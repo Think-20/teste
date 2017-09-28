@@ -1,0 +1,78 @@
+<md-sidenav-container id="sidenav-container">
+  <md-sidenav id="sidenav" mode="side" opened="{{opened}}">
+    <div id="logo-container" class="my-container">
+      <div class="text-center">
+        <a [routerLink]="['/home']">
+          <img src="/assets/images/logo.png" alt="Think Ideias">
+        </a>
+      </div>
+    </div>
+    <div id="menu-container">
+      <div class="my-container">
+        <div id="username-sidenav" class="row">
+          <div class="col-md-8 text-right">
+            <span class="user-name" mdTooltip="{{user.employee.department.description}}">
+              {{user.employee.name}}
+            </span>
+          </div>
+          <div class="col-md-4 user-photo text-center">
+            <img width="55px" src="/assets/images/users/{{user.id}}.jpg" alt="Photo">
+          </div>
+        </div>
+      </div>
+      <nav class="nav-navbar">
+        <div class="nav-item">
+          <a md-raised-button class="departament-container">
+            <span class="departament departament-3"></span> Administrativo
+          </a>
+        </div>
+        <div class="nav-item">
+          <a (click)="atendimento = atendimento === true ? false : true" md-raised-button class="departament-container">
+            <span class="departament departament-5"></span> Atendimento
+          </a>
+          <div [@rowAppeared]="state" *ngIf="atendimento">
+            <div class="sub-navbar">
+              <a [routerLink]="['/clients']" md-raised-button>Clientes</a>
+              <a md-raised-button [routerLink]="['/projects']">Projetos</a>
+            </div>
+          </div>
+        </div>
+        <div class="nav-item">
+          <a md-raised-button class="departament-container">
+            <span class="departament departament-2"></span> Criação
+          </a>
+        </div>
+        <div class="nav-item">
+          <a md-raised-button class="departament-container">
+            <span class="departament departament-4"></span> Diretoria
+          </a>
+        </div>
+        <div class="nav-item">
+          <a (click)="producao = producao === true ? false : true" md-raised-button class="departament-container">
+            <span class="departament departament-1"></span> Produção
+          </a>
+          <div [@rowAppeared]="state" *ngIf="producao">
+            <div class="sub-navbar">
+              <a (click)="centroCusto = centroCusto === true ? false : true" md-raised-button>Centro de custos</a>
+              <div [@rowAppeared]="state" *ngIf="centroCusto" class="sub-navbar">
+                <a md-raised-button [routerLink]="['/cost-categories']">Categorias de custo</a>
+                <a md-raised-button [routerLink]="['/item-categories']">Categorias de item</a>
+                <a md-raised-button [routerLink]="['/items']">Itens</a>
+              </div>
+            </div>
+            <div class="sub-navbar">
+              <a (click)="orcamento = orcamento === true ? false : true" md-raised-button>Orçamento</a>
+              <div [@rowAppeared]="state" *ngIf="orcamento" class="sub-navbar">
+                <a disabled md-raised-button [routerLink]="['/costs-sheet']">Planilha de custos</a>
+                <a disabled md-raised-button [routerLink]="['/specification']">Memorial descritivo</a>
+              </div>
+            </div>
+            <div class="sub-navbar">
+              <a disabled [routerLink]="['/costs-sheet']" md-raised-button>Ficha de custos</a>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </div>
+  </md-sidenav>
+</md-sidenav-container>

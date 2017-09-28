@@ -1,0 +1,101 @@
+#brand:hover, #brand:active, #brand:visited, #brand:focus {
+  text-decoration: none;
+}
+
+.my-container {
+  padding: 20px 15px;
+}
+
+#sidenav-container {
+  height: 100%;
+  font-weight: 300;
+}
+
+#sidenav {
+  height: 100%;
+  width: 300px;
+  overflow: hidden;
+}
+
+#menu-container {
+  height: calc(100% - 64px);
+  overflow: auto;
+}
+
+.sub-navbar {
+  padding-right: 33px;
+}
+
+.sub-navbar .sub-navbar {
+  padding-right: 25px;
+}
+
+#logo-container {
+  background-color: #e5e6e8 !important;
+  padding: 12px;
+  margin-bottom: 5px;
+}
+
+#logo-container img {
+  width: 124px;
+}
+
+
+#username-sidenav {
+  padding: 7px 0;
+  margin-bottom: 20px;
+}
+
+.user-photo {
+  padding-left: 0 !important;
+}
+
+.user-photo .mat-icon {
+  font-size: 70px !important;
+  color: #999;
+  width: auto !important;
+  height: auto !important;
+}
+
+.user-name {
+  color: #212529;
+  font-size: 20px;
+  float: right;
+  margin-top: 32px;
+  margin-right: -18px;
+  font-weight: 300;
+}
+
+.nav-navbar {
+  padding-right: 50px;
+}
+
+.nav-navbar .nav-item {
+  text-indent: 10px;
+  margin-bottom: 15px;
+}
+
+.nav-item a[disabled] {
+  background-color: white;
+  color: #AAA !important;
+}
+
+.nav-navbar .nav-item a {
+  line-height: 18px;
+  display: block;
+  font-size: 13px;
+  color: #7b7b7b;
+  box-shadow: none; 
+  text-align: right;
+  font-weight: 300;
+}
+
+.nav-navbar .nav-item > a {
+  padding: 3px 0;
+  font-size: 16px !important;
+  color: #212529;
+}
+
+.nav-navbar .nav-item a {
+  text-decoration: none;
+}

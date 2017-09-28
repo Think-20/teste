@@ -1,0 +1,23 @@
+<div id="dataTableShow" class="col-md-12" *ngIf="itemCategory">
+  <md-card-title>
+    <p class="lead">Dados da categoria de item</p>
+  </md-card-title>
+  <md-card>
+    <dl>
+      <dt>ID</dt>
+      <dd>{{itemCategory.id}}</dd>
+    </dl>
+    <dl>
+      <dt>Descrição</dt>
+      <dd>{{itemCategory.description}}</dd>
+    </dl>
+    <dl>
+      <dt>Categoria pai</dt>
+      <dd>{{itemCategory?.itemCategory?.description}}</dd>
+    </dl>
+  </md-card>
+  <md-card-title>
+    <p class="lead">Categorias de item relacionados</p>
+  </md-card-title>
+  <md-card></md-card>
+</div>

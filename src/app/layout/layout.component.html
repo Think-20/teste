@@ -1,0 +1,16 @@
+<div id="my-master-container">
+    <cb-sidenav #sidenav opened="opened"></cb-sidenav>
+    <div id="my-second-container">
+        <cb-navbar (toggleMenuEmitter)="sidenav.toggleMenu()"></cb-navbar>
+        <div id="container-box" class="my-container">
+            <div class="row">
+                <div class="col-md-8">  
+                  <router-outlet></router-outlet>
+                </div>
+                <div class="col-md-4">
+                    <cb-notification-bar></cb-notification-bar>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

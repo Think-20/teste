@@ -1,0 +1,63 @@
+<div class="col-md-12">
+  <form [formGroup]="searchForm">
+    <div class="row">
+        <md-input-container class="col-md-9">
+          <input mdInput formControlName="search" placeholder="Qual item você procura?" autocomplete="off">
+        </md-input-container>
+        <div class="col-md-3">
+          <a [routerLink]="['/items/new']" color="primary" md-raised-button>
+            NOVO
+          </a>
+        </div>
+    </div>
+  </form>
+</div>
+<div *ngIf="items?.length > 0" class="col-md-12">
+  <table class="table mat-table">
+    <div class="mat-header-row">
+      <div class="mat-header-cell mat-column-id">ID</div>
+      <div class="mat-header-cell mat-column-name">Nome</div>
+      <div class="mat-header-cell mat-column-description">Descrição</div>
+      <div class="mat-header-cell mat-column-cnpj">Preço</div>
+      <div class="mat-header-cell mat-column-action">Ação</div>
+    </div>
+    <div class="mat-row" *ngFor="let item of items" [@rowAppeared]="rowAppearedState">
+      <div class="mat-cell mat-column-id">
+        {{ item.id }}
+      </div>
+      <div class="mat-cell mat-column-name">
+        {{ item.name }}
+      </div>
+      <div class="mat-cell mat-column-description">
+        {{ item.description }}
+      </div>
+      <div class="mat-cell mat-column-price">
+        {{ item.price | currency: 'BRL': true }}
+      </div>
+      <div class="mat-cell mat-column-action">
+        <md-menu #menu="mdMenu">
+          <a [routerLink]="['/items/show', item.id]" md-menu-item>
+            <md-icon>subject</md-icon> Detalhes
+          </a>
+          <a [routerLink]="['/items/edit', item.id]" md-menu-item>
+            <md-icon>mode_edit</md-icon> Editar
+          </a>
+          <button (click)="delete(item)" md-menu-item>
+            <md-icon>delete</md-icon> Remover
+          </button>
+        </md-menu>
+
+        <button md-icon-button [mdMenuTriggerFor]="menu">
+          <md-icon>menu</md-icon>
+        </button>
+      </div>
+    </div>
+  </table>
+</div>
+<div *ngIf="items?.length == 0" class="col-md-12">
+  <p>
+    <small>
+      Não encontramos resultados para sua busca. :(
+    </small>
+  </p>
+</div>

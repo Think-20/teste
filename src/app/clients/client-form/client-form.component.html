@@ -1,0 +1,172 @@
+<div class="col-md-12">
+  <form [formGroup]="clientForm" novalidate autocomplete="off">
+    <md-card-title>
+      <p class="lead">Dados do cliente</p>
+    </md-card-title>
+    <md-card>
+      <div class="row">
+          <md-input-container class="col-md-3">
+            <input formControlName="fantasyName" mdInput placeholder="Nome*">
+            <md-error>
+              Obrigatório, entre 3 e 30 caract. 
+            </md-error>
+          </md-input-container>
+          <md-input-container class="col-md-6">
+            <input formControlName="name" mdInput placeholder="Razão social*">
+            <md-error>
+              Obrigatório, entre 3 e 50 caract. 
+            </md-error>
+          </md-input-container>
+          <md-input-container class="col-md-3">
+            <input formControlName="site" mdInput placeholder="Site">
+            <md-error>
+              7 caract. 
+            </md-error>
+          </md-input-container>
+          <md-select class="col-md-3" placeholder="Tipo*" formControlName="clientType" [compareWith]="compareClientType">
+            <md-option *ngFor="let type of clientTypes" [value]="type">
+              {{ type.description }}
+            </md-option>
+          </md-select>
+          <md-select class="col-md-3" placeholder="Status*" formControlName="clientStatus" [compareWith]="compareClientStatus">
+            <md-option *ngFor="let status of clientStatus" [value]="status">
+              {{ status.description }}
+            </md-option>
+          </md-select>
+          <md-select class="col-md-3" placeholder="Atendimento*" formControlName="employee" [compareWith]="compareEmployee">
+            <md-option *ngFor="let employee of employees" [value]="employee">
+              {{ employee.name }}
+            </md-option>
+          </md-select>
+          <cb-stars class="col-md-3 star-input" label="Score" [rate]="client != undefined ? (client.rate + 1) : 0" [input]="clientForm.controls.rate">
+            <input formControlName="rate" mdInput>
+          </cb-stars>
+          <md-input-container class="col-md-3">
+            <input formControlName="cnpj" mask="99.999.999/9999-99" mdInput placeholder="CNPJ*">
+            <md-error>
+              Obrigatório
+            </md-error>
+          </md-input-container>
+          <md-input-container class="col-md-3">
+            <input formControlName="ie" mask="999.999.999.999" mdInput placeholder="Inscrição estadual">
+          </md-input-container>
+          <md-input-container class="col-md-3">
+            <input formControlName="mainphone" mask="(99) 9999-9999?9" mdInput placeholder="Telefone principal*">
+            <md-error>
+              Obrigatório
+            </md-error>
+          </md-input-container>
+          <md-input-container class="col-md-3">
+            <input formControlName="secundaryphone" mask="(99) 9999-9999?9" mdInput placeholder="Telefone secundário">
+          </md-input-container>
+          <div class="form-array" formArrayName="contacts">
+            <div *ngFor="let control of getContactsControls(clientForm); let i = index">
+              <form [formGroup]="getContactsControls(clientForm)[i]" novalidate autocomplete="off" class="flex contact-item">
+                <md-input-container class="col-md-3">
+                  <input formControlName="name" mdInput placeholder="Contato*">
+                  <md-error>
+                    Obrigatório, mínimo 3 caract.
+                  </md-error>
+                </md-input-container>
+                <md-input-container class="col-md-3">
+                  <input formControlName="email" mdInput placeholder="E-mail*">
+                  <md-error>
+                    Obrigatório, tipo e-mail.
+                  </md-error>
+                </md-input-container>
+                <md-input-container class="col-md-3">
+                  <input formControlName="department" mdInput placeholder="Departamento*">
+                  <md-error>
+                    Obrigatório, mínimo 3 caract.
+                  </md-error>
+                </md-input-container>
+                <md-input-container class="col-md-3">
+                  <input formControlName="cellphone" mask="(99) 9999-9999?9" mdInput placeholder="Celular">
+                  <md-error>
+                    Tipo telefone
+                  </md-error>
+                </md-input-container>
+                <button *ngIf="i > 0" type="button" class="delete-contact" (click)="deleteContact(i)" md-button>
+                  <md-icon>clear</md-icon>
+                </button>
+              </form>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <button type="button" class="add-contact" (click)="addContact()" md-button>
+              <md-icon>add</md-icon>
+            </button>
+          </div>
+          <md-input-container class="col-md-12">
+            <textarea formControlName="note" mdInput placeholder="Observação: Indicação, já nos conhecia, como chegou até nós..."></textarea>
+          </md-input-container>
+      </div>
+    </md-card>
+    <md-card-title>
+      <p class="lead">
+        Endereço
+      </p>
+    </md-card-title>
+    <md-card>
+      <div class="row">
+          <md-input-container class="col-md-3">
+            <input formControlName="cep" mask="99999-999" mdInput placeholder="CEP*">
+            <md-error>
+              Obrigatório
+            </md-error>
+          </md-input-container>
+          <md-input-container class="col-md-6">
+            <input formControlName="street" mdInput placeholder="Logradouro*">
+            <md-error>
+              Obrigatório, entre 3 e 50 caract. 
+            </md-error>
+          </md-input-container>
+          <md-input-container class="col-md-3">
+            <input formControlName="number" mdInput placeholder="Número*">
+            <md-error>
+              Obrigatório, entre 1 e 11 caract. 
+            </md-error>
+          </md-input-container>
+          <md-input-container class="col-md-3">
+            <input formControlName="complement" mdInput placeholder="Complemento">
+          </md-input-container>
+          <md-input-container class="col-md-2">
+            <input mdInput formControlName="state" [mdAutocomplete]="autocompleteState" placeholder="Estado*">
+            <md-error>
+              Obrigatório
+            </md-error>
+          </md-input-container>
+          <md-autocomplete #autocompleteState="mdAutocomplete" [displayWith]="displayState">
+              <md-option *ngFor="let state of states | async" [value]="state">
+                {{ state.code }}
+              </md-option>
+          </md-autocomplete>
+          <md-input-container class="col-md-4">
+            <input mdInput formControlName="city" [mdAutocomplete]="autocompleteCity" placeholder="Cidade*">
+            <md-error>
+              Obrigatório
+            </md-error>
+          </md-input-container>
+          <md-autocomplete #autocompleteCity="mdAutocomplete" [displayWith]="displayCity">
+              <md-option *ngFor="let city of cities | async" [value]="city">
+                {{ city.name }}
+              </md-option>
+          </md-autocomplete>
+          <md-input-container class="col-md-3">
+            <input formControlName="neighborhood" mdInput placeholder="Bairro*">
+            <md-error>
+              Obrigatório, entre 3 e 30 caract. 
+            </md-error>
+          </md-input-container>
+      </div>
+      <md-card-actions class="col-md-12 text-right">
+        <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save(clientForm.value)" md-raised-button>
+          SALVAR
+        </button>
+        <button class="cb-button" *ngIf="typeForm === 'edit'" color="primary" (click)="edit(clientForm.value, client.id)" md-raised-button>
+          EDITAR
+        </button>
+      </md-card-actions>
+    </md-card>
+  </form>
+</div>

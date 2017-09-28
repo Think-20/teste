@@ -1,0 +1,22 @@
+<div class="col-md-12">
+  <form [formGroup]="costCategoryForm" novalidate>
+    <md-card-title>
+      <p class="lead">Dados da categoria de custo</p>
+    </md-card-title>
+    <md-card>
+      <div class="row">
+          <md-input-container class="col-md-12">
+            <input formControlName="description" mdInput placeholder="Descrição">
+          </md-input-container>
+      </div>
+      <md-card-actions class="col-md-12">
+        <button *ngIf="typeForm === 'new'" color="primary" [disabled]="!costCategoryForm.valid" (click)="save(costCategoryForm.value)" md-raised-button>
+          <md-icon>add_circle_outline</md-icon> SALVAR
+        </button>
+        <button *ngIf="typeForm === 'edit'" color="primary" [disabled]="!costCategoryForm.valid" (click)="edit(costCategoryForm.value, costCategory.id)" md-raised-button>
+          <md-icon>mode_edit</md-icon> EDITAR
+        </button>
+      </md-card-actions>
+    </md-card>
+  </form>
+</div>

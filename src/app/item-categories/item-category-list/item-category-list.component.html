@@ -1,0 +1,58 @@
+<div class="col-md-12">
+  <form [formGroup]="searchForm">
+    <div class="row">
+        <md-input-container class="col-md-9">
+          <input mdInput formControlName="search" placeholder="Qual categoria de item você procura?" autocomplete="off">
+        </md-input-container>
+        <div class="col-md-3">
+          <a [routerLink]="['/item-categories/new']" color="primary" md-raised-button>
+            NOVO
+          </a>
+        </div>
+    </div>
+  </form>
+</div>
+<div *ngIf="itemCategories?.length > 0" class="col-md-12">
+  <table class="table mat-table">
+    <div class="mat-header-row">
+      <div class="mat-header-cell mat-column-id">ID</div>
+      <div class="mat-header-cell mat-column-description">Descrição</div>
+      <div class="mat-header-cell mat-column-itemCategory">Categoria pai</div>
+    </div>
+    <div class="mat-row" *ngFor="let itemCategory of itemCategories" [@rowAppeared]="rowAppearedState">
+      <div class="mat-cell mat-column-id">
+        {{ itemCategory.id }}
+      </div>
+      <div class="mat-cell mat-column-description">
+        {{ itemCategory.description }}
+      </div>
+      <div class="mat-cell mat-column-itemCategory">
+        {{ itemCategory.item_category?.description }}
+      </div>
+      <div class="mat-cell mat-column-action">
+        <md-menu #menu="mdMenu">
+          <a [routerLink]="['/item-categories/show', itemCategory.id]" md-menu-item>
+            <md-icon>subject</md-icon> Detalhes
+          </a>
+          <a [routerLink]="['/item-categories/edit', itemCategory.id]" md-menu-item>
+            <md-icon>mode_edit</md-icon> Editar
+          </a>
+          <button (click)="delete(itemCategory)" md-menu-item>
+            <md-icon>delete</md-icon> Remover
+          </button>
+        </md-menu>
+
+        <button md-icon-button [mdMenuTriggerFor]="menu">
+          <md-icon>menu</md-icon>
+        </button>
+      </div>
+    </div>
+  </table>
+</div>
+<div *ngIf="itemCategories?.length == 0" class="col-md-12">
+  <p>
+    <small>
+      Não encontramos resultados para sua busca. :(
+    </small>
+  </p>
+</div>

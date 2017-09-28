@@ -1,0 +1,23 @@
+<div id="dataTableShow" class="col-md-12" *ngIf="item">
+  <md-card-title>
+    <p class="lead">Dados do item</p>
+  </md-card-title>
+  <md-card>
+    <dl>
+      <dt>Nome</dt>
+      <dd>{{item.name}}</dd>
+      <dt>Descrição</dt>
+      <dd>{{item.description}}</dd>
+      <dt>Preço</dt>
+      <dd>{{item.price | currency: 'BRL': true}}</dd>
+      <dt>Categoria de custo</dt>
+      <dd>{{item.cost_category?.description}}</dd>
+      <dt>Categoria de item</dt>
+      <dd>{{item.item_category?.description}}</dd>
+    </dl>
+  </md-card>
+  <md-card-title>
+    <p class="lead">Preços relacionados</p>
+  </md-card-title>
+  <md-card></md-card>
+</div>

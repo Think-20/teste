@@ -1,0 +1,16 @@
+#container-box {
+    height: calc(100% - 64px);
+    padding: 5px 15px;
+}
+
+#container-box > .row,
+#container-box > .row > .col-md-8,
+#container-box > .row > .col-md-4 {
+    height: 100%;
+    overflow: auto;
+}
+
+#container-box > .row > .col-md-8 {
+    padding-bottom: 250px;
+}
+

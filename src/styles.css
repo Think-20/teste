@@ -1,0 +1,427 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+
+body {
+    background-color: #fbfbfb;
+}
+
+html, body, cb-login {
+    height: 100%;
+}
+
+.cb-button {
+    background-color: transparent !important;
+    box-shadow: none !important;
+    border: 1px solid #dcdcdc !important;
+    color: #AAA !important;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif !important;
+    font-weight: normal !important;
+    border-radius: 0 !important;
+}
+
+.cb-button:focus {
+    outline: none;
+}
+
+.my-container {
+    width: 100%;
+    padding: 15px;
+    min-height: 64px;
+}
+
+.form-array {
+  width: 100%;
+}
+
+
+.flex {
+  display: flex;
+}
+
+.flex-spacer {
+    flex-grow: 5;
+}
+
+p {
+    margin-bottom: 0;
+}
+
+button {
+    outline: 0;
+}
+
+
+.departament-container {
+  position: relative;
+  line-height: 42px;
+  padding-right: 47px !important;
+  font-size: 15px !important;
+}
+
+.departament-1 {
+  background-color: #ed008f;
+}
+
+.departament-2 {
+  background-color: #00aff2;
+}
+
+.departament-3 {
+  background-color: #a4ce3a;
+}
+
+.departament-4 {
+  background-color: #e5e6e8;
+}
+
+.departament-5 {
+  background-color: #ffca00;
+}
+
+.departament {
+  position: absolute;
+  top: 2px;
+  right: 15px;
+  display: table;
+  width: 20px;
+  height: 20px;
+  content: ' ';
+}
+
+#my-master-container {
+    position: absolute;
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+#my-second-container {
+    flex: 1 75%;
+    max-height: 100%;
+}
+
+#sidenav-container {
+  height: 100%;
+}
+
+#sidenav {
+  height: 100%;
+  width: 300px;
+}
+
+#container-box > .row > .col-md-8::-webkit-scrollbar,
+#container-box > .row > .col-md-4::-webkit-scrollbar,
+#menu-container::-webkit-scrollbar {
+    border-radius: 9px;
+    width: 8px;
+}
+
+#container-box > .row > .col-md-8::-webkit-scrollbar-thumb,
+#container-box > .row > .col-md-4::-webkit-scrollbar-thumb,
+#menu-container::-webkit-scrollbar-thumb {
+    border-radius: 9px;
+    background-color: rgba(231,230,239,0.25);
+}
+
+h1, h2, h3, h4 {
+  padding-top: 20px;
+}
+
+.my-container > h1, .my-container > h2, .my-container > h3, .my-container > h4 {
+  padding-top: 0;
+  margin-top: 7px;
+}
+
+.mat-card-actions {
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+md-card {
+    /*
+    margin-bottom: 10px;
+    */
+}
+
+.mat-card {
+  box-shadow: none !important;
+}
+
+.mat-input-flex, .mat-select-placeholder, .mat-select-value-text {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif !important;
+  font-size: 14px;
+}
+
+.mat-select {
+  padding-bottom: 1.29688em;
+}
+
+.mat-select-trigger {
+  margin-top: 15px;
+}
+
+.mat-card, .mat-button, .mat-icon-button, .mat-raised-button {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif !important;
+}
+
+.mat-menu-item {
+  text-decoration: none !important;
+  font-size: 14px;
+}
+
+.mat-raised-button:hover {
+  text-decoration: none !important;
+}
+
+.mat-menu-item .mat-icon {
+  font-size: 20px !important;
+}
+
+.mat-menu-item:hover {
+  color: rgba(0,0,0,.87);
+}
+
+md-card-title {
+    /*
+    background-color: #fbfbfb;
+    */
+    background-color: #fff; 
+    border-top: 1px solid #eee;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    margin-bottom: 0px !important;
+    padding: 15px 15px 15px 15px;
+    /*
+    box-shadow: 0px 0px 0px rgba(0,0,0,.1),  
+        -1px 1px 2px rgba(0,0,0,.1),
+        1px 0px 2px rgba(0,0,0,.1);
+    */
+    border-bottom: 1px solid #eee;
+}
+
+.mat-card-subtitle:not(:first-child), .mat-card-title:not(:first-child) {
+  margin-top: 0 !important;
+}
+
+md-card-title > p {
+    font-size: 16px !important;
+    font-weight: 300;
+}
+
+.mat-row, .mat-header-row {
+  display: flex;
+  align-items: center;
+  height: auto !important;
+  border-bottom: 1px solid #ddd;
+}
+
+.mat-cell, .mat-header-cell {
+    padding: 0px 10px;
+}
+
+.mat-table {
+  margin-top: 10px;
+  padding-bottom: 10px;
+  display: block;
+}
+
+.mat-header-cell {
+  padding-top: 15px;
+  padding-bottom: 15px;
+}
+
+.mat-row::after, .mat-header-row::after {
+    display: table;
+    content: '';
+    clear: both;
+}
+
+#searchForm .mat-row, #searchForm .mat-header-row {
+  border-bottom: 0px;
+}
+
+#searchForm .mat-card {
+  padding: 0px;
+}
+
+#searchForm .mat-table {
+  margin: 0px;
+}
+
+#searchForm .report .mat-header-cell {
+  font-size: 10px;
+  padding-bottom: 0px;
+}
+
+#searchForm .report .mat-cell {
+  padding-top: 0px;
+  font-size: 300;
+  font-size: 20px;
+  color: rgba(0,0,0,.5);
+}
+
+.records-not-found {
+  padding: 10px;
+  color: rgba(0,0,0,.5);
+  text-align: center;
+}
+
+.search-bar-group {
+  align-items: center;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.search-bar-group .mat-input-infix {
+  border-top: 3px solid transparent;
+}
+
+.search-bar-group .title {
+  padding-left: 15px;
+  flex: 1 5;
+}
+
+.search-bar-group .bar {
+  flex: 4 5;
+  height: 36px;
+  padding-right: 10px;
+}
+
+.search-bar-group .buttons {
+  padding-right: 10px;
+}
+
+.search-bar-group .mat-input-element {
+  text-align: right;
+  color: #AAA;
+}
+
+.search-bar-group a {
+  color: #BBB !important;
+  min-width: 24px;
+  padding: 0px 5px;
+}
+
+.search-bar-group a:hover { 
+  color: #BBB !important;
+}
+
+.search-bar-group .mat-input-underline {
+  display: none;
+}
+
+.search-bar-group .mat-focused .mat-input-placeholder.mat-float, 
+.search-bar-group .mat-input-placeholder.mat-float:not(.mat-empty) {
+  opacity: 0 !important;
+}
+
+.search-bar-group .mat-input-placeholder.mat-empty {
+  opacity: 1 !important;
+  text-align: right;
+}
+
+#login-content .mat-input-container {
+  height: 36px;
+}
+
+.mat-input-underline.mat-form-field-underline,
+.mat-select:not(.mat-select-disabled).mat-primary .mat-select-underline {
+   background-color: rgba(0,0,0,.15);
+}
+
+.mat-select-arrow {
+   color: rgba(0,0,0,.18);
+}
+
+.mat-input-ripple,
+.mat-select:focus:not(.mat-select-disabled).mat-primary .mat-select-underline {
+   background-color: #00afef;
+}
+
+.mat-focused .mat-input-placeholder .mat-select-placeholder,
+.mat-select:focus:not(.mat-select-disabled).mat-primary .mat-select-arrow,
+.mat-select:focus:not(.mat-select-disabled).mat-primary .mat-select-trigger,
+.mat-focused .mat-input-placeholder {
+  color: #00afef;
+}
+
+#login-content .mat-focused .mat-input-placeholder.mat-float, #login-content .mat-input-placeholder.mat-float:not(.mat-empty) {
+  opacity: 0 !important;
+}
+
+.mat-input-placeholder.mat-empty {
+  opacity: 1 !important;
+}
+
+.mat-input-invalid .mat-input-placeholder {
+  color: #f44336;
+}
+
+#dataTableShow dl {
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif !important;
+    font-size: 14px;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 0;
+}
+
+#dataTableShow dd, dt {
+    flex: 1 50%;
+    padding: 8px 20px;
+    border-bottom: 1px solid #eee;
+    margin-bottom: 0;
+}
+
+#dataTableShow dd {
+    flex: 1 75%;
+    text-align: left;
+}
+
+#dataTableShow dt {
+    flex: 1 25%;
+    text-align: left;
+    background-color: #fbfbfb;
+    font-weight: 300;
+}
+
+#dataTableShow .mat-card {
+    padding: 0;
+}
+
+.mat-select {
+  padding-top: 0;
+  padding-bottom: 0;
+  height: 59px;
+}
+ 
+.mat-input-element {
+  height: 17px;
+}
+
+.stars-container input {
+    visibility: hidden !important;
+}
+
+.star-input .stars-container {
+    position: relative;
+    height: 30px;
+    border-bottom: 1px solid #DDD;
+    
+}
+
+.star-input .stars-content {
+    text-align: right;
+    margin-top: 15px;
+    background-color: white;
+    z-index: 10;
+}
+
+.mat-form-field-subscript-wrapper {
+  overflow: visible !important;
+}
+
+.mat-error {
+  margin-top: -4px;
+  font-size: 9px;
+}

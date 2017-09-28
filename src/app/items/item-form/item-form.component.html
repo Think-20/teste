@@ -1,0 +1,50 @@
+<div class="col-md-12">
+  <form [formGroup]="itemForm" novalidate>
+    <md-card-title>
+      <p class="lead">Dados do item</p>
+    </md-card-title>
+    <md-card>
+      <div class="row">
+         <div class="col-md-12 text-right">
+          <button md-button type="button" (click)="fileInput.click()">
+            <md-icon>library_add</md-icon> FOTO
+            <input #fileInput type="file" (change)="showImage()" style="display:none;" />
+          </button>
+         </div>
+          <md-input-container class="col-md-8">
+            <input formControlName="name" mdInput placeholder="Nome">
+          </md-input-container>
+          <md-input-container class="col-md-4">
+            <input formControlName="price" mdInput placeholder="Preço">
+          </md-input-container>
+          <md-input-container class="col-md-6">
+            <input mdInput formControlName="costCategory" [mdAutocomplete]="autocompleteCostCategory" placeholder="Categoria de custo">
+          </md-input-container>
+          <md-input-container class="col-md-6">
+            <input mdInput formControlName="itemCategory" [mdAutocomplete]="autocompleteItemCategory" placeholder="Categoria de item">
+          </md-input-container>
+          <md-autocomplete #autocompleteCostCategory="mdAutocomplete" [displayWith]="displayCostCategory">
+              <md-option *ngFor="let costCategory of costCategories | async" [value]="costCategory">
+                {{ costCategory.description }}
+              </md-option>
+          </md-autocomplete>
+          <md-autocomplete #autocompleteItemCategory="mdAutocomplete" [displayWith]="displayItemCategory">
+              <md-option *ngFor="let itemCategory of itemCategories | async" [value]="itemCategory">
+                {{ itemCategory.description }}
+              </md-option>
+          </md-autocomplete>
+          <md-input-container class="col-md-12">
+            <textarea formControlName="description" mdInput placeholder="Descrição"></textarea>
+          </md-input-container>
+      </div>
+      <md-card-actions class="col-md-12">
+        <button *ngIf="typeForm === 'new'" color="primary" [disabled]="!itemForm.valid" (click)="save(itemForm.value)" md-raised-button>
+          <md-icon>add_circle_outline</md-icon> SALVAR
+        </button>
+        <button *ngIf="typeForm === 'edit'" color="primary" [disabled]="!itemForm.valid" (click)="edit(itemForm.value, item.id)" md-raised-button>
+          <md-icon>mode_edit</md-icon> EDITAR
+        </button>
+      </md-card-actions>
+    </md-card>
+  </form>
+</div>

@@ -1,0 +1,17 @@
+<md-toolbar>
+  <div>
+    <button md-button (click)="toggleMenu()">
+      <md-icon>menu</md-icon> <span>Menu</span>
+    </button>
+  </div>
+  <div class="flex-spacer"></div>
+  <button class="my-button" md-button>
+    <md-icon>notifications</md-icon>
+  </button>
+  <button class="my-button" md-button>
+    <md-icon>message</md-icon>
+  </button>
+  <button [routerLink]="['/login']" class="my-button" md-button>
+    <md-icon>close</md-icon>
+  </button>
+</md-toolbar>
