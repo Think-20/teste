@@ -7,7 +7,7 @@ import { Contact } from '../contacts/contact.model';
 export class Client {
     id: number
     name: string
-    fantasyName: string
+    fantasy_name: string
     cnpj: number
     mainphone: number
     secundaryphone: number
@@ -18,14 +18,10 @@ export class Client {
     number: number
     neighborhood: string
     complement?: string
-    cityId: string
     city?: City
     cep: number
-    employeeId: number
     employee?: Employee
-    clientTypeId: number
     type?: ClientType
-    clientStatusId: number
     status?: ClientStatus
     contacts?: Contact[]
     created_at: string

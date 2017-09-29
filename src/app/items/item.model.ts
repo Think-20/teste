@@ -6,8 +6,6 @@ export class Item {
     name: string
     description: string
     price: number
-    itemCategoryId?: number
     item_category?: ItemCategory
-    costCategoryId?: number
     cost_category?: CostCategory
 }

@@ -6,7 +6,7 @@
     <md-card>
       <div class="row">
           <md-input-container class="col-md-3">
-            <input formControlName="fantasyName" mdInput placeholder="Nome*">
+            <input formControlName="fantasy_name" mdInput placeholder="Nome*">
             <md-error>
               Obrigatório, entre 3 e 30 caract. 
             </md-error>
@@ -23,12 +23,12 @@
               7 caract. 
             </md-error>
           </md-input-container>
-          <md-select class="col-md-3" placeholder="Tipo*" formControlName="clientType" [compareWith]="compareClientType">
+          <md-select class="col-md-3" placeholder="Tipo*" formControlName="client_type" [compareWith]="compareClientType">
             <md-option *ngFor="let type of clientTypes" [value]="type">
               {{ type.description }}
             </md-option>
           </md-select>
-          <md-select class="col-md-3" placeholder="Status*" formControlName="clientStatus" [compareWith]="compareClientStatus">
+          <md-select class="col-md-3" placeholder="Status*" formControlName="client_status" [compareWith]="compareClientStatus">
             <md-option *ngFor="let status of clientStatus" [value]="status">
               {{ status.description }}
             </md-option>
@@ -63,6 +63,7 @@
             <div *ngFor="let control of getContactsControls(clientForm); let i = index">
               <form [formGroup]="getContactsControls(clientForm)[i]" novalidate autocomplete="off" class="flex contact-item">
                 <md-input-container class="col-md-3">
+                  <input formControlName="id" type="hidden">
                   <input formControlName="name" mdInput placeholder="Contato*">
                   <md-error>
                     Obrigatório, mínimo 3 caract.

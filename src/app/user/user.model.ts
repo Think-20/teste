@@ -4,7 +4,6 @@ export class User {
     id: number
     email: string
     password: string
-    employeeId: number
     employee?: Employee
     functionalities?: Functionality[]
 }

@@ -20,11 +20,15 @@ export class ErrorHandler {
             if(error.url === null) {
                 errorMessage = 'Erro: servidor não encontrado.'
             } else if(error.text() != '') {
-                let data = JSON.parse(error.text())
-                errorMessage = `Erro ${error.status} - ${data.message}`
+                try {
+                    let data = JSON.parse(error.text())
+                    errorMessage = `Erro ${error.status} - ${data.message}`
+                } catch(e) {
+                    errorMessage = `Erro ${error.status} ao comunicar com o servidor.`
+                }
             }
         } else {
-            errorMessage = error.toString
+            errorMessage = 'Não foi obtida nenhuma informação.'
         }
 
         return errorMessage

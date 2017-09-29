@@ -90,7 +90,7 @@ export class ClientFormComponent implements OnInit {
         Validators.minLength(3),
         Validators.maxLength(50)
       ]),
-      fantasyName: this.formBuilder.control('', [
+      fantasy_name: this.formBuilder.control('', [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(30)
@@ -98,8 +98,8 @@ export class ClientFormComponent implements OnInit {
       site: this.formBuilder.control('', [
         Validators.minLength(7),
       ]),
-      clientType: clientTypeControl,
-      clientStatus: clientStatusControl,
+      client_type: clientTypeControl,
+      client_status: clientStatusControl,
       employee: employeeControl,
       rate: this.formBuilder.control(''),
       cnpj: this.formBuilder.control('', [
@@ -151,37 +151,9 @@ export class ClientFormComponent implements OnInit {
         this.clientStatus = clientStatus
 
         if(this.typeForm === 'edit') {
-          let snackBarStateCharging = this.snackBar.open('Carregando cliente...')
-          let clientId = parseInt(this.route.snapshot.url[1].path)
-          this.clientService.client(clientId).subscribe(client => {
-            snackBarStateCharging.dismiss()
-            this.client = client
-
-            this.clientForm.controls.name.setValue(this.client.name)
-            this.clientForm.controls.fantasyName.setValue(this.client.fantasyName)
-            this.clientForm.controls.cnpj.setValue(this.client.cnpj)
-            this.clientForm.controls.mainphone.setValue(this.client.mainphone)
-            this.clientForm.controls.secundaryphone.setValue(this.client.secundaryphone)
-            this.clientForm.controls.clientType.setValue(this.client.type)
-            this.clientForm.controls.clientStatus.setValue(this.client.status)
-            this.clientForm.controls.employee.setValue(this.client.employee)
-            this.clientForm.controls.site.setValue(this.client.site)
-            this.clientForm.controls.note.setValue(this.client.note)
-            this.clientForm.controls.rate.setValue(this.client.rate)
-            this.clientForm.controls.cep.setValue(this.client.cep)
-            this.clientForm.controls.street.setValue(this.client.street)
-            this.clientForm.controls.number.setValue(this.client.number)
-            this.clientForm.controls.neighborhood.setValue(this.client.neighborhood)
-            this.clientForm.controls.city.setValue(this.client.city)
-            this.clientForm.controls.state.setValue(this.client.city.state)
-            this.clientForm.controls.complement.setValue(this.client.complement)
-
-            for(let contact of client.contacts) {
-              this.addContact(contact)
-            }
-          })
+          this.loadClient()
         } else {
-          this.clientForm.controls.clientStatus.setValue(this.clientStatus.filter((status) => {
+          this.clientForm.controls.client_status.setValue(this.clientStatus.filter((status) => {
             return status.description == 'Ativo'
           }).pop())
           this.clientForm.controls.employee.setValue(this.employees.filter((employee) => {
@@ -214,6 +186,40 @@ export class ClientFormComponent implements OnInit {
       })
   }
 
+  loadClient() {
+    let snackBarStateCharging = this.snackBar.open('Carregando cliente...')
+    let clientId = parseInt(this.route.snapshot.url[1].path)
+    this.clientService.client(clientId).subscribe(client => {
+      snackBarStateCharging.dismiss()
+      this.client = client
+
+      this.clientForm.controls.name.setValue(this.client.name)
+      this.clientForm.controls.fantasy_name.setValue(this.client.fantasy_name)
+      this.clientForm.controls.cnpj.setValue(this.client.cnpj)
+      this.clientForm.controls.mainphone.setValue(this.client.mainphone)
+      this.clientForm.controls.secundaryphone.setValue(this.client.secundaryphone)
+      this.clientForm.controls.client_type.setValue(this.client.type)
+      this.clientForm.controls.client_status.setValue(this.client.status)
+      this.clientForm.controls.employee.setValue(this.client.employee)
+      this.clientForm.controls.site.setValue(this.client.site)
+      this.clientForm.controls.note.setValue(this.client.note)
+      this.clientForm.controls.rate.setValue(this.client.rate)
+      this.clientForm.controls.cep.setValue(this.client.cep)
+      this.clientForm.controls.street.setValue(this.client.street)
+      this.clientForm.controls.number.setValue(this.client.number)
+      this.clientForm.controls.neighborhood.setValue(this.client.neighborhood)
+      this.clientForm.controls.city.setValue(this.client.city)
+      this.clientForm.controls.state.setValue(this.client.city.state)
+      this.clientForm.controls.complement.setValue(this.client.complement)
+      
+      this.clientForm.controls.contacts.setValue([])
+
+      for(let contact of client.contacts) {
+        this.addContact(contact)
+      }
+    })
+  }
+
   get contacts() { return this.clientForm.get('contacts'); }
 
   compareClientType(clientType1: ClientType, clientType2: ClientType) {
@@ -232,6 +238,7 @@ export class ClientFormComponent implements OnInit {
     const contacts = <FormArray>this.clientForm.controls['contacts']
     
     contacts.push(this.formBuilder.group({
+      id: this.formBuilder.control(contact ? contact.id : '' || ''),
       name: this.formBuilder.control(contact ? contact.name : '' || '', [
         Validators.required,
         Validators.minLength(3)
@@ -299,10 +306,11 @@ export class ClientFormComponent implements OnInit {
     
     this.clientService.edit(client).subscribe(data => {
       this.snackBar.open(data.message, '', {
-        duration: 5000
+        duration: data.status ? 1000 : 5000
+      }).afterDismissed().subscribe(observer => {
+        this.loadClient()
       })
     })
   }
-
 }
 

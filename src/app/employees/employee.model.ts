@@ -5,8 +5,6 @@ export class Employee {
     id: number
     name: string
     payment: number
-    positionId: number
-    departmentId: number
     department?: Department
     position?: Position
 }

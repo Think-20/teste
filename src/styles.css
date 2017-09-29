@@ -311,6 +311,10 @@ md-card-title > p {
   display: none;
 }
 
+.mat-select-underline {
+  height: 2px !important;
+}
+
 .search-bar-group .mat-focused .mat-input-placeholder.mat-float, 
 .search-bar-group .mat-input-placeholder.mat-float:not(.mat-empty) {
   opacity: 0 !important;
