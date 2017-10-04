@@ -9,6 +9,11 @@ import { ClientFormComponent } from './clients/client-form/client-form.component
 import { ClientListComponent } from './clients/client-list/client-list.component';
 import { ClientShowComponent } from './clients/client-show/client-show.component';
 
+import { ProvidersComponent } from './providers/providers.component';
+import { ProviderFormComponent } from './providers/provider-form/provider-form.component';
+import { ProviderListComponent } from './providers/provider-list/provider-list.component';
+import { ProviderShowComponent } from './providers/provider-show/provider-show.component';
+
 import { CostCategoryFormComponent } from './cost-categories/cost-category-form/cost-category-form.component';
 import { CostCategoryListComponent } from './cost-categories/cost-category-list/cost-category-list.component';
 import { CostCategoryShowComponent } from './cost-categories/cost-category-show/cost-category-show.component';
@@ -111,6 +116,25 @@ export const ROUTES: Routes = [
                     },
                     {
                         path: 'list', component: ClientListComponent
+                    }
+                ]
+            },
+            {
+                path : 'providers', component : ProvidersComponent, children: [
+                    {
+                        path: '', redirectTo: 'list', pathMatch: 'full'
+                    },
+                    {
+                        path: 'new', component: ProviderFormComponent
+                    },
+                    {
+                        path: 'edit/:id', component: ProviderFormComponent
+                    },
+                    {
+                        path: 'show/:id', component: ProviderShowComponent
+                    },
+                    {
+                        path: 'list', component: ProviderListComponent
                     }
                 ]
             }

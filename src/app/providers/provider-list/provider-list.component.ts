@@ -3,13 +3,13 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MdSnackBar } from '@angular/material';
 
-import { ClientService } from '../client.service';
-import { Client } from '../client.model';
+import { ProviderService } from '../provider.service';
+import { Provider } from '../provider.model';
 
 @Component({
-  selector: 'cb-client-list',
-  templateUrl: './client-list.component.html',
-  styleUrls: ['./client-list.component.css'],
+  selector: 'cb-provider-list',
+  templateUrl: './provider-list.component.html',
+  styleUrls: ['./provider-list.component.css'],
   animations: [
     trigger('rowAppeared', [
       state('ready', style({opacity: 1})),
@@ -27,56 +27,36 @@ import { Client } from '../client.model';
   ]
 })
 @Injectable()
-export class ClientListComponent implements OnInit {
+export class ProviderListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
   search: FormControl
-  clients: Client[] = []
+  providers: Provider[] = []
   searching = false
 
   constructor(
     private fb: FormBuilder,
-    private clientService: ClientService,
+    private providerService: ProviderService,
     private snackBar: MdSnackBar
   ) { }
 
-  total(clients: Client[]) {
-    return clients.length
+  total(providers: Provider[]) {
+    return providers.length
   }
   
-  statusActive(clients: Client[]) {
-    return clients.filter((client) => { return client.status.description == 'Ativo' }).length
+  score3Plus(providers: Provider[]) {
+    return providers.filter((provider) => { return provider.rate >= 3 }).length
   }
   
-  statusInactive(clients: Client[]) {
-    return clients.filter((client) => { return client.status.description == 'Inativo' }).length
-  }
-  
-  typeAgencia(clients: Client[]) {
-    return clients.filter((client) => { return client.type.description == 'Agência' }).length
-  }
-  
-  typeExpositor(clients: Client[]) {
-    return clients.filter((client) => { return client.type.description == 'Expositor' }).length
-  }
-  
-  typeAutonomo(clients: Client[]) {
-    return clients.filter((client) => { return client.type.description == 'Autônomo' }).length
-  }
-  
-  score3Plus(clients: Client[]) {
-    return clients.filter((client) => { return client.rate >= 3 }).length
-  }
-  
-  score3Minus(clients: Client[]) {
-    return clients.filter((client) => { return client.rate < 3 }).length
+  score3Minus(providers: Provider[]) {
+    return providers.filter((provider) => { return provider.rate < 3 }).length
   }
 
-  lastUpdate(clients: Client[]) {
-    if(clients.length === 0) return
+  lastUpdate(providers: Provider[]) {
+    if(providers.length === 0) return
 
-    return clients.reduce((previousValue, currentValue) => {
+    return providers.reduce((previousValue, currentValue) => {
       return currentValue.updated_at > previousValue.updated_at ? currentValue : previousValue
     })
   }
@@ -88,11 +68,11 @@ export class ClientListComponent implements OnInit {
     })
 
     this.searching = true
-    let snackBar = this.snackBar.open('Carregando clientes...')
+    let snackBar = this.snackBar.open('Carregando fornecedores...')
     
-    this.clientService.clients().subscribe(clients => {
+    this.providerService.providers().subscribe(providers => {
       this.searching = false
-      this.clients = clients
+      this.providers = providers
       snackBar.dismiss()
     })
 
@@ -100,21 +80,21 @@ export class ClientListComponent implements OnInit {
       .do(() => this.searching = true)
       .debounceTime(500)
       .subscribe(value => {
-        this.clientService.clients(value).subscribe(searchClients => {
+        this.providerService.providers(value).subscribe(searchProviders => {
           this.searching = false
-          this.clients = searchClients
+          this.providers = searchProviders
         })
     })
   }
 
-  delete(client: Client) {
-    this.clientService.delete(client.id).subscribe((data) => {
+  delete(provider: Provider) {
+    this.providerService.delete(provider.id).subscribe((data) => {
       this.snackBar.open(data.message, '', {
         duration: 5000
       })
 
       if(data.status) {
-        this.clients.splice(this.clients.indexOf(client), 1)
+        this.providers.splice(this.providers.indexOf(provider), 1)
       }
     })
   }

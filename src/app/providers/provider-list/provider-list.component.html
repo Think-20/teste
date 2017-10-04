@@ -6,7 +6,7 @@
           Lista
         </div>
         <md-input-container class="bar">
-          <input #search mdInput formControlName="search" placeholder="Qual cliente você procura?" autocomplete="off">
+          <input #search mdInput formControlName="search" placeholder="Qual fornecedor você procura?" autocomplete="off">
         </md-input-container>
         <div class="buttons">  
           <a md-button (click)="search.focus()">
@@ -15,48 +15,40 @@
           <a md-button>
             <md-icon>keyboard_arrow_down</md-icon>
           </a>
-          <a [routerLink]="['/clients/new']" md-button>
+          <a [routerLink]="['/providers/new']" md-button>
             <md-icon>add</md-icon>
           </a>
         </div>
       </div>
     </md-card-title>
     <md-card>
-      <div *ngIf="clients?.length > 0">
+      <div *ngIf="providers?.length > 0">
         <table class="table mat-table">
           <div class="mat-header-row">
             <div class="mat-header-cell mat-column-name">Nome</div>
-            <div class="mat-header-cell mat-column-type">Tipo</div>
-            <div class="mat-header-cell mat-column-status">Status</div>
             <div class="mat-header-cell mat-column-employee">Atendimento</div>
             <div class="mat-header-cell mat-column-rate">Score</div>
             <div class="mat-header-cell mat-column-action">Ação</div>
           </div>
-          <div class="mat-row" *ngFor="let client of clients" [@rowAppeared]="rowAppearedState">
+          <div class="mat-row" *ngFor="let provider of providers" [@rowAppeared]="rowAppearedState">
             <div class="mat-cell mat-column-name">
-              {{ client.fantasy_name }}
-            </div>
-            <div class="mat-cell mat-column-type">
-              {{ client.type.description }}
-            </div>
-            <div class="mat-cell mat-column-status">
-              {{ client.status.description }}
+              {{ provider.fantasy_name }}
             </div>
             <div class="mat-cell mat-column-employee">
-              {{ client.employee.name }}
+              {{ provider.employee.name }}
             </div>
             <div class="mat-cell mat-column-rate">
-                <cb-stars [readonly]="true" [rate]="client.rate"></cb-stars>
+                <cb-stars [readonly]="true" [rate]="provider.rate"></cb-stars>
             </div>
             <div class="mat-cell mat-column-action">
               <md-menu #menu="mdMenu">
-                <a [routerLink]="['/clients/show', client.id]" md-menu-item>
+                <a [routerLink]="['/providers/show', provider.id]" md-menu-item>
                   <md-icon>subject</md-icon> Detalhes
                 </a>
-                <a [routerLink]="['/clients/edit', client.id]" md-menu-item>
+                <a [routerLink]="['/providers/edit', provider.id]" md-menu-item>
                   <md-icon>mode_edit</md-icon> Editar
                 </a>
-                <button (click)="delete(client)" md-menu-item>
+                <button (click)="delete(provider)" md-menu-item>
                   <md-icon>delete</md-icon> Remover
                 </button>
               </md-menu>
@@ -75,17 +67,17 @@
           </small>
         </p>
       </div>
-      <div *ngIf="clients.length == 0 && searchForm.controls.search.value != '' && !searching" class="col-md-12 records-not-found">
+      <div *ngIf="providers.length == 0 && searchForm.controls.search.value != '' && !searching" class="col-md-12 records-not-found">
         <p>
           <small>
             Não encontramos resultados para sua busca. :(
           </small>
         </p>
       </div>
-      <div *ngIf="clients.length == 0 && searchForm.controls.search.value == '' && !searching" class="col-md-12 records-not-found">
+      <div *ngIf="providers.length == 0 && searchForm.controls.search.value == '' && !searching" class="col-md-12 records-not-found">
         <p>
           <small>
-            Ainda não existe nenhum cliente cadastrado. Que tal <a [routerLink]="['/clients/new']">cadastrar</a> agora?
+            Ainda não existe nenhum fornecedor cadastrado. Que tal <a [routerLink]="['/providers/new']">cadastrar</a> agora?
           </small>
         </p>
       </div>
@@ -101,17 +93,13 @@
       <table class="table mat-table report">
         <div class="mat-header-row">
           <div class="mat-header-cell col-md-2 text-center">Total</div>
-          <div class="mat-header-cell col-md-2 text-right">Inativo/Ativo</div>
-          <div class="mat-header-cell col-md-3 text-right">Agência/Expositor/Autônomo</div>
           <div class="mat-header-cell col-md-2 text-right">Score +3/-3</div>
           <div class="mat-header-cell col-md-3 text-right">Última atualização</div>
         </div>
         <div class="mat-row">
-          <div class="mat-cell col-md-2 text-center">{{ total(clients) }}</div>
-          <div class="mat-cell col-md-2 text-right">{{ statusInactive(clients) }}/{{ statusActive(clients) }}</div>
-          <div class="mat-cell col-md-3 text-right">{{ typeAgencia(clients) }}/{{ typeExpositor(clients) }}/{{ typeAutonomo(clients) }}</div>
-          <div class="mat-cell col-md-2 text-right">{{ score3Plus(clients) }}/{{ score3Minus(clients) }}</div>
-          <div class="mat-cell col-md-3 text-right">{{ lastUpdate(clients)?.updated_at | date: 'dd/MM/yyyy' }}</div>
+          <div class="mat-cell col-md-2 text-center">{{ total(providers) }}</div>
+          <div class="mat-cell col-md-2 text-right">{{ score3Plus(providers) }}/{{ score3Minus(providers) }}</div>
+          <div class="mat-cell col-md-3 text-right">{{ lastUpdate(providers)?.updated_at | date: 'dd/MM/yyyy' }}</div>
         </div>
       </table>
     </md-card>

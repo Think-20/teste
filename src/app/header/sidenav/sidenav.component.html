@@ -53,6 +53,9 @@
           </a>
           <div [@rowAppeared]="state" *ngIf="producao">
             <div class="sub-navbar">
+              <a [routerLink]="['/providers']" md-raised-button>Fornecedores</a>
+            </div>
+            <div class="sub-navbar">
               <a (click)="centroCusto = centroCusto === true ? false : true" md-raised-button>Centro de custos</a>
               <div [@rowAppeared]="state" *ngIf="centroCusto" class="sub-navbar">
                 <a md-raised-button [routerLink]="['/cost-categories']">Categorias de custo</a>

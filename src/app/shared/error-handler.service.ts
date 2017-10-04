@@ -7,7 +7,7 @@ import 'rxjs/add/observable/throw';
 export class ErrorHandler {
     static capture(error: Response | any) {
         let errorMessage: string = ErrorHandler.message(error)
-        console.log(errorMessage)
+        //console.log(errorMessage)
         return Observable.throw(errorMessage) 
     }
 
@@ -47,7 +47,9 @@ export class ErrorHandler {
                 return
             }
             (<FormControl>form.get(key)).markAsTouched()
+            //console.log((<FormControl>form.get(key)), key)
         })
+
         return true
     }
     

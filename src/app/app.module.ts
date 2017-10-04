@@ -39,6 +39,16 @@ import { ClientShowComponent } from './clients/client-show/client-show.component
 import { ClientsComponent } from './clients/clients.component';
 import { ClientService } from './clients/client.service';
 
+import { ProviderFormComponent } from './providers/provider-form/provider-form.component';
+import { ProviderListComponent } from './providers/provider-list/provider-list.component';
+import { ProviderShowComponent } from './providers/provider-show/provider-show.component';
+import { ProvidersComponent } from './providers/providers.component';
+import { ProviderService } from './providers/provider.service';
+
+import { BankAccountTypeService } from './bank-account-types/bank-account-type.service';
+import { BankService } from './banks/bank.service';
+import { PersonTypeService } from './person-types/person-type.service';
+
 import { CostCategoryFormComponent } from './cost-categories/cost-category-form/cost-category-form.component';
 import { CostCategoryListComponent } from './cost-categories/cost-category-list/cost-category-list.component';
 import { CostCategoryShowComponent } from './cost-categories/cost-category-show/cost-category-show.component';
@@ -76,6 +86,11 @@ import { StarsComponent } from './shared/stars/stars.component';
     ClientFormComponent,
     ClientListComponent,
     ClientShowComponent,
+
+    ProvidersComponent,
+    ProviderFormComponent,
+    ProviderListComponent,
+    ProviderShowComponent,
     
     CostCategoriesComponent,
     CostCategoryFormComponent,
@@ -117,6 +132,10 @@ import { StarsComponent } from './shared/stars/stars.component';
   ],
   providers: [
     ClientService,
+    ProviderService,
+    BankAccountTypeService,
+    BankService,
+    PersonTypeService,
     CostCategoryService,
     ItemService,
     ItemCategoryService,
