@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MdSnackBar } from '@angular/material';
 
+import { API } from '../../app.api';
 import { ItemService } from '../item.service';
 import { Item } from '../item.model';
 
@@ -33,7 +34,7 @@ export class ItemShowComponent implements OnInit {
   }
 
   getImage(imageName) {
-    return `http://localhost:8000/assets/images/${imageName}`
+    return `${API}/assets/images/${imageName}`
   }
 
 }

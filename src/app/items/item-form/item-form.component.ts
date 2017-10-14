@@ -21,6 +21,7 @@ import { ErrorHandler } from '../../shared/error-handler.service';
 import { Patterns } from '../../shared/patterns.model';
 
 import { Observable } from 'rxjs/Observable';
+import { API } from '../../app.api';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
 
@@ -115,7 +116,7 @@ export class ItemFormComponent implements OnInit {
     if(fileInput.files && fileInput.files[0]) {
       let file = fileInput._file ? fileInput._file : fileInput.files[0]
       this.itemService.uploadImage(file).subscribe(data => {
-        this.imagePath = `http://localhost:8000/assets/images/${data.name}`
+        this.imagePath = `${API}/assets/images/${data.name}`
         this.itemForm.get('image').setValue(data.name)
       })
     }
@@ -146,7 +147,7 @@ export class ItemFormComponent implements OnInit {
 
       this.itemForm.controls.name.setValue(this.item.name)
       this.itemForm.controls.description.setValue(this.item.description)
-      this.imagePath = `http://localhost:8000/assets/images/${this.item.image}`
+      this.imagePath = `${API}/assets/images/${this.item.image}`
       this.itemForm.controls.item_category.setValue(this.item.item_category)
       this.itemForm.controls.cost_category.setValue(this.item.cost_category)
       

@@ -312,7 +312,7 @@ md-card-title > p {
 }
 
 .mat-select-underline {
-  height: 2px !important;
+  height: 1px !important;
 }
 
 .search-bar-group .mat-focused .mat-input-placeholder.mat-float, 
