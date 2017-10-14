@@ -4,20 +4,33 @@
   </md-card-title>
   <md-card>
     <dl>
+      <dt>Foto</dt>
+      <dd>
+        <img width="200" [src]="getImage(item.image)" alt="Foto do item">
+      </dd>
       <dt>Nome</dt>
       <dd>{{item.name}}</dd>
       <dt>Descrição</dt>
       <dd>{{item.description}}</dd>
-      <dt>Preço</dt>
-      <dd>{{item.price | currency: 'BRL': true}}</dd>
+      <dt>Categoria de Item</dt>
+      <dd>{{item.item_category?.description}}</dd>
       <dt>Categoria de custo</dt>
       <dd>{{item.cost_category?.description}}</dd>
-      <dt>Categoria de item</dt>
-      <dd>{{item.item_category?.description}}</dd>
     </dl>
   </md-card>
   <md-card-title>
-    <p class="lead">Preços relacionados</p>
+    <p class="lead">Preços</p>
   </md-card-title>
-  <md-card></md-card>
+  <div *ngFor="let pricing of item.pricings; let i = index">
+    <md-card>
+      <dl>
+        <dt>Preço</dt>
+        <dd>R$ {{pricing.price}}</dd>
+        <dt>Unidade de medida</dt>
+        <dd>{{pricing.measure.description}}</dd>
+        <dt>Fornecedor</dt>
+        <dd>{{pricing.provider.fantasy_name}}</dd>
+      </dl>
+    </md-card>
+  </div>
 </div>

@@ -1,48 +1,104 @@
 <div class="col-md-12">
-  <form [formGroup]="itemForm" novalidate>
+  <form [formGroup]="itemForm" novalidate autocomplete="off">
     <md-card-title>
       <p class="lead">Dados do item</p>
     </md-card-title>
     <md-card>
       <div class="row">
-         <div class="col-md-12 text-right">
-          <button md-button type="button" (click)="fileInput.click()">
-            <md-icon>library_add</md-icon> FOTO
-            <input #fileInput type="file" (change)="showImage()" style="display:none;" />
-          </button>
-         </div>
-          <md-input-container class="col-md-8">
-            <input formControlName="name" mdInput placeholder="Nome">
-          </md-input-container>
-          <md-input-container class="col-md-4">
-            <input formControlName="price" mdInput placeholder="Preço">
+          <div class="col-md-12 image-container text-center"> 
+            <img [src]="imagePath" alt="Imagem de item">
+            <input type="hidden" formControlName="image">
+            <div>
+              <button class="button-image-add" md-button type="button" (click)="fileInput.click()">
+                <md-icon>library_add</md-icon> FOTO
+                <input #fileInput type="file" (change)="showImage()" style="display:none;" />
+              </button>
+            </div>
+          </div>
+          <md-input-container class="col-md-6">
+            <input formControlName="name" mdInput placeholder="Nome*">
+            <md-error>
+              Obrigatório, entre 3 e 50 caract. 
+            </md-error>
           </md-input-container>
           <md-input-container class="col-md-6">
-            <input mdInput formControlName="costCategory" [mdAutocomplete]="autocompleteCostCategory" placeholder="Categoria de custo">
+            <input formControlName="description" mdInput placeholder="Descrição*">
+            <md-error>
+              Obrigatório, entre 3 e 255 caract. 
+            </md-error>
           </md-input-container>
           <md-input-container class="col-md-6">
-            <input mdInput formControlName="itemCategory" [mdAutocomplete]="autocompleteItemCategory" placeholder="Categoria de item">
+            <input mdInput formControlName="item_category" [mdAutocomplete]="autocompleteItemCategory" placeholder="Categoria de item*">
+            <md-error>
+              Obrigatório
+            </md-error>
+          </md-input-container>
+          <md-autocomplete #autocompleteItemCategory="mdAutocomplete" [displayWith]="displayItemCategory">
+              <md-option *ngFor="let itemCategory of itemCategories | async" [value]="itemCategory">
+                {{ itemCategory.description }}
+              </md-option>
+          </md-autocomplete>
+          <md-input-container class="col-md-6">
+            <input mdInput formControlName="cost_category" [mdAutocomplete]="autocompleteCostCategory" placeholder="Categoria de custo*">
+            <md-error>
+              Obrigatório
+            </md-error>
           </md-input-container>
           <md-autocomplete #autocompleteCostCategory="mdAutocomplete" [displayWith]="displayCostCategory">
               <md-option *ngFor="let costCategory of costCategories | async" [value]="costCategory">
                 {{ costCategory.description }}
               </md-option>
           </md-autocomplete>
-          <md-autocomplete #autocompleteItemCategory="mdAutocomplete" [displayWith]="displayItemCategory">
-              <md-option *ngFor="let itemCategory of itemCategories | async" [value]="itemCategory">
-                {{ itemCategory.description }}
-              </md-option>
-          </md-autocomplete>
-          <md-input-container class="col-md-12">
-            <textarea formControlName="description" mdInput placeholder="Descrição"></textarea>
-          </md-input-container>
+          <div class="form-array" formArrayName="pricings">
+            <div *ngFor="let control of getPricingsControls(itemForm); let i = index">
+              <form [formGroup]="getPricingsControls(itemForm)[i]" novalidate autocomplete="off" class="flex pricing-item">
+                <input formControlName="id" type="hidden">
+                <md-input-container class="col-md-4">
+                  <input formControlName="price" mdInput placeholder="Preço*">
+                  <md-error>
+                    Obrigatório
+                  </md-error>
+                </md-input-container>
+                <md-input-container class="col-md-4">
+                  <input formControlName="measure" mdInput [mdAutocomplete]="autocompleteMeasure" placeholder="Unidade de medida*">
+                  <md-error>
+                    Obrigatório
+                  </md-error>
+                </md-input-container>
+                <md-autocomplete #autocompleteMeasure="mdAutocomplete" [displayWith]="displayMeasure">
+                  <md-option *ngFor="let measure of measures | async" [value]="measure">
+                    {{ measure.description }}
+                  </md-option>
+                </md-autocomplete>
+                <md-input-container class="col-md-4">
+                  <input formControlName="provider" mdInput [mdAutocomplete]="autocompleteProvider" placeholder="Fornecedor*">
+                  <md-error>
+                    Obrigatório
+                  </md-error>
+                </md-input-container>
+                <md-autocomplete #autocompleteProvider="mdAutocomplete" [displayWith]="displayProvider">
+                  <md-option *ngFor="let provider of providers | async" [value]="provider">
+                    {{ provider.fantasy_name }}
+                  </md-option>
+                </md-autocomplete>
+                <button *ngIf="i > 0" type="button" class="delete-pricing" (click)="deletePricing(i)" md-button>
+                  <md-icon>clear</md-icon>
+                </button>
+              </form>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <button type="button" class="add-pricing" (click)="addPricing()" md-button>
+              <md-icon>add</md-icon>
+            </button>
+          </div>
       </div>
-      <md-card-actions class="col-md-12">
-        <button *ngIf="typeForm === 'new'" color="primary" [disabled]="!itemForm.valid" (click)="save(itemForm.value)" md-raised-button>
-          <md-icon>add_circle_outline</md-icon> SALVAR
+      <md-card-actions class="col-md-12 text-right">
+        <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save(itemForm.value)" md-raised-button>
+          SALVAR
         </button>
-        <button *ngIf="typeForm === 'edit'" color="primary" [disabled]="!itemForm.valid" (click)="edit(itemForm.value, item.id)" md-raised-button>
-          <md-icon>mode_edit</md-icon> EDITAR
+        <button class="cb-button" *ngIf="typeForm === 'edit'" color="primary" (click)="edit(itemForm.value, item.id)" md-raised-button>
+          EDITAR
         </button>
       </md-card-actions>
     </md-card>

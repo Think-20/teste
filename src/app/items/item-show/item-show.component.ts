@@ -7,7 +7,8 @@ import { Item } from '../item.model';
 
 @Component({
   selector: 'cb-item-show',
-  templateUrl: './item-show.component.html'
+  templateUrl: './item-show.component.html',
+  styleUrls: ['./item-show.component.css']
 })
 export class ItemShowComponent implements OnInit {
 
@@ -29,6 +30,10 @@ export class ItemShowComponent implements OnInit {
       this.item = item
       snackBar.dismiss()
     })        
+  }
+
+  getImage(imageName) {
+    return `http://localhost:8000/assets/images/${imageName}`
   }
 
 }
