@@ -52,6 +52,16 @@ export class ClientService {
                 return ErrorHandler.capture(err)
             })
     }
+    
+    uploadSheet(file: any): Observable<any> {
+        let requestOptions = new RequestOptions()
+
+        let url = 'item/image'
+        let data = new FormData()
+        data.append('file', file)
+
+        return this.http.post(`${API}/${url}`, data, requestOptions)
+    }
 
     save(client: Client): Observable<any> {
         let url = 'client/save'

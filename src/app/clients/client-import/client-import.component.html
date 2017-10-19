@@ -1,0 +1,29 @@
+<div class="col-md-12">
+  <form novalidate autocomplete="off">
+    <md-card-title>
+      <p class="lead">Dados do cliente</p>
+    </md-card-title>
+    <md-card>
+      <div class="row">
+        <div class="col-md-12 text-center">
+         <button class="cb-button" md-raised-button type="button" (click)="fileInput.click()">
+           <md-icon>file_upload</md-icon> PLANILHA
+           <input #fileInput type="file" (change)="uploadSheet()" style="display:none;" />
+         </button>
+        </div>
+      </div>
+    </md-card>
+    <div *ngIf="informations.length > 0">
+      <md-card-title>
+        <p class="lead">Informações</p>
+      </md-card-title>
+      <md-card>
+        <div class="upload-informations">
+          <ul>
+            <li>teste</li>
+          </ul>
+        </div>
+      </md-card>
+    </div>
+  </form>
+</div>
