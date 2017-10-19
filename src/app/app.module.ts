@@ -36,6 +36,7 @@ import { EmployeeService } from './employees/employee.service';
 import { ClientFormComponent } from './clients/client-form/client-form.component';
 import { ClientListComponent } from './clients/client-list/client-list.component';
 import { ClientShowComponent } from './clients/client-show/client-show.component';
+import { ClientImportComponent } from './clients/client-import/client-import.component';
 import { ClientsComponent } from './clients/clients.component';
 import { ClientService } from './clients/client.service';
 
@@ -106,7 +107,8 @@ import { StarsComponent } from './shared/stars/stars.component';
     ItemFormComponent,
     ItemListComponent,
     ItemShowComponent,
-    StarsComponent
+    StarsComponent,
+    ClientImportComponent
   ],
   imports: [
     BrowserModule,

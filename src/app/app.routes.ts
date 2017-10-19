@@ -8,6 +8,7 @@ import { ClientsComponent } from './clients/clients.component';
 import { ClientFormComponent } from './clients/client-form/client-form.component';
 import { ClientListComponent } from './clients/client-list/client-list.component';
 import { ClientShowComponent } from './clients/client-show/client-show.component';
+import { ClientImportComponent } from './clients/client-import/client-import.component';
 
 import { ProvidersComponent } from './providers/providers.component';
 import { ProviderFormComponent } from './providers/provider-form/provider-form.component';
@@ -116,6 +117,9 @@ export const ROUTES: Routes = [
                     },
                     {
                         path: 'list', component: ClientListComponent
+                    },
+                    {
+                        path: 'import', component: ClientImportComponent
                     }
                 ]
             },

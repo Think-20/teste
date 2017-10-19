@@ -237,6 +237,14 @@ md-card-title > p {
     clear: both;
 }
 
+.button-section {
+  margin: 10px 0px;
+}
+
+.upload-informations {
+  color: #555;
+}
+
 #searchForm .mat-row, #searchForm .mat-header-row {
   border-bottom: 0px;
 }
@@ -312,7 +320,7 @@ md-card-title > p {
 }
 
 .mat-select-underline {
-  height: 2px !important;
+  height: 1px !important;
 }
 
 .search-bar-group .mat-focused .mat-input-placeholder.mat-float, 
