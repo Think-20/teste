@@ -32,7 +32,8 @@ export class ItemListComponent implements OnInit {
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
   search: FormControl
-  items: Item[]
+  items: Item[] = []
+  searching = false
 
   constructor(
     private fb: FormBuilder,
@@ -40,29 +41,45 @@ export class ItemListComponent implements OnInit {
     private snackBar: MdSnackBar
   ) { }
 
+  total(items: Item[]) {
+    return items.length
+  }
+
   ngOnInit() {
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
       search: this.search
     })
 
+    this.searching = true
     let snackBar = this.snackBar.open('Carregando itens...')
     
     this.itemService.items().subscribe(items => {
+      this.searching = false
       this.items = items
       snackBar.dismiss()
     })
 
     this.search.valueChanges
+      .do(() => this.searching = true)
       .debounceTime(500)
       .subscribe(value => {
-        this.itemService.items(value).subscribe(items => this.items = items)
+        this.itemService.items(value).subscribe(searchItems => {
+          this.searching = false
+          this.items = searchItems
+        })
     })
   }
 
   delete(item: Item) {
-    this.itemService.delete(item.id).subscribe(() => {
-      this.items.splice(this.items.indexOf(item), 1)
+    this.itemService.delete(item.id).subscribe((data) => {
+      this.snackBar.open(data.message, '', {
+        duration: 5000
+      })
+
+      if(data.status) {
+        this.items.splice(this.items.indexOf(item), 1)
+      }
     })
   }
  

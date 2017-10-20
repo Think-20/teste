@@ -6,12 +6,20 @@
     <md-card>
       <div class="row">
         <div class="col-md-12 text-center">
-         <button class="cb-button" md-raised-button type="button" (click)="fileInput.click()">
-           <md-icon>file_upload</md-icon> PLANILHA
-           <input #fileInput type="file" (change)="uploadSheet()" style="display:none;" />
+         <button class="cb-button attachment" md-raised-button type="button" (click)="fileInput.click()">
+           <img src="/assets/images/icons/excel.png" alt="Excel">
+            <br>
+            <p *ngIf="fileInput.files.length == 0">Clique para escolher um arquivo</p>
+            <p *ngIf="fileInput.files.length == 1">{{fileInput.files[0].name}}</p>
+           <input #fileInput type="file" accept=".xls,.xlsx" style="display:none;" />
          </button>
         </div>
       </div>
+      <md-card-actions class="text-right">
+        <button class="cb-button" md-raised-button type="button" (click)="uploadSheet()">
+          IMPORTAR
+        </button>
+      </md-card-actions>
     </md-card>
     <div *ngIf="informations.length > 0">
       <md-card-title>
@@ -20,7 +28,9 @@
       <md-card>
         <div class="upload-informations">
           <ul>
-            <li>teste</li>
+            <li *ngFor="let information of informations; let i = index">
+              {{(i + 1)}} {{information.message}}
+            </li>
           </ul>
         </div>
       </md-card>

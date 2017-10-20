@@ -34,6 +34,25 @@ export class ItemService {
             })
     }
 
+    uploadImage(file: any): Observable<any> {
+        let requestOptions = new RequestOptions()
+        let headers = new Headers()
+
+        let user = this.auth.currentUser()
+        let token = this.auth.token()
+
+        headers.set('Authorization', `${token}`)
+        headers.set('User', `${user.id}`)
+        requestOptions.headers = headers
+
+        let url = 'item/image'
+        let data = new FormData()
+        data.append('image', file, file.name)
+
+        return this.http.post(`${API}/${url}`, data, requestOptions)
+            .map(response => response.json())
+    }
+
     item(itemId: number): Observable<Item> {
         let url = `items/get/${itemId}`
 
@@ -45,16 +64,6 @@ export class ItemService {
                 })
                 return ErrorHandler.capture(err)
             })
-    }
-
-    uploadImage(file: any): Observable<any> {
-        let requestOptions = new RequestOptions()
-
-        let url = 'item/image'
-        let data = new FormData()
-        data.append('file', file)
-
-        return this.http.post(`${API}/${url}`, data, requestOptions)
     }
 
     save(item: Item): Observable<any> {
@@ -91,9 +100,9 @@ export class ItemService {
             })
     }
 
-    delete(id: number): Observable<Item> {
+    delete(id: number): Observable<any> {
         let url = `item/remove/${id}`
-
+        
         return this.http.delete(`${API}/${url}`)
             .map(response => response.json())
             .catch((err) => {

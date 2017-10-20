@@ -55,12 +55,27 @@ export class ClientService {
     
     uploadSheet(file: any): Observable<any> {
         let requestOptions = new RequestOptions()
+        let headers = new Headers()
 
-        let url = 'item/image'
+        let user = this.auth.currentUser()
+        let token = this.auth.token()
+
+        headers.set('Authorization', `${token}`)
+        headers.set('User', `${user.id}`)
+        requestOptions.headers = headers
+
+        let url = 'client/import'
         let data = new FormData()
-        data.append('file', file)
+        data.append('file', file, file.name)
 
         return this.http.post(`${API}/${url}`, data, requestOptions)
+            .map(response => response.json())
+            .catch((err) => {
+                this.snackBar.open(ErrorHandler.message(err), '', {
+                    duration: 3000
+                })
+                return ErrorHandler.capture(err)
+            })
     }
 
     save(client: Client): Observable<any> {

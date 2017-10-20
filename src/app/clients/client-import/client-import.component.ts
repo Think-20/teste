@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MdSnackBar } from '@angular/material';
 
 import { ClientService } from '../client.service';
 
@@ -16,6 +17,7 @@ export class ClientImportComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
+    private snackBar: MdSnackBar,
     private clientService: ClientService
   ) { }
 
@@ -29,7 +31,12 @@ export class ClientImportComponent implements OnInit {
     let fileInput = this.fileInput.nativeElement
     if(fileInput.files && fileInput.files[0]) {
       let file = fileInput.files[0]
-      this.clientService.uploadSheet(file).subscribe(response => console.log(response.json()))
+      this.clientService.uploadSheet(file).subscribe(data => {
+        this.snackBar.open('Importação executada, veja as informações.', '', {
+          duration: data.status ? 1000 : 5000
+        })
+        this.informations = data.informations
+      })
     }
   }
 

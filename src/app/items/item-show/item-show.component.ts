@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MdSnackBar } from '@angular/material';
 
+import { API } from '../../app.api';
 import { ItemService } from '../item.service';
 import { Item } from '../item.model';
 
 @Component({
   selector: 'cb-item-show',
-  templateUrl: './item-show.component.html'
+  templateUrl: './item-show.component.html',
+  styleUrls: ['./item-show.component.css']
 })
 export class ItemShowComponent implements OnInit {
 
@@ -29,6 +31,10 @@ export class ItemShowComponent implements OnInit {
       this.item = item
       snackBar.dismiss()
     })        
+  }
+
+  getImage(imageName) {
+    return `${API}/assets/images/${imageName}`
   }
 
 }

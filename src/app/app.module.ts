@@ -18,8 +18,8 @@ import { MaskDirective } from './shared/mask.directive';
 
 import { HomeComponent } from './home/home.component';
 import { NotificationBarComponent } from './notification-bar/notification-bar.component';
-import { MeasureComponent } from './measure/measure.component';
-import { MeasureService } from './measure/measure.service';
+import { MeasureComponent } from './measures/measure.component';
+import { MeasureService } from './measures/measure.service';
 import { FinalityComponent } from './finality/finality.component';
 import { FinalityService } from './finality/finality.service';
 import { PurchaseOrderComponent } from './purchase-order/purchase-order.component';
