@@ -3,6 +3,7 @@ import { NgModule, LOCALE_ID } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { 
+  MatDialog, MatDialogModule, MatSlideToggleModule, MatSlideToggle,
   MdTableModule, MdProgressBarModule, MdCardModule, MdInputModule, MdSelectModule, 
   MdButtonModule, MdIconModule, MdTabsModule, MdAutocompleteModule, MdChipsModule,
   MdSnackBar, MdSnackBarModule, MdMenuModule, MD_PLACEHOLDER_GLOBAL_OPTIONS
@@ -130,7 +131,9 @@ import { StarsComponent } from './shared/stars/stars.component';
     MdAutocompleteModule,
     MdChipsModule,
     MdSnackBarModule,
-    MdMenuModule
+    MdMenuModule,
+    MatDialogModule,
+    MatSlideToggleModule
   ],
   providers: [
     ClientService,
@@ -150,7 +153,9 @@ import { StarsComponent } from './shared/stars/stars.component';
     ClientTypeService,
     EmployeeService,
 
+    MatDialog,
     MdSnackBar,
+    MatSlideToggle,
     {provide: MD_PLACEHOLDER_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
     {provide: LOCALE_ID, useValue: 'pt-BR'}
   ],

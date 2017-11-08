@@ -1,10 +1,11 @@
 import { Component, OnInit, Injectable, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
-import { ActivatedRoute } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MdSnackBar, MatDialog, MatSlideToggle } from '@angular/material';
 
 import { Item } from '../item.model';
+import { ChildItem } from '../../child-items/child-item.model';
 import { ItemCategory } from '../../item-categories/item-category.model';
 import { CostCategory } from '../../cost-categories/cost-category.model';
 import { Measure } from '../../measures/measure.model';
@@ -53,6 +54,8 @@ export class ItemFormComponent implements OnInit {
   rowAppearedState = 'ready'
   item: Item
   itemForm: FormGroup
+  compositeItem: boolean = false
+  items: Observable<Item[]>
   itemCategories: Observable<ItemCategory[]>
   costCategories: Observable<CostCategory[]>
   measures: Observable<Measure[]>
@@ -68,7 +71,8 @@ export class ItemFormComponent implements OnInit {
     private providerService: ProviderService,
     private formBuilder: FormBuilder,
     private snackBar: MdSnackBar,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {    
@@ -86,6 +90,7 @@ export class ItemFormComponent implements OnInit {
         Validators.minLength(3),
         Validators.maxLength(255)
       ]), 
+      item_type: this.formBuilder.control(0),
       image: this.formBuilder.control('sem-foto.jpg'),
       item_category: this.formBuilder.control('', [
         Validators.required
@@ -93,7 +98,8 @@ export class ItemFormComponent implements OnInit {
       cost_category: this.formBuilder.control('', [
         Validators.required
       ]),
-      pricings: this.formBuilder.array([])
+      pricings: this.formBuilder.array([]),
+      childItems: this.formBuilder.array([])
     })
 
     this.itemForm.get('item_category').valueChanges.subscribe(itemCategory => {
@@ -104,10 +110,16 @@ export class ItemFormComponent implements OnInit {
       this.costCategories = this.costCategoryService.costCategories(costCategory)
     })
 
+    this.itemForm.get('item_type').valueChanges.subscribe(value => {
+      if(value == 1) {
+        this.compositeItem = true
+      } else {
+        this.compositeItem = false
+      }
+    })
+
     if(this.typeForm === 'edit') {
       this.loadItem()
-    } else {
-      this.addPricing()
     }
   }
 
@@ -122,12 +134,16 @@ export class ItemFormComponent implements OnInit {
     }
   }
 
-  displayProvider(provider: Provider): string {
-    return provider.fantasy_name
+  displayItem(item: Item): string {
+    return item.name
   }
 
   displayMeasure(measure: Measure): string {
     return measure.description
+  }
+
+  displayProvider(provider: Provider): string {
+    return provider.fantasy_name
   }
 
   displayItemCategory(itemCategory: ItemCategory): string {
@@ -150,17 +166,31 @@ export class ItemFormComponent implements OnInit {
       this.imagePath = `${API}/assets/images/${this.item.image}`
       this.itemForm.controls.item_category.setValue(this.item.item_category)
       this.itemForm.controls.cost_category.setValue(this.item.cost_category)
-      
-      this.itemForm.controls.pricings.setValue([])
+      this.itemForm.controls.item_type.setValue(this.item.item_type.id)
+
+      let pricings = <FormArray>this.itemForm.controls.pricings
+      for(let i = 0; i <= pricings.length; i++) {
+        pricings.removeAt(0)
+      }
 
       for(let pricing of item.pricings) {
         this.addPricing(pricing)
+      }
+
+      let childItems = <FormArray>this.itemForm.controls.childItems
+      for(let i = 0; i <= childItems.length; i++) {
+        childItems.removeAt(0)
+      }
+
+      for(let childItem of item.child_items) {
+        this.addChildItem(childItem)
       }
     })
   }
 
   get pricings() { return this.itemForm.get('pricings'); }
-
+  get childItems() { return this.itemForm.get('childItems'); }
+  
   addPricing(pricing?: Pricing) {
     const pricings = <FormArray>this.itemForm.controls['pricings']
     
@@ -177,22 +207,145 @@ export class ItemFormComponent implements OnInit {
       ])
     }))
 
-    pricings.at((pricings.length - 1)).get('measure').valueChanges.subscribe(measure => {
+    let pricingForm = <FormGroup>pricings.at((pricings.length - 1))
+    
+    /* Se for um preço existente, iniciar em modo bloqueado. */
+    if(pricing) {
+      pricingForm.disable()
+    }
+
+    pricingForm.get('measure').valueChanges.subscribe(measure => {
       this.measures = this.measureService.measures(measure)
     })
 
-    pricings.at((pricings.length - 1)).get('provider').valueChanges.subscribe(provider => {
+    pricingForm.get('provider').valueChanges.subscribe(provider => {
       this.providers = this.providerService.providers(provider)
+    })
+  }
+
+  editPricing(i) {
+    const pricings = <FormArray>this.itemForm.controls['pricings']
+    let pricing: Pricing = pricings.at(i).value
+    pricings.at(i).get('id').enable()
+    pricings.at(i).get('price').enable()
+  }
+
+  savePricing(i) {
+    const pricings = <FormArray>this.itemForm.controls['pricings']
+    let pricing: Pricing = pricings.at(i).value
+
+    this.itemService.savePricing(this.item, pricing).subscribe(data => {
+      if(data.status) {
+        pricings.at(i).disable()
+        pricings.at(i).get('id').updateValueAndValidity(data.pricing.id)
+      }
+      
+      let snack = this.snackBar.open(data.message, '', {
+        duration: 3000
+      })
+
+      snack.afterDismissed().subscribe(() => this.loadItem())
     })
   }
 
   deletePricing(i) {
     const pricings = <FormArray>this.itemForm.controls['pricings']
-    if(pricings.length > 1) pricings.removeAt(i)
+    let pricing: Pricing = pricings.at(i).value
+    //if(pricings.length > 1) 
+    
+    this.itemService.removePricing(this.item, pricing).subscribe(data => {
+      if(data.status) {
+        pricings.removeAt(i)
+      }
+      let snack = this.snackBar.open(data.message, '', {
+        duration: 3000
+      })
+
+      snack.afterDismissed().subscribe(() => this.loadItem())
+    })
+      
+  }
+
+  addChildItem(childItem?: ChildItem) {
+    const childItems = <FormArray>this.itemForm.controls['childItems']
+    
+    childItems.push(this.formBuilder.group({
+      id: this.formBuilder.control(childItem ? childItem.id : '' || ''),
+      quantity: this.formBuilder.control(childItem ? childItem.quantity : '' || '', [
+        Validators.required
+      ]),
+      measure: this.formBuilder.control(childItem ? childItem.measure : '' || '', [
+        Validators.required
+      ]),
+      item: this.formBuilder.control(childItem ? childItem.item : '' || '', [
+        Validators.required
+      ])
+    }))
+
+    let childItemForm = <FormGroup>childItems.at((childItems.length - 1))
+    
+    /* Se for um preço existente, iniciar em modo bloqueado. */
+    if(childItem) {
+      childItemForm.disable()
+    }
+
+    childItemForm.get('measure').valueChanges.subscribe(measure => {
+      this.measures = this.measureService.measures(measure)
+    })
+
+    childItemForm.get('item').valueChanges.subscribe(item => {
+      this.items = this.itemService.items(item)
+    })
+  }
+
+  editChildItem(i) {
+    const childItems = <FormArray>this.itemForm.controls['childItems']
+    let childItem: Pricing = childItems.at(i).value
+    childItems.at(i).get('id').enable()
+    childItems.at(i).get('quantity').enable()
+  }
+
+  saveChildItem(i) {
+    const childItems = <FormArray>this.itemForm.controls['childItems']
+    let childItem: ChildItem = childItems.at(i).value
+
+    this.itemService.saveChildItem(this.item, childItem).subscribe(data => {
+      if(data.status) {
+        childItems.at(i).disable()
+        childItems.at(i).get('id').updateValueAndValidity(data.childItem.id)
+      }
+      
+      let snack = this.snackBar.open(data.message, '', {
+        duration: 3000
+      })
+
+      snack.afterDismissed().subscribe(() => this.loadItem())
+    })
+  }
+
+  deleteChildItem(i) {
+    const childItems = <FormArray>this.itemForm.controls['childItems']
+    let childItem: ChildItem = childItems.at(i).value
+    
+    this.itemService.removeChildItem(this.item, childItem).subscribe(data => {
+      if(data.status) {
+        childItems.removeAt(i)
+      }
+      let snack = this.snackBar.open(data.message, '', {
+        duration: 3000
+      })
+
+      snack.afterDismissed().subscribe(() => this.loadItem())
+    })
+      
   }
 
   getPricingsControls(itemForm: FormGroup) {
     return (<FormArray>this.itemForm.get('pricings')).controls
+  } 
+
+  getChildItemsControls(itemForm: FormGroup) {
+    return (<FormArray>this.itemForm.get('childItems')).controls
   } 
 
   save(item: Item) {
@@ -205,11 +358,15 @@ export class ItemFormComponent implements OnInit {
 
     this.itemService.save(item).subscribe(data => {
       this.snackBar.open(data.message, '', {
-        duration: 5000
+        duration: data.status ? 1000 : 5000
+      }).afterDismissed().subscribe(observer => {
+        if(data.status) {
+          this.router.navigate([`/items/edit`, data.item.id])
+        }
       })
-    })
+    }) 
   }
-
+  
   edit(item: Item, itemId: number) {
     if(ErrorHandler.formIsInvalid(this.itemForm)) {
       this.snackBar.open('Por favor, preencha corretamente os campos.', '', {

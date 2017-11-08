@@ -437,3 +437,7 @@ md-card-title > p {
   margin-top: -4px;
   font-size: 9px;
 }
+
+.mat-slide-toggle-content {
+  color: rgba(117, 117, 117, 0.77) !important;
+}

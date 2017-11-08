@@ -6,6 +6,9 @@
     <md-card>
       <div class="row">
           <div class="col-md-12 image-container text-center"> 
+            <div class="text-right">
+              <mat-slide-toggle formControlName="item_type">Item composto</mat-slide-toggle>
+            </div>
             <img [src]="imagePath" alt="Imagem de item">
             <input type="hidden" formControlName="image">
             <div>
@@ -49,49 +52,6 @@
                 {{ costCategory.description }}
               </md-option>
           </md-autocomplete>
-          <div class="form-array" formArrayName="pricings">
-            <div *ngFor="let control of getPricingsControls(itemForm); let i = index">
-              <form [formGroup]="getPricingsControls(itemForm)[i]" novalidate autocomplete="off" class="flex pricing-item">
-                <input formControlName="id" type="hidden">
-                <md-input-container class="col-md-4">
-                  <input formControlName="price" mdInput placeholder="Preço*">
-                  <md-error>
-                    Obrigatório
-                  </md-error>
-                </md-input-container>
-                <md-input-container class="col-md-4">
-                  <input formControlName="measure" mdInput [mdAutocomplete]="autocompleteMeasure" placeholder="Unidade de medida*">
-                  <md-error>
-                    Obrigatório
-                  </md-error>
-                </md-input-container>
-                <md-autocomplete #autocompleteMeasure="mdAutocomplete" [displayWith]="displayMeasure">
-                  <md-option *ngFor="let measure of measures | async" [value]="measure">
-                    {{ measure.description }}
-                  </md-option>
-                </md-autocomplete>
-                <md-input-container class="col-md-4">
-                  <input formControlName="provider" mdInput [mdAutocomplete]="autocompleteProvider" placeholder="Fornecedor*">
-                  <md-error>
-                    Obrigatório
-                  </md-error>
-                </md-input-container>
-                <md-autocomplete #autocompleteProvider="mdAutocomplete" [displayWith]="displayProvider">
-                  <md-option *ngFor="let provider of providers | async" [value]="provider">
-                    {{ provider.fantasy_name }}
-                  </md-option>
-                </md-autocomplete>
-                <button *ngIf="i > 0" type="button" class="delete-pricing" (click)="deletePricing(i)" md-button>
-                  <md-icon>clear</md-icon>
-                </button>
-              </form>
-            </div>
-          </div>
-          <div class="col-md-12">
-            <button type="button" class="add-pricing" (click)="addPricing()" md-button>
-              <md-icon>add</md-icon>
-            </button>
-          </div>
       </div>
       <md-card-actions class="col-md-12 text-right">
         <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save(itemForm.value)" md-raised-button>
@@ -102,5 +62,141 @@
         </button>
       </md-card-actions>
     </md-card>
+    <div *ngIf="!compositeItem">
+      <md-card-title>
+        <p class="lead">Preços</p>
+      </md-card-title>
+      <md-card>
+        <div *ngIf="item == null" class="col-md-12 records-not-found">
+          <p>
+            <small>
+              Primeiro cadastre o item para poder relacionar com os preços.
+            </small>
+          </p>
+        </div>
+        <div *ngIf="item != null">
+          <div class="form-array" formArrayName="pricings">
+            <div *ngFor="let control of getPricingsControls(itemForm); let i = index">
+              <form [formGroup]="getPricingsControls(itemForm)[i]" novalidate autocomplete="off" class="flex pricing-item">
+                <input formControlName="id" type="hidden">
+                <md-input-container class="col-md-3">
+                  <input formControlName="price" mdInput placeholder="Preço*">
+                  <md-error>
+                    Obrigatório
+                  </md-error>
+                </md-input-container>
+                <md-input-container class="col-md-4">
+                  <input formControlName="measure" mdInput [mdAutocomplete]="autocompleteMeasure" placeholder="Medida*">
+                  <md-error>
+                    Obrigatório
+                  </md-error>
+                </md-input-container>
+                <md-autocomplete #autocompleteMeasure="mdAutocomplete" [displayWith]="displayMeasure">
+                    <md-option *ngFor="let measure of measures | async" [value]="measure">
+                      {{ measure.description }}
+                    </md-option>
+                </md-autocomplete>
+                <md-input-container class="col-md-4">
+                  <input formControlName="provider" mdInput [mdAutocomplete]="autocompleteProvider" placeholder="Fornecedor*">
+                  <md-error>
+                    Obrigatório
+                  </md-error>
+                </md-input-container>
+                <md-autocomplete #autocompleteProvider="mdAutocomplete" [displayWith]="displayProvider">
+                    <md-option *ngFor="let provider of providers | async" [value]="provider">
+                      {{ provider.fantasy_name }}
+                    </md-option>
+                </md-autocomplete>
+                <button 
+                  *ngIf="getPricingsControls(itemForm)[i].enabled == true"  
+                  type="button" 
+                  class="save-pricing" (click)="savePricing(i)" md-button>
+                  <md-icon>done</md-icon>
+                </button>
+                <button 
+                  *ngIf="getPricingsControls(itemForm)[i].enabled == false" 
+                  type="button" 
+                  class="edit-pricing" (click)="editPricing(i)" md-button>
+                  <md-icon>mode_edit</md-icon>
+                </button>
+                <button type="button" class="delete-pricing" (click)="deletePricing(i)" md-button>
+                  <md-icon>clear</md-icon>
+                </button>
+              </form>
+            </div>
+            <div class="col-md-12">
+              <button type="button" class="add-pricing" (click)="addPricing()" md-button>
+                <md-icon>add</md-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </md-card>
+    </div>
+    <div *ngIf="compositeItem">
+      <md-card-title>
+        <p class="lead">Itens relacionados</p>
+      </md-card-title>
+      <md-card>
+        <div *ngIf="item == null" class="col-md-12 records-not-found">
+          <p>
+            <small>
+              Primeiro cadastre o item para poder relacionar com outros itens.
+            </small>
+          </p>
+        </div>
+        <div *ngIf="item != null">
+          <div class="form-array" formArrayName="pricings">
+            <div *ngFor="let control of getChildItemsControls(itemForm); let i = index">
+              <form [formGroup]="getChildItemsControls(itemForm)[i]" novalidate autocomplete="off" class="flex pricing-item">
+                <input formControlName="id" type="hidden">
+                <md-autocomplete #autocompleteItem="mdAutocomplete" [displayWith]="displayItem">
+                    <md-option *ngFor="let item of items | async" [value]="item">
+                      {{ item.name }}
+                    </md-option>
+                </md-autocomplete>
+                <md-input-container class="col-md-4">
+                  <input formControlName="item" mdInput placeholder="Item*" [mdAutocomplete]="autocompleteItem">
+                </md-input-container>
+                <md-autocomplete #autocompleteMeasure="mdAutocomplete" [displayWith]="displayMeasure">
+                    <md-option *ngFor="let measure of measures | async" [value]="measure">
+                      {{ measure.description }}
+                    </md-option>
+                </md-autocomplete>
+                <md-input-container class="col-md-3">
+                  <input formControlName="measure" mdInput placeholder="Medida*" [mdAutocomplete]="autocompleteMeasure">
+                </md-input-container>
+                <md-input-container class="col-md-3">
+                  <input formControlName="quantity" mdInput placeholder="Quantidade*">
+                  <md-error>
+                    Obrigatório
+                  </md-error>
+                </md-input-container>
+                <button 
+                  *ngIf="getChildItemsControls(itemForm)[i].enabled == true"  
+                  type="button" 
+                  class="save-pricing" (click)="saveChildItem(i)" md-button>
+                  <md-icon>done</md-icon>
+                </button>
+                <button 
+                  *ngIf="getChildItemsControls(itemForm)[i].enabled == false" 
+                  type="button" 
+                  class="edit-pricing" (click)="editChildItem(i)" md-button>
+                  <md-icon>mode_edit</md-icon>
+                </button>
+                <button type="button" class="delete-pricing" (click)="deleteChildItem(i)" md-button>
+                  <md-icon>clear</md-icon>
+                </button>
+              </form>
+            </div>
+            <div class="col-md-12">
+              <button type="button" class="add-pricing" (click)="addChildItem()" md-button>
+                <md-icon>add</md-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </md-card>
+    </div> 
   </form>
 </div>

@@ -20,7 +20,7 @@
     flex-wrap: wrap;
  }
 
- .add-pricing, .delete-pricing {
+ .add-pricing, .save-pricing, .edit-pricing, .delete-pricing {
     z-index: 10;
     min-width: 10px !important;
     padding: 0px !important;
@@ -34,9 +34,16 @@
     left: 0px;
  }
 
+ .save-pricing, .edit-pricing {
+    position: absolute;
+    right: 32px;
+    top: 3px;
+    z-index: 10;
+ }
+
 .delete-pricing {
     position: absolute;
-    right: 6px;
+    right: 4px;
     top: 3px;
     z-index: 10;
 }

@@ -10,6 +10,8 @@ import 'rxjs/operator/debounceTime';
 import { API } from '../app.api';
 import { ErrorHandler } from '../shared/error-handler.service';
 import { Item } from './item.model';
+import { Pricing } from '../pricings/pricing.model';
+import { ChildItem } from '../child-items/child-item.model';
 import { AuthService } from '../login/auth.service';
 
 
@@ -57,6 +59,72 @@ export class ItemService {
         let url = `items/get/${itemId}`
 
         return this.http.get(`${API}/${url}`)
+            .map(response => response.json())
+            .catch((err) => {
+                this.snackBar.open(ErrorHandler.message(err), '', {
+                    duration: 3000
+                })
+                return ErrorHandler.capture(err)
+            })
+    }
+
+    savePricing(item: Item, pricing: Pricing): Observable<any> {
+        let url = `item/save-pricing/${item.id}`
+
+        return this.http.post(
+                `${API}/${url}`,
+                JSON.stringify(pricing),
+                new RequestOptions()
+            )
+            .map(response => response.json())
+            .catch((err) => {
+                this.snackBar.open(ErrorHandler.message(err), '', {
+                    duration: 3000
+                })
+                return ErrorHandler.capture(err)
+            })
+    }
+
+    removePricing(item: Item, pricing: Pricing): Observable<any> {
+        let url = `item/${item.id}/remove-pricing/${pricing.id}`
+
+        return this.http.delete(
+                `${API}/${url}`,
+                new RequestOptions()
+            )
+            .map(response => response.json())
+            .catch((err) => {
+                this.snackBar.open(ErrorHandler.message(err), '', {
+                    duration: 3000
+                })
+                return ErrorHandler.capture(err)
+            })
+    }
+
+    saveChildItem(item: Item, childItem: ChildItem): Observable<any> {
+        let url = `item/save-child-item/${item.id}`
+
+        return this.http.post(
+                `${API}/${url}`,
+                JSON.stringify(childItem),
+                new RequestOptions()
+            )
+            .map(response => response.json())
+            .catch((err) => {
+                this.snackBar.open(ErrorHandler.message(err), '', {
+                    duration: 3000
+                })
+                return ErrorHandler.capture(err)
+            })
+    }
+
+    removeChildItem(item: Item, childItem: ChildItem): Observable<any> {
+        let url = `item/${item.id}/remove-child-item/${childItem.id}`
+
+        return this.http.delete(
+                `${API}/${url}`,
+                new RequestOptions()
+            )
             .map(response => response.json())
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
