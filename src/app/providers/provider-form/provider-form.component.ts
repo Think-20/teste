@@ -323,7 +323,7 @@ export class ProviderFormComponent implements OnInit {
 
   deleteAccount(i) {
     const accounts = <FormArray>this.providerForm.controls['accounts']
-    if(accounts.length > 1) accounts.removeAt(i)
+    accounts.removeAt(i)
   }
 
   displayState(state: State) {

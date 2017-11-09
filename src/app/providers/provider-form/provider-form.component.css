@@ -13,8 +13,15 @@
  .add-contact, .add-account {
     position: relative;
     margin-top: -20px;
-    top: -16px;
     left: 0px;
+ }
+
+ .add-contact {
+    top: -16px;
+ }
+
+ .add-account {
+    top: -9px;
  }
 
 .delete-contact, .delete-account {
