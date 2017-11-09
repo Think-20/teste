@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  api: 'http://54.244.102.158:8000'
+  api: 'https://companybook.ddns.net:8000'
 };

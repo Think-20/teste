@@ -99,52 +99,64 @@
               <md-icon>add</md-icon>
             </button>
           </div>
-          <div class="form-array" formArrayName="contacts">
-            <div *ngFor="let control of getAccountsControls(providerForm); let i = index">
-              <form [formGroup]="getAccountsControls(providerForm)[i]" novalidate autocomplete="off" class="flex contact-item">
-                <md-input-container class="col-md-3">
-                  <input formControlName="id" type="hidden">
-                  <input formControlName="favored" mdInput placeholder="Favorecido*">
-                  <md-error>
-                    Obrigatório, mínimo 3 caract.
-                  </md-error>
-                </md-input-container>
-                <md-input-container class="col-md-2">
-                  <input formControlName="agency" mdInput placeholder="Agência*">
-                  <md-error>
-                    Obrigatório, mínimo 4 dígitos
-                  </md-error>
-                </md-input-container>
-                <md-input-container class="col-md-2">
-                  <input formControlName="account_number" mdInput placeholder="Número*">
-                  <md-error>
-                    Obrigatório, mínimo 6 dígitos
-                  </md-error>
-                </md-input-container>
-                <md-select class="col-md-3" placeholder="Tipo de conta*" formControlName="bank_account_type" [compareWith]="compareBankAccountType">
-                  <md-option *ngFor="let bankAccountType of bankAccountTypes | async" [value]="bankAccountType">
-                    {{ bankAccountType.description }}
-                  </md-option>
-                </md-select>
-                <md-select class="col-md-2" placeholder="Banco*" formControlName="bank" [compareWith]="compareBank">
-                  <md-option *ngFor="let bank of banks | async" [value]="bank">
-                    {{ bank.name }}
-                  </md-option>
-                </md-select>
-                <button *ngIf="i > 0" type="button" class="delete-account" (click)="deleteAccount(i)" md-button>
-                  <md-icon>clear</md-icon>
-                </button>
-              </form>
-            </div>
-          </div>
-          <div *ngIf="getAccountsControls(providerForm).length > 0" class="col-md-12">
-            <button type="button" class="add-account" (click)="addAccount()" md-button>
-              <md-icon>add</md-icon>
-            </button>
-          </div>
           <md-input-container class="col-md-12">
             <textarea formControlName="note" mdInput placeholder="Observação: Indicação, já nos conhecia, como chegou até nós..."></textarea>
           </md-input-container>
+      </div>
+    </md-card>
+    <md-card-title>
+      <p class="lead">
+        Dados bancários
+      </p>
+    </md-card-title>
+    <md-card>
+      <div class="row">
+        <div class="form-array" formArrayName="contacts">
+          <div *ngFor="let control of getAccountsControls(providerForm); let i = index">
+            <form [formGroup]="getAccountsControls(providerForm)[i]" novalidate autocomplete="off" class="flex contact-item">
+              <input formControlName="id" type="hidden">
+              <md-input-container class="col-md-6">
+                <input formControlName="favored" mdInput placeholder="Favorecido*">
+                <md-error>
+                  Obrigatório, mínimo 3 caract.
+                </md-error>
+              </md-input-container>
+              <md-input-container class="col-md-3">
+                <input formControlName="agency" mdInput placeholder="Agência*">
+                <md-error>
+                  Obrigatório, mínimo 4 dígitos
+                </md-error>
+              </md-input-container>
+              <md-input-container class="col-md-3">
+                <input formControlName="account_number" mdInput placeholder="Número*">
+                <md-error>
+                  Obrigatório, mínimo 6 dígitos
+                </md-error>
+              </md-input-container>
+              <md-select class="col-md-6" placeholder="Tipo de conta*" formControlName="bank_account_type" [compareWith]="compareBankAccountType">
+                <md-option *ngFor="let bankAccountType of bankAccountTypes | async" [value]="bankAccountType">
+                  {{ bankAccountType.description }}
+                </md-option>
+              </md-select>
+              <md-select class="col-md-6" placeholder="Banco*" formControlName="bank" [compareWith]="compareBank">
+                <md-option *ngFor="let bank of banks | async" [value]="bank">
+                  {{ bank.name }}
+                </md-option>
+              </md-select>
+              <button type="button" class="delete-account" (click)="deleteAccount(i)" md-button>
+                <md-icon>clear</md-icon>
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-12">
+          <button *ngIf="getAccountsControls(providerForm).length > 0" type="button" class="add-account" (click)="addAccount()" md-button>
+            <md-icon>add</md-icon>
+          </button>
+          <button *ngIf="getAccountsControls(providerForm).length == 0" type="button" class="cb-button" (click)="addAccount()" md-raised-button>
+            Adicionar informações de pagamento
+          </button>
+        </div>
       </div>
     </md-card>
     <md-card-title>
