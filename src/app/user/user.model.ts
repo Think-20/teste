@@ -6,10 +6,16 @@ export class User {
     password: string
     employee?: Employee
     functionalities?: Functionality[]
+    displays: Display[]
 }
 
 export class Functionality {
     id: number
     url: string
     description: string
+}
+
+export class Display {
+    url: string
+    access: string
 }

@@ -47,19 +47,19 @@ export const ROUTES: Routes = [
             {
                 path : 'cost-categories', component : CostCategoriesComponent, children: [
                     {
-                        path: '', redirectTo: 'list', pathMatch: 'full'
+                        path: '', redirectTo: 'list', pathMatch: 'full', canActivate: [AuthGuard]
                     },
                     {
-                        path: 'new', component: CostCategoryFormComponent
+                        path: 'new', component: CostCategoryFormComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'edit/:id', component: CostCategoryFormComponent
+                        path: 'edit/:id', component: CostCategoryFormComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'show/:id', component: CostCategoryShowComponent
+                        path: 'show/:id', component: CostCategoryShowComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'list', component: CostCategoryListComponent
+                        path: 'list', component: CostCategoryListComponent, canActivate: [AuthGuard]
                     }
                 ]
             },
@@ -69,16 +69,16 @@ export const ROUTES: Routes = [
                         path: '', redirectTo: 'list', pathMatch: 'full'
                     },
                     {
-                        path: 'new', component: ItemCategoryFormComponent
+                        path: 'new', component: ItemCategoryFormComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'edit/:id', component: ItemCategoryFormComponent
+                        path: 'edit/:id', component: ItemCategoryFormComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'show/:id', component: ItemCategoryShowComponent
+                        path: 'show/:id', component: ItemCategoryShowComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'list', component: ItemCategoryListComponent
+                        path: 'list', component: ItemCategoryListComponent, canActivate: [AuthGuard]
                     }
                 ]
             },
@@ -88,16 +88,16 @@ export const ROUTES: Routes = [
                         path: '', redirectTo: 'list', pathMatch: 'full'
                     },
                     {
-                        path: 'new', component: ItemFormComponent
+                        path: 'new', component: ItemFormComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'edit/:id', component: ItemFormComponent
+                        path: 'edit/:id', component: ItemFormComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'show/:id', component: ItemShowComponent
+                        path: 'show/:id', component: ItemShowComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'list', component: ItemListComponent
+                        path: 'list', component: ItemListComponent, canActivate: [AuthGuard]
                     }
                 ]
             },
@@ -107,19 +107,19 @@ export const ROUTES: Routes = [
                         path: '', redirectTo: 'list', pathMatch: 'full'
                     },
                     {
-                        path: 'new', component: ClientFormComponent
+                        path: 'new', component: ClientFormComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'edit/:id', component: ClientFormComponent
+                        path: 'edit/:id', component: ClientFormComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'show/:id', component: ClientShowComponent
+                        path: 'show/:id', component: ClientShowComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'list', component: ClientListComponent
+                        path: 'list', component: ClientListComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'import', component: ClientImportComponent
+                        path: 'import', component: ClientImportComponent, canActivate: [AuthGuard]
                     }
                 ]
             },
@@ -129,21 +129,19 @@ export const ROUTES: Routes = [
                         path: '', redirectTo: 'list', pathMatch: 'full'
                     },
                     {
-                        path: 'new', component: ProviderFormComponent
+                        path: 'new', component: ProviderFormComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'edit/:id', component: ProviderFormComponent
+                        path: 'edit/:id', component: ProviderFormComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'show/:id', component: ProviderShowComponent
+                        path: 'show/:id', component: ProviderShowComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'list', component: ProviderListComponent
+                        path: 'list', component: ProviderListComponent, canActivate: [AuthGuard]
                     }
                 ]
             }
-        ],
-
-        canActivate: [AuthGuard]
+        ] 
     }
 ]

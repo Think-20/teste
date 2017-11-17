@@ -1,5 +1,6 @@
 import { Component, OnInit, Injectable, Output, ElementRef, Renderer, ViewChild } from '@angular/core';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../../login/auth.service';
 import { User } from '../../user/user.model';
@@ -38,9 +39,26 @@ export class SidenavComponent implements OnInit {
   clients = false
 
   constructor(
-    private auth: AuthService
+    private auth: AuthService,
+    private route: Router
   ) { }
 
+  hasNoPermission(user: User, url: string): boolean {
+    let iterativeRoute = this.route.routerState.snapshot.root
+    let originalRoute = iterativeRoute.routeConfig !== null ? '/' + iterativeRoute.routeConfig.path : ''
+
+    while(iterativeRoute.parent !== null 
+        && iterativeRoute.parent.routeConfig !== null 
+        && iterativeRoute.parent.routeConfig.path != '') 
+    {
+        iterativeRoute = iterativeRoute.parent
+        originalRoute = '/' + iterativeRoute.routeConfig.path + originalRoute
+    }
+
+    return user.displays.filter(display => {
+        return display.url === originalRoute && display.access === 'N'
+    }).length > 0
+  }
   ngOnInit() {
     this.user = this.auth.currentUser()
   }
