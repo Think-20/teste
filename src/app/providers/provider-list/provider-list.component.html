@@ -1,27 +1,27 @@
 <div class="col-md-12" id="searchForm">
   <form [formGroup]="searchForm" autocomplete="off">
-    <md-card-title>
+    <mat-card-title>
       <div class="row search-bar-group">
         <div class="title">
           Lista
         </div>
-        <md-input-container class="bar">
-          <input #search mdInput formControlName="search" placeholder="Qual fornecedor você procura?" autocomplete="off">
-        </md-input-container>
+        <mat-input-container class="bar">
+          <input #search matInput formControlName="search" placeholder="Qual fornecedor você procura?" autocomplete="off">
+        </mat-input-container>
         <div class="buttons">  
-          <a md-button (click)="search.focus()">
-            <md-icon>search</md-icon>
+          <a mat-button (click)="search.focus()">
+            <mat-icon>search</mat-icon>
           </a>
-          <a md-button>
-            <md-icon>keyboard_arrow_down</md-icon>
+          <a mat-button>
+            <mat-icon>keyboard_arrow_down</mat-icon>
           </a>
-          <a [routerLink]="['/providers/new']" md-button>
-            <md-icon>add</md-icon>
+          <a [routerLink]="['/providers/new']" mat-button>
+            <mat-icon>add</mat-icon>
           </a>
         </div>
       </div>
-    </md-card-title>
-    <md-card>
+    </mat-card-title>
+    <mat-card>
       <div *ngIf="providers?.length > 0">
         <table class="table mat-table">
           <div class="mat-header-row">
@@ -41,20 +41,20 @@
                 <cb-stars [readonly]="true" [rate]="provider.rate"></cb-stars>
             </div>
             <div class="mat-cell mat-column-action">
-              <md-menu #menu="mdMenu">
-                <a [routerLink]="['/providers/show', provider.id]" md-menu-item>
-                  <md-icon>subject</md-icon> Detalhes
+              <mat-menu #menu="matMenu">
+                <a [routerLink]="['/providers/show', provider.id]" mat-menu-item>
+                  <mat-icon>subject</mat-icon> Detalhes
                 </a>
-                <a [routerLink]="['/providers/edit', provider.id]" md-menu-item>
-                  <md-icon>mode_edit</md-icon> Editar
+                <a [routerLink]="['/providers/edit', provider.id]" mat-menu-item>
+                  <mat-icon>mode_edit</mat-icon> Editar
                 </a>
-                <button (click)="delete(provider)" md-menu-item>
-                  <md-icon>delete</md-icon> Remover
+                <button (click)="delete(provider)" mat-menu-item>
+                  <mat-icon>delete</mat-icon> Remover
                 </button>
-              </md-menu>
+              </mat-menu>
 
-              <button md-icon-button [mdMenuTriggerFor]="menu">
-                <md-icon>menu</md-icon>
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>menu</mat-icon>
               </button>
             </div>
           </div>
@@ -81,15 +81,15 @@
           </small>
         </p>
       </div>
-    </md-card>
-    <md-card-title>
+    </mat-card>
+    <mat-card-title>
       <div class="row search-bar-group">
         <div class="title">
           Relatório
         </div>
       </div>
-    </md-card-title>
-    <md-card>
+    </mat-card-title>
+    <mat-card>
       <table class="table mat-table report">
         <div class="mat-header-row">
           <div class="mat-header-cell col-md-2 text-center">Total</div>
@@ -102,6 +102,6 @@
           <div class="mat-cell col-md-3 text-right">{{ lastUpdate(providers)?.updated_at | date: 'dd/MM/yyyy' }}</div>
         </div>
       </table>
-    </md-card>
+    </mat-card>
   </form>
 </div>

@@ -8,21 +8,25 @@ export class ErrorHandler {
     static capture(error: Response | any) {
         let errorMessage: string = ErrorHandler.message(error)
         //console.log(errorMessage)
-        return Observable.throw(errorMessage) 
+        return Observable.throw(errorMessage)
     }
 
     static message(error: Response | any): string {
         let errorMessage: string
 
-        if(error instanceof Response) {        
+        if(error instanceof Response) {
             errorMessage = `Erro ${error.status} ao acessar a URL ${error.url} - ${error.statusText}`
-            
+
             if(error.url === null) {
                 errorMessage = 'Erro: servidor não encontrado.'
             } else if(error.text() != '') {
                 try {
                     let data = JSON.parse(error.text())
-                    errorMessage = `Erro ${error.status} - ${data.message}`
+                    if(error.status == 404) {
+                      errorMessage = 'Arquivo não encontrado'
+                    } else {
+                      errorMessage = `Erro ${error.status} - ${data.message}`
+                    }
                 } catch(e) {
                     errorMessage = `Erro ${error.status} ao comunicar com o servidor.`
                 }
@@ -52,23 +56,24 @@ export class ErrorHandler {
 
         return true
     }
-    
+
     static formArrayIsInvalid(formArray: FormArray) {
-        
+
     }
 
     static containsForm(field: any) {
-        if(!(field instanceof FormArray)) {
-            return false
+        if((field instanceof FormArray)) {
+          let formArray = <FormArray>field
+          for(let i = 0; i < formArray.length; i++) {
+              let formGroup = <FormGroup>formArray.controls[i]
+              ErrorHandler.formIsInvalid(formGroup)
+          }
+          return true
+        } else if((field instanceof FormGroup)) {
+          let formGroup = <FormGroup>field
+          ErrorHandler.formIsInvalid(formGroup)
+          return true
         }
-
-        let formArray = <FormArray>field
-
-        for(let i = 0; i < formArray.length; i++) {
-            let formGroup = <FormGroup>formArray.controls[i]
-            ErrorHandler.formIsInvalid(formGroup)
-        }
-
-        return true
+        return false
     }
 }

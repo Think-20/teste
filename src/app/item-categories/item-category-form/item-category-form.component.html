@@ -1,30 +1,30 @@
 <div class="col-md-12">
   <form [formGroup]="itemCategoryForm" novalidate>
-    <md-card-title>
+    <mat-card-title>
       <p class="lead">Dados da categoria de item</p>
-    </md-card-title>
-    <md-card>
+    </mat-card-title>
+    <mat-card>
       <div class="row">
-          <md-input-container class="col-md-6">
-            <input formControlName="description" mdInput placeholder="Descrição">
-          </md-input-container>
-          <md-input-container class="col-md-6">
-            <input mdInput formControlName="itemCategory" [mdAutocomplete]="autocompleteItem" placeholder="Categoria de item">
-          </md-input-container>
-          <md-autocomplete #autocompleteItem="mdAutocomplete" [displayWith]="displayItemCategory">
-              <md-option *ngFor="let itemCategory of itemCategories | async" [value]="itemCategory">
+          <mat-input-container class="col-md-6">
+            <input formControlName="description" matInput placeholder="Descrição">
+          </mat-input-container>
+          <mat-input-container class="col-md-6">
+            <input matInput formControlName="itemCategory" [matAutocomplete]="autocompleteItem" placeholder="Categoria de item">
+          </mat-input-container>
+          <mat-autocomplete #autocompleteItem="matAutocomplete" [displayWith]="displayItemCategory">
+              <mat-option *ngFor="let itemCategory of itemCategories | async" [value]="itemCategory">
                 {{ itemCategory.description }}
-              </md-option>
-          </md-autocomplete>
+              </mat-option>
+          </mat-autocomplete>
       </div>
-      <md-card-actions class="col-md-12">
-        <button *ngIf="typeForm === 'new'" color="primary" [disabled]="!itemCategoryForm.valid" (click)="save(itemCategoryForm.value)" md-raised-button>
-          <md-icon>add_circle_outline</md-icon> SALVAR
+      <mat-card-actions class="col-md-12">
+        <button *ngIf="typeForm === 'new'" color="primary" [disabled]="!itemCategoryForm.valid" (click)="save(itemCategoryForm.value)" mat-raised-button>
+          <mat-icon>add_circle_outline</mat-icon> SALVAR
         </button>
-        <button *ngIf="typeForm === 'edit'" color="primary" [disabled]="!itemCategoryForm.valid" (click)="edit(itemCategoryForm.value, itemCategory.id)" md-raised-button>
-          <md-icon>mode_edit</md-icon> EDITAR
+        <button *ngIf="typeForm === 'edit'" color="primary" [disabled]="!itemCategoryForm.valid" (click)="edit(itemCategoryForm.value, itemCategory.id)" mat-raised-button>
+          <mat-icon>mode_edit</mat-icon> EDITAR
         </button>
-      </md-card-actions>
-    </md-card>
+      </mat-card-actions>
+    </mat-card>
   </form>
 </div>

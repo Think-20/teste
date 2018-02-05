@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { ProviderService } from '../provider.service';
 import { Provider } from '../provider.model';
@@ -17,7 +17,7 @@ export class ProviderShowComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private providerService: ProviderService,
-    private snackBar: MdSnackBar
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {

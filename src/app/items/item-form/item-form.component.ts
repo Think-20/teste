@@ -2,7 +2,7 @@ import { Component, OnInit, Injectable, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MdSnackBar, MatDialog, MatSlideToggle } from '@angular/material';
+import { MatSnackBar, MatDialog, MatSlideToggle } from '@angular/material';
 
 import { Item } from '../item.model';
 import { ChildItem } from '../../child-items/child-item.model';
@@ -70,7 +70,7 @@ export class ItemFormComponent implements OnInit {
     private measureService: MeasureService,
     private providerService: ProviderService,
     private formBuilder: FormBuilder,
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private route: ActivatedRoute,
     private router: Router
   ) { }

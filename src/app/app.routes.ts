@@ -30,6 +30,11 @@ import { ItemListComponent } from './items/item-list/item-list.component';
 import { ItemShowComponent } from './items/item-show/item-show.component';
 import { ItemsComponent } from './items/items.component';
 
+import { BriefingFormComponent } from './briefings/briefing-form/briefing-form.component';
+import { BriefingListComponent } from './briefings/briefing-list/briefing-list.component';
+import { BriefingShowComponent } from './briefings/briefing-show/briefing-show.component';
+import { BriefingsComponent } from './briefings/briefings.component';
+
 import { AuthGuard } from './login/auth.guard';
 
 export const ROUTES: Routes = [
@@ -42,7 +47,7 @@ export const ROUTES: Routes = [
                 path: '', redirectTo: 'home', pathMatch: 'full'
             },
             {
-                path : 'home', component : HomeComponent
+                path : 'home', component : HomeComponent, canActivate: [AuthGuard]
             },
             {
                 path : 'cost-categories', component : CostCategoriesComponent, children: [
@@ -141,7 +146,26 @@ export const ROUTES: Routes = [
                         path: 'list', component: ProviderListComponent, canActivate: [AuthGuard]
                     }
                 ]
+            },
+            {
+                path : 'briefings', component : BriefingsComponent, children: [
+                    {
+                        path: '', redirectTo: 'list', pathMatch: 'full'
+                    },
+                    {
+                        path: 'new', component: BriefingFormComponent, canActivate: [AuthGuard]
+                    },
+                    {
+                        path: 'edit/:id', component: BriefingFormComponent, canActivate: [AuthGuard]
+                    },
+                    {
+                        path: 'show/:id', component: BriefingShowComponent, canActivate: [AuthGuard]
+                    },
+                    {
+                        path: 'list', component: BriefingListComponent, canActivate: [AuthGuard]
+                    }
+                ]
             }
-        ] 
+        ]
     }
 ]

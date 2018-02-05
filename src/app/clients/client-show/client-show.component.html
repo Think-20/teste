@@ -1,8 +1,8 @@
 <div id="dataTableShow" class="col-md-12" *ngIf="client">
-  <md-card-title>
+  <mat-card-title>
     <p class="lead">Dados do cliente</p>
-  </md-card-title>
-  <md-card>
+  </mat-card-title>
+  <mat-card>
     <dl>
       <dt>Nome</dt>
       <dd>{{client.name}}</dd>
@@ -25,12 +25,12 @@
       <dt>Atendimento</dt>
       <dd>{{client.employee.name}}</dd>
     </dl>
-  </md-card>
+  </mat-card>
   <div *ngFor="let contact of client.contacts; let i = index">
-    <md-card-title>
+    <mat-card-title>
       <p class="lead">Contato {{i+1}}</p>
-    </md-card-title>
-    <md-card>
+    </mat-card-title>
+    <mat-card>
       <dl>
         <dt>Nome</dt>
         <dd>{{contact.name}}</dd>
@@ -41,12 +41,12 @@
         <dt>Celular</dt>
         <dd>{{contact.cellphone}}</dd>
       </dl>
-    </md-card>
+    </mat-card>
   </div>
-  <md-card-title>
+  <mat-card-title>
     <p class="lead">Endereço</p>
-  </md-card-title>
-  <md-card>
+  </mat-card-title>
+  <mat-card>
     <dl>
       <dt>Logradouro</dt>
       <dd>{{client.street}}</dd>
@@ -61,9 +61,9 @@
       <dt>CEP</dt>
       <dd>{{client.cep}}</dd>
     </dl>
-  </md-card>
-  <md-card-title>
+  </mat-card>
+  <mat-card-title>
     <p class="lead">Projetos relacionados</p>
-  </md-card-title>
-  <md-card></md-card>
+  </mat-card-title>
+  <mat-card></mat-card>
 </div>

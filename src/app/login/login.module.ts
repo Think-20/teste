@@ -7,8 +7,8 @@ import { RouterModule } from '@angular/router';
 
 import { 
   MD_PLACEHOLDER_GLOBAL_OPTIONS,
-  MdTableModule, MdProgressBarModule, MdCardModule, MdInputModule, MdSelectModule, 
-  MdButtonModule, MdIconModule, MdTabsModule, MdAutocompleteModule, MdChipsModule
+  MatTableModule, MatProgressBarModule, MatCardModule, MatInputModule, MatSelectModule, 
+  MatButtonModule, MatIconModule, MatTabsModule, MatAutocompleteModule, MatChipsModule
 } from '@angular/material';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -34,16 +34,16 @@ import { RequestOptionsApiService } from './request-options-api.service';
     ReactiveFormsModule,
     RouterModule.forRoot(ROUTES),
 
-    MdTableModule,
-    MdProgressBarModule,
-    MdCardModule,
-    MdInputModule,
-    MdSelectModule,
-    MdButtonModule,
-    MdIconModule,
-    MdTabsModule,
-    MdAutocompleteModule,
-    MdChipsModule
+    MatTableModule,
+    MatProgressBarModule,
+    MatCardModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTabsModule,
+    MatAutocompleteModule,
+    MatChipsModule
   ],
   providers: [
     AuthGuard,

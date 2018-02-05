@@ -2,18 +2,20 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
-import { 
+import {
   MatDialog, MatDialogModule, MatSlideToggleModule, MatSlideToggle,
-  MdTableModule, MdProgressBarModule, MdCardModule, MdInputModule, MdSelectModule, 
-  MdButtonModule, MdIconModule, MdTabsModule, MdAutocompleteModule, MdChipsModule,
-  MdSnackBar, MdSnackBarModule, MdMenuModule, MD_PLACEHOLDER_GLOBAL_OPTIONS
+  MatTableModule, MatProgressBarModule, MatCardModule, MatInputModule, MatSelectModule,
+  MatButtonModule, MatIconModule, MatTabsModule, MatAutocompleteModule, MatChipsModule,
+  MatSnackBar, MatSnackBarModule, MatMenuModule, MD_PLACEHOLDER_GLOBAL_OPTIONS,
+  MatDatepickerModule, MAT_DATE_LOCALE, CompatibilityModule, NoConflictStyleCompatibilityMode,
+  MatNativeDateModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ROUTES } from './app.routes';
 
 import { HeaderModule } from './header/header.module';
-import { LoginModule } from './login/login.module'; 
+import { LoginModule } from './login/login.module';
 import { AppComponent } from './app.component';
 import { MaskDirective } from './shared/mask.directive';
 
@@ -33,6 +35,7 @@ import { CityService } from './address/city.service';
 import { ClientTypeService } from './clients/client-types/client-type.service';
 import { ClientStatusService } from './clients/client-status/client-status.service';
 import { EmployeeService } from './employees/employee.service';
+import { BriefingService } from './briefings/briefing.service';
 
 import { ClientFormComponent } from './clients/client-form/client-form.component';
 import { ClientListComponent } from './clients/client-list/client-list.component';
@@ -63,12 +66,27 @@ import { ItemCategoryShowComponent } from './item-categories/item-category-show/
 import { ItemCategoriesComponent } from './item-categories/item-categories.component';
 import { ItemCategoryService } from './item-categories/item-category.service';
 
+import { BriefingFormComponent } from './briefings/briefing-form/briefing-form.component';
+import { BriefingListComponent } from './briefings/briefing-list/briefing-list.component';
+import { BriefingShowComponent } from './briefings/briefing-show/briefing-show.component';
+import { BriefingsComponent } from './briefings/briefings.component';
+
+import { JobService } from './jobs/job.service';
+import { JobTypeService } from './job-types/job-type.service';
+import { BriefingCompetitionService } from './briefing-competitions/briefing-competition.service';
+
 import { ItemFormComponent } from './items/item-form/item-form.component';
 import { ItemListComponent } from './items/item-list/item-list.component';
 import { ItemShowComponent } from './items/item-show/item-show.component';
 import { ItemsComponent } from './items/items.component';
 import { ItemService } from './items/item.service';
+
 import { StarsComponent } from './shared/stars/stars.component';
+import { UploadFileService } from './shared/upload-file.service';
+import { BriefingSpecialPresentationService } from 'app/briefing-special-presentations/briefing-special-presentation.service';
+import { BriefingPresentationService } from 'app/briefing-presentations/briefing-presentation.service';
+import { StandConfigurationService } from 'app/stand-configurations/stand-configuration.service';
+import { StandGenreService } from 'app/stand-genres/stand-genre.service';
 
 @NgModule({
   declarations: [
@@ -93,17 +111,22 @@ import { StarsComponent } from './shared/stars/stars.component';
     ProviderFormComponent,
     ProviderListComponent,
     ProviderShowComponent,
-    
+
     CostCategoriesComponent,
     CostCategoryFormComponent,
     CostCategoryListComponent,
     CostCategoryShowComponent,
-    
+
     ItemCategoriesComponent,
     ItemCategoryFormComponent,
     ItemCategoryListComponent,
     ItemCategoryShowComponent,
-    
+
+    BriefingsComponent,
+    BriefingFormComponent,
+    BriefingListComponent,
+    BriefingShowComponent,
+
     ItemsComponent,
     ItemFormComponent,
     ItemListComponent,
@@ -113,6 +136,9 @@ import { StarsComponent } from './shared/stars/stars.component';
   ],
   imports: [
     BrowserModule,
+    CompatibilityModule,
+    NoConflictStyleCompatibilityMode,
+    MatNativeDateModule,
     HeaderModule,
     LoginModule,
     HttpModule,
@@ -120,20 +146,21 @@ import { StarsComponent } from './shared/stars/stars.component';
     ReactiveFormsModule,
     RouterModule.forRoot(ROUTES),
 
-    MdTableModule,
-    MdProgressBarModule,
-    MdCardModule,
-    MdInputModule,
-    MdSelectModule,
-    MdButtonModule,
-    MdIconModule,
-    MdTabsModule,
-    MdAutocompleteModule,
-    MdChipsModule,
-    MdSnackBarModule,
-    MdMenuModule,
+    MatTableModule,
+    MatProgressBarModule,
+    MatCardModule,
+    MatInputModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTabsModule,
+    MatAutocompleteModule,
+    MatChipsModule,
+    MatSnackBarModule,
+    MatMenuModule,
     MatDialogModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatDatepickerModule
   ],
   providers: [
     ClientService,
@@ -152,12 +179,22 @@ import { StarsComponent } from './shared/stars/stars.component';
     ClientStatusService,
     ClientTypeService,
     EmployeeService,
+    BriefingService,
+    JobService,
+    JobTypeService,
+    BriefingCompetitionService,
+    BriefingPresentationService,
+    BriefingSpecialPresentationService,
+    StandConfigurationService,
+    StandGenreService,
+    UploadFileService,
 
     MatDialog,
-    MdSnackBar,
+    MatSnackBar,
     MatSlideToggle,
     {provide: MD_PLACEHOLDER_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
-    {provide: LOCALE_ID, useValue: 'pt-BR'}
+    {provide: LOCALE_ID, useValue: 'pt-BR'},
+    {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'}
   ],
   bootstrap: [AppComponent]
 })

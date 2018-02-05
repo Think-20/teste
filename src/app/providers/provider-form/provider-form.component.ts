@@ -2,7 +2,7 @@ import { Component, OnInit, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { Provider } from '../provider.model';
 import { ProviderService } from '../provider.service';
@@ -76,7 +76,7 @@ export class ProviderFormComponent implements OnInit {
     private providerService: ProviderService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private route: ActivatedRoute
   ) { }
 

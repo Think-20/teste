@@ -1,12 +1,12 @@
 <div class="col-md-12">
   <form novalidate autocomplete="off">
-    <md-card-title>
+    <mat-card-title>
       <p class="lead">Dados do cliente</p>
-    </md-card-title>
-    <md-card>
+    </mat-card-title>
+    <mat-card>
       <div class="row">
         <div class="col-md-12 text-center">
-         <button class="cb-button attachment" md-raised-button type="button" (click)="fileInput.click()">
+         <button class="cb-button attachment" mat-raised-button type="button" (click)="fileInput.click()">
            <img src="/assets/images/icons/excel.png" alt="Excel">
             <br>
             <p *ngIf="fileInput.files.length == 0">Clique para escolher um arquivo</p>
@@ -15,17 +15,17 @@
          </button>
         </div>
       </div>
-      <md-card-actions class="text-right">
-        <button class="cb-button" md-raised-button type="button" (click)="uploadSheet()">
+      <mat-card-actions class="text-right">
+        <button class="cb-button" mat-raised-button type="button" (click)="uploadSheet()">
           IMPORTAR
         </button>
-      </md-card-actions>
-    </md-card>
+      </mat-card-actions>
+    </mat-card>
     <div *ngIf="informations.length > 0">
-      <md-card-title>
+      <mat-card-title>
         <p class="lead">Informações</p>
-      </md-card-title>
-      <md-card>
+      </mat-card-title>
+      <mat-card>
         <div class="upload-informations">
           <ul>
             <li *ngFor="let information of informations; let i = index">
@@ -33,7 +33,7 @@
             </li>
           </ul>
         </div>
-      </md-card>
+      </mat-card>
     </div>
   </form>
 </div>

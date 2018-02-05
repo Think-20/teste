@@ -1,0 +1,19 @@
+.mat-column-client {
+    width: 25%;
+}
+
+.mat-column-event {
+    width: 20%;
+}
+
+.mat-column-type {
+    width: 20%;
+}
+
+.mat-column-attendance {
+    width: 25%;
+}
+
+.mat-column-action {
+    width: 10%;
+}

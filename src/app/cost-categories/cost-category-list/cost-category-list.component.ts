@@ -1,7 +1,7 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { CostCategoryService } from '../cost-category.service';
 import { CostCategory } from '../cost-category.model';
@@ -37,7 +37,7 @@ export class CostCategoryListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private costCategoryService: CostCategoryService,
-    private snackBar: MdSnackBar
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {

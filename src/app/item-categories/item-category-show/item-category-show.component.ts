@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { ItemCategoryService } from '../item-category.service';
 import { ItemCategory } from '../item-category.model';
@@ -16,7 +16,7 @@ export class ItemCategoryShowComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private itemCategoryService: ItemCategoryService,
-    private snackBar: MdSnackBar
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {

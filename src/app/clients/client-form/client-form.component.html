@@ -1,173 +1,173 @@
 <div class="col-md-12">
   <form [formGroup]="clientForm" novalidate autocomplete="off">
-    <md-card-title>
+    <mat-card-title>
       <p class="lead">Dados do cliente</p>
-    </md-card-title>
-    <md-card>
+    </mat-card-title>
+    <mat-card>
       <div class="row">
-          <md-input-container class="col-md-3">
-            <input formControlName="fantasy_name" mdInput placeholder="Nome*">
-            <md-error>
+          <mat-input-container class="col-md-3">
+            <input formControlName="fantasy_name" matInput placeholder="Nome*">
+            <mat-error>
               Obrigatório, entre 3 e 30 caract. 
-            </md-error>
-          </md-input-container>
-          <md-input-container class="col-md-6">
-            <input formControlName="name" mdInput placeholder="Razão social*">
-            <md-error>
+            </mat-error>
+          </mat-input-container>
+          <mat-input-container class="col-md-6">
+            <input formControlName="name" matInput placeholder="Razão social*">
+            <mat-error>
               Obrigatório, entre 3 e 50 caract. 
-            </md-error>
-          </md-input-container>
-          <md-input-container class="col-md-3">
-            <input formControlName="site" mdInput placeholder="Site">
-            <md-error>
+            </mat-error>
+          </mat-input-container>
+          <mat-input-container class="col-md-3">
+            <input formControlName="site" matInput placeholder="Site">
+            <mat-error>
               7 caract. 
-            </md-error>
-          </md-input-container>
-          <md-select class="col-md-3" placeholder="Tipo*" formControlName="client_type" [compareWith]="compareClientType">
-            <md-option *ngFor="let type of clientTypes" [value]="type">
+            </mat-error>
+          </mat-input-container>
+          <mat-select class="col-md-3" placeholder="Tipo*" formControlName="client_type" [compareWith]="compareClientType">
+            <mat-option *ngFor="let type of clientTypes" [value]="type">
               {{ type.description }}
-            </md-option>
-          </md-select>
-          <md-select class="col-md-3" placeholder="Status*" formControlName="client_status" [compareWith]="compareClientStatus">
-            <md-option *ngFor="let status of clientStatus" [value]="status">
+            </mat-option>
+          </mat-select>
+          <mat-select class="col-md-3" placeholder="Status*" formControlName="client_status" [compareWith]="compareClientStatus">
+            <mat-option *ngFor="let status of clientStatus" [value]="status">
               {{ status.description }}
-            </md-option>
-          </md-select>
-          <md-select class="col-md-3" placeholder="Atendimento*" formControlName="employee" [compareWith]="compareEmployee">
-            <md-option *ngFor="let employee of employees" [value]="employee">
+            </mat-option>
+          </mat-select>
+          <mat-select class="col-md-3" placeholder="Atendimento*" formControlName="employee" [compareWith]="compareEmployee">
+            <mat-option *ngFor="let employee of employees" [value]="employee">
               {{ employee.name }}
-            </md-option>
-          </md-select>
+            </mat-option>
+          </mat-select>
           <cb-stars class="col-md-3 star-input" label="Score" [rate]="client != undefined ? (client.rate + 1) : 0" [input]="clientForm.controls.rate">
-            <input formControlName="rate" mdInput>
+            <input formControlName="rate" matInput>
           </cb-stars>
-          <md-input-container class="col-md-3">
-            <input formControlName="cnpj" mask="99.999.999/9999-99" mdInput placeholder="CNPJ*">
-            <md-error>
+          <mat-input-container class="col-md-3">
+            <input formControlName="cnpj" mask="99.999.999/9999-99" matInput placeholder="CNPJ*">
+            <mat-error>
               Obrigatório
-            </md-error>
-          </md-input-container>
-          <md-input-container class="col-md-3">
-            <input formControlName="ie" mask="999.999.999.999" mdInput placeholder="Inscrição estadual">
-          </md-input-container>
-          <md-input-container class="col-md-3">
-            <input formControlName="mainphone" mask="(99) 9999-9999?9" mdInput placeholder="Telefone principal*">
-            <md-error>
+            </mat-error>
+          </mat-input-container>
+          <mat-input-container class="col-md-3">
+            <input formControlName="ie" mask="999.999.999.999" matInput placeholder="Inscrição estadual">
+          </mat-input-container>
+          <mat-input-container class="col-md-3">
+            <input formControlName="mainphone" mask="(99) 9999-9999?9" matInput placeholder="Telefone principal*">
+            <mat-error>
               Obrigatório
-            </md-error>
-          </md-input-container>
-          <md-input-container class="col-md-3">
-            <input formControlName="secundaryphone" mask="(99) 9999-9999?9" mdInput placeholder="Telefone secundário">
-          </md-input-container>
+            </mat-error>
+          </mat-input-container>
+          <mat-input-container class="col-md-3">
+            <input formControlName="secundaryphone" mask="(99) 9999-9999?9" matInput placeholder="Telefone secundário">
+          </mat-input-container>
           <div class="form-array" formArrayName="contacts">
             <div *ngFor="let control of getContactsControls(clientForm); let i = index">
               <form [formGroup]="getContactsControls(clientForm)[i]" novalidate autocomplete="off" class="flex contact-item">
-                <md-input-container class="col-md-3">
+                <mat-input-container class="col-md-3">
                   <input formControlName="id" type="hidden">
-                  <input formControlName="name" mdInput placeholder="Contato*">
-                  <md-error>
+                  <input formControlName="name" matInput placeholder="Contato*">
+                  <mat-error>
                     Obrigatório, mínimo 3 caract.
-                  </md-error>
-                </md-input-container>
-                <md-input-container class="col-md-3">
-                  <input formControlName="email" mdInput placeholder="E-mail*">
-                  <md-error>
+                  </mat-error>
+                </mat-input-container>
+                <mat-input-container class="col-md-3">
+                  <input formControlName="email" matInput placeholder="E-mail*">
+                  <mat-error>
                     Obrigatório, tipo e-mail.
-                  </md-error>
-                </md-input-container>
-                <md-input-container class="col-md-3">
-                  <input formControlName="department" mdInput placeholder="Departamento*">
-                  <md-error>
+                  </mat-error>
+                </mat-input-container>
+                <mat-input-container class="col-md-3">
+                  <input formControlName="department" matInput placeholder="Departamento*">
+                  <mat-error>
                     Obrigatório, mínimo 3 caract.
-                  </md-error>
-                </md-input-container>
-                <md-input-container class="col-md-3">
-                  <input formControlName="cellphone" mask="(99) 9999-9999?9" mdInput placeholder="Celular">
-                  <md-error>
+                  </mat-error>
+                </mat-input-container>
+                <mat-input-container class="col-md-3">
+                  <input formControlName="cellphone" mask="(99) 9999-9999?9" matInput placeholder="Celular">
+                  <mat-error>
                     Tipo telefone
-                  </md-error>
-                </md-input-container>
-                <button *ngIf="i > 0" type="button" class="delete-contact" (click)="deleteContact(i)" md-button>
-                  <md-icon>clear</md-icon>
+                  </mat-error>
+                </mat-input-container>
+                <button *ngIf="i > 0" type="button" class="delete-contact" (click)="deleteContact(i)" mat-button>
+                  <mat-icon>clear</mat-icon>
                 </button>
               </form>
             </div>
           </div>
           <div class="col-md-12">
-            <button type="button" class="add-contact" (click)="addContact()" md-button>
-              <md-icon>add</md-icon>
+            <button type="button" class="add-contact" (click)="addContact()" mat-button>
+              <mat-icon>add</mat-icon>
             </button>
           </div>
-          <md-input-container class="col-md-12">
-            <textarea formControlName="note" mdInput placeholder="Observação: Indicação, já nos conhecia, como chegou até nós..."></textarea>
-          </md-input-container>
+          <mat-input-container class="col-md-12">
+            <textarea formControlName="note" matInput placeholder="Observação: Indicação, já nos conhecia, como chegou até nós..."></textarea>
+          </mat-input-container>
       </div>
-    </md-card>
-    <md-card-title>
+    </mat-card>
+    <mat-card-title>
       <p class="lead">
         Endereço
       </p>
-    </md-card-title>
-    <md-card>
+    </mat-card-title>
+    <mat-card>
       <div class="row">
-          <md-input-container class="col-md-3">
-            <input formControlName="cep" mask="99999-999" mdInput placeholder="CEP*">
-            <md-error>
+          <mat-input-container class="col-md-3">
+            <input formControlName="cep" mask="99999-999" matInput placeholder="CEP*">
+            <mat-error>
               Obrigatório
-            </md-error>
-          </md-input-container>
-          <md-input-container class="col-md-6">
-            <input formControlName="street" mdInput placeholder="Logradouro*">
-            <md-error>
+            </mat-error>
+          </mat-input-container>
+          <mat-input-container class="col-md-6">
+            <input formControlName="street" matInput placeholder="Logradouro*">
+            <mat-error>
               Obrigatório, entre 3 e 50 caract. 
-            </md-error>
-          </md-input-container>
-          <md-input-container class="col-md-3">
-            <input formControlName="number" mdInput placeholder="Número*">
-            <md-error>
+            </mat-error>
+          </mat-input-container>
+          <mat-input-container class="col-md-3">
+            <input formControlName="number" matInput placeholder="Número*">
+            <mat-error>
               Obrigatório, entre 1 e 11 caract. 
-            </md-error>
-          </md-input-container>
-          <md-input-container class="col-md-3">
-            <input formControlName="complement" mdInput placeholder="Complemento">
-          </md-input-container>
-          <md-input-container class="col-md-2">
-            <input mdInput formControlName="state" [mdAutocomplete]="autocompleteState" placeholder="Estado*">
-            <md-error>
+            </mat-error>
+          </mat-input-container>
+          <mat-input-container class="col-md-3">
+            <input formControlName="complement" matInput placeholder="Complemento">
+          </mat-input-container>
+          <mat-input-container class="col-md-2">
+            <input matInput formControlName="state" [matAutocomplete]="autocompleteState" placeholder="Estado*">
+            <mat-error>
               Obrigatório
-            </md-error>
-          </md-input-container>
-          <md-autocomplete #autocompleteState="mdAutocomplete" [displayWith]="displayState">
-              <md-option *ngFor="let state of states | async" [value]="state">
+            </mat-error>
+          </mat-input-container>
+          <mat-autocomplete #autocompleteState="matAutocomplete" [displayWith]="displayState">
+              <mat-option *ngFor="let state of states | async" [value]="state">
                 {{ state.code }}
-              </md-option>
-          </md-autocomplete>
-          <md-input-container class="col-md-4">
-            <input mdInput formControlName="city" [mdAutocomplete]="autocompleteCity" placeholder="Cidade*">
-            <md-error>
+              </mat-option>
+          </mat-autocomplete>
+          <mat-input-container class="col-md-4">
+            <input matInput formControlName="city" [matAutocomplete]="autocompleteCity" placeholder="Cidade*">
+            <mat-error>
               Obrigatório
-            </md-error>
-          </md-input-container>
-          <md-autocomplete #autocompleteCity="mdAutocomplete" [displayWith]="displayCity">
-              <md-option *ngFor="let city of cities | async" [value]="city">
+            </mat-error>
+          </mat-input-container>
+          <mat-autocomplete #autocompleteCity="matAutocomplete" [displayWith]="displayCity">
+              <mat-option *ngFor="let city of cities | async" [value]="city">
                 {{ city.name }}
-              </md-option>
-          </md-autocomplete>
-          <md-input-container class="col-md-3">
-            <input formControlName="neighborhood" mdInput placeholder="Bairro*">
-            <md-error>
+              </mat-option>
+          </mat-autocomplete>
+          <mat-input-container class="col-md-3">
+            <input formControlName="neighborhood" matInput placeholder="Bairro*">
+            <mat-error>
               Obrigatório, entre 3 e 30 caract. 
-            </md-error>
-          </md-input-container>
+            </mat-error>
+          </mat-input-container>
       </div>
-      <md-card-actions class="col-md-12 text-right">
-        <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save(clientForm.value)" md-raised-button>
+      <mat-card-actions class="col-md-12 text-right">
+        <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save(clientForm.value)" mat-raised-button>
           SALVAR
         </button>
-        <button class="cb-button" *ngIf="typeForm === 'edit'" color="primary" (click)="edit(clientForm.value, client.id)" md-raised-button>
+        <button class="cb-button" *ngIf="typeForm === 'edit'" color="primary" (click)="edit(clientForm.value, client.id)" mat-raised-button>
           EDITAR
         </button>
-      </md-card-actions>
-    </md-card>
+      </mat-card-actions>
+    </mat-card>
   </form>
 </div>

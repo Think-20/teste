@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { ClientService } from '../client.service';
 import { Client } from '../client.model';
@@ -17,7 +17,7 @@ export class ClientShowComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private clientService: ClientService,
-    private snackBar: MdSnackBar
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {

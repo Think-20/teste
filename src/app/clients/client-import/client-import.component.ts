@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { ClientService } from '../client.service';
 
@@ -17,7 +17,7 @@ export class ClientImportComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private clientService: ClientService
   ) { }
 

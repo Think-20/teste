@@ -1,7 +1,7 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { ItemService } from '../item.service';
 import { Item } from '../item.model';
@@ -38,7 +38,7 @@ export class ItemListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private itemService: ItemService,
-    private snackBar: MdSnackBar
+    private snackBar: MatSnackBar
   ) { }
 
   total(items: Item[]) {

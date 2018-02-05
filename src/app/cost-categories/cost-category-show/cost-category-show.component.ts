@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { CostCategoryService } from '../cost-category.service';
 import { CostCategory } from '../cost-category.model';
@@ -16,7 +16,7 @@ export class CostCategoryShowComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private costCategoryService: CostCategoryService,
-    private snackBar: MdSnackBar
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {

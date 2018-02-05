@@ -2,7 +2,7 @@ import { Component, OnInit, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { Client } from '../client.model';
 import { ClientService } from '../client.service';
@@ -70,7 +70,7 @@ export class ClientFormComponent implements OnInit {
     private clientService: ClientService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private route: ActivatedRoute
   ) { }
 

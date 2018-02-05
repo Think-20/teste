@@ -2,7 +2,7 @@ import { Component, OnInit, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { CostCategory } from '../cost-category.model';
 import { CostCategoryService } from '../cost-category.service';
@@ -43,7 +43,7 @@ export class CostCategoryFormComponent implements OnInit {
   constructor(
     private costCategoryService: CostCategoryService,
     private formBuilder: FormBuilder,
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private route: ActivatedRoute
   ) { }
 

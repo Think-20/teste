@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MdSidenavModule, MdIconModule, MdButtonModule, MdToolbarModule, MdTooltipModule } from '@angular/material';
+import { MatSidenavModule, MatIconModule, MatButtonModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
@@ -14,11 +14,11 @@ import { NavbarComponent } from './navbar/navbar.component';
 @NgModule({
   imports: [
     CommonModule,
-    MdSidenavModule,
-    MdIconModule,
-    MdButtonModule,
-    MdToolbarModule,
-    MdTooltipModule,
+    MatSidenavModule,
+    MatIconModule,
+    MatButtonModule,
+    MatToolbarModule,
+    MatTooltipModule,
 
     RouterModule.forRoot(ROUTES)
   ],
@@ -28,7 +28,7 @@ import { NavbarComponent } from './navbar/navbar.component';
     NavbarComponent
   ],
   declarations: [
-    SidenavComponent, 
+    SidenavComponent,
     NavbarComponent
   ]
 })

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import { MdSnackBar } from '@angular/material'
+import { MatSnackBar } from '@angular/material'
 
 import { API } from '../app.api';
 import { ErrorHandler } from '../shared/error-handler.service';
@@ -12,7 +12,7 @@ import { Observable } from 'rxjs/Observable';
 export class AuthService {
     constructor(
         private http: Http,
-        private snackBar: MdSnackBar
+        private snackBar: MatSnackBar
     ) { }
     
     login(data): Observable<any> {

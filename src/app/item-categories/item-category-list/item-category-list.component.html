@@ -1,11 +1,11 @@
 <div class="col-md-12">
   <form [formGroup]="searchForm">
     <div class="row">
-        <md-input-container class="col-md-9">
-          <input mdInput formControlName="search" placeholder="Qual categoria de item você procura?" autocomplete="off">
-        </md-input-container>
+        <mat-input-container class="col-md-9">
+          <input matInput formControlName="search" placeholder="Qual categoria de item você procura?" autocomplete="off">
+        </mat-input-container>
         <div class="col-md-3">
-          <a [routerLink]="['/item-categories/new']" color="primary" md-raised-button>
+          <a [routerLink]="['/item-categories/new']" color="primary" mat-raised-button>
             NOVO
           </a>
         </div>
@@ -30,20 +30,20 @@
         {{ itemCategory.item_category?.description }}
       </div>
       <div class="mat-cell mat-column-action">
-        <md-menu #menu="mdMenu">
-          <a [routerLink]="['/item-categories/show', itemCategory.id]" md-menu-item>
-            <md-icon>subject</md-icon> Detalhes
+        <mat-menu #menu="matMenu">
+          <a [routerLink]="['/item-categories/show', itemCategory.id]" mat-menu-item>
+            <mat-icon>subject</mat-icon> Detalhes
           </a>
-          <a [routerLink]="['/item-categories/edit', itemCategory.id]" md-menu-item>
-            <md-icon>mode_edit</md-icon> Editar
+          <a [routerLink]="['/item-categories/edit', itemCategory.id]" mat-menu-item>
+            <mat-icon>mode_edit</mat-icon> Editar
           </a>
-          <button (click)="delete(itemCategory)" md-menu-item>
-            <md-icon>delete</md-icon> Remover
+          <button (click)="delete(itemCategory)" mat-menu-item>
+            <mat-icon>delete</mat-icon> Remover
           </button>
-        </md-menu>
+        </mat-menu>
 
-        <button md-icon-button [mdMenuTriggerFor]="menu">
-          <md-icon>menu</md-icon>
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>menu</mat-icon>
         </button>
       </div>
     </div>

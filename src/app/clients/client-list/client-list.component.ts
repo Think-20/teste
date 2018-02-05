@@ -1,7 +1,7 @@
 import { Component, OnInit, Injectable } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { ClientService } from '../client.service';
 import { Client } from '../client.model';
@@ -38,7 +38,7 @@ export class ClientListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private clientService: ClientService,
-    private snackBar: MdSnackBar
+    private snackBar: MatSnackBar
   ) { }
 
   total(clients: Client[]) {

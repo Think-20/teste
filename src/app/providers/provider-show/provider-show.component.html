@@ -1,8 +1,8 @@
 <div id="dataTableShow" class="col-md-12" *ngIf="provider">
-  <md-card-title>
+  <mat-card-title>
     <p class="lead">Dados do fornecedor</p>
-  </md-card-title>
-  <md-card>
+  </mat-card-title>
+  <mat-card>
     <dl>
       <dt>Nome</dt>
       <dd>{{provider.name}}</dd>
@@ -25,12 +25,12 @@
       <dt>Atendimento</dt>
       <dd>{{provider.employee.name}}</dd>
     </dl>
-  </md-card>
+  </mat-card>
   <div *ngFor="let contact of provider.contacts; let i = index">
-    <md-card-title>
+    <mat-card-title>
       <p class="lead">Contato {{i+1}}</p>
-    </md-card-title>
-    <md-card>
+    </mat-card-title>
+    <mat-card>
       <dl>
         <dt>Nome</dt>
         <dd>{{contact.name}}</dd>
@@ -41,13 +41,13 @@
         <dt>Celular</dt>
         <dd>{{contact.cellphone}}</dd>
       </dl>
-    </md-card>
+    </mat-card>
   </div>
   <div *ngFor="let account of provider.accounts; let i = index">
-    <md-card-title>
+    <mat-card-title>
       <p class="lead">Conta bancária {{i+1}}</p>
-    </md-card-title>
-    <md-card>
+    </mat-card-title>
+    <mat-card>
       <dl>
         <dt>Favorecido</dt>
         <dd>{{account.favored}}</dd>
@@ -60,12 +60,12 @@
         <dt>Banco</dt>
         <dd>{{account.bank.name}}</dd>
       </dl>
-    </md-card>
+    </mat-card>
   </div>
-  <md-card-title>
+  <mat-card-title>
     <p class="lead">Endereço</p>
-  </md-card-title>
-  <md-card>
+  </mat-card-title>
+  <mat-card>
     <dl>
       <dt>Logradouro</dt>
       <dd>{{provider.street}}</dd>
@@ -80,9 +80,9 @@
       <dt>CEP</dt>
       <dd>{{provider.cep}}</dd>
     </dl>
-  </md-card>
-  <md-card-title>
+  </mat-card>
+  <mat-card-title>
     <p class="lead">Projetos relacionados</p>
-  </md-card-title>
-  <md-card></md-card>
+  </mat-card-title>
+  <mat-card></mat-card>
 </div>

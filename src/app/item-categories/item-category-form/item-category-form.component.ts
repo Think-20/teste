@@ -2,7 +2,7 @@ import { Component, OnInit, Injectable } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { ItemCategory } from '../item-category.model';
 import { ItemCategoryService } from '../item-category.service';
@@ -44,7 +44,7 @@ export class ItemCategoryFormComponent implements OnInit {
   constructor(
     private itemCategoryService: ItemCategoryService,
     private formBuilder: FormBuilder,
-    private snackBar: MdSnackBar,
+    private snackBar: MatSnackBar,
     private route: ActivatedRoute
   ) { }
 

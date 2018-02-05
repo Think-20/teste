@@ -1,0 +1,220 @@
+<div class="col-md-12">
+  <form [formGroup]="briefingForm" novalidate autocomplete="off">
+    <input type="hidden" formControlName="id">
+    <mat-card-title>
+      <p class="lead">Dados do briefing</p>
+    </mat-card-title>
+    <mat-card>
+      <div class="row">
+        <mat-select class="col-md-3" placeholder="Job*" formControlName="job" [compareWith]="compareJob">
+          <mat-option *ngFor="let job of jobs" [value]="job">
+            {{ job.description }}
+          </mat-option>
+        </mat-select>
+        <mat-input-container class="col-md-3">
+          <input matInput formControlName="exhibitor" [matAutocomplete]="autocompleteExhibitor" placeholder="Expositor*">
+          <mat-error>
+            Obrigatório
+          </mat-error>
+        </mat-input-container>
+        <mat-autocomplete #autocompleteExhibitor="matAutocomplete" [displayWith]="displayExhibitor">
+            <mat-option *ngFor="let exhibitor of exhibitors" [value]="exhibitor">
+              {{ exhibitor.fantasy_name }}
+            </mat-option>
+        </mat-autocomplete>
+        <mat-input-container class="col-md-3">
+          <input formControlName="event" matInput placeholder="Evento*">
+          <mat-error>
+            Obrigatório, entre 3 e 150 caract.
+          </mat-error>
+        </mat-input-container>
+        <mat-form-field class="col-md-3">
+          <input type="date" formControlName="deadline" matInput placeholder="Deadline*">
+          <!--
+            input [matDatepicker]="deadlinePicker"
+          <mat-datepicker-toggle matSuffix [for]="deadlinePicker"></mat-datepicker-toggle>
+          <mat-datepicker #deadlinePicker></mat-datepicker>
+          -->
+        </mat-form-field>
+        <mat-select class="col-md-3" placeholder="Tipo*" formControlName="job_type" [compareWith]="compareJobType">
+          <mat-option *ngFor="let job_type of job_types" [value]="job_type">
+            {{ job_type.description }}
+          </mat-option>
+        </mat-select>
+        <mat-input-container class="col-md-3">
+          <input matInput formControlName="agency" [matAutocomplete]="autocompleteAgency" placeholder="Agência*">
+          <mat-error>
+            Obrigatório
+          </mat-error>
+        </mat-input-container>
+        <mat-autocomplete #autocompleteAgency="matAutocomplete" [displayWith]="displayAgency">
+            <mat-option *ngFor="let agency of agencies" [value]="agency">
+              {{ agency.fantasy_name }}
+            </mat-option>
+        </mat-autocomplete>
+        <mat-select class="col-md-3" placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
+          <mat-option *ngFor="let attendance of attendances" [value]="attendance">
+            {{ attendance.name }}
+          </mat-option>
+        </mat-select>
+        <mat-select class="col-md-3" placeholder="Criação*" formControlName="creation" [compareWith]="compareCreation">
+          <mat-option *ngFor="let creation of creations" [value]="creation">
+            {{ creation.name }}
+          </mat-option>
+        </mat-select>
+        <mat-input-container class="col-md-3">
+          <input formControlName="area" matInput placeholder="Área (m²)*">
+          <mat-error>
+            Obrigatório, até 99999,99
+          </mat-error>
+        </mat-input-container>
+        <mat-input-container class="col-md-3">
+          <input formControlName="budget" matInput placeholder="Verba*">
+          <mat-error>
+            Obrigatório, até 99999999,99
+          </mat-error>
+        </mat-input-container>
+        <mat-input-container class="col-md-3">
+          <input formControlName="area_budget" matInput readonly placeholder="Valor/m²">
+        </mat-input-container>
+        <cb-stars class="col-md-3 star-input" label="Rate" [rate]="briefing != undefined ? (briefing.rate + 1) : 0" [input]="briefingForm.controls.rate">
+            <input formControlName="rate" matInput>
+        </cb-stars>
+      </div>
+    </mat-card>
+
+    <div *ngIf="briefingForm.get('job_type').value.hasOwnProperty('description')  && briefingForm.get('job_type').value.description == 'Stand'">
+      <mat-card-title>
+        <p class="lead">Stand</p>
+      </mat-card-title>
+      <mat-card>
+        <div [formGroup]="briefingForm.get('stand')" class="row">
+          <input type="hidden" formControlName="id">
+          <mat-select class="col-md-3" placeholder="Configuração*" formControlName="configuration" [compareWith]="compareConfiguration">
+            <mat-option *ngFor="let configuration of configurations" [value]="configuration">
+              {{ configuration.description }}
+            </mat-option>
+          </mat-select>
+          <mat-input-container class="col-md-3">
+            <input formControlName="place" matInput placeholder="Local*">
+            <mat-error>
+              Obrigatório, entre 3 e 150 caract.
+            </mat-error>
+          </mat-input-container>
+          <mat-input-container class="col-md-3">
+            <input #planFile formControlName="plan" readonly matInput placeholder="Planta do Evento/Local*" (click)="filePlanFile.click()">
+            <input #filePlanFile type="file" (change)="uploadFile('stand.plan', filePlanFile)" style="display:none;" />
+            <mat-error>
+              Obrigatório
+            </mat-error>
+          </mat-input-container>
+          <mat-input-container class="col-md-3">
+            <input #regulationFile formControlName="regulation" readonly matInput placeholder="Regulamento*" (click)="fileRegulationFile.click()">
+            <input #fileRegulationFile type="file" (change)="uploadFile('stand.regulation', fileRegulationFile)" style="display:none;" />
+            <mat-error>
+              Obrigatório
+            </mat-error>
+          </mat-input-container>
+          <mat-select class="col-md-3" placeholder="Coluna*" formControlName="column" [compareWith]="compareColumn">
+            <mat-option *ngFor="let column of columns" [value]="column">
+              {{ column.description }}
+            </mat-option>
+          </mat-select>
+          <mat-input-container class="col-md-3">
+            <input formControlName="street_number" matInput placeholder="Rua e número*">
+            <mat-error>
+              Obrigatório, mínimo 2 caract.
+            </mat-error>
+          </mat-input-container>
+          <mat-input-container class="col-md-3">
+            <input formControlName="closed_area_percent" matInput placeholder="Área fechada*">
+            <mat-error>
+              Obrigatório
+            </mat-error>
+          </mat-input-container>
+          <mat-input-container class="col-md-3">
+            <input formControlName="opened_area_percent" matInput readonly placeholder="Área aberta*">
+            <mat-error>
+              Obrigatório, preencha área fechada
+            </mat-error>
+          </mat-input-container>
+          <mat-select class="col-md-3" placeholder="Gênero*" formControlName="genre" [compareWith]="compareGenre">
+            <mat-option *ngFor="let genre of genres" [value]="genre">
+              {{ genre.description }}
+            </mat-option>
+          </mat-select>
+          <mat-input-container class="col-md-9">
+            <input formControlName="note" matInput placeholder="Observações">
+            <mat-error>
+              Entre 3 e 5000 caract.
+            </mat-error>
+          </mat-input-container>
+        </div>
+      </mat-card>
+    </div>
+
+    <mat-card-title>
+      <p class="lead">Outras informações</p>
+    </mat-card-title>
+    <mat-card>
+      <div class="row">
+        <mat-select class="col-md-3" placeholder="Concorrência*" formControlName="competition" [compareWith]="compareCompetition">
+          <mat-option *ngFor="let competition of competitions" [value]="competition">
+            {{ competition.description }}
+          </mat-option>
+        </mat-select>
+        <mat-input-container class="col-md-3">
+          <input #latestMountsFile formControlName="latest_mounts_file" readonly matInput placeholder="Referências*" (click)="fileLatestMountsFile.click()">
+          <input #fileLatestMountsFile type="file" (change)="uploadFile('latest_mounts_file', fileLatestMountsFile)" style="display:none;" />
+          <mat-error>
+            Obrigatório
+          </mat-error>
+        </mat-input-container>
+        <mat-input-container class="col-md-3">
+          <input #colorsFile formControlName="colors_file" readonly matInput placeholder="Cores e Materiais Sugeridos*" (click)="fileColorsFile.click()">
+          <input #fileColorsFile type="file" (change)="uploadFile('colors_file', fileColorsFile)" style="display:none;" />
+          <mat-error>
+            Obrigatório
+          </mat-error>
+        </mat-input-container>
+        <mat-input-container class="col-md-3">
+          <input #guideFile formControlName="guide_file" readonly matInput placeholder="Guide/Key Visual/Logos/Imagens/Produtos*" (click)="fileGuideFile.click()">
+          <input #fileGuideFile type="file" (change)="uploadFile('guide_file', fileGuideFile)" style="display:none;" />
+          <mat-error>
+            Obrigatório
+          </mat-error>
+        </mat-input-container>
+        <mat-select class="col-md-3" placeholder="Apresentação*" formControlName="presentation" [compareWith]="comparePresentation">
+          <mat-option *ngFor="let presentation of presentations" [value]="presentation">
+            {{ presentation.description }}
+          </mat-option>
+        </mat-select>
+        <mat-select class="col-md-3" placeholder="Apresentação especial*" formControlName="special_presentation" [compareWith]="compareSpecialPresentation">
+          <mat-option *ngFor="let special_presentation of special_presentations" [value]="special_presentation">
+            {{ special_presentation.description }}
+          </mat-option>
+        </mat-select>
+        <cb-stars class="col-md-3 star-input" label="Expectativa de aprovação" [rate]="briefing != undefined ? (briefing.approval_expectation_rate + 1) : 0" [input]="briefingForm.controls.approval_expectation_rate">
+            <input formControlName="approval_expectation_rate" matInput>
+        </cb-stars>
+        <mat-input-container class="col-md-3">
+          <input matInput formControlName="think_history" readonly placeholder="Histórico Think - Aprovação/Participação*">
+          <mat-error>
+            Obrigatório
+          </mat-error>
+        </mat-input-container>
+      </div>
+    </mat-card>
+
+    <mat-card>
+      <mat-card-actions class="col-md-12 text-right">
+        <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save(briefingForm.value)" mat-raised-button>
+          SALVAR
+        </button>
+        <button class="cb-button" *ngIf="typeForm === 'edit'" color="primary" (click)="edit(briefingForm.value, briefing.id)" mat-raised-button>
+          EDITAR
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>

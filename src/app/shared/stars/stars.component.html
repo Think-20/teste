@@ -1,13 +1,13 @@
 <div class="stars-container">
   <div class="label">{{label}}</div>
   <div class="stars-content">
-    <md-icon (mouseenter)="mouseEnter(i)" 
+    <mat-icon (mouseenter)="mouseEnter(i)" 
     (mouseleave)="mouseLeave()" 
     (click)="defineRate(i)"
     class="star"
     *ngFor="let i of rates">
     {{ rate > i ? 'star' : 'star_border' }}
-    </md-icon>
+    </mat-icon>
   </div>
   <ng-content></ng-content>
 </div>

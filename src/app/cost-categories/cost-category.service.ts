@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import { MdSnackBar } from '@angular/material'
+import { MatSnackBar } from '@angular/material'
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -16,7 +16,7 @@ import { CostCategory } from './cost-category.model';
 export class CostCategoryService {
     constructor(
         private http: Http,
-        private snackBar: MdSnackBar
+        private snackBar: MatSnackBar
     ) {}
 
     costCategories(query: string = ''): Observable<CostCategory[]> {
