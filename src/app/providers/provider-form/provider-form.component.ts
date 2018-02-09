@@ -64,7 +64,6 @@ export class ProviderFormComponent implements OnInit {
   employees: Employee[]
   personTypes: PersonType[]
   providerForm: FormGroup
-  contactsArray: FormArray
 
   constructor(
     private stateService: StateService,
@@ -80,7 +79,7 @@ export class ProviderFormComponent implements OnInit {
     private route: ActivatedRoute
   ) { }
 
-  ngOnInit() {    
+  ngOnInit() {
     let snackBarStateCharging
     this.typeForm = this.route.snapshot.url[0].path
 
@@ -96,7 +95,7 @@ export class ProviderFormComponent implements OnInit {
     let cityControl: FormControl = this.formBuilder.control('', [Validators.required])
     let employeeControl: FormControl = this.formBuilder.control('', [Validators.required])
     let personTypeControl: FormControl = this.formBuilder.control('', [Validators.required])
-    
+
     this.providerForm = this.formBuilder.group({
       name: this.formBuilder.control('', [
         Validators.required,
@@ -156,7 +155,7 @@ export class ProviderFormComponent implements OnInit {
          snackBarStateCharging = this.snackBar.open('Aguarde...')
       })
       .debounceTime(500)
-      .subscribe(stateName => { 
+      .subscribe(stateName => {
         this.states = this.stateService.states(stateName)
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
       })
@@ -166,9 +165,9 @@ export class ProviderFormComponent implements OnInit {
          snackBarStateCharging = this.snackBar.open('Aguarde...')
       })
       .debounceTime(500)
-      .subscribe(cityName => { 
+      .subscribe(cityName => {
         let stateId = stateControl.value.id || stateControl.value
-        this.cities = this.cityService.cities(stateId, cityName) 
+        this.cities = this.cityService.cities(stateId, cityName)
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
       })
 
@@ -233,7 +232,7 @@ export class ProviderFormComponent implements OnInit {
       this.providerForm.controls.city.setValue(this.provider.city)
       this.providerForm.controls.state.setValue(this.provider.city.state)
       this.providerForm.controls.complement.setValue(this.provider.complement)
-      
+
       this.providerForm.controls.contacts.setValue([])
 
       for(let contact of provider.contacts) {
@@ -268,7 +267,7 @@ export class ProviderFormComponent implements OnInit {
 
   addContact(contact?: Contact) {
     const contacts = <FormArray>this.providerForm.controls['contacts']
-    
+
     contacts.push(this.formBuilder.group({
       id: this.formBuilder.control(contact ? contact.id : '' || ''),
       name: this.formBuilder.control(contact ? contact.name : '' || '', [
@@ -297,7 +296,7 @@ export class ProviderFormComponent implements OnInit {
 
   addAccount(account?: BankAccount) {
     const accounts = <FormArray>this.providerForm.controls['accounts']
-    
+
     accounts.push(this.formBuilder.group({
       id: this.formBuilder.control(account ? account.id : '' || ''),
       favored: this.formBuilder.control(account ? account.favored : '' || '', [
@@ -340,11 +339,11 @@ export class ProviderFormComponent implements OnInit {
 
   getContactsControls(providerForm: FormGroup) {
     return (<FormArray>this.providerForm.get('contacts')).controls
-  } 
+  }
 
   getAccountsControls(providerForm: FormGroup) {
     return (<FormArray>this.providerForm.get('accounts')).controls
-  } 
+  }
 
   save(provider: Provider) {
     if(ErrorHandler.formIsInvalid(this.providerForm)) {
@@ -368,9 +367,9 @@ export class ProviderFormComponent implements OnInit {
       })
       return;
     }
-    
+
     provider.id = providerId
-    
+
     this.providerService.edit(provider).subscribe(data => {
       this.snackBar.open(data.message, '', {
         duration: data.status ? 1000 : 5000

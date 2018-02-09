@@ -1,25 +1,58 @@
- .contact-item {
+ .closed_item-item {
     position: relative;
     flex-wrap: wrap;
  }
 
- .add-contact, .delete-contact {
+ .add-closed_item, .delete-closed_item, .edit-closed_item {
     z-index: 10;
     min-width: 10px !important;
     padding: 0px !important;
     color: #BBB;
  }
- 
- .add-contact {
+
+ .add-closed_item {
     position: relative;
     margin-top: -20px;
     top: -16px;
     left: 0px;
  }
 
-.delete-contact {
-    position: absolute;
-    right: 6px;
-    top: 3px;
-    z-index: 10;
+ .edit-closed_item {
+  position: absolute;
+  left: 0;
+  top: -10px;
+  z-index: 10;
+ }
+
+ .delete-closed_item {
+  position: absolute;
+  left: 22px;
+  top: -10px;
+  z-index: 10;
+ }
+
+ .stand-item {
+  position: relative;
+  font-size: 13px;
+  padding-bottom: 10px;
+ }
+
+ .stand-item .square {
+  width: 29px;
+  height: 29px;
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+}
+
+.stand-item .title {
+  text-align: right;
+}
+
+.stand-item .title label {
+  margin-bottom: 0;
+}
+
+.stand-item .description {
+  text-align: left;
+  color: #888;
 }

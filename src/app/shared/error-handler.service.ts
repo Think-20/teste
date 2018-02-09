@@ -28,11 +28,11 @@ export class ErrorHandler {
                       errorMessage = `Erro ${error.status} - ${data.message}`
                     }
                 } catch(e) {
-                    errorMessage = `Erro ${error.status} ao comunicar com o servidor.`
+                  errorMessage = `Erro ${error.status} ao comunicar com o servidor.`
                 }
             }
         } else {
-            errorMessage = 'Não foi obtida nenhuma informação.'
+          errorMessage = 'Não foi obtida nenhuma informação.'
         }
 
         return errorMessage
@@ -40,18 +40,18 @@ export class ErrorHandler {
 
     static formIsInvalid(form: FormGroup) {
         if(form.valid) {
-            return false
+          return false
         }
 
         Object.keys(form.controls).forEach((key) => {
             if(ErrorHandler.containsForm(form.get(key))) {
-                return
+              return
             }
             if(!form.get(key).invalid) {
-                return
+              return
             }
             (<FormControl>form.get(key)).markAsTouched()
-            //console.log((<FormControl>form.get(key)), key)
+            console.log((<FormControl>form.get(key)), key)
         })
 
         return true

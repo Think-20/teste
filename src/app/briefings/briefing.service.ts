@@ -62,6 +62,11 @@ export class BriefingService {
         })
     }
 
+    previewFile(briefing: Briefing, type: string,  file: string) {
+      let url = `${API}/briefing/download/${briefing.id}/${type}/${file}?access_token=${this.auth.token()}&user_id=${this.auth.currentUser().id}`
+      window.open(url, '_blank')
+    }
+
     save(briefing: Briefing): Observable<any> {
         let url = 'briefing/save'
 

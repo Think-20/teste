@@ -38,20 +38,22 @@ import { StandGenre } from 'app/stand-genres/stand-genre.model';
 import { StandGenreService } from 'app/stand-genres/stand-genre.service';
 import { Stand } from 'app/stand/stand.model';
 import { isUndefined } from 'util';
+import { StandItem } from 'app/stand/stand-items/stand-item.model';
 
 @Component({
   selector: 'cb-briefing-form',
   templateUrl: './briefing-form.component.html',
   styleUrls: ['./briefing-form.component.css'],
   animations: [
-    trigger('rowAppeared', [
-      state('ready', style({opacity: 1})),
-      transition('void => ready', animate('300ms 0s ease-in', keyframes([
+    trigger('standItemAnimation', [
+      state('visible', style({opacity: 1})),
+      state('hidden', style({opacity: 0})),
+      transition('hidden => visible', animate('300ms 0s ease-in', keyframes([
         style({opacity: 0, transform: 'translateX(-30px)', offset: 0}),
         style({opacity: 0.8, transform: 'translateX(10px)', offset: 0.8}),
         style({opacity: 1, transform: 'translateX(0px)', offset: 1})
       ]))),
-      transition('ready => void', animate('300ms 0s ease-out', keyframes([
+      transition('visible => hidden', animate('300ms 0s ease-out', keyframes([
         style({opacity: 1, transform: 'translateX(0px)', offset: 0}),
         style({opacity: 0.8, transform: 'translateX(-10px)', offset: 0.2}),
         style({opacity: 0, transform: 'translateX(30px)', offset: 1})
@@ -63,7 +65,7 @@ import { isUndefined } from 'util';
 export class BriefingFormComponent implements OnInit {
 
   typeForm: string
-  rowAppearedState = 'ready'
+  standItemState = 'hidden'
   briefing: Briefing
   columns: any[] = [{id: 0, description: 'Não'}, {id: 1, description: 'Sim'}]
   jobs: Job[]
@@ -80,7 +82,16 @@ export class BriefingFormComponent implements OnInit {
   configurations: StandConfiguration[]
   genres: StandGenre[]
   briefingForm: FormGroup
-  contactsArray: FormArray
+  closedItems: StandItem[] = [
+    {id: null, quantity: 1, title: 'Salas de reuniões', description: 'Mesa com 4 cadeiras e armário'},
+    {id: null, quantity: 1, title: 'Bar', description: 'Balcão com banquetas'},
+    {id: null, quantity: 1, title: 'Copa', description: 'Pia, geladeira, prateleiras'},
+    {id: null, quantity: 1, title: 'Depósito', description: 'Lockers'},
+    {id: null, quantity: 1, title: 'Lounge', description: 'Bistrôs, estar'},
+    {id: null, quantity: 1, title: 'Atendimento', description: 'Mesa com 4 cadeiras'},
+    {id: null, quantity: 1, title: 'Exposição', description: 'Displays'},
+  ]
+  closedItemsStates: any = []
 
   constructor(
     private jobService: JobService,
@@ -105,7 +116,7 @@ export class BriefingFormComponent implements OnInit {
     this.typeForm = this.route.snapshot.url[0].path
 
     this.briefingForm = this.formBuilder.group({
-      id: this.formBuilder.control(''),
+      id: this.formBuilder.control({value: '', disabled: true}),
       job: this.formBuilder.control('', [Validators.required]),
       exhibitor: this.formBuilder.control('', [Validators.required]),
       event: this.formBuilder.control('', [
@@ -145,15 +156,34 @@ export class BriefingFormComponent implements OnInit {
 
     this.jobService.jobs().subscribe((jobs) => {
       this.jobs = jobs
-    })
+      this.jobTypeService.jobTypes().subscribe((jobs) => {
+        this.job_types = jobs
+        this.briefingForm.get('job_type').valueChanges.subscribe((job_type) => {
+          this.updateBriefingChild()
+        })
 
-    this.jobTypeService.jobTypes().subscribe((jobs) => {
-      this.job_types = jobs
-      Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
-    })
-
-    this.briefingForm.get('job_type').valueChanges.subscribe((job_type) => {
-      this.updateBriefingChild()
+        this.employeeService.employees().subscribe(employees => {
+          this.creations = employees.filter((employee) => {
+            return employee.department.description === 'Criação'
+          })
+          this.competitionService.briefingCompetitions().subscribe((competitions) => {
+            this.competitions = competitions
+            this.presentationService.briefingPresentations().subscribe((presentations) => {
+              this.presentations = presentations
+              this.specialPresentationService.briefingSpecialPresentations().subscribe((special_presentations) => {
+                this.special_presentations = special_presentations
+                this.configurationService.standConfigurations().subscribe((configurations) => {
+                  this.configurations = configurations
+                  this.genreService.standGenres().subscribe((genres) => {
+                    this.genres = genres
+                    snackBarStateCharging.dismiss()
+                  })
+                })
+              })
+            })
+          })
+        })
+      })
     })
 
     this.briefingForm.get('exhibitor').valueChanges
@@ -184,12 +214,6 @@ export class BriefingFormComponent implements OnInit {
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
       })
 
-    this.employeeService.employees().subscribe(employees => {
-      this.creations = employees.filter((employee) => {
-        return employee.department.description === 'Criação'
-      })
-    })
-
     this.briefingForm.get('area').valueChanges.subscribe(() => {
       this.updateAreaBudget();
     })
@@ -198,28 +222,11 @@ export class BriefingFormComponent implements OnInit {
       this.updateAreaBudget();
     })
 
-    this.competitionService.briefingCompetitions().subscribe((competitions) => {
-      this.competitions = competitions
-    })
-
-    this.presentationService.briefingPresentations().subscribe((presentations) => {
-      this.presentations = presentations
-    })
-
-    this.specialPresentationService.briefingSpecialPresentations().subscribe((special_presentations) => {
-      this.special_presentations = special_presentations
-    })
-
-    this.configurationService.standConfigurations().subscribe((configurations) => {
-      this.configurations = configurations
-    })
-
-    this.genreService.standGenres().subscribe((genres) => {
-      this.genres = genres
-    })
-
     if(this.typeForm === 'edit') {
       this.loadBriefing()
+    } else if(this.typeForm === 'show') {
+      this.loadBriefing()
+      this.briefingForm.disable()
     } else {
       this.employeeService.canInsertClients().subscribe(employees => {
         this.attendances = employees
@@ -260,11 +267,26 @@ export class BriefingFormComponent implements OnInit {
     this.uploadFileService.uploadFile(this.briefingForm, key, inputFile)
   }
 
+  previewFile(briefing: Briefing, type: string,  file: string) {
+    this.briefingService.previewFile(briefing, type, file)
+  }
+
+  download(briefing: Briefing, filename: string, type: String, file: String) {
+    this.briefingService.download(briefing, type, file).subscribe((blob) => {
+      let fileUrl = URL.createObjectURL(blob)
+      //window.open(fileUrl, '_blank')
+      let anchor = document.createElement("a");
+      anchor.download = filename;
+      anchor.href = fileUrl;
+      anchor.target = '_blank'
+      anchor.click();
+    })
+  }
+
   loadBriefing() {
     let snackBarStateCharging = this.snackBar.open('Carregando briefing...')
     let briefingId = parseInt(this.route.snapshot.url[1].path)
     this.briefingService.briefing(briefingId).subscribe(briefing => {
-      snackBarStateCharging.dismiss()
       this.briefing = briefing
 
       this.briefingForm.controls.id.setValue(briefing.id)
@@ -294,7 +316,7 @@ export class BriefingFormComponent implements OnInit {
       this.briefingForm.controls.presentation.setValue(briefing.presentation)
       this.briefingForm.controls.special_presentation.setValue(briefing.special_presentation)
       this.briefingForm.controls.approval_expectation_rate.setValue(briefing.approval_expectation_rate)
-
+      snackBarStateCharging.dismiss()
     })
   }
 
@@ -352,7 +374,7 @@ export class BriefingFormComponent implements OnInit {
 
   addStand(stand?: Stand) {
     this.briefingForm.controls.stand = this.formBuilder.group({
-      id: this.formBuilder.control(stand ? stand.id : '', [Validators.required]),
+      id: this.formBuilder.control(stand ? stand.id : ''),
       configuration: this.formBuilder.control(stand ? stand.configuration : '', [Validators.required]),
       place: this.formBuilder.control(stand ? stand.place : '', [
         Validators.required,
@@ -380,13 +402,79 @@ export class BriefingFormComponent implements OnInit {
         Validators.pattern(Patterns.percent)
       ]),
       genre: this.formBuilder.control(stand ? stand.genre : '', [Validators.required]),
+      note_opened_area: this.formBuilder.control(stand ? stand.note_opened_area : '', [
+        Validators.minLength(3),
+        Validators.maxLength(5000)
+      ]),
+      note_closed_area: this.formBuilder.control(stand ? stand.note_closed_area : '', [
+        Validators.minLength(3),
+        Validators.maxLength(5000)
+      ]),
+      closed_items: this.formBuilder.array([])
     })
+
+    let standForm = <FormGroup> this.briefingForm.controls.stand
+    //standForm.controls.closed_items.setValue([])
+
+    for(let closed_item of this.closedItems) {
+      this.closedItemsStates.push({state: 'hidden'})
+      this.addClosedItem(closed_item)
+    }
 
     this.briefingForm.get('stand').get('closed_area_percent').valueChanges.subscribe(() => {
       this.updateOpenedArea()
     })
 
     stand ? this.updateOpenedArea() : null
+
+    if(this.typeForm === 'show') {
+      standForm.disable()
+    }
+  }
+
+  hiddenStandItem(i: number) {
+    this.closedItemsStates[i].state = 'hidden'
+  }
+
+  showStandItem(i: number) {
+    this.closedItemsStates[i].state = 'visible'
+  }
+
+  addClosedItem(closed_item?: StandItem) {
+    let standForm = <FormGroup> this.briefingForm.controls.stand
+    const closed_items = <FormArray>standForm.controls.closed_items
+
+    closed_items.push(this.formBuilder.group({
+      id: this.formBuilder.control(closed_item ? closed_item.id : '' || ''),
+      title: this.formBuilder.control(closed_item ? closed_item.title : '' || '', [
+        Validators.required,
+        Validators.minLength(3)
+      ]),
+      quantity: this.formBuilder.control(closed_item ? closed_item.quantity : '' || '', [
+        Validators.required,
+        Validators.pattern(Patterns.number)
+      ]),
+      description: this.formBuilder.control(closed_item ? closed_item.description : '', [
+        Validators.required
+      ]),
+    }))
+  }
+
+  editClosedItem(i) {
+    this.closedItemsStates.splice(i, 1)
+    this.closedItems.splice(i, 1)
+  }
+
+  deleteClosedItem(i) {
+    this.closedItemsStates.splice(i, 1)
+    this.closedItems.splice(i, 1)
+  }
+
+  getClosedItemsControls() {
+    let standForm = <FormGroup> this.briefingForm.controls.stand
+    let closedItemsArray = <FormArray> standForm.controls.closed_items
+
+    return closedItemsArray.controls
   }
 
   save(briefing: Briefing) {
