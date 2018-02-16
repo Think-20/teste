@@ -29,6 +29,10 @@ html, body, cb-login {
     min-height: 64px;
 }
 
+#container-box .row .col-md-8 .my-container {
+  margin-bottom: 16px;
+}
+
 .form-array {
   width: 100%;
 }
@@ -354,7 +358,8 @@ mat-card-title > p {
 .mat-focused .mat-input-placeholder .mat-select-placeholder,
 .mat-select:focus:not(.mat-select-disabled).mat-primary .mat-select-arrow,
 .mat-select:focus:not(.mat-select-disabled).mat-primary .mat-select-trigger,
-.mat-focused .mat-input-placeholder {
+.mat-focused .mat-input-placeholder,
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
   color: #00afef;
 }
 
@@ -444,4 +449,16 @@ mat-card-title > p {
 
 .mat-input-wrapper.mat-form-field-wrapper {
   margin-top: 6px !important;
+}
+
+/* Briefing form */
+
+.mat-card-title.row {
+  display: flex !important;
+  margin: 0 !important;
+}
+
+.mat-card-title.row .col-md-6 {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
 }

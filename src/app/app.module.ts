@@ -8,7 +8,7 @@ import {
   MatButtonModule, MatIconModule, MatTabsModule, MatAutocompleteModule, MatChipsModule,
   MatSnackBar, MatSnackBarModule, MatMenuModule, MD_PLACEHOLDER_GLOBAL_OPTIONS,
   MatDatepickerModule, MAT_DATE_LOCALE, CompatibilityModule, NoConflictStyleCompatibilityMode,
-  MatNativeDateModule
+  MatNativeDateModule, MatPaginatorModule, MatPaginatorIntl
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -71,6 +71,9 @@ import { BriefingListComponent } from './briefings/briefing-list/briefing-list.c
 import { BriefingShowComponent } from './briefings/briefing-show/briefing-show.component';
 import { BriefingsComponent } from './briefings/briefings.component';
 
+import { StandFormComponent } from './stand/stand-form/stand-form.component';
+import { StandItemFormComponent } from './stand/stand-items/stand-item-form/stand-item-form.component';
+
 import { JobService } from './jobs/job.service';
 import { JobTypeService } from './job-types/job-type.service';
 import { BriefingCompetitionService } from './briefing-competitions/briefing-competition.service';
@@ -87,6 +90,8 @@ import { BriefingSpecialPresentationService } from 'app/briefing-special-present
 import { BriefingPresentationService } from 'app/briefing-presentations/briefing-presentation.service';
 import { StandConfigurationService } from 'app/stand-configurations/stand-configuration.service';
 import { StandGenreService } from 'app/stand-genres/stand-genre.service';
+import { StandItemService } from 'app/stand/stand-items/stand-item.service';
+import { PaginatorIntl } from 'app/shared/paginator-intl.model';
 
 @NgModule({
   declarations: [
@@ -127,6 +132,9 @@ import { StandGenreService } from 'app/stand-genres/stand-genre.service';
     BriefingListComponent,
     BriefingShowComponent,
 
+    StandFormComponent,
+    StandItemFormComponent,
+
     ItemsComponent,
     ItemFormComponent,
     ItemListComponent,
@@ -160,7 +168,8 @@ import { StandGenreService } from 'app/stand-genres/stand-genre.service';
     MatMenuModule,
     MatDialogModule,
     MatSlideToggleModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    MatPaginatorModule
   ],
   providers: [
     ClientService,
@@ -188,14 +197,19 @@ import { StandGenreService } from 'app/stand-genres/stand-genre.service';
     StandConfigurationService,
     StandGenreService,
     UploadFileService,
+    StandItemService,
 
     MatDialog,
     MatSnackBar,
     MatSlideToggle,
     {provide: MD_PLACEHOLDER_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
     {provide: LOCALE_ID, useValue: 'pt-BR'},
-    {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'}
+    {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
+    {provide: MatPaginatorIntl, useClass: PaginatorIntl}
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents: [
+    StandItemFormComponent
+  ]
 })
 export class AppModule { }

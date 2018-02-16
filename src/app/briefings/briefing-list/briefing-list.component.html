@@ -25,6 +25,7 @@
       <div *ngIf="briefings?.length > 0">
         <table class="table mat-table">
           <div class="mat-header-row">
+            <div class="mat-header-cell mat-column-id">ID</div>
             <div class="mat-header-cell mat-column-client">Cliente</div>
             <div class="mat-header-cell mat-column-event">Evento</div>
             <div class="mat-header-cell mat-column-type">Tipo</div>
@@ -32,6 +33,9 @@
             <div class="mat-header-cell mat-column-action">Ação</div>
           </div>
           <div class="mat-row" *ngFor="let briefing of briefings" [@rowAppeared]="rowAppearedState">
+            <div class="mat-cell mat-column-id">
+              {{ briefingService.showId(briefing) }}
+            </div>
             <div class="mat-cell mat-column-client">
               {{ briefing.exhibitor.fantasy_name }}
             </div>
@@ -47,7 +51,7 @@
             <div class="mat-cell mat-column-action">
               <mat-menu #menu="matMenu">
                 <a [routerLink]="['/briefings/show', briefing.id]" mat-menu-item>
-                  <mat-icon>subject</mat-icon> Detalhes
+                  <mat-icon>subject</mat-icon> Visualização
                 </a>
                 <a [routerLink]="['/briefings/edit', briefing.id]" mat-menu-item>
                   <mat-icon>mode_edit</mat-icon> Editar
@@ -99,9 +103,15 @@
           <div class="mat-header-cell col-md-2 text-center">Total</div>
         </div>
         <div class="mat-row">
-          <div class="mat-cell col-md-2 text-center">{{ total(briefings) }}</div>
+          <div class="mat-cell col-md-2 text-center">{{ pagination?.total }}</div>
         </div>
       </table>
     </mat-card>
+    <mat-paginator *ngIf="briefings"
+      [length]="pagination?.total"
+      [pageSize]="pagination?.per_page"
+      [pageSizeOptions]="[50]"
+      (page)="changePage($event)"
+    ></mat-paginator>
   </form>
 </div>

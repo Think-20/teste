@@ -20,9 +20,8 @@ export class UploadFileService {
   ) {}
 
   uploadFile(form: FormGroup, key: string, inputFile: HTMLInputElement) {
-    if(key.search('.')) {
+    if(key.indexOf('.') > 0) {
       let keys = key.split('.')
-
       keys.forEach((value, index) => {
         if(index < keys.length) {
           form = <FormGroup> form.get(value)
@@ -30,8 +29,6 @@ export class UploadFileService {
           key = value
         }
       })
-
-
     }
 
     form.get(key).setValue('Aguarde...')

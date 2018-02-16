@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material';
 
 import { BriefingService } from '../briefing.service';
 import { Briefing } from '../briefing.model';
+import { Pagination } from 'app/shared/pagination.model';
 
 @Component({
   selector: 'cb-briefing-list',
@@ -32,6 +33,7 @@ export class BriefingListComponent implements OnInit {
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
   search: FormControl
+  pagination: Pagination
   briefings: Briefing[] = []
   searching = false
 
@@ -40,10 +42,6 @@ export class BriefingListComponent implements OnInit {
     private briefingService: BriefingService,
     private snackBar: MatSnackBar
   ) { }
-
-  total(briefings: Briefing[]) {
-    return briefings.length
-  }
 
   ngOnInit() {
     this.search = this.fb.control('')
@@ -54,9 +52,10 @@ export class BriefingListComponent implements OnInit {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando briefings...')
 
-    this.briefingService.briefings().subscribe(briefings => {
+    this.briefingService.briefings().subscribe(pagination => {
+      this.pagination = pagination
       this.searching = false
-      this.briefings = briefings
+      this.briefings = pagination.data
       snackBar.dismiss()
     })
 
@@ -64,10 +63,21 @@ export class BriefingListComponent implements OnInit {
       .do(() => this.searching = true)
       .debounceTime(500)
       .subscribe(value => {
-        this.briefingService.briefings(value).subscribe(searchBriefings => {
+        this.briefingService.briefings(value).subscribe(pagination => {
+          this.pagination = pagination
           this.searching = false
-          this.briefings = searchBriefings
+          this.briefings = pagination.data
         })
+    })
+  }
+
+  changePage($event) {
+    this.searching = true
+    this.briefings = []
+    this.briefingService.briefings(this.search.value, ($event.pageIndex + 1)).subscribe(pagination => {
+      this.pagination = pagination
+      this.briefings = pagination.data
+      this.searching = false
     })
   }
 

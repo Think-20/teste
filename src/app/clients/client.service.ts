@@ -23,7 +23,7 @@ export class ClientService {
 
     clients(query: string = ''): Observable<Client[]> {
         let url = query === '' ? `clients/all` : `clients/filter/${query}`
-        let prefix = this.auth.isClientMaster('clients/all') ? '' : 'my-'
+        let prefix = this.auth.hasAccess('clients/all') ? '' : 'my-'
 
         url = prefix + url
 
@@ -39,7 +39,7 @@ export class ClientService {
 
     client(clientId: number): Observable<Client> {
         let url = `clients/get/${clientId}`
-        let prefix = this.auth.isClientMaster('clients/get/{id}') ? '' : 'my-'
+        let prefix = this.auth.hasAccess('clients/get/{id}') ? '' : 'my-'
 
         url = prefix + url
 
@@ -52,7 +52,7 @@ export class ClientService {
                 return ErrorHandler.capture(err)
             })
     }
-    
+
     uploadSheet(file: any): Observable<any> {
         let requestOptions = new RequestOptions()
         let headers = new Headers()
@@ -80,7 +80,7 @@ export class ClientService {
 
     save(client: Client): Observable<any> {
         let url = 'client/save'
-        let prefix = this.auth.isClientMaster('client/save') ? '' : 'my-'
+        let prefix = this.auth.hasAccess('client/save') ? '' : 'my-'
 
         url = prefix + url
 
@@ -97,10 +97,10 @@ export class ClientService {
                 return ErrorHandler.capture(err)
             })
     }
-    
+
     edit(client: Client): Observable<any> {
         let url = 'client/edit'
-        let prefix = this.auth.isClientMaster('client/edit') ? '' : 'my-'
+        let prefix = this.auth.hasAccess('client/edit') ? '' : 'my-'
 
         url = prefix + url
 
@@ -120,7 +120,7 @@ export class ClientService {
 
     delete(id: number): Observable<any> {
         let url = `client/remove/${id}`
-        let prefix = this.auth.isClientMaster('client/remove/{id}') ? '' : 'my-'
+        let prefix = this.auth.hasAccess('client/remove/{id}') ? '' : 'my-'
 
         url = prefix + url
 

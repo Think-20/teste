@@ -10,6 +10,7 @@ import { Stand } from 'app/stand/stand.model';
 
 export class Briefing {
     id: number
+    code?: number
     job_id: number
     job: Job
     exhibitor_id: number
@@ -38,4 +39,6 @@ export class Briefing {
     special_presentation: BriefingSpecialPresentation
     approval_expectation_rate: number
     stand: Stand
+    created_at: string
+    updated_at: string
 }

@@ -7,14 +7,14 @@ import { ErrorHandler } from '../shared/error-handler.service';
 
 import { User } from '../user/user.model';
 import { Observable } from 'rxjs/Observable';
- 
+
 @Injectable()
 export class AuthService {
     constructor(
         private http: Http,
         private snackBar: MatSnackBar
     ) { }
-    
+
     login(data): Observable<any> {
         let url = `${API}/login`
 
@@ -29,7 +29,7 @@ export class AuthService {
             })
     }
 
-    logout() {        
+    logout() {
         let url = `${API}/logout`
 
         if(this.currentUser()) {
@@ -61,20 +61,20 @@ export class AuthService {
         let currentUser = localStorage.getItem('currentUser')
         return JSON.parse(currentUser)
     }
-    
-    isClientMaster(url: string): boolean {
+
+    hasAccess(url: string): boolean {
         let urlWithBar = '/' + url
 
         let currentUser = this.currentUser()
-        let isClientMaster: boolean = false
+        let isMaster: boolean = false
 
         this.currentUser().functionalities.map(funcionality => {
             return funcionality.url
         }).forEach(functionality => {
-            if(functionality === urlWithBar) isClientMaster = true
+            if(functionality === urlWithBar) isMaster = true
         })
 
-        return isClientMaster;
+        return isMaster;
     }
 
     token() {

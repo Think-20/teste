@@ -23,4 +23,6 @@ export class Stand {
     note_closed_area: string
     note_opened_area: string
     closed_items: StandItem[]
+    opened_items: StandItem[]
+    items: StandItem[]
 }
