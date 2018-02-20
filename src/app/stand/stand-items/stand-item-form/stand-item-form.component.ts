@@ -55,7 +55,7 @@ export class StandItemFormComponent implements OnInit {
       description: this.formBuilder.control(this.item ? this.item.description : '', [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(255)
+        Validators.maxLength(5000)
       ]),
     })
   }

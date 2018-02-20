@@ -97,7 +97,7 @@ export class BriefingService {
 
       url = prefix + url
 
-      window.open(url, '_blank')
+      window.open(`${API}/${url}`, '_blank')
     }
 
     save(briefing: Briefing): Observable<any> {

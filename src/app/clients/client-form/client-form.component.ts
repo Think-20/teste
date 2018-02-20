@@ -74,7 +74,7 @@ export class ClientFormComponent implements OnInit {
     private route: ActivatedRoute
   ) { }
 
-  ngOnInit() {    
+  ngOnInit() {
     let snackBarStateCharging
     this.typeForm = this.route.snapshot.url[0].path
 
@@ -83,7 +83,7 @@ export class ClientFormComponent implements OnInit {
     let clientTypeControl: FormControl = this.formBuilder.control('', [Validators.required])
     let clientStatusControl: FormControl = this.formBuilder.control('', [Validators.required])
     let employeeControl: FormControl = this.formBuilder.control('', [Validators.required])
-    
+
     this.clientForm = this.formBuilder.group({
       name: this.formBuilder.control('', [
         Validators.required,
@@ -143,7 +143,7 @@ export class ClientFormComponent implements OnInit {
     this.employeeService.canInsertClients().subscribe(employees => {
       this.employees = employees
     })
-  
+
     this.clientTypeService.types().subscribe((clientTypes) => {
       this.clientTypes = clientTypes
 
@@ -169,7 +169,7 @@ export class ClientFormComponent implements OnInit {
          snackBarStateCharging = this.snackBar.open('Aguarde...')
       })
       .debounceTime(500)
-      .subscribe(stateName => { 
+      .subscribe(stateName => {
         this.states = this.stateService.states(stateName)
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
       })
@@ -179,9 +179,9 @@ export class ClientFormComponent implements OnInit {
          snackBarStateCharging = this.snackBar.open('Aguarde...')
       })
       .debounceTime(500)
-      .subscribe(cityName => { 
+      .subscribe(cityName => {
         let stateId = stateControl.value.id || stateControl.value
-        this.cities = this.cityService.cities(stateId, cityName) 
+        this.cities = this.cityService.cities(stateId, cityName)
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
       })
   }
@@ -211,13 +211,21 @@ export class ClientFormComponent implements OnInit {
       this.clientForm.controls.city.setValue(this.client.city)
       this.clientForm.controls.state.setValue(this.client.city.state)
       this.clientForm.controls.complement.setValue(this.client.complement)
-      
+
       this.clientForm.controls.contacts.setValue([])
 
       for(let contact of client.contacts) {
         this.addContact(contact)
       }
     })
+  }
+
+  ucFirst() {
+    let formControl = this.clientForm.controls.fantasy_name
+    let value = formControl.value.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+        return letter.toUpperCase();
+    });
+    formControl.setValue(value)
   }
 
   get contacts() { return this.clientForm.get('contacts'); }
@@ -236,7 +244,7 @@ export class ClientFormComponent implements OnInit {
 
   addContact(contact?: Contact) {
     const contacts = <FormArray>this.clientForm.controls['contacts']
-    
+
     contacts.push(this.formBuilder.group({
       id: this.formBuilder.control(contact ? contact.id : '' || ''),
       name: this.formBuilder.control(contact ? contact.name : '' || '', [
@@ -277,7 +285,7 @@ export class ClientFormComponent implements OnInit {
 
   getContactsControls(clientForm: FormGroup) {
     return (<FormArray>this.clientForm.get('contacts')).controls
-  } 
+  }
 
   save(client: Client) {
     if(ErrorHandler.formIsInvalid(this.clientForm)) {
@@ -301,9 +309,9 @@ export class ClientFormComponent implements OnInit {
       })
       return;
     }
-    
+
     client.id = clientId
-    
+
     this.clientService.edit(client).subscribe(data => {
       this.snackBar.open(data.message, '', {
         duration: data.status ? 1000 : 5000
