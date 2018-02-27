@@ -82,6 +82,10 @@ button {
   background-color: #ffca00;
 }
 
+.departament-6 {
+  background-color: #c377e0;
+}
+
 .departament {
   position: absolute;
   top: 2px;
@@ -181,6 +185,10 @@ mat-card {
 .mat-menu-item {
   text-decoration: none !important;
   font-size: 14px;
+}
+
+.mat-menu-item[disabled]:hover {
+  color: rgba(0,0,0,.38) !important;
 }
 
 .mat-raised-button:hover {
@@ -470,4 +478,16 @@ mat-card-title > p {
 .mat-card-title.row .col-md-6 {
   padding-left: 0 !important;
   padding-right: 0 !important;
+}
+
+/* Botão dentro de inputs */
+.button-inner-mat-input {
+  position: absolute !important;
+  top: 0;
+  right: 0;
+  padding: 2px 0px !important;
+  min-width: 20px !important;
+  line-height: 0 !important;
+  height: 27px;
+  color: #AAA !important;
 }

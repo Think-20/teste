@@ -12,6 +12,7 @@ import { Patterns } from '../../shared/patterns.model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
+import { ErrorHandler } from '../../shared/error-handler.service';
 
 @Component({
   selector: 'cb-cost-category-form',
@@ -47,10 +48,10 @@ export class CostCategoryFormComponent implements OnInit {
     private route: ActivatedRoute
   ) { }
 
-  ngOnInit() {    
+  ngOnInit() {
     let snackBarStateCharging
     this.typeForm = this.route.snapshot.url[0].path
-    
+
     this.costCategoryForm = this.formBuilder.group({
       description: this.formBuilder.control('', [
         Validators.required,
@@ -65,7 +66,7 @@ export class CostCategoryFormComponent implements OnInit {
       this.costCategoryService.costCategory(costCategoryId).subscribe(costCategory => {
         snackBarStateCharging.dismiss()
         this.costCategory = costCategory
-          
+
         this.costCategoryForm.controls.description.setValue(this.costCategory.description)
       })
     }
@@ -73,6 +74,13 @@ export class CostCategoryFormComponent implements OnInit {
   }
 
   save(costCategory: CostCategory) {
+    if(ErrorHandler.formIsInvalid(this.costCategoryForm)) {
+      this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
+        duration: 5000
+      })
+      return;
+    }
+
     this.costCategoryService.save(costCategory).subscribe(data => {
       this.snackBar.open(data.message, '', {
         duration: 5000
@@ -81,8 +89,15 @@ export class CostCategoryFormComponent implements OnInit {
   }
 
   edit(costCategory: CostCategory, costCategoryId: number) {
+    if(ErrorHandler.formIsInvalid(this.costCategoryForm)) {
+      this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
+        duration: 5000
+      })
+      return;
+    }
+
     costCategory.id = costCategoryId
-    
+
     this.costCategoryService.edit(costCategory).subscribe(data => {
       this.snackBar.open(data.message, '', {
         duration: 5000

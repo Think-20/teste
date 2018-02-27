@@ -7,9 +7,15 @@
       <div class="row">
           <mat-input-container class="col-md-6">
             <input formControlName="description" matInput placeholder="Descrição">
+            <mat-error>
+              Obrigatório, entre 3 e 50 caract.
+            </mat-error>
           </mat-input-container>
           <mat-input-container class="col-md-6">
             <input matInput formControlName="itemCategory" [matAutocomplete]="autocompleteItem" placeholder="Categoria de item">
+            <mat-error>
+              Obrigatório
+            </mat-error>
           </mat-input-container>
           <mat-autocomplete #autocompleteItem="matAutocomplete" [displayWith]="displayItemCategory">
               <mat-option *ngFor="let itemCategory of itemCategories | async" [value]="itemCategory">
@@ -17,12 +23,12 @@
               </mat-option>
           </mat-autocomplete>
       </div>
-      <mat-card-actions class="col-md-12">
-        <button *ngIf="typeForm === 'new'" color="primary" [disabled]="!itemCategoryForm.valid" (click)="save(itemCategoryForm.value)" mat-raised-button>
-          <mat-icon>add_circle_outline</mat-icon> SALVAR
+      <mat-card-actions class="col-md-12 text-right">
+        <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save(itemCategoryForm.value)" mat-raised-button>
+          SALVAR
         </button>
-        <button *ngIf="typeForm === 'edit'" color="primary" [disabled]="!itemCategoryForm.valid" (click)="edit(itemCategoryForm.value, itemCategory.id)" mat-raised-button>
-          <mat-icon>mode_edit</mat-icon> EDITAR
+        <button class="cb-button" *ngIf="typeForm === 'edit'" color="primary" (click)="edit(itemCategoryForm.value, item.id)" mat-raised-button>
+          EDITAR
         </button>
       </mat-card-actions>
     </mat-card>

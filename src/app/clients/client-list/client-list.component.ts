@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material';
 
 import { ClientService } from '../client.service';
 import { Client } from '../client.model';
+import { AuthService } from '../../login/auth.service';
 
 @Component({
   selector: 'cb-client-list',
@@ -38,37 +39,62 @@ export class ClientListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private clientService: ClientService,
+    private authService: AuthService,
     private snackBar: MatSnackBar
   ) { }
 
   total(clients: Client[]) {
     return clients.length
   }
-  
+
+  permissionVerify(module: string, client: Client): boolean {
+    let access: boolean
+    let employee = this.authService.currentUser().employee
+    switch(module) {
+      case 'show': {
+        access = client.employee.id != employee.id ? this.authService.hasAccess('/clients/get/{id}') : true
+        break
+      }
+      case 'edit': {
+        access = client.employee.id != employee.id ? this.authService.hasAccess('/client/edit') : true
+        break
+      }
+      case 'delete': {
+        access = client.employee.id != employee.id ? this.authService.hasAccess('/client/remove/{id}') : true
+        break
+      }
+      default: {
+        access = false
+        break
+      }
+    }
+    return access
+  }
+
   statusActive(clients: Client[]) {
     return clients.filter((client) => { return client.status.description == 'Ativo' }).length
   }
-  
+
   statusInactive(clients: Client[]) {
     return clients.filter((client) => { return client.status.description == 'Inativo' }).length
   }
-  
+
   typeAgencia(clients: Client[]) {
     return clients.filter((client) => { return client.type.description == 'Agência' }).length
   }
-  
+
   typeExpositor(clients: Client[]) {
     return clients.filter((client) => { return client.type.description == 'Expositor' }).length
   }
-  
+
   typeAutonomo(clients: Client[]) {
     return clients.filter((client) => { return client.type.description == 'Autônomo' }).length
   }
-  
+
   score3Plus(clients: Client[]) {
     return clients.filter((client) => { return client.rate >= 3 }).length
   }
-  
+
   score3Minus(clients: Client[]) {
     return clients.filter((client) => { return client.rate < 3 }).length
   }
@@ -89,7 +115,7 @@ export class ClientListComponent implements OnInit {
 
     this.searching = true
     let snackBar = this.snackBar.open('Carregando clientes...')
-    
+
     this.clientService.clients().subscribe(clients => {
       this.searching = false
       this.clients = clients
@@ -118,5 +144,5 @@ export class ClientListComponent implements OnInit {
       }
     })
   }
- 
+
 }

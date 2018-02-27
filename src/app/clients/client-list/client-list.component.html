@@ -8,7 +8,7 @@
         <mat-input-container class="bar">
           <input #search matInput formControlName="search" placeholder="Qual cliente você procura?" autocomplete="off">
         </mat-input-container>
-        <div class="buttons">  
+        <div class="buttons">
           <a mat-button (click)="search.focus()">
             <mat-icon>search</mat-icon>
           </a>
@@ -50,13 +50,13 @@
             </div>
             <div class="mat-cell mat-column-action">
               <mat-menu #menu="matMenu">
-                <a [routerLink]="['/clients/show', client.id]" mat-menu-item>
+                <a [disabled]="!permissionVerify('show', client)" [routerLink]="permissionVerify('show', client) ? ['/clients/show', client.id] : null" mat-menu-item>
                   <mat-icon>subject</mat-icon> Detalhes
                 </a>
-                <a [routerLink]="['/clients/edit', client.id]" mat-menu-item>
+                <a [disabled]="!permissionVerify('edit', client)"  [routerLink]="permissionVerify('show', client) ? ['/clients/edit', client.id] : null" mat-menu-item>
                   <mat-icon>mode_edit</mat-icon> Editar
                 </a>
-                <button (click)="delete(client)" mat-menu-item>
+                <button [disabled]="!permissionVerify('delete', client)"  (click)="delete(client)" mat-menu-item>
                   <mat-icon>delete</mat-icon> Remover
                 </button>
               </mat-menu>

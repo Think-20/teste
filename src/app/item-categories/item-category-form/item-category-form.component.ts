@@ -12,6 +12,7 @@ import { Patterns } from '../../shared/patterns.model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
+import { ErrorHandler } from '../../shared/error-handler.service';
 
 @Component({
   selector: 'cb-item-category-form',
@@ -48,12 +49,12 @@ export class ItemCategoryFormComponent implements OnInit {
     private route: ActivatedRoute
   ) { }
 
-  ngOnInit() {    
+  ngOnInit() {
     let snackBarStateCharging
     this.typeForm = this.route.snapshot.url[0].path
 
     let itemCategoryControl: FormControl = this.formBuilder.control('')
-    
+
     this.itemCategoryForm = this.formBuilder.group({
       description: this.formBuilder.control('', [
         Validators.required,
@@ -68,7 +69,7 @@ export class ItemCategoryFormComponent implements OnInit {
          snackBarStateCharging = this.snackBar.open('Aguarde...')
       })
       .debounceTime(500)
-      .subscribe(itemDescription => { 
+      .subscribe(itemDescription => {
         this.itemCategories = this.itemCategoryService.itemCategories(itemDescription)
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
       })
@@ -79,7 +80,7 @@ export class ItemCategoryFormComponent implements OnInit {
       this.itemCategoryService.itemCategory(itemCategoryId).subscribe(itemCategory => {
         snackBarStateCharging.dismiss()
         this.itemCategory = itemCategory
-          
+
         this.itemCategoryForm.controls.description.setValue(this.itemCategory.description)
         this.itemCategoryForm.controls.itemCategory.setValue(this.itemCategory.item_category || '')
       })
@@ -92,6 +93,13 @@ export class ItemCategoryFormComponent implements OnInit {
   }
 
   save(itemCategory: ItemCategory) {
+    if(ErrorHandler.formIsInvalid(this.itemCategoryForm)) {
+      this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
+        duration: 5000
+      })
+      return;
+    }
+
     this.itemCategoryService.save(itemCategory).subscribe(data => {
       this.snackBar.open(data.message, '', {
         duration: 5000
@@ -100,8 +108,15 @@ export class ItemCategoryFormComponent implements OnInit {
   }
 
   edit(itemCategory: ItemCategory, itemCategoryId: number) {
+    if(ErrorHandler.formIsInvalid(this.itemCategoryForm)) {
+      this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
+        duration: 5000
+      })
+      return;
+    }
+
     itemCategory.id = itemCategoryId
-    
+
     this.itemCategoryService.edit(itemCategory).subscribe(data => {
       this.snackBar.open(data.message, '', {
         duration: 5000

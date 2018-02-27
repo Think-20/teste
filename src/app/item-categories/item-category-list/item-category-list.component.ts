@@ -32,7 +32,8 @@ export class ItemCategoryListComponent implements OnInit {
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
   search: FormControl
-  itemCategories: ItemCategory[]
+  itemCategories: ItemCategory[] = []
+  searching = false
 
   constructor(
     private fb: FormBuilder,
@@ -47,7 +48,7 @@ export class ItemCategoryListComponent implements OnInit {
     })
 
     let snackBar = this.snackBar.open('Carregando categorias de item...')
-    
+
     this.itemCategoryService.itemCategories().subscribe(itemCategories => {
       this.itemCategories = itemCategories
       snackBar.dismiss()
@@ -65,5 +66,5 @@ export class ItemCategoryListComponent implements OnInit {
       this.itemCategories.splice(this.itemCategories.indexOf(itemCategory), 1)
     })
   }
- 
+
 }

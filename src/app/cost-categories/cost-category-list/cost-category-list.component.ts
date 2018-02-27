@@ -32,7 +32,8 @@ export class CostCategoryListComponent implements OnInit {
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
   search: FormControl
-  costCategories: CostCategory[]
+  costCategories: CostCategory[] = []
+  searching = false
 
   constructor(
     private fb: FormBuilder,
@@ -47,7 +48,7 @@ export class CostCategoryListComponent implements OnInit {
     })
 
     let snackBar = this.snackBar.open('Carregando categorias de custo...')
-    
+
     this.costCategoryService.costCategories().subscribe(costCategories => {
       this.costCategories = costCategories
       snackBar.dismiss()
@@ -65,5 +66,5 @@ export class CostCategoryListComponent implements OnInit {
       this.costCategories.splice(this.costCategories.indexOf(costCategory), 1)
     })
   }
- 
+
 }

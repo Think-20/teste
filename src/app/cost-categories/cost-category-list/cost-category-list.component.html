@@ -1,54 +1,99 @@
-<div class="col-md-12">
-  <form [formGroup]="searchForm">
-    <div class="row">
-        <mat-input-container class="col-md-9">
-          <input matInput formControlName="search" placeholder="Qual categoria de custo você procura?" autocomplete="off">
+<div class="col-md-12" id="searchForm">
+  <form [formGroup]="searchForm" autocomplete="off">
+    <mat-card-title>
+      <div class="row search-bar-group">
+        <div class="title">
+          Lista
+        </div>
+        <mat-input-container class="bar">
+          <input #search matInput formControlName="search" placeholder="Qual categoria de custo você procura?" autocomplete="off">
         </mat-input-container>
-        <div class="col-md-3">
-          <a [routerLink]="['/cost-categories/new']" color="primary" mat-raised-button>
-            NOVO
+        <div class="buttons">
+          <a mat-button (click)="search.focus()">
+            <mat-icon>search</mat-icon>
+          </a>
+          <a mat-button>
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </a>
+          <a [routerLink]="['/cost-categories/new']" mat-button>
+            <mat-icon>add</mat-icon>
           </a>
         </div>
-    </div>
-  </form>
-</div>
-<div *ngIf="costCategories?.length > 0" class="col-md-12">
-  <table class="table mat-table">
-    <div class="mat-header-row">
-      <div class="mat-header-cell mat-column-id">ID</div>
-      <div class="mat-header-cell mat-column-description">Descrição</div>
-    </div>
-    <div class="mat-row" *ngFor="let costCategory of costCategories" [@rowAppeared]="rowAppearedState">
-      <div class="mat-cell mat-column-id">
-        {{ costCategory.id }}
       </div>
-      <div class="mat-cell mat-column-description">
-        {{ costCategory.description }}
-      </div>
-      <div class="mat-cell mat-column-action">
-        <mat-menu #menu="matMenu">
-          <a [routerLink]="['/cost-categories/show', costCategory.id]" mat-menu-item>
-            <mat-icon>subject</mat-icon> Detalhes
-          </a>
-          <a [routerLink]="['/cost-categories/edit', costCategory.id]" mat-menu-item>
-            <mat-icon>mode_edit</mat-icon> Editar
-          </a>
-          <button (click)="delete(costCategory)" mat-menu-item>
-            <mat-icon>delete</mat-icon> Remover
-          </button>
-        </mat-menu>
+    </mat-card-title>
+    <mat-card>
+      <div *ngIf="costCategories?.length > 0">
+        <table class="table mat-table">
+          <div class="mat-header-row">
+            <div class="mat-header-cell mat-column-id">ID</div>
+            <div class="mat-header-cell mat-column-description">Descrição</div>
+            <div class="mat-header-cell mat-column-action">Ação</div>
+          </div>
+          <div class="mat-row" *ngFor="let costCategory of costCategories" [@rowAppeared]="rowAppearedState">
+            <div class="mat-cell mat-column-id">
+              {{ costCategory.id }}
+            </div>
+            <div class="mat-cell mat-column-description">
+              {{ costCategory.description }}
+            </div>
+            <div class="mat-cell mat-column-action">
+              <mat-menu #menu="matMenu">
+                <a [routerLink]="['/cost-categories/show', costCategory.id]" mat-menu-item>
+                  <mat-icon>subject</mat-icon> Detalhes
+                </a>
+                <a [routerLink]="['/cost-categories/edit', costCategory.id]" mat-menu-item>
+                  <mat-icon>mode_edit</mat-icon> Editar
+                </a>
+                <button (click)="delete(costCategory)" mat-menu-item>
+                  <mat-icon>delete</mat-icon> Remover
+                </button>
+              </mat-menu>
 
-        <button mat-icon-button [matMenuTriggerFor]="menu">
-          <mat-icon>menu</mat-icon>
-        </button>
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>menu</mat-icon>
+              </button>
+            </div>
+          </div>
+        </table>
       </div>
-    </div>
-  </table>
-</div>
-<div *ngIf="costCategories?.length == 0" class="col-md-12">
-  <p>
-    <small>
-      Não encontramos resultados para sua busca. :(
-    </small>
-  </p>
+      <div *ngIf="searching" class="col-md-12 records-not-found">
+        <p>
+          <small>
+            Aguarde...
+          </small>
+        </p>
+      </div>
+      <div *ngIf="costCategories.length == 0 && searchForm.controls.search.value != '' && !searching" class="col-md-12 records-not-found">
+        <p>
+          <small>
+            Não encontramos resultados para sua busca. :(
+          </small>
+        </p>
+      </div>
+      <div *ngIf="costCategories.length == 0 && searchForm.controls.search.value == '' && !searching" class="col-md-12 records-not-found">
+        <p>
+          <small>
+            Ainda não existe nenhum item cadastrado. Que tal <a [routerLink]="['/cost-categories/new']">cadastrar</a> agora?
+          </small>
+        </p>
+      </div>
+    </mat-card>
+    <mat-card-title>
+      <div class="row search-bar-group">
+        <div class="title">
+          Relatório
+        </div>
+      </div>
+    </mat-card-title>
+    <mat-card>
+      <table class="table mat-table report">
+        <div class="mat-header-row">
+          <div class="mat-header-cell col-md-2 text-center">Total</div>
+        </div>
+        <div class="mat-row">
+          <div class="mat-cell col-md-2 text-center">{{ costCategories?.length }}</div>
+        </div>
+      </table>
+    </mat-card>
+  </form>
 </div>
