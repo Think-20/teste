@@ -120,6 +120,7 @@ export class ClientListComponent implements OnInit {
 
     this.clientService.clients().subscribe(pagination => {
       this.searching = false
+      this.pagination = pagination
       this.clients = <Client[]> pagination.data
       snackBar.dismiss()
     })
@@ -130,6 +131,7 @@ export class ClientListComponent implements OnInit {
       .subscribe(value => {
         this.clientService.clients(value).subscribe(pagination => {
           this.searching = false
+          this.pagination = pagination
           this.clients = <Client[]> pagination.data
         })
     })
