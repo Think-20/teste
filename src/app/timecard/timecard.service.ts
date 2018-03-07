@@ -5,28 +5,54 @@ import { MatSnackBar } from '@angular/material'
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/operator/debounceTime';
+import 'rxjs/add/operator/catch';
 
 
 import { API } from '../app.api';
+import { Timecard } from './timecard.model';
 import { ErrorHandler } from '../shared/error-handler.service';
-import { Client } from './client.model';
 import { AuthService } from '../login/auth.service';
 import { Pagination } from '../shared/pagination.model';
+import { Employee } from '../employees/employee.model';
 
 
 @Injectable()
-export class ClientService {
+export class TimecardService {
     constructor(
         private http: Http,
-        private snackBar: MatSnackBar,
-        private auth: AuthService
+        private authService: AuthService,
+        private snackBar: MatSnackBar
     ) {}
 
-    clients(query: string = '', page: number = 0): Observable<Pagination> {
-      let url = query === '' ? `clients/all?page=${page}` : `clients/filter/${query}?page=${page}`
-      let prefix = this.auth.hasAccess('clients/all') ? '' : 'my-'
+    hasAccess(module: string): boolean {
+      let access: boolean = false
+      switch(module) {
+        case 'delete': {
+          access = this.authService.hasAccess('employees/office-hours/remove/{id}')
+          break;
+        }
+        case 'edit': {
+          access = this.authService.hasAccess('employees/office-hours/edit')
+          break;
+        }
+        case 'list': {
+          access = this.authService.hasAccess('employees/office-hours/show/another/{employeeId}')
+          break;
+        }
+        case 'new': {
+          access = this.authService.hasAccess('employees/office-hours/register/another')
+          break;
+        }
+        default: {
+          break;
+        }
+      }
+      return access
+    }
 
-        url = prefix + url
+    timecards(employee?: Employee): Observable<Pagination> {
+        let url = this.authService.hasAccess('employees/office-hours/show/another/{employeeId}')
+          ? `employees/office-hours/show/another/${employee.id}` : 'employees/office-hours/show/yourself'
 
         return this.http.get(`${API}/${url}`)
             .map(response => response.json())
@@ -38,13 +64,8 @@ export class ClientService {
             })
     }
 
-    client(clientId: number): Observable<Client> {
-        let url = `clients/get/${clientId}`
-        let prefix = this.auth.hasAccess('clients/get/{id}') ? '' : 'my-'
-
-        url = prefix + url
-
-        return this.http.get(`${API}/${url}`)
+    timecard(timecardId: number): Observable<Timecard> {
+        return this.http.get(`${API}/employees/office-hours/get/${timecardId}`)
             .map(response => response.json())
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
@@ -54,40 +75,10 @@ export class ClientService {
             })
     }
 
-    uploadSheet(file: any): Observable<any> {
-        let requestOptions = new RequestOptions()
-        let headers = new Headers()
-
-        let user = this.auth.currentUser()
-        let token = this.auth.token()
-
-        headers.set('Authorization', `${token}`)
-        headers.set('User', `${user.id}`)
-        requestOptions.headers = headers
-
-        let url = 'client/import'
-        let data = new FormData()
-        data.append('file', file, file.name)
-
-        return this.http.post(`${API}/${url}`, data, requestOptions)
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
-
-    save(client: Client): Observable<any> {
-        let url = 'client/save'
-        let prefix = this.auth.hasAccess('client/save') ? '' : 'my-'
-
-        url = prefix + url
-
+    save(timecard: Timecard): Observable<any> {
         return this.http.post(
-                `${API}/${url}`,
-                JSON.stringify(client),
+                `${API}/employees/office-hours/register/another`,
+                JSON.stringify(timecard),
                 new RequestOptions()
             )
             .map(response => response.json())
@@ -99,33 +90,31 @@ export class ClientService {
             })
     }
 
-    edit(client: Client): Observable<any> {
-        let url = 'client/edit'
-        let prefix = this.auth.hasAccess('client/edit') ? '' : 'my-'
+    register(): Observable<any> {
+        return this.http.post(
+                `${API}/employees/office-hours/register/yourself`,
+                new RequestOptions()
+            )
+            .map(response => response.json())
+            .catch((err) => {
+                this.snackBar.open(ErrorHandler.message(err), '', {
+                    duration: 3000
+                })
+                return ErrorHandler.capture(err)
+            })
+    }
 
-        url = prefix + url
-
+    edit(timecard: Timecard): Observable<any> {
         return this.http.put(
-                `${API}/${url}`,
-                JSON.stringify(client),
+                `${API}/employees/office-hours/edit`,
+                JSON.stringify(timecard),
                 new RequestOptions()
             )
             .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
     }
 
-    delete(id: number): Observable<any> {
-        let url = `client/remove/${id}`
-        let prefix = this.auth.hasAccess('client/remove/{id}') ? '' : 'my-'
-
-        url = prefix + url
-
-        return this.http.delete(`${API}/${url}`)
+    delete(id: number): Observable<Timecard> {
+        return this.http.delete(`${API}/employees/office-hours/remove/${id}`)
             .map(response => response.json())
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {

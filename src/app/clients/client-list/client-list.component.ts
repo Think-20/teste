@@ -6,6 +6,7 @@ import { MatSnackBar } from '@angular/material';
 import { ClientService } from '../client.service';
 import { Client } from '../client.model';
 import { AuthService } from '../../login/auth.service';
+import { Pagination } from '../../shared/pagination.model';
 
 @Component({
   selector: 'cb-client-list',
@@ -35,6 +36,7 @@ export class ClientListComponent implements OnInit {
   search: FormControl
   clients: Client[] = []
   searching = false
+  pagination: Pagination
 
   constructor(
     private fb: FormBuilder,
@@ -52,15 +54,15 @@ export class ClientListComponent implements OnInit {
     let employee = this.authService.currentUser().employee
     switch(module) {
       case 'show': {
-        access = client.employee.id != employee.id ? this.authService.hasAccess('/clients/get/{id}') : true
+        access = client.employee.id != employee.id ? this.authService.hasAccess('clients/get/{id}') : true
         break
       }
       case 'edit': {
-        access = client.employee.id != employee.id ? this.authService.hasAccess('/client/edit') : true
+        access = client.employee.id != employee.id ? this.authService.hasAccess('client/edit') : true
         break
       }
       case 'delete': {
-        access = client.employee.id != employee.id ? this.authService.hasAccess('/client/remove/{id}') : true
+        access = client.employee.id != employee.id ? this.authService.hasAccess('client/remove/{id}') : true
         break
       }
       default: {
@@ -116,9 +118,9 @@ export class ClientListComponent implements OnInit {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando clientes...')
 
-    this.clientService.clients().subscribe(clients => {
+    this.clientService.clients().subscribe(pagination => {
       this.searching = false
-      this.clients = clients
+      this.clients = <Client[]> pagination.data
       snackBar.dismiss()
     })
 
@@ -126,9 +128,9 @@ export class ClientListComponent implements OnInit {
       .do(() => this.searching = true)
       .debounceTime(500)
       .subscribe(value => {
-        this.clientService.clients(value).subscribe(searchClients => {
+        this.clientService.clients(value).subscribe(pagination => {
           this.searching = false
-          this.clients = searchClients
+          this.clients = <Client[]> pagination.data
         })
     })
   }
@@ -142,6 +144,16 @@ export class ClientListComponent implements OnInit {
       if(data.status) {
         this.clients.splice(this.clients.indexOf(client), 1)
       }
+    })
+  }
+
+  changePage($event) {
+    this.searching = true
+    this.clients = []
+    this.clientService.clients(this.search.value, ($event.pageIndex + 1)).subscribe(pagination => {
+      this.pagination = pagination
+      this.clients = <Client[]> pagination.data
+      this.searching = false
     })
   }
 

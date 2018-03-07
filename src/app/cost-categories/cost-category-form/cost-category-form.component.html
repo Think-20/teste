@@ -14,7 +14,7 @@
         <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save(costCategoryForm.value)" mat-raised-button>
           SALVAR
         </button>
-        <button class="cb-button" *ngIf="typeForm === 'edit'" color="primary" (click)="edit(costCategoryForm.value, item.id)" mat-raised-button>
+        <button class="cb-button" *ngIf="typeForm === 'edit'" color="primary" (click)="edit(costCategoryForm.value, costCategory.id)" mat-raised-button>
           EDITAR
         </button>
       </mat-card-actions>

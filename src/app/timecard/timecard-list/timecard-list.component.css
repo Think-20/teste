@@ -1,0 +1,11 @@
+.mat-column-id {
+    width: 15%;
+}
+
+.mat-column-entry, .mat-column-exit {
+    width: 70%;
+}
+
+.mat-column-action {
+    width: 15%;
+}

@@ -53,7 +53,7 @@
                 <a [disabled]="!permissionVerify('show', client)" [routerLink]="permissionVerify('show', client) ? ['/clients/show', client.id] : null" mat-menu-item>
                   <mat-icon>subject</mat-icon> Detalhes
                 </a>
-                <a [disabled]="!permissionVerify('edit', client)"  [routerLink]="permissionVerify('show', client) ? ['/clients/edit', client.id] : null" mat-menu-item>
+                <a [disabled]="!permissionVerify('edit', client)"  [routerLink]="permissionVerify('edit', client) ? ['/clients/edit', client.id] : null" mat-menu-item>
                   <mat-icon>mode_edit</mat-icon> Editar
                 </a>
                 <button [disabled]="!permissionVerify('delete', client)"  (click)="delete(client)" mat-menu-item>
@@ -115,6 +115,12 @@
         </div>
       </table>
     </mat-card>
+    <mat-paginator *ngIf="clients"
+      [length]="pagination?.total"
+      [pageSize]="pagination?.per_page"
+      [pageSizeOptions]="[50]"
+      (page)="changePage($event)"
+    ></mat-paginator>
   </form>
 </div>
 

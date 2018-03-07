@@ -121,8 +121,8 @@ export class BriefingFormComponent implements OnInit {
     })
     .debounceTime(500)
     .subscribe(exhibitorName => {
-      this.clientService.clients(exhibitorName).subscribe((clients) => {
-        this.exhibitors = clients.filter((client) => {
+      this.clientService.clients(exhibitorName).subscribe((pagination) => {
+        this.exhibitors = pagination.data.filter((client) => {
           return client.type.description === 'Expositor'
         })
       })
@@ -135,8 +135,8 @@ export class BriefingFormComponent implements OnInit {
     })
     .debounceTime(500)
     .subscribe(name => {
-      this.clientService.clients(name).subscribe((clients) => {
-        this.agencies = clients.filter((client) => {
+      this.clientService.clients(name).subscribe((pagination) => {
+        this.agencies = pagination.data.filter((client) => {
           return client.type.description === 'Agência'
         })
       })

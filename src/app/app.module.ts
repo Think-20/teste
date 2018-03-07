@@ -92,6 +92,10 @@ import { StandConfigurationService } from 'app/stand-configurations/stand-config
 import { StandGenreService } from 'app/stand-genres/stand-genre.service';
 import { StandItemService } from 'app/stand/stand-items/stand-item.service';
 import { PaginatorIntl } from 'app/shared/paginator-intl.model';
+import { TimecardComponent } from './timecard/timecard.component';
+import { TimecardService } from './timecard/timecard.service';
+import { TimecardFormComponent } from './timecard/timecard-form/timecard-form.component';
+import { TimecardListComponent } from './timecard/timecard-list/timecard-list.component';
 
 @NgModule({
   declarations: [
@@ -140,7 +144,11 @@ import { PaginatorIntl } from 'app/shared/paginator-intl.model';
     ItemListComponent,
     ItemShowComponent,
     StarsComponent,
-    ClientImportComponent
+    ClientImportComponent,
+
+    TimecardComponent,
+    TimecardFormComponent,
+    TimecardListComponent
   ],
   imports: [
     BrowserModule,
@@ -198,6 +206,7 @@ import { PaginatorIntl } from 'app/shared/paginator-intl.model';
     StandGenreService,
     UploadFileService,
     StandItemService,
+    TimecardService,
 
     MatDialog,
     MatSnackBar,

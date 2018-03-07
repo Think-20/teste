@@ -347,11 +347,17 @@ mat-card-title > p {
 .search-bar-group .mat-focused .mat-input-placeholder.mat-float,
 .search-bar-group .mat-input-placeholder.mat-float:not(.mat-empty) {
   opacity: 0 !important;
+  margin-top: -3px;
+  height: auto;
+  padding: 2px 0;
 }
 
 .search-bar-group .mat-input-placeholder.mat-empty {
   opacity: 1 !important;
   text-align: right;
+  margin-top: -3px;
+  height: auto;
+  padding: 2px 0;
 }
 
 #login-content .mat-input-container {

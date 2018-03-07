@@ -1,0 +1,108 @@
+<div class="col-md-12" id="searchForm">
+  <form [formGroup]="searchForm" autocomplete="off">
+    <mat-card-title>
+      <div class="row search-bar-group">
+        <div class="title">
+          Lista
+        </div>
+        <mat-input-container class="bar">
+          <input #search matInput [matAutocomplete]="autocompleteEmployee" formControlName="search" placeholder="{{ accessList ? 'Qual funcionário você procura?' : 'Veja seus registros' }}" autocomplete="off">
+          <mat-autocomplete #autocompleteEmployee="matAutocomplete" [displayWith]="displayEmployee">
+            <mat-option *ngFor="let employee of employees" [value]="employee">
+              {{ employee.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-input-container>
+        <div class="buttons">
+          <a mat-button (click)="search.focus()">
+            <mat-icon>search</mat-icon>
+          </a>
+          <a mat-button>
+            <mat-icon>keyboard_arrow_down</mat-icon>
+          </a>
+          <a [routerLink]="['/timecard/new']" mat-button>
+            <mat-icon>add</mat-icon>
+          </a>
+        </div>
+      </div>
+    </mat-card-title>
+    <mat-card>
+      <div *ngIf="timecards?.length > 0">
+        <table class="table mat-table">
+          <div class="mat-header-row">
+            <div class="mat-header-cell mat-column-id">ID</div>
+            <div class="mat-header-cell mat-column-entry">Entrada</div>
+            <div class="mat-header-cell mat-column-exit">Saída</div>
+            <div class="mat-header-cell mat-column-action">Ação</div>
+          </div>
+          <div class="mat-row" *ngFor="let timecard of timecards" [@rowAppeared]="rowAppearedState">
+            <div class="mat-cell mat-column-id">
+              {{ timecard.id }}
+            </div>
+            <div class="mat-cell mat-column-entry">
+              {{ timecard.entry | date:'dd/MM/yyyy HH:mm'  }}
+            </div>
+            <div class="mat-cell mat-column-exit" *ngIf="timecard.exit == ''">
+
+            </div>
+            <div class="mat-cell mat-column-exit" *ngIf="timecard.exit != ''">
+              {{ timecard.exit | date:'dd/MM/yyyy HH:mm'  }}
+            </div>
+            <div class="mat-cell mat-column-action">
+              <mat-menu #menu="matMenu">
+                <button [disabled]="!accessEdit" [routerLink]="['/timecard/edit', timecard.id]" mat-menu-item>
+                  <mat-icon>mode_edit</mat-icon> Editar
+                </button>
+                <button [disabled]="!accessDelete" (click)="delete(timecard)" mat-menu-item>
+                  <mat-icon>delete</mat-icon> Remover
+                </button>
+              </mat-menu>
+
+              <button mat-icon-button [matMenuTriggerFor]="menu">
+                <mat-icon>menu</mat-icon>
+              </button>
+            </div>
+          </div>
+        </table>
+      </div>
+      <div *ngIf="searching" class="col-md-12 records-not-found">
+        <p>
+          <small>
+            Aguarde...
+          </small>
+        </p>
+      </div>
+      <div *ngIf="timecards.length == 0 && searchForm.controls.search.value != '' && !searching" class="col-md-12 records-not-found">
+        <p>
+          <small>
+            Não encontramos resultados para sua busca. :(
+          </small>
+        </p>
+      </div>
+      <div *ngIf="timecards.length == 0 && searchForm.controls.search.value == '' && !searching" class="col-md-12 records-not-found">
+        <p>
+          <small>
+            {{ accessList ? 'Faça sua busca' : 'Ainda não existem registros de ponto.' }}
+          </small>
+        </p>
+      </div>
+    </mat-card>
+    <mat-card-title>
+      <div class="row search-bar-group">
+        <div class="title">
+          Relatório
+        </div>
+      </div>
+    </mat-card-title>
+    <mat-card>
+      <table class="table mat-table report">
+        <div class="mat-header-row">
+          <div class="mat-header-cell col-md-2 text-center">Total</div>
+        </div>
+        <div class="mat-row">
+          <div class="mat-cell col-md-2 text-center">{{ timecards?.length }}</div>
+        </div>
+      </table>
+    </mat-card>
+  </form>
+</div>

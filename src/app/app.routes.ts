@@ -35,7 +35,11 @@ import { BriefingListComponent } from './briefings/briefing-list/briefing-list.c
 import { BriefingShowComponent } from './briefings/briefing-show/briefing-show.component';
 import { BriefingsComponent } from './briefings/briefings.component';
 
+import { TimecardComponent } from './timecard/timecard.component';
+
 import { AuthGuard } from './login/auth.guard';
+import { TimecardFormComponent } from './timecard/timecard-form/timecard-form.component';
+import { TimecardListComponent } from './timecard/timecard-list/timecard-list.component';
 
 export const ROUTES: Routes = [
     {
@@ -164,6 +168,22 @@ export const ROUTES: Routes = [
                     {
                         path: 'list', component: BriefingListComponent, canActivate: [AuthGuard]
                     }
+                ]
+            },
+            {
+                path : 'timecard', component : TimecardComponent, children: [
+                  {
+                      path: '', redirectTo: 'list', pathMatch: 'full'
+                  },
+                  {
+                      path: 'new', component: TimecardFormComponent, canActivate: [AuthGuard]
+                  },
+                  {
+                      path: 'edit/:id', component: TimecardFormComponent, canActivate: [AuthGuard]
+                  },
+                  {
+                      path: 'list', component: TimecardListComponent, canActivate: [AuthGuard]
+                  }
                 ]
             }
         ]

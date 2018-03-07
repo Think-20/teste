@@ -89,6 +89,7 @@ export class BriefingListComponent implements OnInit {
 
       if(data.status) {
         this.briefings.splice(this.briefings.indexOf(briefing), 1)
+        this.pagination.total = this.pagination.total - 1
       }
     })
   }
