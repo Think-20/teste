@@ -121,7 +121,6 @@ export class ClientFormComponent implements OnInit {
         Validators.maxLength(50)
       ]),
       number: this.formBuilder.control('', [
-        Validators.required,
         Validators.maxLength(11)
       ]),
       neighborhood: this.formBuilder.control('', [

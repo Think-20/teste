@@ -130,7 +130,6 @@ export class ProviderFormComponent implements OnInit {
         Validators.maxLength(50)
       ]),
       number: this.formBuilder.control('', [
-        Validators.required,
         Validators.maxLength(11)
       ]),
       neighborhood: this.formBuilder.control('', [
@@ -175,11 +174,11 @@ export class ProviderFormComponent implements OnInit {
       .subscribe(person => {
         if(person.id == 2) {
           this.providerForm.controls.cpf.setValidators([])
-          this.providerForm.controls.cpf.updateValueAndValidity([])
+          this.providerForm.controls.cpf.updateValueAndValidity()
           this.providerForm.controls.cnpj.setValidators(cnpjValidators)
         } else if(person.id == 1) {
           this.providerForm.controls.cnpj.setValidators([])
-          this.providerForm.controls.cnpj.updateValueAndValidity([])
+          this.providerForm.controls.cnpj.updateValueAndValidity()
           this.providerForm.controls.cpf.setValidators(cpfValidators)
         }
       })

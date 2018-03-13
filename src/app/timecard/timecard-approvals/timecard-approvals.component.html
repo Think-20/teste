@@ -1,27 +1,16 @@
 <div class="col-md-12" id="searchForm">
-  <form [formGroup]="searchForm" autocomplete="off">
+  <form autocomplete="off">
     <mat-card-title>
       <div class="row search-bar-group">
         <div class="title">
-          Lista
+          Aprovações
         </div>
-        <mat-input-container class="bar">
-          <input #search matInput [matAutocomplete]="autocompleteEmployee" formControlName="search" placeholder="{{ accessList ? 'Qual funcionário você procura?' : 'Veja seus registros' }}" autocomplete="off">
-          <mat-autocomplete #autocompleteEmployee="matAutocomplete" [displayWith]="displayEmployee">
-            <mat-option *ngFor="let employee of employees" [value]="employee">
-              {{ employee.name }}
-            </mat-option>
-          </mat-autocomplete>
-        </mat-input-container>
         <div class="buttons">
           <a mat-button (click)="search.focus()">
             <mat-icon>search</mat-icon>
           </a>
           <a mat-button>
             <mat-icon>keyboard_arrow_down</mat-icon>
-          </a>
-          <a [routerLink]="['/timecard/new']" mat-button>
-            <mat-icon>add</mat-icon>
           </a>
         </div>
       </div>
@@ -58,10 +47,10 @@
             </div>
             <div class="mat-cell mat-column-action">
               <mat-menu #menu="matMenu">
-                <button [disabled]="!accessEdit" [routerLink]="['/timecard/edit', timecard.id]" mat-menu-item>
-                  <mat-icon>mode_edit</mat-icon> Editar
+                <button (click)="approve(timecard)" mat-menu-item>
+                  <mat-icon>done</mat-icon> Aprovar
                 </button>
-                <button [disabled]="!accessDelete" (click)="delete(timecard)" mat-menu-item>
+                <button (click)="delete(timecard)" mat-menu-item>
                   <mat-icon>delete</mat-icon> Remover
                 </button>
               </mat-menu>
@@ -80,17 +69,10 @@
           </small>
         </p>
       </div>
-      <div *ngIf="timecards.length == 0 && searchForm.controls.search.value != '' && !searching" class="col-md-12 records-not-found">
+      <div *ngIf="timecards.length == 0 && !searching" class="col-md-12 records-not-found">
         <p>
           <small>
-            Não encontramos resultados para sua busca. :(
-          </small>
-        </p>
-      </div>
-      <div *ngIf="timecards.length == 0 && searchForm.controls.search.value == '' && !searching" class="col-md-12 records-not-found">
-        <p>
-          <small>
-            {{ accessList ? 'Faça sua busca' : 'Ainda não existem registros de ponto.' }}
+            Nenhuma aprovação pendente.
           </small>
         </p>
       </div>
@@ -114,10 +96,3 @@
     </mat-card>
   </form>
 </div>
-
-<div class="col-md-12 button-section">
-  <a class="cb-button" [routerLink]="['/timecard/approvals']" mat-raised-button>
-    Aprovar
-  </a>
-</div>
-

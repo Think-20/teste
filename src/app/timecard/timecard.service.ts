@@ -64,6 +64,32 @@ export class TimecardService {
             })
     }
 
+    approvalsPending(): Observable<Timecard[]> {
+        let url = `employees/office-hours/approvals-pending/show`
+
+        return this.http.get(`${API}/${url}`)
+            .map(response => response.json())
+            .catch((err) => {
+                this.snackBar.open(ErrorHandler.message(err), '', {
+                    duration: 3000
+                })
+                return ErrorHandler.capture(err)
+            })
+    }
+
+    approve(id: number): Observable<any> {
+        let url = `employees/office-hours/approvals-pending/approve/${id}`
+
+        return this.http.get(`${API}/${url}`)
+            .map(response => response.json())
+            .catch((err) => {
+                this.snackBar.open(ErrorHandler.message(err), '', {
+                    duration: 3000
+                })
+                return ErrorHandler.capture(err)
+            })
+    }
+
     timecard(timecardId: number): Observable<Timecard> {
         return this.http.get(`${API}/employees/office-hours/get/${timecardId}`)
             .map(response => response.json())
@@ -76,23 +102,12 @@ export class TimecardService {
     }
 
     save(timecard: Timecard): Observable<any> {
-        return this.http.post(
-                `${API}/employees/office-hours/register/another`,
-                JSON.stringify(timecard),
-                new RequestOptions()
-            )
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+      let url = this.authService.hasAccess('employees/office-hours/register/another')
+        ? `employees/office-hours/register/another` : 'employees/office-hours/register/yourself'
 
-    register(): Observable<any> {
         return this.http.post(
-                `${API}/employees/office-hours/register/yourself`,
+                `${API}/${url}`,
+                JSON.stringify(timecard),
                 new RequestOptions()
             )
             .map(response => response.json())
@@ -113,7 +128,7 @@ export class TimecardService {
             .map(response => response.json())
     }
 
-    delete(id: number): Observable<Timecard> {
+    delete(id: number): Observable<any> {
         return this.http.delete(`${API}/employees/office-hours/remove/${id}`)
             .map(response => response.json())
             .catch((err) => {

@@ -8,13 +8,13 @@
           <mat-input-container class="col-md-3">
             <input formControlName="fantasy_name" matInput placeholder="Nome*">
             <mat-error>
-              Obrigatório, entre 3 e 30 caract. 
+              Obrigatório, entre 3 e 30 caract.
             </mat-error>
           </mat-input-container>
           <mat-input-container class="col-md-9">
             <input formControlName="name" matInput placeholder="Razão social*">
             <mat-error>
-              Obrigatório, entre 3 e 50 caract. 
+              Obrigatório, entre 3 e 50 caract.
             </mat-error>
           </mat-input-container>
           <mat-select class="col-md-3" placeholder="Tipo*" formControlName="person_type" [compareWith]="comparePersonType">
@@ -30,7 +30,7 @@
           <mat-input-container class="col-md-3">
             <input formControlName="site" matInput placeholder="Site">
             <mat-error>
-              7 caract. 
+              7 caract.
             </mat-error>
           </mat-input-container>
           <cb-stars class="col-md-3 star-input" label="Score" [rate]="provider != undefined ? (provider.rate + 1) : 0" [input]="providerForm.controls.rate">
@@ -175,13 +175,13 @@
           <mat-input-container class="col-md-6">
             <input formControlName="street" matInput placeholder="Logradouro*">
             <mat-error>
-              Obrigatório, entre 3 e 50 caract. 
+              Obrigatório, entre 3 e 50 caract.
             </mat-error>
           </mat-input-container>
           <mat-input-container class="col-md-3">
-            <input formControlName="number" matInput placeholder="Número*">
+            <input formControlName="number" matInput placeholder="Número">
             <mat-error>
-              Obrigatório, entre 1 e 11 caract. 
+              Entre 1 e 11 caract.
             </mat-error>
           </mat-input-container>
           <mat-input-container class="col-md-3">
@@ -212,7 +212,7 @@
           <mat-input-container class="col-md-3">
             <input formControlName="neighborhood" matInput placeholder="Bairro*">
             <mat-error>
-              Obrigatório, entre 3 e 30 caract. 
+              Obrigatório, entre 3 e 30 caract.
             </mat-error>
           </mat-input-container>
       </div>

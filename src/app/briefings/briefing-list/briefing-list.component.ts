@@ -6,6 +6,8 @@ import { MatSnackBar } from '@angular/material';
 import { BriefingService } from '../briefing.service';
 import { Briefing } from '../briefing.model';
 import { Pagination } from 'app/shared/pagination.model';
+import { Employee } from '../../employees/employee.model';
+import { EmployeeService } from '../../employees/employee.service';
 
 @Component({
   selector: 'cb-briefing-list',
@@ -35,10 +37,13 @@ export class BriefingListComponent implements OnInit {
   search: FormControl
   pagination: Pagination
   briefings: Briefing[] = []
+  attendances: Employee[]
   searching = false
+  filter = false
 
   constructor(
     private fb: FormBuilder,
+    private employeeService: EmployeeService,
     private briefingService: BriefingService,
     private snackBar: MatSnackBar
   ) { }
@@ -46,8 +51,15 @@ export class BriefingListComponent implements OnInit {
   ngOnInit() {
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
-      search: this.search
+      search: this.search,
+      attendance: this.fb.control('')
     })
+
+    /*
+    this.employeeService.canInsertClients().subscribe((attendances) => {
+      this.attendances = attendances
+    })
+    */
 
     this.searching = true
     let snackBar = this.snackBar.open('Carregando briefings...')
@@ -57,6 +69,17 @@ export class BriefingListComponent implements OnInit {
       this.searching = false
       this.briefings = pagination.data
       snackBar.dismiss()
+    })
+
+    this.searchForm.controls.attendance.valueChanges
+      .do(() => this.searching = true)
+      .debounceTime(500)
+      .subscribe(value => {
+        this.briefingService.briefings().subscribe(pagination => {
+          this.pagination = pagination
+          this.searching = false
+          this.briefings = pagination.data
+        })
     })
 
     this.search.valueChanges
@@ -69,6 +92,10 @@ export class BriefingListComponent implements OnInit {
           this.briefings = pagination.data
         })
     })
+  }
+
+  compareAttendance(var1: Employee, var2: Employee) {
+    return var1.id === var2.id
   }
 
   changePage($event) {

@@ -15,6 +15,7 @@ import 'rxjs/add/operator/do';
 import { ErrorHandler } from '../../shared/error-handler.service';
 import { Employee } from '../../employees/employee.model';
 import { EmployeeService } from '../../employees/employee.service';
+import { AuthService } from '../../login/auth.service';
 
 @Component({
   selector: 'cb-timecard-form',
@@ -44,11 +45,13 @@ export class TimecardFormComponent implements OnInit {
   timecardForm: FormGroup
   employees: Observable<Employee[]>
   accessNew: boolean = false
+  justifyHours: boolean = false
 
   constructor(
     private timecardService: TimecardService,
     private employeeService: EmployeeService,
     private formBuilder: FormBuilder,
+    private authService: AuthService,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute
   ) { }
@@ -68,8 +71,21 @@ export class TimecardFormComponent implements OnInit {
       ]),
       employee: this.formBuilder.control('', [
         Validators.required
-      ])
+      ]),
+      reason: this.formBuilder.control('')
     })
+
+    if(!this.accessNew) {
+      this.timecardForm.controls.employee.setValue(this.authService.currentUser().employee)
+      this.timecardForm.controls.employee.disable()
+    }
+
+    this.timecardForm.controls.entry.valueChanges
+    .debounceTime(500)
+    .subscribe((value) => this.checkJustifyHours())
+    this.timecardForm.controls.exit.valueChanges
+    .debounceTime(500)
+    .subscribe((value) => this.checkJustifyHours())
 
     this.timecardForm.controls.employee.valueChanges
     .do(employeeName => {
@@ -95,6 +111,28 @@ export class TimecardFormComponent implements OnInit {
 
   }
 
+  checkJustifyHours() {
+    let entry = this.timecardForm.controls.entry.value
+    let exit = this.timecardForm.controls.exit.value
+    let diff = (new Date(exit).getTime() - new Date(entry).getTime())/1000
+
+    if(isNaN(diff)) return
+
+    console.log(diff)
+
+    //9 horas e 15 minutos pra menos e pra mais
+    if(diff > 33300 || diff < 31500) {
+      this.justifyHours = true
+      this.timecardForm.controls.reason.setValidators(Validators.required)
+      this.timecardForm.controls.exit.setErrors({})
+      this.timecardForm.controls.exit.updateValueAndValidity()
+    }  else {
+      this.justifyHours = false
+      this.timecardForm.controls.reason.setValidators([])
+      this.timecardForm.controls.exit.updateValueAndValidity()
+    }
+  }
+
   displayEmployee(employee: Employee) {
     return employee.name
   }
@@ -108,14 +146,6 @@ export class TimecardFormComponent implements OnInit {
     }
 
     this.timecardService.save(timecard).subscribe(data => {
-      this.snackBar.open(data.message, '', {
-        duration: 5000
-      })
-    })
-  }
-
-  register() {
-    this.timecardService.register().subscribe(data => {
       this.snackBar.open(data.message, '', {
         duration: 5000
       })

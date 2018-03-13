@@ -40,6 +40,7 @@ import { TimecardComponent } from './timecard/timecard.component';
 import { AuthGuard } from './login/auth.guard';
 import { TimecardFormComponent } from './timecard/timecard-form/timecard-form.component';
 import { TimecardListComponent } from './timecard/timecard-list/timecard-list.component';
+import { TimecardApprovalsComponent } from './timecard/timecard-approvals/timecard-approvals.component';
 
 export const ROUTES: Routes = [
     {
@@ -183,6 +184,9 @@ export const ROUTES: Routes = [
                   },
                   {
                       path: 'list', component: TimecardListComponent, canActivate: [AuthGuard]
+                  },
+                  {
+                      path: 'approvals', component: TimecardApprovalsComponent, canActivate: [AuthGuard]
                   }
                 ]
             }

@@ -1,4 +1,4 @@
-<div class="col-md-12" *ngIf="accessNew">
+<div class="col-md-12">
   <form [formGroup]="timecardForm" novalidate>
     <input type="hidden" formControlName="id">
     <mat-card-title>
@@ -7,19 +7,19 @@
     <mat-card>
       <div class="row">
           <mat-input-container class="col-md-4">
-            <input type="datetime-local" formControlName="entry" matInput placeholder="Entrada">
+            <input type="datetime-local" formControlName="entry" matInput placeholder="Entrada*">
             <mat-error>
               Obrigatório
             </mat-error>
           </mat-input-container>
           <mat-input-container class="col-md-4">
-            <input type="datetime-local" formControlName="exit" matInput placeholder="Saída">
+            <input type="datetime-local" formControlName="exit" matInput placeholder="Saída*">
             <mat-error>
               Obrigatório
             </mat-error>
           </mat-input-container>
           <mat-input-container class="col-md-4">
-            <input matInput formControlName="employee" [matAutocomplete]="autocompleteEmployee" placeholder="Funcionário">
+            <input matInput formControlName="employee" [matAutocomplete]="autocompleteEmployee" placeholder="Funcionário*">
             <mat-error>
               Obrigatório
             </mat-error>
@@ -29,6 +29,14 @@
                 {{ employee.name }}
               </mat-option>
           </mat-autocomplete>
+          <div *ngIf="justifyHours">
+            <mat-input-container class="col-md-12">
+              <input formControlName="reason" matInput placeholder="Motivo*">
+              <mat-error>
+                Obrigatório
+              </mat-error>
+            </mat-input-container>
+          </div>
       </div>
       <mat-card-actions class="col-md-12 text-right">
         <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save(timecardForm.value)" mat-raised-button>
@@ -40,17 +48,4 @@
       </mat-card-actions>
     </mat-card>
   </form>
-</div>
-
-<div class="col-md-12" *ngIf="typeForm == 'new'">
-  <mat-card-title>
-    <p class="lead">Registrar entrada/saída</p>
-  </mat-card-title>
-  <mat-card>
-      <mat-card-actions class="col-md-12 text-center">
-        <button class="cb-button" color="primary" (click)="register()" mat-raised-button>
-          REGISTRAR
-        </button>
-      </mat-card-actions>
-  </mat-card>
 </div>

@@ -360,6 +360,11 @@ mat-card-title > p {
   padding: 2px 0;
 }
 
+.filter-grid {
+  padding: 15px 0px 8px 0px !important;
+  border-bottom: 1px solid #eee;
+}
+
 #login-content .mat-input-container {
   height: 36px;
 }

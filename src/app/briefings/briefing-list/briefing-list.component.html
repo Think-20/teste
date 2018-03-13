@@ -12,7 +12,7 @@
           <a mat-button (click)="search.focus()">
             <mat-icon>search</mat-icon>
           </a>
-          <a mat-button>
+          <a mat-button (click)="filter = filter ? false : true">
             <mat-icon>keyboard_arrow_down</mat-icon>
           </a>
           <a [routerLink]="['/briefings/new']" mat-button>
@@ -21,6 +21,17 @@
         </div>
       </div>
     </mat-card-title>
+    <mat-card *ngIf="false" class="filter-grid">
+      <div class="row">
+        <div class="col-md-12">
+          <mat-select class="col-md-3" placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
+            <mat-option *ngFor="let attendance of attendances" [value]="attendance">
+              {{ attendance.name }}
+            </mat-option>
+          </mat-select>
+        </div>
+      </div>
+    </mat-card>
     <mat-card>
       <div *ngIf="briefings?.length > 0">
         <table class="table mat-table">
