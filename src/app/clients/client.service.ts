@@ -22,13 +22,17 @@ export class ClientService {
         private auth: AuthService
     ) {}
 
-    clients(query: string = '', page: number = 0): Observable<Pagination> {
-      let url = query === '' ? `clients/all?page=${page}` : `clients/filter/${query}?page=${page}`
+    clients(params?: {}, page: number = 0): Observable<Pagination> {
+      let url = params === {} ? `clients/all?page=${page}` : `clients/filter?page=${page}`
       let prefix = this.auth.hasAccess('clients/all') ? '' : 'my-'
 
         url = prefix + url
 
-        return this.http.get(`${API}/${url}`)
+        return this.http.post(
+              `${API}/${url}`,
+              JSON.stringify(params),
+              new RequestOptions()
+            )
             .map(response => response.json())
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {

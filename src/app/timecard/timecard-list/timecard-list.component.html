@@ -1,60 +1,108 @@
 <div class="col-md-12" id="searchForm">
-  <form [formGroup]="searchForm" autocomplete="off">
+  <form [formGroup]="justifyForm" id="justifyForm" autocomplete="off">
     <mat-card-title>
-      <div class="row search-bar-group">
-        <div class="title">
-          Lista
+      <div class="row">
+        <div class="buttons col-md-2">
+          <div>
+            <button [disabled]="!activeCheckin" class="cb-button button-check" color="primary" (click)="register(justifyForm.value)" mat-raised-button>
+              CHECK IN
+            </button>
+          </div>
+          <div>
+            <button [disabled]="!activeCheckout" class="cb-button button-check" color="primary" (click)="register(justifyForm.value)" mat-raised-button>
+              CHECK OUT
+            </button>
+          </div>
         </div>
-        <mat-input-container class="bar">
-          <input #search matInput [matAutocomplete]="autocompleteEmployee" formControlName="search" placeholder="{{ accessList ? 'Qual funcionário você procura?' : 'Veja seus registros' }}" autocomplete="off">
+        <div class="inputs row col-md-6">
+          <mat-input-container class="col-md-6">
+            <input matInput  formControlName="place" placeholder="Local*" autocomplete="off">
+          <!--
+              <input matInput [matAutocomplete]="autocompletePlace" formControlName="place" placeholder="Local*" autocomplete="off">
+            <mat-autocomplete #autocompletePlace="matAutocomplete" [displayWith]="displayPlace">
+              <mat-option *ngFor="let place of places" [value]="place">
+                {{ place.description }}
+              </mat-option>
+            </mat-autocomplete>
+          -->
+          </mat-input-container>
+          <mat-input-container class="col-md-6">
+            <input matInput formControlName="reason" placeholder="Justificativa*" autocomplete="off">
+          </mat-input-container>
+        </div>
+        <div class="date-panel col-md-2">
+          <h6><small>{{ date | date:'dd' }} de {{ date | date:'MMMM' }} de {{ date | date:'yyyy' }}</small></h6>
+          <h2>{{ date | date:'h:mm a' }}</h2>
+        </div>
+      </div>
+    </mat-card-title>
+    <mat-card class="filter-grid">
+      <form [formGroup]="filterForm" autocomplete="off">
+        <mat-input-container class="col-md-2">
+          <input matInput formControlName="year" placeholder="Ano">
+        </mat-input-container>
+        <mat-select class="col-md-3" placeholder="Mês" formControlName="month" [compareWith]="compareMonth">
+          <mat-option *ngFor="let month of months" [value]="month">
+            {{ month.name }}
+          </mat-option>
+        </mat-select>
+        <mat-input-container *ngIf="accessList" class="col-md-4">
+          <input matInput [matAutocomplete]="autocompleteEmployee" formControlName="employee" placeholder="Funcionário">
           <mat-autocomplete #autocompleteEmployee="matAutocomplete" [displayWith]="displayEmployee">
             <mat-option *ngFor="let employee of employees" [value]="employee">
               {{ employee.name }}
             </mat-option>
           </mat-autocomplete>
         </mat-input-container>
-        <div class="buttons">
-          <a mat-button (click)="search.focus()">
-            <mat-icon>search</mat-icon>
-          </a>
-          <a mat-button>
-            <mat-icon>keyboard_arrow_down</mat-icon>
-          </a>
-          <a [routerLink]="['/timecard/new']" mat-button>
-            <mat-icon>add</mat-icon>
-          </a>
+        <div class="col-md-2 button-grid-inline">
+          <button (click)="filter()" type="button" class="cb-button" mat-raised-button>FILTRAR</button>
         </div>
-      </div>
-    </mat-card-title>
+      </form>
+    </mat-card>
     <mat-card>
       <div *ngIf="timecards?.length > 0">
         <table class="table mat-table">
           <div class="mat-header-row">
-            <div class="mat-header-cell mat-column-id">ID</div>
-            <div class="mat-header-cell mat-column-entry">Entrada</div>
-            <div class="mat-header-cell mat-column-exit">Saída</div>
+            <div class="mat-header-cell mat-column-date">Dia</div>
+            <div class="mat-header-cell mat-column-local-in">Local Check in</div>
+            <div class="mat-header-cell mat-column-hours">Horário</div>
+            <div class="mat-header-cell mat-column-local-out">Local Check out</div>
+            <div class="mat-header-cell mat-column-total">Total</div>
+            <div class="mat-header-cell mat-column-balance">Saldo</div>
             <div class="mat-header-cell mat-column-reason">Motivo</div>
-            <div class="mat-header-cell mat-column-approved">Aprovação</div>
+            <div class="mat-header-cell mat-column-approved">Aprov.</div>
             <div class="mat-header-cell mat-column-action">Ação</div>
           </div>
           <div class="mat-row" *ngFor="let timecard of timecards" [@rowAppeared]="rowAppearedState">
-            <div class="mat-cell mat-column-id">
-              {{ timecard.id }}
+            <div class="mat-cell mat-column-date">
+              {{ timecard.entry | date: 'dd' }}
             </div>
-            <div class="mat-cell mat-column-entry">
-              {{ timecard.entry | date:'dd/MM/yyyy HH:mm'  }}
+            <div class="mat-cell mat-column-local-in">
+              <a href="//maps.google.com/?q={{timecard.autoEntryPlaceCoordinates}}" target="_blank" matTooltip="{{ timecard.autoEntryPlace }}">{{ timecard.entryPlace }}</a>
             </div>
-            <div class="mat-cell mat-column-exit" *ngIf="timecard.exit == ''">
-
+            <div class="mat-cell mat-column-hours">
+              {{ timecard.entry | date:'HH:mm'  }} <span *ngIf="timecard.exit != ''">às {{ timecard.exit | date:'HH:mm'  }}</span>
             </div>
-            <div class="mat-cell mat-column-exit" *ngIf="timecard.exit != ''">
-              {{ timecard.exit | date:'dd/MM/yyyy HH:mm'  }}
+            <div class="mat-cell mat-column-local-out">
+              <a href="//maps.google.com/?q={{timecard.autoExitPlaceCoordinates}}" target="_blank" matTooltip="{{ timecard.autoExitPlace }}">{{ timecard.exitPlace }}</a>
+            </div>
+            <div class="mat-cell mat-column-total">
+              {{ total([timecard]) }}
+            </div>
+            <div class="mat-cell mat-column-balance">
+              {{ balance([timecard]) }}
             </div>
             <div class="mat-cell mat-column-reason">
               {{ timecard.reason }}
             </div>
             <div class="mat-cell mat-column-approved">
-              <mat-icon>{{ timecard.approved == 1 ? 'done' : 'close'}}</mat-icon>
+              <span *ngIf="timecard.approved == 1">
+                <mat-icon *ngIf="timecard.approved_user == null" matTooltip="Sistema">done</mat-icon>
+                <mat-icon *ngIf="timecard.approved_user != null" matTooltip="{{timecard.approved_user.employee.name}}">done</mat-icon>
+              </span>
+              <span *ngIf="timecard.approved == 0">
+                <mat-icon>close</mat-icon>
+              </span>
             </div>
             <div class="mat-cell mat-column-action">
               <mat-menu #menu="matMenu">
@@ -65,7 +113,6 @@
                   <mat-icon>delete</mat-icon> Remover
                 </button>
               </mat-menu>
-
               <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>menu</mat-icon>
               </button>
@@ -80,17 +127,10 @@
           </small>
         </p>
       </div>
-      <div *ngIf="timecards.length == 0 && searchForm.controls.search.value != '' && !searching" class="col-md-12 records-not-found">
+      <div *ngIf="timecards.length == 0 && !searching" class="col-md-12 records-not-found">
         <p>
           <small>
             Não encontramos resultados para sua busca. :(
-          </small>
-        </p>
-      </div>
-      <div *ngIf="timecards.length == 0 && searchForm.controls.search.value == '' && !searching" class="col-md-12 records-not-found">
-        <p>
-          <small>
-            {{ accessList ? 'Faça sua busca' : 'Ainda não existem registros de ponto.' }}
           </small>
         </p>
       </div>
@@ -105,10 +145,12 @@
     <mat-card>
       <table class="table mat-table report">
         <div class="mat-header-row">
-          <div class="mat-header-cell col-md-2 text-center">Total</div>
+          <div class="mat-header-cell col-md-3 text-center">Total</div>
+          <div class="mat-header-cell col-md-2 text-center">Saldo</div>
         </div>
         <div class="mat-row">
-          <div class="mat-cell col-md-2 text-center">{{ timecards?.length }}</div>
+          <div class="mat-cell col-md-3 text-center">{{ total(timecards) }}</div>
+          <div class="mat-cell col-md-2 text-center">{{ balance(timecards) }}</div>
         </div>
       </table>
     </mat-card>
@@ -117,7 +159,6 @@
 
 <div class="col-md-12 button-section">
   <a class="cb-button" [routerLink]="['/timecard/approvals']" mat-raised-button>
-    Aprovar
+    APROVAR
   </a>
 </div>
-

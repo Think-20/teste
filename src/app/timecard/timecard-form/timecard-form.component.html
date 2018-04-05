@@ -1,4 +1,4 @@
-<div class="col-md-12">
+<div class="col-md-12" *ngIf="accessNew">
   <form [formGroup]="timecardForm" novalidate>
     <input type="hidden" formControlName="id">
     <mat-card-title>
@@ -44,6 +44,29 @@
         </button>
         <button class="cb-button" *ngIf="typeForm === 'edit'" color="primary" (click)="edit(timecardForm.value, timecard.id)" mat-raised-button>
           EDITAR
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>
+
+<div class="col-md-12" *ngIf="!accessNew">
+  <form [formGroup]="justifyForm" novalidate>
+    <mat-card-title>
+      <p class="lead">Registrar</p>
+    </mat-card-title>
+    <mat-card>
+      <div class="row">
+          <mat-input-container class="col-md-12" *ngIf="justifyHours">
+            <input formControlName="reason" matInput placeholder="Motivo*">
+            <mat-error>
+              Obrigatório
+            </mat-error>
+          </mat-input-container>
+      </div>
+      <mat-card-actions class="col-md-12 text-center">
+        <button class="cb-button" color="primary" (click)="register(justifyForm.value)" mat-raised-button>
+          {{ buttonText }}
         </button>
       </mat-card-actions>
     </mat-card>

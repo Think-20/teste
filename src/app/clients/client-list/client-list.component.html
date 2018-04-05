@@ -12,7 +12,7 @@
           <a mat-button (click)="search.focus()">
             <mat-icon>search</mat-icon>
           </a>
-          <a mat-button>
+          <a mat-button (click)="filterToggle()">
             <mat-icon>keyboard_arrow_down</mat-icon>
           </a>
           <a [routerLink]="['/clients/new']" mat-button>
@@ -21,6 +21,21 @@
         </div>
       </div>
     </mat-card-title>
+    <mat-card *ngIf="filter" class="filter-grid">
+      <div class="row">
+        <div class="col-md-12">
+          <mat-select class="col-md-3" placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
+            <mat-option></mat-option>
+            <mat-option *ngFor="let attendance of attendances" [value]="attendance">
+              {{ attendance.name }}
+            </mat-option>
+          </mat-select>
+          <div class="col-md-2 button-grid-inline">
+            <button (click)="filterForm()" type="button" class="cb-button" mat-raised-button>FILTRAR</button>
+          </div>
+        </div>
+      </div>
+    </mat-card>
     <mat-card>
       <div *ngIf="clients?.length > 0">
         <table class="table mat-table">
@@ -118,7 +133,7 @@
     <mat-paginator *ngIf="clients"
       [length]="pagination?.total"
       [pageSize]="pagination?.per_page"
-      [pageSizeOptions]="[50]"
+      [pageSizeOptions]="[pagination?.per_page]"
       (page)="changePage($event)"
     ></mat-paginator>
   </form>

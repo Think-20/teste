@@ -7,6 +7,8 @@ import { ClientService } from '../client.service';
 import { Client } from '../client.model';
 import { AuthService } from '../../login/auth.service';
 import { Pagination } from '../../shared/pagination.model';
+import { EmployeeService } from '../../employees/employee.service';
+import { Employee } from '../../employees/employee.model';
 
 @Component({
   selector: 'cb-client-list',
@@ -35,12 +37,15 @@ export class ClientListComponent implements OnInit {
   searchForm: FormGroup
   search: FormControl
   clients: Client[] = []
+  attendances: Employee[]
   searching = false
+  filter: boolean = false
   pagination: Pagination
 
   constructor(
     private fb: FormBuilder,
     private clientService: ClientService,
+    private employeeService: EmployeeService,
     private authService: AuthService,
     private snackBar: MatSnackBar
   ) { }
@@ -112,7 +117,12 @@ export class ClientListComponent implements OnInit {
   ngOnInit() {
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
-      search: this.search
+      search: this.search,
+      attendance: this.fb.control('')
+    })
+
+    this.employeeService.canInsertClients().subscribe((attendances) => {
+      this.attendances = attendances
     })
 
     this.searching = true
@@ -129,12 +139,29 @@ export class ClientListComponent implements OnInit {
       .do(() => this.searching = true)
       .debounceTime(500)
       .subscribe(value => {
-        this.clientService.clients(value).subscribe(pagination => {
+        this.clientService.clients(this.searchForm.value).subscribe(pagination => {
           this.searching = false
           this.pagination = pagination
           this.clients = <Client[]> pagination.data
         })
     })
+  }
+
+  filterToggle() {
+    this.filter = this.filter ? false : true
+  }
+
+  filterForm() {
+    this.searching = true
+    this.clientService.clients(this.searchForm.value).subscribe(pagination => {
+      this.searching = false
+      this.pagination = pagination
+      this.clients = <Client[]> pagination.data
+    })
+  }
+
+  compareAttendance(var1: Employee, var2: Employee) {
+    return var1.id === var2.id
   }
 
   delete(client: Client) {
@@ -152,7 +179,7 @@ export class ClientListComponent implements OnInit {
   changePage($event) {
     this.searching = true
     this.clients = []
-    this.clientService.clients(this.search.value, ($event.pageIndex + 1)).subscribe(pagination => {
+    this.clientService.clients(this.searchForm.value, ($event.pageIndex + 1)).subscribe(pagination => {
       this.pagination = pagination
       this.clients = <Client[]> pagination.data
       this.searching = false

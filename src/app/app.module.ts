@@ -8,7 +8,7 @@ import {
   MatButtonModule, MatIconModule, MatTabsModule, MatAutocompleteModule, MatChipsModule,
   MatSnackBar, MatSnackBarModule, MatMenuModule, MD_PLACEHOLDER_GLOBAL_OPTIONS,
   MatDatepickerModule, MAT_DATE_LOCALE, CompatibilityModule, NoConflictStyleCompatibilityMode,
-  MatNativeDateModule, MatPaginatorModule, MatPaginatorIntl
+  MatNativeDateModule, MatPaginatorModule, MatPaginatorIntl, MatTooltipModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -179,7 +179,8 @@ import { TimecardApprovalsComponent } from './timecard/timecard-approvals/timeca
     MatDialogModule,
     MatSlideToggleModule,
     MatDatepickerModule,
-    MatPaginatorModule
+    MatPaginatorModule,
+    MatTooltipModule
   ],
   providers: [
     ClientService,

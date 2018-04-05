@@ -1,5 +1,5 @@
 import { Component, OnInit, Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatSnackBar } from '@angular/material';
 
@@ -8,6 +8,9 @@ import { Timecard } from '../timecard.model';
 import { Employee } from '../../employees/employee.model';
 import { EmployeeService } from '../../employees/employee.service';
 import { Observable } from 'rxjs/Observable';
+import { ErrorHandler } from '../../shared/error-handler.service';
+import { Month, MONTHS } from '../../shared/date/months';
+import { Pagination } from '../../shared/pagination.model';
 
 @Component({
   selector: 'cb-timecard-list',
@@ -33,14 +36,20 @@ import { Observable } from 'rxjs/Observable';
 export class TimecardListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
-  searchForm: FormGroup
-  search: FormControl
+  filterForm: FormGroup
+  justifyForm: FormGroup
+  activeCheckin: boolean = false
+  activeCheckout: boolean = false
+  date: Date = new Date()
   employees: Employee[]
   timecards: Timecard[] = []
+  timecard: Timecard
   accessList: boolean = false
   accessEdit: boolean = false
   accessDelete: boolean = false
+  accessNew: boolean = false
   searching = false
+  months: Month[] = MONTHS
 
   constructor(
     private fb: FormBuilder,
@@ -53,41 +62,185 @@ export class TimecardListComponent implements OnInit {
     this.accessList = this.timecardService.hasAccess('list')
     this.accessEdit = this.timecardService.hasAccess('edit')
     this.accessDelete = this.timecardService.hasAccess('delete')
+    this.accessNew = this.timecardService.hasAccess('new')
 
-    this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
-      search: this.search
+    this.justifyForm = this.fb.group({
+      place: this.fb.control('', [
+        Validators.required
+      ]),
+      reason: this.fb.control('', [
+        Validators.required
+      ])
     })
 
-    if(!this.accessList) {
-      this.search.disable()
-      this.searching = true
-      this.timecardService.timecards().subscribe((pagination) => {
-        this.timecards = <Timecard[]> pagination.data
-        this.searching = false
-      })
+    this.filterForm = this.fb.group({
+      month: this.fb.control(''),
+      employee: this.fb.control(''),
+      year: this.fb.control('')
+    })
+
+    if(!this.accessNew) {
+      this.renewStatus()
+    } else {
+      this.justifyForm.disable()
     }
 
-    this.search.valueChanges
-      .debounceTime(500)
-      .subscribe(value => {
-        if(!(value instanceof Object)) {
-          this.searching = true
-          this.employeeService.employees(value).subscribe((employees) => {
-            this.employees = employees
-            this.searching = false
-          })
-        } else {
-          this.searching = true
-          let snackBar = this.snackBar.open('Carregando registros...')
-          let employee = <Employee> value
-          this.timecardService.timecards(employee).subscribe(pagination => {
-            this.searching = false
-            this.timecards = <Timecard[]> pagination.data
-            snackBar.dismiss()
-          })
-        }
+   this.filterForm.controls.employee.valueChanges
+   .debounceTime(500)
+   .subscribe(value => {
+      let snackBar = this.snackBar.open('Carregando registros...')
+      this.employeeService.employees(value).subscribe(employees => {
+        this.searching = false
+        this.employees = employees
+        snackBar.dismiss()
+      })
     })
+
+    let date = new Date()
+    this.filterForm.controls.month.setValue(this.months.filter((month, index) => {
+      return month.id == (date.getMonth() + 1)
+    }).pop())
+    this.filterForm.controls.year.setValue(date.getFullYear())
+
+    if(!this.accessList) {
+      this.filter()
+    }
+  }
+
+  renewStatus() {
+    this.timecardService.status().subscribe((timecards) => {
+      if(timecards.length == 0) {
+        this.activeCheckout = false
+        this.activeCheckin = true
+        this.justifyForm.controls.reason.disable()
+      } else {
+        this.activeCheckin = false
+        this.activeCheckout = true
+        this.timecard = timecards.pop()
+        this.checkJustifyHours(new Date(this.timecard.entry), new Date())
+        let checkChangeHours = Observable.timer(1000)
+        checkChangeHours.subscribe((time) => {
+          this.checkJustifyHours(new Date(this.timecard.entry), new Date())
+        })
+      }
+    })
+  }
+
+  checkJustifyHours(date1: Date, date2: Date) {
+    let entry = date1
+    let exit = date2
+    let diff = (new Date(exit).getTime() - new Date(entry).getTime())/1000
+
+    if(isNaN(diff)) return
+
+    //9 horas e 15 minutos pra menos e pra mais
+    if(diff > 33300 || diff < 31500) {
+      this.justifyForm.controls.reason.enable()
+    }  else {
+      this.justifyForm.controls.reason.disable()
+    }
+  }
+
+  register(data: any) {
+    console.log('reg')
+    var geolocation = window.navigator.geolocation;
+    geolocation.getCurrentPosition((geo) => {
+      let lat = geo.coords.latitude
+      let long = geo.coords.longitude
+      data.coordinates = `${lat},${long}`
+
+      if(ErrorHandler.formIsInvalid(this.justifyForm)) {
+        this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
+          duration: 5000
+        })
+        return;
+      }
+
+      this.timecardService.register(data).subscribe(data => {
+        this.snackBar.open(data.message, '', {
+          duration: 5000
+        })
+
+        if(data.status) {
+          this.renewStatus()
+          this.filter()
+        }
+      })
+    }, (error) => {
+      this.snackBar.open('Por favor, autorize a localização. Se tiver negado o acesso, feche o navegador e abra novamente,', '', {
+        duration: 5000
+      })
+      return;
+    })
+  }
+
+  total(timecards: Timecard[]): string {
+    let formatedHours
+    let formatedMin
+    let diff
+    let hours = 0
+    let min = 0
+
+    timecards.forEach((timecard) => {
+      let entry = timecard.entry
+      let exit = timecard.exit
+
+      if(exit != null) {
+        diff = (new Date(exit).getTime() - new Date(entry).getTime())/1000
+        hours += diff > 3600 ? Math.floor((diff / 3600)) : 0
+        min += (diff - (hours * 3600)) > 60 ? Math.floor(((diff - (hours * 3600)) / 60)) : 0
+      }
+    })
+
+    formatedHours = hours
+    formatedMin = min
+
+    if(hours < 10) {
+      formatedHours = '0' + hours
+    }
+    if(min < 10) {
+      formatedMin = '0' + (parseFloat(min.toString()).toFixed(0)).toString()
+    }
+
+    return `${formatedHours}:${formatedMin}`
+  }
+
+  balance(timecards: Timecard[]): string {
+    let formatedHours
+    let formatedMin
+    let diff
+    let hours = 0
+    let min = 0
+    let sign = '+'
+
+    timecards.forEach((timecard) => {
+      let entry = timecard.entry
+      let exit = timecard.exit
+
+      if(exit != null) {
+        diff = (new Date(exit).getTime() - new Date(entry).getTime())/1000
+        //Padrão 9 horas
+        diff = diff - 32400
+        if(diff < 0) {
+          sign = '-'
+          diff = diff * -1
+        }
+        hours += diff > 3600 ? Math.floor((diff / 3600)) : 0
+        min += (diff - (hours * 3600)) > 60 ? Math.floor(((diff - (hours * 3600)) / 60)) : 0
+      }
+    })
+
+    formatedHours = hours
+    formatedMin = min
+
+    if(hours < 10) {
+      formatedHours = '0' + hours
+    }
+    if(min < 10) {
+      formatedMin = '0' + (parseFloat(min.toString()).toFixed(0)).toString()
+    }
+
+    return `${sign}${formatedHours}:${formatedMin}`
   }
 
   delete(timecard: Timecard) {
@@ -96,8 +249,20 @@ export class TimecardListComponent implements OnInit {
     })
   }
 
+  filter() {
+      this.searching = true
+      this.timecardService.timecards(this.filterForm.value).subscribe((timecards) => {
+      this.searching = false
+      this.timecards = timecards
+    })
+  }
+
   displayEmployee(employee: Employee) {
     return employee.name
+  }
+
+  compareMonth(month1: Month, month2: Month) {
+    return month1.id == month2.id
   }
 
 }

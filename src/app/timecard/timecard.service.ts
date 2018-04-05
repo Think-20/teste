@@ -36,7 +36,7 @@ export class TimecardService {
           break;
         }
         case 'list': {
-          access = this.authService.hasAccess('employees/office-hours/show/another/{employeeId}')
+          access = this.authService.hasAccess('employees/office-hours/show/another')
           break;
         }
         case 'new': {
@@ -50,11 +50,24 @@ export class TimecardService {
       return access
     }
 
-    timecards(employee?: Employee): Observable<Pagination> {
-        let url = this.authService.hasAccess('employees/office-hours/show/another/{employeeId}')
-          ? `employees/office-hours/show/another/${employee.id}` : 'employees/office-hours/show/yourself'
+    timecards(params?: {}): Observable<Timecard[]> {
+        let url = this.authService.hasAccess('employees/office-hours/show/another')
+          ? `employees/office-hours/show/another` : 'employees/office-hours/show/yourself'
 
-        return this.http.get(`${API}/${url}`)
+        return this.http.post(`${API}/${url}`,
+              JSON.stringify(params)
+            )
+            .map(response => response.json())
+            .catch((err) => {
+                this.snackBar.open(ErrorHandler.message(err), '', {
+                    duration: 3000
+                })
+                return ErrorHandler.capture(err)
+            })
+    }
+
+    status(): Observable<Timecard[]> {
+        return this.http.get(`${API}/employees/office-hours/status/yourself`)
             .map(response => response.json())
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
@@ -101,9 +114,29 @@ export class TimecardService {
             })
     }
 
+    register(data): Observable<any> {
+      let url = 'employees/office-hours/register/yourself'
+
+        return this.http.post(
+                `${API}/${url}`,
+                JSON.stringify(data),
+                new RequestOptions()
+            )
+            .map(response => response.json())
+            .catch((err) => {
+                this.snackBar.open(ErrorHandler.message(err), '', {
+                    duration: 3000
+                })
+                return ErrorHandler.capture(err)
+            })
+    }
+
     save(timecard: Timecard): Observable<any> {
+      /*
       let url = this.authService.hasAccess('employees/office-hours/register/another')
         ? `employees/office-hours/register/another` : 'employees/office-hours/register/yourself'
+      */
+      let url = `employees/office-hours/register/another`
 
         return this.http.post(
                 `${API}/${url}`,

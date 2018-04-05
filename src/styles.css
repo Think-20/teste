@@ -19,8 +19,17 @@ html, body, cb-login {
     border-radius: 0 !important;
 }
 
+.cb-button[disabled] {
+    background-color: #EEE !important;
+}
+
 .cb-button:focus {
     outline: none;
+}
+
+.button-grid-inline {
+  display: inline-block;
+  text-align: right;
 }
 
 .my-container {
@@ -477,6 +486,10 @@ mat-card-title > p {
 
 .mat-input-wrapper.mat-form-field-wrapper {
   margin-top: 6px !important;
+}
+
+.mat-form-field {
+  width: 100%;
 }
 
 /* Briefing form */

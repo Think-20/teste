@@ -1,19 +1,104 @@
-.mat-column-id {
-  width: 15%;
-}
-
-.mat-column-entry, .mat-column-exit {
-  width: 15%;
-}
-
 .mat-column-action {
-  width: 15%;
-}
-
-.mat-column-reason {
-  width: 30%;
-}
-
-.mat-column-approved {
   width: 10%;
+}
+
+.mat-column-date {
+  width: 7%;
+}
+.mat-column-local-in {
+  width: 13%;
+}
+.mat-column-hours {
+  width: 20%;
+
+}
+.mat-column-local-out {
+  width: 13%;
+
+}
+.mat-column-total {
+  width: 8%;
+
+}
+.mat-column-balance {
+  width: 8%;
+
+}
+.mat-column-reason {
+  width: 13%;
+
+}
+.mat-column-approved {
+  width: 8%;
+}
+
+.mat-cell-icon {
+  font-size: 15px;
+}
+
+.button-check {
+  width: 95%;
+  max-width: 110px;
+  margin-bottom: 5px;
+}
+
+#justifyForm .inputs {
+  align-items: flex-end;
+  flex-basis: 60%;
+  max-width: 60%;
+  margin-bottom: -20px;
+}
+
+#justifyForm .buttons {
+  flex-basis: 20%;
+  max-width: 20%;
+  padding: 5px 10px;
+}
+
+#justifyForm .date-panel {
+  justify-content: center;
+  align-items: flex-end;
+  display: flex;
+  flex-flow: column;
+  flex-basis: 20%;
+  max-width: 20%;
+  margin-left: 12px;
+  text-align: center;
+  padding: 0;
+  text-align: right;
+  margin-bottom: -24px;
+}
+
+#justifyForm .date-panel h6,  #justifyForm .date-panel h2 {
+  margin: 0;
+  padding: 0;
+  color: #888;
+  font-weight: 300;
+}
+
+#justifyForm .mat-card-title {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+@media screen and (max-width: 800px) {
+  #justifyForm .inputs, #justifyForm .buttons {
+    width: 100%;
+    flex-basis: 100%;
+    max-width: unset;
+  }
+
+  #justifyForm .date-panel {
+    display: none;
+  }
+
+  #justifyForm .buttons div {
+    width: 50%;
+    float: left;
+  }
+
+  #justifyForm .buttons div .cb-button {
+    width: 100%;
+    max-width: unset;
+  }
 }

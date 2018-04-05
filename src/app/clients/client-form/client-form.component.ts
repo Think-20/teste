@@ -88,12 +88,12 @@ export class ClientFormComponent implements OnInit {
       name: this.formBuilder.control('', [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(50)
+        Validators.maxLength(100)
       ]),
       fantasy_name: this.formBuilder.control('', [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(30)
+        Validators.maxLength(50)
       ]),
       site: this.formBuilder.control('', [
         Validators.minLength(7),
@@ -256,7 +256,8 @@ export class ClientFormComponent implements OnInit {
       ]),
       email: this.formBuilder.control(contact ? contact.email : '', [
         Validators.required,
-        Validators.pattern(Patterns.email)
+        Validators.pattern(Patterns.email),
+        Validators.maxLength(80)
       ]),
       cellphone: this.formBuilder.control(contact ? contact.cellphone : '' || '', [
         Validators.minLength(10),

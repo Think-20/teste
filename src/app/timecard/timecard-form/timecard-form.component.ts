@@ -43,9 +43,11 @@ export class TimecardFormComponent implements OnInit {
   rowAppearedState = 'ready'
   timecard: Timecard
   timecardForm: FormGroup
+  justifyForm: FormGroup
   employees: Observable<Employee[]>
   accessNew: boolean = false
   justifyHours: boolean = false
+  buttonText: string = 'AGUARDE...'
 
   constructor(
     private timecardService: TimecardService,
@@ -75,6 +77,15 @@ export class TimecardFormComponent implements OnInit {
       reason: this.formBuilder.control('')
     })
 
+    this.justifyForm = this.formBuilder.group({
+      reason: this.formBuilder.control('', [Validators.required])
+    })
+
+    if(!this.accessNew) {
+      this.renewStatus()
+    }
+
+    /*
     if(!this.accessNew) {
       this.timecardForm.controls.employee.setValue(this.authService.currentUser().employee)
       this.timecardForm.controls.employee.disable()
@@ -86,6 +97,7 @@ export class TimecardFormComponent implements OnInit {
     this.timecardForm.controls.exit.valueChanges
     .debounceTime(500)
     .subscribe((value) => this.checkJustifyHours())
+    */
 
     this.timecardForm.controls.employee.valueChanges
     .do(employeeName => {
@@ -111,25 +123,35 @@ export class TimecardFormComponent implements OnInit {
 
   }
 
-  checkJustifyHours() {
-    let entry = this.timecardForm.controls.entry.value
-    let exit = this.timecardForm.controls.exit.value
+  renewStatus() {
+    this.timecardService.status().subscribe((timecards) => {
+      if(timecards.length == 0) {
+        this.buttonText = 'CHECK-IN'
+        this.justifyHours = false
+      } else {
+        this.buttonText = 'CHECK-OUT'
+        this.timecard = timecards.pop()
+        this.checkJustifyHours(new Date(this.timecard.entry), new Date())
+        let checkChangeHours = Observable.timer(1000)
+        checkChangeHours.subscribe((time) => {
+          this.checkJustifyHours(new Date(this.timecard.entry), new Date())
+        })
+      }
+    })
+  }
+
+  checkJustifyHours(date1: Date, date2: Date) {
+    let entry = date1
+    let exit = date2
     let diff = (new Date(exit).getTime() - new Date(entry).getTime())/1000
 
     if(isNaN(diff)) return
 
-    console.log(diff)
-
     //9 horas e 15 minutos pra menos e pra mais
     if(diff > 33300 || diff < 31500) {
       this.justifyHours = true
-      this.timecardForm.controls.reason.setValidators(Validators.required)
-      this.timecardForm.controls.exit.setErrors({})
-      this.timecardForm.controls.exit.updateValueAndValidity()
     }  else {
       this.justifyHours = false
-      this.timecardForm.controls.reason.setValidators([])
-      this.timecardForm.controls.exit.updateValueAndValidity()
     }
   }
 
@@ -149,6 +171,15 @@ export class TimecardFormComponent implements OnInit {
       this.snackBar.open(data.message, '', {
         duration: 5000
       })
+    })
+  }
+
+  register(data) {
+    this.timecardService.register(data).subscribe(data => {
+      this.snackBar.open(data.message, '', {
+        duration: 5000
+      })
+      this.renewStatus()
     })
   }
 
