@@ -97,6 +97,7 @@ import { TimecardService } from './timecard/timecard.service';
 import { TimecardFormComponent } from './timecard/timecard-form/timecard-form.component';
 import { TimecardListComponent } from './timecard/timecard-list/timecard-list.component';
 import { TimecardApprovalsComponent } from './timecard/timecard-approvals/timecard-approvals.component';
+import { TimecardPlaceService } from './timecard/timecard-place/timecard-place.service';
 
 @NgModule({
   declarations: [
@@ -210,6 +211,7 @@ import { TimecardApprovalsComponent } from './timecard/timecard-approvals/timeca
     UploadFileService,
     StandItemService,
     TimecardService,
+    TimecardPlaceService,
 
     MatDialog,
     MatSnackBar,

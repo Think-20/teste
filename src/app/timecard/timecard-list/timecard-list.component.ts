@@ -11,6 +11,8 @@ import { Observable } from 'rxjs/Observable';
 import { ErrorHandler } from '../../shared/error-handler.service';
 import { Month, MONTHS } from '../../shared/date/months';
 import { Pagination } from '../../shared/pagination.model';
+import { TimecardPlace } from '../timecard-place/timecard-place.model';
+import { TimecardPlaceService } from '../timecard-place/timecard-place.service';
 
 @Component({
   selector: 'cb-timecard-list',
@@ -47,30 +49,59 @@ export class TimecardListComponent implements OnInit {
   accessList: boolean = false
   accessEdit: boolean = false
   accessDelete: boolean = false
+  accessAprove: boolean = false
   accessNew: boolean = false
   searching = false
+  justifyPlace: boolean = false
   months: Month[] = MONTHS
+  places: TimecardPlace[]
+  totalBalance: string
+  filtering: boolean = false
 
   constructor(
     private fb: FormBuilder,
     private timecardService: TimecardService,
+    private timecardPlaceService: TimecardPlaceService,
     private employeeService: EmployeeService,
     private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
+    this.timecardPlaceService.places().subscribe((places) => {
+      this.places = places
+    })
+
     this.accessList = this.timecardService.hasAccess('list')
+    this.accessAprove = this.timecardService.hasAccess('approve')
     this.accessEdit = this.timecardService.hasAccess('edit')
     this.accessDelete = this.timecardService.hasAccess('delete')
     this.accessNew = this.timecardService.hasAccess('new')
 
     this.justifyForm = this.fb.group({
+      place_id: this.fb.control('', [
+        Validators.required
+      ]),
       place: this.fb.control('', [
         Validators.required
       ]),
       reason: this.fb.control('', [
         Validators.required
       ])
+    })
+
+    //Habilitar somente quando a opção for externo.
+    this.justifyForm.controls.place.disable()
+    this.justifyPlace = false
+
+    this.justifyForm.controls.place_id.valueChanges.subscribe((timecardPlace) => {
+      if(timecardPlace.description != 'Externo') {
+        this.justifyForm.controls.place.disable()
+        this.justifyPlace = false
+        return
+      }
+
+      this.justifyForm.controls.place.enable()
+      this.justifyPlace = true
     })
 
     this.filterForm = this.fb.group({
@@ -142,14 +173,18 @@ export class TimecardListComponent implements OnInit {
   }
 
   register(data: any) {
-    console.log('reg')
+    this.activeCheckout = false
+    this.activeCheckin = false
     var geolocation = window.navigator.geolocation;
     geolocation.getCurrentPosition((geo) => {
+      let snack = this.snackBar.open('Aguarde, obtendo posicionamento e registrando...')
       let lat = geo.coords.latitude
       let long = geo.coords.longitude
       data.coordinates = `${lat},${long}`
 
       if(ErrorHandler.formIsInvalid(this.justifyForm)) {
+        snack.dismiss()
+        this.renewStatus()
         this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
           duration: 5000
         })
@@ -157,6 +192,8 @@ export class TimecardListComponent implements OnInit {
       }
 
       this.timecardService.register(data).subscribe(data => {
+        snack.dismiss()
+        this.renewStatus()
         this.snackBar.open(data.message, '', {
           duration: 5000
         })
@@ -167,11 +204,12 @@ export class TimecardListComponent implements OnInit {
         }
       })
     }, (error) => {
-      this.snackBar.open('Por favor, autorize a localização. Se tiver negado o acesso, feche o navegador e abra novamente,', '', {
+      this.snackBar.open('Por favor, autorize a localização. Se tiver negado o acesso, feche o navegador e abra novamente. Caso não tenha êxito, faça logoff e então login e tente novamente.', '', {
         duration: 5000
       })
+      this.renewStatus()
       return;
-    })
+    }, {timeout: 5000})
   }
 
   total(timecards: Timecard[]): string {
@@ -251,9 +289,10 @@ export class TimecardListComponent implements OnInit {
 
   filter() {
       this.searching = true
-      this.timecardService.timecards(this.filterForm.value).subscribe((timecards) => {
+      this.timecardService.timecards(this.filterForm.value).subscribe((data) => {
       this.searching = false
-      this.timecards = timecards
+      this.timecards = <Timecard[]> data.timecards
+      this.totalBalance = data.balance
     })
   }
 
@@ -263,6 +302,10 @@ export class TimecardListComponent implements OnInit {
 
   compareMonth(month1: Month, month2: Month) {
     return month1.id == month2.id
+  }
+
+  comparePlace(var1: TimecardPlace, var2: TimecardPlace) {
+    return var1.id == var2.id
   }
 
 }

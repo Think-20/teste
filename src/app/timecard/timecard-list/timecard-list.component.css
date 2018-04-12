@@ -1,3 +1,23 @@
+.clearfix::before,
+.clearfix::after {
+  flex-basis: 0;
+  order: 1;
+}
+
+.mat-row {
+  flex-wrap: wrap;
+}
+
+.mat-header-cell {
+  text-transform: uppercase;
+  font-size: 10px;
+  text-align: center;
+}
+
+.mat-cell {
+  text-align: center;
+}
+
 .mat-column-action {
   width: 10%;
 }
@@ -32,6 +52,10 @@
   width: 8%;
 }
 
+.mat-column-place {
+  width: 50%;
+}
+
 .mat-cell-icon {
   font-size: 15px;
 }
@@ -42,11 +66,15 @@
   margin-bottom: 5px;
 }
 
+.mat-column-local-in a, .mat-column-local-out a {
+  color: rgba(0,0,0,.87);
+}
+
 #justifyForm .inputs {
   align-items: flex-end;
   flex-basis: 60%;
   max-width: 60%;
-  margin-bottom: -20px;
+  margin-bottom: -5px;
 }
 
 #justifyForm .buttons {
@@ -76,9 +104,21 @@
   font-weight: 300;
 }
 
-#justifyForm .mat-card-title {
+#justifyForm .date-panel h2 {
+  font-size: 33px;
+}
+
+#justifyCardTitle .mat-card-title {
   padding-top: 0;
   padding-bottom: 0;
+}
+
+.user-mode .mat-column-reason {
+  width: 21% !important;
+}
+
+#justifyForm .mat-form-field {
+  height: 59px;
 }
 
 @media screen and (max-width: 800px) {

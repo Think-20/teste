@@ -43,6 +43,10 @@ export class TimecardService {
           access = this.authService.hasAccess('employees/office-hours/register/another')
           break;
         }
+        case 'approve': {
+          access = this.authService.hasAccess('employees/office-hours/approvals-pending/approve/{id}')
+          break;
+        }
         default: {
           break;
         }
@@ -50,7 +54,7 @@ export class TimecardService {
       return access
     }
 
-    timecards(params?: {}): Observable<Timecard[]> {
+    timecards(params?: {}): Observable<any> {
         let url = this.authService.hasAccess('employees/office-hours/show/another')
           ? `employees/office-hours/show/another` : 'employees/office-hours/show/yourself'
 

@@ -1,6 +1,6 @@
 <div class="col-md-12" id="searchForm">
   <form [formGroup]="justifyForm" id="justifyForm" autocomplete="off">
-    <mat-card-title>
+    <mat-card-title id="justifyCardTitle" *ngIf="!accessList">
       <div class="row">
         <div class="buttons col-md-2">
           <div>
@@ -15,17 +15,23 @@
           </div>
         </div>
         <div class="inputs row col-md-6">
+          <mat-select class="col-md-6" placeholder="Local*" formControlName="place_id" [compareWith]="comparePlace">
+            <mat-option *ngFor="let place of places" [value]="place">
+              {{ place.description }}
+            </mat-option>
+          </mat-select>
+          <!--
           <mat-input-container class="col-md-6">
             <input matInput  formControlName="place" placeholder="Local*" autocomplete="off">
-          <!--
+
               <input matInput [matAutocomplete]="autocompletePlace" formControlName="place" placeholder="Local*" autocomplete="off">
             <mat-autocomplete #autocompletePlace="matAutocomplete" [displayWith]="displayPlace">
               <mat-option *ngFor="let place of places" [value]="place">
                 {{ place.description }}
               </mat-option>
             </mat-autocomplete>
-          -->
           </mat-input-container>
+          -->
           <mat-input-container class="col-md-6">
             <input matInput formControlName="reason" placeholder="Justificativa*" autocomplete="off">
           </mat-input-container>
@@ -34,10 +40,29 @@
           <h6><small>{{ date | date:'dd' }} de {{ date | date:'MMMM' }} de {{ date | date:'yyyy' }}</small></h6>
           <h2>{{ date | date:'h:mm a' }}</h2>
         </div>
+        <mat-input-container *ngIf="justifyPlace" class="col-md-12">
+          <input matInput formControlName="place" placeholder="Descrição do local*" autocomplete="off">
+        </mat-input-container>
+      </div>
+    </mat-card-title>
+    <mat-card-title *ngIf="accessList">
+      <div class="row search-bar-group">
+        <div class="title">
+          Lista
+        </div>
       </div>
     </mat-card-title>
     <mat-card class="filter-grid">
-      <form [formGroup]="filterForm" autocomplete="off">
+      <div class="row search-bar-group">
+        <div class="col-md-12">
+          <div class="buttons">
+            <a mat-button (click)="filtering = filtering ? false : true">
+              <mat-icon>filter_list</mat-icon>
+            </a>
+          </div>
+        </div>
+      </div>
+      <form *ngIf="filtering" [formGroup]="filterForm" autocomplete="off">
         <mat-input-container class="col-md-2">
           <input matInput formControlName="year" placeholder="Ano">
         </mat-input-container>
@@ -61,7 +86,7 @@
     </mat-card>
     <mat-card>
       <div *ngIf="timecards?.length > 0">
-        <table class="table mat-table">
+        <table class="table mat-table" [class.user-mode]="!accessList">
           <div class="mat-header-row">
             <div class="mat-header-cell mat-column-date">Dia</div>
             <div class="mat-header-cell mat-column-local-in">Local Check in</div>
@@ -71,20 +96,20 @@
             <div class="mat-header-cell mat-column-balance">Saldo</div>
             <div class="mat-header-cell mat-column-reason">Motivo</div>
             <div class="mat-header-cell mat-column-approved">Aprov.</div>
-            <div class="mat-header-cell mat-column-action">Ação</div>
+            <div *ngIf="accessList" class="mat-header-cell mat-column-action">Ação</div>
           </div>
           <div class="mat-row" *ngFor="let timecard of timecards" [@rowAppeared]="rowAppearedState">
             <div class="mat-cell mat-column-date">
               {{ timecard.entry | date: 'dd' }}
             </div>
             <div class="mat-cell mat-column-local-in">
-              <a href="//maps.google.com/?q={{timecard.autoEntryPlaceCoordinates}}" target="_blank" matTooltip="{{ timecard.autoEntryPlace }}">{{ timecard.entryPlace }}</a>
+              <a href="//maps.google.com/?q={{timecard.autoEntryPlaceCoordinates}}" target="_blank" matTooltip="{{ timecard.autoEntryPlace }}">{{ timecard.entry_place.description }}</a>
             </div>
             <div class="mat-cell mat-column-hours">
               {{ timecard.entry | date:'HH:mm'  }} <span *ngIf="timecard.exit != ''">às {{ timecard.exit | date:'HH:mm'  }}</span>
             </div>
             <div class="mat-cell mat-column-local-out">
-              <a href="//maps.google.com/?q={{timecard.autoExitPlaceCoordinates}}" target="_blank" matTooltip="{{ timecard.autoExitPlace }}">{{ timecard.exitPlace }}</a>
+              <a href="//maps.google.com/?q={{timecard.autoExitPlaceCoordinates}}" target="_blank" matTooltip="{{ timecard.autoExitPlace }}">{{ timecard.exit_place?.description }}</a>
             </div>
             <div class="mat-cell mat-column-total">
               {{ total([timecard]) }}
@@ -104,8 +129,11 @@
                 <mat-icon>close</mat-icon>
               </span>
             </div>
-            <div class="mat-cell mat-column-action">
+            <div *ngIf="accessList" class="mat-cell mat-column-action">
               <mat-menu #menu="matMenu">
+                <button [disabled]="!accessApprove" [routerLink]="['/timecard/edit', timecard.id]" mat-menu-item>
+                  <mat-icon>done</mat-icon> Aprovar
+                </button>
                 <button [disabled]="!accessEdit" [routerLink]="['/timecard/edit', timecard.id]" mat-menu-item>
                   <mat-icon>mode_edit</mat-icon> Editar
                 </button>
@@ -116,6 +144,12 @@
               <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon>menu</mat-icon>
               </button>
+            </div>
+            <div *ngIf="timecard.entry_place?.description == 'Externo'" class="mat-cell mat-column-place">
+              <small>{{ timecard.entryPlace }}</small>
+            </div>
+            <div *ngIf="timecard.exit_place?.description == 'Externo'" class="mat-cell mat-column-place">
+              <small>{{ timecard.exitPlace }}</small>
             </div>
           </div>
         </table>
@@ -145,12 +179,16 @@
     <mat-card>
       <table class="table mat-table report">
         <div class="mat-header-row">
+          <div class="mat-header-cell col-md-3 text-center">Dias</div>
           <div class="mat-header-cell col-md-3 text-center">Total</div>
-          <div class="mat-header-cell col-md-2 text-center">Saldo</div>
+          <div class="mat-header-cell col-md-3 text-center">Saldo</div>
+          <div class="mat-header-cell col-md-3 text-center">Saldo acumulado</div>
         </div>
         <div class="mat-row">
+          <div class="mat-cell col-md-3 text-center">{{ timecards.length }}</div>
           <div class="mat-cell col-md-3 text-center">{{ total(timecards) }}</div>
-          <div class="mat-cell col-md-2 text-center">{{ balance(timecards) }}</div>
+          <div class="mat-cell col-md-3 text-center">{{ balance(timecards) }}</div>
+          <div class="mat-cell col-md-3 text-center">{{ totalBalance != null ? totalBalance : '00:00' }}</div>
         </div>
       </table>
     </mat-card>
