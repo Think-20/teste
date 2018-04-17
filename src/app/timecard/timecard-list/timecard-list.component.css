@@ -4,6 +4,18 @@
   order: 1;
 }
 
+.filter-adm {
+  margin-right: 15px;
+}
+
+.filter-noadm {
+  background-color: white;
+}
+
+.filter-grid {
+  padding: 20px !important;
+}
+
 .mat-row {
   flex-wrap: wrap;
 }
@@ -61,9 +73,11 @@
 }
 
 .button-check {
-  width: 95%;
-  max-width: 110px;
-  margin-bottom: 5px;
+  width: 100%;
+}
+
+.button-check:first-child {
+  margin-bottom: 10px;
 }
 
 .mat-column-local-in a, .mat-column-local-out a {
@@ -72,15 +86,23 @@
 
 #justifyForm .inputs {
   align-items: flex-end;
+  /*
   flex-basis: 60%;
   max-width: 60%;
-  margin-bottom: -5px;
+  */
+  margin-bottom: -4px;
+  padding: 0 !important;
 }
 
 #justifyForm .buttons {
+  /*
   flex-basis: 20%;
   max-width: 20%;
-  padding: 5px 10px;
+  */
+}
+
+#justifyCardTitle {
+  padding-bottom: 10px;
 }
 
 #justifyForm .date-panel {
@@ -88,13 +110,11 @@
   align-items: flex-end;
   display: flex;
   flex-flow: column;
-  flex-basis: 20%;
-  max-width: 20%;
   margin-left: 12px;
   text-align: center;
   padding: 0;
   text-align: right;
-  margin-bottom: -24px;
+  margin-bottom: -22px;
 }
 
 #justifyForm .date-panel h6,  #justifyForm .date-panel h2 {
@@ -104,8 +124,12 @@
   font-weight: 300;
 }
 
+#justifyForm .date-panel h6 {
+  font-size: 22px;
+}
+
 #justifyForm .date-panel h2 {
-  font-size: 33px;
+  font-size: 39px;
 }
 
 #justifyCardTitle .mat-card-title {

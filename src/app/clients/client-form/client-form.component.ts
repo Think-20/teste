@@ -221,10 +221,10 @@ export class ClientFormComponent implements OnInit {
 
   ucFirst() {
     let formControl = this.clientForm.controls.fantasy_name
-    let value = formControl.value.toLowerCase().replace(/\b[a-z]/g, function(letter) {
+    let value = formControl.value.toLowerCase().replace(/\s[a-z]/g, function(letter) {
         return letter.toUpperCase();
     });
-    formControl.setValue(value)
+    formControl.setValue((value.slice(0, 1).toUpperCase() + value.slice(1, value.length)))
   }
 
   get contacts() { return this.clientForm.get('contacts'); }

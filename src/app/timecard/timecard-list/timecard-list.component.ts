@@ -71,6 +71,13 @@ export class TimecardListComponent implements OnInit {
       this.places = places
     })
 
+    this.filterForm = this.fb.group({
+      month: this.fb.control(''),
+      employee: this.fb.control(''),
+      year: this.fb.control(''),
+      place: this.fb.control('')
+    })
+
     this.accessList = this.timecardService.hasAccess('list')
     this.accessAprove = this.timecardService.hasAccess('approve')
     this.accessEdit = this.timecardService.hasAccess('edit')
@@ -89,6 +96,10 @@ export class TimecardListComponent implements OnInit {
       ])
     })
 
+    this.filterForm.valueChanges.subscribe(() => {
+      this.filter()
+    })
+
     //Habilitar somente quando a opção for externo.
     this.justifyForm.controls.place.disable()
     this.justifyPlace = false
@@ -102,12 +113,6 @@ export class TimecardListComponent implements OnInit {
 
       this.justifyForm.controls.place.enable()
       this.justifyPlace = true
-    })
-
-    this.filterForm = this.fb.group({
-      month: this.fb.control(''),
-      employee: this.fb.control(''),
-      year: this.fb.control('')
     })
 
     if(!this.accessNew) {
@@ -291,7 +296,7 @@ export class TimecardListComponent implements OnInit {
       this.searching = true
       this.timecardService.timecards(this.filterForm.value).subscribe((data) => {
       this.searching = false
-      this.timecards = <Timecard[]> data.timecards
+      this.timecards = <Timecard[]> data.timecards ? data.timecards : []
       this.totalBalance = data.balance
     })
   }

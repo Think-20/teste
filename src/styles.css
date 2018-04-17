@@ -3,10 +3,16 @@
 
 body {
     background-color: #fbfbfb;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 html, body, cb-login {
     height: 100%;
+}
+
+.cb-hidden {
+  display: none !important;
 }
 
 .cb-button {
@@ -162,12 +168,6 @@ h1, h2, h3, h4 {
   margin-left: 0 !important;
   margin-right: 0 !important;
   margin-bottom: 0 !important;
-}
-
-mat-card {
-    /*
-    margin-bottom: 10px;
-    */
 }
 
 .mat-card {

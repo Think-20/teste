@@ -2,7 +2,7 @@
   <form [formGroup]="justifyForm" id="justifyForm" autocomplete="off">
     <mat-card-title id="justifyCardTitle" *ngIf="!accessList">
       <div class="row">
-        <div class="buttons col-md-2">
+        <div class="buttons col-md-3">
           <div>
             <button [disabled]="!activeCheckin" class="cb-button button-check" color="primary" (click)="register(justifyForm.value)" mat-raised-button>
               CHECK IN
@@ -33,15 +33,15 @@
           </mat-input-container>
           -->
           <mat-input-container class="col-md-6">
-            <input matInput formControlName="reason" placeholder="Justificativa*" autocomplete="off">
+            <input matInput formControlName="reason" placeholder="Justificativa de horas*" autocomplete="off">
           </mat-input-container>
         </div>
-        <div class="date-panel col-md-2">
+        <div class="date-panel col-md-3">
           <h6><small>{{ date | date:'dd' }} de {{ date | date:'MMMM' }} de {{ date | date:'yyyy' }}</small></h6>
           <h2>{{ date | date:'h:mm a' }}</h2>
         </div>
         <mat-input-container *ngIf="justifyPlace" class="col-md-12">
-          <input matInput formControlName="place" placeholder="Descrição do local*" autocomplete="off">
+          <input matInput formControlName="place" placeholder="Descrição do local e motivo*" autocomplete="off">
         </mat-input-container>
       </div>
     </mat-card-title>
@@ -50,43 +50,63 @@
         <div class="title">
           Lista
         </div>
+        <a mat-button class="filter-adm" (click)="filtering = filtering ? false : true">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </a>
       </div>
     </mat-card-title>
-    <mat-card class="filter-grid">
-      <div class="row search-bar-group">
-        <div class="col-md-12">
-          <div class="buttons">
-            <a mat-button (click)="filtering = filtering ? false : true">
-              <mat-icon>filter_list</mat-icon>
-            </a>
-          </div>
-        </div>
+    <div *ngIf="!accessList" class="row">
+      <div class="container">
+
       </div>
-      <form *ngIf="filtering" [formGroup]="filterForm" autocomplete="off">
-        <mat-input-container class="col-md-2">
-          <input matInput formControlName="year" placeholder="Ano">
-        </mat-input-container>
-        <mat-select class="col-md-3" placeholder="Mês" formControlName="month" [compareWith]="compareMonth">
-          <mat-option *ngFor="let month of months" [value]="month">
-            {{ month.name }}
-          </mat-option>
-        </mat-select>
-        <mat-input-container *ngIf="accessList" class="col-md-4">
-          <input matInput [matAutocomplete]="autocompleteEmployee" formControlName="employee" placeholder="Funcionário">
-          <mat-autocomplete #autocompleteEmployee="matAutocomplete" [displayWith]="displayEmployee">
-            <mat-option *ngFor="let employee of employees" [value]="employee">
-              {{ employee.name }}
+    </div>
+    <mat-card class="filter-grid">
+      <form [formGroup]="filterForm" autocomplete="off">
+        <div class="row">
+          <div class="search-bar-group">
+            <div *ngIf="!accessList" class="filter-noadm">
+              <a mat-button (click)="filtering = filtering ? false : true">
+                <mat-icon>keyboard_arrow_down</mat-icon>
+              </a>
+            </div>
+          </div>
+          <mat-input-container [class.cb-hidden]="!filtering" class="col-md-2">
+            <input matInput formControlName="year" placeholder="Ano">
+          </mat-input-container>
+          <mat-select [class.cb-hidden]="!filtering" class="col-md-3" placeholder="Mês" formControlName="month" [compareWith]="compareMonth">
+            <mat-option *ngFor="let month of months" [value]="month">
+              {{ month.name }}
             </mat-option>
-          </mat-autocomplete>
-        </mat-input-container>
-        <div class="col-md-2 button-grid-inline">
-          <button (click)="filter()" type="button" class="cb-button" mat-raised-button>FILTRAR</button>
+          </mat-select>
+          <mat-input-container [class.cb-hidden]="!filtering" *ngIf="accessList" class="col-md-4">
+            <input matInput [matAutocomplete]="autocompleteEmployee" formControlName="employee" placeholder="Funcionário">
+            <mat-autocomplete #autocompleteEmployee="matAutocomplete" [displayWith]="displayEmployee">
+              <mat-option *ngFor="let employee of employees" [value]="employee">
+                {{ employee.name }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-input-container>
+          <mat-select [class.cb-hidden]="!filtering" class="col-md-3" placeholder="Local" formControlName="place" [compareWith]="comparePlace">
+            <mat-option *ngFor="let place of places" [value]="place">
+              {{ place.description }}
+            </mat-option>
+          </mat-select>
+          <div *ngIf="false" class="col-md-2 button-grid-inline">
+            <button (click)="filter()" type="button" class="cb-button" mat-raised-button>FILTRAR</button>
+          </div>
         </div>
       </form>
     </mat-card>
     <mat-card>
       <div *ngIf="timecards?.length > 0">
         <table class="table mat-table" [class.user-mode]="!accessList">
+          <!--
+          <div class="mat-row">
+            <div class="mat-header-cell col-md-12">
+                <strong>Filtrando o mês:</strong> {{ filterForm.controls.month.value.name }}
+            </div>
+          </div>
+          -->
           <div class="mat-header-row">
             <div class="mat-header-cell mat-column-date">Dia</div>
             <div class="mat-header-cell mat-column-local-in">Local Check in</div>
@@ -94,7 +114,7 @@
             <div class="mat-header-cell mat-column-local-out">Local Check out</div>
             <div class="mat-header-cell mat-column-total">Total</div>
             <div class="mat-header-cell mat-column-balance">Saldo</div>
-            <div class="mat-header-cell mat-column-reason">Motivo</div>
+            <div class="mat-header-cell mat-column-reason">Justificativa</div>
             <div class="mat-header-cell mat-column-approved">Aprov.</div>
             <div *ngIf="accessList" class="mat-header-cell mat-column-action">Ação</div>
           </div>
@@ -109,7 +129,7 @@
               {{ timecard.entry | date:'HH:mm'  }} <span *ngIf="timecard.exit != ''">às {{ timecard.exit | date:'HH:mm'  }}</span>
             </div>
             <div class="mat-cell mat-column-local-out">
-              <a href="//maps.google.com/?q={{timecard.autoExitPlaceCoordinates}}" target="_blank" matTooltip="{{ timecard.autoExitPlace }}">{{ timecard.exit_place?.description }}</a>
+              <a href="//maps.google.com/?q={{timecard.autoExitPlaceCoordinates}}" target="_blank" matTooltip="Local automático: {{ timecard.autoExitPlace }} - Descrição do local: {{ timecard.exitPlace != '' ? timecard.exitPlace : 'Não externo, sem descrição.' }}">{{ timecard.exit_place?.description }}</a>
             </div>
             <div class="mat-cell mat-column-total">
               {{ total([timecard]) }}
@@ -145,12 +165,14 @@
                 <mat-icon>menu</mat-icon>
               </button>
             </div>
+            <!--
             <div *ngIf="timecard.entry_place?.description == 'Externo'" class="mat-cell mat-column-place">
               <small>{{ timecard.entryPlace }}</small>
             </div>
             <div *ngIf="timecard.exit_place?.description == 'Externo'" class="mat-cell mat-column-place">
               <small>{{ timecard.exitPlace }}</small>
             </div>
+            -->
           </div>
         </table>
       </div>
@@ -180,8 +202,8 @@
       <table class="table mat-table report">
         <div class="mat-header-row">
           <div class="mat-header-cell col-md-3 text-center">Dias</div>
-          <div class="mat-header-cell col-md-3 text-center">Total</div>
-          <div class="mat-header-cell col-md-3 text-center">Saldo</div>
+          <div class="mat-header-cell col-md-3 text-center">Total período</div>
+          <div class="mat-header-cell col-md-3 text-center">Saldo período</div>
           <div class="mat-header-cell col-md-3 text-center">Saldo acumulado</div>
         </div>
         <div class="mat-row">
@@ -195,8 +217,10 @@
   </form>
 </div>
 
+<!--
 <div class="col-md-12 button-section">
   <a class="cb-button" [routerLink]="['/timecard/approvals']" mat-raised-button>
     APROVAR
   </a>
 </div>
+-->
