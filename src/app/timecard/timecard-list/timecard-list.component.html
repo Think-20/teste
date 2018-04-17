@@ -123,13 +123,13 @@
               {{ timecard.entry | date: 'dd' }}
             </div>
             <div class="mat-cell mat-column-local-in">
-              <a href="//maps.google.com/?q={{timecard.autoEntryPlaceCoordinates}}" target="_blank" matTooltip="{{ timecard.autoEntryPlace }}">{{ timecard.entry_place.description }}</a>
+              <a href="//maps.google.com/?q={{timecard.autoEntryPlaceCoordinates}}" target="_blank" matTooltip="Local automático: {{ timecard.autoEntryPlace }} - Descrição do local: {{ timecard.entryPlace != null ? timecard.entryPlace : 'Não externo, sem descrição.' }}">{{ timecard.entry_place.description }}</a>
             </div>
             <div class="mat-cell mat-column-hours">
               {{ timecard.entry | date:'HH:mm'  }} <span *ngIf="timecard.exit != ''">às {{ timecard.exit | date:'HH:mm'  }}</span>
             </div>
             <div class="mat-cell mat-column-local-out">
-              <a href="//maps.google.com/?q={{timecard.autoExitPlaceCoordinates}}" target="_blank" matTooltip="Local automático: {{ timecard.autoExitPlace }} - Descrição do local: {{ timecard.exitPlace != '' ? timecard.exitPlace : 'Não externo, sem descrição.' }}">{{ timecard.exit_place?.description }}</a>
+              <a href="//maps.google.com/?q={{timecard.autoExitPlaceCoordinates}}" target="_blank" matTooltip="Local automático: {{ timecard.autoExitPlace }} - Descrição do local: {{ timecard.exitPlace != null ? timecard.exitPlace : 'Não externo, sem descrição.' }}">{{ timecard.exit_place?.description }}</a>
             </div>
             <div class="mat-cell mat-column-total">
               {{ total([timecard]) }}
