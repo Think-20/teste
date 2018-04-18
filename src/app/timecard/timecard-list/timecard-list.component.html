@@ -37,7 +37,7 @@
           </mat-input-container>
         </div>
         <div class="date-panel col-md-3">
-          <h6><small>{{ date | date:'dd' }} de {{ date | date:'MMMM' }} de {{ date | date:'yyyy' }}</small></h6>
+          <h6>{{ date | date:'dd' }} de {{ date | date:'MMMM' }} de {{ date | date:'yyyy' }}</h6>
           <h2>{{ date | date:'h:mm a' }}</h2>
         </div>
         <mat-input-container *ngIf="justifyPlace" class="col-md-12">
@@ -138,7 +138,7 @@
               {{ balance([timecard]) }}
             </div>
             <div class="mat-cell mat-column-reason">
-              {{ timecard.reason }}
+              <cb-read-more *ngIf="timecard.reason != null" [text]="timecard.reason"></cb-read-more>
             </div>
             <div class="mat-cell mat-column-approved">
               <span *ngIf="timecard.approved == 1">

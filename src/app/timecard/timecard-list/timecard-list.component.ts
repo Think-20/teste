@@ -13,6 +13,7 @@ import { Month, MONTHS } from '../../shared/date/months';
 import { Pagination } from '../../shared/pagination.model';
 import { TimecardPlace } from '../timecard-place/timecard-place.model';
 import { TimecardPlaceService } from '../timecard-place/timecard-place.service';
+import { AuthService } from '../../login/auth.service';
 
 @Component({
   selector: 'cb-timecard-list',
@@ -61,6 +62,7 @@ export class TimecardListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private timecardService: TimecardService,
+    private auth: AuthService,
     private timecardPlaceService: TimecardPlaceService,
     private employeeService: EmployeeService,
     private snackBar: MatSnackBar
@@ -180,41 +182,81 @@ export class TimecardListComponent implements OnInit {
   register(data: any) {
     this.activeCheckout = false
     this.activeCheckin = false
-    var geolocation = window.navigator.geolocation;
-    geolocation.getCurrentPosition((geo) => {
-      let snack = this.snackBar.open('Aguarde, obtendo posicionamento e registrando...')
-      let lat = geo.coords.latitude
-      let long = geo.coords.longitude
-      data.coordinates = `${lat},${long}`
 
-      if(ErrorHandler.formIsInvalid(this.justifyForm)) {
-        snack.dismiss()
-        this.renewStatus()
-        this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
-          duration: 5000
-        })
-        return;
+    let user = this.auth.currentUser()
+    let isMobile = {
+      Android: function() {
+          return navigator.userAgent.match(/Android/i);
+      },
+      BlackBerry: function() {
+          return navigator.userAgent.match(/BlackBerry/i);
+      },
+      iOS: function() {
+          return navigator.userAgent.match(/iPhone|iPad|iPod/i);
+      },
+      Opera: function() {
+          return navigator.userAgent.match(/Opera Mini/i);
+      },
+      Windows: function() {
+          return navigator.userAgent.match(/IEMobile/i) || navigator.userAgent.match(/WPDesktop/i);
+      },
+      any: function() {
+          return (isMobile.Android() || isMobile.BlackBerry() || isMobile.iOS() || isMobile.Opera() || isMobile.Windows());
       }
+    };
 
-      this.timecardService.register(data).subscribe(data => {
+    if(isMobile.any() || user.coordinatesNow == null) {
+      var geolocation = window.navigator.geolocation;
+      let snack = this.snackBar.open('Aguarde, obtendo posicionamento e registrando...')
+
+      geolocation.getCurrentPosition((geo) => {
         snack.dismiss()
-        this.renewStatus()
-        this.snackBar.open(data.message, '', {
+        let lat = geo.coords.latitude
+        let long = geo.coords.longitude
+        data.coordinates = `${lat},${long}`
+        user.coordinatesNow = data.coordinates
+        this.registerInsert(data)
+      }, (error) => {
+        snack.dismiss()
+        let code = error.code;
+        let message;
+
+        if(code == 1) {
+          message = 'Sem permissão para recuperar a localização.';
+        } else if(code == 2) {
+          message = 'A obtenção da geolocalização falhou.';
+        } else {
+          message = 'Tempo de limite excedido para obter a localização';
+        }
+
+        this.snackBar.open(message, '', {
           duration: 5000
         })
+      }, {timeout: 5000, enableHighAccuracy: true})
 
-        if(data.status) {
-          this.renewStatus()
-          this.filter()
-        }
+      return;
+    }
+
+    data.coordinates = user.coordinatesNow
+    this.registerInsert(data)
+  }
+
+  registerInsert(data: any) {
+    if(ErrorHandler.formIsInvalid(this.justifyForm)) {
+      this.renewStatus()
+      this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
+        duration: 5000
       })
-    }, (error) => {
-      this.snackBar.open('Por favor, autorize a localização. Se tiver negado o acesso, feche o navegador e abra novamente. Caso não tenha êxito, faça logoff e então login e tente novamente.', '', {
+      return;
+    }
+
+    this.timecardService.register(data).subscribe(data => {
+      this.snackBar.open(data.message, '', {
         duration: 5000
       })
       this.renewStatus()
-      return;
-    }, {timeout: 5000, enableHighAccuracy: true})
+      this.filter()
+    })
   }
 
   total(timecards: Timecard[]): string {

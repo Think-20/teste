@@ -7,6 +7,7 @@ export class User {
     employee?: Employee
     functionalities?: Functionality[]
     displays: Display[]
+    coordinatesNow ?: string
 }
 
 export class Functionality {

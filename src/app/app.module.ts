@@ -86,6 +86,8 @@ import { ItemService } from './items/item.service';
 
 import { StarsComponent } from './shared/stars/stars.component';
 import { UploadFileService } from './shared/upload-file.service';
+import { ReadMoreComponent } from './shared/text/read-more.component';
+
 import { BriefingSpecialPresentationService } from 'app/briefing-special-presentations/briefing-special-presentation.service';
 import { BriefingPresentationService } from 'app/briefing-presentations/briefing-presentation.service';
 import { StandConfigurationService } from 'app/stand-configurations/stand-configuration.service';
@@ -146,6 +148,7 @@ import { TimecardPlaceService } from './timecard/timecard-place/timecard-place.s
     ItemListComponent,
     ItemShowComponent,
     StarsComponent,
+    ReadMoreComponent,
     ClientImportComponent,
 
     TimecardComponent,
