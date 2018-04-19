@@ -135,7 +135,7 @@
               {{ total([timecard]) }}
             </div>
             <div class="mat-cell mat-column-balance">
-              {{ balance([timecard]) }}
+              {{ timecard.balance }}
             </div>
             <div class="mat-cell mat-column-reason">
               <cb-read-more *ngIf="timecard.reason != null" [text]="timecard.reason"></cb-read-more>

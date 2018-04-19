@@ -232,8 +232,9 @@ export class TimecardListComponent implements OnInit {
         this.snackBar.open(message, '', {
           duration: 5000
         })
-      }, {timeout: 5000, enableHighAccuracy: true})
+      }, {timeout: 10000, enableHighAccuracy: true, maximumAge: 3000})
 
+      this.renewStatus()
       return;
     }
 
@@ -293,27 +294,18 @@ export class TimecardListComponent implements OnInit {
   balance(timecards: Timecard[]): string {
     let formatedHours
     let formatedMin
-    let diff
+    let seconds = 0
     let hours = 0
     let min = 0
-    let sign = '+'
 
     timecards.forEach((timecard) => {
-      let entry = timecard.entry
-      let exit = timecard.exit
-
-      if(exit != null) {
-        diff = (new Date(exit).getTime() - new Date(entry).getTime())/1000
-        //Padrão 9 horas
-        diff = diff - 32400
-        if(diff < 0) {
-          sign = '-'
-          diff = diff * -1
-        }
-        hours += diff > 3600 ? Math.floor((diff / 3600)) : 0
-        min += (diff - (hours * 3600)) > 60 ? Math.floor(((diff - (hours * 3600)) / 60)) : 0
+      if(timecard.balance != null) {
+        seconds += parseInt(timecard.balance.slice(0,2)) * 3600 + parseInt(timecard.balance.slice(3,5)) * 60
       }
     })
+
+    hours = seconds > 3600 ? Math.floor((seconds / 3600)) : 0
+    min = (seconds - (hours * 3600)) > 60 ? Math.floor(((seconds - (hours * 3600)) / 60)) : 0
 
     formatedHours = hours
     formatedMin = min
@@ -325,7 +317,7 @@ export class TimecardListComponent implements OnInit {
       formatedMin = '0' + (parseFloat(min.toString()).toFixed(0)).toString()
     }
 
-    return `${sign}${formatedHours}:${formatedMin}`
+    return `${formatedHours}:${formatedMin}`
   }
 
   delete(timecard: Timecard) {

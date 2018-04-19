@@ -10,6 +10,7 @@ export class Timecard {
   employee?: Employee
   approved?: number
   approved_user?: User
+  balance?: string
   entryPlace?: string
   entry_place_id?: number
   exit_place_id?: number
