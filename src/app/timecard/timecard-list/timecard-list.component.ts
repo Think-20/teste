@@ -171,8 +171,8 @@ export class TimecardListComponent implements OnInit {
 
     if(isNaN(diff)) return
 
-    //9 horas e 15 minutos pra menos e pra mais
-    if(diff > 33300 || diff < 31500) {
+    //8 horas
+    if(diff > 28800) {
       this.justifyForm.controls.reason.enable()
     }  else {
       this.justifyForm.controls.reason.disable()
