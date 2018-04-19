@@ -167,7 +167,7 @@ export class TimecardListComponent implements OnInit {
   checkJustifyHours(date1: Date, date2: Date) {
     let entry = date1
     let exit = date2
-    let diff = (new Date(exit).getTime() - new Date(entry).getTime())/1000
+    let diff = (new Date(exit).getTime() - new Date(entry).getTime()) / 1000
 
     if(isNaN(diff)) return
 
@@ -205,7 +205,7 @@ export class TimecardListComponent implements OnInit {
       }
     };
 
-    if(isMobile.any() || user.coordinatesNow == null) {
+    if(isMobile.any() || user.coordinatesNow == '' || user.coordinatesNow == null) {
       var geolocation = window.navigator.geolocation;
       let snack = this.snackBar.open('Aguarde, obtendo posicionamento e registrando...')
 
@@ -232,7 +232,7 @@ export class TimecardListComponent implements OnInit {
         this.snackBar.open(message, '', {
           duration: 5000
         })
-      }, {timeout: 10000, enableHighAccuracy: true, maximumAge: 3000})
+      }, {timeout: 15000, enableHighAccuracy: true, maximumAge: 0})
 
       this.renewStatus()
       return;
