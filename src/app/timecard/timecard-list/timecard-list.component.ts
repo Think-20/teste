@@ -232,7 +232,7 @@ export class TimecardListComponent implements OnInit {
         this.snackBar.open(message, '', {
           duration: 5000
         })
-      }, {timeout: 15000, enableHighAccuracy: true, maximumAge: 0})
+      }, {timeout: 30000, enableHighAccuracy: true, maximumAge: 0})
 
       this.renewStatus()
       return;
