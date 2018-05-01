@@ -25,4 +25,6 @@ export class Stand {
     closed_items: StandItem[]
     opened_items: StandItem[]
     items: StandItem[]
+    area: number
+    budget: number
 }

@@ -85,6 +85,7 @@ import { ItemsComponent } from './items/items.component';
 import { ItemService } from './items/item.service';
 
 import { StarsComponent } from './shared/stars/stars.component';
+import { ProductionTimeComponent } from './shared/production-time/production-time.component';
 import { UploadFileService } from './shared/upload-file.service';
 import { ReadMoreComponent } from './shared/text/read-more.component';
 
@@ -100,6 +101,8 @@ import { TimecardFormComponent } from './timecard/timecard-form/timecard-form.co
 import { TimecardListComponent } from './timecard/timecard-list/timecard-list.component';
 import { TimecardApprovalsComponent } from './timecard/timecard-approvals/timecard-approvals.component';
 import { TimecardPlaceService } from './timecard/timecard-place/timecard-place.service';
+import { BriefingLevelService } from './briefing-level/briefing-level.service';
+import { BriefingMainExpectationService } from './briefing-main-expectation/briefing-main-expectation.service';
 
 @NgModule({
   declarations: [
@@ -148,6 +151,7 @@ import { TimecardPlaceService } from './timecard/timecard-place/timecard-place.s
     ItemListComponent,
     ItemShowComponent,
     StarsComponent,
+    ProductionTimeComponent,
     ReadMoreComponent,
     ClientImportComponent,
 
@@ -209,6 +213,8 @@ import { TimecardPlaceService } from './timecard/timecard-place/timecard-place.s
     BriefingCompetitionService,
     BriefingPresentationService,
     BriefingSpecialPresentationService,
+    BriefingLevelService,
+    BriefingMainExpectationService,
     StandConfigurationService,
     StandGenreService,
     UploadFileService,

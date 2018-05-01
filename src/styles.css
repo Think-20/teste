@@ -404,6 +404,10 @@ mat-card-title > p {
   color: #00afef;
 }
 
+.mat-primary .mat-pseudo-checkbox-checked, .mat-primary .mat-pseudo-checkbox-indeterminate {
+  background-color: #00afef;
+}
+
 #login-content .mat-focused .mat-input-placeholder.mat-float, #login-content .mat-input-placeholder.mat-float:not(.mat-empty) {
   opacity: 0 !important;
 }

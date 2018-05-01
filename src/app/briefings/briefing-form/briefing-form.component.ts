@@ -8,12 +8,7 @@ import { Briefing } from '../briefing.model';
 import { BriefingService } from '../briefing.service';
 
 import { EmployeeService } from '../../employees/employee.service';
-import { JobService } from '../../jobs/job.service';
-import { JobTypeService } from '../../job-types/job-type.service';
 import { ClientService } from '../../clients/client.service';
-import { BriefingCompetitionService } from '../../briefing-competitions/briefing-competition.service';
-import { BriefingPresentationService } from '../../briefing-presentations/briefing-presentation.service';
-import { BriefingSpecialPresentationService } from '../../briefing-special-presentations/briefing-special-presentation.service';
 import { AuthService } from '../../login/auth.service';
 import { UploadFileService } from '../../shared/upload-file.service';
 
@@ -23,7 +18,6 @@ import { JobType } from '../../job-types/job-type.model';
 import { Client } from '../../clients/client.model';
 import { BriefingCompetition } from '../../briefing-competitions/briefing-competition.model';
 import { BriefingPresentation } from 'app/briefing-presentations/briefing-presentation.model';
-import { BriefingSpecialPresentation } from 'app/briefing-special-presentations/briefing-special-presentation.model';
 
 import { ErrorHandler } from '../../shared/error-handler.service';
 import { Patterns } from '../../shared/patterns.model';
@@ -33,6 +27,9 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
 import { Stand } from 'app/stand/stand.model';
 import { isUndefined } from 'util';
+import { BriefingMainExpectation } from 'app/briefing-main-expectation/briefing-main-expectation.model';
+import { BriefingLevel } from 'app/briefing-level/briefing-level.model';
+import { BriefingHowCome } from 'app/briefing-how-come/briefing-how-come.model';
 
 @Component({
   selector: 'cb-briefing-form',
@@ -48,25 +45,21 @@ export class BriefingFormComponent implements OnInit {
   jobs: Job[]
   job_types: JobType[]
   clients: Client[]
-  exhibitors: Client[]
+  main_expectations: BriefingMainExpectation[]
   agencies: Client[]
+  levels: BriefingLevel[]
+  how_comes: BriefingHowCome[]
   competitions: BriefingCompetition[]
   employees: Employee[]
   attendances: Employee[]
   creations: Employee[]
   presentations: BriefingPresentation[]
-  special_presentations: BriefingSpecialPresentation[]
   briefingForm: FormGroup
 
   constructor(
-    private jobService: JobService,
-    private jobTypeService: JobTypeService,
     private clientService: ClientService,
     private uploadFileService: UploadFileService,
     private employeeService: EmployeeService,
-    private competitionService: BriefingCompetitionService,
-    private presentationService: BriefingPresentationService,
-    private specialPresentationService: BriefingSpecialPresentationService,
     private briefingService: BriefingService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
@@ -81,50 +74,44 @@ export class BriefingFormComponent implements OnInit {
     this.briefingForm = this.formBuilder.group({
       id: this.formBuilder.control({value: '', disabled: true}),
       job: this.formBuilder.control('', [Validators.required]),
-      exhibitor: this.formBuilder.control('', [Validators.required]),
+      main_expectation: this.formBuilder.control('', [Validators.required]),
+      client: this.formBuilder.control('', [Validators.required]),
       event: this.formBuilder.control('', [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(150)
       ]),
+      last_provider: this.formBuilder.control('', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(100)
+      ]),
       deadline: this.formBuilder.control('', [Validators.required]),
+      available_date: this.formBuilder.control('', [Validators.required]),
+      estimated_time: this.formBuilder.control('', [Validators.required]),
+      level: this.formBuilder.control('', [Validators.required]),
+      how_come: this.formBuilder.control('', [Validators.required]),
       job_type: this.formBuilder.control('', [Validators.required]),
       agency: this.formBuilder.control('', [Validators.required]),
       attendance: this.formBuilder.control('', [Validators.required]),
       creation: this.formBuilder.control('', [Validators.required]),
-      area: this.formBuilder.control('', [
-        Validators.required,
-        Validators.pattern(Patterns.float),
-        Validators.maxLength(10),
-      ]),
-      budget: this.formBuilder.control('', [
-        Validators.required,
-        Validators.pattern(Patterns.float),
-        Validators.maxLength(13),
-      ]),
-      area_budget: this.formBuilder.control(''),
       rate: this.formBuilder.control(''),
       stand: this.formBuilder.group({}),
       competition: this.formBuilder.control('', [Validators.required]),
       latest_mounts_file: this.formBuilder.control('', [Validators.required]),
-      colors_file: this.formBuilder.control('', [Validators.required]),
-      guide_file: this.formBuilder.control('', [Validators.required]),
       presentation: this.formBuilder.control('', [Validators.required]),
-      special_presentation: this.formBuilder.control('', [Validators.required]),
       approval_expectation_rate: this.formBuilder.control(''),
       think_history: this.formBuilder.control('')
     })
 
-    this.briefingForm.get('exhibitor').valueChanges
-    .do(exhibitorName => {
+    this.briefingForm.get('client').valueChanges
+    .do(clientName => {
         snackBarStateCharging = this.snackBar.open('Aguarde...')
     })
     .debounceTime(500)
-    .subscribe(exhibitorName => {
-      this.clientService.clients(exhibitorName).subscribe((pagination) => {
-        this.exhibitors = pagination.data.filter((client) => {
-          return client.type.description === 'Expositor'
-        })
+    .subscribe(clientName => {
+      this.clientService.clients({search: clientName}).subscribe((pagination) => {
+        this.clients = pagination.data
       })
       Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
     })
@@ -135,20 +122,12 @@ export class BriefingFormComponent implements OnInit {
     })
     .debounceTime(500)
     .subscribe(name => {
-      this.clientService.clients(name).subscribe((pagination) => {
+      this.clientService.clients({search: name}).subscribe((pagination) => {
         this.agencies = pagination.data.filter((client) => {
           return client.type.description === 'Agência'
         })
       })
       Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
-    })
-
-    this.briefingForm.get('area').valueChanges.subscribe(() => {
-      this.updateAreaBudget();
-    })
-
-    this.briefingForm.get('budget').valueChanges.subscribe(() => {
-      this.updateAreaBudget();
     })
 
     snackBarStateCharging = this.snackBar.open('Aguarde...')
@@ -161,7 +140,9 @@ export class BriefingFormComponent implements OnInit {
       this.attendances = data.attendances
       this.competitions = data.competitions
       this.presentations = data.presentations
-      this.special_presentations = data.special_presentations
+      this.main_expectations = data.main_expectations
+      this.levels = data.levels
+      this.how_comes = data.how_comes
       snackBarStateCharging.dismiss()
 
       if(this.typeForm === 'edit') {
@@ -178,14 +159,6 @@ export class BriefingFormComponent implements OnInit {
         })
       }
     })
-  }
-
-  updateAreaBudget() {
-    let area = parseFloat(String(this.briefingForm.get('area').value).replace(',', '.'))
-    let budget = parseFloat(String(this.briefingForm.get('budget').value).replace(',', '.'))
-    let area_budget = (isNaN(area) || isNaN(budget)) ? '' : String((budget / area).toFixed(2)).replace('.', ',')
-
-    this.briefingForm.get('area_budget').setValue(area_budget)
   }
 
   uploadFile(key: string, inputFile: HTMLInputElement) {
@@ -217,24 +190,21 @@ export class BriefingFormComponent implements OnInit {
       this.briefingForm.controls.id.setValue(briefing.id)
       this.briefingForm.controls.job_type.disable()
       this.briefingForm.controls.job.setValue(briefing.job)
-      this.briefingForm.controls.exhibitor.setValue(briefing.exhibitor)
+      this.briefingForm.controls.client.setValue(briefing.client)
       this.briefingForm.controls.event.setValue(briefing.event)
       this.briefingForm.controls.deadline.setValue(briefing.deadline)
       this.briefingForm.controls.job_type.setValue(briefing.job_type)
       this.briefingForm.controls.agency.setValue(briefing.agency)
       this.briefingForm.controls.attendance.setValue(briefing.attendance)
-
       this.briefingForm.controls.creation.setValue(briefing.creation)
-      this.briefingForm.controls.area.setValue(briefing.area.toString().replace('.',','))
-      this.briefingForm.controls.budget.setValue(briefing.budget.toString().replace('.',','))
-      this.updateAreaBudget()
       this.briefingForm.controls.rate.setValue(briefing.rate)
+      this.briefingForm.controls.available_date.setValue(briefing.available_date)
+      this.briefingForm.controls.last_provider.setValue(briefing.last_provider)
+      this.briefingForm.controls.level.setValue(briefing.level)
+      this.briefingForm.controls.how_come.setValue(briefing.how_come)
       this.briefingForm.controls.competition.setValue(briefing.competition)
       this.briefingForm.controls.latest_mounts_file.setValue(briefing.latest_mounts_file)
-      this.briefingForm.controls.colors_file.setValue(briefing.colors_file)
-      this.briefingForm.controls.guide_file.setValue(briefing.guide_file)
       this.briefingForm.controls.presentation.setValue(briefing.presentation)
-      this.briefingForm.controls.special_presentation.setValue(briefing.special_presentation)
       this.briefingForm.controls.approval_expectation_rate.setValue(briefing.approval_expectation_rate)
       snackBarStateCharging.dismiss()
     })
@@ -268,7 +238,15 @@ export class BriefingFormComponent implements OnInit {
     return var1.id === var2.id
   }
 
-  compareSpecialPresentation(var1: BriefingSpecialPresentation, var2: BriefingSpecialPresentation) {
+  compareMainExpectation(var1: BriefingMainExpectation, var2: BriefingMainExpectation) {
+    return var1.id === var2.id
+  }
+
+  compareLevel(var1: BriefingLevel, var2: BriefingLevel) {
+    return var1.id === var2.id
+  }
+
+  compareHowCome(var1: BriefingHowCome, var2: BriefingHowCome) {
     return var1.id === var2.id
   }
 
@@ -276,8 +254,8 @@ export class BriefingFormComponent implements OnInit {
     return var1.id === var2.id
   }
 
-  displayExhibitor(exhibitor: Client) {
-    return exhibitor.fantasy_name
+  displayclient(client: Client) {
+    return client.fantasy_name
   }
 
   displayAgency(agency: Client) {

@@ -6,15 +6,17 @@ import { BriefingCompetition } from 'app/briefing-competitions/briefing-competit
 import { BriefingPresentation } from 'app/briefing-presentations/briefing-presentation.model';
 import { BriefingSpecialPresentation } from 'app/briefing-special-presentations/briefing-special-presentation.model';
 import { Stand } from 'app/stand/stand.model';
-
+import { BriefingMainExpectation } from '../briefing-main-expectation/briefing-main-expectation.model';
+import { BriefingLevel } from '../briefing-level/briefing-level.model';
+import { BriefingHowCome } from '../briefing-how-come/briefing-how-come.model';
 
 export class Briefing {
     id: number
     code?: number
     job_id: number
     job: Job
-    exhibitor_id: number
-    exhibitor: Client
+    client_id: number
+    client: Client
     event: string
     deadline: string
     job_type_id: number
@@ -25,20 +27,23 @@ export class Briefing {
     attendance: Employee
     creation_id: number
     creation: Employee
-    area: number
-    budget: number
     rate: number
+    estimated_time: number
     competition_id: number
+    last_provider: string
     competition: BriefingCompetition
     latest_mounts_file: string
-    colors_file: string
-    guide_file: string
-    presentation_id: number
-    presentation: BriefingPresentation
-    special_presentation_id: number
-    special_presentation: BriefingSpecialPresentation
+    main_expectation_id?: number
+    main_expectation?: BriefingMainExpectation
+    level_id?: number
+    level?: BriefingLevel
+    how_come_id?: number
+    how_come?: BriefingHowCome
+    available_date: string
+    presentation_id?: number
+    presentation?: BriefingPresentation
     approval_expectation_rate: number
-    stand: Stand
+    stand?: Stand
     created_at: string
     updated_at: string
 }

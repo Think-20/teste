@@ -124,9 +124,28 @@ export class StandFormComponent implements OnInit {
       ]),
       closed_items: this.formBuilder.array([]),
       opened_items: this.formBuilder.array([]),
+      area: this.formBuilder.control(stand ? stand.area.toString().replace('.',',') : '', [
+        Validators.required,
+        Validators.pattern(Patterns.float),
+        Validators.maxLength(10),
+      ]),
+      budget: this.formBuilder.control(stand ? stand.budget.toString().replace('.',',') : '', [
+        Validators.required,
+        Validators.pattern(Patterns.float),
+        Validators.maxLength(13),
+      ]),
+      area_budget: this.formBuilder.control(''),
     })
 
     this.briefingForm.controls.stand = this.standForm
+
+    this.standForm.get('area').valueChanges.subscribe(() => {
+      this.updateAreaBudget();
+    })
+
+    this.standForm.get('budget').valueChanges.subscribe(() => {
+      this.updateAreaBudget();
+    })
 
     snackBarStateCharging = this.snackBar.open('Aguarde...')
 
@@ -152,6 +171,14 @@ export class StandFormComponent implements OnInit {
     } else if(this.typeForm === 'new') {
       this.loadStandItemsDefault()
     }
+  }
+
+  updateAreaBudget() {
+    let area = parseFloat(String(this.briefingForm.get('area').value).replace(',', '.'))
+    let budget = parseFloat(String(this.briefingForm.get('budget').value).replace(',', '.'))
+    let area_budget = (isNaN(area) || isNaN(budget)) ? '' : String((budget / area).toFixed(2)).replace('.', ',')
+
+    this.briefingForm.get('area_budget').setValue(area_budget)
   }
 
   loadStandItemsDefault() {
@@ -190,6 +217,7 @@ export class StandFormComponent implements OnInit {
         return true
       }
     })
+    this.updateAreaBudget()
   }
 
   updateOpenedArea() {

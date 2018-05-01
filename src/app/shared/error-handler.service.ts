@@ -51,7 +51,7 @@ export class ErrorHandler {
               return
             }
             (<FormControl>form.get(key)).markAsTouched()
-            //console.log((<FormControl>form.get(key)), key)
+            console.log((<FormControl>form.get(key)), key)
         })
 
         return true

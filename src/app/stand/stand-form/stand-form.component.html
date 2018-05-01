@@ -60,6 +60,21 @@
         Entre 3 e 5000 caract.
       </mat-error>
     </mat-input-container>
+    <mat-input-container class="col-md-4">
+      <input formControlName="area" matInput placeholder="Área (m²)*">
+      <mat-error>
+        Obrigatório, até 99999,99
+      </mat-error>
+    </mat-input-container>
+    <mat-input-container class="col-md-4">
+      <input formControlName="budget" matInput placeholder="Verba*">
+      <mat-error>
+        Obrigatório, até 99999999,99
+      </mat-error>
+    </mat-input-container>
+    <mat-input-container class="col-md-4">
+      <input formControlName="area_budget" matInput readonly placeholder="Valor/m²">
+    </mat-input-container>
     <mat-input-container class="col-md-6">
       <input formControlName="closed_area_percent" matInput placeholder="Área fechada*">
       <mat-error>
