@@ -19,6 +19,7 @@ export class UploadFileService {
       private auth: AuthService
   ) {}
 
+  /*
   uploadFile(form: FormGroup, key: string, inputFile: HTMLInputElement) {
     if(key.indexOf('.') > 0) {
       let keys = key.split('.')
@@ -32,14 +33,28 @@ export class UploadFileService {
     }
 
     form.get(key).setValue('Aguarde...')
-    let file = inputFile.files.item(0)
+    let files = inputFile.files
+    let filename = ''
 
-    this.sendToServer(form.get(key), file).subscribe((data) => {
-      form.get(key).setValue(file.name.replace(/^C:\\fakepath\\/i, ''))
+    for(var i = 0; i < files.length; i++) {
+      filename += files.item(i).name.replace(/^C:\\fakepath\\/i, '') + ','
+    }
+    filename = filename.slice(0, filename.length - 1)
+
+    this.sendToServer(form.get(key), files).subscribe((data) => {
+      form.get(key).setValue(filename)
     })
   }
+  */
 
-  private sendToServer(input: AbstractControl, file: File): Observable<any> {
+  uploadFile(inputFile: HTMLInputElement) {
+    let files = inputFile.files
+    let filenames = []
+
+    return this.sendToServer(files)
+  }
+
+  private sendToServer(files: FileList): Observable<any> {
       let requestOptions = new RequestOptions()
       let headers = new Headers()
 
@@ -52,12 +67,13 @@ export class UploadFileService {
 
       let url = 'upload-file'
       let data = new FormData()
-      data.append('file', file, file.name)
+      
+      for(var i = 0; i < files.length; i++)
+      data.append(i.toString(), files.item(i), files.item(i).name)
 
       return this.http.post(`${API}/${url}`, data, requestOptions)
           .map(response => response.json())
           .catch((err) => {
-              input.setValue('')
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
               })

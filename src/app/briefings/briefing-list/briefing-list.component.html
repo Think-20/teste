@@ -41,6 +41,7 @@
             <div class="mat-header-cell mat-column-event">Evento</div>
             <div class="mat-header-cell mat-column-type">Tipo</div>
             <div class="mat-header-cell mat-column-attendance">Atendimento</div>
+            <div class="mat-header-cell mat-column-date">Data</div>
             <div class="mat-header-cell mat-column-action">Ação</div>
           </div>
           <div class="mat-row" *ngFor="let briefing of briefings" [@rowAppeared]="rowAppearedState">
@@ -48,7 +49,7 @@
               {{ briefingService.showId(briefing) }}
             </div>
             <div class="mat-cell mat-column-client">
-              {{ briefing.exhibitor.fantasy_name }}
+              {{ briefing.client.fantasy_name }}
             </div>
             <div class="mat-cell mat-column-event">
               {{ briefing.event }}
@@ -58,6 +59,9 @@
             </div>
             <div class="mat-cell mat-column-attendance">
               {{ briefing.attendance.name }}
+            </div>
+            <div class="mat-cell mat-column-date">
+              {{ briefing.created_at | date:'dd/MM/yy' }}
             </div>
             <div class="mat-cell mat-column-action">
               <mat-menu #menu="matMenu">
@@ -121,7 +125,7 @@
     <mat-paginator *ngIf="briefings"
       [length]="pagination?.total"
       [pageSize]="pagination?.per_page"
-      [pageSizeOptions]="[50]"
+      [pageSizeOptions]="[pagination?.per_page]"
       (page)="changePage($event)"
     ></mat-paginator>
   </form>

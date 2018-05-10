@@ -408,6 +408,24 @@ mat-card-title > p {
   background-color: #00afef;
 }
 
+.mat-select-panel .mat-option-multiple {
+  color: rgba(0,0,0,.38) !important;
+}
+
+.mat-select-panel .mat-option-multiple .mat-pseudo-checkbox {
+  color: rgba(0,0,0,.28) !important;
+  background-color: white !important;
+}
+
+.mat-select-panel .mat-option-multiple.mat-selected {
+  color: black !important;
+}
+
+.mat-select-panel .mat-option-multiple.mat-selected .mat-pseudo-checkbox-checked {
+  color: black !important;
+  background-color: black !important; 
+}
+
 #login-content .mat-focused .mat-input-placeholder.mat-float, #login-content .mat-input-placeholder.mat-float:not(.mat-empty) {
   opacity: 0 !important;
 }

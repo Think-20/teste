@@ -1,0 +1,100 @@
+<div class="my-container">
+  <h3 class="lead">Cronograma</h3>
+</div>
+<div class="col-md-12">
+  <mat-card class="schedule-card">
+    <div *ngIf="briefings?.length > 0">
+      <table class="table mat-table schedule-table">
+        <div class="mat-header-row">
+          <div class="mat-header-cell mat-column-date">Data</div>
+          <div class="mat-header-cell mat-column-job">Job</div>
+          <div class="mat-header-cell mat-column-type">Tipo</div>
+          <div class="mat-header-cell mat-column-event">Evento</div>
+          <div class="mat-header-cell mat-column-agency">Agência</div>
+          <div class="mat-header-cell mat-column-budget">Verba</div>
+          <div class="mat-header-cell mat-column-deadline">Deadline</div>
+          <div class="mat-header-cell mat-column-attendance">Atendimento</div>
+          <div class="mat-header-cell mat-column-creation">Criação</div>
+          <!--
+          <div class="mat-header-cell mat-column-action">Ação</div>
+          -->
+        </div>
+        <div class="mat-row" *ngFor="let briefing of briefings" [@rowAppeared]="rowAppearedState">
+          <div class="mat-cell mat-column-date">
+            {{ briefing.available_date | date:'dd/MM' }}
+          </div>
+          <div class="mat-cell mat-column-job">
+            {{ briefing.job.description }}
+          </div>
+          <div class="mat-cell mat-column-type">
+            {{ briefing.job_type.description }}
+          </div>
+          <div class="mat-cell mat-column-event">
+            {{ briefing.event }}
+          </div>
+          <div class="mat-cell mat-column-agency">
+            {{ briefing.agency.fantasy_name }}
+          </div>
+          <div class="mat-cell mat-column-budget">
+            {{ briefing.budget | currency:'BRL':true }}
+          </div>
+          <div class="mat-cell mat-column-deadline">
+            {{ briefing.deadline | date:'dd/MM' }}
+          </div>
+          <div class="mat-cell mat-column-attendance">
+            {{ briefing.attendance.name }}
+          </div>
+          <div class="mat-cell mat-column-creation">
+            {{ briefing.creation.name }}
+          </div>
+          <!--
+          <div class="mat-cell mat-column-action">
+            <mat-menu #menu="matMenu">
+              <a [routerLink]="['/briefings/show', briefing.id]" mat-menu-item>
+                <mat-icon>subject</mat-icon> Visualização
+              </a>
+              <a [routerLink]="['/briefings/edit', briefing.id]" mat-menu-item>
+                <mat-icon>mode_edit</mat-icon> Editar
+              </a>
+              <button (click)="delete(briefing)" mat-menu-item>
+                <mat-icon>delete</mat-icon> Remover
+              </button>
+            </mat-menu>
+
+            <button mat-icon-button [matMenuTriggerFor]="menu">
+              <mat-icon>menu</mat-icon>
+            </button>
+          </div>
+          -->
+        </div>
+      </table>
+    </div>
+    <div *ngIf="searching" class="col-md-12 records-not-found">
+      <p>
+        <small>
+          Aguarde...
+        </small>
+      </p>
+    </div>
+    <div *ngIf="briefings.length == 0 && searchForm.controls.search.value != '' && !searching" class="col-md-12 records-not-found">
+      <p>
+        <small>
+          Não encontramos resultados para sua busca. :(
+        </small>
+      </p>
+    </div>
+    <div *ngIf="briefings.length == 0 && searchForm.controls.search.value == '' && !searching" class="col-md-12 records-not-found">
+      <p>
+        <small>
+          Ainda não existe nenhum briefing cadastrado. Que tal <a [routerLink]="['/briefings/new']">cadastrar</a> agora?
+        </small>
+      </p>
+    </div>
+  </mat-card>
+  <mat-paginator *ngIf="briefings"
+    [length]="pagination?.total"
+    [pageSize]="pagination?.per_page"
+    [pageSizeOptions]="[20]"
+    (page)="changePage($event)"
+  ></mat-paginator>
+</div>

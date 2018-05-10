@@ -227,7 +227,7 @@ export class StandFormComponent implements OnInit {
   }
 
   uploadFile(key: string, inputFile: HTMLInputElement) {
-    this.uploadFileService.uploadFile(this.standForm, key, inputFile)
+    //this.uploadFileService.uploadFile(this.standForm, key, inputFile)
   }
 
   previewFile(briefing: Briefing, type: string,  file: string) {

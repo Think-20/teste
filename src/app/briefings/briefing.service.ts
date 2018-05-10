@@ -73,8 +73,8 @@ export class BriefingService {
             })
     }
 
-    download(briefing: Briefing, type: String, file: String) {
-      let url = `briefing/download/${briefing.id}/${type}/${file}`
+    download(briefing: Briefing, type: String, filename: String) {
+      let url = `briefing/download/${briefing.id}/${type}/${filename}`
       let prefix = this.auth.hasAccess('briefing/download/{id}/{type}/{file}') ? '' : 'my-'
 
       url = prefix + url

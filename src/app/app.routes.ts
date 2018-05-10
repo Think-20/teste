@@ -42,6 +42,8 @@ import { TimecardFormComponent } from './timecard/timecard-form/timecard-form.co
 import { TimecardListComponent } from './timecard/timecard-list/timecard-list.component';
 import { TimecardApprovalsComponent } from './timecard/timecard-approvals/timecard-approvals.component';
 
+import { ScheduleComponent } from './schedule/schedule.component';
+
 export const ROUTES: Routes = [
     {
         path : 'login', component : LoginComponent
@@ -189,6 +191,28 @@ export const ROUTES: Routes = [
                       path: 'approvals', component: TimecardApprovalsComponent, canActivate: [AuthGuard]
                   }
                 ]
+            },
+            {
+                path : 'schedule', component : ScheduleComponent, canActivate: [AuthGuard]
+                /*
+                children: [
+                  {
+                      path: '', redirectTo: 'list', pathMatch: 'full'
+                  },
+                  {
+                      path: 'new', component: TimecardFormComponent, canActivate: [AuthGuard]
+                  },
+                  {
+                      path: 'edit/:id', component: TimecardFormComponent, canActivate: [AuthGuard]
+                  },
+                  {
+                      path: 'list', component: TimecardListComponent, canActivate: [AuthGuard]
+                  },
+                  {
+                      path: 'approvals', component: TimecardApprovalsComponent, canActivate: [AuthGuard]
+                  }
+                ]
+                */
             }
         ]
     }

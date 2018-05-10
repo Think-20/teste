@@ -26,10 +26,11 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
 import { Stand } from 'app/stand/stand.model';
-import { isUndefined } from 'util';
+import { isUndefined, isObject } from 'util';
 import { BriefingMainExpectation } from 'app/briefing-main-expectation/briefing-main-expectation.model';
 import { BriefingLevel } from 'app/briefing-level/briefing-level.model';
 import { BriefingHowCome } from 'app/briefing-how-come/briefing-how-come.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'cb-briefing-form',
@@ -51,6 +52,7 @@ export class BriefingFormComponent implements OnInit {
   how_comes: BriefingHowCome[]
   competitions: BriefingCompetition[]
   employees: Employee[]
+  paramAttendance: Employee = null
   attendances: Employee[]
   creations: Employee[]
   presentations: BriefingPresentation[]
@@ -64,12 +66,16 @@ export class BriefingFormComponent implements OnInit {
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
     let snackBarStateCharging
     this.typeForm = this.route.snapshot.url[0].path
+
+    this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
+    ? this.authService.currentUser().employee : null
 
     this.briefingForm = this.formBuilder.group({
       id: this.formBuilder.control({value: '', disabled: true}),
@@ -86,10 +92,14 @@ export class BriefingFormComponent implements OnInit {
         Validators.minLength(3),
         Validators.maxLength(100)
       ]),
+      budget: this.formBuilder.control('', [
+        Validators.required,
+        Validators.pattern(Patterns.float),
+        Validators.maxLength(13),
+      ]),
       deadline: this.formBuilder.control('', [Validators.required]),
       available_date: this.formBuilder.control('', [Validators.required]),
       estimated_time: this.formBuilder.control('', [Validators.required]),
-      level: this.formBuilder.control('', [Validators.required]),
       how_come: this.formBuilder.control('', [Validators.required]),
       job_type: this.formBuilder.control('', [Validators.required]),
       agency: this.formBuilder.control('', [Validators.required]),
@@ -97,9 +107,10 @@ export class BriefingFormComponent implements OnInit {
       creation: this.formBuilder.control('', [Validators.required]),
       rate: this.formBuilder.control(''),
       stand: this.formBuilder.group({}),
+      presentations: this.formBuilder.control('', [Validators.required]),
+      levels: this.formBuilder.control('', [Validators.required]),
       competition: this.formBuilder.control('', [Validators.required]),
-      latest_mounts_file: this.formBuilder.control('', [Validators.required]),
-      presentation: this.formBuilder.control('', [Validators.required]),
+      files: this.formBuilder.array([]),
       approval_expectation_rate: this.formBuilder.control(''),
       think_history: this.formBuilder.control('')
     })
@@ -110,8 +121,15 @@ export class BriefingFormComponent implements OnInit {
     })
     .debounceTime(500)
     .subscribe(clientName => {
-      this.clientService.clients({search: clientName}).subscribe((pagination) => {
-        this.clients = pagination.data
+      if(clientName == '' || isObject(clientName)) {
+        snackBarStateCharging.dismiss()
+        return;
+      }
+
+      this.clientService.clients({search: clientName, attendance: this.paramAttendance}).subscribe((pagination) => {
+        this.clients = pagination.data.filter((client) => {
+          return client.type.description !== 'Agência'
+        })
       })
       Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
     })
@@ -122,7 +140,12 @@ export class BriefingFormComponent implements OnInit {
     })
     .debounceTime(500)
     .subscribe(name => {
-      this.clientService.clients({search: name}).subscribe((pagination) => {
+      if(name == '' || isObject(name)) {
+        snackBarStateCharging.dismiss()
+        return;
+      }
+
+      this.clientService.clients({search: name, attendance: this.paramAttendance}).subscribe((pagination) => {
         this.agencies = pagination.data.filter((client) => {
           return client.type.description === 'Agência'
         })
@@ -143,6 +166,7 @@ export class BriefingFormComponent implements OnInit {
       this.main_expectations = data.main_expectations
       this.levels = data.levels
       this.how_comes = data.how_comes
+      this.briefingForm.controls.available_date.setValue(data.available_date)
       snackBarStateCharging.dismiss()
 
       if(this.typeForm === 'edit') {
@@ -161,16 +185,23 @@ export class BriefingFormComponent implements OnInit {
     })
   }
 
-  uploadFile(key: string, inputFile: HTMLInputElement) {
-    this.uploadFileService.uploadFile(this.briefingForm, key, inputFile)
+  uploadFile(inputFile: HTMLInputElement) {
+    let filenames: string[] = []
+    this.uploadFileService.uploadFile(inputFile).subscribe((data) => {
+      filenames = data.names
+
+      filenames.forEach((filename) => {
+        this.addFile(filename)
+      })
+    })
   }
 
-  previewFile(briefing: Briefing, type: string,  file: string) {
-    this.briefingService.previewFile(briefing, type, file)
+  previewFile(briefing: Briefing, filename: string, type: string,) {
+    this.briefingService.previewFile(briefing, type, filename)
   }
 
-  download(briefing: Briefing, filename: string, type: String, file: String) {
-    this.briefingService.download(briefing, type, file).subscribe((blob) => {
+  download(briefing: Briefing, filename: string, type: String) {
+    this.briefingService.download(briefing, type, filename).subscribe((blob) => {
       let fileUrl = URL.createObjectURL(blob)
       //window.open(fileUrl, '_blank')
       let anchor = document.createElement("a");
@@ -200,13 +231,20 @@ export class BriefingFormComponent implements OnInit {
       this.briefingForm.controls.rate.setValue(briefing.rate)
       this.briefingForm.controls.available_date.setValue(briefing.available_date)
       this.briefingForm.controls.last_provider.setValue(briefing.last_provider)
-      this.briefingForm.controls.level.setValue(briefing.level)
+      this.briefingForm.controls.levels.setValue(briefing.levels)
+      this.briefingForm.controls.main_expectation.setValue(briefing.main_expectation)
       this.briefingForm.controls.how_come.setValue(briefing.how_come)
       this.briefingForm.controls.competition.setValue(briefing.competition)
-      this.briefingForm.controls.latest_mounts_file.setValue(briefing.latest_mounts_file)
-      this.briefingForm.controls.presentation.setValue(briefing.presentation)
+      this.briefingForm.controls.budget.setValue(briefing.budget.toString().replace('.',','))
+      this.briefingForm.controls.presentations.setValue(briefing.presentations)
       this.briefingForm.controls.approval_expectation_rate.setValue(briefing.approval_expectation_rate)
       snackBarStateCharging.dismiss()
+
+      this.briefingForm.controls.files = this.formBuilder.array([])
+
+      for(var i = 0; i < briefing.files.length; i++) {
+        this.addFile(briefing.files[i].filename)
+      }
     })
   }
 
@@ -262,6 +300,23 @@ export class BriefingFormComponent implements OnInit {
     return agency.fantasy_name
   }
 
+  addFile(file?: string) {
+    const files = <FormArray>this.briefingForm.controls['files']
+
+    files.push(this.formBuilder.group({
+      name: this.formBuilder.control({value : (file ? file : ''), disabled: (this.typeForm === 'show' ? true : false)}),
+    }))
+  }
+
+  deleteFile(i) {
+    const files = <FormArray>this.briefingForm.controls['files']
+    files.removeAt(i)
+  }
+
+  getFilesControls() {
+    return (<FormArray>this.briefingForm.get('files')).controls
+  }
+
   save() {
     this.briefingForm.updateValueAndValidity()
     let briefing = this.briefingForm.value
@@ -274,8 +329,14 @@ export class BriefingFormComponent implements OnInit {
     }
 
     this.briefingService.save(briefing).subscribe(data => {
-      this.snackBar.open(data.message, '', {
+      let snack = this.snackBar.open(data.message, '', {
         duration: 5000
+      })
+
+      snack.afterDismissed().subscribe(() => {
+        if(data.status) {
+          this.router.navigateByUrl('/schedule')
+        }
       })
     })
   }

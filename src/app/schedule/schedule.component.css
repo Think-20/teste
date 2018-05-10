@@ -1,0 +1,57 @@
+.mat-column-date {
+  width: 5%;
+}
+.mat-column-job {
+  width: 10%;
+}
+.mat-column-type {
+  width: 10%;
+}
+.mat-column-event {
+  width: 10%;
+}
+.mat-column-agency {
+  width: 20%;
+}
+.mat-column-budget {
+  width: 10%;
+}
+.mat-column-deadline {
+  width: 8%;
+}
+.mat-column-attendance {
+  width: 13%;
+}
+.mat-column-creation {
+  width: 13%;
+}
+
+.schedule-card {
+  padding: 0;
+}
+
+.schedule-table {
+  margin-bottom: 0;
+  overflow-x: scroll;
+}
+
+.schedule-table .mat-cell, .schedule-table .mat-header-cell {
+  font-size: 12px;
+  text-align: center;
+  padding: 10px;
+}
+
+.schedule-table .mat-row, .schedule-table .mat-header-row {
+  width: 150%;
+}
+
+.schedule-table::-webkit-scrollbar {
+    border-radius: 9px;
+    width: 8px;
+    height: 12px;
+}
+
+.schedule-table::-webkit-scrollbar-thumb {
+    border-radius: 9px;
+    background-color: rgba(231,230,239,0.5);
+}

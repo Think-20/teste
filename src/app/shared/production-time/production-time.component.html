@@ -1,12 +1,12 @@
 <div class="production-time-container">
   <div class="label">{{label}}</div>
-  <div class="label text-right" *ngIf="rate > 0">{{rate - 1}} dias</div>
+  <div class="label text-right" *ngIf="rate > 0">{{this.input.value}} dia(s)</div>
   <div class="production-time-content">
     <span (mouseenter)="mouseEnter(i)" 
     (mouseleave)="mouseLeave()" 
     (click)="defineRate(i)"
     class="production-time"
-    [class.selected]="rate > i"
+    [class.selected]="rate >= i"
     [style.width]="100/max + '%'"
     *ngFor="let i of rates">
     </span>

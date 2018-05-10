@@ -103,6 +103,7 @@ import { TimecardApprovalsComponent } from './timecard/timecard-approvals/timeca
 import { TimecardPlaceService } from './timecard/timecard-place/timecard-place.service';
 import { BriefingLevelService } from './briefing-level/briefing-level.service';
 import { BriefingMainExpectationService } from './briefing-main-expectation/briefing-main-expectation.service';
+import { ScheduleComponent } from './schedule/schedule.component';
 
 @NgModule({
   declarations: [
@@ -158,7 +159,8 @@ import { BriefingMainExpectationService } from './briefing-main-expectation/brie
     TimecardComponent,
     TimecardFormComponent,
     TimecardListComponent,
-    TimecardApprovalsComponent
+    TimecardApprovalsComponent,
+    ScheduleComponent
   ],
   imports: [
     BrowserModule,

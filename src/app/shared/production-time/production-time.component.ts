@@ -23,24 +23,25 @@ export class ProductionTimeComponent implements OnInit {
     for(var i = 1; i <= this.max; i++) {
       this.rates.push(i);
     }
+    this.input.setValue(this.rate.toString())
   }
 
   changeRate(newValue: number) {
     if(this.readonly) return
 
     this.rate = newValue
-    
+
     if(newValue === 0) {
-      this.input.setValue('') 
+      this.input.setValue('')
     } else {
-      this.input.setValue((this.rate - 1).toString())
+      this.input.setValue(this.rate.toString())
     }
   }
 
   mouseEnter(index: number): void {
     if(this.readonly) return
     this.temp = this.rate
-    this.changeRate(index + 1)
+    this.changeRate(index)
   }
 
   mouseLeave(): void {
@@ -51,10 +52,10 @@ export class ProductionTimeComponent implements OnInit {
   defineRate(index: number) {
     if(this.readonly) return
     /* Zerar valor do rate, caso a estrela clicada já tenha valor */
-    if(this.temp === index + 1) {
+    if(this.temp === index) {
       this.changeRate(0)
     } else {
-    this.changeRate(index + 1)
+      this.changeRate(index)
       this.temp = null
     }
   }

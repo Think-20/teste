@@ -28,20 +28,19 @@ export class Briefing {
     creation_id: number
     creation: Employee
     rate: number
+    budget: number
     estimated_time: number
     competition_id: number
     last_provider: string
     competition: BriefingCompetition
-    latest_mounts_file: string
+    files: any[]
     main_expectation_id?: number
     main_expectation?: BriefingMainExpectation
-    level_id?: number
-    level?: BriefingLevel
     how_come_id?: number
     how_come?: BriefingHowCome
     available_date: string
-    presentation_id?: number
-    presentation?: BriefingPresentation
+    presentations?: BriefingPresentation
+    levels?: BriefingLevel
     approval_expectation_rate: number
     stand?: Stand
     created_at: string
