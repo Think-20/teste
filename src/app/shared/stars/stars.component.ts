@@ -24,9 +24,9 @@ export class StarsComponent implements OnInit {
     if(this.readonly) return
 
     this.rate = newValue
-    
+
     if(newValue === 0) {
-      this.input.setValue('') 
+      this.input.setValue('')
     } else {
       this.input.setValue((this.rate - 1).toString())
     }

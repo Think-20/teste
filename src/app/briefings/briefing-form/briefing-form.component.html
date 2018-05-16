@@ -29,6 +29,20 @@
           </mat-option>
         </mat-select>
         <mat-input-container class="col-md-3">
+          <input matInput formControlName="agency" [matAutocomplete]="autocompleteAgency" placeholder="Agência">
+          <mat-error>
+            Obrigatório
+          </mat-error>
+          <a [routerLink]="['/clients/new']" target="_blank" class="button-inner-mat-input" mat-button>
+            <mat-icon>add</mat-icon>
+          </a>
+        </mat-input-container>
+        <mat-autocomplete #autocompleteAgency="matAutocomplete" [displayWith]="displayAgency">
+            <mat-option *ngFor="let agency of agencies" [value]="agency">
+              {{ agency.fantasy_name }}
+            </mat-option>
+        </mat-autocomplete>
+        <mat-input-container class="col-md-3" *ngIf="briefingForm.controls.client.enabled">
           <input matInput formControlName="client" [matAutocomplete]="autocompleteclient" placeholder="Cliente*">
           <mat-error>
             Obrigatório
@@ -42,20 +56,12 @@
               {{ client.fantasy_name }}
             </mat-option>
         </mat-autocomplete>
-        <mat-input-container class="col-md-3">
-          <input matInput formControlName="agency" [matAutocomplete]="autocompleteAgency" placeholder="Agência*">
+        <mat-input-container class="col-md-3" *ngIf="briefingForm.controls.not_client.enabled">
+          <input formControlName="not_client" matInput placeholder="Cliente*">
           <mat-error>
-            Obrigatório
+            Obrigatório, entre 3 e 100 caract.
           </mat-error>
-          <a [routerLink]="['/clients/new']" target="_blank" class="button-inner-mat-input" mat-button>
-            <mat-icon>add</mat-icon>
-          </a>
         </mat-input-container>
-        <mat-autocomplete #autocompleteAgency="matAutocomplete" [displayWith]="displayAgency">
-            <mat-option *ngFor="let agency of agencies" [value]="agency">
-              {{ agency.fantasy_name }}
-            </mat-option>
-        </mat-autocomplete>
         <mat-input-container class="col-md-3">
           <input formControlName="event" matInput placeholder="Evento*">
           <mat-error>
@@ -79,8 +85,8 @@
             {{ creation.name }}
           </mat-option>
         </mat-select>
-        <cb-stars class="col-md-3 star-input" label="Score" [rate]="briefing != undefined ? (briefing.rate + 1) : 0" [input]="briefingForm.controls.rate">
-            <input formControlName="rate" matInput>
+        <cb-stars class="col-md-3 star-input" label="Score"  [rate]="briefing != undefined ? (briefing.rate + 1) : 0" [input]="briefingForm.controls.rate">
+          <input formControlName="rate" matInput>
         </cb-stars>
       </div>
     </mat-card>
@@ -122,7 +128,7 @@
             {{ presentation.description }}
           </mat-option>
         </mat-select>
-        <cb-stars class="col-md-3 star-input" label="Expectativa de aprovação" [rate]="briefing != undefined ? (briefing.approval_expectation_rate + 1) : 0" [input]="briefingForm.controls.approval_expectation_rate">
+        <cb-stars class="col-md-3 star-input" label="Expectativa de aprovação*" [rate]="briefing != undefined ? (briefing.approval_expectation_rate + 1) : 0" [input]="briefingForm.controls.approval_expectation_rate">
             <input formControlName="approval_expectation_rate" matInput>
         </cb-stars>
         <mat-input-container class="col-md-3">

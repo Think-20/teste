@@ -49,7 +49,7 @@
               {{ briefingService.showId(briefing) }}
             </div>
             <div class="mat-cell mat-column-client">
-              {{ briefing.client.fantasy_name }}
+              {{ briefing.client ? briefing.client.fantasy_name : briefing.not_client }}
             </div>
             <div class="mat-cell mat-column-event">
               {{ briefing.event }}

@@ -81,7 +81,7 @@ export class BriefingFormComponent implements OnInit {
       id: this.formBuilder.control({value: '', disabled: true}),
       job: this.formBuilder.control('', [Validators.required]),
       main_expectation: this.formBuilder.control('', [Validators.required]),
-      client: this.formBuilder.control('', [Validators.required]),
+      client: this.formBuilder.control(''),
       event: this.formBuilder.control('', [
         Validators.required,
         Validators.minLength(3),
@@ -92,6 +92,7 @@ export class BriefingFormComponent implements OnInit {
         Validators.minLength(3),
         Validators.maxLength(100)
       ]),
+      not_client: this.formBuilder.control(''),
       budget: this.formBuilder.control('', [
         Validators.required,
         Validators.pattern(Patterns.float),
@@ -102,7 +103,7 @@ export class BriefingFormComponent implements OnInit {
       estimated_time: this.formBuilder.control('', [Validators.required]),
       how_come: this.formBuilder.control('', [Validators.required]),
       job_type: this.formBuilder.control('', [Validators.required]),
-      agency: this.formBuilder.control('', [Validators.required]),
+      agency: this.formBuilder.control(''),
       attendance: this.formBuilder.control('', [Validators.required]),
       creation: this.formBuilder.control('', [Validators.required]),
       rate: this.formBuilder.control(''),
@@ -111,9 +112,11 @@ export class BriefingFormComponent implements OnInit {
       levels: this.formBuilder.control('', [Validators.required]),
       competition: this.formBuilder.control('', [Validators.required]),
       files: this.formBuilder.array([]),
-      approval_expectation_rate: this.formBuilder.control(''),
+      approval_expectation_rate: this.formBuilder.control('', [Validators.required]),
       think_history: this.formBuilder.control('')
     })
+
+    this.briefingForm.controls.not_client.disable()
 
     this.briefingForm.get('client').valueChanges
     .do(clientName => {
@@ -140,7 +143,14 @@ export class BriefingFormComponent implements OnInit {
     })
     .debounceTime(500)
     .subscribe(name => {
-      if(name == '' || isObject(name)) {
+      if(isObject(name)) {
+        this.enableNotClient()
+        snackBarStateCharging.dismiss()
+        return;
+      }
+
+      if(name == '') {
+        this.disableNotClient()
         snackBarStateCharging.dismiss()
         return;
       }
@@ -183,6 +193,26 @@ export class BriefingFormComponent implements OnInit {
         })
       }
     })
+  }
+
+  enableNotClient() {
+    this.briefingForm.controls.not_client.enable()
+    this.briefingForm.controls.not_client.setValidators([
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(100)
+    ])
+    this.briefingForm.controls.client.disable()
+    this.briefingForm.controls.client.clearValidators()
+  }
+
+  disableNotClient() {
+    this.briefingForm.controls.not_client.disable()
+    this.briefingForm.controls.not_client.clearValidators()
+    this.briefingForm.controls.client.enable()
+    this.briefingForm.controls.client.setValidators([
+      Validators.required
+    ])
   }
 
   uploadFile(inputFile: HTMLInputElement) {

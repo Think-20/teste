@@ -93,6 +93,22 @@ export class ScheduleComponent implements OnInit {
     })
   }
 
+  price(price: number) {
+    if(price == 0) {
+      return '0,00'
+    }
+
+    let formatedPrice: string = price.toString().replace('.',',')
+    
+    for(let i = (price.toString().length - 4); i >= 0; i--) {
+      if(i != 6 && ((i - 3) % 3 == 0) && formatedPrice.charAt(i - 1) != '') {
+        formatedPrice = formatedPrice.slice(0, i) + '.' + formatedPrice.slice(i, formatedPrice.toString().length)
+      }
+    }
+
+    return formatedPrice
+  }
+
   compareAttendance(var1: Employee, var2: Employee) {
     return var1.id === var2.id
   }

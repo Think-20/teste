@@ -1,8 +1,9 @@
 <div class="stars-container">
-  <div class="label">{{label}}</div>
+  <div class="label mat-input-placeholder"
+  [class.label-invalid]="input.invalid && input.touched">{{label}}</div>
   <div class="stars-content">
-    <mat-icon (mouseenter)="mouseEnter(i)" 
-    (mouseleave)="mouseLeave()" 
+    <mat-icon (mouseenter)="mouseEnter(i)"
+    (mouseleave)="mouseLeave()"
     (click)="defineRate(i)"
     class="star"
     *ngFor="let i of rates">

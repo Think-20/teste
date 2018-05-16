@@ -9,19 +9,25 @@
           <div class="mat-header-cell mat-column-date">Data</div>
           <div class="mat-header-cell mat-column-job">Job</div>
           <div class="mat-header-cell mat-column-type">Tipo</div>
+          <div class="mat-header-cell mat-column-client">Cliente</div>
           <div class="mat-header-cell mat-column-event">Evento</div>
+          <div class="mat-header-cell mat-column-event-date">Data do evento</div>
           <div class="mat-header-cell mat-column-agency">Agência</div>
           <div class="mat-header-cell mat-column-budget">Verba</div>
+          <div class="mat-header-cell mat-column-propo">Proposta</div>
+          <div class="mat-header-cell mat-column-area">Área</div>
           <div class="mat-header-cell mat-column-deadline">Deadline</div>
-          <div class="mat-header-cell mat-column-attendance">Atendimento</div>
+          <div class="mat-header-cell mat-column-attendance">Atend.</div>
           <div class="mat-header-cell mat-column-creation">Criação</div>
+          <div class="mat-header-cell mat-column-stat">Status</div>
           <!--
           <div class="mat-header-cell mat-column-action">Ação</div>
           -->
         </div>
-        <div class="mat-row" *ngFor="let briefing of briefings" [@rowAppeared]="rowAppearedState">
+        <div class="mat-row" *ngFor="let briefing of briefings; let i = index" [@rowAppeared]="rowAppearedState"
+          [class.other-date]="briefing.available_date != briefings[(i - 1)]?.available_date">
           <div class="mat-cell mat-column-date">
-            {{ briefing.available_date | date:'dd/MM' }}
+            {{ i == 0 || briefing.available_date != briefings[(i - 1)]?.available_date ? (briefing.available_date | date:'dd/MM') : '' }}
           </div>
           <div class="mat-cell mat-column-job">
             {{ briefing.job.description }}
@@ -29,14 +35,26 @@
           <div class="mat-cell mat-column-type">
             {{ briefing.job_type.description }}
           </div>
+          <div class="mat-cell mat-column-client">
+            {{ briefing.client ? briefing.client.fantasy_name : briefing.not_client }}
+          </div>
           <div class="mat-cell mat-column-event">
             {{ briefing.event }}
           </div>
+          <div class="mat-cell mat-column-event-date">
+            &nbsp;
+          </div>
           <div class="mat-cell mat-column-agency">
-            {{ briefing.agency.fantasy_name }}
+            {{ briefing.agency ? briefing.agency.fantasy_name : '' }}
           </div>
           <div class="mat-cell mat-column-budget">
-            {{ briefing.budget | currency:'BRL':true }}
+            {{ price(briefing.budget) }}
+          </div>
+          <div class="mat-cell mat-column-propo">
+            &nbsp;
+          </div>
+          <div class="mat-cell mat-column-area">
+            &nbsp;
           </div>
           <div class="mat-cell mat-column-deadline">
             {{ briefing.deadline | date:'dd/MM' }}
@@ -46,6 +64,9 @@
           </div>
           <div class="mat-cell mat-column-creation">
             {{ briefing.creation.name }}
+          </div>
+          <div class="mat-cell mat-column-stat">
+            &nbsp;
           </div>
           <!--
           <div class="mat-cell mat-column-action">

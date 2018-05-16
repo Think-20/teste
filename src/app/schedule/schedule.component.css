@@ -2,28 +2,43 @@
   width: 5%;
 }
 .mat-column-job {
-  width: 10%;
+  width: 8%;
 }
 .mat-column-type {
-  width: 10%;
+  width: 8%;
 }
 .mat-column-event {
-  width: 10%;
+  width: 7%;
+}
+.mat-column-event-date {
+  width: 7%;
+}
+.mat-column-client {
+  width: 8%;
 }
 .mat-column-agency {
-  width: 20%;
+  width: 8%;
 }
 .mat-column-budget {
-  width: 10%;
+  width: 7%;
 }
 .mat-column-deadline {
   width: 8%;
 }
 .mat-column-attendance {
-  width: 13%;
+  width: 8%;
 }
 .mat-column-creation {
-  width: 13%;
+  width: 8%;
+}
+.mat-column-propo {
+  width: 8%;
+}
+.mat-column-stat {
+  width: 6%;
+}
+.mat-column-area {
+  width: 5%;
 }
 
 .schedule-card {
@@ -36,13 +51,18 @@
 }
 
 .schedule-table .mat-cell, .schedule-table .mat-header-cell {
-  font-size: 12px;
+  font-size: 10px;
   text-align: center;
-  padding: 10px;
+  padding: 5px;
+  min-height: 40px;
 }
 
-.schedule-table .mat-row, .schedule-table .mat-header-row {
-  width: 150%;
+.other-date {
+  border-top: 1px solid #ccc !important;
+}
+
+.schedule-table .mat-header-cell {
+  font-size: 9px;
 }
 
 .schedule-table::-webkit-scrollbar {

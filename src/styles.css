@@ -263,6 +263,7 @@ mat-card-title > p {
 .mat-header-cell {
   padding-top: 15px;
   padding-bottom: 15px;
+  text-transform: uppercase;
 }
 
 .mat-row::after, .mat-header-row::after {
