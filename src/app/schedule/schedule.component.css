@@ -2,7 +2,7 @@
   width: 5%;
 }
 .mat-column-job {
-  width: 8%;
+  width: 9%;
 }
 .mat-column-type {
   width: 8%;
@@ -14,7 +14,7 @@
   width: 7%;
 }
 .mat-column-client {
-  width: 8%;
+  width: 10%;
 }
 .mat-column-agency {
   width: 8%;
@@ -29,13 +29,13 @@
   width: 8%;
 }
 .mat-column-creation {
-  width: 8%;
+  width: 9%;
 }
 .mat-column-propo {
-  width: 8%;
+  width: 9%;
 }
 .mat-column-stat {
-  width: 6%;
+  width: 7%;
 }
 .mat-column-area {
   width: 5%;
@@ -43,26 +43,55 @@
 
 .schedule-card {
   padding: 0;
+  background: transparent;
 }
 
 .schedule-table {
   margin-bottom: 0;
-  overflow-x: scroll;
+  background: transparent;
+}
+
+.line-chrono {
+  background-color: white;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+
+.line-chrono:first-child {
+  border-top: 0 !important;
+}
+
+.line-briefings {
+  width: 100%;
+}
+
+.line-briefing {
+  display: flex;
+  border-bottom: 1px solid #ccc;
+}
+
+.line-briefing:last-child {
+  border-bottom: 0;
+}
+
+.day-chrono {
+  align-self: stretch;
+  border-right: 1px solid #ccc;
+  justify-content: center;
+  display: flex;
+  align-items: center;
 }
 
 .schedule-table .mat-cell, .schedule-table .mat-header-cell {
-  font-size: 10px;
+  font-size: 12px;
   text-align: center;
-  padding: 5px;
   min-height: 40px;
-}
-
-.other-date {
-  border-top: 1px solid #ccc !important;
+  padding: 3px;
 }
 
 .schedule-table .mat-header-cell {
-  font-size: 9px;
+  font-size: 11px;
+  background-color: white;
 }
 
 .schedule-table::-webkit-scrollbar {

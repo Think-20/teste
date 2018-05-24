@@ -1,5 +1,5 @@
 <div id="my-master-container">
-    <cb-sidenav #sidenav opened="opened"></cb-sidenav>
+    <cb-sidenav #sidenav opened="opened" [class.opened]="sidenav.opened"></cb-sidenav>
     <div id="my-second-container">
         <cb-navbar (toggleMenuEmitter)="sidenav.toggleMenu()"></cb-navbar>
         <div id="container-box" class="my-container">

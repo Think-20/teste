@@ -3,26 +3,34 @@
     padding: 5px 15px;
 }
 
+cb-sidenav.opened {
+    width: 17.5%;
+    flex: 17.5%;
+}
+
 #container-box > .row,
 #container-box > .row > .col-md-8,
 #container-box > .row > .col-md-4 {
     height: 100%;
-    overflow: auto;
-}
-
-#container-box > .row > .col-md-8 {
-    padding-bottom: 250px;
+    overflow: auto;             
 }
 
 #timeline-container {
-    width: 100%;
-    max-width: 250px;
+    max-width: 21.25%;
+    padding: 0;
 }
 
 #all-container {
-    max-width: calc(100% - 250px);
-    width: 100%;
-    flex: 100%;
+    padding: 0;
+    width: 78.75%;
+    flex: 78.75%;
+    max-width: 78.75%;
+}
+
+@media screen and (min-width: 900px) {
+    #container-box > .row > .col-md-8 {
+        padding-bottom: 250px;
+    }
 }
 
 

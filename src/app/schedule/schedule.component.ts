@@ -39,6 +39,7 @@ export class ScheduleComponent implements OnInit {
   attendances: Employee[]
   searching = false
   filter = false
+  chrono = [{}]
 
   constructor(
     private fb: FormBuilder,
@@ -67,30 +68,48 @@ export class ScheduleComponent implements OnInit {
       this.pagination = pagination
       this.searching = false
       this.briefings = pagination.data
+      this.chronologicDisplay()
       snackBar.dismiss()
     })
+  }
 
-    this.searchForm.controls.attendance.valueChanges
-      .do(() => this.searching = true)
-      .debounceTime(500)
-      .subscribe(value => {
-        this.briefingService.briefings().subscribe(pagination => {
-          this.pagination = pagination
-          this.searching = false
-          this.briefings = pagination.data
-        })
-    })
+  chronologicDisplay() {
+    let i: number = 0
+    let date: Date = new Date()
+    let thisMonth: number = date.getMonth()
+    let days: number[]
 
-    this.search.valueChanges
-      .do(() => this.searching = true)
-      .debounceTime(500)
-      .subscribe(value => {
-        this.briefingService.briefings(value).subscribe(pagination => {
-          this.pagination = pagination
-          this.searching = false
-          this.briefings = pagination.data
+    console.log(date, thisMonth)
+
+    date.setDate(1)
+
+    while(date.getMonth() == thisMonth) {
+      if(date.getDay() > 0 && date.getDay() < 6) {
+        let briefings = this.briefings.filter((briefing) => {
+          let briefingDate = new Date(Date.parse(briefing.available_date + 'T00:00:00'))
+          console.log(briefingDate, briefing.available_date)
+          return briefingDate.getDate() == date.getDate()
+            && briefingDate.getMonth() == date.getMonth()
         })
-    })
+
+        if(briefings.length < 6) {
+          let length = briefings.length
+          for(let y = 0; y < (5 - length); y++) {
+            briefings.push(new Briefing())
+          }
+        }
+
+        this.chrono[i] = {
+          day: date.getDate(),
+          weekDay: date.getDay(),
+          briefings: briefings          
+        }
+
+        i++
+      }
+
+      date.setDate(date.getDate() + 1)
+    }
   }
 
   price(price: number) {
@@ -99,7 +118,7 @@ export class ScheduleComponent implements OnInit {
     }
 
     let formatedPrice: string = price.toString().replace('.',',')
-    
+
     for(let i = (price.toString().length - 4); i >= 0; i--) {
       if(i != 6 && ((i - 3) % 3 == 0) && formatedPrice.charAt(i - 1) != '') {
         formatedPrice = formatedPrice.slice(0, i) + '.' + formatedPrice.slice(i, formatedPrice.toString().length)
@@ -107,10 +126,6 @@ export class ScheduleComponent implements OnInit {
     }
 
     return formatedPrice
-  }
-
-  compareAttendance(var1: Employee, var2: Employee) {
-    return var1.id === var2.id
   }
 
   changePage($event) {

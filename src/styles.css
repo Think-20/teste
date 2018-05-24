@@ -123,17 +123,8 @@ button {
 }
 
 #my-second-container {
-    flex: 1 75%;
+    flex: 1 82.5%;
     max-height: 100%;
-}
-
-#sidenav-container {
-  height: 100%;
-}
-
-#sidenav {
-  height: 100%;
-  width: 300px;
 }
 
 #container-box > .row > .col-md-8::-webkit-scrollbar,
