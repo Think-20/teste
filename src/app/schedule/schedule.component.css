@@ -41,6 +41,11 @@
   width: 5%;
 }
 
+.add-chrono {
+  padding: 0;
+  margin-top: 15px;
+}
+
 .schedule-card {
   padding: 0;
   background: transparent;

@@ -163,6 +163,9 @@ export const ROUTES: Routes = [
                         path: 'new', component: BriefingFormComponent, canActivate: [AuthGuard]
                     },
                     {
+                        path: 'new/:available_date', component: BriefingFormComponent, canActivate: [AuthGuard]
+                    },
+                    {
                         path: 'edit/:id', component: BriefingFormComponent, canActivate: [AuthGuard]
                     },
                     {

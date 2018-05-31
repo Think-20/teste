@@ -1,5 +1,5 @@
 <div class="my-container">
-  <h3 class="lead">Cronograma</h3>
+  <h3 class="lead">Cronograma - {{ month.name }}</h3>
 </div>
 <div class="col-md-12">
   <mat-card class="schedule-card">
@@ -24,12 +24,24 @@
           <div class="mat-header-cell mat-column-action">Ação</div>
           -->
         </div>
-        <div class="mat-row line-chrono" *ngFor="let chr of chrono; let i = index" [@rowAppeared]="rowAppearedState">
-          <div class="mat-cell mat-column-date day-chrono">
-            <span>{{ chr.day }}</span>
+        <div #list class="mat-row line-chrono" *ngFor="let chr of chrono; let i = index" [@rowAppeared]="rowAppearedState">
+          <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }}">
+            <div>
+              <span>{{ chr.day }}</span>
+              <button class="cb-button add-chrono" (click)="addBriefing(chr.day)">
+                <mat-icon>+</mat-icon>
+              </button>
+            </div>
           </div>
           <div class="line-briefings">
-            <div class="line-briefing" *ngFor="let briefing of chrono[i].briefings">
+            <div #line class="line-briefing" *ngFor="let briefing of chrono[i].briefings"
+              draggable="true"
+              (mousedown)="presetDrag(line)"
+              (dragstart)="startDrag($event, briefing)"
+              (drop)="onDrop($event, chrono[i])"
+              (dragover)="onDragOver($event)"
+              (dragend)="finishDrag($event, chrono[i])"
+            >
               <div class="mat-cell mat-column-job">
                 {{ briefing.job?.description }}
               </div>
@@ -68,7 +80,7 @@
               </div>
               <div class="mat-cell mat-column-stat">
                 {{ briefing.status }}
-              </div> 
+              </div>
             </div>
           </div>
           <!--
@@ -116,120 +128,3 @@
     </div>
   </mat-card>
 </div>
-
-<!--
-<div class="col-md-12">
-  <mat-card class="schedule-card">
-    <div *ngIf="briefings?.length > 0">
-      <table class="table mat-table schedule-table">
-        <div class="mat-header-row">
-          <div class="mat-header-cell mat-column-date">Data</div>
-          <div class="mat-header-cell mat-column-job">Job</div>
-          <div class="mat-header-cell mat-column-type">Tipo</div>
-          <div class="mat-header-cell mat-column-client">Cliente</div>
-          <div class="mat-header-cell mat-column-event">Evento</div>
-          <div class="mat-header-cell mat-column-event-date">Data do evento</div>
-          <div class="mat-header-cell mat-column-agency">Agência</div>
-          <div class="mat-header-cell mat-column-budget">Verba</div>
-          <div class="mat-header-cell mat-column-propo">Proposta</div>
-          <div class="mat-header-cell mat-column-area">Área</div>
-          <div class="mat-header-cell mat-column-deadline">Deadline</div>
-          <div class="mat-header-cell mat-column-attendance">Atend.</div>
-          <div class="mat-header-cell mat-column-creation">Criação</div>
-          <div class="mat-header-cell mat-column-stat">Status</div>
-          <div class="mat-header-cell mat-column-action">Ação</div>
-        </div>
-        <div class="mat-row" *ngFor="let briefing of briefings; let i = index" [@rowAppeared]="rowAppearedState"
-          [class.other-date]="briefing.available_date != briefings[(i - 1)]?.available_date">
-          <div class="mat-cell mat-column-date">
-            {{ i == 0 || briefing.available_date != briefings[(i - 1)]?.available_date ? (briefing.available_date | date:'dd/MM') : '' }}
-          </div>
-          <div class="mat-cell mat-column-job">
-            {{ briefing.job.description }}
-          </div>
-          <div class="mat-cell mat-column-type">
-            {{ briefing.job_type.description }}
-          </div>
-          <div class="mat-cell mat-column-client">
-            {{ briefing.client ? briefing.client.fantasy_name : briefing.not_client }}
-          </div>
-          <div class="mat-cell mat-column-event">
-            {{ briefing.event }}
-          </div>
-          <div class="mat-cell mat-column-event-date">
-            &nbsp;
-          </div>
-          <div class="mat-cell mat-column-agency">
-            {{ briefing.agency ? briefing.agency.fantasy_name : '' }}
-          </div>
-          <div class="mat-cell mat-column-budget">
-            {{ price(briefing.budget) }}
-          </div>
-          <div class="mat-cell mat-column-propo">
-            &nbsp;
-          </div>
-          <div class="mat-cell mat-column-area">
-            &nbsp;
-          </div>
-          <div class="mat-cell mat-column-deadline">
-            {{ briefing.deadline | date:'dd/MM' }}
-          </div>
-          <div class="mat-cell mat-column-attendance">
-            {{ briefing.attendance.name }}
-          </div>
-          <div class="mat-cell mat-column-creation">
-            {{ briefing.creation.name }}
-          </div>
-          <div class="mat-cell mat-column-stat">
-            {{ briefing.status }}
-          </div>
-          <div class="mat-cell mat-column-action">
-            <mat-menu #menu="matMenu">
-              <a [routerLink]="['/briefings/show', briefing.id]" mat-menu-item>
-                <mat-icon>subject</mat-icon> Visualização
-              </a>
-              <a [routerLink]="['/briefings/edit', briefing.id]" mat-menu-item>
-                <mat-icon>mode_edit</mat-icon> Editar
-              </a>
-              <button (click)="delete(briefing)" mat-menu-item>
-                <mat-icon>delete</mat-icon> Remover
-              </button>
-            </mat-menu>
-
-            <button mat-icon-button [matMenuTriggerFor]="menu">
-              <mat-icon>menu</mat-icon>
-            </button>
-          </div>
-        </div>
-      </table>
-    </div>
-    <div *ngIf="searching" class="col-md-12 records-not-found">
-      <p>
-        <small>
-          Aguarde...
-        </small>
-      </p>
-    </div>
-    <div *ngIf="briefings.length == 0 && searchForm.controls.search.value != '' && !searching" class="col-md-12 records-not-found">
-      <p>
-        <small>
-          Não encontramos resultados para sua busca. :(
-        </small>
-      </p>
-    </div>
-    <div *ngIf="briefings.length == 0 && searchForm.controls.search.value == '' && !searching" class="col-md-12 records-not-found">
-      <p>
-        <small>
-          Ainda não existe nenhum briefing cadastrado. Que tal <a [routerLink]="['/briefings/new']">cadastrar</a> agora?
-        </small>
-      </p>
-    </div>
-  </mat-card>
-  <mat-paginator *ngIf="briefings"
-    [length]="pagination?.total"
-    [pageSize]="pagination?.per_page"
-    [pageSizeOptions]="[20]"
-    (page)="changePage($event)"
-  ></mat-paginator>
-</div>
--->

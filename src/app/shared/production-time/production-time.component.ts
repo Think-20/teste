@@ -20,7 +20,7 @@ export class ProductionTimeComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    for(var i = 1; i <= this.max; i++) {
+    for(var i = 0.5; i <= this.max; i += 0.5) {
       this.rates.push(i);
     }
     this.input.setValue(this.rate.toString())

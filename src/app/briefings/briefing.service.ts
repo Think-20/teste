@@ -41,13 +41,29 @@ export class BriefingService {
           })
     }
 
-    briefings(query: string = '', page: number = 0): Observable<Pagination> {
-        let url = query === '' ? `briefings/all?page=${page}` : `briefings/filter/${query}?page=${page}`
+    recalculateNextDate(nextEstimatedTime): Observable<any> {
+      let url = `briefings/recalculate-next-date/${nextEstimatedTime}`
+
+      return this.http.get(`${API}/${url}`)
+          .map(response => response.json())
+          .catch((err) => {
+              this.snackBar.open(ErrorHandler.message(err), '', {
+                  duration: 3000
+              })
+              return ErrorHandler.capture(err)
+          })
+    }
+
+    briefings(params?: {}, page: number = 0): Observable<Pagination> {
+        let url = params === {} ? `briefings/all?page=${page}` : `briefings/filter?page=${page}`
         let prefix = this.auth.hasAccess('briefings/all') ? '' : 'my-'
 
         url = prefix + url
 
-        return this.http.get(`${API}/${url}`)
+        return this.http.post(`${API}/${url}`,
+              JSON.stringify(params),
+              new RequestOptions()
+            )
             .map(response => response.json())
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {

@@ -39,7 +39,7 @@ import { Router } from '@angular/router';
 })
 @Injectable()
 export class BriefingFormComponent implements OnInit {
-
+  availableDateParam: string
   typeForm: string
   standItemState = 'hidden'
   briefing: Briefing
@@ -73,6 +73,7 @@ export class BriefingFormComponent implements OnInit {
   ngOnInit() {
     let snackBarStateCharging
     this.typeForm = this.route.snapshot.url[0].path
+    this.availableDateParam = this.typeForm == 'new' ? this.route.snapshot.params['available_date'] : ''
 
     this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
     ? this.authService.currentUser().employee : null
@@ -170,14 +171,27 @@ export class BriefingFormComponent implements OnInit {
       this.jobs = data.jobs
       this.job_types = data.job_types
       this.creations = data.creations
+
+      if(this.availableDateParam == undefined) {
+        this.briefingForm.controls.creation.setValue(data.creation)
+        this.briefingForm.controls.available_date.setValue(data.available_date)
+        this.addListenerEstimatedTime()
+        
+        snackBarStateCharging.dismiss()
+        snackBarStateCharging = this.snackBar.open('Considerando que o tempo de produção seja 1 dia, ' + data.creation.name + ' foi selecionado.', '', {
+          duration: 2000
+        })
+
+      } else {
+        this.briefingForm.controls.available_date.setValue(this.availableDateParam)
+      }
+
       this.attendances = data.attendances
       this.competitions = data.competitions
       this.presentations = data.presentations
       this.main_expectations = data.main_expectations
       this.levels = data.levels
       this.how_comes = data.how_comes
-      this.briefingForm.controls.available_date.setValue(data.available_date)
-      snackBarStateCharging.dismiss()
 
       if(this.typeForm === 'edit') {
         this.loadBriefing()
@@ -192,6 +206,46 @@ export class BriefingFormComponent implements OnInit {
           }).pop())
         })
       }
+    })
+  }
+
+  addListenerEstimatedTime() {
+    let snackBarStateCharging
+
+    this.briefingForm.get('estimated_time').valueChanges
+    .debounceTime(1000)
+    .subscribe(nextEstimatedTime => {
+      snackBarStateCharging = this.snackBar.open('Aguarde...')
+      this.briefingService.recalculateNextDate(nextEstimatedTime).subscribe((response) => {
+        let data = response.data
+        snackBarStateCharging.dismiss()
+        /*
+        let date = new Date(data.available_date)
+        let formatedDate = ''
+
+        if(date.getDate() < 10) {
+          formatedDate += '0' + date.getDate() + '/'
+        } else {
+          formatedDate += date.getDate() + '/'
+        }
+
+        if((date.getMonth() + 1) < 10) {
+          formatedDate += '0' + (date.getMonth() + 1) + '/'
+        } else {
+          formatedDate += (date.getMonth() + 1) + '/'
+        }
+
+        formatedDate += date.getFullYear()
+        */
+
+        this.briefingForm.controls.creation.setValue(data.creation)
+        this.briefingForm.controls.available_date.setValue(data.available_date)
+      
+        snackBarStateCharging = this.snackBar.open('Considerando a mudança no tempo de produção, ' + data.creation.name + ' foi selecionado e a próxima data foi alterada.', '', {
+          duration: 2000
+        })
+      })
+      Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
     })
   }
 
