@@ -1,9 +1,21 @@
 <div class="my-container">
-  <h3 class="lead">Cronograma - {{ month.name }}</h3>
+  <h3 class="lead row">
+    <div class="col-md-6">
+      Cronograma - 
+      <span class="actualMonth" (click)="monthSelect.open()">{{ month.name }}
+        <mat-select class="select-hidden" #monthSelect>
+          <mat-option *ngFor="let month of months" (click)="changeMonth(month)">{{month.name}}</mat-option>
+        </mat-select>
+      </span>
+    </div>
+    <div class="col-md-6">
+      <small>{{ updatedMessage }}</small>
+    </div>
+  </h3>
 </div>
 <div class="col-md-12">
   <mat-card class="schedule-card">
-    <div *ngIf="briefings?.length > 0">
+    <div>
       <table class="table mat-table schedule-table">
         <div class="mat-header-row">
           <div class="mat-header-cell mat-column-date">Data</div>
@@ -27,7 +39,7 @@
         <div #list class="mat-row line-chrono" *ngFor="let chr of chrono; let i = index" [@rowAppeared]="rowAppearedState">
           <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }}">
             <div>
-              <span>{{ chr.day }}</span>
+              <span>{{ chr.day }}-{{ chr.dayOfWeek?.abbrev }}</span>
               <button class="cb-button add-chrono" (click)="addBriefing(chr.day)">
                 <mat-icon>+</mat-icon>
               </button>
@@ -109,20 +121,6 @@
       <p>
         <small>
           Aguarde...
-        </small>
-      </p>
-    </div>
-    <div *ngIf="briefings.length == 0 && searchForm.controls.search.value != '' && !searching" class="col-md-12 records-not-found">
-      <p>
-        <small>
-          Não encontramos resultados para sua busca. :(
-        </small>
-      </p>
-    </div>
-    <div *ngIf="briefings.length == 0 && searchForm.controls.search.value == '' && !searching" class="col-md-12 records-not-found">
-      <p>
-        <small>
-          Ainda não existe nenhum briefing cadastrado. Que tal <a [routerLink]="['/briefings/new']">cadastrar</a> agora?
         </small>
       </p>
     </div>

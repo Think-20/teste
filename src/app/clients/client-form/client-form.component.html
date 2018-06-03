@@ -6,7 +6,7 @@
     <mat-card>
       <div class="row">
           <mat-input-container class="col-md-3">
-            <input (keyup)="ucFirst()" formControlName="fantasy_name" matInput placeholder="Nome*">
+            <input ucWords formControlName="fantasy_name" matInput placeholder="Nome*">
             <mat-error>
               Obrigatório, entre 3 e 50 caract.
             </mat-error>

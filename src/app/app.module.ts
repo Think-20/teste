@@ -18,6 +18,7 @@ import { HeaderModule } from './header/header.module';
 import { LoginModule } from './login/login.module';
 import { AppComponent } from './app.component';
 import { MaskDirective } from './shared/mask.directive';
+import { UcWordsDirective } from './shared/uc-words.directive';
 
 import { HomeComponent } from './home/home.component';
 import { NotificationBarComponent } from './notification-bar/notification-bar.component';
@@ -105,9 +106,14 @@ import { BriefingLevelService } from './briefing-level/briefing-level.service';
 import { BriefingMainExpectationService } from './briefing-main-expectation/briefing-main-expectation.service';
 import { ScheduleComponent } from './schedule/schedule.component';
 
+import { CurrencyMaskModule } from 'ng2-currency-mask';
+import { CURRENCY_MASK_CONFIG } from "ng2-currency-mask/src/currency-mask.config";
+import { CustomCurrencyMaskConfig } from 'app/shared/custom-currency-mask-config';
+
 @NgModule({
   declarations: [
     MaskDirective,
+    UcWordsDirective,
 
     AppComponent,
     HomeComponent,
@@ -163,6 +169,7 @@ import { ScheduleComponent } from './schedule/schedule.component';
     ScheduleComponent
   ],
   imports: [
+    CurrencyMaskModule,
     BrowserModule,
     CompatibilityModule,
     NoConflictStyleCompatibilityMode,
@@ -230,7 +237,8 @@ import { ScheduleComponent } from './schedule/schedule.component';
     {provide: MD_PLACEHOLDER_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
     {provide: LOCALE_ID, useValue: 'pt-BR'},
     {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
-    {provide: MatPaginatorIntl, useClass: PaginatorIntl}
+    {provide: MatPaginatorIntl, useClass: PaginatorIntl},
+    {provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
   ],
   bootstrap: [AppComponent],
   entryComponents: [

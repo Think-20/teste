@@ -9,6 +9,7 @@ import { Pagination } from 'app/shared/pagination.model';
 import { Employee } from '../employees/employee.model';
 import { EmployeeService } from '../employees/employee.service';
 import { Month, MONTHS } from '../shared/date/months';
+import { DAYSOFWEEK } from '../shared/date/days-of-week';
 import { Router } from '@angular/router';
 
 @Component({
@@ -34,9 +35,8 @@ import { Router } from '@angular/router';
 export class ScheduleComponent implements OnInit {
 
   @ViewChildren('list') list: QueryList<any>
+  scrollActivate: boolean = false
   rowAppearedState: string = 'ready'
-  searchForm: FormGroup
-  search: FormControl
   pagination: Pagination
   briefings: Briefing[] = []
   attendances: Employee[]
@@ -44,7 +44,9 @@ export class ScheduleComponent implements OnInit {
   filter = false
   chrono = [{}]
   month: Month
+  months: Month[] = MONTHS
   date: Date
+  updatedMessage: string = ''
 
   briefingDrag: Briefing
   lineBriefing: HTMLElement
@@ -108,47 +110,103 @@ export class ScheduleComponent implements OnInit {
   }
 
   startDrag($event: DragEvent, briefing: Briefing) {
+    return false
+    /*
     let image = this.lineBriefing.cloneNode(true) as HTMLElement
     this.lineBriefing.style.position = 'absolute'
     $event.dataTransfer.setDragImage(image, 0, 0)
+    */
   }
 
   ngAfterViewInit() {
     this.list.changes.subscribe(() => {
-      console.log('atualizado')
-      this.scrollToDate()
+      if(this.scrollActivate)
+        this.scrollToDate()
     })
   }
 
   ngOnInit() {
     this.date = new Date()
     this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
+    this.scrollActivate = true
+    this.changeMonth(this.month)    
+    this.scrollActivate = false
+  }
 
-    this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
-      search: this.search,
-      attendance: this.fb.control('')
-    })
-
+  changeMonth(month: Month) {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando briefings...')
+    this.month = month
+    let iniDate = this.date.getUTCFullYear() + '-' + (month.id) + '-01'
+    let finDate = this.date.getUTCFullYear() + '-' + (month.id) + '-31'
 
     this.briefingService.briefings({
-        iniDate: this.date.getUTCFullYear() + '-' + (this.date.getMonth() + 1) + '-01',
-        finDate: this.date.getUTCFullYear() + '-' + (this.date.getMonth() + 1) + '-31',
+        iniDate: iniDate,
+        finDate: finDate,
         paginate: false
     }).subscribe(pagination => {
       this.pagination = pagination
       this.searching = false
       this.briefings = pagination.data
-      this.chronologicDisplay()
+      this.chronologicDisplay(iniDate)
+      this.setUpdatedMessage()
       snackBar.dismiss()
     })
   }
 
-  chronologicDisplay() {
+  setUpdatedMessage() {
+    if(this.briefings.length == 0) {
+      this.updatedMessage = 'Sem atualizações'
+      return
+    }
+
+    let sortedBriefings = this.briefings.sort((a,b) => {
+      if(a.updated_at > b.updated_at) {
+        return 1
+      } else if(a.updated_at < b.updated_at) {
+        return -1
+      } else {
+        return 0
+      }
+    })
+
+    let formatedDate = ''
+    let briefing = sortedBriefings[sortedBriefings.length - 1]
+    let date = new Date(briefing.updated_at)
+    
+    if(date.getDate() < 10) {
+      formatedDate += '0' + date.getDate() + '/'
+    } else {
+      formatedDate += date.getDate() + '/'
+    }
+
+    if((date.getUTCMonth() + 1) < 10) {
+      formatedDate += '0' + (date.getUTCMonth() + 1) + '/'
+    } else {
+      formatedDate += (date.getUTCMonth() + 1) + '/'
+    }
+
+    formatedDate += date.getFullYear()
+    formatedDate += ' às '
+    
+    if(date.getHours() < 10) {
+      formatedDate += '0' + date.getHours() + ':'
+    } else {
+      formatedDate += date.getHours() + ':'
+    }
+    
+    if(date.getMinutes() < 10) {
+      formatedDate += '0' + date.getMinutes()
+    } else {
+      formatedDate += date.getMinutes()
+    }
+
+    this.updatedMessage = 'Atualizado ' + formatedDate + ' por ' + briefing.attendance.name
+  }
+
+  chronologicDisplay(iniDate) {
     let i: number = 0
-    let date: Date = new Date()
+    let date: Date = new Date(iniDate)
     let thisMonth: number = date.getMonth()
     let days: number[]
     date.setDate(1)
@@ -170,7 +228,7 @@ export class ScheduleComponent implements OnInit {
 
         this.chrono[i] = {
           day: date.getDate(),
-          weekDay: date.getDay(),
+          dayOfWeek: DAYSOFWEEK.find(dayOfWeek => dayOfWeek.id == date.getDay()),
           briefings: briefings
         }
 
@@ -220,16 +278,6 @@ export class ScheduleComponent implements OnInit {
     }
 
     return formatedPrice
-  }
-
-  changePage($event) {
-    this.searching = true
-    this.briefings = []
-    this.briefingService.briefings(this.search.value, ($event.pageIndex + 1)).subscribe(pagination => {
-      this.pagination = pagination
-      this.briefings = pagination.data
-      this.searching = false
-    })
   }
 
   delete(briefing: Briefing) {

@@ -1,6 +1,31 @@
 .mat-column-date {
   width: 5%;
 }
+
+.mat-column-date > div {
+  display: block;
+}
+
+.mat-column-date > div > span {
+  display: block;
+  width: 100%;
+}
+
+.lead {
+  align-items: baseline;
+}
+
+.lead small {
+  color: rgba(0,0,0,.5);
+  font-weight: 300;
+  text-align: right;
+  display: block;
+}
+
+.actualMonth {
+  cursor: pointer;
+}
+
 .mat-column-job {
   width: 9%;
 }
@@ -39,6 +64,11 @@
 }
 .mat-column-area {
   width: 5%;
+}
+
+.select-hidden {
+  visibility: hidden;
+  margin-left: -40px;
 }
 
 .add-chrono {

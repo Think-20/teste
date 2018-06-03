@@ -96,8 +96,7 @@ export class BriefingFormComponent implements OnInit {
       not_client: this.formBuilder.control(''),
       budget: this.formBuilder.control('', [
         Validators.required,
-        Validators.pattern(Patterns.float),
-        Validators.maxLength(13),
+        Validators.maxLength(13)
       ]),
       deadline: this.formBuilder.control('', [Validators.required]),
       available_date: this.formBuilder.control('', [Validators.required]),
@@ -183,6 +182,7 @@ export class BriefingFormComponent implements OnInit {
         })
 
       } else {
+        snackBarStateCharging.dismiss()
         this.briefingForm.controls.available_date.setValue(this.availableDateParam)
       }
 

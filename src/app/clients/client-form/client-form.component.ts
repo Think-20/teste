@@ -61,7 +61,7 @@ export class ClientFormComponent implements OnInit {
   clientForm: FormGroup
   contactsArray: FormArray
 
-  constructor(
+constructor(
     private stateService: StateService,
     private cityService: CityService,
     private clientTypeService: ClientTypeService,
@@ -217,14 +217,6 @@ export class ClientFormComponent implements OnInit {
         this.addContact(contact)
       }
     })
-  }
-
-  ucFirst() {
-    let formControl = this.clientForm.controls.fantasy_name
-    let value = formControl.value.toLowerCase().replace(/\s[a-z]/g, function(letter) {
-        return letter.toUpperCase();
-    });
-    formControl.setValue((value.slice(0, 1).toUpperCase() + value.slice(1, value.length)))
   }
 
   get contacts() { return this.clientForm.get('contacts'); }

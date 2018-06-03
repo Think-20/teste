@@ -57,22 +57,21 @@
             </mat-option>
         </mat-autocomplete>
         <mat-input-container class="col-md-3" *ngIf="briefingForm.controls.not_client.enabled">
-          <input formControlName="not_client" matInput placeholder="Cliente*">
+          <input ucWords formControlName="not_client" matInput placeholder="Cliente*">
           <mat-error>
             Obrigatório, entre 3 e 100 caract.
           </mat-error>
         </mat-input-container>
         <mat-input-container class="col-md-3">
-          <input formControlName="event" matInput placeholder="Evento*">
+          <input ucWords formControlName="event" matInput placeholder="Evento*">
           <mat-error>
             Obrigatório, entre 3 e 150 caract.
           </mat-error>
         </mat-input-container>
         <mat-input-container class="col-md-3">
-          <span matPrefix>R$ &nbsp;</span>
-          <input formControlName="budget" matInput placeholder="Verba estimada*">
+          <input currencyMask formControlName="budget" matInput placeholder="Verba estimada*">
           <mat-error>
-            Obrigatório, até 99999999,99
+            Obrigatório, até 99.999.999,99
           </mat-error>
         </mat-input-container>
         <mat-select class="col-md-3" placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
