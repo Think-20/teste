@@ -56,6 +56,12 @@ html, body, cb-login {
   width: 100%;
 }
 
+.mat-row-scroll {
+  margin-top: 5px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  height: 500px;
+}
 
 .flex {
   display: flex;
@@ -130,7 +136,8 @@ button {
 #container-box > .row > .col-md-8::-webkit-scrollbar,
 #container-box > .row > .col-md-4::-webkit-scrollbar,
 #menu-container::-webkit-scrollbar, .mat-select-panel::-webkit-scrollbar,
-.mat-autocomplete-panel::-webkit-scrollbar {
+.mat-autocomplete-panel::-webkit-scrollbar,
+.mat-row-scroll::-webkit-scrollbar {
     border-radius: 9px;
     width: 8px;
 }
@@ -139,7 +146,8 @@ button {
 
 #container-box > .row > .col-md-8::-webkit-scrollbar-thumb,
 #container-box > .row > .col-md-4::-webkit-scrollbar-thumb,
-#menu-container::-webkit-scrollbar-thumb {
+#menu-container::-webkit-scrollbar-thumb,
+.mat-row-scroll::-webkit-scrollbar-thumb {
     border-radius: 9px;
     background-color: rgba(231,230,239,0.25);
 }
@@ -415,7 +423,7 @@ mat-card-title > p {
 
 .mat-select-panel .mat-option-multiple.mat-selected .mat-pseudo-checkbox-checked {
   color: black !important;
-  background-color: black !important; 
+  background-color: black !important;
 }
 
 #login-content .mat-focused .mat-input-placeholder.mat-float, #login-content .mat-input-placeholder.mat-float:not(.mat-empty) {

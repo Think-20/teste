@@ -12,6 +12,7 @@ import { ErrorHandler } from '../shared/error-handler.service';
 import { Client } from './client.model';
 import { AuthService } from '../login/auth.service';
 import { Pagination } from '../shared/pagination.model';
+import { DataInfo } from '../shared/data-info.model';
 
 
 @Injectable()
@@ -22,7 +23,7 @@ export class ClientService {
         private auth: AuthService
     ) {}
 
-    clients(params?: {}, page: number = 0): Observable<Pagination> {
+    clients(params?: {}, page: number = 0): Observable<DataInfo> {
       let url = params === {} ? `clients/all?page=${page}` : `clients/filter?page=${page}`
       let prefix = this.auth.hasAccess('clients/all') ? '' : 'my-'
 

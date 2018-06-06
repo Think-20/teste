@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Injectable, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
@@ -57,6 +57,8 @@ export class BriefingFormComponent implements OnInit {
   creations: Employee[]
   presentations: BriefingPresentation[]
   briefingForm: FormGroup
+  isAdmin: boolean = false
+  @ViewChild('creation') creationSelect
 
   constructor(
     private clientService: ClientService,
@@ -70,6 +72,12 @@ export class BriefingFormComponent implements OnInit {
     private router: Router
   ) { }
 
+  toggleCreation() {
+    if(!this.isAdmin) {
+      this.creationSelect.close()
+    }
+  }
+
   ngOnInit() {
     let snackBarStateCharging
     this.typeForm = this.route.snapshot.url[0].path
@@ -77,6 +85,8 @@ export class BriefingFormComponent implements OnInit {
 
     this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
     ? this.authService.currentUser().employee : null
+
+    this.isAdmin = this.authService.hasAccess('briefing/save')
 
     this.briefingForm = this.formBuilder.group({
       id: this.formBuilder.control({value: '', disabled: true}),
@@ -89,7 +99,6 @@ export class BriefingFormComponent implements OnInit {
         Validators.maxLength(150)
       ]),
       last_provider: this.formBuilder.control('', [
-        Validators.required,
         Validators.minLength(3),
         Validators.maxLength(100)
       ]),
@@ -129,8 +138,8 @@ export class BriefingFormComponent implements OnInit {
         return;
       }
 
-      this.clientService.clients({search: clientName, attendance: this.paramAttendance}).subscribe((pagination) => {
-        this.clients = pagination.data.filter((client) => {
+      this.clientService.clients({search: clientName, attendance: this.paramAttendance}).subscribe((dataInfo) => {
+        this.clients = dataInfo.pagination.data.filter((client) => {
           return client.type.description !== 'Agência'
         })
       })
@@ -155,8 +164,8 @@ export class BriefingFormComponent implements OnInit {
         return;
       }
 
-      this.clientService.clients({search: name, attendance: this.paramAttendance}).subscribe((pagination) => {
-        this.agencies = pagination.data.filter((client) => {
+      this.clientService.clients({search: name, attendance: this.paramAttendance}).subscribe((dataInfo) => {
+        this.agencies = dataInfo.pagination.data.filter((client) => {
           return client.type.description === 'Agência'
         })
       })
@@ -175,7 +184,7 @@ export class BriefingFormComponent implements OnInit {
         this.briefingForm.controls.creation.setValue(data.creation)
         this.briefingForm.controls.available_date.setValue(data.available_date)
         this.addListenerEstimatedTime()
-        
+
         snackBarStateCharging.dismiss()
         snackBarStateCharging = this.snackBar.open('Considerando que o tempo de produção seja 1 dia, ' + data.creation.name + ' foi selecionado.', '', {
           duration: 2000
@@ -240,7 +249,7 @@ export class BriefingFormComponent implements OnInit {
 
         this.briefingForm.controls.creation.setValue(data.creation)
         this.briefingForm.controls.available_date.setValue(data.available_date)
-      
+
         snackBarStateCharging = this.snackBar.open('Considerando a mudança no tempo de produção, ' + data.creation.name + ' foi selecionado e a próxima data foi alterada.', '', {
           duration: 2000
         })
@@ -376,7 +385,7 @@ export class BriefingFormComponent implements OnInit {
     return var1.id === var2.id
   }
 
-  displayclient(client: Client) {
+  displayClient(client: Client) {
     return client.fantasy_name
   }
 

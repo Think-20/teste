@@ -11,6 +11,7 @@ import { EmployeeService } from '../employees/employee.service';
 import { Month, MONTHS } from '../shared/date/months';
 import { DAYSOFWEEK } from '../shared/date/days-of-week';
 import { Router } from '@angular/router';
+import { AuthService } from '../login/auth.service';
 
 @Component({
   selector: 'cb-schedule',
@@ -35,6 +36,8 @@ import { Router } from '@angular/router';
 export class ScheduleComponent implements OnInit {
 
   @ViewChildren('list') list: QueryList<any>
+  searchForm: FormGroup
+  search: FormControl
   scrollActivate: boolean = false
   rowAppearedState: string = 'ready'
   pagination: Pagination
@@ -57,9 +60,34 @@ export class ScheduleComponent implements OnInit {
     private fb: FormBuilder,
     private employeeService: EmployeeService,
     private briefingService: BriefingService,
+    private authService: AuthService,
     private snackBar: MatSnackBar,
     private router: Router
   ) { }
+
+  permissionVerify(module: string, briefing: Briefing): boolean {
+    let access: boolean
+    let employee = this.authService.currentUser().employee
+    switch(module) {
+      case 'show': {
+        access = briefing.attendance.id != employee.id ? this.authService.hasAccess('briefings/get/{id}') : true
+        break
+      }
+      case 'edit': {
+        access = briefing.attendance.id != employee.id ? this.authService.hasAccess('briefing/edit') : true
+        break
+      }
+      case 'delete': {
+        access = briefing.attendance.id != employee.id ? this.authService.hasAccess('briefing/remove/{id}') : true
+        break
+      }
+      default: {
+        access = false
+        break
+      }
+    }
+    return access
+  }
 
   onDragOver($event: DragEvent) {
     let moduleX = $event.layerX - this.tempX > 0 ? $event.layerX - this.tempX : ($event.layerX - this.tempX) * -1
@@ -126,11 +154,15 @@ export class ScheduleComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.search = this.fb.control('')
+    this.searchForm = this.fb.group({
+      search: this.search,
+      attendance: this.fb.control('')
+    })
+
     this.date = new Date()
     this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
-    this.scrollActivate = true
-    this.changeMonth(this.month)    
-    this.scrollActivate = false
+    this.changeMonth(this.month)
   }
 
   changeMonth(month: Month) {
@@ -139,6 +171,13 @@ export class ScheduleComponent implements OnInit {
     this.month = month
     let iniDate = this.date.getUTCFullYear() + '-' + (month.id) + '-01'
     let finDate = this.date.getUTCFullYear() + '-' + (month.id) + '-31'
+
+    let date = new Date()
+    if(month.id == date.getMonth() + 1) {
+      this.scrollActivate = true
+    } else {
+      this.scrollActivate = false
+    }
 
     this.briefingService.briefings({
         iniDate: iniDate,
@@ -173,7 +212,7 @@ export class ScheduleComponent implements OnInit {
     let formatedDate = ''
     let briefing = sortedBriefings[sortedBriefings.length - 1]
     let date = new Date(briefing.updated_at)
-    
+
     if(date.getDate() < 10) {
       formatedDate += '0' + date.getDate() + '/'
     } else {
@@ -188,20 +227,20 @@ export class ScheduleComponent implements OnInit {
 
     formatedDate += date.getFullYear()
     formatedDate += ' às '
-    
+
     if(date.getHours() < 10) {
       formatedDate += '0' + date.getHours() + ':'
     } else {
       formatedDate += date.getHours() + ':'
     }
-    
+
     if(date.getMinutes() < 10) {
       formatedDate += '0' + date.getMinutes()
     } else {
       formatedDate += date.getMinutes()
     }
 
-    this.updatedMessage = 'Atualizado ' + formatedDate + ' por ' + briefing.attendance.name
+    this.updatedMessage = 'Última atualização ' + formatedDate + ' por ' + briefing.attendance.name
   }
 
   chronologicDisplay(iniDate) {
@@ -241,10 +280,12 @@ export class ScheduleComponent implements OnInit {
 
   scrollToDate() {
     const elementList = document.querySelectorAll('.day-' + this.date.getDate());
+    //const elementBody = document.querySelectorAll('.header-form')[0] as HTMLElement;
 
     if(elementList.length > 0) {
       const element = elementList[0] as HTMLElement;
-      element.scrollIntoView({ behavior: 'smooth' });
+      element.scrollIntoView(false);
+      //elementBody.scrollIntoView({ behavior: 'smooth' });
     }
   }
 

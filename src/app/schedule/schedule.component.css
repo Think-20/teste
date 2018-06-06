@@ -11,6 +11,10 @@
   width: 100%;
 }
 
+.updated-message {
+  font-size: 16px;
+}
+
 .lead {
   align-items: baseline;
 }
@@ -69,6 +73,7 @@
 .select-hidden {
   visibility: hidden;
   margin-left: -40px;
+  height: 0;
 }
 
 .add-chrono {
@@ -127,6 +132,16 @@
 .schedule-table .mat-header-cell {
   font-size: 11px;
   background-color: white;
+}
+
+#searchForm .header-form {
+  border-top: 1px solid #ccc !important;
+}
+
+.mat-header-row, #searchForm .header-form {
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  width: calc(100% - 8px);
 }
 
 .schedule-table::-webkit-scrollbar {

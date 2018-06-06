@@ -6,7 +6,7 @@ import { HttpModule, RequestOptions } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { 
-  MD_PLACEHOLDER_GLOBAL_OPTIONS,
+  MAT_PLACEHOLDER_GLOBAL_OPTIONS,
   MatTableModule, MatProgressBarModule, MatCardModule, MatInputModule, MatSelectModule, 
   MatButtonModule, MatIconModule, MatTabsModule, MatAutocompleteModule, MatChipsModule
 } from '@angular/material';

@@ -12,18 +12,18 @@
             {{ job.description }}
           </mat-option>
         </mat-select>
-        <mat-select class="col-md-3" placeholder="Expectativa*" formControlName="main_expectation" [compareWith]="compareMainExpectation">
+        <mat-select  class="col-md-3" placeholder="Expectativa*" formControlName="main_expectation" [compareWith]="compareMainExpectation">
           <mat-option *ngFor="let mainExpectation of main_expectations" [value]="mainExpectation">
             {{ mainExpectation.description }}
           </mat-option>
         </mat-select>
         <mat-form-field class="col-md-3">
-          <input #availableDate type="date" formControlName="available_date" matInput placeholder="Data disponível*">
+          <input [readonly]="!isAdmin" #availableDate type="date" formControlName="available_date" matInput placeholder="Data disponível*">
         </mat-form-field>
         <mat-form-field class="col-md-3">
           <input type="date" formControlName="deadline" matInput [min]="availableDate.value" placeholder="Deadline*">
         </mat-form-field>
-        <mat-select class="col-md-3" placeholder="Tipo*" formControlName="job_type" [compareWith]="compareJobType">
+        <mat-select  class="col-md-3" placeholder="Tipo*" formControlName="job_type" [compareWith]="compareJobType">
           <mat-option *ngFor="let job_type of job_types" [value]="job_type">
             {{ job_type.description }}
           </mat-option>
@@ -38,9 +38,9 @@
           </a>
         </mat-input-container>
         <mat-autocomplete #autocompleteAgency="matAutocomplete" [displayWith]="displayAgency">
-            <mat-option *ngFor="let agency of agencies" [value]="agency">
-              {{ agency.fantasy_name }}
-            </mat-option>
+          <mat-option *ngFor="let agency of agencies" [value]="agency">
+            {{ agency.fantasy_name }}
+          </mat-option>
         </mat-autocomplete>
         <mat-input-container class="col-md-3" *ngIf="briefingForm.controls.client.enabled">
           <input matInput formControlName="client" [matAutocomplete]="autocompleteclient" placeholder="Cliente*">
@@ -51,10 +51,10 @@
             <mat-icon>add</mat-icon>
           </a>
         </mat-input-container>
-        <mat-autocomplete #autocompleteclient="matAutocomplete" [displayWith]="displayclient">
-            <mat-option *ngFor="let client of clients" [value]="client">
-              {{ client.fantasy_name }}
-            </mat-option>
+        <mat-autocomplete #autocompleteclient="matAutocomplete" [displayWith]="displayClient">
+          <mat-option *ngFor="let client of clients" [value]="client">
+            {{ client.fantasy_name }}
+          </mat-option>
         </mat-autocomplete>
         <mat-input-container class="col-md-3" *ngIf="briefingForm.controls.not_client.enabled">
           <input ucWords formControlName="not_client" matInput placeholder="Cliente*">
@@ -74,61 +74,61 @@
             Obrigatório, até 99.999.999,99
           </mat-error>
         </mat-input-container>
-        <mat-select class="col-md-3" placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
+
+        <mat-select  class="col-md-3" placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
           <mat-option *ngFor="let attendance of attendances" [value]="attendance">
             {{ attendance.name }}
           </mat-option>
         </mat-select>
-        <mat-select class="col-md-3" placeholder="Criação*" formControlName="creation" [compareWith]="compareCreation">
+        <mat-select  class="col-md-3" #creation (click)="toggleCreation()" placeholder="Criação*" formControlName="creation" [compareWith]="compareCreation">
           <mat-option *ngFor="let creation of creations" [value]="creation">
             {{ creation.name }}
           </mat-option>
         </mat-select>
-        <cb-stars class="col-md-3 star-input" label="Score"  [rate]="briefing != undefined ? (briefing.rate + 1) : 0" [input]="briefingForm.controls.rate">
+        <cb-stars class="col-md-3 star-input" label="Score" [rate]="briefing != undefined ? (briefing.rate + 1) : 0" [input]="briefingForm.controls.rate">
           <input formControlName="rate" matInput>
         </cb-stars>
       </div>
     </mat-card>
-
     <!--
     <div *ngIf="briefingForm.get('job_type').value.hasOwnProperty('description')  && briefingForm.get('job_type').value.description == 'Stand'">
       <cb-stand-form [briefingForm]="briefingForm" [briefing]="briefing"></cb-stand-form>
     </div>
     -->
-
     <mat-card-title>
       <p class="lead">Outras informações</p>
     </mat-card-title>
     <mat-card>
       <div class="row">
-        <mat-select class="col-md-3" placeholder="Concorrência*" formControlName="competition" [compareWith]="compareCompetition">
+        <mat-select  class="col-md-3" placeholder="Concorrência*" formControlName="competition" [compareWith]="compareCompetition">
           <mat-option *ngFor="let competition of competitions" [value]="competition">
             {{ competition.description }}
           </mat-option>
         </mat-select>
         <mat-input-container class="col-md-3">
-          <input formControlName="last_provider" matInput placeholder="Último fornecedor*">
+          <input ucWords formControlName="last_provider" matInput placeholder="Último fornecedor">
           <mat-error>
-            Obrigatório, entre 3 e 100 caract.
+            Entre 3 e 100 caract.
           </mat-error>
         </mat-input-container>
-        <mat-select class="col-md-3" placeholder="Nível entrega*" formControlName="levels" [compareWith]="compareLevel" multiple>
+        <mat-select  class="col-md-3" placeholder="Nível entrega*" formControlName="levels" [compareWith]="compareLevel" multiple>
           <mat-option *ngFor="let level of levels" [value]="level">
             {{ level.description }}
           </mat-option>
         </mat-select>
-        <mat-select class="col-md-3" placeholder="Como chegou*" formControlName="how_come" [compareWith]="compareHowCome">
+        <mat-select  class="col-md-3" placeholder="Como chegou*" formControlName="how_come" [compareWith]="compareHowCome">
           <mat-option *ngFor="let how_come of how_comes" [value]="how_come">
             {{ how_come.description }}
           </mat-option>
         </mat-select>
-        <mat-select class="col-md-3" placeholder="Apresentação*" formControlName="presentations" [compareWith]="comparePresentation" multiple>
+        <mat-select  class="col-md-3" placeholder="Apresentação*" formControlName="presentations" [compareWith]="comparePresentation" multiple>
           <mat-option *ngFor="let presentation of presentations" [value]="presentation">
             {{ presentation.description }}
           </mat-option>
         </mat-select>
-        <cb-stars class="col-md-3 star-input" label="Expectativa de aprovação*" [rate]="briefing != undefined ? (briefing.approval_expectation_rate + 1) : 0" [input]="briefingForm.controls.approval_expectation_rate">
-            <input formControlName="approval_expectation_rate" matInput>
+        <cb-stars class="col-md-3 star-input" label="Expectativa de aprovação*" [rate]="briefing != undefined ? (briefing.approval_expectation_rate + 1) : 0"
+          [input]="briefingForm.controls.approval_expectation_rate">
+          <input formControlName="approval_expectation_rate" matInput>
         </cb-stars>
         <mat-input-container class="col-md-3">
           <input matInput formControlName="think_history" readonly placeholder="Histórico - Aprovação/Participação*">
@@ -138,12 +138,11 @@
         </mat-input-container>
       </div>
     </mat-card>
-
     <mat-card-title>
       <p class="lead">Referências</p>
     </mat-card-title>
     <mat-card>
-       <div class="row" formArrayName="files">
+      <div class="row" formArrayName="files">
         <div *ngFor="let control of getFilesControls(); let i = index" class="col-md-4">
           <form [formGroup]="getFilesControls()[i]" novalidate autocomplete="off" class="flex contact-item">
             <mat-input-container>
@@ -161,7 +160,8 @@
           </form>
         </div>
         <div class="col-md-12">
-          <input #inputFiles type="file" multiple accept="image/jpeg,application/pdf" (change)="uploadFile(inputFiles)" style="display:none;" />
+          <input #inputFiles type="file" multiple accept="image/jpeg,application/pdf" (change)="uploadFile(inputFiles)" style="display:none;"
+          />
           <button *ngIf="getFilesControls().length > 0" type="button" class="add-file" (click)="inputFiles.click()" mat-button>
             <mat-icon>add</mat-icon>
           </button>
@@ -171,17 +171,17 @@
         </div>
       </div>
     </mat-card>
-
     <mat-card-title>
       <p class="lead">Tempo estimado de produção</p>
     </mat-card-title>
     <mat-card>
       <div class="row">
-        <cb-production-time [readonly]="typeForm === 'show' ? true : false" class="col-md-12 production-time-input" label="Tempo estimado" [rate]="briefing != undefined ? (briefing.estimated_time) : 1" [input]="briefingForm.controls.estimated_time" [min]="0" [max]="10">
-            <input formControlName="estimated_time" type="hidden">
+        <cb-production-time [readonly]="typeForm === 'show' ? true : false" class="col-md-12 production-time-input" label="Tempo estimado"
+          [rate]="briefing != undefined ? (briefing.estimated_time) : 1" [input]="briefingForm.controls.estimated_time" [min]="0"
+          [max]="10">
+          <input formControlName="estimated_time" type="hidden">
         </cb-production-time>
       </div>
-
       <mat-card-actions class="col-md-12 text-right">
         <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save()" mat-raised-button>
           SALVAR

@@ -6,7 +6,7 @@ import {
   MatDialog, MatDialogModule, MatSlideToggleModule, MatSlideToggle,
   MatTableModule, MatProgressBarModule, MatCardModule, MatInputModule, MatSelectModule,
   MatButtonModule, MatIconModule, MatTabsModule, MatAutocompleteModule, MatChipsModule,
-  MatSnackBar, MatSnackBarModule, MatMenuModule, MD_PLACEHOLDER_GLOBAL_OPTIONS,
+  MatSnackBar, MatSnackBarModule, MatMenuModule, MAT_PLACEHOLDER_GLOBAL_OPTIONS,
   MatDatepickerModule, MAT_DATE_LOCALE, CompatibilityModule, NoConflictStyleCompatibilityMode,
   MatNativeDateModule, MatPaginatorModule, MatPaginatorIntl, MatTooltipModule
 } from '@angular/material';
@@ -234,7 +234,7 @@ import { CustomCurrencyMaskConfig } from 'app/shared/custom-currency-mask-config
     MatDialog,
     MatSnackBar,
     MatSlideToggle,
-    {provide: MD_PLACEHOLDER_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
+    {provide: MAT_PLACEHOLDER_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
     {provide: LOCALE_ID, useValue: 'pt-BR'},
     {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
     {provide: MatPaginatorIntl, useClass: PaginatorIntl},
