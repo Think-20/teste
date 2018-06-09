@@ -15,8 +15,9 @@ export class Briefing {
     code?: number
     job_id: number
     job: Job
-    client_id: number
-    client: Client
+    client_id?: number
+    client?: Client
+    not_client?: string
     event: string
     deadline: string
     job_type_id: number

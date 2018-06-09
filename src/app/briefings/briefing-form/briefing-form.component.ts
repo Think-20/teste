@@ -125,8 +125,6 @@ export class BriefingFormComponent implements OnInit {
       think_history: this.formBuilder.control('')
     })
 
-    this.briefingForm.controls.not_client.disable()
-
     this.briefingForm.get('client').valueChanges
     .do(clientName => {
         snackBarStateCharging = this.snackBar.open('Aguarde...')
@@ -214,6 +212,7 @@ export class BriefingFormComponent implements OnInit {
             return employee.name == this.authService.currentUser().employee.name
           }).pop())
         })
+        this.briefingForm.controls.not_client.disable()
       }
     })
   }
@@ -259,6 +258,10 @@ export class BriefingFormComponent implements OnInit {
   }
 
   enableNotClient() {
+    if(this.typeForm == 'show') {
+      return
+    }
+
     this.briefingForm.controls.not_client.enable()
     this.briefingForm.controls.not_client.setValidators([
       Validators.required,
@@ -270,6 +273,10 @@ export class BriefingFormComponent implements OnInit {
   }
 
   disableNotClient() {
+    if(this.typeForm == 'show') {
+      return
+    }
+
     this.briefingForm.controls.not_client.disable()
     this.briefingForm.controls.not_client.clearValidators()
     this.briefingForm.controls.client.enable()
@@ -289,7 +296,7 @@ export class BriefingFormComponent implements OnInit {
     })
   }
 
-  previewFile(briefing: Briefing, filename: string, type: string,) {
+  previewFile(briefing: Briefing, filename: string, type: string) {
     this.briefingService.previewFile(briefing, type, filename)
   }
 
@@ -314,11 +321,19 @@ export class BriefingFormComponent implements OnInit {
       this.briefingForm.controls.id.setValue(briefing.id)
       this.briefingForm.controls.job_type.disable()
       this.briefingForm.controls.job.setValue(briefing.job)
-      this.briefingForm.controls.client.setValue(briefing.client)
       this.briefingForm.controls.event.setValue(briefing.event)
       this.briefingForm.controls.deadline.setValue(briefing.deadline)
       this.briefingForm.controls.job_type.setValue(briefing.job_type)
       this.briefingForm.controls.agency.setValue(briefing.agency)
+
+      if(briefing.agency != null) {
+        this.enableNotClient()
+        this.briefingForm.controls.not_client.setValue(briefing.not_client)
+      } else {
+        this.disableNotClient()        
+        this.briefingForm.controls.client.setValue(briefing.client)
+      }
+
       this.briefingForm.controls.attendance.setValue(briefing.attendance)
       this.briefingForm.controls.creation.setValue(briefing.creation)
       this.briefingForm.controls.rate.setValue(briefing.rate)
@@ -328,7 +343,7 @@ export class BriefingFormComponent implements OnInit {
       this.briefingForm.controls.main_expectation.setValue(briefing.main_expectation)
       this.briefingForm.controls.how_come.setValue(briefing.how_come)
       this.briefingForm.controls.competition.setValue(briefing.competition)
-      this.briefingForm.controls.budget.setValue(briefing.budget.toString().replace('.',','))
+      this.briefingForm.controls.budget.setValue(briefing.budget)
       this.briefingForm.controls.presentations.setValue(briefing.presentations)
       this.briefingForm.controls.approval_expectation_rate.setValue(briefing.approval_expectation_rate)
       snackBarStateCharging.dismiss()
@@ -450,7 +465,9 @@ export class BriefingFormComponent implements OnInit {
       this.snackBar.open(data.message, '', {
         duration: data.status ? 1000 : 5000
       }).afterDismissed().subscribe(observer => {
-        this.loadBriefing()
+        if(data.status) {
+          this.router.navigateByUrl('/schedule')
+        }
       })
     })
   }

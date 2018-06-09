@@ -64,15 +64,13 @@
             <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }}">
               <div>
                 <span>{{ chr.day }}-{{ chr.dayOfWeek?.abbrev }}</span>
-                <button class="cb-button add-chrono" (click)="addBriefing(chr.day)">
+                <button [disabled]="!permissionVerify('new', briefing)" class="cb-button add-chrono" (click)="addBriefing(chr.day)">
                   <mat-icon>+</mat-icon>
                 </button>
               </div>
             </div>
             <div class="line-briefings">
-              <div #line class="line-briefing" *ngFor="let briefing of chrono[i].briefings" draggable="true" (mousedown)="presetDrag(line)"
-                (dragstart)="startDrag($event, briefing)" (drop)="onDrop($event, chrono[i])" (dragover)="onDragOver($event)"
-                (dragend)="finishDrag($event, chrono[i])" [matMenuTriggerFor]="menu">
+              <div class="line-briefing" *ngFor="let briefing of chrono[i].briefings" [matMenuTriggerFor]="menu" draggable="true">
                 <mat-menu #menu="matMenu">
                   <a *ngIf="briefing.id == undefined" [routerLink]="['/briefings/new']" mat-menu-item>
                     <mat-icon>add</mat-icon> Adicionar
@@ -106,8 +104,11 @@
                 <div class="mat-cell mat-column-agency">
                   {{ briefing.agency ? briefing.agency.fantasy_name : '' }}
                 </div>
-                <div class="mat-cell mat-column-budget">
-                  {{ briefing.budget != null ? price(briefing.budget) : '' }}
+                <div class="mat-cell mat-column-budget" *ngIf="briefing.budget != null">
+                  {{ briefing.budget | number: '1.2' }}
+                </div>
+                <div class="mat-cell mat-column-budget" *ngIf="briefing.budget == null">
+                  {{ '' }}
                 </div>
                 <div class="mat-cell mat-column-propo">
                   &nbsp;

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, QueryList, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, NgZone, ElementRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatSnackBar } from '@angular/material';
@@ -9,7 +9,7 @@ import { Pagination } from 'app/shared/pagination.model';
 import { Employee } from '../employees/employee.model';
 import { EmployeeService } from '../employees/employee.service';
 import { Month, MONTHS } from '../shared/date/months';
-import { DAYSOFWEEK } from '../shared/date/days-of-week';
+import { DAYSOFWEEK, DayOfWeek } from '../shared/date/days-of-week';
 import { Router } from '@angular/router';
 import { AuthService } from '../login/auth.service';
 
@@ -45,7 +45,7 @@ export class ScheduleComponent implements OnInit {
   attendances: Employee[]
   searching = false
   filter = false
-  chrono = [{}]
+  chrono: Chrono[] = []
   month: Month
   months: Month[] = MONTHS
   date: Date
@@ -62,6 +62,8 @@ export class ScheduleComponent implements OnInit {
     private briefingService: BriefingService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
+    private ngZone: NgZone,
+    private el: ElementRef,
     private router: Router
   ) { }
 
@@ -69,6 +71,10 @@ export class ScheduleComponent implements OnInit {
     let access: boolean
     let employee = this.authService.currentUser().employee
     switch(module) {
+      case 'new': {
+        access = this.authService.hasAccess('briefing/save')
+        break
+      }
       case 'show': {
         access = briefing.attendance.id != employee.id ? this.authService.hasAccess('briefings/get/{id}') : true
         break
@@ -89,67 +95,67 @@ export class ScheduleComponent implements OnInit {
     return access
   }
 
-  onDragOver($event: DragEvent) {
-    let moduleX = $event.layerX - this.tempX > 0 ? $event.layerX - this.tempX : ($event.layerX - this.tempX) * -1
-    let moduleY = $event.layerY - this.tempY > 0 ? $event.layerY - this.tempY : ($event.layerY - this.tempY) * -1
-
-    if( ($event.layerY == this.tempY && $event.layerX == this.tempX)
-    || ($event.layerY == 0 && $event.layerX == 0)
-    || (moduleX > 200 || moduleY > 200) ) {
-      return
-    }
-
-    this.lineBriefing.style.top = $event.layerY + 'px'
-    this.lineBriefing.style.left = $event.layerX + 'px'
-
-    this.tempX = $event.layerX
-    this.tempY = $event.layerY
-
-    $event.preventDefault()
-
-    /*
-    if($event.layerX == 0 && $event.layerY == 0) {
-      this.lineBriefing.style.position = 'relative'
-      this.lineBriefing.style.width = ''
-      this.lineBriefing.style.left = ''
-      this.lineBriefing.style.top = ''
-      $event.stopPropagation()
-      $event.preventDefault()
-    }
-    */
-  }
-
-  onDrop($event: DragEvent, chrono) {
-    console.log('onDrop', $event)
-    console.log(chrono, chrono.day)
-  }
-
-  finishDrag($event: DragEvent, chrono) {
-    console.log('finishDrag', $event)
-    console.log(chrono, chrono.day)
-  }
-
-  presetDrag(line) {
-    this.lineBriefing = line as HTMLElement
-    this.lineBriefing.style.width = this.lineBriefing.offsetWidth + 'px';
-    this.lineBriefing.style.transition = 'all 0.1s linear'
-    this.tempX = this.lineBriefing.offsetLeft
-    this.tempY = this.lineBriefing.offsetTop
-  }
-
-  startDrag($event: DragEvent, briefing: Briefing) {
-    return false
-    /*
-    let image = this.lineBriefing.cloneNode(true) as HTMLElement
-    this.lineBriefing.style.position = 'absolute'
-    $event.dataTransfer.setDragImage(image, 0, 0)
-    */
-  }
-
   ngAfterViewInit() {
     this.list.changes.subscribe(() => {
       if(this.scrollActivate)
         this.scrollToDate()
+
+        let list = document.querySelectorAll("[draggable='true']")
+        let info = { parentSenderPos: null, parentRecipientPos: null, senderPos: null, recipientPos: null}
+        let draggable
+        let angular = this
+
+        this.ngZone.runOutsideAngular(() => {
+          for(let i = 0; i < list.length; i++) {
+            let info = { parentSenderPos: null, senderPos: null }
+            draggable = list.item(i) as HTMLElement
+            draggable.addEventListener('dragstart', function(event: DragEvent) {
+              info.parentSenderPos = Array.prototype.indexOf.call(this.parentNode.parentNode.parentNode.children, this.parentNode.parentNode)
+              info.senderPos = Array.prototype.indexOf.call(this.parentNode.children, this)
+              event.dataTransfer.setData('type', JSON.stringify(info))
+            })
+            draggable.addEventListener('dragover', function(event) {
+              event.preventDefault()
+            })
+            draggable.addEventListener('dragend', function(event) {
+              event.preventDefault()
+            })
+          }
+        })
+
+        this.ngZone.run(() => {
+          for(let i = 0; i < list.length; i++) {
+            draggable = list.item(i) as HTMLElement
+            draggable.addEventListener('drop', function(event:DragEvent) {
+              if(this.parentNode == null) {
+                return
+              }
+
+              event.preventDefault()
+
+              angular.scrollActivate = false
+              info = JSON.parse(event.dataTransfer.getData('type'))
+              info.parentRecipientPos = Array.prototype.indexOf.call(this.parentNode.parentNode.parentNode.children, this.parentNode.parentNode)
+              info.recipientPos = Array.prototype.indexOf.call(this.parentNode.children, this)
+
+              let senderParent = document.querySelectorAll('.line-briefings')[info.parentSenderPos] as HTMLElement
+              let recipientParent = document.querySelectorAll('.line-briefings')[info.parentRecipientPos] as HTMLElement
+              let parentRecipientPos: number = info.parentRecipientPos
+              let parentSenderPos: number = info.parentSenderPos
+
+              //let briefing1Html = senderParent.querySelectorAll('.line-briefing')[info.senderPos] as HTMLElement
+              //briefing1Html.style.backgroundColor = 'yellow'
+              //let briefing2Html = recipientParent.querySelectorAll('.line-briefing')[info.recipientPos] as HTMLElement
+              //briefing2Html.style.backgroundColor = 'red'
+
+              let briefing1 = angular.chrono[parentSenderPos].briefings[info.senderPos]
+              let briefing2 = angular.chrono[parentRecipientPos].briefings[info.recipientPos]
+
+              angular.chrono[parentSenderPos].briefings[info.senderPos] = briefing2
+              angular.chrono[parentRecipientPos].briefings[info.recipientPos] = briefing1
+            })
+          }
+        })
     })
   }
 
@@ -169,8 +175,12 @@ export class ScheduleComponent implements OnInit {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando briefings...')
     this.month = month
-    let iniDate = this.date.getUTCFullYear() + '-' + (month.id) + '-01'
-    let finDate = this.date.getUTCFullYear() + '-' + (month.id) + '-31'
+    let iniDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
+    let finDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-31')
+    iniDateWithoutLimits.setDate(iniDateWithoutLimits.getDate() - 10)
+    finDateWithoutLimits.setDate(finDateWithoutLimits.getDate() + 10)
+    let iniDate = iniDateWithoutLimits.getUTCFullYear() + '-' + (iniDateWithoutLimits.getMonth() + 1) + '-' + iniDateWithoutLimits.getDate()
+    let finDate = finDateWithoutLimits.getUTCFullYear() + '-' + (finDateWithoutLimits.getMonth() + 1) + '-' + finDateWithoutLimits.getDate()
 
     let date = new Date()
     if(month.id == date.getMonth() + 1) {
@@ -187,7 +197,7 @@ export class ScheduleComponent implements OnInit {
       this.pagination = pagination
       this.searching = false
       this.briefings = pagination.data
-      this.chronologicDisplay(iniDate)
+      this.chronologicDisplay(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
       this.setUpdatedMessage()
       snackBar.dismiss()
     })
@@ -254,8 +264,16 @@ export class ScheduleComponent implements OnInit {
       if(date.getDay() > 0 && date.getDay() < 6) {
         let briefings = this.briefings.filter((briefing) => {
           let briefingDate = new Date(Date.parse(briefing.available_date + 'T00:00:00'))
-          return briefingDate.getDate() == date.getDate()
-            && briefingDate.getMonth() == date.getMonth()
+          let lastDate = new Date(Date.parse(briefing.available_date + 'T00:00:00'))
+
+          for(let i = 0; i < Math.ceil(briefing.estimated_time - 1); i++) {
+            lastDate.setDate(lastDate.getDate() + 1)
+            while(lastDate.getDay() == 0 || lastDate.getDay() == 6) {
+              lastDate.setDate(lastDate.getDate() + 1)
+            }              
+          }
+
+          return briefingDate <= date && lastDate >= date
         })
 
         if(briefings.length < 6) {
@@ -334,4 +352,10 @@ export class ScheduleComponent implements OnInit {
     })
   }
 
+}
+
+export class Chrono {
+  day: number
+  dayOfWeek: DayOfWeek
+  briefings: Briefing[]
 }

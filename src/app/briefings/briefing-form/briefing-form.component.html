@@ -160,7 +160,7 @@
           </form>
         </div>
         <div class="col-md-12">
-          <input #inputFiles type="file" multiple accept="image/jpeg,application/pdf" (change)="uploadFile(inputFiles)" style="display:none;"
+          <input [disabled]="typeForm == 'show'" #inputFiles type="file" multiple accept="image/jpeg,application/pdf" (change)="uploadFile(inputFiles)" style="display:none;"
           />
           <button *ngIf="getFilesControls().length > 0" type="button" class="add-file" (click)="inputFiles.click()" mat-button>
             <mat-icon>add</mat-icon>
