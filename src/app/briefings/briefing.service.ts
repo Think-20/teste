@@ -156,6 +156,26 @@ export class BriefingService {
             })
     }
 
+    editAvailableDate(briefing: Briefing): Observable<any> {
+        let url = 'briefing/edit-available-date'
+        let prefix = this.auth.hasAccess('briefing/edit-available-date') ? '' : 'my-'
+
+        url = prefix + url
+
+        return this.http.put(
+                `${API}/${url}`,
+                JSON.stringify(briefing),
+                new RequestOptions()
+            )
+            .map(response => response.json())
+            .catch((err) => {
+                this.snackBar.open(ErrorHandler.message(err), '', {
+                    duration: 3000
+                })
+                return ErrorHandler.capture(err)
+            })
+    }
+
     delete(id: number): Observable<any> {
         let url = `briefing/remove/${id}`
         let prefix = this.auth.hasAccess('briefing/remove/{id}') ? '' : 'my-'
