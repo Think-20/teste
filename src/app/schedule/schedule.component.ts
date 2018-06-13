@@ -97,8 +97,7 @@ export class ScheduleComponent implements OnInit {
 
   ngAfterViewInit() {
     this.list.changes.subscribe(() => {
-      if (this.scrollActivate)
-        this.scrollToDate()
+      this.scrollToDate()
 
       let list = document.querySelectorAll("[draggable='true']")
       let info = { parentSenderPos: null, parentRecipientPos: null, senderPos: null, recipientPos: null }
@@ -163,32 +162,41 @@ export class ScheduleComponent implements OnInit {
 
             let snackBar = angular.snackBar.open('Aguarde enquanto mudamos a data...')
 
-            angular.briefingService.editAvailableDate(briefing1).subscribe((data) => {
-              if(data.status == true) {
-                if(briefing2.id != undefined) {
-                  angular.briefingService.editAvailableDate(briefing2).subscribe((data) => {
-                    if(data.status == true) {
-                      snackBar.dismiss()
-                      angular.changeMonth(angular.month)
-                    } else {
-                      snackBar.dismiss()
-                      angular.snackBar.open('Houve um erro ao alterar.', '', {
-                        duration: 3000
+            angular.briefingService.getNextAvailableDate(briefing1.available_date).subscribe((data) => {
+              briefing1.available_date = data.available_date
+              briefing1.creation_id = data.creation.id
+              angular.briefingService.editAvailableDate(briefing1).subscribe((data) => {
+                if(data.status == true) {
+                  if(briefing2.id != undefined) {
+                    console.log('briefing2.id é undefined, e estou calculando a próxima data')
+                    angular.briefingService.getNextAvailableDate(briefing2.available_date).subscribe((data) => {
+                      briefing2.available_date = data.available_date
+                      briefing2.creation_id = data.creation.id
+                      angular.briefingService.editAvailableDate(briefing2).subscribe((data) => {
+                        if(data.status == true) {
+                          snackBar.dismiss()
+                          angular.changeMonth(angular.month)
+                        } else {
+                          snackBar.dismiss()
+                          angular.snackBar.open('Houve um erro ao alterar.', '', {
+                            duration: 3000
+                          })
+                          return false
+                        }
                       })
-                      return false
-                    }
-                  })
+                    })
+                  } else {
+                    snackBar.dismiss()
+                    angular.changeMonth(angular.month)
+                  }
                 } else {
                   snackBar.dismiss()
-                  angular.changeMonth(angular.month)
+                  angular.snackBar.open('Houve um erro ao alterar.', '', {
+                    duration: 3000
+                  })
+                  return false
                 }
-              } else {
-                snackBar.dismiss()
-                angular.snackBar.open('Houve um erro ao alterar.', '', {
-                  duration: 3000
-                })
-                return false
-              }
+              })
             })            
           })
         }
@@ -336,13 +344,20 @@ export class ScheduleComponent implements OnInit {
   }
 
   scrollToDate() {
-    const elementList = document.querySelectorAll('.day-' + this.date.getDate());
-    //const elementBody = document.querySelectorAll('.header-form')[0] as HTMLElement;
+    let date = new Date()
+    let dayString: string
+    const elementBodyTable = document.querySelectorAll('.mat-row-scroll')[0] as HTMLElement;
 
-    if (elementList.length > 0) {
-      const element = elementList[0] as HTMLElement;
-      element.scrollIntoView(false);
-      //elementBody.scrollIntoView({ behavior: 'smooth' });
+    if(this.month.id == date.getMonth() + 1) {
+      dayString = '.day-' + this.date.getDate()
+      const elementList = document.querySelectorAll(dayString);
+
+      if (elementList.length > 0) {
+        const element = elementList[0] as HTMLElement;
+        elementBodyTable.scrollTo(0, element.offsetTop - 45)
+      } 
+    } else {
+      elementBodyTable.scrollTo(0, 0)
     }
   }
 

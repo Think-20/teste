@@ -70,22 +70,7 @@
               </div>
             </div>
             <div class="line-briefings">
-              <div class="line-briefing" *ngFor="let briefing of chrono[i].briefings" [matMenuTriggerFor]="menu" draggable="true">
-                <mat-menu #menu="matMenu">
-                  <a *ngIf="briefing.id == undefined" [routerLink]="['/briefings/new']" mat-menu-item>
-                    <mat-icon>add</mat-icon> Adicionar
-                  </a>
-                  <a [disabled]="!permissionVerify('show', briefing)" *ngIf="briefing.id != undefined" [routerLink]="['/briefings/show', briefing.id]" mat-menu-item>
-                    <mat-icon>subject</mat-icon> Visualização
-                  </a>
-                  <a [disabled]="!permissionVerify('edit', briefing)" *ngIf="briefing.id != undefined" [routerLink]="['/briefings/edit', briefing.id]" mat-menu-item>
-                    <mat-icon>mode_edit</mat-icon> Editar
-                  </a>
-                  <button [disabled]="!permissionVerify('delete', briefing)" *ngIf="briefing.id != undefined" (click)="delete(briefing)" mat-menu-item>
-                    <mat-icon>delete</mat-icon> Remover
-                  </button>
-                </mat-menu>
-
+              <div class="line-briefing" *ngFor="let briefing of chrono[i].briefings" draggable="true">
                 <div class="mat-cell mat-column-job">
                   {{ briefing.job?.description }}
                 </div>

@@ -89,6 +89,19 @@ export class BriefingService {
             })
     }
 
+    getNextAvailableDate(date: string): Observable<any> {
+        let url = `briefing/get-next-available/${date}`
+
+        return this.http.get(`${API}/${url}`)
+            .map(response => response.json())
+            .catch((err) => {
+                this.snackBar.open(ErrorHandler.message(err), '', {
+                    duration: 3000
+                })
+                return ErrorHandler.capture(err)
+            })
+    }
+
     download(briefing: Briefing, type: String, filename: String) {
       let url = `briefing/download/${briefing.id}/${type}/${filename}`
       let prefix = this.auth.hasAccess('briefing/download/{id}/{type}/{file}') ? '' : 'my-'
