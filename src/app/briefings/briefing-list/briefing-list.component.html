@@ -63,6 +63,14 @@
             <div class="mat-cell mat-column-date">
               {{ briefing.created_at | date:'dd/MM/yy' }}
             </div>
+            <div class="mat-cell mat-column-status" (click)=select.open()>
+              {{ briefing.status.description }}        
+              <mat-select #select class="langSelect" (change)="editStatus($event, briefing)">
+                <mat-option *ngFor="let s of status" [value]="s">
+                  {{ s.description }}
+                </mat-option>
+              </mat-select>  
+            </div>
             <div class="mat-cell mat-column-action">
               <mat-menu #menu="matMenu">
                 <a [routerLink]="['/briefings/show', briefing.id]" mat-menu-item>

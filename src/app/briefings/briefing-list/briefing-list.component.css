@@ -3,7 +3,7 @@
 }
 
 .mat-column-client {
-    width: 15%;
+    width: 13%;
 }
 
 .mat-column-event {
@@ -15,13 +15,34 @@
 }
 
 .mat-column-type {
-    width: 15%;
+    width: 12%;
 }
 
 .mat-column-attendance {
-    width: 20%;
+    width: 15%;
+}
+
+.mat-column-status {
+    width: 10%;
 }
 
 .mat-column-action {
     width: 10%;
+}
+
+::ng-deep .langSelect div.mat-select-arrow-wrapper {
+    display: none;
+}
+
+::ng-deep .langSelect.mat-select {
+    display: inline;
+}
+
+::ng-deep .langSelect.mat-select .mat-select-trigger > * {
+    display: none;
+}
+
+::ng-deep .langSelect.mat-select .mat-select-trigger {
+    height: 0;
+    margin-top: 0;
 }

@@ -136,6 +136,11 @@
             Obrigatório
           </mat-error>
         </mat-input-container>
+        <mat-select  class="col-md-3" placeholder="Status*" formControlName="status" [compareWith]="compareStatus">
+          <mat-option *ngFor="let s of status" [value]="s">
+            {{ s.description }}
+          </mat-option>
+        </mat-select>
       </div>
     </mat-card>
     <mat-card-title>

@@ -56,8 +56,8 @@
           <div class="mat-header-cell mat-column-creation">Criação</div>
           <div class="mat-header-cell mat-column-stat">Status</div>
           <!--
-          <div class="mat-header-cell mat-column-action">Ação</div>
-          -->
+            <div class="mat-header-cell mat-column-action">Ação</div>
+            -->
         </div>
         <div class="mat-row-scroll">
           <div #list class="mat-row line-chrono" *ngFor="let chr of chrono; let i = index" [@rowAppeared]="rowAppearedState">
@@ -70,15 +70,31 @@
               </div>
             </div>
             <div class="line-briefings">
-              <div class="line-briefing" *ngFor="let briefing of chrono[i].briefings" draggable="true">
+              <div class="line-briefing" *ngFor="let briefing of chrono[i].briefings" [matMenuTriggerFor]="menu" draggable="true">
+                <mat-menu #menu="matMenu">
+                  <a *ngIf="briefing.id == undefined" [routerLink]="['/briefings/new']" mat-menu-item>
+                    <mat-icon>add</mat-icon> Adicionar
+                  </a>
+                  <a [disabled]="!permissionVerify('show', briefing)" *ngIf="briefing.id != undefined" [routerLink]="['/briefings/show', briefing.id]"
+                    mat-menu-item>
+                    <mat-icon>subject</mat-icon> Visualização
+                  </a>
+                  <a [disabled]="!permissionVerify('edit', briefing)" *ngIf="briefing.id != undefined" [routerLink]="['/briefings/edit', briefing.id]"
+                    mat-menu-item>
+                    <mat-icon>mode_edit</mat-icon> Editar
+                  </a>
+                  <button [disabled]="!permissionVerify('delete', briefing)" *ngIf="briefing.id != undefined" (click)="delete(briefing)" mat-menu-item>
+                    <mat-icon>delete</mat-icon> Remover
+                  </button>
+                </mat-menu>
                 <div class="mat-cell mat-column-job">
-                  {{ briefing.job?.description }}
+                  {{ jobDisplay(briefing, chrono[i]) }}
                 </div>
                 <div class="mat-cell mat-column-type">
                   {{ briefing.job_type?.description }}
                 </div>
                 <div class="mat-cell mat-column-client">
-                  {{ briefing.client ? briefing.client.fantasy_name : briefing.not_client }}
+                  {{ briefing.client != null ? briefing.client.fantasy_name : briefing.not_client }}
                 </div>
                 <div class="mat-cell mat-column-event">
                   {{ briefing.event }}
@@ -111,29 +127,29 @@
                   {{ briefing?.creation?.name }}
                 </div>
                 <div class="mat-cell mat-column-stat">
-                  {{ briefing.status }}
+                  {{ briefing?.status?.description }}
                 </div>
               </div>
             </div>
             <!--
-            <div class="mat-cell mat-column-action">
-              <mat-menu #menu="matMenu">
-                <a [routerLink]="['/briefings/show', briefing.id]" mat-menu-item>
-                  <mat-icon>subject</mat-icon> Visualização
-                </a>
-                <a [routerLink]="['/briefings/edit', briefing.id]" mat-menu-item>
-                  <mat-icon>mode_edit</mat-icon> Editar
-                </a>
-                <button (click)="delete(briefing)" mat-menu-item>
-                  <mat-icon>delete</mat-icon> Remover
+              <div class="mat-cell mat-column-action">
+                <mat-menu #menu="matMenu">
+                  <a [routerLink]="['/briefings/show', briefing.id]" mat-menu-item>
+                    <mat-icon>subject</mat-icon> Visualização
+                  </a>
+                  <a [routerLink]="['/briefings/edit', briefing.id]" mat-menu-item>
+                    <mat-icon>mode_edit</mat-icon> Editar
+                  </a>
+                  <button (click)="delete(briefing)" mat-menu-item>
+                    <mat-icon>delete</mat-icon> Remover
+                  </button>
+                </mat-menu>
+  
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <mat-icon>menu</mat-icon>
                 </button>
-              </mat-menu>
-
-              <button mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>menu</mat-icon>
-              </button>
-            </div>
-            -->
+              </div>
+              -->
           </div>
         </div>
       </table>

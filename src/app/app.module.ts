@@ -109,6 +109,7 @@ import { ScheduleComponent } from './schedule/schedule.component';
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CURRENCY_MASK_CONFIG } from "ng2-currency-mask/src/currency-mask.config";
 import { CustomCurrencyMaskConfig } from 'app/shared/custom-currency-mask-config';
+import { BriefingStatusService } from 'app/brefing-status/briefing-status.service';
 
 @NgModule({
   declarations: [
@@ -230,6 +231,7 @@ import { CustomCurrencyMaskConfig } from 'app/shared/custom-currency-mask-config
     StandItemService,
     TimecardService,
     TimecardPlaceService,
+    BriefingStatusService,
 
     MatDialog,
     MatSnackBar,

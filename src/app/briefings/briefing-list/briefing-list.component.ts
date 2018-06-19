@@ -8,6 +8,8 @@ import { Briefing } from '../briefing.model';
 import { Pagination } from 'app/shared/pagination.model';
 import { Employee } from '../../employees/employee.model';
 import { EmployeeService } from '../../employees/employee.service';
+import { BriefingStatus } from 'app/brefing-status/briefing-status.model';
+import { BriefingStatusService } from 'app/brefing-status/briefing-status.service';
 
 @Component({
   selector: 'cb-briefing-list',
@@ -38,6 +40,7 @@ export class BriefingListComponent implements OnInit {
   pagination: Pagination
   briefings: Briefing[] = []
   attendances: Employee[]
+  status: BriefingStatus[]
   searching = false
   filter = false
 
@@ -45,6 +48,7 @@ export class BriefingListComponent implements OnInit {
     private fb: FormBuilder,
     private employeeService: EmployeeService,
     private briefingService: BriefingService,
+    private briefingStatus: BriefingStatusService,
     private snackBar: MatSnackBar
   ) { }
 
@@ -54,6 +58,8 @@ export class BriefingListComponent implements OnInit {
       search: this.search,
       attendance: this.fb.control('')
     })
+
+    this.briefingStatus.briefingStatus().subscribe(status => this.status = status)
 
     /*
     this.employeeService.canInsertClients().subscribe((attendances) => {
@@ -91,6 +97,24 @@ export class BriefingListComponent implements OnInit {
           this.searching = false
           this.briefings = pagination.data
         })
+    })
+  }
+
+  editStatus(event, briefing: Briefing) {
+    let status = event.value as BriefingStatus
+    let oldStatus = briefing.status
+    briefing.status = status
+    this.briefingService.edit(briefing).subscribe(data => {
+      if(data.status == true) {
+        this.snackBar.open('Atualizado com sucesso!', '', {
+          duration: 3000
+        })
+      } else {
+        briefing.status = oldStatus
+        this.snackBar.open('Erro ao atualizar.', '', {
+          duration: 3000
+        })
+      }
     })
   }
 

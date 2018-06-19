@@ -298,6 +298,20 @@ export class ScheduleComponent implements OnInit {
     this.updatedMessage = 'Última atualização ' + formatedDate + ' por ' + briefing.attendance.name
   }
 
+  jobDisplay(briefing: Briefing, chrono: Chrono) {
+    if(briefing.id == null) {
+      return ''
+    }
+
+    let date = new Date(Date.parse(briefing.available_date + 'T00:00:00'))
+  
+    if(date.getDate() != chrono.day) {
+      return 'Continuação'
+    } 
+
+    return briefing.job.description
+  }
+
   chronologicDisplay(iniDate) {
     let i: number = 0
     let date: Date = new Date(iniDate)

@@ -9,6 +9,7 @@ import { Stand } from 'app/stand/stand.model';
 import { BriefingMainExpectation } from '../briefing-main-expectation/briefing-main-expectation.model';
 import { BriefingLevel } from '../briefing-level/briefing-level.model';
 import { BriefingHowCome } from '../briefing-how-come/briefing-how-come.model';
+import { BriefingStatus } from 'app/brefing-status/briefing-status.model';
 
 export class Briefing {
     id: number
@@ -39,6 +40,8 @@ export class Briefing {
     main_expectation?: BriefingMainExpectation
     how_come_id?: number
     how_come?: BriefingHowCome
+    status_id?: number
+    status: BriefingStatus
     available_date: string
     presentations?: BriefingPresentation
     levels?: BriefingLevel

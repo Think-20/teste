@@ -31,6 +31,7 @@ import { BriefingMainExpectation } from 'app/briefing-main-expectation/briefing-
 import { BriefingLevel } from 'app/briefing-level/briefing-level.model';
 import { BriefingHowCome } from 'app/briefing-how-come/briefing-how-come.model';
 import { Router } from '@angular/router';
+import { BriefingStatus } from 'app/brefing-status/briefing-status.model';
 
 @Component({
   selector: 'cb-briefing-form',
@@ -55,6 +56,7 @@ export class BriefingFormComponent implements OnInit {
   paramAttendance: Employee = null
   attendances: Employee[]
   creations: Employee[]
+  status: BriefingStatus[]
   presentations: BriefingPresentation[]
   briefingForm: FormGroup
   isAdmin: boolean = false
@@ -120,6 +122,7 @@ export class BriefingFormComponent implements OnInit {
       presentations: this.formBuilder.control('', [Validators.required]),
       levels: this.formBuilder.control('', [Validators.required]),
       competition: this.formBuilder.control('', [Validators.required]),
+      status: this.formBuilder.control('', [Validators.required]),
       files: this.formBuilder.array([]),
       approval_expectation_rate: this.formBuilder.control('', [Validators.required]),
       think_history: this.formBuilder.control('')
@@ -177,6 +180,7 @@ export class BriefingFormComponent implements OnInit {
       this.jobs = data.jobs
       this.job_types = data.job_types
       this.creations = data.creations
+      this.status = data.status
 
       if(this.availableDateParam == undefined) {
         this.briefingForm.controls.creation.setValue(data.creation)
@@ -344,6 +348,7 @@ export class BriefingFormComponent implements OnInit {
       this.briefingForm.controls.how_come.setValue(briefing.how_come)
       this.briefingForm.controls.competition.setValue(briefing.competition)
       this.briefingForm.controls.budget.setValue(briefing.budget)
+      this.briefingForm.controls.status.setValue(briefing.status)
       this.briefingForm.controls.presentations.setValue(briefing.presentations)
       this.briefingForm.controls.approval_expectation_rate.setValue(briefing.approval_expectation_rate)
       snackBarStateCharging.dismiss()
@@ -394,9 +399,13 @@ export class BriefingFormComponent implements OnInit {
 
   compareHowCome(var1: BriefingHowCome, var2: BriefingHowCome) {
     return var1.id === var2.id
-  }
+  } 
 
   compareColumn(var1: any, var2: any) {
+    return var1.id === var2.id
+  }
+
+  compareStatus(var1: BriefingStatus, var2: BriefingStatus) {
     return var1.id === var2.id
   }
 

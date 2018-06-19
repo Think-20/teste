@@ -93,7 +93,6 @@
 
 .line-chrono {
   background-color: white;
-  border: 1px solid #ccc;
   margin-bottom: 10px;
 }
 
@@ -116,7 +115,6 @@
 
 .day-chrono {
   align-self: stretch;
-  border-right: 1px solid #ccc;
   justify-content: center;
   display: flex;
   align-items: center;
@@ -136,6 +134,10 @@
 
 #searchForm .header-form {
   border-top: 1px solid #ccc !important;
+}
+
+.mat-header-row {
+  border-bottom: 1px solid #ccc !important;
 }
 
 .mat-header-row, #searchForm .header-form {
