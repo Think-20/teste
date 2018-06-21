@@ -16,6 +16,8 @@ export class Briefing {
     code?: number
     job_id: number
     job: Job
+    briefing_id?: number
+    briefing?: Briefing
     client_id?: number
     client?: Client
     not_client?: string
@@ -27,6 +29,8 @@ export class Briefing {
     agency: Client
     attendance_id: number
     attendance: Employee
+    responsible_id: number
+    responsible: Employee
     creation_id: number
     creation: Employee
     rate: number

@@ -12,6 +12,12 @@
             {{ job.description }}
           </mat-option>
         </mat-select>
+        
+        <mat-select  *ngIf="relationatedJob" class="col-md-3" placeholder="Briefing*" formControlName="briefing" [compareWith]="compareBriefing" (click)="selectBriefing()">
+          <mat-option *ngFor="let briefing of briefings" [value]="briefing">
+            {{ briefingService.showId(briefing) }}
+          </mat-option>
+        </mat-select>
         <mat-select  class="col-md-3" placeholder="Expectativa*" formControlName="main_expectation" [compareWith]="compareMainExpectation">
           <mat-option *ngFor="let mainExpectation of main_expectations" [value]="mainExpectation">
             {{ mainExpectation.description }}
@@ -74,15 +80,19 @@
             Obrigatório, até 99.999.999,99
           </mat-error>
         </mat-input-container>
-
-        <mat-select  class="col-md-3" placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
+        <mat-select *ngIf="!relationatedJob" class="col-md-3" placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
           <mat-option *ngFor="let attendance of attendances" [value]="attendance">
             {{ attendance.name }}
           </mat-option>
         </mat-select>
-        <mat-select  class="col-md-3" #creation (click)="toggleCreation()" placeholder="Criação*" formControlName="creation" [compareWith]="compareCreation">
+        <mat-select *ngIf="!relationatedJob" class="col-md-3" #creation (click)="toggleCreation()" placeholder="Criação*" formControlName="creation" [compareWith]="compareCreation">
           <mat-option *ngFor="let creation of creations" [value]="creation">
             {{ creation.name }}
+          </mat-option>
+        </mat-select>
+        <mat-select *ngIf="relationatedJob" class="col-md-3" placeholder="Responsável*" formControlName="responsible" [compareWith]="compareAttendance">
+          <mat-option *ngFor="let responsible of responsibles" [value]="responsible">
+            {{ responsible.name }}
           </mat-option>
         </mat-select>
         <cb-stars class="col-md-3 star-input" label="Score" [rate]="briefing != undefined ? (briefing.rate + 1) : 0" [input]="briefingForm.controls.rate">

@@ -312,6 +312,20 @@ export class ScheduleComponent implements OnInit {
     return briefing.job.description
   }
 
+  signal(briefing: Briefing) {
+    let oldStatusId = briefing.status.id
+    briefing.status.id = 5
+    this.briefingService.edit(briefing).subscribe((data) => {
+      if(data.status) {
+        this.snackBar.open('Briefing sinalizado com sucesso!', '', {
+          duration: 3000
+        })
+      } else {
+        briefing.status.id = oldStatusId
+      }
+    })
+  }
+
   chronologicDisplay(iniDate) {
     let i: number = 0
     let date: Date = new Date(iniDate)
@@ -389,22 +403,6 @@ export class ScheduleComponent implements OnInit {
     }
 
     this.router.navigate(['/briefings/new', this.date.getUTCFullYear() + '-' + tempMonth + '-' + tempDay])
-  }
-
-  price(price: number) {
-    if (price == 0) {
-      return '0,00'
-    }
-
-    let formatedPrice: string = price.toString().replace('.', ',')
-
-    for (let i = (price.toString().length - 4); i >= 0; i--) {
-      if (i != 6 && ((i - 3) % 3 == 0) && formatedPrice.charAt(i - 1) != '') {
-        formatedPrice = formatedPrice.slice(0, i) + '.' + formatedPrice.slice(i, formatedPrice.toString().length)
-      }
-    }
-
-    return formatedPrice
   }
 
   delete(briefing: Briefing) {

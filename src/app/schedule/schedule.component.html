@@ -45,9 +45,9 @@
           <div class="mat-header-cell mat-column-job">Job</div>
           <div class="mat-header-cell mat-column-type">Tipo</div>
           <div class="mat-header-cell mat-column-client">Cliente</div>
+          <div class="mat-header-cell mat-column-agency">Agência</div>
           <div class="mat-header-cell mat-column-event">Evento</div>
           <div class="mat-header-cell mat-column-event-date">Data do evento</div>
-          <div class="mat-header-cell mat-column-agency">Agência</div>
           <div class="mat-header-cell mat-column-budget">Verba</div>
           <div class="mat-header-cell mat-column-propo">Proposta</div>
           <div class="mat-header-cell mat-column-area">Área</div>
@@ -70,7 +70,7 @@
               </div>
             </div>
             <div class="line-briefings">
-              <div class="line-briefing" *ngFor="let briefing of chrono[i].briefings" [matMenuTriggerFor]="menu" draggable="true">
+              <div class="line-briefing" [class.signal]="briefing?.status?.id == 5" *ngFor="let briefing of chrono[i].briefings" [matMenuTriggerFor]="menu" draggable="true">
                 <mat-menu #menu="matMenu">
                   <a *ngIf="briefing.id == undefined" [routerLink]="['/briefings/new']" mat-menu-item>
                     <mat-icon>add</mat-icon> Adicionar
@@ -82,6 +82,10 @@
                   <a [disabled]="!permissionVerify('edit', briefing)" *ngIf="briefing.id != undefined" [routerLink]="['/briefings/edit', briefing.id]"
                     mat-menu-item>
                     <mat-icon>mode_edit</mat-icon> Editar
+                  </a>
+                  <a [disabled]="!permissionVerify('edit', briefing)" *ngIf="briefing.id != undefined" (click)="signal(briefing)"
+                    mat-menu-item>
+                    <mat-icon>outlined_flag</mat-icon> Sinalizar
                   </a>
                   <button [disabled]="!permissionVerify('delete', briefing)" *ngIf="briefing.id != undefined" (click)="delete(briefing)" mat-menu-item>
                     <mat-icon>delete</mat-icon> Remover
@@ -96,14 +100,14 @@
                 <div class="mat-cell mat-column-client">
                   {{ briefing.client != null ? briefing.client.fantasy_name : briefing.not_client }}
                 </div>
+                <div class="mat-cell mat-column-agency">
+                  {{ briefing.agency ? briefing.agency.fantasy_name : '' }}
+                </div>
                 <div class="mat-cell mat-column-event">
                   {{ briefing.event }}
                 </div>
                 <div class="mat-cell mat-column-event-date">
                   &nbsp;
-                </div>
-                <div class="mat-cell mat-column-agency">
-                  {{ briefing.agency ? briefing.agency.fantasy_name : '' }}
                 </div>
                 <div class="mat-cell mat-column-budget" *ngIf="briefing.budget != null">
                   {{ briefing.budget | number: '1.2' }}

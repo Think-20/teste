@@ -110,6 +110,7 @@ import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CURRENCY_MASK_CONFIG } from "ng2-currency-mask/src/currency-mask.config";
 import { CustomCurrencyMaskConfig } from 'app/shared/custom-currency-mask-config';
 import { BriefingStatusService } from 'app/brefing-status/briefing-status.service';
+import { BriefingSelectComponent } from './briefings/briefing-form/briefing-select/briefing-select.component';
 
 @NgModule({
   declarations: [
@@ -167,7 +168,8 @@ import { BriefingStatusService } from 'app/brefing-status/briefing-status.servic
     TimecardFormComponent,
     TimecardListComponent,
     TimecardApprovalsComponent,
-    ScheduleComponent
+    ScheduleComponent,
+    BriefingSelectComponent
   ],
   imports: [
     CurrencyMaskModule,
@@ -244,7 +246,8 @@ import { BriefingStatusService } from 'app/brefing-status/briefing-status.servic
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    StandItemFormComponent
+    StandItemFormComponent,
+    BriefingSelectComponent
   ]
 })
 export class AppModule { }

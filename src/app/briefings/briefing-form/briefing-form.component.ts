@@ -2,7 +2,7 @@ import { Component, OnInit, Injectable, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 
 import { Briefing } from '../briefing.model';
 import { BriefingService } from '../briefing.service';
@@ -32,6 +32,7 @@ import { BriefingLevel } from 'app/briefing-level/briefing-level.model';
 import { BriefingHowCome } from 'app/briefing-how-come/briefing-how-come.model';
 import { Router } from '@angular/router';
 import { BriefingStatus } from 'app/brefing-status/briefing-status.model';
+import { BriefingSelectComponent } from 'app/briefings/briefing-form/briefing-select/briefing-select.component';
 
 @Component({
   selector: 'cb-briefing-form',
@@ -44,6 +45,7 @@ export class BriefingFormComponent implements OnInit {
   typeForm: string
   standItemState = 'hidden'
   briefing: Briefing
+  briefings: Briefing[]
   jobs: Job[]
   job_types: JobType[]
   clients: Client[]
@@ -53,6 +55,7 @@ export class BriefingFormComponent implements OnInit {
   how_comes: BriefingHowCome[]
   competitions: BriefingCompetition[]
   employees: Employee[]
+  responsibles: Employee[]
   paramAttendance: Employee = null
   attendances: Employee[]
   creations: Employee[]
@@ -60,6 +63,7 @@ export class BriefingFormComponent implements OnInit {
   presentations: BriefingPresentation[]
   briefingForm: FormGroup
   isAdmin: boolean = false
+  relationatedJob: boolean = false
   @ViewChild('creation') creationSelect
 
   constructor(
@@ -70,12 +74,13 @@ export class BriefingFormComponent implements OnInit {
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
+    private dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router
   ) { }
 
   toggleCreation() {
-    if(!this.isAdmin) {
+    if (!this.isAdmin) {
       this.creationSelect.close()
     }
   }
@@ -86,13 +91,15 @@ export class BriefingFormComponent implements OnInit {
     this.availableDateParam = this.typeForm == 'new' ? this.route.snapshot.params['available_date'] : ''
 
     this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
-    ? this.authService.currentUser().employee : null
+      ? this.authService.currentUser().employee : null
 
     this.isAdmin = this.authService.hasAccess('briefing/save')
 
     this.briefingForm = this.formBuilder.group({
-      id: this.formBuilder.control({value: '', disabled: true}),
+      id: this.formBuilder.control({ value: '', disabled: true }),
       job: this.formBuilder.control('', [Validators.required]),
+      briefing: this.formBuilder.control('', [Validators.required]),
+      responsible: this.formBuilder.control('', [Validators.required]),
       main_expectation: this.formBuilder.control('', [Validators.required]),
       client: this.formBuilder.control(''),
       event: this.formBuilder.control('', [
@@ -129,48 +136,87 @@ export class BriefingFormComponent implements OnInit {
     })
 
     this.briefingForm.get('client').valueChanges
-    .do(clientName => {
+      .do(clientName => {
         snackBarStateCharging = this.snackBar.open('Aguarde...')
-    })
-    .debounceTime(500)
-    .subscribe(clientName => {
-      if(clientName == '' || isObject(clientName)) {
-        snackBarStateCharging.dismiss()
-        return;
-      }
-
-      this.clientService.clients({search: clientName, attendance: this.paramAttendance}).subscribe((dataInfo) => {
-        this.clients = dataInfo.pagination.data.filter((client) => {
-          return client.type.description !== 'Agência'
-        })
       })
-      Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
-    })
+      .debounceTime(500)
+      .subscribe(clientName => {
+        if (clientName == '' || isObject(clientName)) {
+          snackBarStateCharging.dismiss()
+          return;
+        }
+
+        this.clientService.clients({ search: clientName, attendance: this.paramAttendance }).subscribe((dataInfo) => {
+          this.clients = dataInfo.pagination.data.filter((client) => {
+            return client.type.description !== 'Agência'
+          })
+        })
+        Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
+      })
 
     this.briefingForm.get('agency').valueChanges
-    .do(name => {
+      .do(name => {
         snackBarStateCharging = this.snackBar.open('Aguarde...')
-    })
-    .debounceTime(500)
-    .subscribe(name => {
-      if(isObject(name)) {
-        this.enableNotClient()
-        snackBarStateCharging.dismiss()
-        return;
-      }
-
-      if(name == '') {
-        this.disableNotClient()
-        snackBarStateCharging.dismiss()
-        return;
-      }
-
-      this.clientService.clients({search: name, attendance: this.paramAttendance}).subscribe((dataInfo) => {
-        this.agencies = dataInfo.pagination.data.filter((client) => {
-          return client.type.description === 'Agência'
-        })
       })
-      Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
+      .debounceTime(500)
+      .subscribe(name => {
+        if (isObject(name)) {
+          this.enableNotClient()
+          snackBarStateCharging.dismiss()
+          return;
+        }
+
+        if (name == '') {
+          this.disableNotClient()
+          snackBarStateCharging.dismiss()
+          return;
+        }
+
+        this.clientService.clients({ search: name, attendance: this.paramAttendance }).subscribe((dataInfo) => {
+          this.agencies = dataInfo.pagination.data.filter((client) => {
+            return client.type.description === 'Agência'
+          })
+        })
+        Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
+      })
+
+    this.briefingForm.get('job').valueChanges.subscribe((value) => {
+      if (!isObject(value)) {
+        return
+      }
+
+      let job = value as Job
+      switch (job.description) {
+        case 'Projeto': {
+          this.relationatedJob = false
+          this.disableOtherJob()
+          break
+        }
+        case 'Orçamento': {
+          this.relationatedJob = true
+          this.enableOtherJob()
+          this.responsibles = this.employees.filter((employee) => {
+            return employee.name == 'Rafaela Tukamoto'
+          })
+          this.briefingForm.controls.responsible.setValue(this.responsibles[0])
+          break
+        }
+        case 'Detalhamento': {
+          this.relationatedJob = true
+          this.enableOtherJob()
+          this.responsibles = this.employees.filter((employee) => {
+            return employee.name == 'Willyane Alves'
+          })
+          this.briefingForm.controls.responsible.setValue(this.responsibles[0])
+          break
+        }
+        default: {
+          this.relationatedJob = true
+          this.enableOtherJob()
+          this.responsibles = this.employees
+          break
+        }
+      }
     })
 
     snackBarStateCharging = this.snackBar.open('Aguarde...')
@@ -182,7 +228,7 @@ export class BriefingFormComponent implements OnInit {
       this.creations = data.creations
       this.status = data.status
 
-      if(this.availableDateParam == undefined) {
+      if (this.availableDateParam == undefined) {
         this.briefingForm.controls.creation.setValue(data.creation)
         this.briefingForm.controls.available_date.setValue(data.available_date)
         this.addListenerEstimatedTime()
@@ -198,15 +244,16 @@ export class BriefingFormComponent implements OnInit {
       }
 
       this.attendances = data.attendances
+      this.employees = data.employees
       this.competitions = data.competitions
       this.presentations = data.presentations
       this.main_expectations = data.main_expectations
       this.levels = data.levels
       this.how_comes = data.how_comes
 
-      if(this.typeForm === 'edit') {
+      if (this.typeForm === 'edit') {
         this.loadBriefing()
-      } else if(this.typeForm === 'show') {
+      } else if (this.typeForm === 'show') {
         this.loadBriefing()
         this.briefingForm.disable()
       } else {
@@ -217,6 +264,9 @@ export class BriefingFormComponent implements OnInit {
           }).pop())
         })
         this.briefingForm.controls.not_client.disable()
+        this.briefingForm.get('status').setValue(this.status.filter((status) => {
+          return status.description == 'Stand-by'
+        }).pop())
       }
     })
   }
@@ -225,44 +275,44 @@ export class BriefingFormComponent implements OnInit {
     let snackBarStateCharging
 
     this.briefingForm.get('estimated_time').valueChanges
-    .debounceTime(1000)
-    .subscribe(nextEstimatedTime => {
-      snackBarStateCharging = this.snackBar.open('Aguarde...')
-      this.briefingService.recalculateNextDate(nextEstimatedTime).subscribe((response) => {
-        let data = response.data
-        snackBarStateCharging.dismiss()
-        /*
-        let date = new Date(data.available_date)
-        let formatedDate = ''
+      .debounceTime(1000)
+      .subscribe(nextEstimatedTime => {
+        snackBarStateCharging = this.snackBar.open('Aguarde...')
+        this.briefingService.recalculateNextDate(nextEstimatedTime).subscribe((response) => {
+          let data = response.data
+          snackBarStateCharging.dismiss()
+          /*
+          let date = new Date(data.available_date)
+          let formatedDate = ''
+  
+          if(date.getDate() < 10) {
+            formatedDate += '0' + date.getDate() + '/'
+          } else {
+            formatedDate += date.getDate() + '/'
+          }
+  
+          if((date.getMonth() + 1) < 10) {
+            formatedDate += '0' + (date.getMonth() + 1) + '/'
+          } else {
+            formatedDate += (date.getMonth() + 1) + '/'
+          }
+  
+          formatedDate += date.getFullYear()
+          */
 
-        if(date.getDate() < 10) {
-          formatedDate += '0' + date.getDate() + '/'
-        } else {
-          formatedDate += date.getDate() + '/'
-        }
+          this.briefingForm.controls.creation.setValue(data.creation)
+          this.briefingForm.controls.available_date.setValue(data.available_date)
 
-        if((date.getMonth() + 1) < 10) {
-          formatedDate += '0' + (date.getMonth() + 1) + '/'
-        } else {
-          formatedDate += (date.getMonth() + 1) + '/'
-        }
-
-        formatedDate += date.getFullYear()
-        */
-
-        this.briefingForm.controls.creation.setValue(data.creation)
-        this.briefingForm.controls.available_date.setValue(data.available_date)
-
-        snackBarStateCharging = this.snackBar.open('Considerando a mudança no tempo de produção, ' + data.creation.name + ' foi selecionado e a próxima data foi alterada.', '', {
-          duration: 2000
+          snackBarStateCharging = this.snackBar.open('Considerando a mudança no tempo de produção, ' + data.creation.name + ' foi selecionado e a próxima data foi alterada.', '', {
+            duration: 2000
+          })
         })
+        Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
       })
-      Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
-    })
   }
 
   enableNotClient() {
-    if(this.typeForm == 'show') {
+    if (this.typeForm == 'show') {
       return
     }
 
@@ -277,7 +327,7 @@ export class BriefingFormComponent implements OnInit {
   }
 
   disableNotClient() {
-    if(this.typeForm == 'show') {
+    if (this.typeForm == 'show') {
       return
     }
 
@@ -287,6 +337,38 @@ export class BriefingFormComponent implements OnInit {
     this.briefingForm.controls.client.setValidators([
       Validators.required
     ])
+  }
+
+  enableOtherJob() {
+    if (this.typeForm == 'show') {
+      return
+    }
+
+    this.briefingForm.controls.briefing.enable()
+    this.briefingForm.controls.responsible.enable()
+    this.briefingForm.controls.briefing.setValidators([
+      Validators.required
+    ])
+    this.briefingForm.controls.responsible.setValidators([
+      Validators.required
+    ])
+    this.briefingForm.controls.creation.disable()
+    this.briefingForm.controls.creation.clearValidators()
+  }
+
+  disableOtherJob() {
+    if (this.typeForm == 'show') {
+      return
+    }
+
+    this.briefingForm.controls.creation.enable()
+    this.briefingForm.controls.creation.setValidators([
+      Validators.required
+    ])
+    this.briefingForm.controls.briefing.clearValidators()
+    this.briefingForm.controls.responsible.clearValidators()
+    this.briefingForm.controls.responsible.disable()
+    this.briefingForm.controls.briefing.disable()
   }
 
   uploadFile(inputFile: HTMLInputElement) {
@@ -316,49 +398,90 @@ export class BriefingFormComponent implements OnInit {
     })
   }
 
+  selectBriefing() {
+    if (this.typeForm === 'show') {
+      return;
+    }
+
+    let dialog = this.dialog.open(BriefingSelectComponent, {
+      width: '80%',
+      data: {
+        job: this.briefingForm.controls.job.value
+      }
+    })
+
+    dialog.afterClosed().subscribe((result) => {
+      if (result === undefined) {
+        return;
+      }
+
+      let briefing = result as Briefing
+      this.briefings = [briefing]
+      this.briefingForm.controls.briefing.setValue(briefing)
+      this.loadBriefingInForm(briefing, false)
+    })
+  }
+
   loadBriefing() {
     let snackBarStateCharging = this.snackBar.open('Carregando briefing...')
     let briefingId = parseInt(this.route.snapshot.url[1].path)
     this.briefingService.briefing(briefingId).subscribe(briefing => {
       this.briefing = briefing
-
-      this.briefingForm.controls.id.setValue(briefing.id)
-      this.briefingForm.controls.job_type.disable()
-      this.briefingForm.controls.job.setValue(briefing.job)
-      this.briefingForm.controls.event.setValue(briefing.event)
-      this.briefingForm.controls.deadline.setValue(briefing.deadline)
-      this.briefingForm.controls.job_type.setValue(briefing.job_type)
-      this.briefingForm.controls.agency.setValue(briefing.agency)
-
-      if(briefing.agency != null) {
-        this.enableNotClient()
-        this.briefingForm.controls.not_client.setValue(briefing.not_client)
-      } else {
-        this.disableNotClient()        
-        this.briefingForm.controls.client.setValue(briefing.client)
-      }
-
-      this.briefingForm.controls.attendance.setValue(briefing.attendance)
-      this.briefingForm.controls.creation.setValue(briefing.creation)
-      this.briefingForm.controls.rate.setValue(briefing.rate)
-      this.briefingForm.controls.available_date.setValue(briefing.available_date)
-      this.briefingForm.controls.last_provider.setValue(briefing.last_provider)
-      this.briefingForm.controls.levels.setValue(briefing.levels)
-      this.briefingForm.controls.main_expectation.setValue(briefing.main_expectation)
-      this.briefingForm.controls.how_come.setValue(briefing.how_come)
-      this.briefingForm.controls.competition.setValue(briefing.competition)
-      this.briefingForm.controls.budget.setValue(briefing.budget)
-      this.briefingForm.controls.status.setValue(briefing.status)
-      this.briefingForm.controls.presentations.setValue(briefing.presentations)
-      this.briefingForm.controls.approval_expectation_rate.setValue(briefing.approval_expectation_rate)
+      this.loadBriefingInForm(briefing)
       snackBarStateCharging.dismiss()
-
-      this.briefingForm.controls.files = this.formBuilder.array([])
-
-      for(var i = 0; i < briefing.files.length; i++) {
-        this.addFile(briefing.files[i].filename)
-      }
     })
+  }
+
+  loadBriefingInForm(briefing: Briefing, replaceAll = true) {
+    this.briefingForm.controls.id.setValue(briefing.id)
+    this.briefingForm.controls.job_type.disable()
+    this.briefingForm.controls.job.setValue(briefing.job)
+
+    if(briefing.responsible != null) {
+      this.briefingForm.controls.responsible.setValue(briefing.responsible)
+    }
+    if(briefing.briefing != null) {
+      this.briefings = [briefing.briefing]
+      this.briefingForm.controls.briefing.setValue(briefing.briefing)
+    }
+
+    this.briefingForm.controls.event.setValue(briefing.event)
+    this.briefingForm.controls.deadline.setValue(briefing.deadline)
+    this.briefingForm.controls.job_type.setValue(briefing.job_type)
+    this.briefingForm.controls.agency.setValue(briefing.agency)
+
+    if (briefing.agency != null) {
+      this.enableNotClient()
+      this.briefingForm.controls.not_client.setValue(briefing.not_client)
+    } else {
+      this.disableNotClient()
+      this.briefingForm.controls.client.setValue(briefing.client)
+    }
+
+    if(briefing.attendance != null) {
+      this.briefingForm.controls.attendance.setValue(briefing.attendance)
+    }
+    if(briefing.creation != null) {
+      this.briefingForm.controls.creation.setValue(briefing.creation)
+    }
+
+    this.briefingForm.controls.rate.setValue(briefing.rate)
+    this.briefingForm.controls.available_date.setValue(briefing.available_date)
+    this.briefingForm.controls.last_provider.setValue(briefing.last_provider)
+    this.briefingForm.controls.levels.setValue(briefing.levels)
+    this.briefingForm.controls.main_expectation.setValue(briefing.main_expectation)
+    this.briefingForm.controls.how_come.setValue(briefing.how_come)
+    this.briefingForm.controls.competition.setValue(briefing.competition)
+    this.briefingForm.controls.budget.setValue(briefing.budget)
+    this.briefingForm.controls.status.setValue(briefing.status)
+    this.briefingForm.controls.presentations.setValue(briefing.presentations)
+    this.briefingForm.controls.approval_expectation_rate.setValue(briefing.approval_expectation_rate)
+
+    this.briefingForm.controls.files = this.formBuilder.array([])
+
+    for (var i = 0; i < briefing.files.length; i++) {
+      this.addFile(briefing.files[i].filename)
+    }
   }
 
   compareJob(job1: Employee, job2: Employee) {
@@ -399,13 +522,17 @@ export class BriefingFormComponent implements OnInit {
 
   compareHowCome(var1: BriefingHowCome, var2: BriefingHowCome) {
     return var1.id === var2.id
-  } 
+  }
 
   compareColumn(var1: any, var2: any) {
     return var1.id === var2.id
   }
 
   compareStatus(var1: BriefingStatus, var2: BriefingStatus) {
+    return var1.id === var2.id
+  }
+
+  compareBriefing(var1: Briefing, var2: Briefing) {
     return var1.id === var2.id
   }
 
@@ -421,7 +548,7 @@ export class BriefingFormComponent implements OnInit {
     const files = <FormArray>this.briefingForm.controls['files']
 
     files.push(this.formBuilder.group({
-      name: this.formBuilder.control({value : (file ? file : ''), disabled: (this.typeForm === 'show' ? true : false)}),
+      name: this.formBuilder.control({ value: (file ? file : ''), disabled: (this.typeForm === 'show' ? true : false) }),
     }))
   }
 
@@ -438,7 +565,7 @@ export class BriefingFormComponent implements OnInit {
     this.briefingForm.updateValueAndValidity()
     let briefing = this.briefingForm.value
 
-    if(ErrorHandler.formIsInvalid(this.briefingForm)) {
+    if (ErrorHandler.formIsInvalid(this.briefingForm)) {
       this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
         duration: 5000
       })
@@ -451,7 +578,7 @@ export class BriefingFormComponent implements OnInit {
       })
 
       snack.afterDismissed().subscribe(() => {
-        if(data.status) {
+        if (data.status) {
           this.router.navigateByUrl('/schedule')
         }
       })
@@ -463,7 +590,7 @@ export class BriefingFormComponent implements OnInit {
     let briefing = this.briefingForm.value
     briefing.id = this.briefing.id
 
-    if(ErrorHandler.formIsInvalid(this.briefingForm)) {
+    if (ErrorHandler.formIsInvalid(this.briefingForm)) {
       this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
         duration: 5000
       })
@@ -474,7 +601,7 @@ export class BriefingFormComponent implements OnInit {
       this.snackBar.open(data.message, '', {
         duration: data.status ? 1000 : 5000
       }).afterDismissed().subscribe(observer => {
-        if(data.status) {
+        if (data.status) {
           this.router.navigateByUrl('/schedule')
         }
       })

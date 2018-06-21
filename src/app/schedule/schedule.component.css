@@ -78,7 +78,12 @@
 
 .add-chrono {
   padding: 0;
+  border: none !important;
   margin-top: 15px;
+}
+
+.signal {
+  background-color: #e5e6e8;
 }
 
 .schedule-card {
@@ -141,8 +146,6 @@
 }
 
 .mat-header-row, #searchForm .header-form {
-  border-left: 1px solid #ccc;
-  border-right: 1px solid #ccc;
   width: calc(100% - 8px);
 }
 
