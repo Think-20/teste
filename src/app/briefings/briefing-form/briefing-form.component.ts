@@ -44,11 +44,10 @@ export class BriefingFormComponent implements OnInit {
   availableDateParam: string
   typeForm: string
   standItemState = 'hidden'
-  briefing: Briefing
-  briefings: Briefing[]
   jobs: Job[]
   job_types: JobType[]
   clients: Client[]
+  briefing: Briefing
   main_expectations: BriefingMainExpectation[]
   agencies: Client[]
   levels: BriefingLevel[]
@@ -63,7 +62,6 @@ export class BriefingFormComponent implements OnInit {
   presentations: BriefingPresentation[]
   briefingForm: FormGroup
   isAdmin: boolean = false
-  relationatedJob: boolean = false
   @ViewChild('creation') creationSelect
 
   constructor(
@@ -98,9 +96,8 @@ export class BriefingFormComponent implements OnInit {
     this.briefingForm = this.formBuilder.group({
       id: this.formBuilder.control({ value: '', disabled: true }),
       job: this.formBuilder.control('', [Validators.required]),
-      briefing: this.formBuilder.control('', [Validators.required]),
-      responsible: this.formBuilder.control('', [Validators.required]),
       main_expectation: this.formBuilder.control('', [Validators.required]),
+      internal_creation: this.formBuilder.control('1', [Validators.required]),
       client: this.formBuilder.control(''),
       event: this.formBuilder.control('', [
         Validators.required,
@@ -180,47 +177,15 @@ export class BriefingFormComponent implements OnInit {
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
       })
 
-    this.briefingForm.get('job').valueChanges.subscribe((value) => {
-      if (!isObject(value)) {
-        return
-      }
-
-      let job = value as Job
-      switch (job.description) {
-        case 'Projeto': {
-          this.relationatedJob = false
-          this.disableOtherJob()
-          break
-        }
-        case 'Orçamento': {
-          this.relationatedJob = true
-          this.enableOtherJob()
-          this.responsibles = this.employees.filter((employee) => {
-            return employee.name == 'Rafaela Tukamoto'
-          })
-          this.briefingForm.controls.responsible.setValue(this.responsibles[0])
-          break
-        }
-        case 'Detalhamento': {
-          this.relationatedJob = true
-          this.enableOtherJob()
-          this.responsibles = this.employees.filter((employee) => {
-            return employee.name == 'Willyane Alves'
-          })
-          this.briefingForm.controls.responsible.setValue(this.responsibles[0])
-          break
-        }
-        default: {
-          this.relationatedJob = true
-          this.enableOtherJob()
-          this.responsibles = this.employees
-          break
-        }
+    this.briefingForm.get('internal_creation').valueChanges.subscribe((value) => {
+      if(value == '1') {
+        this.enableInternalCreation()
+      } else {
+        this.disableInternalCreation()
       }
     })
 
     snackBarStateCharging = this.snackBar.open('Aguarde...')
-
     this.briefingService.loadFormData().subscribe(response => {
       let data = response.data
       this.jobs = data.jobs
@@ -277,6 +242,10 @@ export class BriefingFormComponent implements OnInit {
     this.briefingForm.get('estimated_time').valueChanges
       .debounceTime(1000)
       .subscribe(nextEstimatedTime => {
+        if(this.briefingForm.get('estimated_time').status == 'DISABLED') {
+          return
+        }
+
         snackBarStateCharging = this.snackBar.open('Aguarde...')
         this.briefingService.recalculateNextDate(nextEstimatedTime).subscribe((response) => {
           let data = response.data
@@ -284,19 +253,19 @@ export class BriefingFormComponent implements OnInit {
           /*
           let date = new Date(data.available_date)
           let formatedDate = ''
-  
+
           if(date.getDate() < 10) {
             formatedDate += '0' + date.getDate() + '/'
           } else {
             formatedDate += date.getDate() + '/'
           }
-  
+
           if((date.getMonth() + 1) < 10) {
             formatedDate += '0' + (date.getMonth() + 1) + '/'
           } else {
             formatedDate += (date.getMonth() + 1) + '/'
           }
-  
+
           formatedDate += date.getFullYear()
           */
 
@@ -339,36 +308,37 @@ export class BriefingFormComponent implements OnInit {
     ])
   }
 
-  enableOtherJob() {
+  disableInternalCreation() {
     if (this.typeForm == 'show') {
       return
     }
 
-    this.briefingForm.controls.briefing.enable()
-    this.briefingForm.controls.responsible.enable()
-    this.briefingForm.controls.briefing.setValidators([
-      Validators.required
-    ])
-    this.briefingForm.controls.responsible.setValidators([
-      Validators.required
-    ])
     this.briefingForm.controls.creation.disable()
     this.briefingForm.controls.creation.clearValidators()
+    this.briefingForm.controls.available_date.disable()
+    this.briefingForm.controls.available_date.clearValidators()
+    this.briefingForm.controls.estimated_time.disable()
+    this.briefingForm.controls.estimated_time.clearValidators()
   }
 
-  disableOtherJob() {
+  enableInternalCreation() {
     if (this.typeForm == 'show') {
       return
     }
 
+    this.briefingForm.controls.available_date.enable()
+    this.briefingForm.controls.available_date.setValidators([
+      Validators.required
+    ])
     this.briefingForm.controls.creation.enable()
     this.briefingForm.controls.creation.setValidators([
       Validators.required
     ])
-    this.briefingForm.controls.briefing.clearValidators()
-    this.briefingForm.controls.responsible.clearValidators()
-    this.briefingForm.controls.responsible.disable()
-    this.briefingForm.controls.briefing.disable()
+    this.briefingForm.controls.estimated_time.enable()
+    this.briefingForm.controls.estimated_time.setValue(1)
+    this.briefingForm.controls.estimated_time.setValidators([
+      Validators.required
+    ])
   }
 
   uploadFile(inputFile: HTMLInputElement) {
@@ -398,30 +368,6 @@ export class BriefingFormComponent implements OnInit {
     })
   }
 
-  selectBriefing() {
-    if (this.typeForm === 'show') {
-      return;
-    }
-
-    let dialog = this.dialog.open(BriefingSelectComponent, {
-      width: '80%',
-      data: {
-        job: this.briefingForm.controls.job.value
-      }
-    })
-
-    dialog.afterClosed().subscribe((result) => {
-      if (result === undefined) {
-        return;
-      }
-
-      let briefing = result as Briefing
-      this.briefings = [briefing]
-      this.briefingForm.controls.briefing.setValue(briefing)
-      this.loadBriefingInForm(briefing, false)
-    })
-  }
-
   loadBriefing() {
     let snackBarStateCharging = this.snackBar.open('Carregando briefing...')
     let briefingId = parseInt(this.route.snapshot.url[1].path)
@@ -435,37 +381,29 @@ export class BriefingFormComponent implements OnInit {
   loadBriefingInForm(briefing: Briefing, replaceAll = true) {
     this.briefingForm.controls.id.setValue(briefing.id)
     this.briefingForm.controls.job_type.disable()
+    this.briefingForm.controls.internal_creation.disable()
     this.briefingForm.controls.job.setValue(briefing.job)
-
-    if(briefing.responsible != null) {
-      this.briefingForm.controls.responsible.setValue(briefing.responsible)
-    }
-    if(briefing.briefing != null) {
-      this.briefings = [briefing.briefing]
-      this.briefingForm.controls.briefing.setValue(briefing.briefing)
-    }
 
     this.briefingForm.controls.event.setValue(briefing.event)
     this.briefingForm.controls.deadline.setValue(briefing.deadline)
     this.briefingForm.controls.job_type.setValue(briefing.job_type)
-    this.briefingForm.controls.agency.setValue(briefing.agency)
 
     if (briefing.agency != null) {
       this.enableNotClient()
+      this.briefingForm.controls.agency.setValue(briefing.agency)
       this.briefingForm.controls.not_client.setValue(briefing.not_client)
     } else {
       this.disableNotClient()
       this.briefingForm.controls.client.setValue(briefing.client)
     }
 
-    if(briefing.attendance != null) {
-      this.briefingForm.controls.attendance.setValue(briefing.attendance)
-    }
-    if(briefing.creation != null) {
+    if (briefing.creation != null) {
       this.briefingForm.controls.creation.setValue(briefing.creation)
     }
 
     this.briefingForm.controls.rate.setValue(briefing.rate)
+    this.briefingForm.controls.internal_creation.setValue(briefing.internal_creation)
+    this.briefingForm.controls.attendance.setValue(briefing.attendance)
     this.briefingForm.controls.available_date.setValue(briefing.available_date)
     this.briefingForm.controls.last_provider.setValue(briefing.last_provider)
     this.briefingForm.controls.levels.setValue(briefing.levels)

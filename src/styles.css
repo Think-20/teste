@@ -177,7 +177,7 @@ h1, h2, h3, h4 {
   box-shadow: none !important;
 }
 
-.mat-input-flex, .mat-select-placeholder, .mat-select-value-text {
+.mat-input-flex, .mat-select-placeholder, .mat-select-value-text, .mat-radio-label-content {
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif !important;
   font-size: 14px;
 }
@@ -239,7 +239,8 @@ mat-card-title {
 
 mat-card-title > p {
     font-size: 16px !important;
-    font-weight: 300;
+    font-weight: 300 !important;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif !important;
 }
 
 .mat-row, .mat-header-row {
@@ -396,12 +397,34 @@ mat-card-title > p {
    background-color: #00afef;
 }
 
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+  background-color: #00afef;
+}
+
+.mat-tab-label {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif !important;
+  text-transform: uppercase;
+font-size: 11px;
+}
+
 .mat-focused .mat-input-placeholder .mat-select-placeholder,
 .mat-select:focus:not(.mat-select-disabled).mat-primary .mat-select-arrow,
 .mat-select:focus:not(.mat-select-disabled).mat-primary .mat-select-trigger,
 .mat-focused .mat-input-placeholder,
 .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
   color: #00afef;
+}
+
+.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #00afef;
+}
+
+.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
+  background-color: rgba(0,175,239,.26);
+}
+
+.mat-radio-button.mat-accent .mat-radio-inner-circle {
+  background-color: #00afef;
 }
 
 .mat-primary .mat-pseudo-checkbox-checked, .mat-primary .mat-pseudo-checkbox-indeterminate {

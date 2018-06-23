@@ -70,7 +70,9 @@ export class BriefingListComponent implements OnInit {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando briefings...')
 
-    this.briefingService.briefings().subscribe(pagination => {
+    this.briefingService.briefings({
+      orderBy: 'created_at'
+    }).subscribe(pagination => {
       this.pagination = pagination
       this.searching = false
       this.briefings = pagination.data

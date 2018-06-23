@@ -43,6 +43,7 @@ import { TimecardListComponent } from './timecard/timecard-list/timecard-list.co
 import { TimecardApprovalsComponent } from './timecard/timecard-approvals/timecard-approvals.component';
 
 import { ScheduleComponent } from './schedule/schedule.component';
+import { BriefingTabsComponent } from './briefings/briefing-tabs/briefing-tabs.component';
 
 export const ROUTES: Routes = [
     {
@@ -160,16 +161,16 @@ export const ROUTES: Routes = [
                         path: '', redirectTo: 'list', pathMatch: 'full'
                     },
                     {
-                        path: 'new', component: BriefingFormComponent, canActivate: [AuthGuard]
+                        path: 'new', component: BriefingTabsComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'new/:available_date', component: BriefingFormComponent, canActivate: [AuthGuard]
+                        path: 'new/:available_date', component: BriefingTabsComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'edit/:id', component: BriefingFormComponent, canActivate: [AuthGuard]
+                        path: 'edit/:id', component: BriefingTabsComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'show/:id', component: BriefingFormComponent, canActivate: [AuthGuard]
+                        path: 'show/:id', component: BriefingTabsComponent, canActivate: [AuthGuard]
                     },
                     {
                         path: 'list', component: BriefingListComponent, canActivate: [AuthGuard]

@@ -8,7 +8,7 @@ import {
   MatButtonModule, MatIconModule, MatTabsModule, MatAutocompleteModule, MatChipsModule,
   MatSnackBar, MatSnackBarModule, MatMenuModule, MAT_PLACEHOLDER_GLOBAL_OPTIONS,
   MatDatepickerModule, MAT_DATE_LOCALE, CompatibilityModule, NoConflictStyleCompatibilityMode,
-  MatNativeDateModule, MatPaginatorModule, MatPaginatorIntl, MatTooltipModule
+  MatNativeDateModule, MatPaginatorModule, MatPaginatorIntl, MatTooltipModule, MatRadioModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -111,6 +111,7 @@ import { CURRENCY_MASK_CONFIG } from "ng2-currency-mask/src/currency-mask.config
 import { CustomCurrencyMaskConfig } from 'app/shared/custom-currency-mask-config';
 import { BriefingStatusService } from 'app/brefing-status/briefing-status.service';
 import { BriefingSelectComponent } from './briefings/briefing-form/briefing-select/briefing-select.component';
+import { BriefingTabsComponent } from './briefings/briefing-tabs/briefing-tabs.component';
 
 @NgModule({
   declarations: [
@@ -169,7 +170,8 @@ import { BriefingSelectComponent } from './briefings/briefing-form/briefing-sele
     TimecardListComponent,
     TimecardApprovalsComponent,
     ScheduleComponent,
-    BriefingSelectComponent
+    BriefingSelectComponent,
+    BriefingTabsComponent
   ],
   imports: [
     CurrencyMaskModule,
@@ -200,7 +202,8 @@ import { BriefingSelectComponent } from './briefings/briefing-form/briefing-sele
     MatSlideToggleModule,
     MatDatepickerModule,
     MatPaginatorModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatRadioModule
   ],
   providers: [
     ClientService,
