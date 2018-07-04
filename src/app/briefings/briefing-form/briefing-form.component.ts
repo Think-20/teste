@@ -51,15 +51,20 @@ export class BriefingFormComponent implements OnInit {
       available_date: this.formBuilder.control('', [Validators.required]),
       responsible: this.formBuilder.control('', [Validators.required]),
       presentations: this.formBuilder.control('', [Validators.required]),
-      estimated_time: this.formBuilder.control('', [Validators.required]),
+      estimated_time: this.formBuilder.control('1', [Validators.required]),
     })
 
     this.availableDateParam = this.typeForm == 'new' ? this.route.snapshot.params['available_date'] : ''
 
-    this.loadDefaultData()
     if(this.job != null && this.job['briefing'] != null) {
       this.briefing = this.job['briefing']
-      this.loadBriefingInForm(this.briefing)
+      this.loadDefaultData(this.briefing)
+    } else {
+      this.loadDefaultData()
+    }
+
+    if(this.typeForm == 'show') {
+      this.briefingForm.disable()
     }
   }
 
@@ -69,7 +74,7 @@ export class BriefingFormComponent implements OnInit {
     }
   }
 
-  loadDefaultData() {
+  loadDefaultData(briefing: Briefing = null) {
     let snackBarStateCharging = this.snackBar.open('Aguarde...')
     this.briefingService.loadFormData().subscribe((response) => {
       let data = response.data
@@ -90,6 +95,10 @@ export class BriefingFormComponent implements OnInit {
       }
 
       this.presentations = data.presentations
+
+      if(briefing != null) {
+        this.loadBriefingInForm(briefing)
+      }
     })
   }
 

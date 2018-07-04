@@ -52,10 +52,15 @@ export class BudgetFormComponent implements OnInit {
 
     this.availableDateParam = this.typeForm == 'new' ? this.route.snapshot.params['available_date'] : ''
 
-    this.loadDefaultData()
     if(this.job != null && this.job['budget'] != null) {
       this.budget = this.job['budget']
-      this.loadBudgetInForm(this.budget)
+      this.loadDefaultData(this.budget)
+    } else {
+      this.loadDefaultData()
+    }
+
+    if(this.typeForm == 'show') {
+      this.budgetForm.disable()
     }
   }
 
@@ -65,7 +70,7 @@ export class BudgetFormComponent implements OnInit {
     }
   }
 
-  loadDefaultData() {
+  loadDefaultData(budget: Budget = null) {
     let snackBarStateCharging = this.snackBar.open('Aguarde...')
     this.budgetService.loadFormData().subscribe((response) => {
       let data = response.data
@@ -85,6 +90,9 @@ export class BudgetFormComponent implements OnInit {
         this.budgetForm.controls.available_date.setValue(this.availableDateParam)
       }
 
+      if(budget != null) {
+        this.loadBudgetInForm(budget)
+      }
     })
   }
 

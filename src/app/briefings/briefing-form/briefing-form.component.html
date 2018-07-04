@@ -1,21 +1,22 @@
-<form [formGroup]="briefingForm" novalidate autocomplete="off" *ngIf="job?.job_activity?.description != 'Orçamento'">
+<form [formGroup]="briefingForm" novalidate autocomplete="off">
   <input type="hidden" formControlName="id">
   <mat-card>
     <div class="row">
-        <mat-form-field class="col-md-3">
-          <input [readonly]="!isAdmin" type="date" formControlName="available_date" matInput placeholder="Data disponível*">
-        </mat-form-field>
-        <mat-select class="col-md-3" #responsible (click)="toggleCreation()" placeholder="Criação*" formControlName="responsible" [compareWith]="compareResponsible">
-          <mat-option *ngFor="let responsible of responsibles" [value]="responsible">
-            {{ responsible.name }}
-          </mat-option>
-        </mat-select>
-        <mat-select class="col-md-3" placeholder="Apresentação*" formControlName="presentations" [compareWith]="comparePresentation"
-          multiple>
-          <mat-option *ngFor="let presentation of presentations" [value]="presentation">
-            {{ presentation.description }}
-          </mat-option>
-        </mat-select>
+      <mat-form-field class="col-md-3">
+        <input [readonly]="!isAdmin" type="date" formControlName="available_date" matInput placeholder="Data disponível*">
+      </mat-form-field>
+      <mat-select class="col-md-3" #responsible (click)="toggleCreation()" placeholder="Criação*" formControlName="responsible"
+        [compareWith]="compareResponsible">
+        <mat-option *ngFor="let responsible of responsibles" [value]="responsible">
+          {{ responsible.name }}
+        </mat-option>
+      </mat-select>
+      <mat-select class="col-md-3" placeholder="Apresentação*" formControlName="presentations" [compareWith]="comparePresentation"
+        multiple>
+        <mat-option *ngFor="let presentation of presentations" [value]="presentation">
+          {{ presentation.description }}
+        </mat-option>
+      </mat-select>
     </div>
   </mat-card>
   <mat-card-title>

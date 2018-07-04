@@ -192,6 +192,8 @@ export class JobFormComponent implements OnInit {
           return status.description == 'Stand-by'
         }).pop())
       }
+
+      snackBarStateCharging.dismiss()
     })
   }
 

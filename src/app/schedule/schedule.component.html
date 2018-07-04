@@ -53,7 +53,7 @@
           <div class="mat-header-cell mat-column-area">Área</div>
           <div class="mat-header-cell mat-column-deadline">Deadline</div>
           <div class="mat-header-cell mat-column-attendance">Atend.</div>
-          <div class="mat-header-cell mat-column-creation">Criação</div>
+          <div class="mat-header-cell mat-column-creation">Respons.</div>
           <div class="mat-header-cell mat-column-stat">Status</div>
           <!--
             <div class="mat-header-cell mat-column-action">Ação</div>
@@ -128,7 +128,7 @@
                   {{ job?.attendance?.name }}
                 </div>
                 <div class="mat-cell mat-column-creation">
-                  {{ job?.creation?.name }}
+                  {{ displayResponsible(job) }}
                 </div>
                 <div class="mat-cell mat-column-stat">
                   {{ job?.status?.description }}

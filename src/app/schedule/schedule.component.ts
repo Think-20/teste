@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../login/auth.service';
 import { BriefingService } from '../briefings/briefing.service';
 import { Briefing } from '../briefings/briefing.model';
+import { BudgetService } from '../budgets/budget.service';
 
 @Component({
   selector: 'cb-schedule',
@@ -65,6 +66,7 @@ export class ScheduleComponent implements OnInit {
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private briefingService: BriefingService,
+    private budgetService: BudgetService,
     private ngZone: NgZone,
     private el: ElementRef,
     private router: Router
@@ -164,17 +166,27 @@ export class ScheduleComponent implements OnInit {
             job2.briefing.available_date = temp
 
             let snackBar = angular.snackBar.open('Aguarde enquanto mudamos a data...')
+            let jobStep1 = angular.getJobStep(job1)
+            let jobStep2 = angular.getJobStep(job2)
 
-            angular.briefingService.getNextAvailableDate(job1.briefing.available_date).subscribe((data) => {
-              job1.briefing.available_date = data.briefing.available_date
-              job1.briefing.responsible_id = data.responsible.id
-              angular.briefingService.editAvailableDate(job1.briefing).subscribe((data) => {
+            if(jobStep1 != jobStep2 && jobStep1 != '' && jobStep2 != '' ) {
+              angular.snackBar.open('Não é possível mudar data de tipos diferentes', '', {
+                duration: 3000
+              })
+              return
+            }
+
+            angular.getJobStepService(job1).getNextAvailableDate(job1[jobStep1].available_date).subscribe((data) => {
+              job1[jobStep1].available_date = data[jobStep1].available_date
+              job1[jobStep1].responsible_id = data.responsible.id
+              angular.getJobStepService(job1).editAvailableDate
+              angular.briefingService.editAvailableDate(job1[jobStep1]).subscribe((data) => {
                 if(data.status == true) {
                   if(job2.id != undefined) {
-                    angular.briefingService.getNextAvailableDate(job2.briefing.available_date).subscribe((data) => {
-                      job2.briefing.available_date = data.briefing.available_date
-                      job2.briefing.responsible_id = data.responsible.id
-                      angular.briefingService.editAvailableDate(job2.briefing).subscribe((data) => {
+                    angular.briefingService.getNextAvailableDate(job2[jobStep1].available_date).subscribe((data) => {
+                      job2[jobStep1].available_date = data[jobStep1].available_date
+                      job2[jobStep1].responsible_id = data.responsible.id
+                      angular.briefingService.editAvailableDate(job2[jobStep1]).subscribe((data) => {
                         if(data.status == true) {
                           snackBar.dismiss()
                           angular.changeMonth(angular.month)
@@ -320,6 +332,15 @@ export class ScheduleComponent implements OnInit {
     return job.job_activity.description
   }
 
+  displayResponsible(job: Job, chrono: Chrono) {
+    if(job.id == null) {
+      return ''
+    }
+
+    let jobStep = this.getJobStep(job)
+    return this.getJobStep(job) == 'briefing' ? job.briefing.responsible.name : job.budget.responsible.name
+  }
+
   signal(job: Job) {
     let oldStatus = job.status
     job.status = {id: 5, description: 'Negociação avançada'}
@@ -364,10 +385,6 @@ export class ScheduleComponent implements OnInit {
             }
           }
 
-          if(job.id == 6) {
-            console.log(job, jobDate, date, lastDate)
-          }
-
           return jobDate <= date && lastDate >= date
         })
 
@@ -392,8 +409,6 @@ export class ScheduleComponent implements OnInit {
 
       date.setDate(date.getDate() + 1)
     }
-
-    console.log(this.chrono)
   }
 
   scrollToDate() {
@@ -412,6 +427,18 @@ export class ScheduleComponent implements OnInit {
     } else {
       elementBodyTable.scrollTo(0, 0)
     }
+  }
+
+  getJobStep(job: Job) {
+    if(job.id == null) {
+      return ''
+    }
+
+    return job.job_activity.description == 'Projeto' ? 'briefing' : 'budget'
+  }
+
+  getJobStepService(job: Job) {
+    return this.getJobStep(job) == 'briefing' ? this.briefingService : this.budgetService
   }
 
   addJob(day: number) {

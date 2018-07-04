@@ -53,12 +53,15 @@ export class ProductionTimeComponent implements OnInit {
   mouseEnter(index: number): void {
     if(this.readonly || this.input.disabled) return
     this.temp = this.rate
-    this.changeRate(index)
+    this.rate = index
+    //this.changeRate(index)
   }
 
   mouseLeave(): void {
     if(this.readonly || this.input.disabled) return
-    if(this.temp !== null && this.rate != 0) this.changeRate(this.temp)
+    if(this.temp !== null && this.rate != 0)
+    //this.changeRate(this.temp)
+    this.rate = this.temp
   }
 
   defineRate(index: number) {
