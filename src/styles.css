@@ -131,6 +131,7 @@ button {
 #my-second-container {
     flex: 1 82.5%;
     max-height: 100%;
+    max-width: 82.5%;
 }
 
 #container-box > .row > .col-md-8::-webkit-scrollbar,

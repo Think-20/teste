@@ -30,10 +30,8 @@ import { ItemListComponent } from './items/item-list/item-list.component';
 import { ItemShowComponent } from './items/item-show/item-show.component';
 import { ItemsComponent } from './items/items.component';
 
-import { BriefingFormComponent } from './briefings/briefing-form/briefing-form.component';
-import { BriefingListComponent } from './briefings/briefing-list/briefing-list.component';
-import { BriefingShowComponent } from './briefings/briefing-show/briefing-show.component';
-import { BriefingsComponent } from './briefings/briefings.component';
+import { JobListComponent } from './jobs/job-list/job-list.component';
+import { JobsComponent } from './jobs/jobs.component';
 
 import { TimecardComponent } from './timecard/timecard.component';
 
@@ -43,7 +41,7 @@ import { TimecardListComponent } from './timecard/timecard-list/timecard-list.co
 import { TimecardApprovalsComponent } from './timecard/timecard-approvals/timecard-approvals.component';
 
 import { ScheduleComponent } from './schedule/schedule.component';
-import { BriefingTabsComponent } from './briefings/briefing-tabs/briefing-tabs.component';
+import { JobTabsComponent } from './jobs/job-tabs/job-tabs.component';
 
 export const ROUTES: Routes = [
     {
@@ -156,24 +154,24 @@ export const ROUTES: Routes = [
                 ]
             },
             {
-                path : 'briefings', component : BriefingsComponent, children: [
+                path : 'jobs', component : JobsComponent, children: [
                     {
                         path: '', redirectTo: 'list', pathMatch: 'full'
                     },
                     {
-                        path: 'new', component: BriefingTabsComponent, canActivate: [AuthGuard]
+                        path: 'new', component: JobTabsComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'new/:available_date', component: BriefingTabsComponent, canActivate: [AuthGuard]
+                        path: 'new/:available_date', component: JobTabsComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'edit/:id', component: BriefingTabsComponent, canActivate: [AuthGuard]
+                        path: 'edit/:id', component: JobTabsComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'show/:id', component: BriefingTabsComponent, canActivate: [AuthGuard]
+                        path: 'show/:id', component: JobTabsComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'list', component: BriefingListComponent, canActivate: [AuthGuard]
+                        path: 'list', component: JobListComponent, canActivate: [AuthGuard]
                     }
                 ]
             },

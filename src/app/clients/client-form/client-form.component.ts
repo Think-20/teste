@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Injectable, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
@@ -50,7 +50,8 @@ import 'rxjs/add/operator/do';
 @Injectable()
 export class ClientFormComponent implements OnInit {
 
-  typeForm: string
+  @Input('mode') typeForm: string
+  @Input('withHeader') withHeader: boolean = true
   rowAppearedState = 'ready'
   client: Client
   clientTypes: ClientType[]

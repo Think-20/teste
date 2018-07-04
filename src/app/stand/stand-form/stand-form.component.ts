@@ -27,6 +27,8 @@ import { BriefingService } from 'app/briefings/briefing.service';
 import { StandItemFormComponent } from 'app/stand/stand-items/stand-item-form/stand-item-form.component';
 import { isUndefined } from 'util';
 import { StandItemService } from 'app/stand/stand-items/stand-item.service';
+import { JobService } from '../../jobs/job.service';
+import { Job } from '../../jobs/job.model';
 
 @Component({
   selector: 'cb-stand-form',
@@ -69,6 +71,7 @@ export class StandFormComponent implements OnInit {
   constructor(
     private uploadFileService: UploadFileService,
     private briefingService: BriefingService,
+    private jobService: JobService,
     private configurationService: StandConfigurationService,
     private standItemService: StandItemService,
     private dialog: MatDialog,
@@ -230,12 +233,12 @@ export class StandFormComponent implements OnInit {
     //this.uploadFileService.uploadFile(this.standForm, key, inputFile)
   }
 
-  previewFile(briefing: Briefing, type: string,  file: string) {
-    this.briefingService.previewFile(briefing, type, file)
+  previewFile(job: Job, type: string,  file: string) {
+    this.jobService.previewFile(job, type, file)
   }
 
-  download(briefing: Briefing, filename: string, type: String, file: String) {
-    this.briefingService.download(briefing, type, file).subscribe((blob) => {
+  download(job: Job, filename: string, type: String, file: String) {
+    this.jobService.download(job, type, file).subscribe((blob) => {
       let fileUrl = URL.createObjectURL(blob)
       let anchor = document.createElement("a");
       anchor.download = filename;

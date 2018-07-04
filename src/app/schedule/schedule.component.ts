@@ -3,8 +3,8 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatSnackBar } from '@angular/material';
 
-import { BriefingService } from '../briefings/briefing.service';
-import { Briefing } from '../briefings/briefing.model';
+import { JobService } from '../jobs/job.service';
+import { Job } from '../jobs/job.model';
 import { Pagination } from 'app/shared/pagination.model';
 import { Employee } from '../employees/employee.model';
 import { EmployeeService } from '../employees/employee.service';
@@ -12,6 +12,8 @@ import { Month, MONTHS } from '../shared/date/months';
 import { DAYSOFWEEK, DayOfWeek } from '../shared/date/days-of-week';
 import { Router } from '@angular/router';
 import { AuthService } from '../login/auth.service';
+import { BriefingService } from '../briefings/briefing.service';
+import { Briefing } from '../briefings/briefing.model';
 
 @Component({
   selector: 'cb-schedule',
@@ -41,7 +43,7 @@ export class ScheduleComponent implements OnInit {
   scrollActivate: boolean = false
   rowAppearedState: string = 'ready'
   pagination: Pagination
-  briefings: Briefing[] = []
+  jobs: Job[] = []
   attendances: Employee[]
   searching = false
   filter = false
@@ -51,40 +53,41 @@ export class ScheduleComponent implements OnInit {
   date: Date
   updatedMessage: string = ''
 
-  briefingDrag: Briefing
-  lineBriefing: HTMLElement
+  jobDrag: Job
+  lineJob: HTMLElement
   tempX: number
   tempY: number
 
   constructor(
     private fb: FormBuilder,
     private employeeService: EmployeeService,
-    private briefingService: BriefingService,
+    private jobService: JobService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
+    private briefingService: BriefingService,
     private ngZone: NgZone,
     private el: ElementRef,
     private router: Router
   ) { }
 
-  permissionVerify(module: string, briefing: Briefing): boolean {
+  permissionVerify(module: string, job: Job): boolean {
     let access: boolean
     let employee = this.authService.currentUser().employee
     switch (module) {
       case 'new': {
-        access = this.authService.hasAccess('briefing/save')
+        access = this.authService.hasAccess('job/save')
         break
       }
       case 'show': {
-        access = briefing.attendance.id != employee.id ? this.authService.hasAccess('briefings/get/{id}') : true
+        access = job.attendance.id != employee.id ? this.authService.hasAccess('jobs/get/{id}') : true
         break
       }
       case 'edit': {
-        access = briefing.attendance.id != employee.id ? this.authService.hasAccess('briefing/edit') : true
+        access = job.attendance.id != employee.id ? this.authService.hasAccess('job/edit') : true
         break
       }
       case 'delete': {
-        access = briefing.attendance.id != employee.id ? this.authService.hasAccess('briefing/remove/{id}') : true
+        access = job.attendance.id != employee.id ? this.authService.hasAccess('job/remove/{id}') : true
         break
       }
       default: {
@@ -137,42 +140,41 @@ export class ScheduleComponent implements OnInit {
             info.parentRecipientPos = Array.prototype.indexOf.call(this.parentNode.parentNode.parentNode.children, this.parentNode.parentNode)
             info.recipientPos = Array.prototype.indexOf.call(this.parentNode.children, this)
 
-            let senderParent = document.querySelectorAll('.line-briefings')[info.parentSenderPos] as HTMLElement
-            let recipientParent = document.querySelectorAll('.line-briefings')[info.parentRecipientPos] as HTMLElement
+            let senderParent = document.querySelectorAll('.line-jobs')[info.parentSenderPos] as HTMLElement
+            let recipientParent = document.querySelectorAll('.line-jobs')[info.parentRecipientPos] as HTMLElement
             let parentRecipientPos: number = info.parentRecipientPos
             let parentSenderPos: number = info.parentSenderPos
 
-            //let briefing1Html = senderParent.querySelectorAll('.line-briefing')[info.senderPos] as HTMLElement
-            //briefing1Html.style.backgroundColor = 'yellow'
-            //let briefing2Html = recipientParent.querySelectorAll('.line-briefing')[info.recipientPos] as HTMLElement
-            //briefing2Html.style.backgroundColor = 'red'
+            //let job1Html = senderParent.querySelectorAll('.line-job')[info.senderPos] as HTMLElement
+            //job1Html.style.backgroundColor = 'yellow'
+            //let job2Html = recipientParent.querySelectorAll('.line-job')[info.recipientPos] as HTMLElement
+            //job2Html.style.backgroundColor = 'red'
 
-            let briefing1 = angular.chrono[parentSenderPos].briefings[info.senderPos]
-            let briefing2 = angular.chrono[parentRecipientPos].briefings[info.recipientPos]
+            let job1 = angular.chrono[parentSenderPos].jobs[info.senderPos]
+            let job2 = angular.chrono[parentRecipientPos].jobs[info.recipientPos]
 
-            if (briefing2.attendance_id != undefined
-              && briefing1.attendance_id != briefing2.attendance_id
+            if (job2.attendance_id != undefined
+              && job1.attendance_id != job2.attendance_id
               && !this.permissionVerify('new')) {
               return false
             }
 
-            let temp = briefing1.available_date
-            briefing1.available_date = briefing2.available_date
-            briefing2.available_date = temp
+            let temp = job1.briefing.available_date
+            job1.briefing.available_date = job2.briefing.available_date
+            job2.briefing.available_date = temp
 
             let snackBar = angular.snackBar.open('Aguarde enquanto mudamos a data...')
 
-            angular.briefingService.getNextAvailableDate(briefing1.available_date).subscribe((data) => {
-              briefing1.available_date = data.available_date
-              briefing1.creation_id = data.creation.id
-              angular.briefingService.editAvailableDate(briefing1).subscribe((data) => {
+            angular.briefingService.getNextAvailableDate(job1.briefing.available_date).subscribe((data) => {
+              job1.briefing.available_date = data.briefing.available_date
+              job1.briefing.responsible_id = data.responsible.id
+              angular.briefingService.editAvailableDate(job1.briefing).subscribe((data) => {
                 if(data.status == true) {
-                  if(briefing2.id != undefined) {
-                    console.log('briefing2.id é undefined, e estou calculando a próxima data')
-                    angular.briefingService.getNextAvailableDate(briefing2.available_date).subscribe((data) => {
-                      briefing2.available_date = data.available_date
-                      briefing2.creation_id = data.creation.id
-                      angular.briefingService.editAvailableDate(briefing2).subscribe((data) => {
+                  if(job2.id != undefined) {
+                    angular.briefingService.getNextAvailableDate(job2.briefing.available_date).subscribe((data) => {
+                      job2.briefing.available_date = data.briefing.available_date
+                      job2.briefing.responsible_id = data.responsible.id
+                      angular.briefingService.editAvailableDate(job2.briefing).subscribe((data) => {
                         if(data.status == true) {
                           snackBar.dismiss()
                           angular.changeMonth(angular.month)
@@ -197,7 +199,7 @@ export class ScheduleComponent implements OnInit {
                   return false
                 }
               })
-            })            
+            })
           })
         }
       })
@@ -218,7 +220,7 @@ export class ScheduleComponent implements OnInit {
 
   changeMonth(month: Month) {
     this.searching = true
-    let snackBar = this.snackBar.open('Carregando briefings...')
+    let snackBar = this.snackBar.open('Carregando jobs...')
     this.month = month
     let iniDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
     let finDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-31')
@@ -234,14 +236,14 @@ export class ScheduleComponent implements OnInit {
       this.scrollActivate = false
     }
 
-    this.briefingService.briefings({
+    this.jobService.jobs({
       iniDate: iniDate,
       finDate: finDate,
       paginate: false
     }).subscribe(pagination => {
       this.pagination = pagination
       this.searching = false
-      this.briefings = pagination.data
+      this.jobs = pagination.data
       this.chronologicDisplay(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
       this.setUpdatedMessage()
       snackBar.dismiss()
@@ -249,12 +251,12 @@ export class ScheduleComponent implements OnInit {
   }
 
   setUpdatedMessage() {
-    if (this.briefings.length == 0) {
+    if (this.jobs.length == 0) {
       this.updatedMessage = 'Sem atualizações'
       return
     }
 
-    let sortedBriefings = this.briefings.sort((a, b) => {
+    let sortedJobs = this.jobs.sort((a, b) => {
       if (a.updated_at > b.updated_at) {
         return 1
       } else if (a.updated_at < b.updated_at) {
@@ -265,8 +267,8 @@ export class ScheduleComponent implements OnInit {
     })
 
     let formatedDate = ''
-    let briefing = sortedBriefings[sortedBriefings.length - 1]
-    let date = new Date(briefing.updated_at)
+    let job = sortedJobs[sortedJobs.length - 1]
+    let date = new Date(job.updated_at)
 
     if (date.getDate() < 10) {
       formatedDate += '0' + date.getDate() + '/'
@@ -295,33 +297,39 @@ export class ScheduleComponent implements OnInit {
       formatedDate += date.getMinutes()
     }
 
-    this.updatedMessage = 'Última atualização ' + formatedDate + ' por ' + briefing.attendance.name
+    this.updatedMessage = 'Última atualização ' + formatedDate + ' por ' + job.attendance.name
   }
 
-  jobDisplay(briefing: Briefing, chrono: Chrono) {
-    if(briefing.id == null) {
+  jobDisplay(job: Job, chrono: Chrono) {
+    if(job.id == null) {
       return ''
     }
 
-    let date = new Date(Date.parse(briefing.available_date + 'T00:00:00'))
-  
+    let date
+
+    if(job.briefing != null) {
+      date = new Date(Date.parse(job.briefing.available_date + 'T00:00:00'))
+    } else if(job.budget != null) {
+      date = new Date(Date.parse(job.budget.available_date + 'T00:00:00'))
+    }
+
     if(date.getDate() != chrono.day) {
       return 'Continuação'
-    } 
+    }
 
-    return briefing.job.description
+    return job.job_activity.description
   }
 
-  signal(briefing: Briefing) {
-    let oldStatusId = briefing.status.id
-    briefing.status.id = 5
-    this.briefingService.edit(briefing).subscribe((data) => {
+  signal(job: Job) {
+    let oldStatus = job.status
+    job.status = {id: 5, description: 'Negociação avançada'}
+    this.jobService.edit(job).subscribe((data) => {
       if(data.status) {
-        this.snackBar.open('Briefing sinalizado com sucesso!', '', {
+        this.snackBar.open('Job sinalizado com sucesso!', '', {
           duration: 3000
         })
       } else {
-        briefing.status.id = oldStatusId
+        job.status = oldStatus
       }
     })
   }
@@ -335,33 +343,48 @@ export class ScheduleComponent implements OnInit {
 
     while (date.getMonth() == thisMonth) {
       if (date.getDay() > 0 && date.getDay() < 6) {
-        let briefings = this.briefings.filter((briefing) => {
-          let briefingDate = new Date(Date.parse(briefing.available_date + 'T00:00:00'))
-          let lastDate = new Date(Date.parse(briefing.available_date + 'T00:00:00'))
+        let jobs = this.jobs.filter((job) => {
+          let jobDate
+          let lastDate
+          let estimatedTime = 1
 
-          for (let i = 0; i < Math.ceil(briefing.estimated_time - 1); i++) {
+          if(job.briefing != null) {
+            jobDate = new Date(Date.parse(job.briefing.available_date + 'T00:00:00'))
+            lastDate = new Date(Date.parse(job.briefing.available_date + 'T00:00:00'))
+            estimatedTime = job.briefing.estimated_time
+          } else if(job.budget != null) {
+            jobDate = new Date(Date.parse(job.budget.available_date + 'T00:00:00'))
+            lastDate = new Date(Date.parse(job.budget.available_date + 'T00:00:00'))
+          }
+
+          for (let i = 0; i < Math.ceil(estimatedTime - 1); i++) {
             lastDate.setDate(lastDate.getDate() + 1)
             while (lastDate.getDay() == 0 || lastDate.getDay() == 6) {
               lastDate.setDate(lastDate.getDate() + 1)
             }
           }
 
-          return briefingDate <= date && lastDate >= date
+          if(job.id == 6) {
+            console.log(job, jobDate, date, lastDate)
+          }
+
+          return jobDate <= date && lastDate >= date
         })
 
-        if (briefings.length < 6) {
-          let length = briefings.length
+        if (jobs.length < 6) {
+          let length = jobs.length
           for (let y = 0; y < (5 - length); y++) {
-            let briefing = new Briefing()
-            briefing.available_date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-            briefings.push(briefing)
+            let job = new Job()
+            job.briefing = new Briefing()
+            job.briefing.available_date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+            jobs.push(job)
           }
         }
 
         this.chrono[i] = {
           day: date.getDate(),
           dayOfWeek: DAYSOFWEEK.find(dayOfWeek => dayOfWeek.id == date.getDay()),
-          briefings: briefings
+          jobs: jobs
         }
 
         i++
@@ -369,6 +392,8 @@ export class ScheduleComponent implements OnInit {
 
       date.setDate(date.getDate() + 1)
     }
+
+    console.log(this.chrono)
   }
 
   scrollToDate() {
@@ -383,13 +408,13 @@ export class ScheduleComponent implements OnInit {
       if (elementList.length > 0) {
         const element = elementList[0] as HTMLElement;
         elementBodyTable.scrollTo(0, element.offsetTop - 45)
-      } 
+      }
     } else {
       elementBodyTable.scrollTo(0, 0)
     }
   }
 
-  addBriefing(day: number) {
+  addJob(day: number) {
     let month = this.date.getMonth() + 1
     let tempMonth = month.toString()
     let tempDay = day.toString()
@@ -402,17 +427,17 @@ export class ScheduleComponent implements OnInit {
       tempDay = '0' + day
     }
 
-    this.router.navigate(['/briefings/new', this.date.getUTCFullYear() + '-' + tempMonth + '-' + tempDay])
+    this.router.navigate(['/jobs/new', this.date.getUTCFullYear() + '-' + tempMonth + '-' + tempDay])
   }
 
-  delete(briefing: Briefing) {
-    this.briefingService.delete(briefing.id).subscribe((data) => {
+  delete(job: Job) {
+    this.jobService.delete(job.id).subscribe((data) => {
       this.snackBar.open(data.message, '', {
         duration: 5000
       })
 
       if (data.status) {
-        this.briefings.splice(this.briefings.indexOf(briefing), 1)
+        this.jobs.splice(this.jobs.indexOf(job), 1)
         this.pagination.total = this.pagination.total - 1
       }
     })
@@ -423,5 +448,5 @@ export class ScheduleComponent implements OnInit {
 export class Chrono {
   day: number
   dayOfWeek: DayOfWeek
-  briefings: Briefing[]
+  jobs: Job[]
 }

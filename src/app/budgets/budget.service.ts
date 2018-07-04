@@ -9,13 +9,13 @@ import 'rxjs/operator/debounceTime';
 
 import { API } from '../app.api';
 import { ErrorHandler } from '../shared/error-handler.service';
-import { Briefing } from './briefing.model';
+import { Budget } from './budget.model';
 import { AuthService } from '../login/auth.service';
 import { Pagination } from 'app/shared/pagination.model';
 
 
 @Injectable()
-export class BriefingService {
+export class BudgetService {
   constructor(
     private http: Http,
     private snackBar: MatSnackBar,
@@ -23,7 +23,7 @@ export class BriefingService {
   ) {}
 
   loadFormData(): Observable<any> {
-    let url = `briefings/load-form`
+    let url = `budgets/load-form`
 
     return this.http.get(`${API}/${url}`)
         .map(response => response.json())
@@ -36,7 +36,7 @@ export class BriefingService {
   }
 
   recalculateNextDate(nextEstimatedTime): Observable<any> {
-    let url = `briefings/recalculate-next-date/${nextEstimatedTime}`
+    let url = `budgets/recalculate-next-date/${nextEstimatedTime}`
 
     return this.http.get(`${API}/${url}`)
         .map(response => response.json())
@@ -48,9 +48,9 @@ export class BriefingService {
         })
   }
 
-  briefings(params?: {}, page: number = 0): Observable<Pagination> {
-      let url = params === {} ? `briefings/all?page=${page}` : `briefings/filter?page=${page}`
-      let prefix = this.auth.hasAccess('briefings/all') ? '' : 'my-'
+  budgets(params?: {}, page: number = 0): Observable<Pagination> {
+      let url = params === {} ? `budgets/all?page=${page}` : `budgets/filter?page=${page}`
+      let prefix = this.auth.hasAccess('budgets/all') ? '' : 'my-'
 
       url = prefix + url
 
@@ -67,9 +67,9 @@ export class BriefingService {
           })
   }
 
-  briefing(briefingId: number): Observable<Briefing> {
-      let url = `briefings/get/${briefingId}`
-      let prefix = this.auth.hasAccess('briefings/get/{id}') ? '' : 'my-'
+  budget(budgetId: number): Observable<Budget> {
+      let url = `budgets/get/${budgetId}`
+      let prefix = this.auth.hasAccess('budgets/get/{id}') ? '' : 'my-'
 
       url = prefix + url
 
@@ -84,7 +84,7 @@ export class BriefingService {
   }
 
   getNextAvailableDate(date: string): Observable<any> {
-      let url = `briefing/get-next-available/${date}`
+      let url = `budget/get-next-available/${date}`
 
       return this.http.get(`${API}/${url}`)
           .map(response => response.json())
@@ -96,15 +96,15 @@ export class BriefingService {
           })
   }
 
-  save(briefing: Briefing): Observable<any> {
-      let url = 'briefing/save'
-      let prefix = this.auth.hasAccess('briefing/save') ? '' : 'my-'
+  save(budget: Budget): Observable<any> {
+      let url = 'budget/save'
+      let prefix = this.auth.hasAccess('budget/save') ? '' : 'my-'
 
       url = prefix + url
 
       return this.http.post(
               `${API}/${url}`,
-              JSON.stringify(briefing),
+              JSON.stringify(budget),
               new RequestOptions()
           )
           .map(response => response.json())
@@ -116,15 +116,15 @@ export class BriefingService {
           })
   }
 
-  edit(briefing: Briefing): Observable<any> {
-      let url = 'briefing/edit'
-      let prefix = this.auth.hasAccess('briefing/edit') ? '' : 'my-'
+  edit(budget: Budget): Observable<any> {
+      let url = 'budget/edit'
+      let prefix = this.auth.hasAccess('budget/edit') ? '' : 'my-'
 
       url = prefix + url
 
       return this.http.put(
               `${API}/${url}`,
-              JSON.stringify(briefing),
+              JSON.stringify(budget),
               new RequestOptions()
           )
           .map(response => response.json())
@@ -136,15 +136,15 @@ export class BriefingService {
           })
   }
 
-  editAvailableDate(briefing: Briefing): Observable<any> {
-      let url = 'briefing/edit-available-date'
-      let prefix = this.auth.hasAccess('briefing/edit-available-date') ? '' : 'my-'
+  editAvailableDate(budget: Budget): Observable<any> {
+      let url = 'budget/edit-available-date'
+      let prefix = this.auth.hasAccess('budget/edit-available-date') ? '' : 'my-'
 
       url = prefix + url
 
       return this.http.put(
               `${API}/${url}`,
-              JSON.stringify(briefing),
+              JSON.stringify(budget),
               new RequestOptions()
           )
           .map(response => response.json())
@@ -157,8 +157,8 @@ export class BriefingService {
   }
 
   delete(id: number): Observable<any> {
-      let url = `briefing/remove/${id}`
-      let prefix = this.auth.hasAccess('briefing/remove/{id}') ? '' : 'my-'
+      let url = `budget/remove/${id}`
+      let prefix = this.auth.hasAccess('budget/remove/{id}') ? '' : 'my-'
 
       url = prefix + url
 

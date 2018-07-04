@@ -36,7 +36,6 @@ import { CityService } from './address/city.service';
 import { ClientTypeService } from './clients/client-types/client-type.service';
 import { ClientStatusService } from './clients/client-status/client-status.service';
 import { EmployeeService } from './employees/employee.service';
-import { BriefingService } from './briefings/briefing.service';
 
 import { ClientFormComponent } from './clients/client-form/client-form.component';
 import { ClientListComponent } from './clients/client-list/client-list.component';
@@ -67,17 +66,12 @@ import { ItemCategoryShowComponent } from './item-categories/item-category-show/
 import { ItemCategoriesComponent } from './item-categories/item-categories.component';
 import { ItemCategoryService } from './item-categories/item-category.service';
 
-import { BriefingFormComponent } from './briefings/briefing-form/briefing-form.component';
-import { BriefingListComponent } from './briefings/briefing-list/briefing-list.component';
-import { BriefingShowComponent } from './briefings/briefing-show/briefing-show.component';
-import { BriefingsComponent } from './briefings/briefings.component';
-
 import { StandFormComponent } from './stand/stand-form/stand-form.component';
 import { StandItemFormComponent } from './stand/stand-items/stand-item-form/stand-item-form.component';
 
-import { JobService } from './jobs/job.service';
+import { JobActivityService } from './job-activities/job-activity.service';
 import { JobTypeService } from './job-types/job-type.service';
-import { BriefingCompetitionService } from './briefing-competitions/briefing-competition.service';
+import { JobCompetitionService } from './job-competitions/job-competition.service';
 
 import { ItemFormComponent } from './items/item-form/item-form.component';
 import { ItemListComponent } from './items/item-list/item-list.component';
@@ -90,7 +84,6 @@ import { ProductionTimeComponent } from './shared/production-time/production-tim
 import { UploadFileService } from './shared/upload-file.service';
 import { ReadMoreComponent } from './shared/text/read-more.component';
 
-import { BriefingSpecialPresentationService } from 'app/briefing-special-presentations/briefing-special-presentation.service';
 import { BriefingPresentationService } from 'app/briefing-presentations/briefing-presentation.service';
 import { StandConfigurationService } from 'app/stand-configurations/stand-configuration.service';
 import { StandGenreService } from 'app/stand-genres/stand-genre.service';
@@ -102,16 +95,26 @@ import { TimecardFormComponent } from './timecard/timecard-form/timecard-form.co
 import { TimecardListComponent } from './timecard/timecard-list/timecard-list.component';
 import { TimecardApprovalsComponent } from './timecard/timecard-approvals/timecard-approvals.component';
 import { TimecardPlaceService } from './timecard/timecard-place/timecard-place.service';
-import { BriefingLevelService } from './briefing-level/briefing-level.service';
-import { BriefingMainExpectationService } from './briefing-main-expectation/briefing-main-expectation.service';
+import { JobLevelService } from './job-level/job-level.service';
+import { JobMainExpectationService } from './job-main-expectation/job-main-expectation.service';
 import { ScheduleComponent } from './schedule/schedule.component';
 
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CURRENCY_MASK_CONFIG } from "ng2-currency-mask/src/currency-mask.config";
 import { CustomCurrencyMaskConfig } from 'app/shared/custom-currency-mask-config';
-import { BriefingStatusService } from 'app/brefing-status/briefing-status.service';
-import { BriefingSelectComponent } from './briefings/briefing-form/briefing-select/briefing-select.component';
-import { BriefingTabsComponent } from './briefings/briefing-tabs/briefing-tabs.component';
+import { JobStatusService } from 'app/job-status/job-status.service';
+
+import { JobTabsComponent } from './jobs/job-tabs/job-tabs.component';
+import { JobsComponent } from './jobs/jobs.component';
+import { JobListComponent } from './jobs/job-list/job-list.component';
+import { JobService } from './jobs/job.service';
+import { JobFormComponent } from './jobs/job-form/job-form.component';
+
+import { BriefingFormComponent } from './briefings/briefing-form/briefing-form.component';
+import { BriefingService } from './briefings/briefing.service';
+
+import { BudgetFormComponent } from './budgets/budget-form/budget-form.component';
+import { BudgetService } from './budgets/budget.service';
 
 @NgModule({
   declarations: [
@@ -148,10 +151,8 @@ import { BriefingTabsComponent } from './briefings/briefing-tabs/briefing-tabs.c
     ItemCategoryListComponent,
     ItemCategoryShowComponent,
 
-    BriefingsComponent,
-    BriefingFormComponent,
-    BriefingListComponent,
-    BriefingShowComponent,
+    JobsComponent,
+    JobListComponent,
 
     StandFormComponent,
     StandItemFormComponent,
@@ -170,8 +171,11 @@ import { BriefingTabsComponent } from './briefings/briefing-tabs/briefing-tabs.c
     TimecardListComponent,
     TimecardApprovalsComponent,
     ScheduleComponent,
-    BriefingSelectComponent,
-    BriefingTabsComponent
+    JobTabsComponent,
+    JobsComponent,
+    BriefingFormComponent,
+    JobFormComponent,
+    BudgetFormComponent
   ],
   imports: [
     CurrencyMaskModule,
@@ -222,21 +226,22 @@ import { BriefingTabsComponent } from './briefings/briefing-tabs/briefing-tabs.c
     ClientStatusService,
     ClientTypeService,
     EmployeeService,
-    BriefingService,
     JobService,
+    JobActivityService,
     JobTypeService,
-    BriefingCompetitionService,
+    JobCompetitionService,
     BriefingPresentationService,
-    BriefingSpecialPresentationService,
-    BriefingLevelService,
-    BriefingMainExpectationService,
+    JobLevelService,
+    JobMainExpectationService,
     StandConfigurationService,
     StandGenreService,
     UploadFileService,
     StandItemService,
     TimecardService,
     TimecardPlaceService,
-    BriefingStatusService,
+    JobStatusService,
+    BriefingService,
+    BudgetService,
 
     MatDialog,
     MatSnackBar,
@@ -249,8 +254,7 @@ import { BriefingTabsComponent } from './briefings/briefing-tabs/briefing-tabs.c
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    StandItemFormComponent,
-    BriefingSelectComponent
+    StandItemFormComponent
   ]
 })
 export class AppModule { }

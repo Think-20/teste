@@ -32,7 +32,7 @@
           </a>
           <div [@rowAppeared]="state" *ngIf="atendimento">
             <div class="sub-navbar">
-              <a mat-raised-button [routerLink]="['/briefings']" [disabled]="hasNoPermission(user, '/briefings')">Briefings</a>
+              <a mat-raised-button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs')">Jobs</a>
               <a [routerLink]="['/clients']" [disabled]="hasNoPermission(user, '/clients')" mat-raised-button>Clientes</a>
               <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Cronograma</a>
             </div>

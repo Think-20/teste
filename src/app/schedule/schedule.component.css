@@ -83,7 +83,7 @@
 }
 
 .signal {
-  background-color: #e5e6e8;
+  background-color: #fbfbfb;
 }
 
 .schedule-card {
@@ -105,16 +105,16 @@
   border-top: 0 !important;
 }
 
-.line-briefings {
+.line-jobs {
   width: 100%;
 }
 
-.line-briefing {
+.line-job {
   display: flex;
   border-bottom: 1px solid #ccc;
 }
 
-.line-briefing:last-child {
+.line-job:last-child {
   border-bottom: 0;
 }
 
