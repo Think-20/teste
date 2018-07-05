@@ -41,10 +41,6 @@ export class BriefingFormComponent implements OnInit {
     private snackBar: MatSnackBar,
   ) { }
 
-  ngOnChanges() {
-    this.ngOnInit()
-  }
-
   ngOnInit() {
     this.briefingForm = this.formBuilder.group({
       id: this.formBuilder.control({ value: '', disabled: true }),

@@ -15,6 +15,7 @@ import { AuthService } from '../login/auth.service';
 import { BriefingService } from '../briefings/briefing.service';
 import { Briefing } from '../briefings/briefing.model';
 import { BudgetService } from '../budgets/budget.service';
+import { JobActivityServiceInterface } from '../jobs/job-activity-service.interface';
 
 @Component({
   selector: 'cb-schedule',
@@ -174,19 +175,20 @@ export class ScheduleComponent implements OnInit {
                 duration: 3000
               })
               return
+            } else if(jobStep1 == '' && jobStep2 == '') {
+              return
             }
 
             angular.getJobStepService(job1).getNextAvailableDate(job1[jobStep1].available_date).subscribe((data) => {
               job1[jobStep1].available_date = data[jobStep1].available_date
               job1[jobStep1].responsible_id = data.responsible.id
-              angular.getJobStepService(job1).editAvailableDate
-              angular.briefingService.editAvailableDate(job1[jobStep1]).subscribe((data) => {
+              angular.getJobStepService(job1).editAvailableDate(job1[jobStep1]).subscribe((data) => {
                 if(data.status == true) {
                   if(job2.id != undefined) {
-                    angular.briefingService.getNextAvailableDate(job2[jobStep1].available_date).subscribe((data) => {
-                      job2[jobStep1].available_date = data[jobStep1].available_date
-                      job2[jobStep1].responsible_id = data.responsible.id
-                      angular.briefingService.editAvailableDate(job2[jobStep1]).subscribe((data) => {
+                    angular.getJobStepService(job2).getNextAvailableDate(job2[jobStep2].available_date).subscribe((data) => {
+                      job2[jobStep2].available_date = data[jobStep2].available_date
+                      job2[jobStep2].responsible_id = data.responsible.id
+                      angular.getJobStepService(job2).editAvailableDate(job2[jobStep2]).subscribe((data) => {
                         if(data.status == true) {
                           snackBar.dismiss()
                           angular.changeMonth(angular.month)
@@ -437,7 +439,7 @@ export class ScheduleComponent implements OnInit {
     return job.job_activity.description == 'Projeto' ? 'briefing' : 'budget'
   }
 
-  getJobStepService(job: Job) {
+  getJobStepService(job: Job): JobActivityServiceInterface {
     return this.getJobStep(job) == 'briefing' ? this.briefingService : this.budgetService
   }
 

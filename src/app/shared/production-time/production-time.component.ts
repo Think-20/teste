@@ -25,6 +25,7 @@ export class ProductionTimeComponent implements OnInit {
     }
     this.input.setValue(this.rate.toString())
 
+    /*
     this.input.statusChanges.subscribe((value) => {
       if(value == 'DISABLED') {
         this.rate = 0
@@ -36,6 +37,7 @@ export class ProductionTimeComponent implements OnInit {
         this.rate = value
       }
     })
+    */
   }
 
   changeRate(newValue: number) {

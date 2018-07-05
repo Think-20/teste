@@ -56,7 +56,8 @@ export class StandFormComponent implements OnInit {
 
   @Input() briefingForm: FormGroup
   @Input() briefing: Briefing
-  stand: Stand
+  @Input() job: Job
+  @Input() stand: Stand
   typeForm: string
   standItemState = 'hidden'
   columns: any[] = [{id: 0, description: 'Não'}, {id: 1, description: 'Sim'}]
@@ -83,7 +84,6 @@ export class StandFormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.stand = this.briefing ? this.briefing.stand : null
     let stand = this.stand
     let snackBarStateCharging
     this.typeForm = this.route.snapshot.url[0].path
@@ -132,9 +132,8 @@ export class StandFormComponent implements OnInit {
         Validators.pattern(Patterns.float),
         Validators.maxLength(10),
       ]),
-      budget: this.formBuilder.control(stand ? stand.budget.toString().replace('.',',') : '', [
+      budget: this.formBuilder.control(stand ? stand.budget : '', [
         Validators.required,
-        Validators.pattern(Patterns.float),
         Validators.maxLength(13),
       ]),
       area_budget: this.formBuilder.control(''),
@@ -166,22 +165,22 @@ export class StandFormComponent implements OnInit {
 
     stand ? this.updateOpenedArea() : null
 
-    if(this.typeForm === 'show') {
+    if(this.typeForm === 'show' && this.stand != null) {
       this.loadStandItems()
       this.standForm.disable()
-    } else if(this.typeForm === 'edit') {
+    } else if(this.typeForm === 'edit' && this.stand != null) {
       this.loadStandItems()
-    } else if(this.typeForm === 'new') {
+    } else if(this.typeForm === 'new' || this.stand == null) {
       this.loadStandItemsDefault()
     }
   }
 
   updateAreaBudget() {
-    let area = parseFloat(String(this.briefingForm.get('area').value).replace(',', '.'))
-    let budget = parseFloat(String(this.briefingForm.get('budget').value).replace(',', '.'))
-    let area_budget = (isNaN(area) || isNaN(budget)) ? '' : String((budget / area).toFixed(2)).replace('.', ',')
+    let area = parseFloat(String(this.standForm.get('area').value).replace(',', '.'))
+    let budget = parseFloat(String(this.standForm.get('budget').value).replace(',', '.'))
+    let area_budget = (isNaN(area) || isNaN(budget)) ? '' : String((budget / area).toFixed(2))
 
-    this.briefingForm.get('area_budget').setValue(area_budget)
+    this.standForm.get('area_budget').setValue(area_budget)
   }
 
   loadStandItemsDefault() {
@@ -230,7 +229,11 @@ export class StandFormComponent implements OnInit {
   }
 
   uploadFile(key: string, inputFile: HTMLInputElement) {
-    //this.uploadFileService.uploadFile(this.standForm, key, inputFile)
+    this.standForm.controls[key].setValue('Aguarde...')
+    this.uploadFileService.uploadFile(inputFile).subscribe((data) => {
+      let filename = data.names[0]
+      this.standForm.controls[key].setValue(filename)
+    })
   }
 
   previewFile(job: Job, type: string,  file: string) {

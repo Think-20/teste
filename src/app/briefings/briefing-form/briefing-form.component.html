@@ -19,6 +19,17 @@
       </mat-select>
     </div>
   </mat-card>
+  <div *ngIf="job?.job_type?.description == 'Stand'">
+    <mat-card-title>
+      <p class="lead">Stand</p>
+    </mat-card-title>
+    <cb-stand-form
+      [job]="job"
+      [briefing]="briefing"
+      [stand]="briefing?.stand"
+      [briefingForm]="briefingForm">
+    </cb-stand-form>
+  </div>
   <mat-card-title>
     <p class="lead">Tempo estimado de produção</p>
   </mat-card-title>

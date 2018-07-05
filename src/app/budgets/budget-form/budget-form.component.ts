@@ -39,10 +39,6 @@ export class BudgetFormComponent implements OnInit {
     private snackBar: MatSnackBar,
   ) { }
 
-  ngOnChanges() {
-    this.ngOnInit()
-  }
-
   ngOnInit() {
     this.budgetForm = this.formBuilder.group({
       id: this.formBuilder.control({ value: '', disabled: true }),

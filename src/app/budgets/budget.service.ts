@@ -12,10 +12,11 @@ import { ErrorHandler } from '../shared/error-handler.service';
 import { Budget } from './budget.model';
 import { AuthService } from '../login/auth.service';
 import { Pagination } from 'app/shared/pagination.model';
+import { JobActivityServiceInterface } from 'app/jobs/job-activity-service.interface'
 
 
 @Injectable()
-export class BudgetService {
+export class BudgetService implements JobActivityServiceInterface {
   constructor(
     private http: Http,
     private snackBar: MatSnackBar,

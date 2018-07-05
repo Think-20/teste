@@ -1,6 +1,3 @@
-<mat-card-title>
-  <p class="lead">Stand</p>
-</mat-card-title>
 <mat-card [formGroup]="briefingForm">
   <div [formGroup]="standForm" class="row">
     <input type="hidden" formControlName="id">
@@ -23,7 +20,7 @@
         Obrigatório
       </mat-error>
     </mat-input-container>
-    <mat-input-container class="col-md-3" *ngIf="typeForm == 'show'" (click)="previewFile(briefing, 'stand', 'plan')">
+    <mat-input-container class="col-md-3" *ngIf="typeForm == 'show'" (click)="previewFile(job, 'stand', 'plan')">
       <input formControlName="plan" matInput placeholder="Planta do Evento/Local*">
     </mat-input-container>
 
@@ -34,7 +31,7 @@
         Obrigatório
       </mat-error>
     </mat-input-container>
-    <mat-input-container class="col-md-3" *ngIf="typeForm == 'show'" (click)="previewFile(briefing, 'stand', 'regulation')">
+    <mat-input-container class="col-md-3" *ngIf="typeForm == 'show'" (click)="previewFile(job, 'stand', 'regulation')">
       <input formControlName="regulation" matInput placeholder="Regulamento*">
     </mat-input-container>
 
@@ -67,13 +64,13 @@
       </mat-error>
     </mat-input-container>
     <mat-input-container class="col-md-4">
-      <input formControlName="budget" matInput placeholder="Verba*">
+      <input currencyMask formControlName="budget" matInput placeholder="Verba*">
       <mat-error>
-        Obrigatório, até 99999999,99
+        Obrigatório, até 99.999.999,99
       </mat-error>
     </mat-input-container>
     <mat-input-container class="col-md-4">
-      <input formControlName="area_budget" matInput readonly placeholder="Valor/m²">
+      <input currencyMask formControlName="area_budget" matInput readonly placeholder="Valor/m²">
     </mat-input-container>
     <mat-input-container class="col-md-6">
       <input formControlName="closed_area_percent" matInput placeholder="Área fechada*">
