@@ -1,0 +1,36 @@
+.container-table {
+    height: 50%;
+    padding: 0 15px;
+}
+
+p {
+    font-size: 14px;
+}
+
+.mat-column-id {
+    width: 15%;
+  }
+  
+  .mat-column-client {
+      width: 13%;
+  }
+  
+  .mat-column-event {
+      width: 12%;
+  }
+  
+  .mat-column-date {
+      width: 15%;
+  }
+  
+  .mat-column-type {
+      width: 15%;
+  }
+  
+  .mat-column-attendance {
+      width: 15%;
+  }
+  
+  .mat-column-status {
+      width: 15%;
+  }

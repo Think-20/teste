@@ -1,3 +1,6 @@
+<div class="my-container">
+  <h3 class="lead">Jobs</h3>
+</div>
 <div class="col-md-12" id="searchForm">
   <form [formGroup]="searchForm" autocomplete="off">
     <mat-card-title>
@@ -6,7 +9,7 @@
           Lista
         </div>
         <mat-input-container class="bar">
-          <input #search matInput formControlName="search" placeholder="Qual evento você procura?" autocomplete="off">
+          <input #search matInput formControlName="search" placeholder="Qual job você procura?" autocomplete="off">
         </mat-input-container>
         <div class="buttons">
           <a mat-button (click)="search.focus()">
@@ -42,6 +45,7 @@
             <div class="mat-header-cell mat-column-type">Tipo</div>
             <div class="mat-header-cell mat-column-attendance">Atendimento</div>
             <div class="mat-header-cell mat-column-date">Data</div>
+            <div class="mat-header-cell mat-column-status">Status</div>
             <div class="mat-header-cell mat-column-action">Ação</div>
           </div>
           <div class="mat-row" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState">
@@ -108,7 +112,8 @@
       <div *ngIf="jobs.length == 0 && searchForm.controls.search.value == '' && !searching" class="col-md-12 records-not-found">
         <p>
           <small>
-            Ainda não existe nenhum job cadastrado. Que tal <a [routerLink]="['/jobs/new']">cadastrar</a> agora?
+            Ainda não existe nenhum job cadastrado. Que tal
+            <a [routerLink]="['/jobs/new']">cadastrar</a> agora?
           </small>
         </p>
       </div>
@@ -130,11 +135,7 @@
         </div>
       </table>
     </mat-card>
-    <mat-paginator *ngIf="jobs"
-      [length]="pagination?.total"
-      [pageSize]="pagination?.per_page"
-      [pageSizeOptions]="[pagination?.per_page]"
-      (page)="changePage($event)"
-    ></mat-paginator>
+    <mat-paginator *ngIf="jobs" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageSizeOptions]="[pagination?.per_page]"
+      (page)="changePage($event)"></mat-paginator>
   </form>
 </div>

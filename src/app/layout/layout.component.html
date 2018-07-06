@@ -1,13 +1,13 @@
 <div id="my-master-container">
     <cb-sidenav #sidenav opened="opened" [class.opened]="sidenav.opened"></cb-sidenav>
-    <div id="my-second-container">
+    <div id="my-second-container" [class.max-size]="!sidenav.opened">
         <cb-navbar (toggleMenuEmitter)="sidenav.toggleMenu()"></cb-navbar>
         <div id="container-box" class="my-container">
             <div class="row">
-                <div id="all-container" class="col-md-8">  
+                <div id="all-container" class="col-md-8">
                   <router-outlet></router-outlet>
                 </div>
-                <div id="timeline-container" class="col-md-4">
+                <div *ngIf="sidenav.opened" id="timeline-container" class="col-md-4">
                     <cb-notification-bar></cb-notification-bar>
                 </div>
             </div>

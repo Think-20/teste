@@ -1,6 +1,6 @@
 import { Pagination } from "./pagination.model";
 
 export class DataInfo {
-  updatedInfo: string
+  updatedInfo: any
   pagination?: Pagination
 }

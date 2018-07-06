@@ -126,7 +126,12 @@
           <div class="mat-cell col-md-2 text-right">{{ statusInactive(clients) }}/{{ statusActive(clients) }}</div>
           <div class="mat-cell col-md-3 text-right">{{ typeAgencia(clients) }}/{{ typeExpositor(clients) }}/{{ typeAutonomo(clients) }}</div>
           <div class="mat-cell col-md-2 text-right">{{ score3Plus(clients) }}/{{ score3Minus(clients) }}</div>
-          <div class="mat-cell col-md-3 text-right">{{ dataInfo?.updatedInfo }}</div>
+          <div class="mat-cell col-md-3 text-right">
+            {{ dataInfo?.updatedInfo?.date }}
+            <p class="updated-info-employee">
+              {{ dataInfo?.updatedInfo?.employee }}
+            </p>
+          </div>
         </div>
       </table>
     </mat-card>

@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChildren, QueryList, NgZone, ElementRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 
 import { JobService } from '../jobs/job.service';
 import { Job } from '../jobs/job.model';
@@ -16,6 +16,7 @@ import { BriefingService } from '../briefings/briefing.service';
 import { Briefing } from '../briefings/briefing.model';
 import { BudgetService } from '../budgets/budget.service';
 import { JobActivityServiceInterface } from '../jobs/job-activity-service.interface';
+import { ScheduleDialogComponent } from 'app/schedule/schedule-dialog/schedule-dialog.component';
 
 @Component({
   selector: 'cb-schedule',
@@ -70,6 +71,7 @@ export class ScheduleComponent implements OnInit {
     private budgetService: BudgetService,
     private ngZone: NgZone,
     private el: ElementRef,
+    private dialog: MatDialog,
     private router: Router
   ) { }
 
@@ -457,6 +459,13 @@ export class ScheduleComponent implements OnInit {
     }
 
     this.router.navigate(['/jobs/new', this.date.getUTCFullYear() + '-' + tempMonth + '-' + tempDay])
+  }
+
+  openDialog() {
+    this.dialog.open(ScheduleDialogComponent, {
+      width: '80%',
+      height: '100%'
+    })
   }
 
   delete(job: Job) {

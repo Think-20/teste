@@ -1,13 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Job } from '../job.model';
 import { Observable } from 'rxjs/Observable';
+import { JobService } from '../job.service';
 
 @Component({
   selector: 'cb-job-tabs',
   templateUrl: './job-tabs.component.html',
   styleUrls: ['./job-tabs.component.css']
 })
+@Injectable()
 export class JobTabsComponent implements OnInit {
   typeForm: string
   job: Job
@@ -15,7 +17,8 @@ export class JobTabsComponent implements OnInit {
   selectedIndex: number = 0
 
   constructor(
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private jobService: JobService,
   ) { }
 
   ngOnInit() {
@@ -38,6 +41,10 @@ export class JobTabsComponent implements OnInit {
       }
     })
 
+  }
+
+  showId(job: Job) {
+    return this.jobService.showId(job)
   }
 
   setJob(job: Job) {

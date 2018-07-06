@@ -134,6 +134,16 @@ button {
     max-width: 82.5%;
 }
 
+.mat-dialog-container::-webkit-scrollbar {
+  border-radius: 9px;
+  width: 8px;
+}
+
+.mat-dialog-container::-webkit-scrollbar-thumb {
+  border-radius: 9px;
+  background-color: rgba(231,230,239,0.25);
+}
+
 #container-box > .row > .col-md-8::-webkit-scrollbar,
 #container-box > .row > .col-md-4::-webkit-scrollbar,
 #menu-container::-webkit-scrollbar, .mat-select-panel::-webkit-scrollbar,

@@ -1,21 +1,18 @@
+<div class="my-container">
+  <h3 class="lead">{{ job?.id != undefined ? 'Job ' + showId(job) : 'Jobs'}}</h3>
+</div>
 <div class="col-md-12">
   <mat-tab-group [selectedIndex]="selectedIndex">
     <mat-tab label="Informações">
       <cb-job-form [typeForm]="typeForm" (jobEmitter)="setJob($event)" (isAdminEmitter)="setIsAdmin($event)"></cb-job-form>
     </mat-tab>
     <mat-tab label="Briefing">
-      <cb-briefing-form
-        *ngIf="job?.id != undefined && job?.job_activity?.description != 'Orçamento'"
-        [typeForm]="typeForm"
-        [job]="job"
+      <cb-briefing-form *ngIf="job?.id != undefined && job?.job_activity?.description != 'Orçamento'" [typeForm]="typeForm" [job]="job"
         [isAdmin]="isAdmin">
       </cb-briefing-form>
     </mat-tab>
     <mat-tab label="Orçamento">
-      <cb-budget-form
-        *ngIf="job?.id != undefined && job?.job_activity?.description != 'Projeto'"
-        [typeForm]="typeForm"
-        [job]="job"
+      <cb-budget-form *ngIf="job?.id != undefined && job?.job_activity?.description != 'Projeto'" [typeForm]="typeForm" [job]="job"
         [isAdmin]="isAdmin">
       </cb-budget-form>
     </mat-tab>

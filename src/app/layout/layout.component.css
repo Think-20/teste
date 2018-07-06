@@ -28,6 +28,15 @@ cb-sidenav.opened {
     overflow-x: hidden !important;
 }
 
+.max-size {
+  max-width: 100% !important;
+}
+
+#my-second-container.max-size #all-container {
+  max-width: 100% !important;
+  width: 100% !important;
+}
+
 @media screen and (min-width: 900px) {
     #container-box > .row > .col-md-8 {
         padding-bottom: 250px;
