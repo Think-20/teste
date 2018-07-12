@@ -1,4 +1,5 @@
 <mat-toolbar>
+  <img *ngIf="!opened" id="logoNavBar" src="/assets/images/logo.png" alt="Think Ideias">
   <div>
     <button mat-button (click)="toggleMenu()">
       <mat-icon>menu</mat-icon> <span>Menu</span>

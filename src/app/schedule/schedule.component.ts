@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChildren, QueryList, NgZone, ElementRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 import { JobService } from '../jobs/job.service';
 import { Job } from '../jobs/job.model';
@@ -16,7 +16,7 @@ import { BriefingService } from '../briefings/briefing.service';
 import { Briefing } from '../briefings/briefing.model';
 import { BudgetService } from '../budgets/budget.service';
 import { JobActivityServiceInterface } from '../jobs/job-activity-service.interface';
-import { ScheduleDialogComponent } from 'app/schedule/schedule-dialog/schedule-dialog.component';
+import { Budget } from '../budgets/budget.model';
 
 @Component({
   selector: 'cb-schedule',
@@ -71,7 +71,6 @@ export class ScheduleComponent implements OnInit {
     private budgetService: BudgetService,
     private ngZone: NgZone,
     private el: ElementRef,
-    private dialog: MatDialog,
     private router: Router
   ) { }
 
@@ -164,11 +163,6 @@ export class ScheduleComponent implements OnInit {
               return false
             }
 
-            let temp = job1.briefing.available_date
-            job1.briefing.available_date = job2.briefing.available_date
-            job2.briefing.available_date = temp
-
-            let snackBar = angular.snackBar.open('Aguarde enquanto mudamos a data...')
             let jobStep1 = angular.getJobStep(job1)
             let jobStep2 = angular.getJobStep(job2)
 
@@ -181,14 +175,31 @@ export class ScheduleComponent implements OnInit {
               return
             }
 
-            angular.getJobStepService(job1).getNextAvailableDate(job1[jobStep1].available_date).subscribe((data) => {
-              job1[jobStep1].available_date = data[jobStep1].available_date
+            if(job1[jobStep1].estimated_time > job2[jobStep1].estimated_time) {
+              angular.snackBar.open('Não é possível mudar uma data de duração maior.', '', {
+                duration: 3000
+              })
+              return
+            }
+
+            let tempDate = job1[jobStep1].available_date
+            let tempTime = job1[jobStep1].estimated_time
+            job1[jobStep1].available_date = job2[jobStep1].available_date
+            job1[jobStep1].estimated_time = job2[jobStep1].estimated_time
+            job2[jobStep1].available_date = tempDate
+            job2[jobStep1].estimated_time = tempTime
+
+            let snackBar = angular.snackBar.open('Aguarde enquanto mudamos a data...')
+
+            angular.getJobStepService(job1).getNextAvailableDate(job1[jobStep1].available_date, job1[jobStep1].estimated_time, true).subscribe((data) => {
+              job1[jobStep1].available_date = data.available_date
               job1[jobStep1].responsible_id = data.responsible.id
+
               angular.getJobStepService(job1).editAvailableDate(job1[jobStep1]).subscribe((data) => {
                 if(data.status == true) {
                   if(job2.id != undefined) {
-                    angular.getJobStepService(job2).getNextAvailableDate(job2[jobStep2].available_date).subscribe((data) => {
-                      job2[jobStep2].available_date = data[jobStep2].available_date
+                    angular.getJobStepService(job2).getNextAvailableDate(job2[jobStep2].available_date, job2[jobStep2].estimated_time, true).subscribe((data) => {
+                      job2[jobStep2].available_date = data.available_date
                       job2[jobStep2].responsible_id = data.responsible.id
                       angular.getJobStepService(job2).editAvailableDate(job2[jobStep2]).subscribe((data) => {
                         if(data.status == true) {
@@ -397,7 +408,9 @@ export class ScheduleComponent implements OnInit {
           for (let y = 0; y < (5 - length); y++) {
             let job = new Job()
             job.briefing = new Briefing()
+            job.budget = new Budget()
             job.briefing.available_date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+            job.budget.available_date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
             jobs.push(job)
           }
         }
@@ -459,13 +472,6 @@ export class ScheduleComponent implements OnInit {
     }
 
     this.router.navigate(['/jobs/new', this.date.getUTCFullYear() + '-' + tempMonth + '-' + tempDay])
-  }
-
-  openDialog() {
-    this.dialog.open(ScheduleDialogComponent, {
-      width: '80%',
-      height: '100%'
-    })
   }
 
   delete(job: Job) {

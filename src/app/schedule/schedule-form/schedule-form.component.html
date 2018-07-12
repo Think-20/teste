@@ -1,0 +1,79 @@
+<div class="my-container">
+  <h3 class="lead">Cronograma</h3>
+</div>
+<div class="col-md-12">
+  <mat-card-title>
+    <p class="lead">Vamos checar a disponibilidade?</p>
+  </mat-card-title>
+  <mat-card>
+    <form [formGroup]="scheduleForm">
+      <div class="row">
+        <input formControlName="job" type="hidden">
+        <mat-select class="col-md-3" formControlName="job_activity" placeholder="Atividade*">
+          <mat-option *ngFor="let job_activity of job_activities" [value]="job_activity">
+            {{ job_activity.description }}
+          </mat-option>
+        </mat-select>
+        <mat-select class="col-md-3" formControlName="duration" placeholder="Duração estimada (dias)*">
+          <mat-option *ngFor="let i of [1,2,3,4,5,6,7,8,9,10]" [value]="i">{{ i }}</mat-option>
+        </mat-select>
+        <mat-form-field class="col-md-3">
+          <input type="date" [readonly]="true" formControlName="available_date" matInput placeholder="Data disponível*">
+        </mat-form-field>
+        <mat-form-field class="col-md-3">
+          <input type="date" formControlName="deadline" matInput placeholder="Deadline*">
+        </mat-form-field>
+      </div>
+      <p *ngIf="nextDateMessage != ''">
+        <small>{{ nextDateMessage }}</small>
+      </p>
+      <div *ngIf="hasPreviousActivity">
+        <p class="lead">Selecione o job</p>
+        <table class="table mat-table">
+          <div class="mat-header-row">
+            <div class="mat-header-cell mat-column-id">ID</div>
+            <div class="mat-header-cell mat-column-client">Cliente</div>
+            <div class="mat-header-cell mat-column-event">Evento</div>
+            <div class="mat-header-cell mat-column-type">Tipo</div>
+            <div class="mat-header-cell mat-column-attendance">Atendimento</div>
+            <div class="mat-header-cell mat-column-date">Data</div>
+            <div class="mat-header-cell mat-column-status">Status</div>
+          </div>
+          <div class="mat-row-scroll">
+            <div class="mat-row" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState">
+              <div class="mat-cell mat-column-id">
+                {{ jobService.showId(job) }}
+              </div>
+              <div class="mat-cell mat-column-client">
+                {{ job.client ? job.client.fantasy_name : job.not_client }}
+              </div>
+              <div class="mat-cell mat-column-event">
+                {{ job.event }}
+              </div>
+              <div class="mat-cell mat-column-type">
+                {{ job.job_type.description }}
+              </div>
+              <div class="mat-cell mat-column-attendance">
+                {{ job.attendance.name }}
+              </div>
+              <div class="mat-cell mat-column-date">
+                {{ job.created_at | date:'dd/MM/yy' }}
+              </div>
+              <div class="mat-cell mat-column-status" (click)=select.open()>
+                {{ job.status.description }}
+                <mat-select #select class="langSelect" (change)="editStatus($event, job)">
+                  <mat-option *ngFor="let s of status" [value]="s">
+                    {{ s.description }}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+          </div>
+        </table>
+      </div>
+      <mat-card-actions class="col-md-12 text-right">
+        <button mat-button class="cb-button" [routerLink]="url">AGENDAR</button>
+      </mat-card-actions>
+    </form>
+  </mat-card>
+</div>

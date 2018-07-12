@@ -30,7 +30,7 @@
           <a mat-button (click)="filter = filter ? false : true">
             <mat-icon>keyboard_arrow_down</mat-icon>
           </a>
-          <a (click)="openDialog()" mat-button>
+          <a [routerLink]="['new']" mat-button>
             <mat-icon>add</mat-icon>
           </a>
         </div>
@@ -64,9 +64,11 @@
             <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }}">
               <div>
                 <span>{{ chr.day }}-{{ chr.dayOfWeek?.abbrev }}</span>
+                <!--
                 <button [disabled]="!permissionVerify('new', job)" class="cb-button add-chrono" (click)="addBriefing(chr.day)">
                   <mat-icon>+</mat-icon>
                 </button>
+                -->
               </div>
             </div>
             <div class="line-jobs">

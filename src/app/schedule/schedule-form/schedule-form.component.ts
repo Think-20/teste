@@ -6,16 +6,15 @@ import { BriefingService } from 'app/briefings/briefing.service';
 import { BudgetService } from 'app/budgets/budget.service';
 
 @Component({
-  selector: 'cb-schedule-dialog',
-  templateUrl: './schedule-dialog.component.html',
-  styleUrls: ['./schedule-dialog.component.css']
+  selector: 'cb-schedule-form',
+  templateUrl: './schedule-form.component.html',
+  styleUrls: ['./schedule-form.component.css']
 })
-export class ScheduleDialogComponent implements OnInit {
+export class ScheduleFormComponent implements OnInit {
 
   hasPreviousActivity: boolean = false
   scheduleForm: FormGroup
   job_activities: JobActivity[]
-  date: string
   nextDateMessage: string = ''
   url = ['/jobs/new', '']
 
@@ -37,6 +36,8 @@ export class ScheduleDialogComponent implements OnInit {
     this.scheduleForm = this.formBuilder.group({
       job_activity: this.formBuilder.control('', [Validators.required]),
       duration: this.formBuilder.control('', [Validators.required]),
+      available_date: this.formBuilder.control('', [Validators.required]),
+      deadline: this.formBuilder.control('', [Validators.required]),
       job: this.formBuilder.control('')
     })
   }
@@ -64,7 +65,9 @@ export class ScheduleDialogComponent implements OnInit {
 
   addListenerInForm() {
     this.scheduleForm.statusChanges.subscribe(status => {
-      if(status != 'VALID') {
+      if(this.scheduleForm.controls.job_activity.status != 'VALID'
+      || this.scheduleForm.controls.duration.status != 'VALID')
+      {
         return
       }
 
@@ -87,26 +90,30 @@ export class ScheduleDialogComponent implements OnInit {
         break
       }
       default : {
-        this.date = null
+        this.scheduleForm.controls.available_date.setValue(null)
         this.nextDateMessage = 'Funcionalidade para esse tipo de atividade ainda não desenvolvida.'
       }
     }
   }
 
   calculateNextDateProject() {
+    let now = new Date()
+    let dateString = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate()
+    let estimatedTime = this.scheduleForm.controls.duration.value
     this.nextDateMessage = 'Aguarde...'
-    this.briefingService.recalculateNextDate(this.scheduleForm.controls.duration.value).subscribe((response) => {
-      let data = response.data
-      this.date = response.data.available_date      
+    this.briefingService.getNextAvailableDate(dateString, estimatedTime).subscribe((data) => {
+      this.scheduleForm.controls.available_date.setValue(data.available_date)
       this.nextDateMessage = 'Lembre-se, você pode mover as suas agendas.'
     })
   }
 
   calculateNextDateBudget() {
+    let now = new Date()
+    let dateString = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate()
+    let estimatedTime = this.scheduleForm.controls.duration.value
     this.nextDateMessage = 'Aguarde...'
-    this.briefingService.loadFormData().subscribe((response) => {
-      let data = response.data
-      this.date = response.data.available_date      
+    this.budgetService.getNextAvailableDate(dateString, estimatedTime).subscribe((data) => {
+      this.scheduleForm.controls.available_date.setValue(data.available_date)
       this.nextDateMessage = 'Lembre-se, você pode mover as suas agendas.'
     })
   }

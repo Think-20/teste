@@ -84,8 +84,9 @@ export class BriefingService implements JobActivityServiceInterface {
           })
   }
 
-  getNextAvailableDate(date: string): Observable<any> {
-      let url = `briefing/get-next-available/${date}`
+  getNextAvailableDate(availableDate: string, estimatedTime: number, swap: boolean = false): Observable<any> {
+    if(estimatedTime == undefined) estimatedTime = 1
+      let url = `briefings/get-next-available-date/${availableDate}/${estimatedTime}/${swap}`
 
       return this.http.get(`${API}/${url}`)
           .map(response => response.json())

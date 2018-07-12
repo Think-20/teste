@@ -115,7 +115,7 @@ import { BriefingService } from './briefings/briefing.service';
 
 import { BudgetFormComponent } from './budgets/budget-form/budget-form.component';
 import { BudgetService } from './budgets/budget.service';
-import { ScheduleDialogComponent } from './schedule/schedule-dialog/schedule-dialog.component';
+import { ScheduleFormComponent } from './schedule/schedule-form/schedule-form.component';
 
 @NgModule({
   declarations: [
@@ -177,7 +177,7 @@ import { ScheduleDialogComponent } from './schedule/schedule-dialog/schedule-dia
     BriefingFormComponent,
     JobFormComponent,
     BudgetFormComponent,
-    ScheduleDialogComponent
+    ScheduleFormComponent
   ],
   imports: [
     CurrencyMaskModule,
@@ -256,8 +256,7 @@ import { ScheduleDialogComponent } from './schedule/schedule-dialog/schedule-dia
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    StandItemFormComponent,
-    ScheduleDialogComponent
+    StandItemFormComponent
   ]
 })
 export class AppModule { }

@@ -42,6 +42,7 @@ import { TimecardApprovalsComponent } from './timecard/timecard-approvals/timeca
 
 import { ScheduleComponent } from './schedule/schedule.component';
 import { JobTabsComponent } from './jobs/job-tabs/job-tabs.component';
+import { ScheduleFormComponent } from './schedule/schedule-form/schedule-form.component'
 
 export const ROUTES: Routes = [
     {
@@ -195,26 +196,9 @@ export const ROUTES: Routes = [
                 ]
             },
             {
-                path : 'schedule', component : ScheduleComponent, canActivate: [AuthGuard]
-                /*
-                children: [
-                  {
-                      path: '', redirectTo: 'list', pathMatch: 'full'
-                  },
-                  {
-                      path: 'new', component: TimecardFormComponent, canActivate: [AuthGuard]
-                  },
-                  {
-                      path: 'edit/:id', component: TimecardFormComponent, canActivate: [AuthGuard]
-                  },
-                  {
-                      path: 'list', component: TimecardListComponent, canActivate: [AuthGuard]
-                  },
-                  {
-                      path: 'approvals', component: TimecardApprovalsComponent, canActivate: [AuthGuard]
-                  }
-                ]
-                */
+              path : 'schedule', component: ScheduleComponent, canActivate: [AuthGuard]
+            }, {
+              path : 'schedule/new', component: ScheduleFormComponent, canActivate: [AuthGuard]
             }
         ]
     }

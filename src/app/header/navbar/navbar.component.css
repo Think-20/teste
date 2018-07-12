@@ -10,3 +10,8 @@ mat-toolbar {
 .my-button {
     min-width: 40px;
 }
+
+#logoNavBar {
+  width: 110px;
+  margin-right: 20px;
+}
