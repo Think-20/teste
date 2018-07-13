@@ -53,6 +53,7 @@ export class ScheduleComponent implements OnInit {
   chrono: Chrono[] = []
   month: Month
   months: Month[] = MONTHS
+  year: number
   date: Date
   updatedMessage: string = ''
 
@@ -242,6 +243,7 @@ export class ScheduleComponent implements OnInit {
 
     this.date = new Date()
     this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
+    this.year = this.date.getFullYear()
     this.changeMonth(this.month)
   }
 

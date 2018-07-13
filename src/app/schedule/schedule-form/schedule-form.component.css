@@ -15,17 +15,21 @@ p {
   }
 
   .mat-column-date {
-      width: 15%;
+      width: 12%;
   }
 
   .mat-column-type {
-      width: 15%;
+      width: 13%;
   }
 
   .mat-column-attendance {
-      width: 15%;
+      width: 12%;
+  }
+
+  .mat-column-creation {
+    width: 13%;
   }
 
   .mat-column-status {
-      width: 15%;
+      width: 10%;
   }

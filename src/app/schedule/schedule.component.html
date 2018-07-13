@@ -2,7 +2,7 @@
   <h3 class="lead row">
     <div class="col-md-6">
       Cronograma -
-      <span class="actualMonth" (click)="monthSelect.open()">{{ month.name }}
+      <span class="actualMonth" (click)="monthSelect.open()">{{ month.name }} {{ year }}
         <mat-select class="select-hidden" #monthSelect>
           <mat-option *ngFor="let month of months" (click)="changeMonth(month)">{{month.name}}</mat-option>
         </mat-select>
@@ -21,7 +21,7 @@
           Lista
         </div>
         <mat-input-container class="bar">
-          <input #search matInput formControlName="search" placeholder="Qual evento você procura?" autocomplete="off">
+          <input #search matInput formControlName="search" placeholder="Qual job você procura?" autocomplete="off">
         </mat-input-container>
         <div class="buttons">
           <a mat-button (click)="search.focus()">
@@ -64,11 +64,9 @@
             <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }}">
               <div>
                 <span>{{ chr.day }}-{{ chr.dayOfWeek?.abbrev }}</span>
-                <!--
-                <button [disabled]="!permissionVerify('new', job)" class="cb-button add-chrono" (click)="addBriefing(chr.day)">
+                <button *ngIf="permissionVerify('new', job)" class="cb-button add-chrono" (click)="addBriefing(chr.day)">
                   <mat-icon>+</mat-icon>
                 </button>
-                -->
               </div>
             </div>
             <div class="line-jobs">
