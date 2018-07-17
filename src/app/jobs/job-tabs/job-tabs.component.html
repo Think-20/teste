@@ -11,13 +11,13 @@
         [isAdmin]="isAdmin">
       </cb-briefing-form>
     </mat-tab>
+    <mat-tab label="Projeto">
+      Projeto
+    </mat-tab>
     <mat-tab label="Orçamento">
       <cb-budget-form *ngIf="job?.id != undefined && job?.job_activity?.description != 'Projeto'" [typeForm]="typeForm" [job]="job"
         [isAdmin]="isAdmin">
       </cb-budget-form>
-    </mat-tab>
-    <mat-tab label="Projeto">
-      Projeto
     </mat-tab>
     <mat-tab label="Proposta">
       Proposta

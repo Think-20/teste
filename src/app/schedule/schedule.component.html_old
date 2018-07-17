@@ -64,55 +64,55 @@
             <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }}">
               <div>
                 <span>{{ chr.day }}-{{ chr.dayOfWeek?.abbrev }}</span>
-                <button *ngIf="permissionVerify('new', job)" class="cb-button add-chrono" (click)="addTask(chr.day)">
+                <button *ngIf="permissionVerify('new', job)" class="cb-button add-chrono" (click)="addBriefing(chr.day)">
                   <mat-icon>+</mat-icon>
                 </button>
               </div>
             </div>
             <div class="line-jobs">
-              <div class="line-job" [class.signal]="job?.status?.id == 5" *ngFor="let task of chrono[i].tasks" [matMenuTriggerFor]="menu" draggable="true">
+              <div class="line-job" [class.signal]="job?.status?.id == 5" *ngFor="let job of chrono[i].jobs" [matMenuTriggerFor]="menu" draggable="true">
                 <mat-menu #menu="matMenu">
-                  <a *ngIf="task.job.id == undefined" [routerLink]="['/jobs/new']" mat-menu-item>
+                  <a *ngIf="job.id == undefined" [routerLink]="['/jobs/new']" mat-menu-item>
                     <mat-icon>add</mat-icon> Adicionar
                   </a>
-                  <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/show', task.job.id]"
+                  <a [disabled]="!permissionVerify('show', job)" *ngIf="job.id != undefined" [routerLink]="['/jobs/show', job.id]"
                     mat-menu-item>
                     <mat-icon>subject</mat-icon> Visualização
                   </a>
-                  <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/edit', task.job.id]"
+                  <a [disabled]="!permissionVerify('edit', job)" *ngIf="job.id != undefined" [routerLink]="['/jobs/edit', job.id]"
                     mat-menu-item>
                     <mat-icon>mode_edit</mat-icon> Editar
                   </a>
-                  <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined" (click)="signal(task.job)"
+                  <a [disabled]="!permissionVerify('edit', job)" *ngIf="job.id != undefined" (click)="signal(job)"
                     mat-menu-item>
                     <mat-icon>outlined_flag</mat-icon> Sinalizar
                   </a>
-                  <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined" (click)="delete(task.job)" mat-menu-item>
+                  <button [disabled]="!permissionVerify('delete', job)" *ngIf="job.id != undefined" (click)="delete(job)" mat-menu-item>
                     <mat-icon>delete</mat-icon> Remover
                   </button>
                 </mat-menu>
                 <div class="mat-cell mat-column-job">
-                  {{ jobDisplay(task, chrono[i]) }}
+                  {{ jobDisplay(job, chrono[i]) }}
                 </div>
                 <div class="mat-cell mat-column-type">
-                  {{ task.job.job_type?.description }}
+                  {{ job.job_type?.description }}
                 </div>
                 <div class="mat-cell mat-column-client">
-                  {{ task.job.client != null ? task.job.client.fantasy_name : task.job.not_client }}
+                  {{ job.client != null ? job.client.fantasy_name : job.not_client }}
                 </div>
                 <div class="mat-cell mat-column-agency">
-                  {{ task.job.agency ? task.job.agency.fantasy_name : '' }}
+                  {{ job.agency ? job.agency.fantasy_name : '' }}
                 </div>
                 <div class="mat-cell mat-column-event">
-                  {{ task.job.event }}
+                  {{ job.event }}
                 </div>
                 <div class="mat-cell mat-column-event-date">
                   &nbsp;
                 </div>
-                <div class="mat-cell mat-column-budget" *ngIf="task.job.budget_value != null">
-                  {{ task.job.budget_value | number: '1.2' }}
+                <div class="mat-cell mat-column-budget" *ngIf="job.budget_value != null">
+                  {{ job.budget_value | number: '1.2' }}
                 </div>
-                <div class="mat-cell mat-column-budget" *ngIf="task.job.budget_value == null">
+                <div class="mat-cell mat-column-budget" *ngIf="job.budget_value == null">
                   {{ '' }}
                 </div>
                 <div class="mat-cell mat-column-propo">
@@ -122,26 +122,26 @@
                   &nbsp;
                 </div>
                 <div class="mat-cell mat-column-deadline">
-                  {{ task.job?.deadline | date:'dd/MM' }}
+                  {{ job?.deadline | date:'dd/MM' }}
                 </div>
                 <div class="mat-cell mat-column-attendance">
-                  {{ task.job?.attendance?.name }}
+                  {{ job?.attendance?.name }}
                 </div>
                 <div class="mat-cell mat-column-creation">
-                  {{ task?.responsible?.name }}
+                  {{ displayResponsible(job) }}
                 </div>
                 <div class="mat-cell mat-column-stat">
-                  {{ task.job?.status?.description }}
+                  {{ job?.status?.description }}
                 </div>
               </div>
             </div>
             <!--
               <div class="mat-cell mat-column-action">
                 <mat-menu #menu="matMenu">
-                  <a [routerLink]="['/jobs/show', task.job.id]" mat-menu-item>
+                  <a [routerLink]="['/jobs/show', job.id]" mat-menu-item>
                     <mat-icon>subject</mat-icon> Visualização
                   </a>
-                  <a [routerLink]="['/jobs/edit', task.job.id]" mat-menu-item>
+                  <a [routerLink]="['/jobs/edit', job.id]" mat-menu-item>
                     <mat-icon>mode_edit</mat-icon> Editar
                   </a>
                   <button (click)="delete(job)" mat-menu-item>

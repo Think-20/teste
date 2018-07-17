@@ -9,6 +9,7 @@ import { JobStatus } from 'app/job-status/job-status.model';
 import { JobActivity } from '../job-activities/job-activity.model';
 import { Briefing } from '../briefings/briefing.model';
 import { Budget } from '../budgets/budget.model';
+import { Task } from '../schedule/task.model';
 
 export class Job {
     id: number
@@ -46,4 +47,6 @@ export class Job {
     approval_expectation_rate: number
     created_at: string
     updated_at: string
+    note?: string
+    task?: Task
 }

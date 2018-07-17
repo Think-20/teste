@@ -3,7 +3,7 @@ p {
 }
 
 .mat-column-id {
-    width: 15%;
+    width: 12%;
   }
 
   .mat-column-client {
@@ -23,7 +23,7 @@ p {
   }
 
   .mat-column-attendance {
-      width: 12%;
+      width: 15%;
   }
 
   .mat-column-creation {
@@ -32,4 +32,21 @@ p {
 
   .mat-column-status {
       width: 10%;
+  }
+
+  .mat-row, .mat-header-row {
+    text-align: center;
+  }
+
+  .mat-row {
+    cursor: pointer;
+    min-height: 43px;
+  }
+
+  .selected {
+    background-color: #ddd;
+  }
+
+  .job-container {
+    margin-top: 20px;
   }

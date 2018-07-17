@@ -116,6 +116,7 @@ import { BriefingService } from './briefings/briefing.service';
 import { BudgetFormComponent } from './budgets/budget-form/budget-form.component';
 import { BudgetService } from './budgets/budget.service';
 import { ScheduleFormComponent } from './schedule/schedule-form/schedule-form.component';
+import { TaskService } from './schedule/task.service';
 
 @NgModule({
   declarations: [
@@ -244,6 +245,7 @@ import { ScheduleFormComponent } from './schedule/schedule-form/schedule-form.co
     JobStatusService,
     BriefingService,
     BudgetService,
+    TaskService,
 
     MatDialog,
     MatSnackBar,

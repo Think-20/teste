@@ -34,6 +34,7 @@ export class SidenavComponent implements OnInit {
 
   producao = false
   orcamento = false
+  criacao = false
   centroCusto = false
   atendimento = false
   clients = false
@@ -47,9 +48,9 @@ export class SidenavComponent implements OnInit {
     let iterativeRoute = this.route.routerState.snapshot.root
     let originalRoute = iterativeRoute.routeConfig !== null ? '/' + iterativeRoute.routeConfig.path : ''
 
-    while(iterativeRoute.parent !== null 
-        && iterativeRoute.parent.routeConfig !== null 
-        && iterativeRoute.parent.routeConfig.path != '') 
+    while(iterativeRoute.parent !== null
+        && iterativeRoute.parent.routeConfig !== null
+        && iterativeRoute.parent.routeConfig.path != '')
     {
         iterativeRoute = iterativeRoute.parent
         originalRoute = '/' + iterativeRoute.routeConfig.path + originalRoute

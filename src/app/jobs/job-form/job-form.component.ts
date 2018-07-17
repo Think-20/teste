@@ -31,6 +31,7 @@ import { JobLevel } from 'app/job-level/job-level.model';
 import { JobHowCome } from 'app/job-how-come/job-how-come.model';
 import { Router } from '@angular/router';
 import { JobStatus } from 'app/job-status/job-status.model';
+import { TaskService } from '../../schedule/task.service';
 
 @Component({
   selector: 'cb-job-form',
@@ -64,6 +65,7 @@ export class JobFormComponent implements OnInit {
     private clientService: ClientService,
     private employeeService: EmployeeService,
     private jobService: JobService,
+    private taskService: TaskService,
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
@@ -113,8 +115,11 @@ export class JobFormComponent implements OnInit {
       status: this.formBuilder.control('', [Validators.required]),
       files: this.formBuilder.array([]),
       approval_expectation_rate: this.formBuilder.control('', [Validators.required]),
-      think_history: this.formBuilder.control('')
+      think_history: this.formBuilder.control('0/1'),
+      note: this.formBuilder.control('', [Validators.max(5000)])
     })
+
+    this.setPreviousDate()
 
     this.jobForm.get('client').valueChanges
       .do(clientName => {
@@ -197,8 +202,19 @@ export class JobFormComponent implements OnInit {
     })
   }
 
+  setPreviousDate() {
+    let job: Job = this.jobService.data
+
+    if (job == null) {
+      return
+    }
+
+    this.jobForm.controls.deadline.setValue(job.deadline)
+    this.jobForm.controls.job_activity.setValue(job.job_activity)
+  }
+
   getNextTab() {
-    switch(this.jobForm.controls.job_activity.value.description) {
+    switch (this.jobForm.controls.job_activity.value.description) {
       case 'Projeto': {
         return 'briefing'
       }
@@ -278,6 +294,7 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.budget_value.setValue(job.budget_value)
     this.jobForm.controls.status.setValue(job.status)
     this.jobForm.controls.approval_expectation_rate.setValue(job.approval_expectation_rate)
+    this.jobForm.controls.note.setValue(job.note)
     this.jobForm.controls.files = this.formBuilder.array([])
 
     for (var i = 0; i < job.files.length; i++) {
@@ -393,22 +410,59 @@ export class JobFormComponent implements OnInit {
       return;
     }
 
-    this.jobService.save(job).subscribe(data => {
-      if (data.status) {
-        this.job = data.job as Job
-        let snack = this.snackBar.open('Salvo com sucesso, redirecionando para a próxima etapa.', '', {
-          duration: 3000
-        })
-        snack.afterDismissed().subscribe(() => {
-          this.router.navigateByUrl('/jobs/edit/' + this.job.id + '?tab=' + this.getNextTab())
-        })
-      } else {
-        this.snackBar.open(data.message, '', {
-          duration: 5000
-        })
-      }
+    let task = this.jobService.data.task
 
-    })
+    if ( ! isObject(task)) {
+      this.jobService.save(job).subscribe(data => {
+        if (data.status) {
+          this.job = data.job as Job
+          let snack = this.snackBar.open('Salvo com sucesso.', '', {
+            duration: 3000
+          })
+          snack.afterDismissed().subscribe(() => {
+            //this.router.navigateByUrl('/jobs/edit/' + this.job.id + '?tab=' + this.getNextTab())
+            this.router.navigateByUrl('/jobs')
+          })
+        } else {
+          this.snackBar.open(data.message, '', {
+            duration: 5000
+          })
+          return
+        }
+      })
+    } else {
+      this.jobService.save(job).subscribe(data => {
+        if (data.status) {
+          this.job = data.job as Job
+          task.job = this.job
+          this.taskService.save(task).subscribe((data) => {
+            if (data.status) {
+              let snack = this.snackBar.open('Salvo com sucesso, redirecionando para o cronograma.', '', {
+                duration: 3000
+              })
+              snack.afterDismissed().subscribe(() => {
+                //this.router.navigateByUrl('/jobs/edit/' + this.job.id + '?tab=' + this.getNextTab())
+                this.router.navigateByUrl('/schedule')
+              })
+            } else {
+              this.snackBar.open(data.message, '', {
+                duration: 5000
+              })
+              return
+            }
+          })
+        } else {
+          this.snackBar.open(data.message, '', {
+            duration: 5000
+          })
+          return
+        }
+      })
+    }
+  }
+
+  ngOnDestroy() {
+    this.jobService.data = new Job()
   }
 
   edit() {

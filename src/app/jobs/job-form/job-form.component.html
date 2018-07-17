@@ -123,6 +123,12 @@
           {{ s.description }}
         </mat-option>
       </mat-select>
+      <mat-input-container class="col-md-12">
+        <textarea matInput formControlName="note" placeholder="Observação"></textarea>
+        <mat-error>
+          Máximo de caracteres 5000.
+        </mat-error>
+      </mat-input-container>
     </div>
     <mat-card-actions class="col-md-12 text-right">
       <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save()" mat-raised-button>

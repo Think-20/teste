@@ -16,6 +16,8 @@ import { Pagination } from 'app/shared/pagination.model';
 
 @Injectable()
 export class JobService {
+    data: Job = new Job
+
     constructor(
         private http: Http,
         private snackBar: MatSnackBar,
