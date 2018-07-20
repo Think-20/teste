@@ -21,7 +21,7 @@
           </mat-option>
         </mat-select>
         <mat-form-field class="col-md-3">
-          <input type="date" [readonly]="true" formControlName="available_date" matInput placeholder="Data disponível*">
+          <input type="date" [readonly]="true" formControlName="available_date" matInput placeholder="Data de início do projeto*">
         </mat-form-field>
         <mat-form-field class="col-md-3">
           <input type="date" formControlName="deadline" matInput placeholder="Deadline*">
@@ -33,6 +33,9 @@
       </div>
       <p *ngIf="nextDateMessage != ''">
         <small>{{ nextDateMessage }}</small>
+      </p>
+      <p *ngIf="scheduleForm.controls.duration.value > 1">
+        <small>Para agendamento de projetos com mais de 1 dia de duração, será necessário a agenda em datas subsequentes e atender pré-requisitos mínimos de budget checados no briefing.</small>
       </p>
       <div *ngIf="hasPreviousActivity" class="job-container">
         <p class="lead">Selecione o job</p>

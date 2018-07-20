@@ -37,6 +37,7 @@ export class TaskService {
         })
   }
 
+  /*
   recalculateNextDate(nextEstimatedTime): Observable<any> {
     let url = `tasks/recalculate-next-date/${nextEstimatedTime}`
 
@@ -49,10 +50,11 @@ export class TaskService {
             return ErrorHandler.capture(err)
         })
   }
+  */
 
   tasks(params?: {}, page: number = 0): Observable<Pagination> {
       let url = params === {} ? `tasks/all?page=${page}` : `tasks/filter?page=${page}`
-      let prefix = this.auth.hasAccess('tasks/all') ? '' : 'my-'
+      let prefix = (this.auth.hasAccess('tasks/all') ||  this.auth.hasAccess('tasks/filter')) ? '' : 'my-'
 
       url = prefix + url
 

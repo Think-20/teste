@@ -9,7 +9,7 @@ mat-toolbar {
 }
 
 #menuButton {
-  margin-left: -28px;
+  margin-left: -20px;
 }
 
 .my-button {
@@ -17,7 +17,7 @@ mat-toolbar {
 }
 
 #logoNavBar {
-  width: 110px;
+  width: 120px;
   margin-left: 50px;
   margin-right: 70px;
 }

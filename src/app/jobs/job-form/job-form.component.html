@@ -13,6 +13,11 @@
           {{ job_activity.description }}
         </mat-option>
       </mat-select>
+      <mat-select class="col-md-3" placeholder="Tipo*" formControlName="job_type" [compareWith]="compareJobType">
+        <mat-option *ngFor="let job_type of job_types" [value]="job_type">
+          {{ job_type.description }}
+        </mat-option>
+      </mat-select>
       <mat-select class="col-md-3" placeholder="Expectativa*" formControlName="main_expectation" [compareWith]="compareMainExpectation">
         <mat-option *ngFor="let mainExpectation of main_expectations" [value]="mainExpectation">
           {{ mainExpectation.description }}
@@ -21,11 +26,6 @@
       <mat-form-field class="col-md-3">
         <input type="date" formControlName="deadline" matInput placeholder="Deadline*">
       </mat-form-field>
-      <mat-select class="col-md-3" placeholder="Tipo*" formControlName="job_type" [compareWith]="compareJobType">
-        <mat-option *ngFor="let job_type of job_types" [value]="job_type">
-          {{ job_type.description }}
-        </mat-option>
-      </mat-select>
       <mat-input-container class="col-md-3">
         <input matInput formControlName="agency" [matAutocomplete]="autocompleteAgency" placeholder="Agência">
         <mat-error>
@@ -80,6 +80,12 @@
       <cb-stars class="col-md-3 star-input" label="Score" [rate]="job != undefined ? (job.rate + 1) : 0" [input]="jobForm.controls.rate">
         <input formControlName="rate" matInput>
       </cb-stars>
+      <mat-input-container class="col-md-3">
+        <input formControlName="creation" matInput placeholder="Criação">
+      </mat-input-container>
+      <mat-input-container class="col-md-3">
+        <input type="date" formControlName="available_date_creation" matInput placeholder="Data de início do projeto">
+      </mat-input-container>
     </div>
   </mat-card>
   <mat-card-title>
@@ -113,7 +119,7 @@
         <input formControlName="approval_expectation_rate" matInput>
       </cb-stars>
       <mat-input-container class="col-md-3">
-        <input matInput formControlName="think_history" readonly placeholder="Histórico - Aprovação/Participação*">
+        <input matInput formControlName="history" readonly placeholder="Histórico - Aprovação/Participação*">
         <mat-error>
           Obrigatório
         </mat-error>
@@ -123,6 +129,13 @@
           {{ s.description }}
         </mat-option>
       </mat-select>
+    </div>
+  </mat-card>
+  <mat-card-title>
+    <p class="lead">Observações</p>
+  </mat-card-title>
+  <mat-card>
+    <div class="row">
       <mat-input-container class="col-md-12">
         <textarea matInput formControlName="note" placeholder="Observação"></textarea>
         <mat-error>

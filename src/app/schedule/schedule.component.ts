@@ -165,21 +165,15 @@ export class ScheduleComponent implements OnInit {
             let job1 = task1.job
             let job2 = task2.job
 
-            if (job2.attendance_id != undefined
-              && job1.attendance_id != job2.attendance_id
-              && !this.permissionVerify('new')) {
-              return false
-            }
-
-            let jobStep1 = task1.job_activity.description
-            let jobStep2 = task2.job_activity.description
+            let jobStep1 = task1.job_activity != null ? task1.job_activity.description : ''
+            let jobStep2 = task2.job_activity != null ? task2.job_activity.description : ''
 
             if(jobStep1 != jobStep2 && jobStep1 != '' && jobStep2 != '' ) {
               angular.snackBar.open('Não é possível mudar data de tipos diferentes', '', {
                 duration: 3000
               })
               return
-            } else if(jobStep1 == '' || jobStep2 == '') {
+            } else if(jobStep1 == '' && jobStep2 == '') {
               return
             }
 
@@ -354,7 +348,7 @@ export class ScheduleComponent implements OnInit {
       return ''
     }
 
-    let date = new Date(task.available_date)
+    let date = new Date(task.available_date + 'T00:00:00')
 
     if(date.getDate() != chrono.day) {
       return 'Continuação'
@@ -400,7 +394,6 @@ export class ScheduleComponent implements OnInit {
         for(let index = 0; index < (5 - length); index++) {
           let task = new Task
           let item = new TaskItem
-          let date = new Date
           item.date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
           task.job = new Job
           task.items = []
@@ -452,7 +445,11 @@ export class ScheduleComponent implements OnInit {
       tempDay = '0' + day
     }
 
-    this.router.navigate(['/schedule/new', this.date.getUTCFullYear() + '-' + tempMonth + '-' + tempDay])
+    this.router.navigate(['/schedule/new'], {
+      queryParams: {
+        date: this.date.getUTCFullYear() + '-' + tempMonth + '-' + tempDay
+      }
+    })
   }
 
   delete(job: Job) {

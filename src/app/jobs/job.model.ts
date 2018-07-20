@@ -48,5 +48,8 @@ export class Job {
     created_at: string
     updated_at: string
     note?: string
+    history: string
     task?: Task
+    creation?: Employee
+    available_date_creation?: string
 }

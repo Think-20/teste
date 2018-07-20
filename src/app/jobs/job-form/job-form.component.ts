@@ -115,8 +115,10 @@ export class JobFormComponent implements OnInit {
       status: this.formBuilder.control('', [Validators.required]),
       files: this.formBuilder.array([]),
       approval_expectation_rate: this.formBuilder.control('', [Validators.required]),
-      think_history: this.formBuilder.control('0/1'),
-      note: this.formBuilder.control('', [Validators.max(5000)])
+      history: this.formBuilder.control('0/0'),
+      note: this.formBuilder.control('', [Validators.max(5000)]),
+      available_date_creation: this.formBuilder.control({value: '', disabled: true}),
+      creation: this.formBuilder.control({value: '', disabled: true})
     })
 
     this.setPreviousDate()
@@ -205,12 +207,14 @@ export class JobFormComponent implements OnInit {
   setPreviousDate() {
     let job: Job = this.jobService.data
 
-    if (job == null) {
+    if (job.deadline == null) {
       return
     }
 
     this.jobForm.controls.deadline.setValue(job.deadline)
     this.jobForm.controls.job_activity.setValue(job.job_activity)
+    this.jobForm.controls.available_date_creation.setValue(job.task.available_date)
+    this.jobForm.controls.creation.setValue(job.task.responsible.name)
   }
 
   getNextTab() {
@@ -295,6 +299,15 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.status.setValue(job.status)
     this.jobForm.controls.approval_expectation_rate.setValue(job.approval_expectation_rate)
     this.jobForm.controls.note.setValue(job.note)
+    this.jobForm.controls.history.setValue(job.history)
+
+    if(job.creation != null) {
+      this.jobForm.controls.creation.setValue(job.creation.name)
+      this.jobForm.controls.available_date_creation.setValue(job.available_date_creation)
+    } else {
+      this.jobForm.controls.creation.setValue('Externo')
+    }
+
     this.jobForm.controls.files = this.formBuilder.array([])
 
     for (var i = 0; i < job.files.length; i++) {

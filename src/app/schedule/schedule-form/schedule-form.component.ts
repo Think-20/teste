@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatSnackBar } from '@angular/material';
 import { JobActivity } from 'app/job-activities/job-activity.model';
@@ -13,6 +13,9 @@ import { TaskService } from '../task.service';
 import { Job } from '../../jobs/job.model';
 import { Employee } from '../../employees/employee.model';
 import { JobActivityService } from '../../job-activities/job-activity.service';
+import { AuthService } from '../../login/auth.service';
+
+import 'rxjs/add/operator/filter';
 
 @Component({
   selector: 'cb-schedule-form',
@@ -40,6 +43,8 @@ export class ScheduleFormComponent implements OnInit {
   scheduleForm: FormGroup
   job_activities: JobActivity[]
   jobs: Job[]
+  dateSetManually: boolean = false
+  isAdmin: boolean = false
   responsibles: Employee[]
   nextDateMessage: string = ''
   url: string = '/jobs/new'
@@ -53,19 +58,38 @@ export class ScheduleFormComponent implements OnInit {
     private taskService: TaskService,
     private briefingService: BriefingService,
     private budgetService: BudgetService,
+    private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
     private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
+    this.isAdmin = this.authService.hasAccess('task/save')
     this.createForm()
+    this.recoveryParams()
     this.createJobActivities()
     this.addListenerInJobActivity()
     this.addListenerForAvailableDate()
   }
 
+  recoveryParams() {
+    if( ! this.isAdmin ) {
+      return
+    }
+
+    this.route.queryParams.filter(params => params.date).subscribe(params => {
+      if(params.date == null) {
+        return
+      }
+
+      this.scheduleForm.controls.available_date.setValue(params.date)
+      this.dateSetManually = true
+    })
+  }
+
   toggleResponsible() {
-    this.responsibleSelect.close()
+    ! this.isAdmin ? this.responsibleSelect.close() : null
   }
 
   createForm() {
@@ -92,7 +116,9 @@ export class ScheduleFormComponent implements OnInit {
   addListenerInJobActivity() {
     this.scheduleForm.controls.job_activity.valueChanges.subscribe(job_activity => {
       let jobActivity = job_activity as JobActivity
-      if (jobActivity.description == 'Projeto') {
+      if (jobActivity.description == 'Projeto'
+      || jobActivity.description == 'Orçamento'
+      || jobActivity.description == 'Outsider') {
         this.setJob(null)
         this.buttonText = 'PRÓXIMO'
         this.hasPreviousActivity = false
@@ -129,7 +155,10 @@ export class ScheduleFormComponent implements OnInit {
     this.taskService.getNextAvailableDate(dateString, estimatedTime, jobActivity).subscribe((data) => {
       this.responsibles = data.responsibles
       this.scheduleForm.controls.responsible.setValue(data.responsible)
-      this.scheduleForm.controls.available_date.setValue(data.available_date)
+
+      if( ! this.dateSetManually) {
+        this.scheduleForm.controls.available_date.setValue(data.available_date)
+      }
       this.nextDateMessage = 'Lembre-se, você pode mover as suas agendas para liberar a data.'
     })
   }
@@ -156,7 +185,9 @@ export class ScheduleFormComponent implements OnInit {
 
     let task = this.scheduleForm.value as Task
 
-    if (task.job_activity.description == 'Projeto') {
+    if (task.job_activity.description == 'Projeto'
+    || task.job_activity.description == 'Orçamento'
+    || task.job_activity.description == 'Outsider') {
       this.jobService.data = new Job
       this.jobService.data.task = task
       this.jobService.data.deadline = this.scheduleForm.controls.deadline.value
