@@ -118,7 +118,11 @@ export class JobFormComponent implements OnInit {
       history: this.formBuilder.control('0/0'),
       note: this.formBuilder.control('', [Validators.max(5000)]),
       available_date_creation: this.formBuilder.control({value: '', disabled: true}),
-      creation: this.formBuilder.control({value: '', disabled: true})
+      attendance_responsible: this.formBuilder.control({value: '', disabled: true}),
+      creation_responsible: this.formBuilder.control({value: '', disabled: true}),
+      detailing_responsible: this.formBuilder.control({value: '', disabled: true}),
+      budget_responsible: this.formBuilder.control({value: '', disabled: true}),
+      production_responsible: this.formBuilder.control({value: '', disabled: true})
     })
 
     this.setPreviousDate()
@@ -213,6 +217,12 @@ export class JobFormComponent implements OnInit {
 
     this.jobForm.controls.deadline.setValue(job.deadline)
     this.jobForm.controls.job_activity.setValue(job.job_activity)
+
+    if(job.job_activity.description == 'Orçamento') {
+      this.jobForm.controls.creation.setValue('Externa')
+      return
+    }
+
     this.jobForm.controls.available_date_creation.setValue(job.task.available_date)
     this.jobForm.controls.creation.setValue(job.task.responsible.name)
   }
@@ -301,11 +311,35 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.note.setValue(job.note)
     this.jobForm.controls.history.setValue(job.history)
 
-    if(job.creation != null) {
-      this.jobForm.controls.creation.setValue(job.creation.name)
+    if(job.creation_responsible != null) {
+      this.jobForm.controls.creation_responsible.setValue(job.creation_responsible.name)
       this.jobForm.controls.available_date_creation.setValue(job.available_date_creation)
     } else {
       this.jobForm.controls.creation.setValue('Externo')
+    }
+
+    if(job.attendance_responsible != null) {
+      this.jobForm.controls.attendance_responsible.setValue(job.attendance_responsible.name)
+    } else {
+      this.jobForm.controls.attendance_responsible.setValue('Sem informações')
+    }
+
+    if(job.detailing_responsible != null) {
+      this.jobForm.controls.detailing_responsible.setValue(job.detailing_responsible.name)
+    } else {
+      this.jobForm.controls.detailing_responsible.setValue('Sem informações')
+    }
+
+    if(job.budget_responsible != null) {
+      this.jobForm.controls.budget_responsible.setValue(job.budget_responsible.name)
+    } else {
+      this.jobForm.controls.budget_responsible.setValue('Sem informações')
+    }
+
+    if(job.production_responsible != null) {
+      this.jobForm.controls.production_responsible.setValue(job.production_responsible.name)
+    } else {
+      this.jobForm.controls.production_responsible.setValue('Sem informações')
     }
 
     this.jobForm.controls.files = this.formBuilder.array([])

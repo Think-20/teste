@@ -18,11 +18,9 @@
           {{ job_type.description }}
         </mat-option>
       </mat-select>
-      <mat-select class="col-md-3" placeholder="Expectativa*" formControlName="main_expectation" [compareWith]="compareMainExpectation">
-        <mat-option *ngFor="let mainExpectation of main_expectations" [value]="mainExpectation">
-          {{ mainExpectation.description }}
-        </mat-option>
-      </mat-select>
+      <mat-input-container class="col-md-3">
+        <input type="date" formControlName="available_date_creation" matInput placeholder="Data de início do projeto">
+      </mat-input-container>
       <mat-form-field class="col-md-3">
         <input type="date" formControlName="deadline" matInput placeholder="Deadline*">
       </mat-form-field>
@@ -72,20 +70,22 @@
           Obrigatório, até 99.999.999,99
         </mat-error>
       </mat-input-container>
+      <mat-select class="col-md-3" placeholder="Expectativa*" formControlName="main_expectation" [compareWith]="compareMainExpectation">
+        <mat-option *ngFor="let mainExpectation of main_expectations" [value]="mainExpectation">
+          {{ mainExpectation.description }}
+        </mat-option>
+      </mat-select>
       <mat-select class="col-md-3" placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
         <mat-option *ngFor="let attendance of attendances" [value]="attendance">
           {{ attendance.name }}
         </mat-option>
       </mat-select>
+      <mat-input-container class="col-md-3">
+        <input formControlName="creation_responsible" matInput placeholder="Criação">
+      </mat-input-container>
       <cb-stars class="col-md-3 star-input" label="Score" [rate]="job != undefined ? (job.rate + 1) : 0" [input]="jobForm.controls.rate">
         <input formControlName="rate" matInput>
       </cb-stars>
-      <mat-input-container class="col-md-3">
-        <input formControlName="creation" matInput placeholder="Criação">
-      </mat-input-container>
-      <mat-input-container class="col-md-3">
-        <input type="date" formControlName="available_date_creation" matInput placeholder="Data de início do projeto">
-      </mat-input-container>
     </div>
   </mat-card>
   <mat-card-title>
@@ -141,6 +141,28 @@
         <mat-error>
           Máximo de caracteres 5000.
         </mat-error>
+      </mat-input-container>
+    </div>
+  </mat-card>
+  <mat-card-title>
+    <p class="lead">Créditos</p>
+  </mat-card-title>
+  <mat-card>
+    <div class="row">
+      <mat-input-container class="col-md-4">
+        <input formControlName="attendance_responsible" matInput placeholder="Atendimento">
+      </mat-input-container>
+      <mat-input-container class="col-md-4">
+        <input formControlName="creation_responsible" matInput placeholder="Criação">
+      </mat-input-container>
+      <mat-input-container class="col-md-4">
+        <input formControlName="detailing_responsible" matInput placeholder="Detalhamento">
+      </mat-input-container>
+      <mat-input-container class="col-md-4">
+        <input formControlName="budget_responsible" matInput placeholder="Orçamento">
+      </mat-input-container>
+      <mat-input-container class="col-md-4">
+        <input formControlName="production_responsible" matInput placeholder="Produção">
       </mat-input-container>
     </div>
     <mat-card-actions class="col-md-12 text-right">

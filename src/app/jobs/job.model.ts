@@ -50,6 +50,10 @@ export class Job {
     note?: string
     history: string
     task?: Task
-    creation?: Employee
     available_date_creation?: string
+    attendance_responsible?: Employee
+    creation_responsible?: Employee
+    detailing_responsible?: Employee
+    budget_responsible?: Employee
+    production_responsible?: Employee
 }

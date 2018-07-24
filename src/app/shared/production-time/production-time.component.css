@@ -4,23 +4,13 @@
     width: 40px;
     height: 10px;
     display: inline-block;
-    border: 1px solid white;
-    background-color: #CCC;
-    border-left: 0;
-}
-
-.production-time:first-child {
-    border-left: 1px solid white;
-}
-
-.selected {
     background-color: white;
     border: 1px solid #CCC;
 }
 
-.selected:first-child {
-    background-color: white;
-    border-left: 1px solid #CCC;
+.selected {
+    border: 1px solid white;
+    background-color: #CCC;
 }
 
 .production-time-container {
@@ -36,6 +26,6 @@
     top: 5px;
 }
 
-.production-time-container .label-right {    
+.production-time-container .label-right {
     text-align: right;
 }

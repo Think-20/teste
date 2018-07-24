@@ -46,6 +46,7 @@
           <div [@rowAppeared]="state" *ngIf="criacao">
             <div class="sub-navbar">
               <a mat-raised-button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events')">Eventos</a>
+              <a mat-raised-button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs')">Jobs</a>
             </div>
           </div>
         </div>
@@ -54,10 +55,16 @@
             <span class="departament departament-4"></span> Diretoria
           </a>
         </div>
-        <div class="nav-item">
+        <div class="nav-item"  (click)="planejamento = planejamento === true ? false : true">
           <a mat-raised-button class="departament-container">
             <span class="departament departament-6"></span> Planejamento
           </a>
+          <div [@rowAppeared]="state" *ngIf="planejamento">
+            <div class="sub-navbar">
+              <a mat-raised-button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events')">Eventos</a>
+              <a mat-raised-button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs')">Jobs</a>
+            </div>
+          </div>
         </div>
         <div class="nav-item">
           <a (click)="producao = producao === true ? false : true" mat-raised-button class="departament-container">
