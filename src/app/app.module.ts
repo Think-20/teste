@@ -6,9 +6,9 @@ import {
   MatDialog, MatDialogModule, MatSlideToggleModule, MatSlideToggle,
   MatTableModule, MatProgressBarModule, MatCardModule, MatInputModule, MatSelectModule,
   MatButtonModule, MatIconModule, MatTabsModule, MatAutocompleteModule, MatChipsModule,
-  MatSnackBar, MatSnackBarModule, MatMenuModule, MAT_PLACEHOLDER_GLOBAL_OPTIONS,
-  MatDatepickerModule, MAT_DATE_LOCALE, CompatibilityModule, NoConflictStyleCompatibilityMode,
-  MatNativeDateModule, MatPaginatorModule, MatPaginatorIntl, MatTooltipModule, MatRadioModule
+  MatSnackBar, MatSnackBarModule, MatMenuModule, MAT_LABEL_GLOBAL_OPTIONS,
+  MatDatepickerModule, MAT_DATE_LOCALE, MatNativeDateModule, MatPaginatorModule,
+  MatPaginatorIntl, MatTooltipModule, MatRadioModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -183,8 +183,6 @@ import { TaskService } from './schedule/task.service';
   imports: [
     CurrencyMaskModule,
     BrowserModule,
-    CompatibilityModule,
-    NoConflictStyleCompatibilityMode,
     MatNativeDateModule,
     HeaderModule,
     LoginModule,
@@ -250,7 +248,7 @@ import { TaskService } from './schedule/task.service';
     MatDialog,
     MatSnackBar,
     MatSlideToggle,
-    {provide: MAT_PLACEHOLDER_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
+    {provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
     {provide: LOCALE_ID, useValue: 'pt-BR'},
     {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
     {provide: MatPaginatorIntl, useClass: PaginatorIntl},

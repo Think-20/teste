@@ -5,9 +5,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpModule, RequestOptions } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
-import { 
-  MAT_PLACEHOLDER_GLOBAL_OPTIONS,
-  MatTableModule, MatProgressBarModule, MatCardModule, MatInputModule, MatSelectModule, 
+import {
+  MatTableModule, MatProgressBarModule, MatCardModule, MatInputModule, MatSelectModule,
   MatButtonModule, MatIconModule, MatTabsModule, MatAutocompleteModule, MatChipsModule
 } from '@angular/material';
 
