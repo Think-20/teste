@@ -1,3 +1,9 @@
+.container-schedule {
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 64px);
+}
+
 .mat-column-date {
   width: 5%;
 }
@@ -139,6 +145,18 @@
   background-color: white;
 }
 
+#searchForm {
+  height: 100%;
+}
+
+#searchForm .mat-card {
+  height: 100%;
+}
+
+.mat-row-scroll {
+  height: 100% !important;
+}
+
 #searchForm .header-form {
   border-top: 1px solid #ccc !important;
 }
@@ -149,6 +167,10 @@
 
 .mat-header-row, #searchForm .header-form {
   width: calc(100% - 8px);
+}
+
+.schedule-table {
+  height: 100%;
 }
 
 .schedule-table::-webkit-scrollbar {

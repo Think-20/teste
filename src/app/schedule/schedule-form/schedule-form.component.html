@@ -20,8 +20,15 @@
             {{ responsible.name }}
           </mat-option>
         </mat-select>
+        <!--
         <mat-form-field class="col-md-3">
           <input type="date" [readonly]="true" formControlName="available_date" matInput placeholder="Data disponível para início*">
+        </mat-form-field>
+        -->
+        <mat-form-field class="col-md-3">
+          <input [matDatepicker]="availableDatepicker" formControlName="available_date" matInput placeholder="Data disponível para início*">
+          <mat-datepicker-toggle matSuffix [for]="availableDatepicker"></mat-datepicker-toggle>
+          <mat-datepicker #availableDatepicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="col-md-3">
           <input type="date" formControlName="deadline" matInput placeholder="Deadline*">

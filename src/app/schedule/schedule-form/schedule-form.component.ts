@@ -46,6 +46,7 @@ export class ScheduleFormComponent implements OnInit {
   dateSetManually: boolean = false
   isAdmin: boolean = false
   responsibles: Employee[]
+  availableDates: string[]
   nextDateMessage: string = ''
   url: string = '/jobs/new'
   buttonText: string = 'PRÓXIMO'
@@ -69,8 +70,16 @@ export class ScheduleFormComponent implements OnInit {
     this.createForm()
     this.recoveryParams()
     this.createJobActivities()
+    this.getAvailableDates()
     this.addListenerInJobActivity()
     this.addListenerForAvailableDate()
+  }
+
+  getAvailableDates() {
+    this.taskService.getAvailableDates({
+      iniDate: '2018-07-24',
+      finDate: '2018-07-24'
+    }).subscribe(dates => this.availableDates = dates)
   }
 
   recoveryParams() {

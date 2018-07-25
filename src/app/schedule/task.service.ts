@@ -101,6 +101,21 @@ export class TaskService {
           })
   }
 
+  getAvailableDates(params = {}): Observable<any> {
+      let url = `tasks/get-available-dates`
+
+      return this.http.post(`${API}/${url}`,
+          JSON.stringify(params),
+          new RequestOptions())
+          .map(response => response.json())
+          .catch((err) => {
+              this.snackBar.open(ErrorHandler.message(err), '', {
+                  duration: 3000
+              })
+              return ErrorHandler.capture(err)
+          })
+  }
+
   save(task: Task): Observable<any> {
       let url = 'task/save'
       let prefix = this.auth.hasAccess('task/save') ? '' : 'my-'

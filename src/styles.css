@@ -434,7 +434,7 @@ font-size: 11px;
   background-color: rgba(0,175,239,.26);
 }
 
-.mat-radio-button.mat-accent .mat-radio-inner-circle {
+.mat-radio-button.mat-accent .mat-radio-inner-circle, .mat-calendar-body-selected {
   background-color: #00afef;
 }
 
