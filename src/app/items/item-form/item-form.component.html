@@ -18,35 +18,35 @@
               </button>
             </div>
           </div>
-          <mat-input-container class="col-md-6">
+          <mat-form-field class="col-md-6">
             <input formControlName="name" matInput placeholder="Nome*">
             <mat-error>
               Obrigatório, entre 3 e 50 caract. 
             </mat-error>
-          </mat-input-container>
-          <mat-input-container class="col-md-6">
+          </mat-form-field>
+          <mat-form-field class="col-md-6">
             <input formControlName="description" matInput placeholder="Descrição*">
             <mat-error>
               Obrigatório, entre 3 e 255 caract. 
             </mat-error>
-          </mat-input-container>
-          <mat-input-container class="col-md-6">
+          </mat-form-field>
+          <mat-form-field class="col-md-6">
             <input matInput formControlName="item_category" [matAutocomplete]="autocompleteItemCategory" placeholder="Categoria de item*">
             <mat-error>
               Obrigatório
             </mat-error>
-          </mat-input-container>
+          </mat-form-field>
           <mat-autocomplete #autocompleteItemCategory="matAutocomplete" [displayWith]="displayItemCategory">
               <mat-option *ngFor="let itemCategory of itemCategories | async" [value]="itemCategory">
                 {{ itemCategory.description }}
               </mat-option>
           </mat-autocomplete>
-          <mat-input-container class="col-md-6">
+          <mat-form-field class="col-md-6">
             <input matInput formControlName="cost_category" [matAutocomplete]="autocompleteCostCategory" placeholder="Categoria de custo*">
             <mat-error>
               Obrigatório
             </mat-error>
-          </mat-input-container>
+          </mat-form-field>
           <mat-autocomplete #autocompleteCostCategory="matAutocomplete" [displayWith]="displayCostCategory">
               <mat-option *ngFor="let costCategory of costCategories | async" [value]="costCategory">
                 {{ costCategory.description }}
@@ -79,29 +79,29 @@
             <div *ngFor="let control of getPricingsControls(itemForm); let i = index">
               <form [formGroup]="getPricingsControls(itemForm)[i]" novalidate autocomplete="off" class="flex pricing-item">
                 <input formControlName="id" type="hidden">
-                <mat-input-container class="col-md-3">
+                <mat-form-field class="col-md-3">
                   <input formControlName="price" matInput placeholder="Preço*">
                   <mat-error>
                     Obrigatório
                   </mat-error>
-                </mat-input-container>
-                <mat-input-container class="col-md-4">
+                </mat-form-field>
+                <mat-form-field class="col-md-4">
                   <input formControlName="measure" matInput [matAutocomplete]="autocompleteMeasure" placeholder="Medida*">
                   <mat-error>
                     Obrigatório
                   </mat-error>
-                </mat-input-container>
+                </mat-form-field>
                 <mat-autocomplete #autocompleteMeasure="matAutocomplete" [displayWith]="displayMeasure">
                     <mat-option *ngFor="let measure of measures | async" [value]="measure">
                       {{ measure.description }}
                     </mat-option>
                 </mat-autocomplete>
-                <mat-input-container class="col-md-4">
+                <mat-form-field class="col-md-4">
                   <input formControlName="provider" matInput [matAutocomplete]="autocompleteProvider" placeholder="Fornecedor*">
                   <mat-error>
                     Obrigatório
                   </mat-error>
-                </mat-input-container>
+                </mat-form-field>
                 <mat-autocomplete #autocompleteProvider="matAutocomplete" [displayWith]="displayProvider">
                     <mat-option *ngFor="let provider of providers | async" [value]="provider">
                       {{ provider.fantasy_name }}
@@ -155,23 +155,23 @@
                       {{ item.name }}
                     </mat-option>
                 </mat-autocomplete>
-                <mat-input-container class="col-md-4">
+                <mat-form-field class="col-md-4">
                   <input formControlName="item" matInput placeholder="Item*" [matAutocomplete]="autocompleteItem">
-                </mat-input-container>
+                </mat-form-field>
                 <mat-autocomplete #autocompleteMeasure="matAutocomplete" [displayWith]="displayMeasure">
                     <mat-option *ngFor="let measure of measures | async" [value]="measure">
                       {{ measure.description }}
                     </mat-option>
                 </mat-autocomplete>
-                <mat-input-container class="col-md-3">
+                <mat-form-field class="col-md-3">
                   <input formControlName="measure" matInput placeholder="Medida*" [matAutocomplete]="autocompleteMeasure">
-                </mat-input-container>
-                <mat-input-container class="col-md-3">
+                </mat-form-field>
+                <mat-form-field class="col-md-3">
                   <input formControlName="quantity" matInput placeholder="Quantidade*">
                   <mat-error>
                     Obrigatório
                   </mat-error>
-                </mat-input-container>
+                </mat-form-field>
                 <button 
                   *ngIf="getChildItemsControls(itemForm)[i].enabled == true"  
                   type="button" 

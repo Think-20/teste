@@ -15,6 +15,10 @@ cb-sidenav.opened {
     overflow: auto;
 }
 
+#my-second-container {
+  z-index: 10;
+}
+
 #timeline-container {
     max-width: 21.25%;
     padding: 0;

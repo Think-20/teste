@@ -5,9 +5,9 @@
         <div class="title">
           Lista
         </div>
-        <mat-input-container class="bar">
+        <mat-form-field class="bar">
           <input #search matInput formControlName="search" placeholder="Qual cliente você procura?" autocomplete="off">
-        </mat-input-container>
+        </mat-form-field>
         <div class="buttons">
           <a mat-button (click)="search.focus()">
             <mat-icon>search</mat-icon>
@@ -24,12 +24,14 @@
     <mat-card *ngIf="filter" class="filter-grid">
       <div class="row">
         <div class="col-md-12">
-          <mat-select class="col-md-3" placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
-            <mat-option></mat-option>
-            <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-              {{ attendance.name }}
-            </mat-option>
-          </mat-select>
+          <mat-form-field class="col-md-3">
+            <mat-select placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
+              <mat-option></mat-option>
+              <mat-option *ngFor="let attendance of attendances" [value]="attendance">
+                {{ attendance.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
           <div class="col-md-2 button-grid-inline">
             <button (click)="filterForm()" type="button" class="cb-button" mat-raised-button>FILTRAR</button>
           </div>
@@ -61,17 +63,19 @@
               {{ client.employee.name }}
             </div>
             <div class="mat-cell mat-column-rate">
-                <cb-stars [readonly]="true" [rate]="client.rate"></cb-stars>
+              <cb-stars [readonly]="true" [rate]="client.rate"></cb-stars>
             </div>
             <div class="mat-cell mat-column-action">
               <mat-menu #menu="matMenu">
-                <a [disabled]="!permissionVerify('show', client)" [routerLink]="permissionVerify('show', client) ? ['/clients/show', client.id] : null" mat-menu-item>
+                <a [disabled]="!permissionVerify('show', client)" [routerLink]="permissionVerify('show', client) ? ['/clients/show', client.id] : null"
+                  mat-menu-item>
                   <mat-icon>subject</mat-icon> Detalhes
                 </a>
-                <a [disabled]="!permissionVerify('edit', client)"  [routerLink]="permissionVerify('edit', client) ? ['/clients/edit', client.id] : null" mat-menu-item>
+                <a [disabled]="!permissionVerify('edit', client)" [routerLink]="permissionVerify('edit', client) ? ['/clients/edit', client.id] : null"
+                  mat-menu-item>
                   <mat-icon>mode_edit</mat-icon> Editar
                 </a>
-                <button [disabled]="!permissionVerify('delete', client)"  (click)="delete(client)" mat-menu-item>
+                <button [disabled]="!permissionVerify('delete', client)" (click)="delete(client)" mat-menu-item>
                   <mat-icon>delete</mat-icon> Remover
                 </button>
               </mat-menu>
@@ -100,7 +104,8 @@
       <div *ngIf="clients.length == 0 && searchForm.controls.search.value == '' && !searching" class="col-md-12 records-not-found">
         <p>
           <small>
-            Ainda não existe nenhum cliente cadastrado. Que tal <a [routerLink]="['/clients/new']">cadastrar</a> agora?
+            Ainda não existe nenhum cliente cadastrado. Que tal
+            <a [routerLink]="['/clients/new']">cadastrar</a> agora?
           </small>
         </p>
       </div>
@@ -135,12 +140,8 @@
         </div>
       </table>
     </mat-card>
-    <mat-paginator *ngIf="clients"
-      [length]="pagination?.total"
-      [pageSize]="pagination?.per_page"
-      [pageSizeOptions]="[pagination?.per_page]"
-      (page)="changePage($event)"
-    ></mat-paginator>
+    <mat-paginator *ngIf="clients" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageSizeOptions]="[pagination?.per_page]"
+      (page)="changePage($event)"></mat-paginator>
   </form>
 </div>
 

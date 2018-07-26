@@ -5,18 +5,18 @@
     </mat-card-title>
     <mat-card>
       <div class="row">
-          <mat-input-container class="col-md-6">
+          <mat-form-field class="col-md-6">
             <input formControlName="description" matInput placeholder="Descrição">
             <mat-error>
               Obrigatório, entre 3 e 50 caract.
             </mat-error>
-          </mat-input-container>
-          <mat-input-container class="col-md-6">
+          </mat-form-field>
+          <mat-form-field class="col-md-6">
             <input matInput formControlName="itemCategory" [matAutocomplete]="autocompleteItem" placeholder="Categoria de item">
             <mat-error>
               Obrigatório
             </mat-error>
-          </mat-input-container>
+          </mat-form-field>
           <mat-autocomplete #autocompleteItem="matAutocomplete" [displayWith]="displayItemCategory">
               <mat-option *ngFor="let itemCategory of itemCategories | async" [value]="itemCategory">
                 {{ itemCategory.description }}

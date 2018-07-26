@@ -9,17 +9,20 @@
     <form [formGroup]="scheduleForm">
       <div class="row">
         <input formControlName="job" type="hidden">
-        <mat-select class="col-md-3" placeholder="Atividade*" formControlName="job_activity" [compareWith]="compareJobActivity">
-          <mat-option *ngFor="let job_activity of job_activities" [value]="job_activity">
-            {{ job_activity.description }}
-          </mat-option>
-        </mat-select>
-        <mat-select class="col-md-3" #responsible (click)="toggleResponsible()" placeholder="Responsável*" formControlName="responsible"
-          [compareWith]="compareResponsible">
-          <mat-option *ngFor="let responsible of responsibles" [value]="responsible">
-            {{ responsible.name }}
-          </mat-option>
-        </mat-select>
+        <mat-form-field class="col-md-3">
+          <mat-select placeholder="Atividade*" formControlName="job_activity" [compareWith]="compareJobActivity">
+            <mat-option *ngFor="let job_activity of job_activities" [value]="job_activity">
+              {{ job_activity.description }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-3">
+          <mat-select #responsible (click)="toggleResponsible()" placeholder="Responsável*" formControlName="responsible" [compareWith]="compareResponsible">
+            <mat-option *ngFor="let responsible of responsibles" [value]="responsible">
+              {{ responsible.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
         <!--
         <mat-form-field class="col-md-3">
           <input type="date" [readonly]="true" formControlName="available_date" matInput placeholder="Data disponível para início*">
@@ -31,7 +34,9 @@
           <mat-datepicker #availableDatepicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input type="date" formControlName="deadline" matInput placeholder="Deadline*">
+          <input [matDatepicker]="deadlineDatepicker" formControlName="deadline" matInput placeholder="Deadline*">
+          <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
+          <mat-datepicker #deadlineDatepicker></mat-datepicker>
         </mat-form-field>
         <cb-production-time class="col-md-12 production-time-input" label="Tempo estimado" [rate]="1" [input]="scheduleForm.controls.duration"
           [min]="0" [max]="10">
@@ -42,7 +47,8 @@
         <small>{{ nextDateMessage }}</small>
       </p>
       <p *ngIf="scheduleForm.controls.duration.value > 1">
-        <small>Para agendamento de projetos com mais de 1 dia de duração, será necessário a agenda em datas subsequentes e atender pré-requisitos mínimos de budget checados no briefing.</small>
+        <small>Para agendamento de projetos com mais de 1 dia de duração, será necessário a agenda em datas subsequentes e atender
+          pré-requisitos mínimos de budget checados no briefing.</small>
       </p>
       <div *ngIf="hasPreviousActivity" class="job-container">
         <p class="lead">Selecione o job</p>
@@ -57,7 +63,8 @@
             <div class="mat-header-cell mat-column-date">Data</div>
             <div class="mat-header-cell mat-column-status">Status</div>
           </div>
-          <div class="mat-row" [class.selected]="job == scheduleForm.controls.job.value" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState" (click)="setJob(job)">
+          <div class="mat-row" [class.selected]="job == scheduleForm.controls.job.value" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState"
+            (click)="setJob(job)">
             <div class="mat-cell mat-column-id text-left">
               {{ jobService.showId(job) }}
             </div>

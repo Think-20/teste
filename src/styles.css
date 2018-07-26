@@ -188,17 +188,13 @@ h1, h2, h3, h4 {
   box-shadow: none !important;
 }
 
-.mat-input-flex, .mat-select-placeholder, .mat-select-value-text, .mat-radio-label-content {
+.mat-form-field-flex, .mat-select-placeholder, .mat-select-value-text, .mat-radio-label-content {
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif !important;
   font-size: 14px;
 }
 
 .mat-select {
   padding-bottom: 1.29688em;
-}
-
-.mat-select-trigger {
-  margin-top: 15px;
 }
 
 .mat-card, .mat-button, .mat-icon-button, .mat-raised-button {
@@ -327,7 +323,7 @@ mat-card-title > p {
   font-weight: 300;
 }
 
-.search-bar-group .mat-input-infix {
+.search-bar-group .mat-form-field-infix {
   border-top: 3px solid transparent;
 }
 
@@ -346,7 +342,7 @@ mat-card-title > p {
   padding-right: 10px;
 }
 
-.search-bar-group .mat-input-element {
+.search-bar-group .mat-form-field-element {
   text-align: right;
   color: #AAA;
 }
@@ -361,7 +357,7 @@ mat-card-title > p {
   color: #BBB !important;
 }
 
-.search-bar-group .mat-input-underline {
+.search-bar-group .mat-form-field-underline {
   display: none;
 }
 
@@ -369,15 +365,15 @@ mat-card-title > p {
   height: 1px !important;
 }
 
-.search-bar-group .mat-focused .mat-input-placeholder.mat-float,
-.search-bar-group .mat-input-placeholder.mat-float:not(.mat-empty) {
+.search-bar-group .mat-focused .mat-form-field-label.mat-float,
+.search-bar-group .mat-form-field-label.mat-float:not(.mat-empty) {
   opacity: 0 !important;
   margin-top: -3px;
   height: auto;
   padding: 2px 0;
 }
 
-.search-bar-group .mat-input-placeholder.mat-empty {
+.search-bar-group .mat-form-field-label.mat-empty {
   opacity: 1 !important;
   text-align: right;
   margin-top: -3px;
@@ -390,11 +386,11 @@ mat-card-title > p {
   border-bottom: 1px solid #eee;
 }
 
-#login-content .mat-input-container {
-  height: 36px;
+#login-content .mat-form-field {
+  height: 43px;
 }
 
-.mat-input-underline.mat-form-field-underline,
+.mat-form-field-underline.mat-form-field-underline,
 .mat-select:not(.mat-select-disabled).mat-primary .mat-select-underline {
    background-color: rgba(0,0,0,.15);
 }
@@ -403,13 +399,13 @@ mat-card-title > p {
    color: rgba(0,0,0,.18);
 }
 
-.mat-input-ripple,
+.mat-focused:not(.mat-form-field-invalid) .mat-form-field-ripple,
 .mat-select:focus:not(.mat-select-disabled).mat-primary .mat-select-underline {
-   background-color: #00afef;
+   background-color: #00afef !important;
 }
 
 .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
-  background-color: #00afef;
+  background-color: #00afef !important;
 }
 
 .mat-tab-label {
@@ -418,16 +414,17 @@ mat-card-title > p {
 font-size: 11px;
 }
 
-.mat-focused .mat-input-placeholder .mat-select-placeholder,
+.mat-focused .mat-form-field-label .mat-select-placeholder,
 .mat-select:focus:not(.mat-select-disabled).mat-primary .mat-select-arrow,
 .mat-select:focus:not(.mat-select-disabled).mat-primary .mat-select-trigger,
-.mat-focused .mat-input-placeholder,
+.mat-form-field.mat-focused:not(.mat-form-field-invalid) .mat-form-field-label,
+.mat-form-field.mat-focused.mat-primary:not(.mat-select-disabled) .mat-select-arrow,
 .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
-  color: #00afef;
+  color: #00afef !important;
 }
 
 .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
-  border-color: #00afef;
+  border-color: #00afef !important;
 }
 
 .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element {
@@ -435,11 +432,11 @@ font-size: 11px;
 }
 
 .mat-radio-button.mat-accent .mat-radio-inner-circle, .mat-calendar-body-selected {
-  background-color: #00afef;
+  background-color: #00afef !important;
 }
 
 .mat-primary .mat-pseudo-checkbox-checked, .mat-primary .mat-pseudo-checkbox-indeterminate {
-  background-color: #00afef;
+  background-color: #00afef !important;
 }
 
 .mat-select-panel .mat-option-multiple {
@@ -460,15 +457,15 @@ font-size: 11px;
   background-color: black !important;
 }
 
-#login-content .mat-focused .mat-input-placeholder.mat-float, #login-content .mat-input-placeholder.mat-float:not(.mat-empty) {
+#login-content .mat-focused .mat-form-field-label.mat-float, #login-content .mat-form-field-label.mat-float:not(.mat-empty) {
   opacity: 0 !important;
 }
 
-.mat-input-placeholder.mat-empty {
+.mat-form-field-label.mat-empty {
   opacity: 1 !important;
 }
 
-.mat-input-invalid .mat-input-placeholder {
+.mat-form-field-invalid .mat-form-field-label {
   color: #f44336;
 }
 
@@ -506,10 +503,9 @@ font-size: 11px;
 .mat-select {
   padding-top: 0;
   padding-bottom: 0;
-  height: 59px;
 }
 
-.mat-input-element {
+.mat-form-field-element {
   height: 17px;
 }
 
@@ -544,7 +540,7 @@ font-size: 11px;
   color: rgba(117, 117, 117, 0.77) !important;
 }
 
-.mat-input-wrapper.mat-form-field-wrapper {
+.mat-form-field-wrapper.mat-form-field-wrapper {
   margin-top: 6px !important;
 }
 
@@ -564,7 +560,7 @@ font-size: 11px;
   padding-right: 0 !important;
 }
 
-/* Botão dentro de inputs */
+/* Botão dentro de form-fields */
 .button-inner-mat-input {
   position: absolute !important;
   top: 0;
@@ -574,4 +570,8 @@ font-size: 11px;
   line-height: 0 !important;
   height: 27px;
   color: #AAA !important;
+}
+
+cb-schedule {
+  height: 100%;
 }

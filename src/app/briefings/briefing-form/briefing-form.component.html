@@ -5,29 +5,28 @@
       <mat-form-field class="col-md-3">
         <input [readonly]="!isAdmin" type="date" formControlName="available_date" matInput placeholder="Data disponível*">
       </mat-form-field>
-      <mat-select class="col-md-3" #responsible (click)="toggleCreation()" placeholder="Criação*" formControlName="responsible"
-        [compareWith]="compareResponsible">
-        <mat-option *ngFor="let responsible of responsibles" [value]="responsible">
-          {{ responsible.name }}
-        </mat-option>
-      </mat-select>
-      <mat-select class="col-md-3" placeholder="Apresentação*" formControlName="presentations" [compareWith]="comparePresentation"
-        multiple>
-        <mat-option *ngFor="let presentation of presentations" [value]="presentation">
-          {{ presentation.description }}
-        </mat-option>
-      </mat-select>
+      <mat-form-field class="col-md-3">
+        <mat-select #responsible (click)="toggleCreation()" placeholder="Criação*" formControlName="responsible" [compareWith]="compareResponsible">
+          <mat-option *ngFor="let responsible of responsibles" [value]="responsible">
+            {{ responsible.name }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="col-md-3">
+        <mat-select placeholder="Apresentação*" formControlName="presentations" [compareWith]="comparePresentation"
+          multiple>
+          <mat-option *ngFor="let presentation of presentations" [value]="presentation">
+            {{ presentation.description }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
     </div>
   </mat-card>
   <div *ngIf="job?.job_type?.description == 'Stand'">
     <mat-card-title>
       <p class="lead">Stand</p>
     </mat-card-title>
-    <cb-stand-form
-      [job]="job"
-      [briefing]="briefing"
-      [stand]="briefing?.stand"
-      [briefingForm]="briefingForm">
+    <cb-stand-form [job]="job" [briefing]="briefing" [stand]="briefing?.stand" [briefingForm]="briefingForm">
     </cb-stand-form>
   </div>
   <mat-card-title>

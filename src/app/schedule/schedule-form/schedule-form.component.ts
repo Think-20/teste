@@ -70,7 +70,7 @@ export class ScheduleFormComponent implements OnInit {
     this.createForm()
     this.recoveryParams()
     this.createJobActivities()
-    this.getAvailableDates()
+    //this.getAvailableDates()
     this.addListenerInJobActivity()
     this.addListenerForAvailableDate()
   }
@@ -166,7 +166,7 @@ export class ScheduleFormComponent implements OnInit {
       this.scheduleForm.controls.responsible.setValue(data.responsible)
 
       if( ! this.dateSetManually) {
-        this.scheduleForm.controls.available_date.setValue(data.available_date)
+        this.scheduleForm.controls.available_date.setValue((new Date(data.available_date + "T00:00:00").toISOString()))
       }
       this.nextDateMessage = 'Lembre-se, você pode mover as suas agendas para liberar a data.'
     })

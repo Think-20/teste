@@ -1,7 +1,5 @@
 .container-schedule {
-  display: flex;
-  flex-direction: column;
-  height: calc(100% - 64px);
+  height: calc(100% - 22px);
 }
 
 .mat-column-date {
@@ -79,8 +77,8 @@
 
 .select-hidden {
   visibility: hidden;
-  margin-left: -40px;
   height: 0;
+  font-size: 14px;
 }
 
 .add-chrono {
@@ -101,6 +99,7 @@
 
 .schedule-table {
   margin-bottom: 0;
+  padding-bottom: 5px;
   background: transparent;
 }
 
@@ -111,6 +110,10 @@
 
 .line-chrono:first-child {
   border-top: 0 !important;
+}
+
+.line-chrono:last-child {
+  margin-bottom: 0px;
 }
 
 .line-jobs {
@@ -146,15 +149,15 @@
 }
 
 #searchForm {
-  height: 100%;
+  height: calc(100% - 64px);
 }
 
 #searchForm .mat-card {
-  height: 100%;
+  height: calc(100% - 68px);
 }
 
 .mat-row-scroll {
-  height: 100% !important;
+  height: calc(100% - 41px) !important;
 }
 
 #searchForm .header-form {

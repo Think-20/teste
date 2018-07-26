@@ -6,36 +6,36 @@
     </mat-card-title>
     <mat-card>
       <div class="row">
-          <mat-input-container class="col-md-4">
+          <mat-form-field class="col-md-4">
             <input type="datetime-local" formControlName="entry" matInput placeholder="Entrada*">
             <mat-error>
               Obrigatório
             </mat-error>
-          </mat-input-container>
-          <mat-input-container class="col-md-4">
+          </mat-form-field>
+          <mat-form-field class="col-md-4">
             <input type="datetime-local" formControlName="exit" matInput placeholder="Saída*">
             <mat-error>
               Obrigatório
             </mat-error>
-          </mat-input-container>
-          <mat-input-container class="col-md-4">
+          </mat-form-field>
+          <mat-form-field class="col-md-4">
             <input matInput formControlName="employee" [matAutocomplete]="autocompleteEmployee" placeholder="Funcionário*">
             <mat-error>
               Obrigatório
             </mat-error>
-          </mat-input-container>
+          </mat-form-field>
           <mat-autocomplete #autocompleteEmployee="matAutocomplete" [displayWith]="displayEmployee">
               <mat-option *ngFor="let employee of employees | async" [value]="employee">
                 {{ employee.name }}
               </mat-option>
           </mat-autocomplete>
           <div *ngIf="justifyHours">
-            <mat-input-container class="col-md-12">
+            <mat-form-field class="col-md-12">
               <input formControlName="reason" matInput placeholder="Motivo*">
               <mat-error>
                 Obrigatório
               </mat-error>
-            </mat-input-container>
+            </mat-form-field>
           </div>
       </div>
       <mat-card-actions class="col-md-12 text-right">
@@ -57,12 +57,12 @@
     </mat-card-title>
     <mat-card>
       <div class="row">
-          <mat-input-container class="col-md-12" *ngIf="justifyHours">
+          <mat-form-field class="col-md-12" *ngIf="justifyHours">
             <input formControlName="reason" matInput placeholder="Motivo*">
             <mat-error>
               Obrigatório
             </mat-error>
-          </mat-input-container>
+          </mat-form-field>
       </div>
       <mat-card-actions class="col-md-12 text-center">
         <button class="cb-button" color="primary" (click)="register(justifyForm.value)" mat-raised-button>

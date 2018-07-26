@@ -1,101 +1,108 @@
 <mat-card [formGroup]="briefingForm">
   <div [formGroup]="standForm" class="row">
     <input type="hidden" formControlName="id">
-    <mat-select class="col-md-3" placeholder="Configuração*" formControlName="configuration" [compareWith]="compareConfiguration">
-      <mat-option *ngFor="let configuration of configurations" [value]="configuration">
-        {{ configuration.description }}
-      </mat-option>
-    </mat-select>
-    <mat-input-container class="col-md-3">
+    <mat-form-field class="col-md-3">
+      <mat-select placeholder="Configuração*" formControlName="configuration" [compareWith]="compareConfiguration">
+        <mat-option *ngFor="let configuration of configurations" [value]="configuration">
+          {{ configuration.description }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="col-md-3">
       <input formControlName="place" matInput placeholder="Local*">
       <mat-error>
         Obrigatório, entre 3 e 150 caract.
       </mat-error>
-    </mat-input-container>
+    </mat-form-field>
 
-    <mat-input-container class="col-md-3" *ngIf="typeForm != 'show'">
+    <mat-form-field class="col-md-3" *ngIf="typeForm != 'show'">
       <input #planFile formControlName="plan" readonly matInput placeholder="Planta do Evento/Local*" (click)="filePlanFile.click()">
-      <input #filePlanFile type="file" accept="image/jpeg,application/pdf" (change)="uploadFile('plan', filePlanFile)" style="display:none;" />
+      <input #filePlanFile type="file" accept="image/jpeg,application/pdf" (change)="uploadFile('plan', filePlanFile)" style="display:none;"
+      />
       <mat-error>
         Obrigatório
       </mat-error>
-    </mat-input-container>
-    <mat-input-container class="col-md-3" *ngIf="typeForm == 'show'" (click)="previewFile(job, 'stand', 'plan')">
+    </mat-form-field>
+    <mat-form-field class="col-md-3" *ngIf="typeForm == 'show'" (click)="previewFile(job, 'stand', 'plan')">
       <input formControlName="plan" matInput placeholder="Planta do Evento/Local*">
-    </mat-input-container>
+    </mat-form-field>
 
-    <mat-input-container class="col-md-3" *ngIf="typeForm != 'show'">
+    <mat-form-field class="col-md-3" *ngIf="typeForm != 'show'">
       <input #regulationFile formControlName="regulation" readonly matInput placeholder="Regulamento*" (click)="fileRegulationFile.click()">
-      <input #fileRegulationFile type="file" accept="image/jpeg,application/pdf" (change)="uploadFile('regulation', fileRegulationFile)" style="display:none;" />
+      <input #fileRegulationFile type="file" accept="image/jpeg,application/pdf" (change)="uploadFile('regulation', fileRegulationFile)"
+        style="display:none;" />
       <mat-error>
         Obrigatório
       </mat-error>
-    </mat-input-container>
-    <mat-input-container class="col-md-3" *ngIf="typeForm == 'show'" (click)="previewFile(job, 'stand', 'regulation')">
+    </mat-form-field>
+    <mat-form-field class="col-md-3" *ngIf="typeForm == 'show'" (click)="previewFile(job, 'stand', 'regulation')">
       <input formControlName="regulation" matInput placeholder="Regulamento*">
-    </mat-input-container>
-
-    <mat-select class="col-md-3" placeholder="Coluna*" formControlName="column" [compareWith]="compareColumn">
-      <mat-option *ngFor="let column of columns" [value]="column">
-        {{ column.description }}
-      </mat-option>
-    </mat-select>
-    <mat-input-container class="col-md-3">
+    </mat-form-field>
+    <mat-form-field class="col-md-3">
+      <mat-select placeholder="Coluna*" formControlName="column" [compareWith]="compareColumn">
+        <mat-option *ngFor="let column of columns" [value]="column">
+          {{ column.description }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="col-md-3">
       <input formControlName="street_number" matInput placeholder="Rua e número*">
       <mat-error>
         Obrigatório, mínimo 2 caract.
       </mat-error>
-    </mat-input-container>
-    <mat-select class="col-md-3" placeholder="Gênero*" formControlName="genre" [compareWith]="compareGenre">
-      <mat-option *ngFor="let genre of genres" [value]="genre">
-        {{ genre.description }}
-      </mat-option>
-    </mat-select>
-    <mat-input-container class="col-md-3">
+    </mat-form-field>
+    <mat-form-field class="col-md-3">
+      <mat-select placeholder="Gênero*" formControlName="genre" [compareWith]="compareGenre">
+        <mat-option *ngFor="let genre of genres" [value]="genre">
+          {{ genre.description }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field class="col-md-3">
       <input formControlName="note" matInput placeholder="Observações">
       <mat-error>
         Entre 3 e 5000 caract.
       </mat-error>
-    </mat-input-container>
-    <mat-input-container class="col-md-4">
+    </mat-form-field>
+    <mat-form-field class="col-md-4">
       <input formControlName="area" matInput placeholder="Área (m²)*">
       <mat-error>
         Obrigatório, até 99999,99
       </mat-error>
-    </mat-input-container>
-    <mat-input-container class="col-md-4">
+    </mat-form-field>
+    <mat-form-field class="col-md-4">
       <input currencyMask formControlName="budget" matInput placeholder="Verba*">
       <mat-error>
         Obrigatório, até 99.999.999,99
       </mat-error>
-    </mat-input-container>
-    <mat-input-container class="col-md-4">
+    </mat-form-field>
+    <mat-form-field class="col-md-4">
       <input currencyMask formControlName="area_budget" matInput readonly placeholder="Valor/m²">
-    </mat-input-container>
-    <mat-input-container class="col-md-6">
+    </mat-form-field>
+    <mat-form-field class="col-md-6">
       <input formControlName="closed_area_percent" matInput placeholder="Área fechada*">
       <mat-error>
         Obrigatório
       </mat-error>
-    </mat-input-container>
-    <mat-input-container class="col-md-6">
+    </mat-form-field>
+    <mat-form-field class="col-md-6">
       <input formControlName="opened_area_percent" matInput readonly placeholder="Área aberta*">
       <mat-error>
         Obrigatório, preencha área fechada
       </mat-error>
-    </mat-input-container>
+    </mat-form-field>
     <div class="col-md-4">
-      <div *ngFor="let closed_item of closedItems; let i = index"
-          class="stand-item stand-closed-item" [class.onlyShow]="typeForm === 'show'" (mouseover)="showClosedStandItem(i)" (mouseleave)="hiddenClosedStandItem(i)">
+      <div *ngFor="let closed_item of closedItems; let i = index" class="stand-item stand-closed-item" [class.onlyShow]="typeForm === 'show'"
+        (mouseover)="showClosedStandItem(i)" (mouseleave)="hiddenClosedStandItem(i)">
         <div class="title">
           <label>{{closed_item.title}}</label>
           <span class="square">{{closed_item.quantity}}</span>
-          <button [@standItemAnimation]="closedItemsStates[i].state"
-          type="button" class="edit-stand_item" (click)="editClosedItem(i, closed_item)" mat-button>
+          <button [@standItemAnimation]="closedItemsStates[i].state" type="button" class="edit-stand_item" (click)="editClosedItem(i, closed_item)"
+            mat-button>
             <mat-icon>edit</mat-icon>
           </button>
-          <button [@standItemAnimation]="closedItemsStates[i].state"
-          type="button" class="delete-stand_item" (click)="deleteClosedItem(i)" mat-button>
+          <button [@standItemAnimation]="closedItemsStates[i].state" type="button" class="delete-stand_item" (click)="deleteClosedItem(i)"
+            mat-button>
             <mat-icon>clear</mat-icon>
           </button>
         </div>
@@ -115,17 +122,17 @@
       &nbsp;
     </div>
     <div class="col-md-4">
-      <div *ngFor="let opened_item of openedItems; let i = index"
-          class="stand-item stand-opened-item" [class.onlyShow]="typeForm === 'show'" (mouseover)="showOpenedStandItem(i)" (mouseleave)="hiddenOpenedStandItem(i)">
+      <div *ngFor="let opened_item of openedItems; let i = index" class="stand-item stand-opened-item" [class.onlyShow]="typeForm === 'show'"
+        (mouseover)="showOpenedStandItem(i)" (mouseleave)="hiddenOpenedStandItem(i)">
         <div class="title">
           <span class="square">{{opened_item.quantity}}</span>
           <label>{{opened_item.title}}</label>
-          <button [@standItemAnimation]="openedItemsStates[i].state"
-          type="button" class="edit-stand_item" (click)="editOpenedItem(i, opened_item)" mat-button>
+          <button [@standItemAnimation]="openedItemsStates[i].state" type="button" class="edit-stand_item" (click)="editOpenedItem(i, opened_item)"
+            mat-button>
             <mat-icon>edit</mat-icon>
           </button>
-          <button [@standItemAnimation]="openedItemsStates[i].state"
-          type="button" class="delete-stand_item" (click)="deleteOpenedItem(i)" mat-button>
+          <button [@standItemAnimation]="openedItemsStates[i].state" type="button" class="delete-stand_item" (click)="deleteOpenedItem(i)"
+            mat-button>
             <mat-icon>clear</mat-icon>
           </button>
         </div>
@@ -141,17 +148,17 @@
         </button>
       </div>
     </div>
-    <mat-input-container class="col-md-6">
+    <mat-form-field class="col-md-6">
       <input formControlName="note_closed_area" matInput placeholder="Observações">
       <mat-error>
         Entre 3 e 5000 caract.
       </mat-error>
-    </mat-input-container>
-    <mat-input-container class="col-md-6">
+    </mat-form-field>
+    <mat-form-field class="col-md-6">
       <input formControlName="note_opened_area" matInput placeholder="Observações">
       <mat-error>
         Entre 3 e 5000 caract.
       </mat-error>
-    </mat-input-container>
+    </mat-form-field>
   </div>
 </mat-card>

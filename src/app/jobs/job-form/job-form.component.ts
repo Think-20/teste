@@ -219,12 +219,12 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.job_activity.setValue(job.job_activity)
 
     if(job.job_activity.description == 'Orçamento') {
-      this.jobForm.controls.creation.setValue('Externa')
+      this.jobForm.controls.creation_responsible.setValue('Externa')
       return
     }
 
     this.jobForm.controls.available_date_creation.setValue(job.task.available_date)
-    this.jobForm.controls.creation.setValue(job.task.responsible.name)
+    this.jobForm.controls.creation_responsible.setValue(job.task.responsible.name)
   }
 
   getNextTab() {

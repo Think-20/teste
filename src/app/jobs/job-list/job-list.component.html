@@ -8,9 +8,9 @@
         <div class="title">
           Lista
         </div>
-        <mat-input-container class="bar">
+        <mat-form-field class="bar">
           <input #search matInput formControlName="search" placeholder="Qual job você procura?" autocomplete="off">
-        </mat-input-container>
+        </mat-form-field>
         <div class="buttons">
           <a mat-button (click)="search.focus()">
             <mat-icon>search</mat-icon>
@@ -27,11 +27,13 @@
     <mat-card *ngIf="false" class="filter-grid">
       <div class="row">
         <div class="col-md-12">
-          <mat-select class="col-md-3" placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
-            <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-              {{ attendance.name }}
-            </mat-option>
-          </mat-select>
+          <mat-form-field class="col-md-3">
+            <mat-select placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
+              <mat-option *ngFor="let attendance of attendances" [value]="attendance">
+                {{ attendance.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
       </div>
     </mat-card>

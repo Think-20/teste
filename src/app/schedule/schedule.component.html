@@ -3,8 +3,9 @@
     <h3 class="lead row">
       <div class="col-md-6">
         Cronograma -
-        <span class="actualMonth" (click)="monthSelect.open()">{{ month.name }} {{ year }}
-          <mat-select class="select-hidden" #monthSelect>
+        <span class="actualMonth" (click)="monthSelect.open()">
+          {{ month.name }} {{ year }}
+          <mat-select panelClass="select-month-panel" class="select-hidden col-md-3" #monthSelect>
             <mat-option *ngFor="let month of months" (click)="changeMonth(month)">{{month.name}}</mat-option>
           </mat-select>
         </span>
@@ -21,9 +22,9 @@
           <div class="title">
             Lista
           </div>
-          <mat-input-container class="bar">
+          <mat-form-field class="bar">
             <input #search matInput formControlName="search" placeholder="Qual job você procura?" autocomplete="off">
-          </mat-input-container>
+          </mat-form-field>
           <div class="buttons">
             <a mat-button (click)="search.focus()">
               <mat-icon>search</mat-icon>

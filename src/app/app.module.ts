@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import {
@@ -117,6 +118,9 @@ import { BudgetFormComponent } from './budgets/budget-form/budget-form.component
 import { BudgetService } from './budgets/budget.service';
 import { ScheduleFormComponent } from './schedule/schedule-form/schedule-form.component';
 import { TaskService } from './schedule/task.service';
+
+import localePt from '@angular/common/locales/pt';
+registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
