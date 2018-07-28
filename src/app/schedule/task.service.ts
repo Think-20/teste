@@ -88,7 +88,6 @@ export class TaskService {
   }
 
   getNextAvailableDate(availableDate: string, estimatedTime: number, jobActivity: JobActivity): Observable<any> {
-    if(estimatedTime == undefined) estimatedTime = 1
       let url = `tasks/get-next-available-date/${availableDate}/${estimatedTime}/${jobActivity.description}`
 
       return this.http.get(`${API}/${url}`)

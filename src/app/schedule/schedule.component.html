@@ -43,6 +43,7 @@
       <table class="table mat-table schedule-table">
         <div class="mat-header-row">
           <div class="mat-header-cell mat-column-date">Data</div>
+          <div class="mat-header-cell mat-column-creation">Respons.</div>
           <div class="mat-header-cell mat-column-job">Job</div>
           <div class="mat-header-cell mat-column-type">Tipo</div>
           <div class="mat-header-cell mat-column-client">Cliente</div>
@@ -54,7 +55,6 @@
           <div class="mat-header-cell mat-column-area">Área</div>
           <div class="mat-header-cell mat-column-deadline">Deadline</div>
           <div class="mat-header-cell mat-column-attendance">Atend.</div>
-          <div class="mat-header-cell mat-column-creation">Respons.</div>
           <div class="mat-header-cell mat-column-stat">Status</div>
           <!--
             <div class="mat-header-cell mat-column-action">Ação</div>
@@ -71,7 +71,11 @@
               </div>
             </div>
             <div class="line-jobs">
-              <div class="line-job" [class.signal]="job?.status?.id == 5" *ngFor="let task of chrono[i].tasks" [matMenuTriggerFor]="menu"
+              <div class="line-job"
+                [class.signal]="task.job?.status?.id == 5"
+                [class.other-attendance]="task.job?.attendance_id != authService.currentUser().employee.id"
+                *ngFor="let task of chrono[i].tasks"
+                [matMenuTriggerFor]="menu"
                 draggable="true">
                 <mat-menu #menu="matMenu">
                   <a *ngIf="task.job.id == undefined" (click)="addTask(chrono[i].day)" mat-menu-item>
@@ -86,12 +90,20 @@
                     <mat-icon>mode_edit</mat-icon> Editar
                   </a>
                   <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined" (click)="signal(task.job)" mat-menu-item>
-                    <mat-icon>outlined_flag</mat-icon> Sinalizar
+                    <span *ngIf="task.job.status?.id == 1">
+                      <mat-icon>flag</mat-icon> Sinalizar
+                    </span>
+                    <span *ngIf="task.job.status?.id == 5">
+                      <mat-icon>outlined_flag</mat-icon> Remover sinalização
+                    </span>
                   </a>
-                  <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined" (click)="delete(task.job)" mat-menu-item>
+                  <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined" (click)="delete(task)" mat-menu-item>
                     <mat-icon>delete</mat-icon> Remover
                   </button>
                 </mat-menu>
+                <div class="mat-cell mat-column-creation">
+                  {{ task?.responsible?.name }}
+                </div>
                 <div class="mat-cell mat-column-job">
                   {{ jobDisplay(task, chrono[i]) }}
                 </div>
@@ -127,9 +139,6 @@
                 </div>
                 <div class="mat-cell mat-column-attendance">
                   {{ task.job?.attendance?.name }}
-                </div>
-                <div class="mat-cell mat-column-creation">
-                  {{ task?.responsible?.name }}
                 </div>
                 <div class="mat-cell mat-column-stat">
                   {{ task.job?.status?.description }}

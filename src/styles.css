@@ -414,12 +414,28 @@ mat-card-title > p {
 font-size: 11px;
 }
 
-.mat-focused .mat-form-field-label .mat-select-placeholder,
-.mat-select:focus:not(.mat-select-disabled).mat-primary .mat-select-arrow,
+/*
+.mat-focused .mat-form-field-label .mat-select-placeholder, .mat-datepicker-toggle-active,
 .mat-select:focus:not(.mat-select-disabled).mat-primary .mat-select-trigger,
-.mat-form-field.mat-focused:not(.mat-form-field-invalid) .mat-form-field-label,
-.mat-form-field.mat-focused.mat-primary:not(.mat-select-disabled) .mat-select-arrow,
-.mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+.mat-form-field.mat-focused:not(.ng-invalid) .mat-form-field-label,
+.mat-form-field.mat-focused.mat-primary:not(.mat-select-disabled):not(.ng-invalid) .mat-select-arrow,
+.mat-primary .mat-option.mat-selected:not(.mat-option-disabled)
+
+
+
+.mat-form-field.mat-focused.mat-primary:not(.mat-select-disabled):not(.ng-invalid),
+
+*/
+.mat-datepicker-toggle .mat-icon-button {
+  outline: none !important;
+}
+
+.mat-datepicker-toggle-active,
+.mat-form-field.mat-focused:not(.ng-invalid) .mat-form-field-label,
+.mat-form-field.mat-focused.ng-untouched .mat-form-field-label,
+.mat-form-field.mat-focused:not(.ng-invalid) .mat-select-arrow,
+.mat-form-field.mat-focused.ng-untouched .mat-select-arrow,
+.mat-option.mat-selected:not(.mat-option-disabled) {
   color: #00afef !important;
 }
 

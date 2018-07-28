@@ -21,6 +21,11 @@ import { Task } from './task.model';
 import { TaskService } from './task.service';
 import { TaskItem } from './task-item.model';
 
+import { Observable, timer, Subscription } from 'rxjs';
+import 'rxjs/add/operator/filter';
+import { JobStatusService } from '../job-status/job-status.service';
+import { JobStatus } from '../job-status/job-status.model';
+
 @Component({
   selector: 'cb-schedule',
   templateUrl: './schedule.component.html',
@@ -59,7 +64,10 @@ export class ScheduleComponent implements OnInit {
   months: Month[] = MONTHS
   year: number
   date: Date
+  jobStatus: JobStatus[]
   updatedMessage: string = ''
+  timer: Observable<number>
+  subscription: Subscription
 
   jobDrag: Job
   lineJob: HTMLElement
@@ -71,6 +79,7 @@ export class ScheduleComponent implements OnInit {
     private employeeService: EmployeeService,
     private taskService: TaskService,
     private jobService: JobService,
+    private jobStatusService: JobStatusService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private briefingService: BriefingService,
@@ -122,6 +131,10 @@ export class ScheduleComponent implements OnInit {
           let info = { parentSenderPos: null, senderPos: null }
           draggable = list.item(i) as HTMLElement
           draggable.addEventListener('dragstart', function (event: DragEvent) {
+            if( ! angular.subscription.closed) {
+              angular.subscription.unsubscribe()
+            }
+
             info.parentSenderPos = Array.prototype.indexOf.call(this.parentNode.parentNode.parentNode.children, this.parentNode.parentNode)
             info.senderPos = Array.prototype.indexOf.call(this.parentNode.children, this)
             event.dataTransfer.setData('type', JSON.stringify(info))
@@ -139,6 +152,8 @@ export class ScheduleComponent implements OnInit {
         for (let i = 0; i < list.length; i++) {
           draggable = list.item(i) as HTMLElement
           draggable.addEventListener('drop', function (event: DragEvent) {
+            angular.createTimerUpdater()
+
             if (this.parentNode == null) {
               return
             }
@@ -191,45 +206,6 @@ export class ScheduleComponent implements OnInit {
                 return false
               }
             })
-
-            /*
-            angular.jobService.getNextAvailableDate(job1[jobStep1].available_date, job1[jobStep1].estimated_time, true).subscribe((data) => {
-              job1[jobStep1].available_date = data.available_date
-              job1[jobStep1].responsible_id = data.responsible.id
-
-              angular.jobService.editAvailableDate(job1[jobStep1]).subscribe((data) => {
-                if(data.status == true) {
-                  if(job2.id != undefined) {
-                    angular.getJobStepService(job2).getNextAvailableDate(job2[jobStep2].available_date, job2[jobStep2].estimated_time, true).subscribe((data) => {
-                      job2[jobStep2].available_date = data.available_date
-                      job2[jobStep2].responsible_id = data.responsible.id
-                      angular.getJobStepService(job2).editAvailableDate(job2[jobStep2]).subscribe((data) => {
-                        if(data.status == true) {
-                          snackBar.dismiss()
-                          angular.changeMonth(angular.month)
-                        } else {
-                          snackBar.dismiss()
-                          angular.snackBar.open('Houve um erro ao alterar.', '', {
-                            duration: 3000
-                          })
-                          return false
-                        }
-                      })
-                    })
-                  } else {
-                    snackBar.dismiss()
-                    angular.changeMonth(angular.month)
-                  }
-                } else {
-                  snackBar.dismiss()
-                  angular.snackBar.open('Houve um erro ao alterar.', '', {
-                    duration: 3000
-                  })
-                  return false
-                }
-              })
-            })
-            */
           })
         }
       })
@@ -247,6 +223,25 @@ export class ScheduleComponent implements OnInit {
     this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
     this.year = this.date.getFullYear()
     this.changeMonth(this.month)
+
+    this.createTimerUpdater()
+    this.loadJobStatus()
+  }
+
+  loadJobStatus() {
+    this.jobStatusService.jobStatus().subscribe(jobStatus => this.jobStatus = jobStatus)
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe()
+  }
+
+  createTimerUpdater() {
+    let time = 30000
+    this.timer = timer(time * 2, time)
+    this.subscription = this.timer.subscribe(timer => {
+      this.changeMonth(this.month)
+    })
   }
 
   checkIfDeadlineIsMinor(job: Job, availableDate: string) {
@@ -359,10 +354,13 @@ export class ScheduleComponent implements OnInit {
 
   signal(job: Job) {
     let oldStatus = job.status
-    job.status = {id: 5, description: 'Negociação avançada'}
+    let wanted = job.status.id == 5 ? 1 : 5
+    let wantedStatus = this.jobStatus.filter(s => { return s.id == wanted }).pop()
+    job.status = wantedStatus
+
     this.jobService.edit(job).subscribe((data) => {
       if(data.status) {
-        this.snackBar.open('Job sinalizado com sucesso!', '', {
+        this.snackBar.open('Sinalização modificada com sucesso!', '', {
           duration: 3000
         })
       } else {
@@ -452,15 +450,14 @@ export class ScheduleComponent implements OnInit {
     })
   }
 
-  delete(job: Job) {
-    this.jobService.delete(job.id).subscribe((data) => {
+  delete(task: Task) {
+    this.taskService.delete(task.id).subscribe((data) => {
       this.snackBar.open(data.message, '', {
         duration: 5000
       })
 
       if (data.status) {
-        this.jobs.splice(this.jobs.indexOf(job), 1)
-        this.pagination.total = this.pagination.total - 1
+        this.changeMonth(this.month)
       }
     })
   }

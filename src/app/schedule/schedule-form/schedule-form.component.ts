@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatCalendarHeader, MatDatepicker } from '@angular/material';
 import { JobActivity } from 'app/job-activities/job-activity.model';
 import { JobService } from 'app/jobs/job.service';
 import { BriefingService } from 'app/briefings/briefing.service';
@@ -15,7 +15,6 @@ import { Employee } from '../../employees/employee.model';
 import { JobActivityService } from '../../job-activities/job-activity.service';
 import { AuthService } from '../../login/auth.service';
 
-import 'rxjs/add/operator/filter';
 
 @Component({
   selector: 'cb-schedule-form',
@@ -46,11 +45,12 @@ export class ScheduleFormComponent implements OnInit {
   dateSetManually: boolean = false
   isAdmin: boolean = false
   responsibles: Employee[]
-  availableDates: string[]
+  availableDates: any = []
   nextDateMessage: string = ''
   url: string = '/jobs/new'
   buttonText: string = 'PRÓXIMO'
   @ViewChild('responsible') responsibleSelect
+  @ViewChild('availableDatepicker') availableDatepicker: MatDatepicker<Date>
 
   constructor(
     private formBuilder: FormBuilder,
@@ -70,16 +70,46 @@ export class ScheduleFormComponent implements OnInit {
     this.createForm()
     this.recoveryParams()
     this.createJobActivities()
-    //this.getAvailableDates()
     this.addListenerInJobActivity()
     this.addListenerForAvailableDate()
   }
 
-  getAvailableDates() {
+  changeMonth(date: Date) {
+    this.getAvailableDates(date)
+  }
+
+  getAvailableDates(date: Date) {
+    this.availableDatepicker.close()
+    let snack = this.snackBar.open('Aguarde enquanto carregamos as datas disponíveis')
     this.taskService.getAvailableDates({
-      iniDate: '2018-07-24',
-      finDate: '2018-07-24'
-    }).subscribe(dates => this.availableDates = dates)
+      iniDate: date.getFullYear() + '-' + (date.getMonth() + 1) + '-01',
+      finDate: date.getFullYear() + '-' + (date.getMonth() + 1) + '-31',
+      job_activity: this.scheduleForm.controls.job_activity.value,
+      duration: this.scheduleForm.controls.duration.value
+    }).subscribe(dates => {
+      this.availableDates = dates
+      snack.dismiss()
+      this.availableDatepicker.open()
+      let date = new Date(this.availableDates[0]['date']['date'])
+      this.scheduleForm.controls.available_date.setValue(date.toISOString())
+    })
+  }
+
+  filterAvailableDates = (calendarDate: Date): boolean => {
+    let response: boolean = false
+
+    this.availableDates.forEach(date => {
+      let myDate = new Date(date.date.date)
+
+      if(myDate.getFullYear() == calendarDate.getFullYear()
+      && myDate.getMonth() == calendarDate.getMonth()
+      && myDate.getDate() == calendarDate.getDate()) {
+        response = true
+      }
+
+    });
+
+    return response
   }
 
   recoveryParams() {
@@ -166,7 +196,8 @@ export class ScheduleFormComponent implements OnInit {
       this.scheduleForm.controls.responsible.setValue(data.responsible)
 
       if( ! this.dateSetManually) {
-        this.scheduleForm.controls.available_date.setValue((new Date(data.available_date + "T00:00:00").toISOString()))
+        let date = new Date(data.available_date + "T00:00:00")
+        this.getAvailableDates(date)
       }
       this.nextDateMessage = 'Lembre-se, você pode mover as suas agendas para liberar a data.'
     })

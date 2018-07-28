@@ -75,11 +75,13 @@
           <mat-form-field [class.cb-hidden]="!filtering" class="col-md-2">
             <input matInput formControlName="year" placeholder="Ano">
           </mat-form-field>
-          <mat-select [class.cb-hidden]="!filtering" class="col-md-3" placeholder="Mês" formControlName="month" [compareWith]="compareMonth">
-            <mat-option *ngFor="let month of months" [value]="month">
-              {{ month.name }}
-            </mat-option>
-          </mat-select>
+          <mat-form-field class="col-md-3">
+            <mat-select [class.cb-hidden]="!filtering" placeholder="Mês" formControlName="month" [compareWith]="compareMonth">
+              <mat-option *ngFor="let month of months" [value]="month">
+                {{ month.name }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
           <mat-form-field [class.cb-hidden]="!filtering" *ngIf="accessList" class="col-md-4">
             <input matInput [matAutocomplete]="autocompleteEmployee" formControlName="employee" placeholder="Funcionário">
             <mat-autocomplete #autocompleteEmployee="matAutocomplete" [displayWith]="displayEmployee">
@@ -88,11 +90,13 @@
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <mat-select [class.cb-hidden]="!filtering" class="col-md-3" placeholder="Local" formControlName="place" [compareWith]="comparePlace">
-            <mat-option *ngFor="let place of places" [value]="place">
-              {{ place.description }}
-            </mat-option>
-          </mat-select>
+          <mat-form-field class="col-md-3">
+            <mat-select [class.cb-hidden]="!filtering" placeholder="Local" formControlName="place" [compareWith]="comparePlace">
+              <mat-option *ngFor="let place of places" [value]="place">
+                {{ place.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
           <div *ngIf="false" class="col-md-2 button-grid-inline">
             <button (click)="filter()" type="button" class="cb-button" mat-raised-button>FILTRAR</button>
           </div>
