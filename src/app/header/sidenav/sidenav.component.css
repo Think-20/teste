@@ -85,7 +85,7 @@
   display: block;
   font-size: 13px;
   color: #7b7b7b;
-  box-shadow: none; 
+  box-shadow: none;
   text-align: right;
   font-weight: 300;
 }
@@ -98,4 +98,5 @@
 
 .nav-navbar .nav-item a {
   text-decoration: none;
+  padding-left: 0;
 }

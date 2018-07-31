@@ -10,8 +10,8 @@
           </mat-select>
         </span>
       </div>
-      <div class="col-md-6 updated-message">
-        <small>{{ updatedMessage }}</small>
+      <div class="col-md-6 updated-message" *ngIf="dataInfo != null">
+        <small>Última atualização {{ dataInfo?.updatedInfo?.date }} por {{ dataInfo?.updatedInfo?.employee }}</small>
       </div>
     </h3>
   </div>
@@ -44,14 +44,14 @@
         <div class="mat-header-row">
           <div class="mat-header-cell mat-column-date">Data</div>
           <div class="mat-header-cell mat-column-creation">Respons.</div>
+          <div class="mat-header-cell mat-column-time">Prazo</div>
           <div class="mat-header-cell mat-column-job">Job</div>
           <div class="mat-header-cell mat-column-type">Tipo</div>
           <div class="mat-header-cell mat-column-client">Cliente</div>
           <div class="mat-header-cell mat-column-agency">Agência</div>
           <div class="mat-header-cell mat-column-event">Evento</div>
           <div class="mat-header-cell mat-column-event-date">Data do evento</div>
-          <div class="mat-header-cell mat-column-budget">Verba</div>
-          <div class="mat-header-cell mat-column-propo">Proposta</div>
+          <div class="mat-header-cell mat-column-budget">Verba/Valor</div>
           <div class="mat-header-cell mat-column-area">Área</div>
           <div class="mat-header-cell mat-column-deadline">Deadline</div>
           <div class="mat-header-cell mat-column-attendance">Atend.</div>
@@ -71,12 +71,8 @@
               </div>
             </div>
             <div class="line-jobs">
-              <div class="line-job"
-                [class.signal]="task.job?.status?.id == 5"
-                [class.other-attendance]="task.job?.attendance_id != authService.currentUser().employee.id"
-                *ngFor="let task of chrono[i].tasks"
-                [matMenuTriggerFor]="menu"
-                draggable="true">
+              <div class="line-job" [class.signal]="task.job?.status?.id == 5" [class.other-attendance]="task.job?.attendance_id != authService.currentUser().employee.id"
+                [ngClass]="getLineClass(task)" *ngFor="let task of chrono[i].tasks" [matMenuTriggerFor]="menu" draggable="true">
                 <mat-menu #menu="matMenu">
                   <a *ngIf="task.job.id == undefined" (click)="addTask(chrono[i].day)" mat-menu-item>
                     <mat-icon>add</mat-icon> Adicionar
@@ -89,7 +85,8 @@
                     mat-menu-item>
                     <mat-icon>mode_edit</mat-icon> Editar
                   </a>
-                  <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined" (click)="signal(task.job)" mat-menu-item>
+                  <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined && (task.job.status?.id == 5 || task.job.status?.id == 1)"
+                    (click)="signal(task.job)" mat-menu-item>
                     <span *ngIf="task.job.status?.id == 1">
                       <mat-icon>flag</mat-icon> Sinalizar
                     </span>
@@ -104,6 +101,9 @@
                 <div class="mat-cell mat-column-creation">
                   {{ task?.responsible?.name }}
                 </div>
+                <div class="mat-cell mat-column-time">
+                  {{ timeDisplay(task, chrono[i]) }}
+                </div>
                 <div class="mat-cell mat-column-job">
                   {{ jobDisplay(task, chrono[i]) }}
                 </div>
@@ -112,6 +112,10 @@
                 </div>
                 <div class="mat-cell mat-column-client">
                   {{ task.job.client != null ? task.job.client.fantasy_name : task.job.not_client }}
+                  <br>
+                  <cb-stars *ngIf="task.job.id != null" class="col-md-12" [readonly]="true" [rate]="task.job?.client?.rate">
+                    <input type="hidden">
+                  </cb-stars>
                 </div>
                 <div class="mat-cell mat-column-agency">
                   {{ task.job.agency ? task.job.agency.fantasy_name : '' }}
@@ -127,9 +131,6 @@
                 </div>
                 <div class="mat-cell mat-column-budget" *ngIf="task.job.budget_value == null">
                   {{ '' }}
-                </div>
-                <div class="mat-cell mat-column-propo">
-                  &nbsp;
                 </div>
                 <div class="mat-cell mat-column-area">
                   &nbsp;

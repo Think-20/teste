@@ -29,3 +29,7 @@
 .production-time-container .label-right {
     text-align: right;
 }
+
+.production-time-content {
+  margin-top: 8px;
+}

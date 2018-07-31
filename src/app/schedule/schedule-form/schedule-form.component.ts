@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ValidatorFn } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatSnackBar, MatCalendarHeader, MatDatepicker } from '@angular/material';
@@ -49,6 +49,7 @@ export class ScheduleFormComponent implements OnInit {
   nextDateMessage: string = ''
   url: string = '/jobs/new'
   buttonText: string = 'PRÓXIMO'
+  budgetValueMessage: string
   @ViewChild('responsible') responsibleSelect
   @ViewChild('availableDatepicker') availableDatepicker: MatDatepicker<Date>
 
@@ -72,6 +73,7 @@ export class ScheduleFormComponent implements OnInit {
     this.createJobActivities()
     this.addListenerInJobActivity()
     this.addListenerForAvailableDate()
+    this.addValidationBudget()
   }
 
   changeMonth(date: Date) {
@@ -137,6 +139,7 @@ export class ScheduleFormComponent implements OnInit {
       duration: this.formBuilder.control('', [Validators.required]),
       available_date: this.formBuilder.control('', [Validators.required]),
       deadline: this.formBuilder.control('', [Validators.required]),
+      budget_value: this.formBuilder.control('', [Validators.required]),
       responsible: this.formBuilder.control('', [Validators.required]),
       job: this.formBuilder.control('')
     })
@@ -171,11 +174,45 @@ export class ScheduleFormComponent implements OnInit {
     })
   }
 
+  addValidationBudget() {
+    let days = this.scheduleForm.controls.duration.value
+    let validators: ValidatorFn[] = []
+    validators.push(Validators.required)
+
+    if(days <= 1) {
+      validators.push(Validators.min(0))
+      validators.push(Validators.max(70000))
+      this.budgetValueMessage = 'O valor deve estar entre 0,00 e 70.000,00 para até 1 dia'
+    } else if(days <= 2) {
+      validators.push(Validators.min(70000.01))
+      validators.push(Validators.max(150000))
+      this.budgetValueMessage = 'O valor deve estar entre 70.000,00 e 150.000,00 para até 2 dias'
+    } else if(days <= 3) {
+      validators.push(Validators.min(150000.01))
+      validators.push(Validators.max(240000))
+      this.budgetValueMessage = 'O valor deve estar entre 150.000,00 e 240.000,00 para até 3 dias'
+    } else if(days <= 4) {
+      validators.push(Validators.min(240000.01))
+      validators.push(Validators.max(340000))
+      this.budgetValueMessage = 'O valor deve estar entre 240.000,00 e 340.000,00 para até 4 dias'
+    } else if(days <= 5) {
+      validators.push(Validators.min(340000.01))
+      validators.push(Validators.max(450000))
+      this.budgetValueMessage = 'O valor deve estar entre 340.000,00 e 450.000,00 para até 5 dias'
+    } else if(days > 5) {
+      validators.push(Validators.min(450000.01))
+      this.budgetValueMessage = 'O valor deve ser maior que 450.000,00 para mais de 5 dias'
+    }
+
+    this.scheduleForm.controls.budget_value.setValidators(validators)
+  }
+
   addListenerForAvailableDate() {
     this.scheduleForm.controls.job_activity.valueChanges.subscribe(status => {
       this.calculateNextDate()
     })
     this.scheduleForm.controls.duration.valueChanges.subscribe(status => {
+      this.addValidationBudget()
       this.calculateNextDate()
     })
   }
@@ -230,6 +267,7 @@ export class ScheduleFormComponent implements OnInit {
     || task.job_activity.description == 'Outsider') {
       this.jobService.data = new Job
       this.jobService.data.task = task
+      this.jobService.data.budget_value = this.scheduleForm.controls.budget_value.value
       this.jobService.data.deadline = this.scheduleForm.controls.deadline.value
       this.jobService.data.job_activity = task.job_activity
       this.url = '/jobs/new'

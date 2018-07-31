@@ -58,7 +58,10 @@
   width: 8%;
 }
 .mat-column-budget {
-  width: 7%;
+  width: 10%;
+}
+.mat-column-time {
+  width: 6%;
 }
 .mat-column-deadline {
   width: 8%;
@@ -67,9 +70,6 @@
   width: 8%;
 }
 .mat-column-creation {
-  width: 9%;
-}
-.mat-column-propo {
   width: 9%;
 }
 .mat-column-stat {

@@ -92,7 +92,10 @@
           Obrigatório, até 99.999.999,99
         </mat-error>
       </mat-form-field>
-      <cb-stars class="col-md-3 star-input" label="Score" [rate]="job != undefined ? (job.rate + 1) : 0" [input]="jobForm.controls.rate">
+      <cb-stars class="col-md-3 star-input" label="Score"
+      [readonly]="true"
+      [rate]="jobForm.controls.client.value?.rate"
+      [input]="jobForm.controls.rate">
         <input formControlName="rate" matInput>
       </cb-stars>
       <mat-form-field class="col-md-3">

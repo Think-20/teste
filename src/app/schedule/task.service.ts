@@ -14,6 +14,7 @@ import { AuthService } from '../login/auth.service';
 import { Pagination } from 'app/shared/pagination.model';
 import { JobActivityServiceInterface } from 'app/jobs/job-activity-service.interface'
 import { JobActivity } from '../job-activities/job-activity.model';
+import { DataInfo } from '../shared/data-info.model';
 
 
 @Injectable()
@@ -52,7 +53,7 @@ export class TaskService {
   }
   */
 
-  tasks(params?: {}, page: number = 0): Observable<Pagination> {
+  tasks(params?: {}, page: number = 0): Observable<DataInfo> {
       let url = params === {} ? `tasks/all?page=${page}` : `tasks/filter?page=${page}`
       let prefix = (this.auth.hasAccess('tasks/all') ||  this.auth.hasAccess('tasks/filter')) ? '' : 'my-'
 

@@ -38,10 +38,16 @@
           <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #deadlineDatepicker></mat-datepicker>
         </mat-form-field>
-        <cb-production-time class="col-md-12 production-time-input" label="Tempo estimado" [rate]="1" [input]="scheduleForm.controls.duration"
+        <cb-production-time class="col-md-9 production-time-input" label="Tempo estimado" [rate]="1" [input]="scheduleForm.controls.duration"
           [min]="0" [max]="10">
           <input formControlName="duration" type="hidden">
         </cb-production-time>
+        <mat-form-field class="col-md-3">
+          <input currencyMask formControlName="budget_value" matInput placeholder="Verba estimada*">
+          <mat-error>
+            {{ budgetValueMessage }}
+          </mat-error>
+        </mat-form-field>
       </div>
       <p *ngIf="nextDateMessage != ''">
         <small>{{ nextDateMessage }}</small>

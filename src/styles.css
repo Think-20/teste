@@ -52,6 +52,10 @@ html, body, cb-login {
   margin-bottom: 16px;
 }
 
+#container-box .row .col-md-4 .my-container {
+  margin-bottom: 16px;
+}
+
 .form-array {
   width: 100%;
 }
@@ -79,39 +83,68 @@ button {
     outline: 0;
 }
 
-
-.departament-container {
+.department-container {
   position: relative;
   line-height: 42px;
   padding-right: 47px !important;
   font-size: 15px !important;
 }
 
-.departament-1 {
+.department-3 {
   background-color: #ed008f;
 }
 
-.departament-2 {
+.department-5 {
   background-color: #00aff2;
 }
 
-.departament-3 {
+.department-7 {
   background-color: #a4ce3a;
 }
 
-.departament-4 {
+.department-1 {
   background-color: #e5e6e8;
 }
 
-.departament-5 {
+.department-4 {
   background-color: #ffca00;
 }
 
-.departament-6 {
+.department-6 {
   background-color: #c377e0;
 }
 
-.departament {
+.department-3-transparent {
+  background-color: #ed008e31;
+  border-bottom: 2px solid #ed008f !important;
+}
+
+.department-5-transparent {
+  background-color: #00aff231;
+  border-bottom: 2px solid #00aff2 !important;
+}
+
+.department-7-transparent {
+  background-color: #a4ce3a31;
+  border-bottom: 2px solid #a4ce3a !important;
+}
+
+.department-1-transparent {
+  background-color: #e5e6e831;
+  border-bottom: 2px solid #e5e6e8 !important;
+}
+
+.department-4-transparent {
+  background-color: #ffca0031;
+  border-bottom: 2px solid #ffca00 !important;
+}
+
+.department-6-transparent {
+  background-color: #c377e031;
+  border-bottom: 2px solid #c377e0 !important;
+}
+
+.department {
   position: absolute;
   top: 2px;
   right: 15px;
@@ -564,6 +597,11 @@ font-size: 11px;
   width: 100%;
 }
 
+.mat-form-field-disabled .mat-form-field-underline {
+  background-image: none !important;
+  background-color: rgba(0,0,0,.15) !important;
+}
+
 /* Briefing form */
 
 .mat-card-title.row {
@@ -590,4 +628,17 @@ font-size: 11px;
 
 cb-schedule {
   height: 100%;
+}
+
+.container-schedule .stars-container .star {
+  max-height: 100%;
+  font-size: 13px !important;
+  max-width: 100%;
+  width: auto;
+  height: auto;
+}
+
+.container-schedule .stars-container {
+  margin-top: -10px !important;
+  margin-bottom: -10px !important;
 }

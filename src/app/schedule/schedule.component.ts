@@ -25,6 +25,7 @@ import { Observable, timer, Subscription } from 'rxjs';
 import 'rxjs/add/operator/filter';
 import { JobStatusService } from '../job-status/job-status.service';
 import { JobStatus } from '../job-status/job-status.model';
+import { DataInfo } from '../shared/data-info.model';
 
 @Component({
   selector: 'cb-schedule',
@@ -65,8 +66,8 @@ export class ScheduleComponent implements OnInit {
   year: number
   date: Date
   jobStatus: JobStatus[]
-  updatedMessage: string = ''
   timer: Observable<number>
+  dataInfo: DataInfo
   subscription: Subscription
 
   jobDrag: Job
@@ -274,68 +275,14 @@ export class ScheduleComponent implements OnInit {
       iniDate: iniDate,
       finDate: finDate,
       paginate: false
-    }).subscribe(pagination => {
-      this.pagination = pagination
+    }).subscribe(dataInfo => {
+      this.pagination = dataInfo.pagination
       this.searching = false
-      this.tasks = pagination.data
+      this.tasks = this.pagination.data
+      this.dataInfo = dataInfo
       this.chronologicDisplay(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
-      this.setUpdatedMessage()
       snackBar.dismiss()
     })
-  }
-
-  setUpdatedMessage() {
-    if (this.tasks.length == 0) {
-      this.updatedMessage = 'Sem atualizações'
-      return
-    }
-
-    let jobs = this.tasks.map(task => {
-      return task.job
-    })
-
-    let sortedJobs = jobs.sort((a, b) => {
-      if (a.updated_at > b.updated_at) {
-        return 1
-      } else if (a.updated_at < b.updated_at) {
-        return -1
-      } else {
-        return 0
-      }
-    })
-
-    let formatedDate = ''
-    let job = sortedJobs[sortedJobs.length - 1]
-    let date = new Date(job.updated_at)
-
-    if (date.getDate() < 10) {
-      formatedDate += '0' + date.getDate() + '/'
-    } else {
-      formatedDate += date.getDate() + '/'
-    }
-
-    if ((date.getUTCMonth() + 1) < 10) {
-      formatedDate += '0' + (date.getUTCMonth() + 1) + '/'
-    } else {
-      formatedDate += (date.getUTCMonth() + 1) + '/'
-    }
-
-    formatedDate += date.getFullYear()
-    formatedDate += ' às '
-
-    if (date.getHours() < 10) {
-      formatedDate += '0' + date.getHours() + ':'
-    } else {
-      formatedDate += date.getHours() + ':'
-    }
-
-    if (date.getMinutes() < 10) {
-      formatedDate += '0' + date.getMinutes()
-    } else {
-      formatedDate += date.getMinutes()
-    }
-
-    this.updatedMessage = 'Última atualização ' + formatedDate + ' por ' + job.attendance.name
   }
 
   jobDisplay(task: Task, chrono: Chrono) {
@@ -350,6 +297,32 @@ export class ScheduleComponent implements OnInit {
     }
 
     return task.job_activity.description
+  }
+
+  timeDisplay(task: Task, chrono: Chrono) {
+    if(task.job.id == null) {
+      return ''
+    }
+
+    let index = task.items.findIndex(arrayItem => {
+      let date = new Date(arrayItem.date + "T00:00:00")
+      return chrono.day == date.getDate()
+    })
+    let taskFound = this.tasks.find(arrayTask => { return task.id == arrayTask.id })
+
+    if(taskFound == null) {
+      return
+    }
+
+    return 'D+' + (taskFound.items.length - index - 1)
+  }
+
+  getLineClass(task: Task) {
+    if(task.job.id == null) {
+      return
+    }
+
+    return 'department-' + task.responsible.department_id + '-transparent'
   }
 
   signal(job: Job) {

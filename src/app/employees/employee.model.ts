@@ -6,5 +6,7 @@ export class Employee {
     name: string
     payment: number
     department?: Department
+    department_id?: number
     position?: Position
+    position_id?: number
 }

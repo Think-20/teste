@@ -217,6 +217,8 @@ export class JobFormComponent implements OnInit {
 
     this.jobForm.controls.deadline.setValue(job.deadline)
     this.jobForm.controls.job_activity.setValue(job.job_activity)
+    this.jobForm.controls.budget_value.setValue(job.budget_value)
+    this.jobForm.controls.budget_value.disable()
 
     if(job.job_activity.description == 'Orçamento') {
       this.jobForm.controls.creation_responsible.setValue('Externa')
@@ -306,6 +308,7 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.how_come.setValue(job.how_come)
     this.jobForm.controls.competition.setValue(job.competition)
     this.jobForm.controls.budget_value.setValue(job.budget_value)
+    this.jobForm.controls.budget_value.disable()
     this.jobForm.controls.status.setValue(job.status)
     this.jobForm.controls.approval_expectation_rate.setValue(job.approval_expectation_rate)
     this.jobForm.controls.note.setValue(job.note)
@@ -448,7 +451,7 @@ export class JobFormComponent implements OnInit {
 
   save() {
     this.jobForm.updateValueAndValidity()
-    let job = this.jobForm.value
+    let job = this.jobForm.getRawValue()
 
     if (ErrorHandler.formIsInvalid(this.jobForm)) {
       this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
@@ -514,7 +517,7 @@ export class JobFormComponent implements OnInit {
 
   edit() {
     this.jobForm.updateValueAndValidity()
-    let job = this.jobForm.value
+    let job = this.jobForm.getRawValue()
     job.id = this.job.id
 
     if (ErrorHandler.formIsInvalid(this.jobForm)) {
