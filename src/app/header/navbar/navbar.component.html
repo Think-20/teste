@@ -1,11 +1,9 @@
 <mat-toolbar>
   <img *ngIf="!opened" id="logoNavBar" src="/assets/images/logo.png" alt="Think Ideias">
-  <div>
-    <button id="menuButton" mat-button (click)="toggleMenu()">
-      <mat-icon>menu</mat-icon> <span>Menu</span>
-    </button>
-  </div>
   <div class="flex-spacer"></div>
+  <button class="my-button" mat-button (click)="toggleMenu()">
+    <mat-icon>menu</mat-icon>
+  </button>
   <button [routerLink]="['/timecard']" class="my-button" mat-button>
     <mat-icon>query_builder</mat-icon>
   </button>

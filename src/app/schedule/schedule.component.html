@@ -6,7 +6,7 @@
         <span class="actualMonth" (click)="monthSelect.open()">
           {{ month.name }} {{ year }}
           <mat-select panelClass="select-month-panel" class="select-hidden col-md-3" #monthSelect>
-            <mat-option *ngFor="let month of months" (click)="changeMonth(month)">{{month.name}}</mat-option>
+            <mat-option *ngFor="let month of months" (click)="updateMonth(month)">{{month.name}}</mat-option>
           </mat-select>
         </span>
       </div>
@@ -62,7 +62,7 @@
         </div>
         <div class="mat-row-scroll">
           <div #list class="mat-row line-chrono" *ngFor="let chr of chrono; let i = index" [@rowAppeared]="rowAppearedState">
-            <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }}">
+            <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }} month-{{ chr.month }}">
               <div>
                 <span>{{ chr.day }}-{{ chr.dayOfWeek?.abbrev }}</span>
                 <button *ngIf="permissionVerify('new', job)" class="cb-button add-chrono" (click)="addTask(chr.day)">

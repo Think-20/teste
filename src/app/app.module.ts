@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
-import { registerLocaleData } from '@angular/common';
+import { registerLocaleData, DatePipe } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import {
@@ -252,6 +252,7 @@ registerLocaleData(localePt);
     MatDialog,
     MatSnackBar,
     MatSlideToggle,
+    DatePipe,
     {provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
     {provide: LOCALE_ID, useValue: 'pt-BR'},
     {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},

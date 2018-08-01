@@ -32,6 +32,7 @@ import { JobHowCome } from 'app/job-how-come/job-how-come.model';
 import { Router } from '@angular/router';
 import { JobStatus } from 'app/job-status/job-status.model';
 import { TaskService } from '../../schedule/task.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'cb-job-form',
@@ -72,6 +73,7 @@ export class JobFormComponent implements OnInit {
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private router: Router,
+    private datePipe: DatePipe,
     private uploadFileService: UploadFileService
   ) { }
 
@@ -95,7 +97,7 @@ export class JobFormComponent implements OnInit {
         Validators.maxLength(150)
       ]),
       last_provider: this.formBuilder.control('', [
-        Validators.minLength(3),
+        Validators.minLength(2),
         Validators.maxLength(100)
       ]),
       not_client: this.formBuilder.control(''),
@@ -122,10 +124,11 @@ export class JobFormComponent implements OnInit {
       creation_responsible: this.formBuilder.control({value: '', disabled: true}),
       detailing_responsible: this.formBuilder.control({value: '', disabled: true}),
       budget_responsible: this.formBuilder.control({value: '', disabled: true}),
-      production_responsible: this.formBuilder.control({value: '', disabled: true})
+      production_responsible: this.formBuilder.control({value: '', disabled: true}),
+      place: this.formBuilder.control({value: '', disabled: true})
     })
 
-    this.setPreviousDate()
+    this.setPreviousData()
 
     this.jobForm.get('client').valueChanges
       .do(clientName => {
@@ -208,7 +211,7 @@ export class JobFormComponent implements OnInit {
     })
   }
 
-  setPreviousDate() {
+  setPreviousData() {
     let job: Job = this.jobService.data
 
     if (job.deadline == null) {
@@ -217,6 +220,7 @@ export class JobFormComponent implements OnInit {
 
     this.jobForm.controls.deadline.setValue(job.deadline)
     this.jobForm.controls.job_activity.setValue(job.job_activity)
+    this.jobForm.controls.job_activity.disable()
     this.jobForm.controls.budget_value.setValue(job.budget_value)
     this.jobForm.controls.budget_value.disable()
 
@@ -290,6 +294,7 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.deadline.setValue(job.deadline)
     this.jobForm.controls.job_type.setValue(job.job_type)
     this.jobForm.controls.job_activity.setValue(job.job_activity)
+    this.jobForm.controls.job_activity.disable()
 
     if (job.agency != null) {
       this.enableNotClient()
@@ -492,7 +497,11 @@ export class JobFormComponent implements OnInit {
               })
               snack.afterDismissed().subscribe(() => {
                 //this.router.navigateByUrl('/jobs/edit/' + this.job.id + '?tab=' + this.getNextTab())
-                this.router.navigateByUrl('/schedule')
+                this.router.navigate(['/schedule'], {
+                  queryParams: {
+                    date: this.datePipe.transform(task.available_date, 'yyyy-MM-dd')
+                  }
+                })
               })
             } else {
               this.snackBar.open(data.message, '', {

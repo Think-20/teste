@@ -8,10 +8,6 @@ mat-toolbar {
   padding-left: 0 !important;
 }
 
-#menuButton {
-  margin-left: -20px;
-}
-
 .my-button {
   min-width: 40px;
 }
@@ -19,5 +15,4 @@ mat-toolbar {
 #logoNavBar {
   width: 120px;
   margin-left: 50px;
-  margin-right: 70px;
 }

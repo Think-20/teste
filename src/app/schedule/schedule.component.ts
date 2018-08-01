@@ -10,7 +10,7 @@ import { Employee } from '../employees/employee.model';
 import { EmployeeService } from '../employees/employee.service';
 import { Month, MONTHS } from '../shared/date/months';
 import { DAYSOFWEEK, DayOfWeek } from '../shared/date/days-of-week';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../login/auth.service';
 import { BriefingService } from '../briefings/briefing.service';
 import { Briefing } from '../briefings/briefing.model';
@@ -26,6 +26,7 @@ import 'rxjs/add/operator/filter';
 import { JobStatusService } from '../job-status/job-status.service';
 import { JobStatus } from '../job-status/job-status.model';
 import { DataInfo } from '../shared/data-info.model';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'cb-schedule',
@@ -52,7 +53,6 @@ export class ScheduleComponent implements OnInit {
   @ViewChildren('list') list: QueryList<any>
   searchForm: FormGroup
   search: FormControl
-  scrollActivate: boolean = false
   rowAppearedState: string = 'ready'
   pagination: Pagination
   tasks: Task[] = []
@@ -87,7 +87,9 @@ export class ScheduleComponent implements OnInit {
     private budgetService: BudgetService,
     private ngZone: NgZone,
     private el: ElementRef,
-    private router: Router
+    private router: Router,
+    private datePipe: DatePipe,
+    private route: ActivatedRoute
   ) { }
 
   permissionVerify(module: string, job: Job): boolean {
@@ -161,7 +163,6 @@ export class ScheduleComponent implements OnInit {
 
             event.preventDefault()
 
-            angular.scrollActivate = false
             info = JSON.parse(event.dataTransfer.getData('type'))
             info.parentRecipientPos = Array.prototype.indexOf.call(this.parentNode.parentNode.parentNode.children, this.parentNode.parentNode)
             info.recipientPos = Array.prototype.indexOf.call(this.parentNode.children, this)
@@ -220,13 +221,22 @@ export class ScheduleComponent implements OnInit {
       attendance: this.fb.control('')
     })
 
-    this.date = new Date()
-    this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
-    this.year = this.date.getFullYear()
-    this.changeMonth(this.month)
-
+    this.activeDate()
     this.createTimerUpdater()
     this.loadJobStatus()
+  }
+
+  activeDate() {
+    this.date = new Date()
+
+    this.route.queryParams.subscribe(params => {
+      if(params.date != undefined)
+        this.date = new Date(params.date + "T00:00:00")
+    })
+
+    this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
+    this.year = this.date.getFullYear()
+    this.changeMonth(this.month, this.date)
   }
 
   loadJobStatus() {
@@ -253,23 +263,37 @@ export class ScheduleComponent implements OnInit {
     return new Date(job.deadline) <= new Date(availableDate)
   }
 
-  changeMonth(month: Month) {
+  updateMonth(month: Month) {
+    let date = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
+    let now = new Date()
+
+    if(month.id == (now.getMonth() + 1)) {
+      date.setDate(now.getDate())
+    }
+
+    this.changeMonth(month, date)
+  }
+
+  changeMonth(month: Month, date?: Date) {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando tarefas...')
     this.month = month
     let iniDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
     let finDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-31')
-    iniDateWithoutLimits.setDate(iniDateWithoutLimits.getDate() - 10)
-    finDateWithoutLimits.setDate(finDateWithoutLimits.getDate() + 10)
+
+    if(date != null) {
+      const urlTree = this.router.createUrlTree([], {
+        queryParams: { date: this.datePipe.transform(date, 'yyyy-MM-dd') },
+        queryParamsHandling: "merge",
+        preserveFragment: true });
+
+      this.router.navigateByUrl(urlTree);
+    }
+
+    iniDateWithoutLimits.setDate(iniDateWithoutLimits.getDate() - 15)
+    finDateWithoutLimits.setDate(finDateWithoutLimits.getDate() + 15)
     let iniDate = iniDateWithoutLimits.getUTCFullYear() + '-' + (iniDateWithoutLimits.getMonth() + 1) + '-' + iniDateWithoutLimits.getDate()
     let finDate = finDateWithoutLimits.getUTCFullYear() + '-' + (finDateWithoutLimits.getMonth() + 1) + '-' + finDateWithoutLimits.getDate()
-
-    let date = new Date()
-    if (month.id == date.getMonth() + 1) {
-      this.scrollActivate = true
-    } else {
-      this.scrollActivate = false
-    }
 
     this.taskService.tasks({
       iniDate: iniDate,
@@ -344,12 +368,14 @@ export class ScheduleComponent implements OnInit {
 
   chronologicDisplay(iniDate) {
     let i: number = 0
+    let fixedDateMax: Date = new Date(iniDate)
     let date: Date = new Date(iniDate)
-    let thisMonth: number = date.getMonth()
-    let days: number[]
-    date.setDate(1)
 
-    while (date.getMonth() == thisMonth) {
+    date.setDate(date.getDate() - 5)
+    fixedDateMax.setDate(fixedDateMax.getDate() + 35)
+    let days: number[]
+
+    while (date.getTime() < fixedDateMax.getTime()) {
       if (date.getDay() > 0 && date.getDay() < 6) {
         let filteredTasks = this.tasks.filter(task => {
           return task.items.filter(item => {
@@ -374,6 +400,7 @@ export class ScheduleComponent implements OnInit {
 
         this.chrono[i] = {
           day: date.getDate(),
+          month: (date.getMonth() + 1),
           dayOfWeek: DAYSOFWEEK.find(dayOfWeek => dayOfWeek.id == date.getDay()),
           tasks: filteredTasks
         }
@@ -386,13 +413,13 @@ export class ScheduleComponent implements OnInit {
   }
 
   scrollToDate() {
-    let date = new Date()
-    let dayString: string
+    let date = this.date
+    let query: string
     const elementBodyTable = document.querySelectorAll('.mat-row-scroll')[0] as HTMLElement;
 
     if(this.month.id == date.getMonth() + 1) {
-      dayString = '.day-' + this.date.getDate()
-      const elementList = document.querySelectorAll(dayString);
+      query = '.day-' + this.date.getDate() + '.month-' + (this.date.getMonth() + 1)
+      const elementList = document.querySelectorAll(query);
 
       if (elementList.length > 0) {
         const element = elementList[0] as HTMLElement;
@@ -439,6 +466,7 @@ export class ScheduleComponent implements OnInit {
 
 export class Chrono {
   day: number
+  month: number
   dayOfWeek: DayOfWeek
   tasks: Task[]
 }

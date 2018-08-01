@@ -9,13 +9,11 @@
     </div>
     <div id="menu-container">
       <div class="my-container">
-        <div id="username-sidenav" class="row">
-          <div class="col-md-8 text-right">
-            <span class="user-name" matTooltip="{{user.employee.department.description}}">
-              {{user.employee.name}}
-            </span>
+        <div id="username-sidenav">
+          <div class="user-name" matTooltip="{{user.employee.department.description}}">
+            {{user.employee.name}}
           </div>
-          <div class="col-md-4 user-photo text-center">
+          <div class="user-photo">
             <img width="55px" src="/assets/images/users/{{user.id}}.jpg" alt="Photo">
           </div>
         </div>

@@ -14,6 +14,7 @@ import { Job } from '../../jobs/job.model';
 import { Employee } from '../../employees/employee.model';
 import { JobActivityService } from '../../job-activities/job-activity.service';
 import { AuthService } from '../../login/auth.service';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -62,6 +63,7 @@ export class ScheduleFormComponent implements OnInit {
     private budgetService: BudgetService,
     private authService: AuthService,
     private router: Router,
+    private datePipe: DatePipe,
     private route: ActivatedRoute,
     private snackBar: MatSnackBar
   ) { }
@@ -77,10 +79,10 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   changeMonth(date: Date) {
-    this.getAvailableDates(date)
+    this.getAvailableDates(date, true)
   }
 
-  getAvailableDates(date: Date) {
+  getAvailableDates(date: Date, open: boolean = false) {
     this.availableDatepicker.close()
     let snack = this.snackBar.open('Aguarde enquanto carregamos as datas disponíveis')
     this.taskService.getAvailableDates({
@@ -91,7 +93,10 @@ export class ScheduleFormComponent implements OnInit {
     }).subscribe(dates => {
       this.availableDates = dates
       snack.dismiss()
-      this.availableDatepicker.open()
+
+      if(open)
+        this.availableDatepicker.open()
+
       let date = new Date(this.availableDates[0]['date']['date'])
       this.scheduleForm.controls.available_date.setValue(date.toISOString())
     })
@@ -99,6 +104,10 @@ export class ScheduleFormComponent implements OnInit {
 
   filterAvailableDates = (calendarDate: Date): boolean => {
     let response: boolean = false
+
+    if( this.isAdmin ) {
+      return true
+    }
 
     this.availableDates.forEach(date => {
       let myDate = new Date(date.date.date)
@@ -124,7 +133,8 @@ export class ScheduleFormComponent implements OnInit {
         return
       }
 
-      this.scheduleForm.controls.available_date.setValue(params.date)
+      this.availableDates = [{date: {date: params.date + "T00:00:00"}}]
+      this.scheduleForm.controls.available_date.setValue(params.date + "T00:00:00")
       this.dateSetManually = true
     })
   }
@@ -280,7 +290,11 @@ export class ScheduleFormComponent implements OnInit {
             duration: 3000
           })
           snack.afterDismissed().subscribe(() => {
-            this.router.navigateByUrl(this.url)
+            this.router.navigate([this.url], {
+              queryParams: {
+                date: this.datePipe.transform(task.available_date, 'yyyy-MM-dd')
+              }
+            })
           })
         } else {
           this.snackBar.open(data.message, '', {

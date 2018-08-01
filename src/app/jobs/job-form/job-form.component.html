@@ -73,6 +73,9 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field class="col-md-3">
+        <input formControlName="place" matInput placeholder="Local">
+      </mat-form-field>
+      <mat-form-field class="col-md-3">
         <mat-select placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
           <mat-option *ngFor="let attendance of attendances" [value]="attendance">
             {{ attendance.name }}
@@ -127,7 +130,7 @@
       <mat-form-field class="col-md-3">
         <input ucWords formControlName="last_provider" matInput placeholder="Último fornecedor">
         <mat-error>
-          Entre 3 e 100 caract.
+          Entre 2 e 100 caract.
         </mat-error>
       </mat-form-field>
       <mat-form-field class="col-md-3">
