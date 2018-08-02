@@ -68,6 +68,7 @@ export class ScheduleComponent implements OnInit {
   date: Date
   jobStatus: JobStatus[]
   timer: Observable<number>
+  today: Date
   dataInfo: DataInfo
   subscription: Subscription
 
@@ -222,6 +223,7 @@ export class ScheduleComponent implements OnInit {
       attendance: this.fb.control('')
     })
 
+    this.today = new Date()
     this.activeDate()
     this.createTimerUpdater()
     this.loadJobStatus()
@@ -351,9 +353,12 @@ export class ScheduleComponent implements OnInit {
   getLineClass(task: Task) {
     if(task.job.id == null) {
       return
+    } else if(task.items[0].date != this.datePipe.transform(this.today, 'yyyy-MM-dd')) {
+      return 'department-' + task.responsible.department_id + '-border'
     }
 
-    return 'department-' + task.responsible.department_id + '-transparent'
+    let departmentId = task.responsible.department_id
+    return 'department-' + departmentId + '-transparent department-' + departmentId + '-border'
   }
 
   signal(task: Task) {

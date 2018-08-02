@@ -115,27 +115,51 @@ button {
 }
 
 .department-3-transparent {
-  background-color: #ed008e31;
+  background-color: #ed008e15;
 }
 
 .department-5-transparent {
-  background-color: #00aff231;
+  background-color: #00aff215;
 }
 
 .department-7-transparent {
-  background-color: #a4ce3a31;
+  background-color: #a4ce3a15;
 }
 
 .department-1-transparent {
-  background-color: #e5e6e831;
+  background-color: #e5e6e815;
 }
 
 .department-4-transparent {
-  background-color: #ffca0031;
+  background-color: #ffca0015;
 }
 
 .department-6-transparent {
-  background-color: #c377e031;
+  background-color: #c377e015;
+}
+
+.department-3-border {
+  border-left: 4px solid #ed008e;
+}
+
+.department-5-border {
+  border-left: 4px solid #00aff2;
+}
+
+.department-7-border {
+  border-left: 4px solid #a4ce3a;
+}
+
+.department-1-border {
+  border-left: 4px solid #e5e6e8;
+}
+
+.department-4-border {
+  border-left: 4px solid #ffca00;
+}
+
+.department-6-border {
+  border-left: 4px solid #c377e0;
 }
 
 .department {
