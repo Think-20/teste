@@ -248,10 +248,16 @@ export class ScheduleComponent implements OnInit {
   }
 
   createTimerUpdater() {
-    let time = 30000
+    let time = 60000
     this.timer = timer(time * 2, time)
     this.subscription = this.timer.subscribe(timer => {
-      this.changeMonth(this.month)
+      this.taskService.updatedInfo().subscribe(data => {
+        if(data.date == this.dataInfo.updatedInfo.date) {
+          return
+        }
+        this.dataInfo.updatedInfo = data
+        this.changeMonth(this.month)
+      })
     })
   }
 

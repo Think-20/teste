@@ -72,6 +72,19 @@ export class TaskService {
           })
   }
 
+  updatedInfo(): Observable<any> {
+      let url = `tasks/updated-info`
+
+      return this.http.get(`${API}/${url}`)
+          .map(response => response.json())
+          .catch((err) => {
+              this.snackBar.open(ErrorHandler.message(err), '', {
+                  duration: 3000
+              })
+              return ErrorHandler.capture(err)
+          })
+  }
+
   task(taskId: number): Observable<Task> {
       let url = `tasks/get/${taskId}`
       let prefix = this.auth.hasAccess('tasks/get/{id}') ? '' : 'my-'
