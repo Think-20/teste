@@ -33,6 +33,7 @@ import { Router } from '@angular/router';
 import { JobStatus } from 'app/job-status/job-status.model';
 import { TaskService } from '../../schedule/task.service';
 import { DatePipe } from '@angular/common';
+import { ObjectValidator } from '../../shared/custom-validators';
 
 @Component({
   selector: 'cb-job-form',
@@ -90,7 +91,7 @@ export class JobFormComponent implements OnInit {
       id: this.formBuilder.control({ value: '', disabled: true }),
       job_activity: this.formBuilder.control('', [Validators.required]),
       main_expectation: this.formBuilder.control('', [Validators.required]),
-      client: this.formBuilder.control(''),
+      client: this.formBuilder.control('', [Validators.required, ObjectValidator]),
       event: this.formBuilder.control('', [
         Validators.required,
         Validators.minLength(3),
@@ -108,7 +109,7 @@ export class JobFormComponent implements OnInit {
       deadline: this.formBuilder.control('', [Validators.required]),
       how_come: this.formBuilder.control('', [Validators.required]),
       job_type: this.formBuilder.control('', [Validators.required]),
-      agency: this.formBuilder.control(''),
+      agency: this.formBuilder.control('', [ObjectValidator]),
       attendance: this.formBuilder.control('', [Validators.required]),
       rate: this.formBuilder.control(''),
       stand: this.formBuilder.group({}),
@@ -258,6 +259,7 @@ export class JobFormComponent implements OnInit {
       Validators.minLength(3),
       Validators.maxLength(100)
     ])
+    this.jobForm.controls.not_client.updateValueAndValidity()
     this.jobForm.controls.client.disable()
     this.jobForm.controls.client.clearValidators()
   }
@@ -271,8 +273,10 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.not_client.clearValidators()
     this.jobForm.controls.client.enable()
     this.jobForm.controls.client.setValidators([
-      Validators.required
+      Validators.required,
+      ObjectValidator
     ])
+    this.jobForm.controls.client.updateValueAndValidity()
   }
 
   loadJob() {
