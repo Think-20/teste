@@ -71,7 +71,8 @@
               </div>
             </div>
             <div class="line-jobs">
-              <div class="line-job" [class.signal]="task.job?.status?.id == 5" [class.other-attendance]="task.job?.attendance_id != authService.currentUser().employee.id"
+              <div class="line-job" [class.signal]="task.job?.status?.id == 5"
+                [class.other-attendance]="task.job?.attendance_id != authService.currentUser().employee.id && task.job.id != undefined && !permissionVerify('edit', task.job)"
                 [ngClass]="getLineClass(task)" *ngFor="let task of chrono[i].tasks" [matMenuTriggerFor]="menu" draggable="true">
                 <mat-menu #menu="matMenu">
                   <a *ngIf="task.job.id == undefined" (click)="addTask(chrono[i].day)" mat-menu-item>
