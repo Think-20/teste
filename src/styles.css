@@ -627,16 +627,3 @@ font-size: 11px;
 cb-schedule {
   height: 100%;
 }
-
-.container-schedule .stars-container .star {
-  max-height: 100%;
-  font-size: 13px !important;
-  max-width: 100%;
-  width: auto;
-  height: auto;
-}
-
-.container-schedule .stars-container {
-  margin-top: -10px !important;
-  margin-bottom: -10px !important;
-}

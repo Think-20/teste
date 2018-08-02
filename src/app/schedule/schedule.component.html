@@ -112,10 +112,6 @@
                 </div>
                 <div class="mat-cell mat-column-client">
                   {{ task.job.client != null ? task.job.client.fantasy_name : task.job.not_client }}
-                  <br>
-                  <cb-stars *ngIf="task.job.id != null" class="col-md-12" [readonly]="true" [rate]="task.job?.client?.rate">
-                    <input type="hidden">
-                  </cb-stars>
                 </div>
                 <div class="mat-cell mat-column-agency">
                   {{ task.job.agency ? task.job.agency.fantasy_name : '' }}
