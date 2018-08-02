@@ -60,6 +60,7 @@ export class ScheduleComponent implements OnInit {
   attendances: Employee[]
   searching = false
   filter = false
+  scrollActive: boolean = true
   chrono: Chrono[] = []
   month: Month
   months: Month[] = MONTHS
@@ -355,13 +356,16 @@ export class ScheduleComponent implements OnInit {
     return 'department-' + task.responsible.department_id + '-transparent'
   }
 
-  signal(job: Job) {
+  signal(task: Task) {
+    this.scrollActive = false
+    let job = task.job
     let oldStatus = job.status
     let wanted = job.status.id == 5 ? 1 : 5
     let wantedStatus = this.jobStatus.filter(s => { return s.id == wanted }).pop()
     job.status = wantedStatus
 
     this.jobService.edit(job).subscribe((data) => {
+      this.scrollActive = true
       if(data.status) {
         this.snackBar.open('Sinalização modificada com sucesso!', '', {
           duration: 3000
@@ -419,6 +423,10 @@ export class ScheduleComponent implements OnInit {
   }
 
   scrollToDate() {
+    if( ! this.scrollActive ) {
+      return
+    }
+
     let date = this.date
     let query: string
     const elementBodyTable = document.querySelectorAll('.mat-row-scroll')[0] as HTMLElement;

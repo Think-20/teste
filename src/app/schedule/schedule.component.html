@@ -44,7 +44,6 @@
         <div class="mat-header-row">
           <div class="mat-header-cell mat-column-date">Data</div>
           <div class="mat-header-cell mat-column-creation">Respons.</div>
-          <div class="mat-header-cell mat-column-time">Prazo</div>
           <div class="mat-header-cell mat-column-job">Job</div>
           <div class="mat-header-cell mat-column-type">Tipo</div>
           <div class="mat-header-cell mat-column-client">Cliente</div>
@@ -53,6 +52,7 @@
           <div class="mat-header-cell mat-column-event-date">Data do evento</div>
           <div class="mat-header-cell mat-column-budget">Verba/Valor</div>
           <div class="mat-header-cell mat-column-area">Área</div>
+          <div class="mat-header-cell mat-column-time">Prazo</div>
           <div class="mat-header-cell mat-column-deadline">Deadline</div>
           <div class="mat-header-cell mat-column-attendance">Atend.</div>
           <div class="mat-header-cell mat-column-stat">Status</div>
@@ -87,7 +87,7 @@
                     <mat-icon>mode_edit</mat-icon> Editar
                   </a>
                   <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined && (task.job.status?.id == 5 || task.job.status?.id == 1)"
-                    (click)="signal(task.job)" mat-menu-item>
+                    (click)="signal(task)" mat-menu-item>
                     <span *ngIf="task.job.status?.id == 1">
                       <mat-icon>flag</mat-icon> Sinalizar
                     </span>
@@ -101,9 +101,6 @@
                 </mat-menu>
                 <div class="mat-cell mat-column-creation">
                   {{ task?.responsible?.name }}
-                </div>
-                <div class="mat-cell mat-column-time">
-                  {{ timeDisplay(task, chrono[i]) }}
                 </div>
                 <div class="mat-cell mat-column-job">
                   {{ jobDisplay(task, chrono[i]) }}
@@ -131,6 +128,9 @@
                 </div>
                 <div class="mat-cell mat-column-area">
                   &nbsp;
+                </div>
+                <div class="mat-cell mat-column-time">
+                  {{ timeDisplay(task, chrono[i]) }}
                 </div>
                 <div class="mat-cell mat-column-deadline">
                   {{ task.job?.deadline | date:'dd/MM' }}
