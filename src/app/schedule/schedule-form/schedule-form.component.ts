@@ -73,8 +73,23 @@ export class ScheduleFormComponent implements OnInit {
     this.createForm()
     this.recoveryParams()
     this.createJobActivities()
-    this.addListenerInJobActivity()
-    this.addListenerForAvailableDate()
+    this.addEvents()
+  }
+
+  addEvents() {
+    this.scheduleForm.controls.job_activity.valueChanges.subscribe(status => {
+      let jobActivity = this.scheduleForm.controls.job_activity.value as JobActivity
+      this.calculateNextDate()
+      this.setButtons()
+
+      if(jobActivity.description == 'Modificação')
+        this.addModificationEvents()
+      else this.addOtherEvents()
+    })
+    this.scheduleForm.controls.duration.valueChanges.subscribe(status => {
+      this.addValidationBudget()
+      this.calculateNextDate()
+    })
     this.addValidationBudget()
   }
 
@@ -82,14 +97,41 @@ export class ScheduleFormComponent implements OnInit {
     this.getAvailableDates(date, true)
   }
 
-  getAvailableDates(date: Date, open: boolean = false) {
+  addModificationEvents() {
+    this.scheduleForm.controls.responsible.disable()
+    this.scheduleForm.controls.budget_value.disable()
+    this.nextDateMessage = 'Escolha primeiro o job, para verificarmos o responsável e a data disponível.'
+
+    let types = ['Projeto', 'Modificação', 'Outsider', 'Opção']
+    this.loadJobs(types)
+
+    this.scheduleForm.controls.job.valueChanges.subscribe(job => {
+      let responsible
+      this.nextDateMessage = ''
+      this.scheduleForm.controls.responsible.setValue('')
+      this.scheduleForm.controls.available_date.setValue('')
+      this.scheduleForm.controls.budget_value.setValue(job.budget_value)
+      this.responsibles = [job.creation_responsible]
+      this.scheduleForm.controls.responsible.setValue(job.creation_responsible)
+      this.getAvailableDates(new Date(), false, this.responsibles[0])
+    })
+  }
+
+  addOtherEvents() {
+    this.scheduleForm.controls.responsible.enable()
+    this.scheduleForm.controls.budget_value.enable()
+    this.loadJobs()
+  }
+
+  getAvailableDates(date: Date, open: boolean = false, onlyEmployee: Employee = null) {
     this.availableDatepicker.close()
     let snack = this.snackBar.open('Aguarde enquanto carregamos as datas disponíveis')
     this.taskService.getAvailableDates({
       iniDate: date.getFullYear() + '-' + (date.getMonth() + 1) + '-01',
       finDate: date.getFullYear() + '-' + (date.getMonth() + 1) + '-31',
       job_activity: this.scheduleForm.controls.job_activity.value,
-      duration: this.scheduleForm.controls.duration.value
+      duration: this.scheduleForm.controls.duration.value,
+      only_employee: onlyEmployee
     }).subscribe(dates => {
       this.availableDates = dates
       snack.dismiss()
@@ -165,9 +207,8 @@ export class ScheduleFormComponent implements OnInit {
     this.scheduleForm.controls.job.setValue(job)
   }
 
-  addListenerInJobActivity() {
-    this.scheduleForm.controls.job_activity.valueChanges.subscribe(job_activity => {
-      let jobActivity = job_activity as JobActivity
+  setButtons() {
+      let jobActivity = this.scheduleForm.controls.job_activity.value as JobActivity
       if (jobActivity.description == 'Projeto'
       || jobActivity.description == 'Orçamento'
       || jobActivity.description == 'Outsider') {
@@ -176,11 +217,23 @@ export class ScheduleFormComponent implements OnInit {
         this.hasPreviousActivity = false
         return
       }
-      this.jobService.jobs().subscribe(data => {
-        this.jobs = data.data
-      })
+
       this.buttonText = 'AGENDAR'
       this.hasPreviousActivity = true
+  }
+
+  loadJobs(types: string[] = []) {
+    if( ! this.hasPreviousActivity )
+      return
+
+    this.jobService.jobs({
+      job_activities: this.job_activities.filter(jobActivity => {
+        return types.indexOf(jobActivity.description) > -1
+      }).map(jobActivity => {
+        return jobActivity.id
+      })
+    }).subscribe(data => {
+      this.jobs = data.data
     })
   }
 
@@ -215,21 +268,14 @@ export class ScheduleFormComponent implements OnInit {
     }
 
     this.scheduleForm.controls.budget_value.setValidators(validators)
-  }
-
-  addListenerForAvailableDate() {
-    this.scheduleForm.controls.job_activity.valueChanges.subscribe(status => {
-      this.calculateNextDate()
-    })
-    this.scheduleForm.controls.duration.valueChanges.subscribe(status => {
-      this.addValidationBudget()
-      this.calculateNextDate()
-    })
+    this.scheduleForm.controls.budget_value.updateValueAndValidity()
   }
 
   calculateNextDate() {
     let controls = this.scheduleForm.controls
-    if (controls.job_activity.status != 'VALID' || controls.duration.status != 'VALID') {
+    if (controls.job_activity.status != 'VALID'
+    || controls.duration.status != 'VALID'
+    || controls.job_activity.value.description == 'Modificação') {
       return
     }
 
@@ -270,7 +316,7 @@ export class ScheduleFormComponent implements OnInit {
       return;
     }
 
-    let task = this.scheduleForm.value as Task
+    let task = this.scheduleForm.getRawValue() as Task
 
     if (task.job_activity.description == 'Projeto'
     || task.job_activity.description == 'Orçamento'

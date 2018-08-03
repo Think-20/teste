@@ -350,10 +350,11 @@ export class ScheduleComponent implements OnInit {
     return 'D+' + (taskFound.items.length - index - 1)
   }
 
-  getLineClass(task: Task) {
+  getLineClass(task: Task, day: number, month: number) {
     if(task.job.id == null) {
       return
-    } else if(task.items[0].date != this.datePipe.transform(this.today, 'yyyy-MM-dd')) {
+    } else if(day.toString() != this.datePipe.transform(this.today, 'd')
+    || month.toString() != this.datePipe.transform(this.today, 'M')) {
       return 'department-' + task.responsible.department_id + '-border'
     }
 
