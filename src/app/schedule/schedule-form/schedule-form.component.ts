@@ -17,6 +17,7 @@ import { AuthService } from '../../login/auth.service';
 import { DatePipe } from '@angular/common';
 import { JobStatusService } from '../../job-status/job-status.service';
 import { JobStatus } from '../../job-status/job-status.model';
+import { debounceTime } from 'rxjs/operators';
 
 
 @Component({
@@ -95,10 +96,24 @@ export class ScheduleFormComponent implements OnInit {
         this.addDetailingEvents()
       else this.addOtherEvents()
     })
-    this.scheduleForm.controls.duration.valueChanges.subscribe(status => {
+
+    this.scheduleForm.controls.budget_value.valueChanges
+    .pipe(debounceTime(500))
+    .subscribe(value => {
+      if(value > 450000 && this.scheduleForm.controls.job_activity.value.description != 'Outsider') {
+        this.scheduleForm.controls.job_activity.setValue(this.job_activities.find(jobActivity => {
+          return jobActivity.description == 'Outsider'
+        }))
+      }
+    })
+
+    this.scheduleForm.controls.duration.valueChanges
+    .pipe(debounceTime(500))
+    .subscribe(status => {
       this.addValidationBudget()
       this.calculateNextDate()
     })
+
     this.addValidationBudget()
   }
 

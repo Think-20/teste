@@ -126,7 +126,7 @@ export class JobFormComponent implements OnInit {
       detailing_responsible: this.formBuilder.control({value: '', disabled: true}),
       budget_responsible: this.formBuilder.control({value: '', disabled: true}),
       production_responsible: this.formBuilder.control({value: '', disabled: true}),
-      place: this.formBuilder.control({value: '', disabled: true})
+      place: this.formBuilder.control('')
     })
 
     this.setPreviousData()
@@ -323,6 +323,7 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.status.setValue(job.status)
     this.jobForm.controls.approval_expectation_rate.setValue(job.approval_expectation_rate)
     this.jobForm.controls.note.setValue(job.note)
+    this.jobForm.controls.place.setValue(job.place)
     this.jobForm.controls.history.setValue(job.history)
 
     if(job.creation_responsible != null) {

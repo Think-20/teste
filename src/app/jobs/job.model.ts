@@ -50,6 +50,7 @@ export class Job {
     note?: string
     history: string
     task?: Task
+    place?: string
     tasks?: Task[]
     available_date_creation?: string
     attendance_responsible?: Employee
