@@ -15,6 +15,8 @@ import { Employee } from '../../employees/employee.model';
 import { JobActivityService } from '../../job-activities/job-activity.service';
 import { AuthService } from '../../login/auth.service';
 import { DatePipe } from '@angular/common';
+import { JobStatusService } from '../../job-status/job-status.service';
+import { JobStatus } from '../../job-status/job-status.model';
 
 
 @Component({
@@ -42,6 +44,7 @@ export class ScheduleFormComponent implements OnInit {
   hasPreviousActivity: boolean = false
   scheduleForm: FormGroup
   job_activities: JobActivity[]
+  job_status: JobStatus[]
   jobs: Job[]
   dateSetManually: boolean = false
   isAdmin: boolean = false
@@ -58,6 +61,7 @@ export class ScheduleFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private jobService: JobService,
     private jobActivityService: JobActivityService,
+    private jobStatusService: JobStatusService,
     private taskService: TaskService,
     private briefingService: BriefingService,
     private budgetService: BudgetService,
@@ -72,7 +76,8 @@ export class ScheduleFormComponent implements OnInit {
     this.isAdmin = this.authService.hasAccess('task/save')
     this.createForm()
     this.recoveryParams()
-    this.createJobActivities()
+    this.loadJobStatus()
+    this.loadJobActivities()
     this.addEvents()
   }
 
@@ -86,6 +91,8 @@ export class ScheduleFormComponent implements OnInit {
         this.addModificationEvents()
       else if(jobActivity.description == 'Orçamento')
         this.addBudgetEvents()
+      else if(jobActivity.description == 'Detalhamento')
+        this.addDetailingEvents()
       else this.addOtherEvents()
     })
     this.scheduleForm.controls.duration.valueChanges.subscribe(status => {
@@ -105,7 +112,15 @@ export class ScheduleFormComponent implements OnInit {
     this.nextDateMessage = 'Escolha primeiro o job, para verificarmos o responsável e a data disponível.'
 
     let types = ['Projeto', 'Modificação', 'Outsider', 'Opção']
-    this.loadJobs(types)
+    this.jobService.jobs({
+      job_activities: this.job_activities.filter(jobActivity => {
+        return types.indexOf(jobActivity.description) > -1
+      }).map(jobActivity => {
+        return jobActivity.id
+      })
+    }).subscribe(data => {
+      this.jobs = data.data
+    })
 
     this.scheduleForm.controls.job.valueChanges.subscribe(job => {
       let responsible
@@ -124,10 +139,36 @@ export class ScheduleFormComponent implements OnInit {
     this.scheduleForm.controls.budget_value.disable()
   }
 
+  addDetailingEvents() {
+    this.scheduleForm.controls.responsible.enable()
+    this.scheduleForm.controls.budget_value.enable()
+
+    let types = ['Projeto', 'Modificação', 'Outsider', 'Opção']
+    this.jobService.jobs({
+      status: this.job_status.find(jobStatus => { return jobStatus.description == 'Aprovado' }).id
+    }).subscribe(data => {
+      this.jobs = <Job[]> data.data
+      let jobActivity = this.job_activities.find(jobActivity => {
+        return jobActivity.description == 'Detalhamento'
+      })
+      this.jobs = this.jobs.filter(job => {
+        let detailed = false
+        job.tasks.forEach(task => {
+          if(task.job_activity.id == jobActivity.id) {
+            detailed = true
+          }
+        })
+        return ! detailed
+      })
+    })
+  }
+
   addOtherEvents() {
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.enable()
-    this.loadJobs()
+    this.jobService.jobs().subscribe(data => {
+      this.jobs = data.data
+    })
   }
 
   getAvailableDates(date: Date, open: boolean = false, onlyEmployee: Employee = null) {
@@ -204,9 +245,15 @@ export class ScheduleFormComponent implements OnInit {
     })
   }
 
-  createJobActivities() {
+  loadJobActivities() {
     this.jobActivityService.jobActivities().subscribe(jobActivities => {
       this.job_activities = jobActivities
+    })
+  }
+
+  loadJobStatus() {
+    this.jobStatusService.jobStatus().subscribe(jobStatus => {
+      this.job_status = jobStatus
     })
   }
 
@@ -227,21 +274,6 @@ export class ScheduleFormComponent implements OnInit {
 
       this.buttonText = 'AGENDAR'
       this.hasPreviousActivity = true
-  }
-
-  loadJobs(types: string[] = []) {
-    if( ! this.hasPreviousActivity )
-      return
-
-    this.jobService.jobs({
-      job_activities: this.job_activities.filter(jobActivity => {
-        return types.indexOf(jobActivity.description) > -1
-      }).map(jobActivity => {
-        return jobActivity.id
-      })
-    }).subscribe(data => {
-      this.jobs = data.data
-    })
   }
 
   addValidationBudget() {
