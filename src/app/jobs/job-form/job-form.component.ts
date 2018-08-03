@@ -228,6 +228,7 @@ export class JobFormComponent implements OnInit {
     if(job.job_activity.description == 'Orçamento') {
       this.jobForm.controls.creation_responsible.setValue('Externa')
       this.jobForm.controls.available_date_creation.setValue(job.task.available_date)
+      this.jobForm.controls.budget_responsible.setValue(job.task.responsible.name)
       return
     }
 
