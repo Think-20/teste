@@ -84,6 +84,8 @@ export class ScheduleFormComponent implements OnInit {
 
       if(jobActivity.description == 'Modificação')
         this.addModificationEvents()
+      else if(jobActivity.description == 'Orçamento')
+        this.addBudgetEvents()
       else this.addOtherEvents()
     })
     this.scheduleForm.controls.duration.valueChanges.subscribe(status => {
@@ -115,6 +117,11 @@ export class ScheduleFormComponent implements OnInit {
       this.scheduleForm.controls.responsible.setValue(job.creation_responsible)
       this.getAvailableDates(new Date(), false, this.responsibles[0])
     })
+  }
+
+  addBudgetEvents() {
+    this.scheduleForm.controls.responsible.enable()
+    this.scheduleForm.controls.budget_value.disable()
   }
 
   addOtherEvents() {
