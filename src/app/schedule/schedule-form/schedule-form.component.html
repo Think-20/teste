@@ -9,6 +9,16 @@
     <form [formGroup]="scheduleForm">
       <div class="row">
         <input formControlName="job" type="hidden">
+        <cb-production-time class="col-md-9 production-time-input" label="Tempo estimado" [rate]="1" [input]="scheduleForm.controls.duration"
+          [min]="0" [max]="10">
+          <input formControlName="duration" type="hidden">
+        </cb-production-time>
+        <mat-form-field class="col-md-3">
+          <input currencyMask formControlName="budget_value" matInput placeholder="Verba estimada*">
+          <mat-error>
+            {{ budgetValueMessage }}
+          </mat-error>
+        </mat-form-field>
         <mat-form-field class="col-md-3">
           <mat-select placeholder="Atividade*" formControlName="job_activity" [compareWith]="compareJobActivity">
             <mat-option *ngFor="let job_activity of job_activities" [value]="job_activity">
@@ -37,16 +47,6 @@
           <input [min]="scheduleForm.controls.available_date.value" [matDatepicker]="deadlineDatepicker" formControlName="deadline" matInput placeholder="Deadline*">
           <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #deadlineDatepicker></mat-datepicker>
-        </mat-form-field>
-        <cb-production-time class="col-md-9 production-time-input" label="Tempo estimado" [rate]="1" [input]="scheduleForm.controls.duration"
-          [min]="0" [max]="10">
-          <input formControlName="duration" type="hidden">
-        </cb-production-time>
-        <mat-form-field class="col-md-3">
-          <input currencyMask formControlName="budget_value" matInput placeholder="Verba estimada*">
-          <mat-error>
-            {{ budgetValueMessage }}
-          </mat-error>
         </mat-form-field>
       </div>
       <p *ngIf="nextDateMessage != ''">
