@@ -11,7 +11,7 @@
         </span>
       </div>
       <div class="col-md-6 updated-message" *ngIf="dataInfo != null">
-        <small>Última atualização {{ dataInfo?.updatedInfo?.date }} por {{ dataInfo?.updatedInfo?.employee }}</small>
+        <small>{{lastUpdateMessage}}</small>
       </div>
     </h3>
   </div>

@@ -71,6 +71,7 @@ export class ScheduleComponent implements OnInit {
   today: Date
   dataInfo: DataInfo
   subscription: Subscription
+  lastUpdateMessage: string
 
   jobDrag: Job
   lineJob: HTMLElement
@@ -259,9 +260,19 @@ export class ScheduleComponent implements OnInit {
           return
         }
         this.dataInfo.updatedInfo = data
+        this.setUpdatedMessage()
         this.changeMonth(this.month)
       })
     })
+  }
+
+  setUpdatedMessage() {
+    if(this.dataInfo.updatedInfo.date == undefined) {
+      this.lastUpdateMessage = 'Sem atualizações'
+      return
+    }
+
+    this.lastUpdateMessage = 'Última atualização ' + this.dataInfo.updatedInfo.date + ' por ' +  this.dataInfo.updatedInfo.employee
   }
 
   checkIfDeadlineIsMinor(job: Job, availableDate: string) {
@@ -313,6 +324,7 @@ export class ScheduleComponent implements OnInit {
       this.searching = false
       this.tasks = this.pagination.data
       this.dataInfo = dataInfo
+      this.setUpdatedMessage()
       this.chronologicDisplay(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
       snackBar.dismiss()
     })
