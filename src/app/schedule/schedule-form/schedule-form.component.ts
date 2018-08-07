@@ -18,6 +18,7 @@ import { DatePipe } from '@angular/common';
 import { JobStatusService } from '../../job-status/job-status.service';
 import { JobStatus } from '../../job-status/job-status.model';
 import { debounceTime } from 'rxjs/operators';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -56,6 +57,7 @@ export class ScheduleFormComponent implements OnInit {
   url: string = '/jobs/new'
   buttonText: string = 'PRÓXIMO'
   budgetValueMessage: string
+  subscriptions: Subscription[] = []
   @ViewChild('responsible') responsibleSelect
   @ViewChild('availableDatepicker') availableDatepicker: MatDatepicker<Date>
 
@@ -115,6 +117,12 @@ export class ScheduleFormComponent implements OnInit {
     })
   }
 
+  clearEvents() {
+    this.subscriptions.forEach(subscription => {
+      subscription.unsubscribe()
+    })
+  }
+
   addEvents() {
     this.scheduleForm.controls.job_activity.valueChanges.subscribe(status => {
       let jobActivity = this.scheduleForm.controls.job_activity.value as JobActivity
@@ -130,7 +138,7 @@ export class ScheduleFormComponent implements OnInit {
       else this.addOtherEvents()
     })
 
-    this.scheduleForm.controls.budget_value.valueChanges
+    this.subscriptions.push(this.scheduleForm.controls.budget_value.valueChanges
       .pipe(debounceTime(500))
       .subscribe(value => {
         if (value > 450000 && this.scheduleForm.controls.job_activity.value.description != 'Outsider') {
@@ -138,14 +146,14 @@ export class ScheduleFormComponent implements OnInit {
             return jobActivity.description == 'Outsider'
           }))
         }
-      })
+      }))
 
-    this.scheduleForm.controls.duration.valueChanges
+    this.subscriptions.push(this.scheduleForm.controls.duration.valueChanges
       .pipe(debounceTime(500))
       .subscribe(status => {
         this.addValidationBudget()
         this.calculateNextDate()
-      })
+      }))
 
     this.addValidationBudget()
   }
@@ -155,7 +163,11 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   addModificationEvents() {
-    this.scheduleForm.controls.responsible.disable()
+    this.clearEvents()
+    if( ! this.dateSetManually) {
+      this.scheduleForm.controls.responsible.disable()
+    }
+
     this.scheduleForm.controls.budget_value.disable()
     this.nextDateMessage = 'Escolha primeiro o job, para verificarmos o responsável e a data disponível.'
 
@@ -170,24 +182,29 @@ export class ScheduleFormComponent implements OnInit {
       this.jobs = data.data
     })
 
-    this.scheduleForm.controls.job.valueChanges.subscribe(job => {
+    this.subscriptions.push(this.scheduleForm.controls.job.valueChanges.subscribe(job => {
       let responsible
       this.nextDateMessage = ''
-      this.scheduleForm.controls.responsible.setValue('')
-      this.scheduleForm.controls.available_date.setValue('')
       this.scheduleForm.controls.budget_value.setValue(job.budget_value)
-      this.responsibles = [job.creation_responsible]
-      this.scheduleForm.controls.responsible.setValue(job.creation_responsible)
-      this.getAvailableDates(new Date(), false, this.responsibles[0])
-    })
+
+      if( ! this.dateSetManually) {
+        this.scheduleForm.controls.responsible.setValue('')
+        this.responsibles = [job.creation_responsible]
+        this.scheduleForm.controls.available_date.setValue('')
+        this.scheduleForm.controls.responsible.setValue(job.creation_responsible)
+        this.getAvailableDates(new Date(), false, this.responsibles[0])
+      }
+    }))
   }
 
   addBudgetEvents() {
+    this.clearEvents()
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.disable()
   }
 
   addDetailingEvents() {
+    this.clearEvents()
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.enable()
 
@@ -212,6 +229,7 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   addOtherEvents() {
+    this.clearEvents()
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.enable()
     this.jobService.jobs().subscribe(data => {
@@ -362,8 +380,7 @@ export class ScheduleFormComponent implements OnInit {
   calculateNextDate() {
     let controls = this.scheduleForm.controls
     if (controls.job_activity.status != 'VALID'
-      || controls.duration.status != 'VALID'
-      || controls.job_activity.value.description == 'Modificação') {
+      || controls.duration.status != 'VALID') {
       return
     }
 
