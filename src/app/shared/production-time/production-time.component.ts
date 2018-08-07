@@ -24,6 +24,9 @@ export class ProductionTimeComponent implements OnInit {
       this.rates.push(i);
     }
     this.input.setValue(this.rate.toString())
+    this.input.valueChanges.subscribe(value => {
+      this.rate = value
+    })
 
     /*
     this.input.statusChanges.subscribe((value) => {

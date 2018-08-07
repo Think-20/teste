@@ -82,9 +82,13 @@
                     mat-menu-item>
                     <mat-icon>subject</mat-icon> Visualização
                   </a>
+                  <a [disabled]="!permissionVerify('task.edit', task.job)" *ngIf="task.id != undefined" [routerLink]="['/schedule/edit', task.id]"
+                    mat-menu-item>
+                    <mat-icon>mode_edit</mat-icon> Editar tarefa
+                  </a>
                   <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/edit', task.job.id]"
                     mat-menu-item>
-                    <mat-icon>mode_edit</mat-icon> Editar
+                    <mat-icon>mode_edit</mat-icon> Editar job
                   </a>
                   <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined && (task.job.status?.id == 5 || task.job.status?.id == 1)"
                     (click)="signal(task)" mat-menu-item>

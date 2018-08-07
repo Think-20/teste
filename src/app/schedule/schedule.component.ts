@@ -111,6 +111,10 @@ export class ScheduleComponent implements OnInit {
         access = job.attendance.id != employee.id ? this.authService.hasAccess('job/edit') : true
         break
       }
+      case 'task.edit': {
+        access = this.authService.hasAccess('task/edit')
+        break
+      }
       case 'delete': {
         access = job.attendance.id != employee.id ? this.authService.hasAccess('job/remove/{id}') : true
         break
@@ -414,6 +418,7 @@ export class ScheduleComponent implements OnInit {
           ).length  > 0
         })
 
+        console.log()
         let length = filteredTasks.length
 
         for(let index = 0; index < (5 - length); index++) {

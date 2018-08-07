@@ -9,6 +9,7 @@
     <form [formGroup]="scheduleForm">
       <div class="row">
         <input formControlName="job" type="hidden">
+        <input formControlName="id" type="hidden">
         <cb-production-time class="col-md-9 production-time-input" label="Tempo estimado" [rate]="1" [input]="scheduleForm.controls.duration"
           [min]="0" [max]="10">
           <input formControlName="duration" type="hidden">
@@ -69,8 +70,8 @@
             <div class="mat-header-cell mat-column-date">Data</div>
             <div class="mat-header-cell mat-column-status">Status</div>
           </div>
-          <div class="mat-row" [class.selected]="job == scheduleForm.controls.job.value" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState"
-            (click)="setJob(job)">
+          <div class="mat-row" [class.selected]="job == scheduleForm.controls.job.value"
+           *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState" (click)="setJob(job)">
             <div class="mat-cell mat-column-id text-left">
               {{ jobService.showId(job) }}
             </div>
@@ -99,7 +100,8 @@
         </table>
       </div>
       <mat-card-actions class="col-md-12 text-right">
-        <button mat-button class="cb-button" (click)="go()">{{ buttonText }}</button>
+        <button *ngIf="typeForm != 'edit'" mat-button class="cb-button" (click)="go()">{{ buttonText }}</button>
+        <button *ngIf="typeForm == 'edit'" mat-button class="cb-button" (click)="edit()">EDITAR</button>
       </mat-card-actions>
     </form>
   </mat-card>

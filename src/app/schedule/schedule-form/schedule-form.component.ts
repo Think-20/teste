@@ -26,22 +26,23 @@ import { debounceTime } from 'rxjs/operators';
   styleUrls: ['./schedule-form.component.css'],
   animations: [
     trigger('rowAppeared', [
-      state('ready', style({opacity: 1})),
+      state('ready', style({ opacity: 1 })),
       transition('void => ready', animate('300ms 0s ease-in', keyframes([
-        style({opacity: 0, transform: 'translateX(-30px)', offset: 0}),
-        style({opacity: 0.8, transform: 'translateX(10px)', offset: 0.8}),
-        style({opacity: 1, transform: 'translateX(0px)', offset: 1})
+        style({ opacity: 0, transform: 'translateX(-30px)', offset: 0 }),
+        style({ opacity: 0.8, transform: 'translateX(10px)', offset: 0.8 }),
+        style({ opacity: 1, transform: 'translateX(0px)', offset: 1 })
       ]))),
       transition('ready => void', animate('300ms 0s ease-out', keyframes([
-        style({opacity: 1, transform: 'translateX(0px)', offset: 0}),
-        style({opacity: 0.8, transform: 'translateX(-10px)', offset: 0.2}),
-        style({opacity: 0, transform: 'translateX(30px)', offset: 1})
+        style({ opacity: 1, transform: 'translateX(0px)', offset: 0 }),
+        style({ opacity: 0.8, transform: 'translateX(-10px)', offset: 0.2 }),
+        style({ opacity: 0, transform: 'translateX(30px)', offset: 1 })
       ])))
     ])
   ]
 })
 export class ScheduleFormComponent implements OnInit {
 
+  typeForm: string = 'new'
   hasPreviousActivity: boolean = false
   scheduleForm: FormGroup
   job_activities: JobActivity[]
@@ -74,12 +75,44 @@ export class ScheduleFormComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.typeForm = this.route.snapshot.url[1].path
     this.isAdmin = this.authService.hasAccess('task/save')
+
     this.createForm()
-    this.recoveryParams()
     this.loadJobStatus()
     this.loadJobActivities()
-    this.addEvents()
+
+    if (this.typeForm == 'edit') {
+      this.loadTask()
+    } else {
+      this.recoveryParams()
+      this.addEvents()
+    }
+  }
+
+  loadTask() {
+    let date = new Date()
+    let taskId = parseInt(this.route.snapshot.url[2].path)
+    this.nextDateMessage = ''
+
+    let snack = this.snackBar.open('Carregando informações...')
+    this.taskService.task(taskId).subscribe(task => {
+      this.taskService.getNextAvailableDate(this.datePipe.transform(date, 'yyyy-MM-dd'), 1, task.job_activity).subscribe((data) => {
+        this.responsibles = data.responsibles
+        this.scheduleForm.controls.responsible.setValue(task.responsible)
+        snack.dismiss()
+      })
+
+      this.scheduleForm.controls.id.setValue(task.id)
+      this.scheduleForm.controls.job_activity.setValue(task.job_activity)
+      this.scheduleForm.controls.job_activity.disable()
+      this.scheduleForm.controls.budget_value.setValue(task.job.budget_value)
+      this.scheduleForm.controls.budget_value.disable()
+      this.scheduleForm.controls.duration.setValue(task.duration)
+      this.scheduleForm.controls.available_date.setValue(new Date(task.available_date + "T00:00:00"))
+      this.scheduleForm.controls.deadline.setValue(new Date(task.job.deadline + "T00:00:00"))
+      this.scheduleForm.controls.deadline.disable()
+    })
   }
 
   addEvents() {
@@ -88,31 +121,31 @@ export class ScheduleFormComponent implements OnInit {
       this.calculateNextDate()
       this.setButtons()
 
-      if(jobActivity.description == 'Modificação')
+      if (jobActivity.description == 'Modificação')
         this.addModificationEvents()
-      else if(jobActivity.description == 'Orçamento')
+      else if (jobActivity.description == 'Orçamento')
         this.addBudgetEvents()
-      else if(jobActivity.description == 'Detalhamento')
+      else if (jobActivity.description == 'Detalhamento')
         this.addDetailingEvents()
       else this.addOtherEvents()
     })
 
     this.scheduleForm.controls.budget_value.valueChanges
-    .pipe(debounceTime(500))
-    .subscribe(value => {
-      if(value > 450000 && this.scheduleForm.controls.job_activity.value.description != 'Outsider') {
-        this.scheduleForm.controls.job_activity.setValue(this.job_activities.find(jobActivity => {
-          return jobActivity.description == 'Outsider'
-        }))
-      }
-    })
+      .pipe(debounceTime(500))
+      .subscribe(value => {
+        if (value > 450000 && this.scheduleForm.controls.job_activity.value.description != 'Outsider') {
+          this.scheduleForm.controls.job_activity.setValue(this.job_activities.find(jobActivity => {
+            return jobActivity.description == 'Outsider'
+          }))
+        }
+      })
 
     this.scheduleForm.controls.duration.valueChanges
-    .pipe(debounceTime(500))
-    .subscribe(status => {
-      this.addValidationBudget()
-      this.calculateNextDate()
-    })
+      .pipe(debounceTime(500))
+      .subscribe(status => {
+        this.addValidationBudget()
+        this.calculateNextDate()
+      })
 
     this.addValidationBudget()
   }
@@ -162,18 +195,18 @@ export class ScheduleFormComponent implements OnInit {
     this.jobService.jobs({
       status: this.job_status.find(jobStatus => { return jobStatus.description == 'Aprovado' }).id
     }).subscribe(data => {
-      this.jobs = <Job[]> data.data
+      this.jobs = <Job[]>data.data
       let jobActivity = this.job_activities.find(jobActivity => {
         return jobActivity.description == 'Detalhamento'
       })
       this.jobs = this.jobs.filter(job => {
         let detailed = false
         job.tasks.forEach(task => {
-          if(task.job_activity.id == jobActivity.id) {
+          if (task.job_activity.id == jobActivity.id) {
             detailed = true
           }
         })
-        return ! detailed
+        return !detailed
       })
     })
   }
@@ -199,7 +232,7 @@ export class ScheduleFormComponent implements OnInit {
       this.availableDates = dates
       snack.dismiss()
 
-      if(open)
+      if (open)
         this.availableDatepicker.open()
 
       let date = new Date(this.availableDates[0]['date']['date'])
@@ -210,16 +243,16 @@ export class ScheduleFormComponent implements OnInit {
   filterAvailableDates = (calendarDate: Date): boolean => {
     let response: boolean = false
 
-    if( this.isAdmin ) {
+    if (this.isAdmin) {
       return true
     }
 
     this.availableDates.forEach(date => {
       let myDate = new Date(date.date.date)
 
-      if(myDate.getFullYear() == calendarDate.getFullYear()
-      && myDate.getMonth() == calendarDate.getMonth()
-      && myDate.getDate() == calendarDate.getDate()) {
+      if (myDate.getFullYear() == calendarDate.getFullYear()
+        && myDate.getMonth() == calendarDate.getMonth()
+        && myDate.getDate() == calendarDate.getDate()) {
         response = true
       }
 
@@ -229,27 +262,28 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   recoveryParams() {
-    if( ! this.isAdmin ) {
+    if (!this.isAdmin) {
       return
     }
 
     this.route.queryParams.filter(params => params.date).subscribe(params => {
-      if(params.date == null) {
+      if (params.date == null) {
         return
       }
 
-      this.availableDates = [{date: {date: params.date + "T00:00:00"}}]
+      this.availableDates = [{ date: { date: params.date + "T00:00:00" } }]
       this.scheduleForm.controls.available_date.setValue(params.date + "T00:00:00")
       this.dateSetManually = true
     })
   }
 
   toggleResponsible() {
-    ! this.isAdmin ? this.responsibleSelect.close() : null
+    !this.isAdmin ? this.responsibleSelect.close() : null
   }
 
   createForm() {
     this.scheduleForm = this.formBuilder.group({
+      id: this.formBuilder.control(''),
       job_activity: this.formBuilder.control('', [Validators.required]),
       duration: this.formBuilder.control('', [Validators.required]),
       available_date: this.formBuilder.control('', [Validators.required]),
@@ -277,18 +311,18 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   setButtons() {
-      let jobActivity = this.scheduleForm.controls.job_activity.value as JobActivity
-      if (jobActivity.description == 'Projeto'
+    let jobActivity = this.scheduleForm.controls.job_activity.value as JobActivity
+    if (jobActivity.description == 'Projeto'
       || jobActivity.description == 'Orçamento'
       || jobActivity.description == 'Outsider') {
-        this.setJob(null)
-        this.buttonText = 'PRÓXIMO'
-        this.hasPreviousActivity = false
-        return
-      }
+      this.setJob(null)
+      this.buttonText = 'PRÓXIMO'
+      this.hasPreviousActivity = false
+      return
+    }
 
-      this.buttonText = 'AGENDAR'
-      this.hasPreviousActivity = true
+    this.buttonText = 'AGENDAR'
+    this.hasPreviousActivity = true
   }
 
   addValidationBudget() {
@@ -296,27 +330,27 @@ export class ScheduleFormComponent implements OnInit {
     let validators: ValidatorFn[] = []
     validators.push(Validators.required)
 
-    if(days <= 1) {
+    if (days <= 1) {
       validators.push(Validators.min(0))
       validators.push(Validators.max(70000))
       this.budgetValueMessage = 'O valor deve estar entre 0,00 e 70.000,00 para até 1 dia'
-    } else if(days <= 2) {
+    } else if (days <= 2) {
       validators.push(Validators.min(70000.01))
       validators.push(Validators.max(150000))
       this.budgetValueMessage = 'O valor deve estar entre 70.000,00 e 150.000,00 para até 2 dias'
-    } else if(days <= 3) {
+    } else if (days <= 3) {
       validators.push(Validators.min(150000.01))
       validators.push(Validators.max(240000))
       this.budgetValueMessage = 'O valor deve estar entre 150.000,00 e 240.000,00 para até 3 dias'
-    } else if(days <= 4) {
+    } else if (days <= 4) {
       validators.push(Validators.min(240000.01))
       validators.push(Validators.max(340000))
       this.budgetValueMessage = 'O valor deve estar entre 240.000,00 e 340.000,00 para até 4 dias'
-    } else if(days <= 5) {
+    } else if (days <= 5) {
       validators.push(Validators.min(340000.01))
       validators.push(Validators.max(450000))
       this.budgetValueMessage = 'O valor deve estar entre 340.000,00 e 450.000,00 para até 5 dias'
-    } else if(days > 5) {
+    } else if (days > 5) {
       validators.push(Validators.min(450000.01))
       this.budgetValueMessage = 'O valor deve ser maior que 450.000,00 para mais de 5 dias'
     }
@@ -328,8 +362,8 @@ export class ScheduleFormComponent implements OnInit {
   calculateNextDate() {
     let controls = this.scheduleForm.controls
     if (controls.job_activity.status != 'VALID'
-    || controls.duration.status != 'VALID'
-    || controls.job_activity.value.description == 'Modificação') {
+      || controls.duration.status != 'VALID'
+      || controls.job_activity.value.description == 'Modificação') {
       return
     }
 
@@ -342,7 +376,7 @@ export class ScheduleFormComponent implements OnInit {
       this.responsibles = data.responsibles
       this.scheduleForm.controls.responsible.setValue(data.responsible)
 
-      if( ! this.dateSetManually) {
+      if (!this.dateSetManually) {
         let date = new Date(data.available_date + "T00:00:00")
         this.getAvailableDates(date)
       }
@@ -373,8 +407,8 @@ export class ScheduleFormComponent implements OnInit {
     let task = this.scheduleForm.getRawValue() as Task
 
     if (task.job_activity.description == 'Projeto'
-    || task.job_activity.description == 'Orçamento'
-    || task.job_activity.description == 'Outsider') {
+      || task.job_activity.description == 'Orçamento'
+      || task.job_activity.description == 'Outsider') {
       this.jobService.data = new Job
       this.jobService.data.task = task
       this.jobService.data.budget_value = this.scheduleForm.controls.budget_value.value
@@ -403,6 +437,36 @@ export class ScheduleFormComponent implements OnInit {
         }
       })
     }
+  }
+
+  edit() {
+    if (ErrorHandler.formIsInvalid(this.scheduleForm)) {
+      this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
+        duration: 5000
+      })
+      return;
+    }
+
+    let task = this.scheduleForm.getRawValue() as Task
+    this.url = '/schedule'
+    this.taskService.edit(task).subscribe(data => {
+      if (data.status) {
+        let snack = this.snackBar.open('Editado com sucesso, redirecionando para o cronograma.', '', {
+          duration: 3000
+        })
+        snack.afterDismissed().subscribe(() => {
+          this.router.navigate([this.url], {
+            queryParams: {
+              date: this.datePipe.transform(task.available_date, 'yyyy-MM-dd')
+            }
+          })
+        })
+      } else {
+        this.snackBar.open(data.message, '', {
+          duration: 5000
+        })
+      }
+    })
   }
 
 }

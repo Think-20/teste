@@ -199,6 +199,8 @@ export const ROUTES: Routes = [
               path : 'schedule', component: ScheduleComponent, canActivate: [AuthGuard]
             }, {
               path : 'schedule/new', component: ScheduleFormComponent, canActivate: [AuthGuard]
+            }, {
+              path : 'schedule/edit/:id', component: ScheduleFormComponent, canActivate: [AuthGuard]
             }
         ]
     }
