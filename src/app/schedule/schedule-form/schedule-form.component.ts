@@ -148,7 +148,7 @@ export class ScheduleFormComponent implements OnInit {
         }
       }))
 
-    this.subscriptions.push(this.scheduleForm.controls.duration.valueChanges
+    this.scheduleForm.controls.duration.valueChanges
       .pipe(debounceTime(500))
       .subscribe(value => {
         if (value >= 5) {
@@ -158,7 +158,7 @@ export class ScheduleFormComponent implements OnInit {
         }
         this.addValidationBudget()
         this.calculateNextDate()
-      }))
+      })
 
     this.addValidationBudget()
   }
