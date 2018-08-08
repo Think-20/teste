@@ -124,11 +124,8 @@
                 <div class="mat-cell mat-column-event-date">
                   &nbsp;
                 </div>
-                <div class="mat-cell mat-column-budget" *ngIf="task.job.budget_value != null">
-                  {{ task.job.budget_value | number: '1.2' }}
-                </div>
-                <div class="mat-cell mat-column-budget" *ngIf="task.job.budget_value == null">
-                  {{ '' }}
+                <div class="mat-cell mat-column-budget">
+                  {{ (canShowBudgetValue(task, chrono[i]) ? task.job.budget_value : '') | number: '1.2' }}
                 </div>
                 <div class="mat-cell mat-column-area">
                   &nbsp;

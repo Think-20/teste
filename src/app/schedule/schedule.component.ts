@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChildren, QueryList, NgZone, ElementRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 
 import { JobService } from '../jobs/job.service';
 import { Job } from '../jobs/job.model';
@@ -68,9 +68,11 @@ export class ScheduleComponent implements OnInit {
   date: Date
   jobStatus: JobStatus[]
   timer: Observable<number>
+  timer2: Observable<number>
   today: Date
   dataInfo: DataInfo
   subscription: Subscription
+  subscriptions: Subscription[] = []
   lastUpdateMessage: string
 
   jobDrag: Job
@@ -88,6 +90,7 @@ export class ScheduleComponent implements OnInit {
     private snackBar: MatSnackBar,
     private briefingService: BriefingService,
     private budgetService: BudgetService,
+    private dialog: MatDialog,
     private ngZone: NgZone,
     private el: ElementRef,
     private router: Router,
@@ -252,7 +255,9 @@ export class ScheduleComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    this.subscription.unsubscribe()
+    this.subscriptions.forEach(subscription => {
+      subscription.unsubscribe()
+    })
   }
 
   createTimerUpdater() {
@@ -268,6 +273,21 @@ export class ScheduleComponent implements OnInit {
         this.changeMonth(this.month)
       })
     })
+
+    this.subscriptions.push(this.subscription)
+
+    if(this.authService.currentUser().email == 'tv@thinkideias.com.br') {
+      this.timer2 = timer(5000, 60 * 1000 * 30)
+      this.subscriptions.push(this.timer2.subscribe(timer => {
+        let dialog = this.dialog.open(ReloadComponent, {
+          height: '1px',
+          width: '1px'
+        })
+        Observable.timer(3000).subscribe(timer => {
+          dialog.close()
+        })
+      }))
+    }
   }
 
   setUpdatedMessage() {
@@ -378,6 +398,16 @@ export class ScheduleComponent implements OnInit {
     return 'department-' + departmentId + '-transparent department-' + departmentId + '-border'
   }
 
+  canShowBudgetValue(task: Task, chrono: Chrono) {
+    let text = this.jobDisplay(task, chrono)
+    if(text == '') {
+      return false
+    }
+
+    let found = ['Modificação', 'Opção', 'Continuação', 'Detalhamento'].indexOf(text) >= 0
+    return found ? false : true
+  }
+
   signal(task: Task) {
     this.scrollActive = false
     let job = task.job
@@ -408,38 +438,35 @@ export class ScheduleComponent implements OnInit {
     let days: number[]
 
     while (date.getTime() < fixedDateMax.getTime()) {
-      if (date.getDay() > 0 && date.getDay() < 6) {
-        let filteredTasks = this.tasks.filter(task => {
-          return task.items.filter(item => {
-              let itemDate = new Date(item.date + 'T00:00:00')
-              return date.getDate() == itemDate.getDate()
-              && date.getMonth() == itemDate.getMonth()
-            }
-          ).length  > 0
-        })
+      let filteredTasks = this.tasks.filter(task => {
+        return task.items.filter(item => {
+            let itemDate = new Date(item.date + 'T00:00:00')
+            return date.getDate() == itemDate.getDate()
+            && date.getMonth() == itemDate.getMonth()
+          }
+        ).length  > 0
+      })
 
-        console.log()
-        let length = filteredTasks.length
+      let length = (date.getDay() == 6 || date.getDay() == 0) ? 3 : filteredTasks.length
 
-        for(let index = 0; index < (5 - length); index++) {
-          let task = new Task
-          let item = new TaskItem
-          item.date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
-          task.job = new Job
-          task.items = []
-          task.items.push(item)
-          filteredTasks.push(task)
-        }
-
-        this.chrono[i] = {
-          day: date.getDate(),
-          month: (date.getMonth() + 1),
-          dayOfWeek: DAYSOFWEEK.find(dayOfWeek => dayOfWeek.id == date.getDay()),
-          tasks: filteredTasks
-        }
-
-        i++
+      for(let index = 0; index < (5 - length); index++) {
+        let task = new Task
+        let item = new TaskItem
+        item.date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+        task.job = new Job
+        task.items = []
+        task.items.push(item)
+        filteredTasks.push(task)
       }
+
+      this.chrono[i] = {
+        day: date.getDate(),
+        month: (date.getMonth() + 1),
+        dayOfWeek: DAYSOFWEEK.find(dayOfWeek => dayOfWeek.id == date.getDay()),
+        tasks: filteredTasks
+      }
+
+      i++
 
       date.setDate(date.getDate() + 1)
     }
@@ -507,3 +534,11 @@ export class Chrono {
   dayOfWeek: DayOfWeek
   tasks: Task[]
 }
+
+@Component({
+  selector: 'cb-reload',
+  template: ''
+})
+export class ReloadComponent {}
+
+

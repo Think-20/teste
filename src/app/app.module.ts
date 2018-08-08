@@ -98,7 +98,7 @@ import { TimecardApprovalsComponent } from './timecard/timecard-approvals/timeca
 import { TimecardPlaceService } from './timecard/timecard-place/timecard-place.service';
 import { JobLevelService } from './job-level/job-level.service';
 import { JobMainExpectationService } from './job-main-expectation/job-main-expectation.service';
-import { ScheduleComponent } from './schedule/schedule.component';
+import { ScheduleComponent, ReloadComponent } from './schedule/schedule.component';
 
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CURRENCY_MASK_CONFIG } from "ng2-currency-mask/src/currency-mask.config";
@@ -182,7 +182,8 @@ registerLocaleData(localePt);
     BriefingFormComponent,
     JobFormComponent,
     BudgetFormComponent,
-    ScheduleFormComponent
+    ScheduleFormComponent,
+    ReloadComponent
   ],
   imports: [
     CurrencyMaskModule,
@@ -261,7 +262,8 @@ registerLocaleData(localePt);
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    StandItemFormComponent
+    StandItemFormComponent, 
+    ReloadComponent
   ]
 })
 export class AppModule { }

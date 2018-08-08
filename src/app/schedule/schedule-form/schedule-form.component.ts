@@ -150,7 +150,12 @@ export class ScheduleFormComponent implements OnInit {
 
     this.subscriptions.push(this.scheduleForm.controls.duration.valueChanges
       .pipe(debounceTime(500))
-      .subscribe(status => {
+      .subscribe(value => {
+        if (value >= 5) {
+          this.scheduleForm.controls.job_activity.setValue(this.job_activities.find(jobActivity => {
+            return jobActivity.description == 'Outsider'
+          }))
+        }
         this.addValidationBudget()
         this.calculateNextDate()
       }))
@@ -206,7 +211,7 @@ export class ScheduleFormComponent implements OnInit {
   addDetailingEvents() {
     this.clearEvents()
     this.scheduleForm.controls.responsible.enable()
-    this.scheduleForm.controls.budget_value.enable()
+    this.scheduleForm.controls.budget_value.disable()
 
     let types = ['Projeto', 'Modificação', 'Outsider', 'Opção']
     this.jobService.jobs({
