@@ -28,6 +28,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
 import { ClientComission } from '../client-comission/client-comission.model';
 import { ClientComissionService } from '../client-comission/client-comission.service';
+import { ObjectValidator } from '../../shared/custom-validators';
 
 @Component({
   selector: 'cb-client-form',
@@ -83,8 +84,8 @@ constructor(
     let snackBarStateCharging
     this.typeForm = this.route.snapshot.url[0].path
 
-    let stateControl: FormControl = this.formBuilder.control('', [Validators.required])
-    let cityControl: FormControl = this.formBuilder.control('', [Validators.required])
+    let stateControl: FormControl = this.formBuilder.control('', [Validators.required, ObjectValidator])
+    let cityControl: FormControl = this.formBuilder.control('', [Validators.required, ObjectValidator])
     let clientTypeControl: FormControl = this.formBuilder.control('', [Validators.required])
     let comissionControl: FormControl = this.formBuilder.control('', [Validators.required])
     let clientStatusControl: FormControl = this.formBuilder.control('', [Validators.required])
