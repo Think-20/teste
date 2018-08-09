@@ -396,12 +396,16 @@ export class ScheduleComponent implements OnInit {
   getLineClass(task: Task, day: number, month: number) {
     if(task.job.id == null) {
       return
-    } else if(day.toString() != this.datePipe.transform(this.today, 'd')
-    || month.toString() != this.datePipe.transform(this.today, 'M')) {
-      return 'department-' + task.responsible.department_id + '-border'
     }
 
+    let originalTask = this.tasks.filter(taskF => { return taskF.id == task.id }).pop()
     let departmentId = task.responsible.department_id
+    let finalDate = new Date(originalTask.items[originalTask.items.length - 1].date + "T00:00:00")
+
+    if(this.datePipe.transform(finalDate, 'yyyy-MM-dd') < this.datePipe.transform(this.today, 'yyyy-MM-dd')) {
+      return 'department-' + departmentId + '-border'
+    }
+
     return 'department-' + departmentId + '-transparent department-' + departmentId + '-border'
   }
 
