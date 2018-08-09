@@ -11,7 +11,7 @@
             Obrigatório, entre 3 e 50 caract.
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="col-md-6">
+        <mat-form-field class="col-md-3">
           <input formControlName="name" matInput placeholder="Razão social*">
           <mat-error>
             Obrigatório, entre 3 e 100 caract.
@@ -27,6 +27,13 @@
           <mat-select placeholder="Tipo*" formControlName="client_type" [compareWith]="compareClientType">
             <mat-option *ngFor="let type of clientTypes" [value]="type">
               {{ type.description }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-3">
+          <mat-select placeholder="Comissão*" formControlName="comission" [compareWith]="compareComission">
+            <mat-option *ngFor="let comission of comissions" [value]="comission">
+              {{ comission.description }}
             </mat-option>
           </mat-select>
         </mat-form-field>

@@ -26,6 +26,8 @@ import { Patterns } from '../../shared/patterns.model';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
+import { ClientComission } from '../client-comission/client-comission.model';
+import { ClientComissionService } from '../client-comission/client-comission.service';
 
 @Component({
   selector: 'cb-client-form',
@@ -55,6 +57,7 @@ export class ClientFormComponent implements OnInit {
   rowAppearedState = 'ready'
   client: Client
   clientTypes: ClientType[]
+  comissions: ClientComission[]
   clientStatus: ClientStatus[]
   cities: Observable<City[]>
   states: Observable<State[]>
@@ -66,6 +69,7 @@ constructor(
     private stateService: StateService,
     private cityService: CityService,
     private clientTypeService: ClientTypeService,
+    private clientComissionService: ClientComissionService,
     private clientStatusService: ClientStatusService,
     private employeeService: EmployeeService,
     private clientService: ClientService,
@@ -82,6 +86,7 @@ constructor(
     let stateControl: FormControl = this.formBuilder.control('', [Validators.required])
     let cityControl: FormControl = this.formBuilder.control('', [Validators.required])
     let clientTypeControl: FormControl = this.formBuilder.control('', [Validators.required])
+    let comissionControl: FormControl = this.formBuilder.control('', [Validators.required])
     let clientStatusControl: FormControl = this.formBuilder.control('', [Validators.required])
     let employeeControl: FormControl = this.formBuilder.control('', [Validators.required])
 
@@ -100,6 +105,7 @@ constructor(
         Validators.minLength(7),
       ]),
       client_type: clientTypeControl,
+      comission: comissionControl,
       client_status: clientStatusControl,
       employee: employeeControl,
       rate: this.formBuilder.control(''),
@@ -146,6 +152,10 @@ constructor(
 
     this.clientTypeService.types().subscribe((clientTypes) => {
       this.clientTypes = clientTypes
+
+      this.clientComissionService.comission().subscribe((comissions) => {
+        this.comissions = comissions
+      })
 
       this.clientStatusService.status().subscribe((clientStatus) => {
         this.clientStatus = clientStatus
@@ -199,6 +209,7 @@ constructor(
       this.clientForm.controls.mainphone.setValue(this.client.mainphone)
       this.clientForm.controls.secundaryphone.setValue(this.client.secundaryphone)
       this.clientForm.controls.client_type.setValue(this.client.type)
+      this.clientForm.controls.comission.setValue(this.client.comission)
       this.clientForm.controls.client_status.setValue(this.client.status)
       this.clientForm.controls.employee.setValue(this.client.employee)
       this.clientForm.controls.site.setValue(this.client.site)
@@ -224,6 +235,10 @@ constructor(
 
   compareClientType(clientType1: ClientType, clientType2: ClientType) {
     return clientType1.id === clientType2.id
+  }
+
+  compareComission(var1: ClientComission, var2: ClientComission) {
+    return var1.id === var2.id
   }
 
   compareClientStatus(clientStatus1: ClientStatus, clientStatus2: ClientStatus) {

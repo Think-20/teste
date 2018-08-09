@@ -120,6 +120,7 @@ import { ScheduleFormComponent } from './schedule/schedule-form/schedule-form.co
 import { TaskService } from './schedule/task.service';
 
 import localePt from '@angular/common/locales/pt';
+import { ClientComissionService } from './clients/client-comission/client-comission.service';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -249,6 +250,7 @@ registerLocaleData(localePt);
     BriefingService,
     BudgetService,
     TaskService,
+    ClientComissionService,
 
     MatDialog,
     MatSnackBar,
@@ -262,7 +264,7 @@ registerLocaleData(localePt);
   ],
   bootstrap: [AppComponent],
   entryComponents: [
-    StandItemFormComponent, 
+    StandItemFormComponent,
     ReloadComponent
   ]
 })
