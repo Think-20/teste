@@ -17,7 +17,7 @@ import { AuthService } from '../../login/auth.service';
 import { DatePipe } from '@angular/common';
 import { JobStatusService } from '../../job-status/job-status.service';
 import { JobStatus } from '../../job-status/job-status.model';
-import { debounceTime } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 
 
@@ -51,14 +51,13 @@ export class ScheduleFormComponent implements OnInit {
   jobs: Job[]
   dateSetManually: boolean = false
   isAdmin: boolean = false
-  responsibles: Employee[]
+  responsibles: Employee[] = []
   availableDates: any = []
   nextDateMessage: string = ''
   url: string = '/jobs/new'
   buttonText: string = 'PRÓXIMO'
   budgetValueMessage: string
   subscriptions: Subscription[] = []
-  @ViewChild('responsible') responsibleSelect
   @ViewChild('availableDatepicker') availableDatepicker: MatDatepicker<Date>
 
   constructor(
@@ -160,11 +159,24 @@ export class ScheduleFormComponent implements OnInit {
         this.calculateNextDate()
       })
 
+    this.scheduleForm.controls.available_date.valueChanges
+      .pipe(distinctUntilChanged())
+      .subscribe(value => {
+        if(this.isAdmin) {
+          return
+        }
+
+        this.availableDates.forEach(row => {
+          if(row.date == this.datePipe.transform(value, 'yyyy-MM-dd')) this.responsibles = row.responsibles
+        })
+        this.scheduleForm.controls.responsible.setValue(this.responsibles.length > 0 ? this.responsibles[0] : '')
+      })
+
     this.addValidationBudget()
   }
 
   changeMonth(date: Date) {
-    this.getAvailableDates(date, true)
+    this.getAvailableDates(date)
   }
 
   addModificationEvents() {
@@ -197,7 +209,7 @@ export class ScheduleFormComponent implements OnInit {
         this.responsibles = [job.creation_responsible]
         this.scheduleForm.controls.available_date.setValue('')
         this.scheduleForm.controls.responsible.setValue(job.creation_responsible)
-        this.getAvailableDates(new Date(), false, this.responsibles[0])
+        this.getAvailableDates(new Date(), this.responsibles[0])
       }
     }))
   }
@@ -242,7 +254,8 @@ export class ScheduleFormComponent implements OnInit {
     })
   }
 
-  getAvailableDates(date: Date, open: boolean = false, onlyEmployee: Employee = null) {
+  getAvailableDates(date: Date, onlyEmployee: Employee = null) {
+    let open = this.availableDatepicker.opened
     this.availableDatepicker.close()
     let snack = this.snackBar.open('Aguarde enquanto carregamos as datas disponíveis')
     this.taskService.getAvailableDates({
@@ -258,7 +271,7 @@ export class ScheduleFormComponent implements OnInit {
       if (open)
         this.availableDatepicker.open()
 
-      let date = new Date(this.availableDates[0]['date']['date'])
+      let date = new Date(this.availableDates[0]['date'] + "T00:00:00")
       this.scheduleForm.controls.available_date.setValue(date.toISOString())
     })
   }
@@ -270,8 +283,8 @@ export class ScheduleFormComponent implements OnInit {
       return true
     }
 
-    this.availableDates.forEach(date => {
-      let myDate = new Date(date.date.date)
+    this.availableDates.forEach(row => {
+      let myDate = new Date(row.date + "T00:00:00")
 
       if (myDate.getFullYear() == calendarDate.getFullYear()
         && myDate.getMonth() == calendarDate.getMonth()
@@ -298,10 +311,6 @@ export class ScheduleFormComponent implements OnInit {
       this.scheduleForm.controls.available_date.setValue(params.date + "T00:00:00")
       this.dateSetManually = true
     })
-  }
-
-  toggleResponsible() {
-    !this.isAdmin ? this.responsibleSelect.close() : null
   }
 
   createForm() {
@@ -395,8 +404,13 @@ export class ScheduleFormComponent implements OnInit {
     let jobActivity = this.scheduleForm.controls.job_activity.value
     this.nextDateMessage = 'Aguarde...'
     this.taskService.getNextAvailableDate(dateString, estimatedTime, jobActivity).subscribe((data) => {
-      this.responsibles = data.responsibles
-      this.scheduleForm.controls.responsible.setValue(data.responsible)
+      if( ! this.isAdmin ) {
+        this.responsibles = data.available_responsibles
+        this.scheduleForm.controls.responsible.setValue(data.available_responsibles[0])
+      } else {
+        this.responsibles = data.responsibles
+        this.scheduleForm.controls.responsible.setValue(data.available_responsibles[0])
+      }
 
       if (!this.dateSetManually) {
         let date = new Date(data.available_date + "T00:00:00")
@@ -404,10 +418,6 @@ export class ScheduleFormComponent implements OnInit {
       }
       this.nextDateMessage = 'Lembre-se, você pode mover as suas agendas para liberar a data.'
     })
-  }
-
-  toggleCreation() {
-    this.responsibleSelect.close()
   }
 
   compareResponsible(var1: Employee, var2: Employee) {

@@ -28,7 +28,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <mat-select #responsible (click)="toggleResponsible()" placeholder="Responsável*" formControlName="responsible" [compareWith]="compareResponsible">
+          <mat-select placeholder="Responsável*" formControlName="responsible" [compareWith]="compareResponsible">
             <mat-option *ngFor="let responsible of responsibles" [value]="responsible">
               {{ responsible.name }}
             </mat-option>
