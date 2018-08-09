@@ -522,13 +522,14 @@ export class ScheduleComponent implements OnInit {
   }
 
   delete(task: Task) {
+    let lastDate = new Date(task.available_date + "T00:00:00")
     this.taskService.delete(task.id).subscribe((data) => {
       this.snackBar.open(data.message, '', {
         duration: 5000
       })
 
       if (data.status) {
-        this.changeMonth(this.month)
+        this.changeMonth(this.month, lastDate)
       }
     })
   }
