@@ -125,7 +125,8 @@ export class ScheduleFormComponent implements OnInit {
   addEvents() {
     this.scheduleForm.controls.job_activity.valueChanges.subscribe(status => {
       let jobActivity = this.scheduleForm.controls.job_activity.value as JobActivity
-      this.calculateNextDate()
+      //this.calculateNextDate()
+      this.getAvailableDates(new Date())
       this.setButtons()
 
       if (jobActivity.description == 'Modificação')
@@ -148,7 +149,7 @@ export class ScheduleFormComponent implements OnInit {
       }))
 
     this.scheduleForm.controls.duration.valueChanges
-      .pipe(debounceTime(500))
+      .pipe(distinctUntilChanged())
       .subscribe(value => {
         if (value >= 5) {
           this.scheduleForm.controls.job_activity.setValue(this.job_activities.find(jobActivity => {
@@ -167,9 +168,11 @@ export class ScheduleFormComponent implements OnInit {
         }
 
         this.availableDates.forEach(row => {
-          if(row.date == this.datePipe.transform(value, 'yyyy-MM-dd')) this.responsibles = row.responsibles
+          if(row.date == this.datePipe.transform(value, 'yyyy-MM-dd')) this.responsibles = row.available_responsibles
         })
-        this.scheduleForm.controls.responsible.setValue(this.responsibles.length > 0 ? this.responsibles[0] : '')
+
+        if(this.scheduleForm.controls.job_activity.value.description != 'Modificação')
+          this.scheduleForm.controls.responsible.setValue(this.responsibles.length > 0 ? this.responsibles[0] : '')
       })
 
     this.addValidationBudget()
@@ -264,15 +267,22 @@ export class ScheduleFormComponent implements OnInit {
       job_activity: this.scheduleForm.controls.job_activity.value,
       duration: this.scheduleForm.controls.duration.value,
       only_employee: onlyEmployee
-    }).subscribe(dates => {
-      this.availableDates = dates
+    }).subscribe(data => {
+      this.availableDates = data.dates
       snack.dismiss()
 
       if (open)
         this.availableDatepicker.open()
 
-      let date = new Date(this.availableDates[0]['date'] + "T00:00:00")
-      this.scheduleForm.controls.available_date.setValue(date.toISOString())
+      if( ! this.isAdmin ) {
+        let date = new Date(this.availableDates[0]['date'] + "T00:00:00")
+        this.scheduleForm.controls.available_date.setValue(date.toISOString())
+        this.responsibles = this.availableDates[0]['available_responsibles']
+        this.scheduleForm.controls.responsible.setValue(this.availableDates[0]['available_responsibles'][0])
+      } else {
+        this.responsibles = data.responsibles
+        this.scheduleForm.controls.responsible.setValue(this.availableDates[0]['available_responsibles'][0])
+      }
     })
   }
 
