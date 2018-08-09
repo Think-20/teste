@@ -74,6 +74,7 @@ export class ScheduleComponent implements OnInit {
   subscription: Subscription
   subscriptions: Subscription[] = []
   lastUpdateMessage: string
+  counter: number = 0
 
   jobDrag: Job
   lineJob: HTMLElement
@@ -279,6 +280,12 @@ export class ScheduleComponent implements OnInit {
     if(this.authService.currentUser().email == 'tv@thinkideias.com.br') {
       this.timer2 = timer(5000, 60 * 1000 * 30)
       this.subscriptions.push(this.timer2.subscribe(timer => {
+        this.counter += 1
+
+        if(this.counter > 2) {
+          window.location.reload()
+        }
+
         let dialog = this.dialog.open(ReloadComponent, {
           height: '1px',
           width: '1px'

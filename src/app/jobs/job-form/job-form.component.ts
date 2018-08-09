@@ -533,7 +533,7 @@ export class JobFormComponent implements OnInit {
 
   edit() {
     this.jobForm.updateValueAndValidity()
-    let job = this.jobForm.getRawValue()
+    let job = this.jobForm.getRawValue() as Job
     job.id = this.job.id
 
     if (ErrorHandler.formIsInvalid(this.jobForm)) {
@@ -548,7 +548,11 @@ export class JobFormComponent implements OnInit {
         duration: data.status ? 1000 : 5000
       }).afterDismissed().subscribe(observer => {
         if (data.status) {
-          this.router.navigateByUrl('/schedule')
+          this.router.navigate(['/schedule'], {
+            queryParams: {
+              date: this.datePipe.transform(job.available_date_creation, 'yyyy-MM-dd')
+            }
+          })
         }
       })
     })
