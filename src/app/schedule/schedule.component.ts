@@ -400,9 +400,11 @@ export class ScheduleComponent implements OnInit {
 
     let originalTask = this.tasks.filter(taskF => { return taskF.id == task.id }).pop()
     let departmentId = task.responsible.department_id
-    let finalDate = new Date(originalTask.items[originalTask.items.length - 1].date + "T00:00:00")
+    let ocurrences = originalTask.items.filter(item => {
+      return item.date == this.datePipe.transform(this.today, 'yyyy-MM-dd')
+    }).length
 
-    if(this.datePipe.transform(finalDate, 'yyyy-MM-dd') < this.datePipe.transform(this.today, 'yyyy-MM-dd')) {
+    if(ocurrences == 0) {
       return 'department-' + departmentId + '-border'
     }
 
