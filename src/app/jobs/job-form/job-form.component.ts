@@ -62,6 +62,7 @@ export class JobFormComponent implements OnInit {
   status: JobStatus[]
   jobForm: FormGroup
   isAdmin: boolean = false
+  buttonEnable: boolean = true
 
   constructor(
     private clientService: ClientService,
@@ -297,7 +298,7 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.job_type.disable()
 
     this.jobForm.controls.event.setValue(job.event)
-    this.jobForm.controls.deadline.setValue(job.deadline)
+    this.jobForm.controls.deadline.setValue(new Date(job.deadline + "T00:00:00"))
     this.jobForm.controls.job_type.setValue(job.job_type)
     this.jobForm.controls.job_activity.setValue(job.job_activity)
     this.jobForm.controls.job_activity.disable()
@@ -326,9 +327,16 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.place.setValue(job.place)
     this.jobForm.controls.history.setValue(job.history)
 
+    if(job.budget_responsible != null) {
+      this.jobForm.controls.budget_responsible.setValue(job.budget_responsible.name)
+      this.jobForm.controls.available_date_creation.setValue(new Date(job.available_date_creation + "T00:00:00"))
+    } else {
+      this.jobForm.controls.budget_responsible.setValue('Sem informações')
+    }
+
     if(job.creation_responsible != null) {
       this.jobForm.controls.creation_responsible.setValue(job.creation_responsible.name)
-      this.jobForm.controls.available_date_creation.setValue(job.available_date_creation)
+      this.jobForm.controls.available_date_creation.setValue(new Date(job.available_date_creation + "T00:00:00"))
     } else {
       this.jobForm.controls.creation.setValue('Externo')
     }
@@ -343,12 +351,6 @@ export class JobFormComponent implements OnInit {
       this.jobForm.controls.detailing_responsible.setValue(job.detailing_responsible.name)
     } else {
       this.jobForm.controls.detailing_responsible.setValue('Sem informações')
-    }
-
-    if(job.budget_responsible != null) {
-      this.jobForm.controls.budget_responsible.setValue(job.budget_responsible.name)
-    } else {
-      this.jobForm.controls.budget_responsible.setValue('Sem informações')
     }
 
     if(job.production_responsible != null) {
@@ -462,6 +464,8 @@ export class JobFormComponent implements OnInit {
   }
 
   save() {
+    if( ! this.buttonEnable) return
+
     this.jobForm.updateValueAndValidity()
     let job = this.jobForm.getRawValue()
 
@@ -473,6 +477,7 @@ export class JobFormComponent implements OnInit {
     }
 
     let task = this.jobService.data.task
+    this.buttonEnable = false
 
     if ( ! isObject(task)) {
       this.jobService.save(job).subscribe(data => {
@@ -491,6 +496,8 @@ export class JobFormComponent implements OnInit {
           })
           return
         }
+
+        this.buttonEnable = true
       })
     } else {
       this.jobService.save(job).subscribe(data => {
@@ -523,6 +530,8 @@ export class JobFormComponent implements OnInit {
           })
           return
         }
+
+        this.buttonEnable = true
       })
     }
   }
@@ -532,6 +541,8 @@ export class JobFormComponent implements OnInit {
   }
 
   edit() {
+    if( ! this.buttonEnable) return
+
     this.jobForm.updateValueAndValidity()
     let job = this.jobForm.getRawValue() as Job
     job.id = this.job.id
@@ -542,6 +553,8 @@ export class JobFormComponent implements OnInit {
       })
       return;
     }
+
+    this.buttonEnable = false
 
     this.jobService.edit(job).subscribe(data => {
       this.snackBar.open(data.message, '', {
@@ -555,6 +568,8 @@ export class JobFormComponent implements OnInit {
           })
         }
       })
+
+      this.buttonEnable = true
     })
   }
 }

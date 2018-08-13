@@ -59,6 +59,7 @@ export class ScheduleFormComponent implements OnInit {
   budgetValueMessage: string
   subscriptions: Subscription[] = []
   @ViewChild('availableDatepicker') availableDatepicker: MatDatepicker<Date>
+  buttonEnable: boolean = true
 
   constructor(
     private formBuilder: FormBuilder,
@@ -460,6 +461,8 @@ export class ScheduleFormComponent implements OnInit {
       this.router.navigateByUrl(this.url)
     } else {
       this.url = '/schedule'
+      this.buttonEnable = false
+
       this.taskService.save(task).subscribe(data => {
         if (data.status) {
           let snack = this.snackBar.open('Salvo com sucesso, redirecionando para o cronograma.', '', {
@@ -477,11 +480,15 @@ export class ScheduleFormComponent implements OnInit {
             duration: 5000
           })
         }
+
+        this.buttonEnable = true
       })
     }
   }
 
   edit() {
+    if( ! this.buttonEnable) return
+
     if (ErrorHandler.formIsInvalid(this.scheduleForm)) {
       this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
         duration: 5000
@@ -491,6 +498,8 @@ export class ScheduleFormComponent implements OnInit {
 
     let task = this.scheduleForm.getRawValue() as Task
     this.url = '/schedule'
+    this.buttonEnable = false
+
     this.taskService.edit(task).subscribe(data => {
       if (data.status) {
         let snack = this.snackBar.open('Editado com sucesso, redirecionando para o cronograma.', '', {
@@ -508,6 +517,8 @@ export class ScheduleFormComponent implements OnInit {
           duration: 5000
         })
       }
+
+      this.buttonEnable = true
     })
   }
 

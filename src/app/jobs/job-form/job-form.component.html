@@ -179,10 +179,10 @@
       </mat-form-field>
     </div>
     <mat-card-actions class="col-md-12 text-right">
-      <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save()" mat-raised-button>
-        PRÓXIMO
+      <button [disabled]="!buttonEnable" class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save()" mat-raised-button>
+        SALVAR
       </button>
-      <button class="cb-button" *ngIf="typeForm === 'edit'" color="primary" (click)="edit()" mat-raised-button>
+      <button [disabled]="!buttonEnable" class="cb-button" *ngIf="typeForm === 'edit'" color="primary" (click)="edit()" mat-raised-button>
         EDITAR
       </button>
     </mat-card-actions>
