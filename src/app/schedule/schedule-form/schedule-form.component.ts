@@ -282,6 +282,8 @@ export class ScheduleFormComponent implements OnInit {
         this.scheduleForm.controls.responsible.setValue(this.availableDates[0]['available_responsibles'][0])
       } else {
         this.responsibles = data.responsibles
+
+        if(this.scheduleForm.controls.job_activity.value.description != 'Modificação')
         this.scheduleForm.controls.responsible.setValue(this.availableDates[0]['available_responsibles'][0])
       }
     })
@@ -420,6 +422,8 @@ export class ScheduleFormComponent implements OnInit {
         this.scheduleForm.controls.responsible.setValue(data.available_responsibles[0])
       } else {
         this.responsibles = data.responsibles
+        
+        if(this.scheduleForm.controls.job_activity.value.description != 'Modificação')
         this.scheduleForm.controls.responsible.setValue(data.available_responsibles[0])
       }
 

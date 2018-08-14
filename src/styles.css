@@ -6,7 +6,7 @@
 }
 
 body {
-    background-color: #fbfbfb;
+    background-color: rgba(231,230,239,0.25);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
@@ -215,13 +215,13 @@ button {
 #menu-container::-webkit-scrollbar-thumb,
 .mat-row-scroll::-webkit-scrollbar-thumb {
     border-radius: 9px;
-    background-color: rgba(231,230,239,0.25);
+    background-color: rgb(229, 230, 232);
 }
 
 .mat-select-panel::-webkit-scrollbar-thumb,
 .mat-autocomplete-panel::-webkit-scrollbar-thumb {
   border-radius: 9px;
-  background-color: rgba(231,230,239,0.5);
+  background-color: rgb(229, 230, 232);
 }
 
 .mat-card-actions {

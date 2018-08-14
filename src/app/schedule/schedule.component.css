@@ -94,16 +94,20 @@
 
 .signal {
   background-color: #fbfbfb;
-  border-top: 4px solid #ccc !important;
-  border-right: 4px solid #ccc !important;
-  border-bottom: 4px solid #ccc !important;
+  border-top: 1px solid #ccc !important;
+  border-right: 1px solid #ccc !important;
+  border-bottom: 1px solid #ccc !important;
 }
 
 .approved {
   background-color: #fbfbfb;
-  border-top: 4px solid rgb(49, 121, 255) !important;
-  border-right: 4px solid rgb(49, 121, 255) !important;
-  border-bottom: 4px solid rgb(49, 121, 255) !important;
+  border-top: 1px solid #00aff2 !important;
+  border-right: 1px solid #00aff2 !important;
+  border-bottom: 1px solid #00aff2 !important;
+}
+
+.no-border {
+  border-bottom: 1px solid transparent !important;
 }
 
 .schedule-card {

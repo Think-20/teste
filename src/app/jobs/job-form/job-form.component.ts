@@ -224,6 +224,8 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.job_activity.setValue(job.job_activity)
     this.jobForm.controls.job_activity.disable()
     this.jobForm.controls.budget_value.setValue(job.budget_value)
+
+    if( ! this.isAdmin)
     this.jobForm.controls.budget_value.disable()
 
     if(job.job_activity.description == 'Orçamento') {
@@ -320,7 +322,10 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.how_come.setValue(job.how_come)
     this.jobForm.controls.competition.setValue(job.competition)
     this.jobForm.controls.budget_value.setValue(job.budget_value)
+    
+    if( ! this.isAdmin)
     this.jobForm.controls.budget_value.disable()
+    
     this.jobForm.controls.status.setValue(job.status)
     this.jobForm.controls.approval_expectation_rate.setValue(job.approval_expectation_rate)
     this.jobForm.controls.note.setValue(job.note)
