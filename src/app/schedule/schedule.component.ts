@@ -183,11 +183,6 @@ export class ScheduleComponent implements OnInit {
             let parentRecipientPos: number = info.parentRecipientPos
             let parentSenderPos: number = info.parentSenderPos
 
-            //let job1Html = senderParent.querySelectorAll('.line-job')[info.senderPos] as HTMLElement
-            //job1Html.style.backgroundColor = 'yellow'
-            //let job2Html = recipientParent.querySelectorAll('.line-job')[info.recipientPos] as HTMLElement
-            //job2Html.style.backgroundColor = 'red'
-
             let task1 = angular.chrono[parentSenderPos].tasks[info.senderPos]
             let task2 = angular.chrono[parentRecipientPos].tasks[info.recipientPos]
             let job1 = task1.job
@@ -210,7 +205,7 @@ export class ScheduleComponent implements OnInit {
             angular.taskService.editAvailableDate(task1, task2).subscribe((data) => {
               if(data.status == true) {
                 snackBar.dismiss()
-                angular.changeMonth(angular.month)
+                angular.changeMonth(angular.month, new Date(task2.items[0].date + "T00:00:00"))
               } else {
                 snackBar.dismiss()
                 angular.snackBar.open(data.message, '', {
@@ -465,7 +460,7 @@ export class ScheduleComponent implements OnInit {
       for(let index = 0; index < (5 - length); index++) {
         let task = new Task
         let item = new TaskItem
-        item.date = date.getFullYear() + '-' + (date.getMonth() + 1) + '-' + date.getDate()
+        item.date = this.datePipe.transform(date, 'yyyy-MM-dd')
         task.job = new Job
         task.items = []
         task.items.push(item)
