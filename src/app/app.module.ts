@@ -121,6 +121,8 @@ import { TaskService } from './schedule/task.service';
 
 import localePt from '@angular/common/locales/pt';
 import { ClientComissionService } from './clients/client-comission/client-comission.service';
+import { UserNotification } from './notification-bar/user-notification/user-notification.model';
+import { UserNotificationService } from './notification-bar/user-notification/user-notification.service';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -251,6 +253,7 @@ registerLocaleData(localePt);
     BudgetService,
     TaskService,
     ClientComissionService,
+    UserNotificationService,
 
     MatDialog,
     MatSnackBar,

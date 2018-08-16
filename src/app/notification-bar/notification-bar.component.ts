@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { UserNotification } from './user-notification/user-notification.model';
+import { UserNotificationService } from './user-notification/user-notification.service';
+
+import { Observable } from 'rxjs/Observable'
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'cb-notification-bar',
@@ -7,9 +12,40 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NotificationBarComponent implements OnInit {
 
-  constructor() { }
+  userNotifications: UserNotification[] = []
+  timerSubscription: Subscription
+
+  constructor(
+    private userNotificationService: UserNotificationService
+  ) { }
 
   ngOnInit() {
+    this.loadRecents()
+    this.listenInit()
+  }
+
+  ngOnDestroy() {
+    this.timerSubscription.unsubscribe()
+  }
+
+  loadRecents() {
+    this.userNotificationService.recents().subscribe(dataInfo => {
+      this.userNotifications = dataInfo.pagination.data
+    })
+  }
+
+  listenInit() {
+    let interval = 60 * 1000
+    this.timerSubscription = Observable.timer(5000, interval).subscribe(() => {
+      this.listenNotifications()
+    })
+  }
+
+  listenNotifications() {
+    this.userNotificationService.listen().subscribe((userNotifications) => {
+      if(userNotifications.length == 0) return;
+      this.userNotifications = userNotifications.concat(this.userNotifications)
+    })
   }
 
 }

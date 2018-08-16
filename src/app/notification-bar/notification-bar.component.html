@@ -1,29 +1,21 @@
 <div class="my-container">
-    <h3 class="lead">Time Line</h3>
+  <h3 class="lead">Timeline</h3>
 </div>
 <div>
-  <mat-card>
-    <mat-card-subtitle>
-      Breve resumo
-    </mat-card-subtitle>
+  <mat-card *ngFor="let userNotification of userNotifications">
+    <mat-card-header>
+      <div mat-card-avatar class="mat-card-photo" [style.backgroundImage]="'url(/assets/images/users/2.jpg)'"></div>
+      <mat-card-title>{{userNotification?.notification?.type?.description}}</mat-card-title>
+      <mat-card-subtitle>{{userNotification?.notification?.date | date:'dd/MM/yyyy H:mm'}}</mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
     <mat-card-content>
-      Reference site about Lorem Ipsum, giving information on its origins, as well as a random Lipsum generator.
+      <p>
+        {{userNotification?.notification?.message}}
+      </p>
     </mat-card-content>
+    <mat-card-actions>
+      <button class="cb-button" mat-button>IR PARA LÁ</button>
+    </mat-card-actions>
   </mat-card>
-  <mat-card>
-    <mat-card-subtitle>
-      Breve resumo
-    </mat-card-subtitle>
-    <mat-card-content>
-      Reference site about Lorem Ipsum, giving information on its origins, as well as a random Lipsum generator.
-    </mat-card-content>
-  </mat-card>
-  <mat-card>
-    <mat-card-subtitle>
-      Breve resumo
-    </mat-card-subtitle>
-    <mat-card-content>
-      Reference site about Lorem Ipsum, giving information on its origins, as well as a random Lipsum generator.
-    </mat-card-content>
-  </mat-card>  
 </div>

@@ -1,13 +1,26 @@
 import { Employee } from '../employees/employee.model'
+import { Notifiable } from '../notification-bar/notification/notification.model';
 
-export class User {
-    id: number
-    email: string
-    password: string
-    employee?: Employee
-    functionalities?: Functionality[]
-    displays: Display[]
-    coordinatesNow ?: string
+export class User implements Notifiable {
+  id: number
+  email: string
+  password: string
+  employee?: Employee
+  functionalities?: Functionality[]
+  displays: Display[]
+  coordinatesNow ?: string
+
+  getName(): string {
+    return this.employee.name
+  }
+
+  getEmployee(): Employee {
+    return this.employee
+  }
+
+  hasEmployee(): boolean {
+    return true
+  }
 }
 
 export class Functionality {
