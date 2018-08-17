@@ -216,6 +216,11 @@ export class JobFormComponent implements OnInit {
   setPreviousData() {
     let job: Job = this.jobService.data
 
+    /* Redirecionar cadastros que não passaram pela tarefa antes */
+    if (job.deadline == null && this.typeForm == 'new') {
+      this.router.navigateByUrl('/schedule/new')
+    }
+
     if (job.deadline == null) {
       return
     }
@@ -322,10 +327,10 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.how_come.setValue(job.how_come)
     this.jobForm.controls.competition.setValue(job.competition)
     this.jobForm.controls.budget_value.setValue(job.budget_value)
-    
+
     if( ! this.isAdmin)
     this.jobForm.controls.budget_value.disable()
-    
+
     this.jobForm.controls.status.setValue(job.status)
     this.jobForm.controls.approval_expectation_rate.setValue(job.approval_expectation_rate)
     this.jobForm.controls.note.setValue(job.note)
