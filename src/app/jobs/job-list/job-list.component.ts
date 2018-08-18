@@ -10,6 +10,7 @@ import { Employee } from '../../employees/employee.model';
 import { EmployeeService } from '../../employees/employee.service';
 import { JobStatus } from 'app/job-status/job-status.model';
 import { JobStatusService } from 'app/job-status/job-status.service';
+import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'cb-job-list',
@@ -40,6 +41,7 @@ export class JobListComponent implements OnInit {
   pagination: Pagination
   jobs: Job[] = []
   attendances: Employee[]
+  creations: Employee[]
   status: JobStatus[]
   searching = false
   filter = false
@@ -56,49 +58,55 @@ export class JobListComponent implements OnInit {
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
       search: this.search,
-      attendance: this.fb.control('')
+      attendance: this.fb.control(''),
+      creation: this.fb.control(''),
+      client: this.fb.control(''),
+      status: this.fb.control('')
     })
 
-    this.jobStatus.jobStatus().subscribe(status => this.status = status)
-
-    /*
-    this.employeeService.canInsertClients().subscribe((attendances) => {
-      this.attendances = attendances
-    })
-    */
+    this.loadFilterData()
 
     this.searching = true
     let snackBar = this.snackBar.open('Carregando jobs...')
 
-    this.jobService.jobs({
-      orderBy: 'created_at'
-    }).subscribe(pagination => {
+    this.jobService.jobs().subscribe(pagination => {
       this.pagination = pagination
       this.searching = false
       this.jobs = pagination.data
       snackBar.dismiss()
     })
 
-    this.searchForm.controls.attendance.valueChanges
-      .do(() => this.searching = true)
-      .debounceTime(500)
-      .subscribe(value => {
-        this.jobService.jobs().subscribe(pagination => {
-          this.pagination = pagination
-          this.searching = false
-          this.jobs = pagination.data
-        })
+    this.searchForm.valueChanges
+    .pipe(distinctUntilChanged())
+    .subscribe(() => {
+      let controls = this.searchForm.controls
+      let status = controls.status.value != undefined ? controls.status.value.id : null
+
+      this.jobService.jobs({
+        clientName: controls.client.value, 
+        status: status,
+        attendance: controls.attendance.value,
+        creation: controls.creation.value
+      }).subscribe(pagination => {
+        this.pagination = pagination
+        this.searching = false
+        this.jobs = pagination.data
+        snackBar.dismiss()
+      })
+    })
+  }
+
+  loadFilterData() {
+    this.jobStatus.jobStatus().subscribe(status => this.status = status)
+
+    this.employeeService.canInsertClients().subscribe((attendances) => {
+      this.attendances = attendances
     })
 
-    this.search.valueChanges
-      .do(() => this.searching = true)
-      .debounceTime(500)
-      .subscribe(value => {
-        this.jobService.jobs(value).subscribe(pagination => {
-          this.pagination = pagination
-          this.searching = false
-          this.jobs = pagination.data
-        })
+    this.employeeService.employees().subscribe(employees => {
+      this.creations = employees.filter(employee => {
+        return employee.department.description === 'Criação'
+      })
     })
   }
 
@@ -121,6 +129,10 @@ export class JobListComponent implements OnInit {
   }
 
   compareAttendance(var1: Employee, var2: Employee) {
+    return var1.id === var2.id
+  }
+
+  compareStatus(var1: JobStatus, var2: JobStatus) {
     return var1.id === var2.id
   }
 

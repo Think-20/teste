@@ -33,6 +33,10 @@ export class NotificationBarComponent implements OnInit {
       this.userNotifications = dataInfo.pagination.data
     })
   }
+  
+  getUserBackground(userNotification: UserNotification) {
+    return `'url(/assets/images/users/${userNotification.user_id}.jpg)'`
+  }
 
   listenInit() {
     let interval = 60 * 1000
