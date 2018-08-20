@@ -524,15 +524,27 @@ export class ScheduleComponent implements OnInit {
 
   delete(task: Task) {
     let lastDate = new Date(task.available_date + "T00:00:00")
-    this.taskService.delete(task.id).subscribe((data) => {
-      this.snackBar.open(data.message, '', {
-        duration: 5000
-      })
+    if(['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0) {
+      this.jobService.delete(task.job.id).subscribe((data) => {
+        this.snackBar.open(data.message, '', {
+          duration: 5000
+        })
 
-      if (data.status) {
-        this.changeMonth(this.month, lastDate)
-      }
-    })
+        if (data.status) {
+          this.changeMonth(this.month, lastDate)
+        }
+      })
+    } else {
+      this.taskService.delete(task.id).subscribe((data) => {
+        this.snackBar.open(data.message, '', {
+          duration: 5000
+        })
+
+        if (data.status) {
+          this.changeMonth(this.month, lastDate)
+        }
+      })
+    }
   }
 
 }
