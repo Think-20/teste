@@ -74,7 +74,8 @@
               <div class="line-job"
               [class.no-border]="['Projeto', 'Orçamento'].indexOf(chrono[i].tasks[y + 1]?.job_activity?.description) >= 0 && [5,3].indexOf(chrono[i].tasks[y + 1]?.job?.status_id) >= 0"
               [class.signal]="task.job?.status?.id == 5 && (['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0)"
-              [class.approved]="task.job?.status?.id == 3 && (['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0)"
+              [class.approved-budget]="task.job?.status?.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0)"
+              [class.approved-creation]="task.job?.status?.id == 3 && (['Projeto'].indexOf(task.job_activity.description) >= 0)"
               [class.other-attendance]="task.job?.attendance_id != authService.currentUser().employee.id && task.job.id != undefined && !permissionVerify('edit', task.job)"
                 [ngClass]="getLineClass(task, chrono[i].day, chrono[i].month)" *ngFor="let task of chrono[i].tasks; let y = index" [matMenuTriggerFor]="menu"
                 draggable="true">
