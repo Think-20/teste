@@ -10,7 +10,10 @@ import { Employee } from '../../employees/employee.model';
 import { EmployeeService } from '../../employees/employee.service';
 import { JobStatus } from 'app/job-status/job-status.model';
 import { JobStatusService } from 'app/job-status/job-status.service';
-import { distinctUntilChanged } from 'rxjs/operators';
+import { distinctUntilChanged, debounceTime, tap } from 'rxjs/operators';
+import { Client } from '../../clients/client.model';
+import { AuthService } from '../../login/auth.service';
+import { ClientService } from '../../clients/client.service';
 
 @Component({
   selector: 'cb-job-list',
@@ -18,16 +21,16 @@ import { distinctUntilChanged } from 'rxjs/operators';
   styleUrls: ['./job-list.component.css'],
   animations: [
     trigger('rowAppeared', [
-      state('ready', style({opacity: 1})),
+      state('ready', style({ opacity: 1 })),
       transition('void => ready', animate('300ms 0s ease-in', keyframes([
-        style({opacity: 0, transform: 'translateX(-30px)', offset: 0}),
-        style({opacity: 0.8, transform: 'translateX(10px)', offset: 0.8}),
-        style({opacity: 1, transform: 'translateX(0px)', offset: 1})
+        style({ opacity: 0, transform: 'translateX(-30px)', offset: 0 }),
+        style({ opacity: 0.8, transform: 'translateX(10px)', offset: 0.8 }),
+        style({ opacity: 1, transform: 'translateX(0px)', offset: 1 })
       ]))),
       transition('ready => void', animate('300ms 0s ease-out', keyframes([
-        style({opacity: 1, transform: 'translateX(0px)', offset: 0}),
-        style({opacity: 0.8, transform: 'translateX(-10px)', offset: 0.2}),
-        style({opacity: 0, transform: 'translateX(30px)', offset: 1})
+        style({ opacity: 1, transform: 'translateX(0px)', offset: 0 }),
+        style({ opacity: 0.8, transform: 'translateX(-10px)', offset: 0.2 }),
+        style({ opacity: 0, transform: 'translateX(30px)', offset: 1 })
       ])))
     ])
   ]
@@ -40,8 +43,10 @@ export class JobListComponent implements OnInit {
   search: FormControl
   pagination: Pagination
   jobs: Job[] = []
+  paramAttendance: Employee = null
   attendances: Employee[]
   creations: Employee[]
+  clients: Client[]
   status: JobStatus[]
   searching = false
   filter = false
@@ -49,6 +54,8 @@ export class JobListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private employeeService: EmployeeService,
+    private authService: AuthService,
+    private clientService: ClientService,
     private jobService: JobService,
     private jobStatus: JobStatusService,
     private snackBar: MatSnackBar
@@ -65,9 +72,19 @@ export class JobListComponent implements OnInit {
     })
 
     this.loadFilterData()
+    this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
+    ? this.authService.currentUser().employee : null
 
     this.searching = true
     let snackBar = this.snackBar.open('Carregando jobs...')
+
+    this.searchForm.controls.client.valueChanges
+    .pipe(distinctUntilChanged(), debounceTime(500))
+    .subscribe(clientName => {
+      this.clientService.clients({ search: clientName, attendance: this.paramAttendance }).subscribe((dataInfo) => {
+        this.clients = dataInfo.pagination.data
+      })
+    })
 
     this.jobService.jobs().subscribe(pagination => {
       this.pagination = pagination
@@ -76,24 +93,30 @@ export class JobListComponent implements OnInit {
       snackBar.dismiss()
     })
 
-    this.searchForm.valueChanges
-    .pipe(distinctUntilChanged())
-    .subscribe(() => {
-      let controls = this.searchForm.controls
-      let status = controls.status.value != undefined ? controls.status.value.id : null
+    let snackbar
 
-      this.jobService.jobs({
-        clientName: controls.client.value, 
-        status: status,
-        attendance: controls.attendance.value,
-        creation: controls.creation.value
-      }).subscribe(pagination => {
-        this.pagination = pagination
-        this.searching = false
-        this.jobs = pagination.data
-        snackBar.dismiss()
+    this.searchForm.valueChanges
+      .do(() => {
+        snackbar = this.snackBar.open('Carregando jobs...')
       })
-    })
+      .pipe(distinctUntilChanged())
+      .subscribe(() => {
+        let controls = this.searchForm.controls
+        let status = controls.status.value != undefined ? controls.status.value.id : null
+
+        this.jobService.jobs({
+          clientName: controls.client.value,
+          status: status,
+          attendance: controls.attendance.value,
+          creation: controls.creation.value
+        }).subscribe(pagination => {
+          snackbar.dismiss()
+          this.pagination = pagination
+          this.searching = false
+          this.jobs = pagination.data
+          snackBar.dismiss()
+        })
+      })
   }
 
   loadFilterData() {
@@ -115,7 +138,7 @@ export class JobListComponent implements OnInit {
     let oldStatus = job.status
     job.status = status
     this.jobService.edit(job).subscribe(data => {
-      if(data.status == true) {
+      if (data.status == true) {
         this.snackBar.open('Atualizado com sucesso!', '', {
           duration: 3000
         })
@@ -152,7 +175,7 @@ export class JobListComponent implements OnInit {
         duration: 5000
       })
 
-      if(data.status) {
+      if (data.status) {
         this.jobs.splice(this.jobs.indexOf(job), 1)
         this.pagination.total = this.pagination.total - 1
       }
