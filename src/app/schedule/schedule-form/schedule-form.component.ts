@@ -194,7 +194,7 @@ export class ScheduleFormComponent implements OnInit {
 
     let types = ['Projeto', 'Modificação', 'Outsider', 'Opção']
     this.jobService.jobs({
-      pagination: false,
+      paginate: false,
       job_activities: this.job_activities.filter(jobActivity => {
         return types.indexOf(jobActivity.description) > -1
       }).map(jobActivity => {
@@ -232,7 +232,7 @@ export class ScheduleFormComponent implements OnInit {
 
     let types = ['Projeto', 'Modificação', 'Outsider', 'Opção']
     this.jobService.jobs({
-      pagination: false,
+      paginate: false,
       status: this.job_status.find(jobStatus => { return jobStatus.description == 'Aprovado' }).id
     }).subscribe(data => {
       this.jobs = <Job[]>data.data
@@ -256,7 +256,7 @@ export class ScheduleFormComponent implements OnInit {
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.enable()
     this.jobService.jobs({
-      pagination: false
+      paginate: false
     }).subscribe(data => {
       this.jobs = data.data
     })
