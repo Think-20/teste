@@ -14,6 +14,8 @@ import { distinctUntilChanged, debounceTime, tap } from 'rxjs/operators';
 import { Client } from '../../clients/client.model';
 import { AuthService } from '../../login/auth.service';
 import { ClientService } from '../../clients/client.service';
+import { JobType } from '../../job-types/job-type.model';
+import { JobTypeService } from '../../job-types/job-type.service';
 
 @Component({
   selector: 'cb-job-list',
@@ -48,6 +50,7 @@ export class JobListComponent implements OnInit {
   creations: Employee[]
   clients: Client[]
   status: JobStatus[]
+  job_types: JobType[]
   searching = false
   filter = false
 
@@ -57,6 +60,7 @@ export class JobListComponent implements OnInit {
     private authService: AuthService,
     private clientService: ClientService,
     private jobService: JobService,
+    private jobTypeService: JobTypeService,
     private jobStatus: JobStatusService,
     private snackBar: MatSnackBar
   ) { }
@@ -67,6 +71,7 @@ export class JobListComponent implements OnInit {
       search: this.search,
       attendance: this.fb.control(''),
       creation: this.fb.control(''),
+      job_type: this.fb.control(''),
       client: this.fb.control(''),
       status: this.fb.control('')
     })
@@ -108,7 +113,8 @@ export class JobListComponent implements OnInit {
           clientName: controls.client.value,
           status: status,
           attendance: controls.attendance.value,
-          creation: controls.creation.value
+          creation: controls.creation.value,
+          job_type: controls.job_type.value
         }).subscribe(pagination => {
           snackbar.dismiss()
           this.pagination = pagination
@@ -121,6 +127,8 @@ export class JobListComponent implements OnInit {
 
   loadFilterData() {
     this.jobStatus.jobStatus().subscribe(status => this.status = status)
+
+    this.jobTypeService.jobTypes().subscribe(job_types => this.job_types = job_types)
 
     this.employeeService.canInsertClients().subscribe((attendances) => {
       this.attendances = attendances
@@ -156,6 +164,10 @@ export class JobListComponent implements OnInit {
   }
 
   compareStatus(var1: JobStatus, var2: JobStatus) {
+    return var1.id === var2.id
+  }
+
+  compareJobType(var1: JobType, var2: JobType) {
     return var1.id === var2.id
   }
 
