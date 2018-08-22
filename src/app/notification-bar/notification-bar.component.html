@@ -1,23 +1,20 @@
 <div class="my-container">
-  <h3 class="lead">Timeline</h3>
+  <h3 class="lead">Feed</h3>
 </div>
 <div>
   <mat-card *ngFor="let userNotification of userNotifications">
+    <button class="button-fixed" mat-button>
+      <mat-icon>add</mat-icon>
+    </button>
     <mat-card-header>
       <div mat-card-avatar class="mat-card-photo" [style.backgroundImage]="'url(/assets/images/users/' + userNotification.notification.notifier_id + '.jpg)'"></div>
-      <mat-card-title>{{userNotification?.notification?.type?.description}}</mat-card-title>
+      <mat-card-title>{{userNotification?.notification?.notifier?.employee?.name}}</mat-card-title>
       <mat-card-subtitle>{{userNotification?.notification?.date | date:'dd/MM/yyyy H:mm'}}</mat-card-subtitle>
     </mat-card-header>
-    <!--
-    <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-    -->
     <mat-card-content>
       <p>
         {{userNotification?.notification?.message}}
       </p>
     </mat-card-content>
-    <mat-card-actions>
-      <button class="cb-button" mat-button>IR PARA LÁ</button>
-    </mat-card-actions>
   </mat-card>
 </div>

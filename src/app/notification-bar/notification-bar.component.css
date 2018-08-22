@@ -7,9 +7,38 @@
   background-size: cover;
 }
 
+.mat-card-avatar {
+  border-radius: 0;
+}
+
+.mat-card-title {
+  font-size: 16px;
+}
+
+.mat-card-subtitle {
+  font-size: 10px;
+  margin-bottom: 0 !important;
+}
+
 .mat-card {
-  padding: 15px;
+  padding: 10px;
   font-weight: lighter;
+  margin-bottom: 10px;
+}
+
+.button-fixed {
+  position: absolute;
+  top: 20px;
+ right: 5px;
+  color: #BBB !important;
+  min-width: 24px;
+  padding: 0px 5px;
+}
+
+.mat-card-content {
+  padding-left: 53px;
+  font-weight: lighter;    
+  font-size: 13px;
 }
 
 .mat-card-image {
