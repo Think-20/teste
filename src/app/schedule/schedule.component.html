@@ -72,7 +72,7 @@
             </div>
             <div class="line-jobs">
               <div class="line-job"
-              [class.no-border]="['Projeto', 'Orçamento'].indexOf(chrono[i].tasks[y + 1]?.job_activity?.description) >= 0 && [5,3].indexOf(chrono[i].tasks[y + 1]?.job?.status_id) >= 0"
+              [class.no-border]="['Projeto', 'Orçamento'].indexOf(chrono[i].tasks[y + 1]?.job_activity?.description) >= 0 && [5,3].indexOf(chrono[i].tasks[y + 1]?.job?.status_id) >= 0  && jobDisplay(task, chrono[i]) != 'Continuação'"
               [class.signal]="task.job?.status?.id == 5 && (['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação'"
               [class.approved-budget]="task.job?.status?.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação'"
               [class.approved-creation]="task.job?.status?.id == 3 && (['Projeto'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação'"
