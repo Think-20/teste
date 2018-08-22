@@ -13,5 +13,6 @@ export class Task {
   job_activity?: JobActivity
   job_id: number
   job?: Job
+  reopened?: number
   items?: TaskItem[]
 }
