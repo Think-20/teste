@@ -25,3 +25,8 @@
 .updated-info-employee {
   font-size: 12px;
 }
+
+.filter-grid .row .col-md-12 {
+  display: flex;
+  flex-wrap: wrap;
+}

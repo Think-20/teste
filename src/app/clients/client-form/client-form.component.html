@@ -54,6 +54,9 @@
         <cb-stars class="col-md-3 star-input" label="Score" [rate]="client != undefined ? (client.rate + 1) : 0" [input]="clientForm.controls.rate">
           <input formControlName="rate" matInput>
         </cb-stars>
+        <cb-stars class="col-md-3 star-input" label="Score" [rate]="client != undefined ? (client.rate + 1) : 0" [input]="clientForm.controls.rate">
+          <input formControlName="rate" matInput>
+        </cb-stars>
         <mat-form-field class="col-md-3">
           <input formControlName="cnpj" mask="99.999.999/9999-99" matInput placeholder="CNPJ*">
           <mat-error>

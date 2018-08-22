@@ -7,7 +7,7 @@
     (click)="defineRate(i)"
     class="star"
     *ngFor="let i of rates">
-    {{ rate > i ? 'star' : 'star_border' }}
+    {{ rate >= i ? 'star' : 'star_border' }}
     </mat-icon>
   </div>
   <ng-content></ng-content>

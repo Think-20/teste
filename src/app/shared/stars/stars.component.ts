@@ -13,44 +13,66 @@ export class StarsComponent implements OnInit {
   rates: number[] = [1,2,3,4,5]
   @Input('rate') rate: number = 0
   @Input('input') input: FormControl = new FormControl()
-  temp: number
+  temp: number = 0
 
   constructor() { }
 
   ngOnInit() {
+    if(this.rate != null) {
+      this.input.setValue(this.rate.toString())
+    }
+
+    this.input.valueChanges.subscribe(value => {
+      this.rate = value
+    })
+
+    /*
+    this.input.statusChanges.subscribe((value) => {
+      if(value == 'DISABLED') {
+        this.rate = 0
+      }
+    })
+
+    this.input.valueChanges.subscribe((value) => {
+      if(value != 'DISABLED') {
+        this.rate = value
+      }
+    })
+    */
   }
 
   changeRate(newValue: number) {
-    if(this.readonly) return
+    if(this.readonly || this.input.disabled) return
 
     this.rate = newValue
 
     if(newValue === 0) {
       this.input.setValue('')
     } else {
-      this.input.setValue((this.rate - 1).toString())
+      this.input.setValue(this.rate.toString())
     }
   }
 
   mouseEnter(index: number): void {
-    if(this.readonly) return
+    if(this.readonly || this.input.disabled) return
     this.temp = this.rate
-    this.changeRate(index + 1)
+    this.rate = index
   }
 
   mouseLeave(): void {
-    if(this.readonly) return
-    if(this.temp !== null && this.rate != 0) this.changeRate(this.temp)
+    if(this.readonly || this.input.disabled) return
+    this.rate = this.temp
   }
 
   defineRate(index: number) {
-    if(this.readonly) return
+    if(this.readonly || this.input.disabled) return
     /* Zerar valor do rate, caso a estrela clicada já tenha valor */
-    if(this.temp === index + 1) {
+    if(this.temp === index) {
       this.changeRate(0)
+      this.temp = 0
     } else {
-    this.changeRate(index + 1)
-      this.temp = null
+      this.changeRate(index)
+      this.temp = index
     }
   }
 

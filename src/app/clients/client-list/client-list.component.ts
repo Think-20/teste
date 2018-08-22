@@ -10,6 +10,12 @@ import { Pagination } from '../../shared/pagination.model';
 import { EmployeeService } from '../../employees/employee.service';
 import { Employee } from '../../employees/employee.model';
 import { DataInfo } from '../../shared/data-info.model';
+import { ClientType } from '../client-types/client-type.model';
+import { ClientStatus } from '../client-status/client-status.model';
+import { ClientStatusService } from '../client-status/client-status.service';
+import { ClientTypeService } from '../client-types/client-type.service';
+import { distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operator/debounceTime';
 
 @Component({
   selector: 'cb-client-list',
@@ -38,6 +44,8 @@ export class ClientListComponent implements OnInit {
   searchForm: FormGroup
   search: FormControl
   clients: Client[] = []
+  clientTypes: ClientType[]
+  clientStatus: ClientStatus[]
   attendances: Employee[]
   searching = false
   filter: boolean = false
@@ -47,6 +55,8 @@ export class ClientListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private clientService: ClientService,
+    private clientStatusService: ClientStatusService,
+    private clientTypeService: ClientTypeService,
     private employeeService: EmployeeService,
     private authService: AuthService,
     private snackBar: MatSnackBar
@@ -112,34 +122,51 @@ export class ClientListComponent implements OnInit {
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
       search: this.search,
-      attendance: this.fb.control('')
+      attendance: this.fb.control(''),
+      client_status: this.fb.control(''),
+      rate: this.fb.control(''),
+      client_type: this.fb.control('')
+    })
+
+    this.loadClients()
+
+    this.clientTypeService.types().subscribe((clientTypes) => {
+      this.clientTypes = clientTypes
+    })
+
+    this.clientStatusService.status().subscribe((clientStatus) => {
+      this.clientStatus = clientStatus
     })
 
     this.employeeService.canInsertClients().subscribe((attendances) => {
       this.attendances = attendances
     })
 
+    this.searchForm.valueChanges
+    .pipe(distinctUntilChanged())
+    .debounceTime(500)
+    .subscribe(() => {
+      let controls = this.searchForm.controls
+      this.loadClients({
+        search: controls.search.value,
+        attendance: controls.attendance.value,
+        client_status: controls.client_status.value,
+        client_type: controls.client_type.value,
+        rate: controls.rate.value,
+      })
+    })
+  }
+
+  loadClients(params = {}) {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando clientes...')
 
-    this.clientService.clients().subscribe(dataInfo => {
+    this.clientService.clients(params).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.clients = <Client[]> this.pagination.data
       snackBar.dismiss()
-    })
-
-    this.search.valueChanges
-      .do(() => this.searching = true)
-      .debounceTime(500)
-      .subscribe(value => {
-        this.clientService.clients(this.searchForm.value).subscribe(dataInfo => {
-          this.searching = false
-          this.dataInfo = dataInfo
-          this.pagination = dataInfo.pagination
-          this.clients = <Client[]> this.pagination.data
-        })
     })
   }
 
@@ -155,6 +182,14 @@ export class ClientListComponent implements OnInit {
       this.pagination = dataInfo.pagination
       this.clients = <Client[]> this.pagination.data
     })
+  }
+
+  compareClientType(clientType1: ClientType, clientType2: ClientType) {
+    return clientType1.id === clientType2.id
+  }
+
+  compareClientStatus(clientStatus1: ClientStatus, clientStatus2: ClientStatus) {
+    return clientStatus1.id === clientStatus2.id
   }
 
   compareAttendance(var1: Employee, var2: Employee) {
