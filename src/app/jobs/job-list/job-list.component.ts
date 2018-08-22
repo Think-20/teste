@@ -53,6 +53,7 @@ export class JobListComponent implements OnInit {
   job_types: JobType[]
   searching = false
   filter = false
+  isAdmin: boolean = false
 
   constructor(
     private fb: FormBuilder,
@@ -66,10 +67,12 @@ export class JobListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.isAdmin = this.authService.hasAccess('job/save')
+
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
       search: this.search,
-      attendance: this.fb.control(''),
+      attendance: this.fb.control({value: '', disabled: !this.isAdmin}),
       creation: this.fb.control(''),
       job_type: this.fb.control(''),
       client: this.fb.control(''),
