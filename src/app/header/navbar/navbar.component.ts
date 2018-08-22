@@ -13,11 +13,17 @@ export class NavbarComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    let menu = localStorage.getItem('menu')
+
+    if(menu === 'closed') {
+      this.toggleMenu()
+    }
   }
 
   toggleMenu() {
     this.opened = this.opened ? false : true
-    this.toggleMenuEmitter.emit()
+    localStorage.setItem('menu', this.opened ? 'open' : 'closed')
+    this.toggleMenuEmitter.emit(this.opened)
   }
 
 }
