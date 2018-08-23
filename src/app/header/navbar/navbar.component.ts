@@ -1,4 +1,5 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
+import { UserNotification } from '../../notification-bar/user-notification/user-notification.model';
 
 @Component({
   selector: 'cb-navbar',
@@ -9,6 +10,7 @@ export class NavbarComponent implements OnInit {
 
   @Input() opened: boolean
   @Output() toggleMenuEmitter = new EventEmitter()
+  notificationQuantity = 0
 
   constructor() { }
 
@@ -26,4 +28,7 @@ export class NavbarComponent implements OnInit {
     this.toggleMenuEmitter.emit(this.opened)
   }
 
+  notificationsLoaded(userNotifications: UserNotification[]) {
+    console.log('Notificações carregadas... {{' + userNotifications.length + '}}')
+  }
 }

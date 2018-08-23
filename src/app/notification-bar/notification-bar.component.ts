@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { UserNotification } from './user-notification/user-notification.model';
 import { UserNotificationService } from './user-notification/user-notification.service';
 
@@ -14,6 +14,7 @@ export class NotificationBarComponent implements OnInit {
 
   userNotifications: UserNotification[] = []
   timerSubscription: Subscription
+  @Output() notificationLoadEmitter: EventEmitter<UserNotification[]> = new EventEmitter()
 
   constructor(
     private userNotificationService: UserNotificationService
@@ -30,10 +31,19 @@ export class NotificationBarComponent implements OnInit {
 
   loadRecents() {
     this.userNotificationService.recents().subscribe(dataInfo => {
-      this.userNotifications = dataInfo.pagination.data
+      let userNotifications = <UserNotification[]> dataInfo.pagination.data
+      this.appendNotifications(userNotifications)
     })
   }
-  
+
+  appendNotifications(userNotifications: UserNotification[]) {
+    let filteredUserNotifications = userNotifications.filter(userNotification => { return userNotification.special == 0})
+    if(filteredUserNotifications.length == 0) return;
+
+    this.notificationLoadEmitter.emit(userNotifications)
+    this.userNotifications = filteredUserNotifications.concat(this.userNotifications)
+  }
+
   getUserBackground(userNotification: UserNotification) {
     return `'url(/assets/images/users/${userNotification.user_id}.jpg)'`
   }
@@ -47,8 +57,7 @@ export class NotificationBarComponent implements OnInit {
 
   listenNotifications() {
     this.userNotificationService.listen().subscribe((userNotifications) => {
-      if(userNotifications.length == 0) return;
-      this.userNotifications = userNotifications.concat(this.userNotifications)
+      this.appendNotifications(userNotifications)
     })
   }
 

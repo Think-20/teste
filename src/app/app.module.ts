@@ -9,7 +9,7 @@ import {
   MatButtonModule, MatIconModule, MatTabsModule, MatAutocompleteModule, MatChipsModule,
   MatSnackBar, MatSnackBarModule, MatMenuModule, MAT_LABEL_GLOBAL_OPTIONS,
   MatDatepickerModule, MAT_DATE_LOCALE, MatNativeDateModule, MatPaginatorModule,
-  MatPaginatorIntl, MatTooltipModule, MatRadioModule
+  MatPaginatorIntl, MatTooltipModule, MatRadioModule, MatBadgeModule
 } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -216,7 +216,8 @@ registerLocaleData(localePt);
     MatDatepickerModule,
     MatPaginatorModule,
     MatTooltipModule,
-    MatRadioModule
+    MatRadioModule,
+    MatBadgeModule
   ],
   providers: [
     ClientService,

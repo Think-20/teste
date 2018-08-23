@@ -1,4 +1,5 @@
 <mat-toolbar>
+    <span matBadge="4" matBadgeOverlap="false">Text with a badge</span>
   <img *ngIf="!opened" id="logoNavBar" src="/assets/images/logo.png" alt="Think Ideias">
   <div class="flex-spacer"></div>
   <button class="my-button" mat-button (click)="toggleMenu()">
@@ -8,7 +9,9 @@
     <mat-icon>query_builder</mat-icon>
   </button>
   <button class="my-button" mat-button>
-    <mat-icon>notifications</mat-icon>
+    <mat-icon
+      matBadge="3"
+      matBadgeColor="warn">notifications</mat-icon>
   </button>
   <button class="my-button" mat-button>
     <mat-icon>message</mat-icon>
