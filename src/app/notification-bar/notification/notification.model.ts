@@ -5,9 +5,9 @@ export class Notification {
   id: number
   type_id?: number
   type?: NotificationType
-  notifiable_id?: number
-  notifiable_type?: string
-  notifiable?: Notifiable
+  notifier_id?: number
+  notifier_type?: string
+  notifier?: Notifiable
   info?: string
   date: string
   message: string
@@ -15,6 +15,7 @@ export class Notification {
 
 export interface Notifiable {
   id?: number
+  employee?: Employee
 
   getName(): string;
   getEmployee(): Employee | null;

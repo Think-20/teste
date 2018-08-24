@@ -1,14 +1,18 @@
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSidenavModule, MatIconModule, MatButtonModule, MatToolbarModule, MatTooltipModule } from '@angular/material';
+import {
+  MatSidenavModule, MatIconModule, MatButtonModule, MatToolbarModule,
+  MatTooltipModule, MatBadgeModule, MatMenuModule
+} from '@angular/material';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 
 import { ROUTES } from '../app.routes';
 
-
+import { NotificationItemComponent } from '../notification-bar/notification-item/notification-item.component';
 import { SidenavComponent } from './sidenav/sidenav.component';
 import { NavbarComponent } from './navbar/navbar.component';
+import { NotificationModule } from '../notification-bar/notification.module';
 
 
 @NgModule({
@@ -19,6 +23,9 @@ import { NavbarComponent } from './navbar/navbar.component';
     MatButtonModule,
     MatToolbarModule,
     MatTooltipModule,
+    MatBadgeModule,
+    MatMenuModule,
+    NotificationModule,
 
     RouterModule.forRoot(ROUTES)
   ],
@@ -29,7 +36,7 @@ import { NavbarComponent } from './navbar/navbar.component';
   ],
   declarations: [
     SidenavComponent,
-    NavbarComponent
+    NavbarComponent,
   ]
 })
 export class HeaderModule { }

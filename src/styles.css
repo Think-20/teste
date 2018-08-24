@@ -201,6 +201,7 @@ button {
 
 #container-box > .row > .col-md-8::-webkit-scrollbar,
 #container-box > .row > .col-md-4::-webkit-scrollbar,
+.menuNotifications::-webkit-scrollbar,
 #menu-container::-webkit-scrollbar, .mat-select-panel::-webkit-scrollbar,
 .mat-autocomplete-panel::-webkit-scrollbar,
 .mat-row-scroll::-webkit-scrollbar {
@@ -211,6 +212,7 @@ button {
 
 
 #container-box > .row > .col-md-8::-webkit-scrollbar-thumb,
+.menuNotifications::-webkit-scrollbar-thumb,
 #container-box > .row > .col-md-4::-webkit-scrollbar-thumb,
 #menu-container::-webkit-scrollbar-thumb,
 .mat-row-scroll::-webkit-scrollbar-thumb {
@@ -654,4 +656,12 @@ font-size: 11px;
 
 cb-schedule {
   height: 100%;
+}
+
+.menuNotifications cb-notification-item .mat-card {
+  margin-bottom: 0 !important;
+}
+
+.menuNotifications .mat-menu-content {
+  padding: 0 !important;
 }

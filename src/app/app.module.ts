@@ -9,8 +9,9 @@ import {
   MatButtonModule, MatIconModule, MatTabsModule, MatAutocompleteModule, MatChipsModule,
   MatSnackBar, MatSnackBarModule, MatMenuModule, MAT_LABEL_GLOBAL_OPTIONS,
   MatDatepickerModule, MAT_DATE_LOCALE, MatNativeDateModule, MatPaginatorModule,
-  MatPaginatorIntl, MatTooltipModule, MatRadioModule, MatBadgeModule
+  MatPaginatorIntl, MatTooltipModule, MatRadioModule
 } from '@angular/material';
+import { MatBadgeModule, MatBadge } from '@angular/material/badge';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ROUTES } from './app.routes';
@@ -123,6 +124,8 @@ import localePt from '@angular/common/locales/pt';
 import { ClientComissionService } from './clients/client-comission/client-comission.service';
 import { UserNotification } from './notification-bar/user-notification/user-notification.model';
 import { UserNotificationService } from './notification-bar/user-notification/user-notification.service';
+import { NotificationItemComponent } from './notification-bar/notification-item/notification-item.component';
+import { NotificationModule } from './notification-bar/notification.module';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -217,7 +220,8 @@ registerLocaleData(localePt);
     MatPaginatorModule,
     MatTooltipModule,
     MatRadioModule,
-    MatBadgeModule
+    MatBadgeModule,
+    NotificationModule
   ],
   providers: [
     ClientService,

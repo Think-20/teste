@@ -73,10 +73,15 @@ export class UserNotificationService {
 
   read(userNotifications: UserNotification[]): Observable<any> {
     let url = 'notifications/read'
+    let ids: number[] = []
+
+    userNotifications.forEach(userNotification => {
+      ids.push(userNotification.id)
+    })
 
     return this.http.put(
       `${API}/${url}`,
-      JSON.stringify(userNotifications),
+      JSON.stringify({ids: ids}),
       new RequestOptions()
     )
     .map(response => response.json())

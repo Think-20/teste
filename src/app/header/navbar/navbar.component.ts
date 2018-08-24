@@ -1,5 +1,7 @@
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { UserNotification } from '../../notification-bar/user-notification/user-notification.model';
+import { UserNotificationService } from '../../notification-bar/user-notification/user-notification.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'cb-navbar',
@@ -10,9 +12,13 @@ export class NavbarComponent implements OnInit {
 
   @Input() opened: boolean
   @Output() toggleMenuEmitter = new EventEmitter()
-  notificationQuantity = 0
+  userNotifications: UserNotification[] = []
+  notReads: number = 0
 
-  constructor() { }
+  constructor(
+    private userNotificationService: UserNotificationService,
+    private datePipe: DatePipe
+  ) { }
 
   ngOnInit() {
     let menu = localStorage.getItem('menu')
@@ -29,6 +35,26 @@ export class NavbarComponent implements OnInit {
   }
 
   notificationsLoaded(userNotifications: UserNotification[]) {
-    console.log('Notificações carregadas... {{' + userNotifications.length + '}}')
+    let filteredUserNotifications = userNotifications.filter(userNotification => { return userNotification.special == 1})
+    if(filteredUserNotifications.length == 0) return;
+
+    this.notReads = this.notReads + filteredUserNotifications.filter(userNotification => { return userNotification.read == 0 }).length
+    this.userNotifications = filteredUserNotifications.concat(this.userNotifications)
+  }
+
+  readMessages() {
+    let notReadNotifications = this.userNotifications.filter(userNotification => { return userNotification.read == 0 })
+    if(notReadNotifications.length == 0) return;
+
+    this.userNotificationService.read(notReadNotifications).subscribe((data) => {
+      if(!data.status) return;
+      let date = new Date()
+      this.userNotifications.forEach(userNotification => {
+        if(userNotification.read == 1) return;
+        userNotification.read = 1
+        userNotification.read_date = this.datePipe.transform(date, 'yyyy-MM-dd hh:mm:ss')
+      })
+      this.notReads = 0
+    })
   }
 }

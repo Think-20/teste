@@ -37,15 +37,12 @@ export class NotificationBarComponent implements OnInit {
   }
 
   appendNotifications(userNotifications: UserNotification[]) {
+    this.notificationLoadEmitter.emit(userNotifications)
+
     let filteredUserNotifications = userNotifications.filter(userNotification => { return userNotification.special == 0})
     if(filteredUserNotifications.length == 0) return;
 
-    this.notificationLoadEmitter.emit(userNotifications)
     this.userNotifications = filteredUserNotifications.concat(this.userNotifications)
-  }
-
-  getUserBackground(userNotification: UserNotification) {
-    return `'url(/assets/images/users/${userNotification.user_id}.jpg)'`
   }
 
   listenInit() {
