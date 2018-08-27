@@ -18,7 +18,13 @@ import { DatePipe } from '@angular/common';
 import { JobStatusService } from '../../job-status/job-status.service';
 import { JobStatus } from '../../job-status/job-status.model';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import { Pagination } from '../../shared/pagination.model';
+import { ClientService } from '../../clients/client.service';
+import { Client } from '../../clients/client.model';
+import { JobType } from '../../job-types/job-type.model';
+import { JobTypeService } from '../../job-types/job-type.service';
+import { EmployeeService } from '../../employees/employee.service';
 
 
 @Component({
@@ -46,13 +52,21 @@ export class ScheduleFormComponent implements OnInit {
   typeForm: string = 'new'
   hasPreviousActivity: boolean = false
   scheduleForm: FormGroup
+  searchForm: FormGroup
   job_activities: JobActivity[]
   job_status: JobStatus[]
   jobs: Job[]
   dateSetManually: boolean = false
+  params: {} = null
+  callback: (jobs: Job[]) => void
   isAdmin: boolean = false
+  paramAttendance: Employee = null
   responsibles: Employee[] = []
+  clients: Client[] = []
   availableDates: any = []
+  job_types: JobType[] = []
+  attendances: Employee[] = []
+  creations: Employee[] = []
   nextDateMessage: string = ''
   url: string = '/jobs/new'
   buttonText: string = 'PRÓXIMO'
@@ -68,6 +82,9 @@ export class ScheduleFormComponent implements OnInit {
     private jobStatusService: JobStatusService,
     private taskService: TaskService,
     private briefingService: BriefingService,
+    private employeeService: EmployeeService,
+    private jobTypeService: JobTypeService,
+    private clientService: ClientService,
     private budgetService: BudgetService,
     private authService: AuthService,
     private router: Router,
@@ -83,6 +100,10 @@ export class ScheduleFormComponent implements OnInit {
     this.createForm()
     this.loadJobStatus()
     this.loadJobActivities()
+    this.loadFilterData()
+
+    this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
+    ? this.authService.currentUser().employee : null
 
     if (this.typeForm == 'edit') {
       this.loadTask()
@@ -90,6 +111,20 @@ export class ScheduleFormComponent implements OnInit {
       this.recoveryParams()
       this.addEvents()
     }
+  }
+
+  loadFilterData() {
+    this.jobTypeService.jobTypes().subscribe(job_types => this.job_types = job_types)
+
+    this.employeeService.canInsertClients().subscribe((attendances) => {
+      this.attendances = attendances
+    })
+
+    this.employeeService.employees().subscribe(employees => {
+      this.creations = employees.filter(employee => {
+        return employee.department.description === 'Criação'
+      })
+    })
   }
 
   loadTask() {
@@ -125,9 +160,8 @@ export class ScheduleFormComponent implements OnInit {
 
   addEvents() {
     this.scheduleForm.controls.job_activity.valueChanges.subscribe(status => {
-      let jobActivity = this.scheduleForm.controls.job_activity.value as JobActivity
-      //this.calculateNextDate()
       this.getAvailableDates(new Date())
+      let jobActivity = this.scheduleForm.controls.job_activity.value as JobActivity
       this.setButtons()
 
       if (jobActivity.description == 'Modificação')
@@ -179,6 +213,10 @@ export class ScheduleFormComponent implements OnInit {
     this.addValidationBudget()
   }
 
+  enableSearchForm() {
+    this.searchForm.enable()
+  }
+
   changeMonth(date: Date) {
     this.getAvailableDates(date)
   }
@@ -192,17 +230,29 @@ export class ScheduleFormComponent implements OnInit {
     this.scheduleForm.controls.budget_value.disable()
     this.nextDateMessage = 'Escolha primeiro o job, para verificarmos o responsável e a data disponível.'
 
+    let snackbar
+    let controls = this.searchForm.controls
     let types = ['Projeto', 'Modificação', 'Outsider', 'Opção']
-    this.jobService.jobs({
+
+    this.params = {
       paginate: false,
+      clientName: controls.client.value,
+      status: controls.status.value != undefined ? controls.status.value.id : null,
+      attendance: controls.attendance.value,
+      creation: controls.creation.value,
+      job_type: controls.job_type.value,
       job_activities: this.job_activities.filter(jobActivity => {
-        return types.indexOf(jobActivity.description) > -1
-      }).map(jobActivity => {
-        return jobActivity.id
-      })
-    }).subscribe(data => {
-      this.jobs = data.data
-    })
+          return types.indexOf(jobActivity.description) > -1
+        }).map(jobActivity => {
+          return jobActivity.id
+        })
+    }
+
+    this.callback = (jobs: Job[]) => {
+      this.jobs = jobs
+    }
+
+    this.loadJobs()
 
     this.subscriptions.push(this.scheduleForm.controls.job.valueChanges.subscribe(job => {
       let responsible
@@ -221,21 +271,36 @@ export class ScheduleFormComponent implements OnInit {
 
   addBudgetEvents() {
     this.clearEvents()
+
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.disable()
   }
 
   addDetailingEvents() {
     this.clearEvents()
+    this.enableSearchForm()
+
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.disable()
 
+    let controls = this.searchForm.controls
+    controls.status.setValue(this.job_status.find(jobStatus => { return jobStatus.description == 'Aprovado' }))
+    controls.status.disable()
+
+    let snackbar
     let types = ['Projeto', 'Modificação', 'Outsider', 'Opção']
-    this.jobService.jobs({
+
+    this.params = {
       paginate: false,
-      status: this.job_status.find(jobStatus => { return jobStatus.description == 'Aprovado' }).id
-    }).subscribe(data => {
-      this.jobs = <Job[]>data.data
+      clientName: controls.client.value,
+      status: controls.status.value != undefined ? controls.status.value.id : null,
+      attendance: controls.attendance.value,
+      creation: controls.creation.value,
+      job_type: controls.job_type.value
+    }
+
+    this.callback = (jobs: Job[]) => {
+      this.jobs = jobs
       let jobActivity = this.job_activities.find(jobActivity => {
         return jobActivity.description == 'Detalhamento'
       })
@@ -248,18 +313,35 @@ export class ScheduleFormComponent implements OnInit {
         })
         return !detailed
       })
-    })
+    }
+
+    this.loadJobs()
   }
 
   addOtherEvents() {
     this.clearEvents()
+    this.enableSearchForm()
+
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.enable()
-    this.jobService.jobs({
-      paginate: false
-    }).subscribe(data => {
-      this.jobs = data.data
-    })
+
+    let snackbar
+    let controls = this.searchForm.controls
+
+    this.params = {
+      paginate: false,
+      clientName: controls.client.value,
+      status: controls.status.value != undefined ? controls.status.value.id : null,
+      attendance: controls.attendance.value,
+      creation: controls.creation.value,
+      job_type: controls.job_type.value
+    }
+
+    this.callback = (jobs: Job[]) => {
+      this.jobs = jobs
+    }
+
+    this.loadJobs()
   }
 
   getAvailableDates(date: Date, onlyEmployee: Employee = null) {
@@ -340,6 +422,40 @@ export class ScheduleFormComponent implements OnInit {
       budget_value: this.formBuilder.control('', [Validators.required]),
       responsible: this.formBuilder.control('', [Validators.required]),
       job: this.formBuilder.control('')
+    })
+
+    this.searchForm = this.formBuilder.group({
+      attendance: this.formBuilder.control({value: '', disabled: !this.isAdmin}),
+      creation: this.formBuilder.control(''),
+      job_type: this.formBuilder.control(''),
+      client: this.formBuilder.control(''),
+      status: this.formBuilder.control('')
+    })
+
+    this.searchForm.controls.client.valueChanges
+    .pipe(distinctUntilChanged(), debounceTime(500))
+    .subscribe(clientName => {
+      this.clientService.clients({ search: clientName, attendance: this.paramAttendance }).subscribe((dataInfo) => {
+        this.clients = dataInfo.pagination.data
+      })
+    })
+
+    this.searchForm.valueChanges
+    .pipe(distinctUntilChanged())
+    .subscribe(() => {
+      console.log(this.params, this.jobs)
+      this.loadJobs()
+    })
+  }
+
+  loadJobs() {
+    let snackbar
+    this.jobService.jobs(this.params).do(() => {
+      snackbar = this.snackBar.open('Carregando jobs...')
+    }).subscribe(data => {
+      snackbar.dismiss()
+      let jobs = <Job[]> data.data
+      this.callback(jobs)
     })
   }
 
@@ -445,6 +561,18 @@ export class ScheduleFormComponent implements OnInit {
 
   compareJobActivity(job1: JobActivity, job2: JobActivity) {
     return job1.id === job2.id
+  }
+
+  compareAttendance(var1: Employee, var2: Employee) {
+    return var1.id === var2.id
+  }
+
+  compareStatus(var1: JobStatus, var2: JobStatus) {
+    return var1.id === var2.id
+  }
+
+  compareJobType(var1: JobType, var2: JobType) {
+    return var1.id === var2.id
   }
 
   go() {
