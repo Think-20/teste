@@ -57,8 +57,8 @@ export class ScheduleFormComponent implements OnInit {
   job_status: JobStatus[]
   jobs: Job[]
   dateSetManually: boolean = false
-  params: {} = null
-  callback: (jobs: Job[]) => void
+  params: () => {} = () => { return {} }
+  callback: (jobs: Job[]) => void = (jobs) => {}
   isAdmin: boolean = false
   paramAttendance: Employee = null
   responsibles: Employee[] = []
@@ -234,25 +234,27 @@ export class ScheduleFormComponent implements OnInit {
     let controls = this.searchForm.controls
     let types = ['Projeto', 'Modificação', 'Outsider', 'Opção']
 
-    this.params = {
-      paginate: false,
-      clientName: controls.client.value,
-      status: controls.status.value != undefined ? controls.status.value.id : null,
-      attendance: controls.attendance.value,
-      creation: controls.creation.value,
-      job_type: controls.job_type.value,
-      job_activities: this.job_activities.filter(jobActivity => {
-          return types.indexOf(jobActivity.description) > -1
-        }).map(jobActivity => {
-          return jobActivity.id
-        })
+    this.params = () => {
+      return {
+        paginate: false,
+        clientName: controls.client.value,
+        status: controls.status.value != undefined ? controls.status.value.id : null,
+        attendance: controls.attendance.value,
+        creation: controls.creation.value,
+        job_type: controls.job_type.value,
+        job_activities: this.job_activities.filter(jobActivity => {
+            return types.indexOf(jobActivity.description) > -1
+          }).map(jobActivity => {
+            return jobActivity.id
+          })
+      }
     }
 
     this.callback = (jobs: Job[]) => {
       this.jobs = jobs
     }
 
-    this.loadJobs()
+    //this.loadJobs()
 
     this.subscriptions.push(this.scheduleForm.controls.job.valueChanges.subscribe(job => {
       let responsible
@@ -290,13 +292,15 @@ export class ScheduleFormComponent implements OnInit {
     let snackbar
     let types = ['Projeto', 'Modificação', 'Outsider', 'Opção']
 
-    this.params = {
-      paginate: false,
-      clientName: controls.client.value,
-      status: controls.status.value != undefined ? controls.status.value.id : null,
-      attendance: controls.attendance.value,
-      creation: controls.creation.value,
-      job_type: controls.job_type.value
+    this.params = () => {
+      return {
+        paginate: false,
+        clientName: controls.client.value,
+        status: controls.status.value != undefined ? controls.status.value.id : null,
+        attendance: controls.attendance.value,
+        creation: controls.creation.value,
+        job_type: controls.job_type.value
+      }
     }
 
     this.callback = (jobs: Job[]) => {
@@ -315,7 +319,7 @@ export class ScheduleFormComponent implements OnInit {
       })
     }
 
-    this.loadJobs()
+    //this.loadJobs()
   }
 
   addOtherEvents() {
@@ -328,20 +332,22 @@ export class ScheduleFormComponent implements OnInit {
     let snackbar
     let controls = this.searchForm.controls
 
-    this.params = {
-      paginate: false,
-      clientName: controls.client.value,
-      status: controls.status.value != undefined ? controls.status.value.id : null,
-      attendance: controls.attendance.value,
-      creation: controls.creation.value,
-      job_type: controls.job_type.value
-    }
+    this.params = () => {
+      return {
+        paginate: false,
+        clientName: controls.client.value,
+        status: controls.status.value != undefined ? controls.status.value.id : null,
+        attendance: controls.attendance.value,
+        creation: controls.creation.value,
+        job_type: controls.job_type.value
+      }
+    } 
 
     this.callback = (jobs: Job[]) => {
       this.jobs = jobs
     }
 
-    this.loadJobs()
+    //this.loadJobs()
   }
 
   getAvailableDates(date: Date, onlyEmployee: Employee = null) {
@@ -442,15 +448,22 @@ export class ScheduleFormComponent implements OnInit {
 
     this.searchForm.valueChanges
     .pipe(distinctUntilChanged())
-    .subscribe(() => {
-      console.log(this.params, this.jobs)
+    .subscribe((value) => {
+      let flag = false
+      
+      for(let key in value) {
+        if(value[key] != '') flag = true
+      }
+
+      if(flag)
       this.loadJobs()
     })
   }
 
   loadJobs() {
+    let params = this.params() 
     let snackbar
-    this.jobService.jobs(this.params).do(() => {
+    this.jobService.jobs(params).do(() => {
       snackbar = this.snackBar.open('Carregando jobs...')
     }).subscribe(data => {
       snackbar.dismiss()
