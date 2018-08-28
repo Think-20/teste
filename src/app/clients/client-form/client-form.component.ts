@@ -29,6 +29,7 @@ import 'rxjs/add/operator/do';
 import { ClientComission } from '../client-comission/client-comission.model';
 import { ClientComissionService } from '../client-comission/client-comission.service';
 import { ObjectValidator } from '../../shared/custom-validators';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'cb-client-form',
@@ -75,6 +76,7 @@ constructor(
     private employeeService: EmployeeService,
     private clientService: ClientService,
     private authService: AuthService,
+    private location: Location,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute
@@ -305,8 +307,11 @@ constructor(
     }
 
     this.clientService.save(client).subscribe(data => {
-      this.snackBar.open(data.message, '', {
+      let snackbar = this.snackBar.open(data.message, '', {
         duration: 5000
+      })
+      snackbar.afterDismissed().subscribe(() => {
+        this.location.back()
       })
     })
   }
