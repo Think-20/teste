@@ -469,6 +469,10 @@ mat-card-title > p {
   background-color: #00afef !important;
 }
 
+.mat-badge-warn .mat-badge-content {
+  background-color: #00afef !important;
+}
+
 .mat-tab-label {
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif !important;
   text-transform: uppercase;
