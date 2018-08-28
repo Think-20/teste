@@ -23,6 +23,10 @@
   margin-bottom: 10px;
 }
 
+.mat-card:last-child {
+  margin-bottom: 0px !important;
+}
+
 .notification-item-content {
   line-height: normal;
   white-space: pre-wrap;

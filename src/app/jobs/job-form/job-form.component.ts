@@ -32,7 +32,7 @@ import { JobHowCome } from 'app/job-how-come/job-how-come.model';
 import { Router } from '@angular/router';
 import { JobStatus } from 'app/job-status/job-status.model';
 import { TaskService } from '../../schedule/task.service';
-import { DatePipe } from '@angular/common';
+import { DatePipe, Location } from '@angular/common';
 import { ObjectValidator } from '../../shared/custom-validators';
 
 @Component({
@@ -74,6 +74,7 @@ export class JobFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private route: ActivatedRoute,
+    private location: Location,
     private router: Router,
     private datePipe: DatePipe,
     private uploadFileService: UploadFileService
@@ -571,11 +572,14 @@ export class JobFormComponent implements OnInit {
         duration: data.status ? 1000 : 5000
       }).afterDismissed().subscribe(observer => {
         if (data.status) {
+          this.location.back()
+          /*
           this.router.navigate(['/schedule'], {
             queryParams: {
               date: this.datePipe.transform(job.available_date_creation, 'yyyy-MM-dd')
             }
           })
+          */
         }
       })
 
