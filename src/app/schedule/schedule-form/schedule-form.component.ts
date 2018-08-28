@@ -341,7 +341,7 @@ export class ScheduleFormComponent implements OnInit {
         creation: controls.creation.value,
         job_type: controls.job_type.value
       }
-    } 
+    }
 
     this.callback = (jobs: Job[]) => {
       this.jobs = jobs
@@ -450,7 +450,7 @@ export class ScheduleFormComponent implements OnInit {
     .pipe(distinctUntilChanged())
     .subscribe((value) => {
       let flag = false
-      
+
       for(let key in value) {
         if(value[key] != '') flag = true
       }
@@ -461,7 +461,7 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   loadJobs() {
-    let params = this.params() 
+    let params = this.params()
     let snackbar
     this.jobService.jobs(params).do(() => {
       snackbar = this.snackBar.open('Carregando jobs...')
@@ -504,6 +504,8 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   addValidationBudget() {
+    if(this.isAdmin) return
+
     let days = this.scheduleForm.controls.duration.value
     let validators: ValidatorFn[] = []
     validators.push(Validators.required)
