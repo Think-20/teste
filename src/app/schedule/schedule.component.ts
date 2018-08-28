@@ -364,7 +364,7 @@ export class ScheduleComponent implements OnInit {
     let date = new Date(task.available_date + 'T00:00:00')
 
     if(date.getDate() != chrono.day) {
-      return 'Continuação'
+      return 'Continuação auto.'
     }
 
     return task.job_activity.description + (task.reopened > 0 ? (' ' + task.reopened) : '')
@@ -412,7 +412,7 @@ export class ScheduleComponent implements OnInit {
       return false
     }
 
-    let found = ['Modificação', 'Opção', 'Continuação', 'Detalhamento'].indexOf(text) >= 0
+    let found = ['Modificação', 'Opção', 'Continuação', 'Continuação auto.', 'Detalhamento'].indexOf(text) >= 0
     return found ? false : true
   }
 

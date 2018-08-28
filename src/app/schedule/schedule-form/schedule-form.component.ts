@@ -170,6 +170,8 @@ export class ScheduleFormComponent implements OnInit {
         this.addBudgetEvents()
       else if (jobActivity.description == 'Detalhamento')
         this.addDetailingEvents()
+        else if (jobActivity.description == 'Continuação')
+          this.addContinuationEvents()
       else this.addOtherEvents()
     })
 
@@ -328,6 +330,34 @@ export class ScheduleFormComponent implements OnInit {
 
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.enable()
+
+    let snackbar
+    let controls = this.searchForm.controls
+
+    this.params = () => {
+      return {
+        paginate: false,
+        clientName: controls.client.value,
+        status: controls.status.value != undefined ? controls.status.value.id : null,
+        attendance: controls.attendance.value,
+        creation: controls.creation.value,
+        job_type: controls.job_type.value
+      }
+    }
+
+    this.callback = (jobs: Job[]) => {
+      this.jobs = jobs
+    }
+
+    //this.loadJobs()
+  }
+
+  addContinuationEvents() {
+    this.clearEvents()
+    this.enableSearchForm()
+
+    this.scheduleForm.controls.responsible.enable()
+    this.scheduleForm.controls.budget_value.disable()
 
     let snackbar
     let controls = this.searchForm.controls

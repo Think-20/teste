@@ -41,7 +41,7 @@
     </form>
     <mat-menu #menu="matMenu">
       <ng-template matMenuContent let-task="task" let-chrono="chrono">
-        <div *ngIf="jobDisplay(task, chrono) != 'Continuação'">
+        <div *ngIf="jobDisplay(task, chrono) != 'Continuação auto.'">
           <a *ngIf="task.job.id == undefined" (click)="addTask(chrono.day)" mat-menu-item>
             <mat-icon>add</mat-icon> Adicionar
           </a>
@@ -104,10 +104,10 @@
               </div>
             </div>
             <div class="line-jobs">
-              <div class="line-job" [class.no-border]="['Projeto', 'Orçamento'].indexOf(chrono[i].tasks[y + 1]?.job_activity?.description) >= 0 && [5,3].indexOf(chrono[i].tasks[y + 1]?.job?.status_id) >= 0  && jobDisplay(task, chrono[i]) != 'Continuação'"
-                [class.signal]="task.job?.status?.id == 5 && (['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação'"
-                [class.approved-budget]="task.job?.status?.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação'"
-                [class.approved-creation]="task.job?.status?.id == 3 && (['Projeto'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação'"
+              <div class="line-job" [class.no-border]="['Projeto', 'Orçamento'].indexOf(chrono[i].tasks[y + 1]?.job_activity?.description) >= 0 && [5,3].indexOf(chrono[i].tasks[y + 1]?.job?.status_id) >= 0  && jobDisplay(task, chrono[i]) != 'Continuação auto.'"
+                [class.signal]="task.job?.status?.id == 5 && (['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação auto.'"
+                [class.approved-budget]="task.job?.status?.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação auto.'"
+                [class.approved-creation]="task.job?.status?.id == 3 && (['Projeto'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação auto.'"
                 [class.other-attendance]="task.job?.attendance_id != authService.currentUser().employee.id && task.responsible_id != authService.currentUser().employee.id && task.job.id != undefined && !permissionVerify('edit', task.job)"
                 [ngClass]="getLineClass(task, chrono[i].day, chrono[i].month)"
                 *ngFor="let task of chrono[i].tasks; let y = index"

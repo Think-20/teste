@@ -22,7 +22,7 @@
         </mat-form-field>
         <mat-form-field class="col-md-3">
           <mat-select placeholder="Atividade*" formControlName="job_activity" [compareWith]="compareJobActivity">
-            <mat-option *ngFor="let job_activity of job_activities" [value]="job_activity">
+            <mat-option *ngFor="let job_activity of job_activities" [value]="job_activity" [disabled]="job_activity.master == 1 && ! isAdmin">
               {{ job_activity.description }}
             </mat-option>
           </mat-select>
