@@ -108,7 +108,7 @@
                 [class.signal]="task.job?.status?.id == 5 && (['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação'"
                 [class.approved-budget]="task.job?.status?.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação'"
                 [class.approved-creation]="task.job?.status?.id == 3 && (['Projeto'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação'"
-                [class.other-attendance]="task.job?.attendance_id != authService.currentUser().employee.id && task.job.id != undefined && !permissionVerify('edit', task.job)"
+                [class.other-attendance]="task.job?.attendance_id != authService.currentUser().employee.id && task.responsible_id != authService.currentUser().employee.id && task.job.id != undefined && !permissionVerify('edit', task.job)"
                 [ngClass]="getLineClass(task, chrono[i].day, chrono[i].month)"
                 *ngFor="let task of chrono[i].tasks; let y = index"
                 [matMenuTriggerFor]="menu"
