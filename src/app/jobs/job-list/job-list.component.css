@@ -1,17 +1,17 @@
 .mat-column-id {
-  width: 15%;
+  width: 12%;
 }
 
 .mat-column-client {
-    width: 13%;
+    width: 10%;
 }
 
 .mat-column-event {
-    width: 12%;
+    width: 10%;
 }
 
 .mat-column-date {
-    width: 13%;
+    width: 10%;
 }
 
 .mat-column-type {
@@ -20,6 +20,10 @@
 
 .mat-column-attendance {
     width: 15%;
+}
+
+.mat-column-creation {
+    width: 11%;
 }
 
 .mat-column-status {
