@@ -217,6 +217,11 @@ export class ScheduleFormComponent implements OnInit {
 
   enableSearchForm() {
     this.searchForm.enable()
+
+    if(this.paramAttendance != null) {
+      this.searchForm.controls.attendance.setValue(this.paramAttendance)
+      this.searchForm.controls.attendance.disable()
+    }
   }
 
   changeMonth(date: Date) {
@@ -256,7 +261,7 @@ export class ScheduleFormComponent implements OnInit {
       this.jobs = jobs
     }
 
-    //this.loadJobs()
+    this.loadJobs()
 
     this.subscriptions.push(this.scheduleForm.controls.job.valueChanges.subscribe(job => {
       let responsible
@@ -321,7 +326,7 @@ export class ScheduleFormComponent implements OnInit {
       })
     }
 
-    //this.loadJobs()
+    this.loadJobs()
   }
 
   addOtherEvents() {
@@ -349,7 +354,7 @@ export class ScheduleFormComponent implements OnInit {
       this.jobs = jobs
     }
 
-    //this.loadJobs()
+    this.loadJobs()
   }
 
   addContinuationEvents() {
@@ -377,7 +382,8 @@ export class ScheduleFormComponent implements OnInit {
       this.jobs = jobs
     }
 
-    //this.loadJobs()
+
+    this.loadJobs()
   }
 
   getAvailableDates(date: Date, onlyEmployee: Employee = null) {
@@ -468,6 +474,11 @@ export class ScheduleFormComponent implements OnInit {
       status: this.formBuilder.control('')
     })
 
+    if(this.paramAttendance != null) {
+      this.searchForm.controls.attendance.setValue(this.paramAttendance)
+      this.searchForm.controls.attendance.disable()
+    }
+
     this.searchForm.controls.client.valueChanges
     .pipe(distinctUntilChanged(), debounceTime(500))
     .subscribe(clientName => {
@@ -492,10 +503,8 @@ export class ScheduleFormComponent implements OnInit {
 
   loadJobs() {
     let params = this.params()
-    let snackbar
-    this.jobService.jobs(params).do(() => {
-      snackbar = this.snackBar.open('Carregando jobs...')
-    }).subscribe(data => {
+    let snackbar = this.snackBar.open('Carregando jobs...')
+    this.jobService.jobs(params).subscribe(data => {
       snackbar.dismiss()
       let jobs = <Job[]> data.data
       this.callback(jobs)
