@@ -126,6 +126,7 @@ import { UserNotification } from './notification-bar/user-notification/user-noti
 import { UserNotificationService } from './notification-bar/user-notification/user-notification.service';
 import { NotificationItemComponent } from './notification-bar/notification-item/notification-item.component';
 import { NotificationModule } from './notification-bar/notification.module';
+import { ProjectsComponent } from './projects/projects.component';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -189,7 +190,8 @@ registerLocaleData(localePt);
     JobFormComponent,
     BudgetFormComponent,
     ScheduleFormComponent,
-    ReloadComponent
+    ReloadComponent,
+    ProjectsComponent
   ],
   imports: [
     CurrencyMaskModule,

@@ -3,14 +3,29 @@
   <mat-card>
     <div class="row">
       <mat-form-field class="col-md-3">
-        <input [readonly]="!isAdmin" type="date" formControlName="available_date" matInput placeholder="Data disponível*">
+        <input currencyMask formControlName="gross_value" matInput placeholder="Valor bruto*">
       </mat-form-field>
       <mat-form-field class="col-md-3">
-        <mat-select #responsible (click)="toggleCreation()" placeholder="Orçamentista*" formControlName="responsible" [compareWith]="compareResponsible">
-          <mat-option *ngFor="let responsible of responsibles" [value]="responsible">
-            {{ responsible.name }}
-          </mat-option>
-        </mat-select>
+        <input currencyMask formControlName="bv_value" matInput placeholder="Valor BV*">
+      </mat-form-field>
+      <mat-form-field class="col-md-3">
+        <input currencyMask formControlName="equipments_value" matInput placeholder="Equipamentos*">
+      </mat-form-field>
+      <mat-form-field class="col-md-3">
+        <input currencyMask formControlName="logistics_value" matInput placeholder="Logística*">
+      </mat-form-field>
+      <mat-form-field class="col-md-3">
+        <input currencyMask formControlName="sales_commission_value" matInput placeholder="Comissão de vendas">
+      </mat-form-field>
+      <mat-form-field class="col-md-3">
+        <input currencyMask formControlName="taxes_value" matInput placeholder="Impostos">
+      </mat-form-field>
+      <mat-form-field class="col-md-3">
+        <input currencyMask formControlName="others_value" matInput placeholder="Outros">
+      </mat-form-field>
+      <mat-form-field class="col-md-3">
+        <input class="text-right" formControlName="discount_aliquot" matInput placeholder="Desconto">
+        <span matSuffix>%</span>
       </mat-form-field>
     </div>
     <mat-card-actions class="col-md-12 text-right">

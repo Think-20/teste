@@ -1,19 +1,11 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { Budget } from '../budget.model';
-import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
-import { BudgetService } from '../budget.service';
-import { UploadFileService } from '../../shared/upload-file.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Employee } from '../../employees/employee.model';
-import { MatSnackBar } from '@angular/material';
-
-import { ErrorHandler } from '../../shared/error-handler.service';
-import { Patterns } from '../../shared/patterns.model';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/do';
-import { isUndefined, isObject } from 'util';
 import { Job } from '../../jobs/job.model';
+import { Budget } from '../budget.model';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { BudgetService } from '../budget.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
+import { ErrorHandler } from '../../shared/error-handler.service';
 
 @Component({
   selector: 'cb-budget-form',
@@ -21,15 +13,12 @@ import { Job } from '../../jobs/job.model';
   styleUrls: ['./budget-form.component.css']
 })
 export class BudgetFormComponent implements OnInit {
-  availableDateParam: string
+  budgets: Budget[]
+  budgetForm: FormGroup
   @Input('typeForm') typeForm: string
   @Input('job') job: Job
-  budgets: Budget[]
   @Input('budget') budget: Budget
-  budgetForm: FormGroup
-  responsibles: Employee[]
   @Input('isAdmin') isAdmin: boolean = false
-  @ViewChild('responsible') responsibleSelect
 
   constructor(
     private budgetService: BudgetService,
@@ -42,68 +31,23 @@ export class BudgetFormComponent implements OnInit {
   ngOnInit() {
     this.budgetForm = this.formBuilder.group({
       id: this.formBuilder.control({ value: '', disabled: true }),
-      available_date: this.formBuilder.control('', [Validators.required]),
-      responsible: this.formBuilder.control('', [Validators.required]),
+      gross_value: this.formBuilder.control('', [Validators.required]),
+      bv_value: this.formBuilder.control('', [Validators.required]),
+      equipments_value: this.formBuilder.control('', [Validators.required]),
+      logistics_value: this.formBuilder.control('', [Validators.required]),
+      sales_commission_value: this.formBuilder.control({ value: '', disabled: true }),
+      taxes_value: this.formBuilder.control({ value: '', disabled: true }),
+      others_value: this.formBuilder.control({ value: '', disabled: true }),
+      discount_aliquot: this.formBuilder.control(''),
     })
-
-    this.availableDateParam = this.typeForm == 'new' ? this.route.snapshot.params['available_date'] : ''
 
     if(this.job != null && this.job['budget'] != null) {
       this.budget = this.job['budget']
-      this.loadDefaultData(this.budget)
-    } else {
-      this.loadDefaultData()
     }
 
     if(this.typeForm == 'show') {
       this.budgetForm.disable()
     }
-  }
-
-  toggleCreation() {
-    if (!this.isAdmin) {
-      this.responsibleSelect.close()
-    }
-  }
-
-  loadDefaultData(budget: Budget = null) {
-    let snackBarStateCharging = this.snackBar.open('Aguarde...')
-    this.budgetService.loadFormData().subscribe((response) => {
-      let data = response.data
-      this.responsibles = data.responsibles
-
-      if (this.availableDateParam == '' || this.availableDateParam == undefined) {
-        this.budgetForm.controls.responsible.setValue(data.responsible)
-        this.budgetForm.controls.available_date.setValue(data.available_date)
-
-        snackBarStateCharging.dismiss()
-        //snackBarStateCharging = this.snackBar.open('Considerando que o tempo de produção seja 1 dia, ' + data.responsible.name + ' foi selecionado.', '', {
-          //duration: 2000
-        //})
-
-      } else {
-        snackBarStateCharging.dismiss()
-        this.budgetForm.controls.available_date.setValue(this.availableDateParam)
-      }
-
-      if(budget != null) {
-        this.loadBudgetInForm(budget)
-      }
-    })
-  }
-
-  loadBudget() {
-    let budget = null
-    this.loadBudgetInForm(budget)
-  }
-
-  loadBudgetInForm(budget: Budget) {
-    this.budgetForm.controls.available_date.setValue(budget.available_date)
-    this.budgetForm.controls.responsible.setValue(budget.responsible)
-  }
-
-  compareResponsible(var1: Employee, var2: Employee) {
-    return var1.id === var2.id
   }
 
   save() {
@@ -118,6 +62,7 @@ export class BudgetFormComponent implements OnInit {
       return;
     }
 
+    /*
     this.budgetService.save(budget).subscribe(data => {
       if (data.status) {
         this.budget = data.budget as Budget
@@ -134,6 +79,7 @@ export class BudgetFormComponent implements OnInit {
       }
 
     })
+    */
   }
 
   edit() {
@@ -148,6 +94,7 @@ export class BudgetFormComponent implements OnInit {
       return;
     }
 
+    /*
     this.budgetService.edit(budget).subscribe(data => {
       this.snackBar.open(data.message, '', {
         duration: data.status ? 1000 : 5000
@@ -157,5 +104,6 @@ export class BudgetFormComponent implements OnInit {
         }
       })
     })
+    */
   }
 }
