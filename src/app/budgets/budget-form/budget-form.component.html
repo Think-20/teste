@@ -1,5 +1,8 @@
 <form [formGroup]="budgetForm" novalidate autocomplete="off">
   <input type="hidden" formControlName="id">
+  <input type="hidden" formControlName="job_id">
+  <input type="hidden" formControlName="task_id">
+  <input type="hidden" formControlName="tax_aliquot">
   <mat-card>
     <div class="row">
       <mat-form-field class="col-md-3">
@@ -18,7 +21,7 @@
         <input currencyMask formControlName="sales_commission_value" matInput placeholder="Comissão de vendas">
       </mat-form-field>
       <mat-form-field class="col-md-3">
-        <input currencyMask formControlName="taxes_value" matInput placeholder="Impostos">
+        <input currencyMask formControlName="tax_value" matInput placeholder="Impostos">
       </mat-form-field>
       <mat-form-field class="col-md-3">
         <input currencyMask formControlName="others_value" matInput placeholder="Outros">

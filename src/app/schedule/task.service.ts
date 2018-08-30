@@ -12,7 +12,6 @@ import { ErrorHandler } from '../shared/error-handler.service';
 import { Task } from './task.model';
 import { AuthService } from '../login/auth.service';
 import { Pagination } from 'app/shared/pagination.model';
-import { JobActivityServiceInterface } from 'app/jobs/job-activity-service.interface'
 import { JobActivity } from '../job-activities/job-activity.model';
 import { DataInfo } from '../shared/data-info.model';
 

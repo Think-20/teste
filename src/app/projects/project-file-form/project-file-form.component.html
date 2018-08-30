@@ -1,0 +1,31 @@
+<mat-card [formGroup]="projectFileForm">
+  <div class="row" formArrayName="files">
+    <div *ngFor="let control of getFilesControls(); let i = index" class="col-md-2">
+      <form [formGroup]="getFilesControls()[i]" novalidate autocomplete="off" class="flex item">
+        <div class="project-image" [ngStyle]="{'background-image': 'url(' + getFilesControls()[i].controls.image.value + ')'}"></div>
+        <mat-form-field>
+          <input formControlName="name" matInput placeholder="Referência*">
+          <mat-error>
+            Obrigatório
+          </mat-error>
+        </mat-form-field>
+        <button type="button" class="download-file" mat-button (click)="previewFile(job, getFilesControls()[i].controls.name.value, 'job')">
+          <mat-icon>file_download</mat-icon>
+        </button>
+        <button type="button" class="delete-file" (click)="deleteFile(i)" mat-button>
+          <mat-icon>clear</mat-icon>
+        </button>
+      </form>
+    </div>
+    <div class="col-md-12">
+      <input [disabled]="typeForm == 'show'" #inputFiles type="file" multiple accept="image/jpeg,application/pdf" (change)="uploadFile(inputFiles)"
+        style="display:none;" />
+      <button *ngIf="getFilesControls().length > 0" type="button" class="add-file" (click)="inputFiles.click()" mat-button>
+        <mat-icon>add</mat-icon>
+      </button>
+      <button *ngIf="getFilesControls().length == 0" type="button" class="cb-button" (click)="inputFiles.click()" mat-raised-button>
+        Adicionar referência
+      </button>
+    </div>
+  </div>
+</mat-card>

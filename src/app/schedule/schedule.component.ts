@@ -15,7 +15,6 @@ import { AuthService } from '../login/auth.service';
 import { BriefingService } from '../briefings/briefing.service';
 import { Briefing } from '../briefings/briefing.model';
 import { BudgetService } from '../budgets/budget.service';
-import { JobActivityServiceInterface } from '../jobs/job-activity-service.interface';
 import { Budget } from '../budgets/budget.model';
 import { Task } from './task.model';
 import { TaskService } from './task.service';

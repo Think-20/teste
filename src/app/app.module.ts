@@ -127,6 +127,8 @@ import { UserNotificationService } from './notification-bar/user-notification/us
 import { NotificationItemComponent } from './notification-bar/notification-item/notification-item.component';
 import { NotificationModule } from './notification-bar/notification.module';
 import { ProjectsComponent } from './projects/projects.component';
+import { ProjectFileFormComponent } from './projects/project-file-form/project-file-form.component';
+import { ProjectFileService } from './projects/project-file.service';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -191,7 +193,8 @@ registerLocaleData(localePt);
     BudgetFormComponent,
     ScheduleFormComponent,
     ReloadComponent,
-    ProjectsComponent
+    ProjectsComponent,
+    ProjectFileFormComponent
   ],
   imports: [
     CurrencyMaskModule,
@@ -261,6 +264,7 @@ registerLocaleData(localePt);
     TaskService,
     ClientComissionService,
     UserNotificationService,
+    ProjectFileService,
 
     MatDialog,
     MatSnackBar,

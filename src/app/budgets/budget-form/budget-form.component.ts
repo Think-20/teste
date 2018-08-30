@@ -1,11 +1,11 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
-import { Job } from '../../jobs/job.model';
 import { Budget } from '../budget.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BudgetService } from '../budget.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 import { ErrorHandler } from '../../shared/error-handler.service';
+import { Task } from '../../schedule/task.model';
 
 @Component({
   selector: 'cb-budget-form',
@@ -13,11 +13,11 @@ import { ErrorHandler } from '../../shared/error-handler.service';
   styleUrls: ['./budget-form.component.css']
 })
 export class BudgetFormComponent implements OnInit {
-  budgets: Budget[]
+  budget: Budget
   budgetForm: FormGroup
+
   @Input('typeForm') typeForm: string
-  @Input('job') job: Job
-  @Input('budget') budget: Budget
+  @Input('task') task: Task
   @Input('isAdmin') isAdmin: boolean = false
 
   constructor(
@@ -31,19 +31,20 @@ export class BudgetFormComponent implements OnInit {
   ngOnInit() {
     this.budgetForm = this.formBuilder.group({
       id: this.formBuilder.control({ value: '', disabled: true }),
+      job_id: this.formBuilder.control({ value: '', disabled: true }),
+      task_id: this.formBuilder.control({ value: '', disabled: true }),
       gross_value: this.formBuilder.control('', [Validators.required]),
       bv_value: this.formBuilder.control('', [Validators.required]),
       equipments_value: this.formBuilder.control('', [Validators.required]),
       logistics_value: this.formBuilder.control('', [Validators.required]),
-      sales_commission_value: this.formBuilder.control({ value: '', disabled: true }),
-      taxes_value: this.formBuilder.control({ value: '', disabled: true }),
-      others_value: this.formBuilder.control({ value: '', disabled: true }),
+      sales_commission_value: this.formBuilder.control(''),
+      tax_aliquot: this.formBuilder.control({ value: '', disabled: true }),
+      tax_value: this.formBuilder.control({ value: '', disabled: true }),
+      others_value: this.formBuilder.control(''),
       discount_aliquot: this.formBuilder.control(''),
     })
 
-    if(this.job != null && this.job['budget'] != null) {
-      this.budget = this.job['budget']
-    }
+    //this.budget = this.task.budget
 
     if(this.typeForm == 'show') {
       this.budgetForm.disable()
@@ -53,7 +54,6 @@ export class BudgetFormComponent implements OnInit {
   save() {
     this.budgetForm.updateValueAndValidity()
     let budget = this.budgetForm.value
-    budget.job = this.job
 
     if (ErrorHandler.formIsInvalid(this.budgetForm)) {
       this.snackBar.open('Por favor, preencha corretamente os campos.', '', {

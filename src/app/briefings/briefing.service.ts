@@ -12,11 +12,10 @@ import { ErrorHandler } from '../shared/error-handler.service';
 import { Briefing } from './briefing.model';
 import { AuthService } from '../login/auth.service';
 import { Pagination } from 'app/shared/pagination.model';
-import { JobActivityServiceInterface } from 'app/jobs/job-activity-service.interface'
 
 
 @Injectable()
-export class BriefingService implements JobActivityServiceInterface {
+export class BriefingService {
   constructor(
     private http: Http,
     private snackBar: MatSnackBar,

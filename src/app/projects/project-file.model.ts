@@ -1,5 +1,5 @@
-import { Task } from "../../schedule/task.model";
-import { Employee } from "../../employees/employee.model";
+import { Task } from "../schedule/task.model";
+import { Employee } from "../employees/employee.model";
 
 export class ProjectFile {
   id: number
