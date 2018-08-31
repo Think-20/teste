@@ -1,2 +1,5 @@
-<cb-project-file-form></cb-project-file-form>
-<cb-budget-form></cb-budget-form>
+<mat-card *ngFor="let task of job.tasks">
+  <h3 class="lead">{{ task?.job_activity?.description }}</h3>
+  <cb-project-file-form class="projects" [task]="task"></cb-project-file-form>
+  <cb-budget-form class="projects" [task]="task"></cb-budget-form>
+</mat-card>

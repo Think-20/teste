@@ -2,9 +2,9 @@
   <div class="row" formArrayName="files">
     <div *ngFor="let control of getFilesControls(); let i = index" class="col-md-2">
       <form [formGroup]="getFilesControls()[i]" novalidate autocomplete="off" class="flex item">
-        <div class="project-image" [ngStyle]="{'background-image': 'url(' + getFilesControls()[i].controls.image.value + ')'}"></div>
+        <div class="project-image" [ngStyle]="{'background-image': 'url(' + getImageUrl(getFilesControls()[i]) + ')'}"></div>
         <mat-form-field>
-          <input formControlName="name" matInput placeholder="Referência*">
+          <input formControlName="original_name" matInput placeholder="Referência*">
           <mat-error>
             Obrigatório
           </mat-error>
@@ -24,7 +24,7 @@
         <mat-icon>add</mat-icon>
       </button>
       <button *ngIf="getFilesControls().length == 0" type="button" class="cb-button" (click)="inputFiles.click()" mat-raised-button>
-        Adicionar referência
+        Que tal adicionar arquivos?
       </button>
     </div>
   </div>

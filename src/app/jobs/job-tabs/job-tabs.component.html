@@ -14,7 +14,7 @@
       -->
     </mat-tab>
     <mat-tab label="Projeto">
-      <cb-projects *ngIf="job?.id != undefined"></cb-projects>
+      <cb-projects *ngIf="job?.id != undefined" [job]="job"></cb-projects>
     </mat-tab>
     <mat-tab label="Orçamento">
       <!--

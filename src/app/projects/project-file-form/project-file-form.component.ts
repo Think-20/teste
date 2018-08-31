@@ -3,6 +3,10 @@ import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { UploadFileService } from '../../shared/upload-file.service';
 import { ProjectFile } from '../project-file.model';
 import { ProjectFileService } from '../project-file.service';
+import { forEach } from '@angular/router/src/utils/collection';
+import { MatSnackBar } from '@angular/material';
+import { Task } from '../../schedule/task.model';
+import { API } from '../../app.api';
 
 @Component({
   selector: 'cb-project-file-form',
@@ -11,11 +15,13 @@ import { ProjectFileService } from '../project-file.service';
 })
 export class ProjectFileFormComponent implements OnInit {
   @Input() typeForm: string
+  @Input() task: Task
   projectFileForm: FormGroup
 
   constructor(
     private formBuilder: FormBuilder,
     private projectFileService: ProjectFileService,
+    private snackbar: MatSnackBar,
     private uploadFileService: UploadFileService
   ) { }
 
@@ -29,18 +35,39 @@ export class ProjectFileFormComponent implements OnInit {
     return (<FormArray>this.projectFileForm.controls.files).controls
   }
 
+  baseName(str)
+  {
+     var base = new String(str).substring(str.lastIndexOf('/') + 1);
+      if(base.lastIndexOf(".") != -1)
+          base = base.substring(0, base.lastIndexOf("."));
+     return base;
+  }
+
   uploadFile(inputFile: HTMLInputElement) {
+    let snackbar = this.snackbar.open('Aguarde enquanto carregamos os arquivos...')
     let filenames: string[] = []
 
     this.uploadFileService.uploadFile(inputFile).subscribe((data) => {
-      filenames = data.names
-      let inputs = []
-      filenames.forEach((filename) => {
-       let reader = new FileReader()
-        reader.readAsDataURL(inputFile.files[0])
-        reader.onloadend = () => {
-          this.addFile(filename, reader.result)
+      let projectFiles: ProjectFile[] = []
+
+      for(let i = 0; i < inputFile.files.length; i++) {
+        let projectFile = new ProjectFile;
+        projectFile.original_name = inputFile.files[i].name
+        projectFile.task = this.task
+        projectFiles.push(projectFile)
+      }
+
+      this.projectFileService.saveMultiple(projectFiles).subscribe((data) => {
+        snackbar.dismiss()
+        if(data.status == false) {
+          this.snackbar.open(data.message, '', { duration: 3000 })
+          return
         }
+
+        let projectFiles = <ProjectFile[]> data.project_files
+        projectFiles.forEach((projectFile) => {
+          this.addFile(projectFile)
+        })
       })
     })
   }
@@ -61,18 +88,46 @@ export class ProjectFileFormComponent implements OnInit {
     })
   }
 
-  addFile(file?: string, image?: string) {
+  addFile(projectFile: ProjectFile) {
     const files = <FormArray>this.projectFileForm.controls.files
+    let image
+
+    if(projectFile.type == 'pdf') {
+      image = '/assets/images/icons/pdf.png'
+    } else {
+      image = `${API}/project-files/view/${projectFile.id}`
+    }
 
     files.push(this.formBuilder.group({
-      name: this.formBuilder.control({ value: (file ? file : ''), disabled: (this.typeForm === 'show' ? true : false) }),
+      id: this.formBuilder.control(projectFile.id),
+      original_name: this.formBuilder.control({ value: (projectFile ? projectFile.original_name : ''), disabled: (this.typeForm === 'show' ? true : false) }),
+      task_id: this.formBuilder.control(projectFile.task_id),
       image: this.formBuilder.control(image)
     }))
   }
 
+  getImageUrl(group: FormGroup) {
+    return group.controls.image.value
+  }
+
+  save() {
+
+  }
+
   deleteFile(i) {
+    let snackbar = this.snackbar.open('Aguarde, estamos removendo...')
     const files = <FormArray>this.projectFileForm.controls.files
-    files.removeAt(i)
+    let projectFile = <ProjectFile> files.at(i).value
+
+    this.projectFileService.delete(projectFile.id).subscribe((data) => {
+      snackbar.dismiss()
+      if(data.status == false) {
+        this.snackbar.open(data.message, '', { duration: 3000 })
+        return
+      }
+
+      files.removeAt(i)
+    })
   }
 
 }
