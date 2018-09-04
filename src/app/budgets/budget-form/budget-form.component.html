@@ -1,10 +1,13 @@
 <form [formGroup]="budgetForm" novalidate autocomplete="off">
   <input type="hidden" formControlName="id">
-  <input type="hidden" formControlName="job_id">
   <input type="hidden" formControlName="task_id">
   <input type="hidden" formControlName="tax_aliquot">
   <mat-card>
     <div class="row">
+      <div class="col-md-12 text-right">
+        <p *ngIf="total > 0" class="lead">Total: {{ total | currency: 'BRL' }}</p>
+        <br>
+      </div>
       <mat-form-field class="col-md-3">
         <input currencyMask formControlName="gross_value" matInput placeholder="Valor bruto*">
       </mat-form-field>
@@ -27,7 +30,7 @@
         <input currencyMask formControlName="others_value" matInput placeholder="Outros">
       </mat-form-field>
       <mat-form-field class="col-md-3">
-        <input class="text-right" formControlName="discount_aliquot" matInput placeholder="Desconto">
+        <input currencyMask [options]="{prefix: ''}" class="text-right" formControlName="discount_aliquot" matInput placeholder="Desconto">
         <span matSuffix>%</span>
       </mat-form-field>
     </div>

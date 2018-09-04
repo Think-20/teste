@@ -24,9 +24,6 @@ export class BudgetService {
 
   save(budget: Budget): Observable<any> {
       let url = 'budget/save'
-      let prefix = this.auth.hasAccess('budget/save') ? '' : 'my-'
-
-      url = prefix + url
 
       return this.http.post(
               `${API}/${url}`,
@@ -44,9 +41,6 @@ export class BudgetService {
 
   edit(budget: Budget): Observable<any> {
       let url = 'budget/edit'
-      let prefix = this.auth.hasAccess('budget/edit') ? '' : 'my-'
-
-      url = prefix + url
 
       return this.http.put(
               `${API}/${url}`,
@@ -64,9 +58,6 @@ export class BudgetService {
 
   delete(id: number): Observable<any> {
       let url = `budget/remove/${id}`
-      let prefix = this.auth.hasAccess('budget/remove/{id}') ? '' : 'my-'
-
-      url = prefix + url
 
       return this.http.delete(`${API}/${url}`)
           .map(response => response.json())

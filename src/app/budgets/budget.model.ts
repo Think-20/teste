@@ -13,6 +13,7 @@ export class Budget {
   logistics_value: number
   sales_commission_value: number
   tax_aliquot: number
+  tax_value?: number
   others_value: number
   discount_aliquot: number
   created_at?: string
