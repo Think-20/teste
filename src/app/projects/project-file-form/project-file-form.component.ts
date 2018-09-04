@@ -29,6 +29,10 @@ export class ProjectFileFormComponent implements OnInit {
     this.projectFileForm = this.formBuilder.group({
       files: this.formBuilder.array([]),
     })
+
+    this.task.project_files.forEach((projectFile) => {
+      this.addFile(projectFile)
+    })
   }
 
   getFilesControls() {
@@ -72,12 +76,12 @@ export class ProjectFileFormComponent implements OnInit {
     })
   }
 
-  previewFile(projectFile: ProjectFile, filename: string, type: string) {
-    this.projectFileService.previewFile(projectFile, type, filename)
+  previewFile(projectFile: ProjectFile) {
+    this.projectFileService.previewFile(projectFile)
   }
 
   download(projectFile: ProjectFile, filename: string, type: String) {
-    this.projectFileService.download(projectFile, type, filename).subscribe((blob) => {
+    this.projectFileService.download(projectFile).subscribe((blob) => {
       let fileUrl = URL.createObjectURL(blob)
       //window.open(fileUrl, '_blank')
       let anchor = document.createElement("a");

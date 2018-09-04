@@ -9,7 +9,7 @@
             Obrigatório
           </mat-error>
         </mat-form-field>
-        <button type="button" class="download-file" mat-button (click)="previewFile(job, getFilesControls()[i].controls.name.value, 'job')">
+        <button type="button" class="download-file" mat-button (click)="previewFile(getFilesControls()[i].value)">
           <mat-icon>file_download</mat-icon>
         </button>
         <button type="button" class="delete-file" (click)="deleteFile(i)" mat-button>

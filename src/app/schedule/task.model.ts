@@ -2,6 +2,7 @@ import { Employee } from "../employees/employee.model";
 import { JobActivity } from "../job-activities/job-activity.model";
 import { Job } from "../jobs/job.model";
 import { TaskItem } from "./task-item.model";
+import { ProjectFile } from "../projects/project-file.model";
 
 export class Task {
   id: number
@@ -15,4 +16,5 @@ export class Task {
   job?: Job
   reopened?: number
   items?: TaskItem[]
+  project_files?: ProjectFile[]
 }

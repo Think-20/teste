@@ -129,12 +129,9 @@ export class ProjectFileService {
       })
   }
 
-  download(projectFile: ProjectFile, type: String, filename: String) {
-    let url = `project-file/download/${projectFile.id}/${type}/${filename}`
-    let prefix = this.auth.hasAccess('project-file/download/{id}/{type}/{file}') ? '' : 'my-'
-
-    url = prefix + url
-
+  download(projectFile: ProjectFile) {
+    let url = `project-files/download/${projectFile.id}`
+    
     return this.http.get(`${API}/${url}`, { responseType: ResponseContentType.Blob }).map(
       (res) => {
         return new Blob([res.blob()], { type: res.headers.get('content-type') })
@@ -147,11 +144,8 @@ export class ProjectFileService {
       })
   }
 
-  previewFile(projectFile: ProjectFile, type: string, file: string) {
-    let url = `project-file/download/${projectFile.id}/${type}/${file}?access_token=${this.auth.token()}&user_id=${this.auth.currentUser().id}`
-    let prefix = this.auth.hasAccess('project-file/download/{id}/{type}/{file}') ? '' : 'my-'
-
-    url = prefix + url
+  previewFile(projectFile: ProjectFile) {
+    let url = `project-files/download/${projectFile.id}?access_token=${this.auth.token()}&user_id=${this.auth.currentUser().id}`
 
     window.open(`${API}/${url}`, '_blank')
   }
