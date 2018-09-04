@@ -41,6 +41,7 @@ export class BudgetFormComponent implements OnInit {
       gross_value: this.formBuilder.control((this.budget ? this.budget.gross_value : ''), [Validators.required]),
       bv_value: this.formBuilder.control((this.budget ? this.budget.bv_value : ''), [Validators.required]),
       equipments_value: this.formBuilder.control((this.budget ? this.budget.equipments_value : ''), [Validators.required]),
+      optional_value: this.formBuilder.control((this.budget ? this.budget.optional_value : '')),
       logistics_value: this.formBuilder.control((this.budget ? this.budget.logistics_value : ''), [Validators.required]),
       sales_commission_value: this.formBuilder.control((this.budget ? this.budget.sales_commission_value : '')),
       tax_aliquot: this.formBuilder.control({ value: (this.budget ? this.budget.tax_aliquot : '16.33'), disabled: true }),
@@ -69,9 +70,11 @@ export class BudgetFormComponent implements OnInit {
     this.total = parseFloat(
       (
         (this.getNumber('gross_value')
+        + this.getNumber('optional_value')
         + this.getNumber('bv_value')
         + this.getNumber('equipments_value')
-        + this.getNumber('logistics_value') + this.getNumber('sales_commission_value')
+        + this.getNumber('logistics_value')
+        + this.getNumber('sales_commission_value')
         + this.getNumber('others_value')
         )
         * ((100 - this.getNumber('discount_aliquot')) / 100)

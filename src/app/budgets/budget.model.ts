@@ -8,6 +8,7 @@ export class Budget {
   task_id?: number
   task?: Task
   gross_value: number
+  optional_value: number
   bv_value: number
   equipments_value: number
   logistics_value: number
