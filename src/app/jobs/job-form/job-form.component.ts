@@ -349,7 +349,7 @@ export class JobFormComponent implements OnInit {
       this.jobForm.controls.creation_responsible.setValue(job.creation_responsible.name)
       this.jobForm.controls.available_date_creation.setValue(new Date(job.available_date_creation + "T00:00:00"))
     } else {
-      this.jobForm.controls.creation.setValue('Externo')
+      this.jobForm.controls.creation_responsible.setValue('Externo')
     }
 
     if(job.attendance_responsible != null) {

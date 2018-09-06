@@ -8,6 +8,7 @@ import { ErrorHandler } from '../../shared/error-handler.service';
 import { Task } from '../../schedule/task.model';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { AuthService } from '../../login/auth.service';
 
 @Component({
   selector: 'cb-budget-form',
@@ -18,21 +19,23 @@ export class BudgetFormComponent implements OnInit {
   budget: Budget
   budgetForm: FormGroup
   total: number = 0
+  isAdmin: boolean = false
   subscription: Subscription
 
   @Input('typeForm') typeForm: string
   @Input('task') task: Task
-  @Input('isAdmin') isAdmin: boolean = false
 
   constructor(
     private budgetService: BudgetService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+    private authService: AuthService,
     private router: Router,
     private snackBar: MatSnackBar,
   ) { }
 
-  ngOnInit() {
+  ngOnInit() {  
+    this.isAdmin = this.authService.hasAccess('budget/save')
     this.budget = this.task.budget
 
     this.budgetForm = this.formBuilder.group({
