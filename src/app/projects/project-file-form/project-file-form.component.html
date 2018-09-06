@@ -4,7 +4,7 @@
       <form [formGroup]="getFilesControls()[i]" novalidate autocomplete="off" class="flex item">
         <div class="project-image" [ngStyle]="{'background-image': 'url(' + getImageUrl(getFilesControls()[i]) + ')'}"></div>
         <mat-form-field>
-          <input formControlName="original_name" matInput placeholder="Referência*">
+          <input type="hidden" formControlName="original_name">
           <mat-error>
             Obrigatório
           </mat-error>
