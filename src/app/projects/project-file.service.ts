@@ -12,6 +12,7 @@ import { ErrorHandler } from '../shared/error-handler.service';
 import { ProjectFile } from './project-file.model';
 import { AuthService } from '../login/auth.service';
 import { Pagination } from 'app/shared/pagination.model';
+import { Task } from '../schedule/task.model';
 
 
 @Injectable()
@@ -131,7 +132,7 @@ export class ProjectFileService {
 
   download(projectFile: ProjectFile) {
     let url = `project-files/download/${projectFile.id}`
-    
+
     return this.http.get(`${API}/${url}`, { responseType: ResponseContentType.Blob }).map(
       (res) => {
         return new Blob([res.blob()], { type: res.headers.get('content-type') })
@@ -146,6 +147,12 @@ export class ProjectFileService {
 
   previewFile(projectFile: ProjectFile) {
     let url = `project-files/download/${projectFile.id}?access_token=${this.auth.token()}&user_id=${this.auth.currentUser().id}`
+
+    window.open(`${API}/${url}`, '_blank')
+  }
+
+  downloadAll(task: Task) {
+    let url = `project-files/download-all/${task.id}?access_token=${this.auth.token()}&user_id=${this.auth.currentUser().id}`
 
     window.open(`${API}/${url}`, '_blank')
   }

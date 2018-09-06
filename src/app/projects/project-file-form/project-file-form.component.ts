@@ -47,6 +47,10 @@ export class ProjectFileFormComponent implements OnInit {
      return base;
   }
 
+  downloadAll() {
+    this.projectFileService.downloadAll(this.task)
+  }
+
   uploadFile(inputFile: HTMLInputElement) {
     let snackbar = this.snackbar.open('Aguarde enquanto carregamos os arquivos...')
     let filenames: string[] = []

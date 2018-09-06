@@ -18,9 +18,14 @@
       <button *ngIf="getFilesControls().length > 0" type="button" class="add-file" (click)="inputFiles.click()" mat-button>
         <mat-icon>add</mat-icon>
       </button>
-      <button *ngIf="getFilesControls().length == 0" type="button" class="cb-button" (click)="inputFiles.click()" mat-raised-button>
-        Que tal adicionar arquivos?
-      </button>
+      <div class="text-right">
+        <button *ngIf="getFilesControls().length > 0" type="button" class="cb-button" (click)="downloadAll()" mat-raised-button>
+          <mat-icon>folder</mat-icon> Download completo
+        </button>
+        <button *ngIf="getFilesControls().length == 0" type="button" class="cb-button" (click)="inputFiles.click()" mat-raised-button>
+          <mat-icon>cloud_upload</mat-icon> Que tal adicionar imagens?
+        </button>
+      </div>
     </div>
   </div>
 </mat-card>
