@@ -34,7 +34,7 @@ export class BudgetFormComponent implements OnInit {
     private snackBar: MatSnackBar,
   ) { }
 
-  ngOnInit() {  
+  ngOnInit() {
     this.isAdmin = this.authService.hasAccess('budget/save')
     this.budget = this.task.budget
 
@@ -95,7 +95,8 @@ export class BudgetFormComponent implements OnInit {
   }
 
   getNumber(field: string): number {
-    return parseFloat(this.budgetForm.controls[field].value)
+    let val = this.budgetForm.controls[field].value
+    return parseFloat(val != '' ? val : 0)
   }
 
   setFormConfig() {
