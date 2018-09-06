@@ -366,7 +366,7 @@ export class ScheduleComponent implements OnInit {
       return 'Continuação auto.'
     }
 
-    return task.job_activity.description + (task.reopened > 0 ? (' ' + task.reopened) : '')
+    return this.taskService.jobDisplay(task)
   }
 
   timeDisplay(task: Task, chrono: Chrono) {

@@ -1,8 +1,8 @@
 <mat-accordion>
-  <mat-expansion-panel *ngFor="let task of job.tasks">
+  <mat-expansion-panel *ngFor="let task of sortedTasks">
     <mat-expansion-panel-header>
       <mat-panel-title>
-        <p class="lead">{{ task?.job_activity?.description }}</p>
+        <p class="lead">{{ taskService.jobDisplay(task) }}</p>
       </mat-panel-title>
     </mat-expansion-panel-header>
     <cb-project-file-form class="projects" [task]="task"></cb-project-file-form>

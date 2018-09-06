@@ -24,6 +24,13 @@ export class TaskService {
     private auth: AuthService
   ) {}
 
+  jobDisplay(task: Task) {
+    let size = 2
+    let text = task.reopened
+    let padChar =  (task.reopened > 0 ? (' ' + String('0').repeat(size) + text).substr( (size * -1), size) : '')
+    return task.job_activity.description +  ' ' + padChar
+  }
+
   loadFormData(): Observable<any> {
     let url = `tasks/load-form`
 
