@@ -686,3 +686,7 @@ cb-schedule {
 .mat-expansion-panel-header-title p {
   font-size: 18px;
 }
+
+.mat-expansion-panel {
+  box-shadow: none !important;
+}
