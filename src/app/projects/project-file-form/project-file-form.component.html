@@ -1,14 +1,9 @@
 <mat-card [formGroup]="projectFileForm">
   <div class="row" formArrayName="files">
-    <div *ngFor="let control of getFilesControls(); let i = index" class="col-md-2">
+    <div *ngFor="let control of getFilesControls(); let i = index" class="col-md-3">
       <form [formGroup]="getFilesControls()[i]" novalidate autocomplete="off" class="flex item">
         <div class="project-image" [ngStyle]="{'background-image': 'url(' + getImageUrl(getFilesControls()[i]) + ')'}"></div>
-        <mat-form-field>
-          <input type="hidden" formControlName="original_name">
-          <mat-error>
-            Obrigatório
-          </mat-error>
-        </mat-form-field>
+        <input type="hidden" formControlName="original_name">
         <button type="button" class="download-file" mat-button (click)="previewFile(getFilesControls()[i].value)">
           <mat-icon>file_download</mat-icon>
         </button>
