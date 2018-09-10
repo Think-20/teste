@@ -50,3 +50,7 @@ p {
   .job-container {
     margin-top: 20px;
   }
+
+.search-bar-group .title {
+  flex: 4 5;
+}

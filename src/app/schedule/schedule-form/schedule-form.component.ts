@@ -51,6 +51,7 @@ export class ScheduleFormComponent implements OnInit {
 
   typeForm: string = 'new'
   hasPreviousActivity: boolean = false
+  filter: boolean = false
   scheduleForm: FormGroup
   searchForm: FormGroup
   job_activities: JobActivity[]

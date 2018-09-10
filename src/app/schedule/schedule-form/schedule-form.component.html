@@ -3,7 +3,22 @@
 </div>
 <div class="col-md-12">
   <mat-card-title>
-    <p class="lead">Vamos checar a disponibilidade?</p>
+    <div class="row search-bar-group">
+      <div class="title">
+          Vamos checar a disponibilidade?
+      </div>
+      <div class="buttons">
+        <a mat-button>
+          <mat-icon>search</mat-icon>
+        </a>
+        <a mat-button (click)="filter = filter ? false : true">
+          <mat-icon>keyboard_arrow_down</mat-icon>
+        </a>
+        <a [routerLink]="['/jobs/new']" mat-button>
+          <mat-icon>add</mat-icon>
+        </a>
+      </div>
+    </div>
   </mat-card-title>
   <mat-card>
     <form [formGroup]="scheduleForm">
@@ -61,7 +76,7 @@
       </p>
       <div *ngIf="hasPreviousActivity" class="job-container">
         <p class="lead">Selecione o job</p>
-        <div [formGroup]="searchForm" class="row">
+        <div *ngIf="filter" [formGroup]="searchForm" class="row">
           <mat-form-field class="col-md-2-4">
             <input matInput formControlName="client" [matAutocomplete]="autocompleteclient" placeholder="Cliente">
           </mat-form-field>
