@@ -96,7 +96,7 @@ export class BudgetFormComponent implements OnInit {
 
   getNumber(field: string): number {
     let val = this.budgetForm.controls[field].value
-    return parseFloat(val != '' ? val : 0)
+    return parseFloat(val != null ? val : 0)
   }
 
   setFormConfig() {
