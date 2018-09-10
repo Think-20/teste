@@ -22,6 +22,7 @@ cb-sidenav.opened {
 #timeline-container {
     max-width: 21.25%;
     padding: 0;
+    padding-left: 10px;
 }
 
 #all-container {
