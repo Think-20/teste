@@ -103,7 +103,7 @@
               {{ job.attendance.name }}
             </div>
             <div class="mat-cell mat-column-creation">
-              {{ job?.creation_responsible?.name }}
+              {{ jobService.displayCreation(job) }}
             </div>
             <div class="mat-cell mat-column-date">
               {{ job.created_at | date:'dd/MM/yy' }}

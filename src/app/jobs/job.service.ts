@@ -24,6 +24,10 @@ export class JobService {
         private auth: AuthService
     ) {}
 
+    displayCreation(job: Job): string {
+      return job.creation_responsible != null ? job.creation_responsible.name : 'Externo'
+    }
+
     showId(job: Job): string {
       let size = 4
       let date = new Date(job.created_at)

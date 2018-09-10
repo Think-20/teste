@@ -129,6 +129,7 @@ import { NotificationModule } from './notification-bar/notification.module';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectFileFormComponent } from './projects/project-file-form/project-file-form.component';
 import { ProjectFileService } from './projects/project-file.service';
+import { ScheduleLineComponent } from './schedule/schedule-line/schedule-line.component';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -194,7 +195,8 @@ registerLocaleData(localePt);
     ScheduleFormComponent,
     ReloadComponent,
     ProjectsComponent,
-    ProjectFileFormComponent
+    ProjectFileFormComponent,
+    ScheduleLineComponent
   ],
   imports: [
     CurrencyMaskModule,
