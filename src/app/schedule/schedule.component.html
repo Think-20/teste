@@ -39,39 +39,6 @@
         </div>
       </mat-card-title>
     </form>
-    <mat-menu #menu="matMenu">
-      <ng-template matMenuContent let-task="task" let-chrono="chrono">
-        <div *ngIf="jobDisplay(task, chrono) != 'Continuação auto.'">
-          <a *ngIf="task.job.id == undefined" (click)="addTask(chrono.day)" mat-menu-item>
-            <mat-icon>add</mat-icon> Adicionar
-          </a>
-          <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/show', task.job.id]"
-            mat-menu-item>
-            <mat-icon>subject</mat-icon> Visualização
-          </a>
-          <a [disabled]="!permissionVerify('task.edit', task.job)" *ngIf="task.id != undefined" [routerLink]="['/schedule/edit', task.id]"
-            mat-menu-item>
-            <mat-icon>mode_edit</mat-icon> Editar tarefa
-          </a>
-          <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/edit', task.job.id]"
-            mat-menu-item>
-            <mat-icon>mode_edit</mat-icon> Editar job
-          </a>
-          <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined && (task.job.status?.id == 5 || task.job.status?.id == 1)"
-            (click)="signal(task)" mat-menu-item>
-            <span *ngIf="task.job.status?.id == 1">
-              <mat-icon>flag</mat-icon> Sinalizar
-            </span>
-            <span *ngIf="task.job.status?.id == 5">
-              <mat-icon>outlined_flag</mat-icon> Remover sinalização
-            </span>
-          </a>
-          <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined" (click)="delete(task)" mat-menu-item>
-            <mat-icon>delete</mat-icon> Remover
-          </button>
-        </div>
-      </ng-template>
-    </mat-menu>
     <mat-card class="schedule-card">
       <table class="table mat-table schedule-table">
         <div class="mat-header-row">
@@ -104,76 +71,11 @@
               </div>
             </div>
             <div class="line-jobs">
-              <div class="line-job" [class.no-border]="['Projeto', 'Orçamento'].indexOf(chrono[i].tasks[y + 1]?.job_activity?.description) >= 0 && [5,3].indexOf(chrono[i].tasks[y + 1]?.job?.status_id) >= 0  && jobDisplay(task, chrono[i]) != 'Continuação auto.'"
-                [class.signal]="task.job?.status?.id == 5 && (['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação auto.'"
-                [class.approved-budget]="task.job?.status?.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação auto.'"
-                [class.approved-creation]="task.job?.status?.id == 3 && (['Projeto'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono[i]) != 'Continuação auto.'"
-                [class.other-attendance]="task.job?.attendance_id != authService.currentUser().employee.id && task.responsible_id != authService.currentUser().employee.id && task.job.id != undefined && !permissionVerify('edit', task.job)"
-                [ngClass]="getLineClass(task, chrono[i].day, chrono[i].month)"
-                *ngFor="let task of chrono[i].tasks; let y = index"
-                [matMenuTriggerFor]="menu"
-                [matMenuTriggerData]="{task: task, chrono: chrono[i]}"
-                draggable="true">
-                <div class="mat-cell mat-column-creation">
-                  {{ task?.responsible?.name }}
-                </div>
-                <div class="mat-cell mat-column-job">
-                  {{ jobDisplay(task, chrono[i]) }}
-                </div>
-                <div class="mat-cell mat-column-type">
-                  {{ task.job.job_type?.description }}
-                </div>
-                <div class="mat-cell mat-column-client">
-                  {{ task.job.client != null ? task.job.client.fantasy_name : task.job.not_client }}
-                </div>
-                <div class="mat-cell mat-column-agency">
-                  {{ task.job.agency ? task.job.agency.fantasy_name : '' }}
-                </div>
-                <div class="mat-cell mat-column-event">
-                  {{ task.job.event }}
-                </div>
-                <div class="mat-cell mat-column-event-date">
-                  &nbsp;
-                </div>
-                <div class="mat-cell mat-column-budget">
-                  {{ (canShowBudgetValue(task, chrono[i]) ? task.job.budget_value : '') | number: '1.2' }}
-                </div>
-                <div class="mat-cell mat-column-area">
-                  &nbsp;
-                </div>
-                <div class="mat-cell mat-column-time">
-                  {{ timeDisplay(task, chrono[i]) }}
-                </div>
-                <div class="mat-cell mat-column-deadline">
-                  {{ task.job?.deadline | date:'dd/MM' }}
-                </div>
-                <div class="mat-cell mat-column-attendance">
-                  {{ task.job?.attendance?.name }}
-                </div>
-                <div class="mat-cell mat-column-stat">
-                  {{ task.job?.status?.description }}
-                </div>
-              </div>
+              <cb-schedule-line [chrono]="chrono[i]" [tasks]="tasks"
+              [today]="today" [jobStatus]="jobStatus" [month]="month"
+              (changeMonthEmitter)="changeMonthByLine($event)"
+              (scrollStatusEmitter)="changeScrollStatus($event)"></cb-schedule-line>
             </div>
-            <!--
-              <div class="mat-cell mat-column-action">
-                <mat-menu #menu="matMenu">
-                  <a [routerLink]="['/jobs/show', task.job.id]" mat-menu-item>
-                    <mat-icon>subject</mat-icon> Visualização
-                  </a>
-                  <a [routerLink]="['/jobs/edit', task.job.id]" mat-menu-item>
-                    <mat-icon>mode_edit</mat-icon> Editar
-                  </a>
-                  <button (click)="delete(job)" mat-menu-item>
-                    <mat-icon>delete</mat-icon> Remover
-                  </button>
-                </mat-menu>
-
-                <button mat-icon-button [matMenuTriggerFor]="menu">
-                  <mat-icon>menu</mat-icon>
-                </button>
-              </div>
-              -->
           </div>
         </div>
       </table>

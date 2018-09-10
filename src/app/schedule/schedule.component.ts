@@ -19,6 +19,7 @@ import { Budget } from '../budgets/budget.model';
 import { Task } from './task.model';
 import { TaskService } from './task.service';
 import { TaskItem } from './task-item.model';
+import { Chrono } from './chrono.model';
 
 import { Observable, timer, Subscription } from 'rxjs';
 import 'rxjs/add/operator/filter';
@@ -97,6 +98,14 @@ export class ScheduleComponent implements OnInit {
     private datePipe: DatePipe,
     private route: ActivatedRoute
   ) { }
+
+  changeMonthByLine(data: any) {
+    this.changeMonth(data.month, data.lastDate)
+  }
+
+  changeScrollStatus(status: boolean) {
+    this.scrollActive = status
+  }
 
   permissionVerify(module: string, job: Job): boolean {
     let access: boolean
@@ -355,86 +364,6 @@ export class ScheduleComponent implements OnInit {
     })
   }
 
-  jobDisplay(task: Task, chrono: Chrono) {
-    if(task.job.id == null) {
-      return ''
-    }
-
-    let date = new Date(task.available_date + 'T00:00:00')
-
-    if(date.getDate() != chrono.day) {
-      return 'Continuação auto.'
-    }
-
-    return this.taskService.jobDisplay(task)
-  }
-
-  timeDisplay(task: Task, chrono: Chrono) {
-    if(task.job.id == null) {
-      return ''
-    }
-
-    let index = task.items.findIndex(arrayItem => {
-      let date = new Date(arrayItem.date + "T00:00:00")
-      return chrono.day == date.getDate()
-    })
-    let taskFound = this.tasks.find(arrayTask => { return task.id == arrayTask.id })
-
-    if(taskFound == null) {
-      return
-    }
-
-    return 'D+' + (taskFound.items.length - index - 1)
-  }
-
-  getLineClass(task: Task, day: number, month: number) {
-    if(task.job.id == null) {
-      return
-    }
-
-    let originalTask = this.tasks.filter(taskF => { return taskF.id == task.id }).pop()
-    let departmentId = task.responsible.department_id
-    let ocurrences = originalTask.items.filter(item => {
-      return item.date == this.datePipe.transform(this.today, 'yyyy-MM-dd')
-    }).length
-
-    if(ocurrences == 0) {
-      return 'department-' + departmentId + '-border'
-    }
-
-    return 'department-' + departmentId + '-transparent department-' + departmentId + '-border'
-  }
-
-  canShowBudgetValue(task: Task, chrono: Chrono) {
-    let text = this.jobDisplay(task, chrono)
-    if(text == '') {
-      return false
-    }
-
-    let found = ['Modificação', 'Opção', 'Continuação', 'Continuação auto.', 'Detalhamento'].indexOf(text) >= 0
-    return found ? false : true
-  }
-
-  signal(task: Task) {
-    this.scrollActive = false
-    let job = task.job
-    let oldStatus = job.status
-    let wanted = job.status.id == 5 ? 1 : 5
-    let wantedStatus = this.jobStatus.filter(s => { return s.id == wanted }).pop()
-    job.status = wantedStatus
-
-    this.jobService.edit(job).subscribe((data) => {
-      this.scrollActive = true
-      if(data.status) {
-        this.snackBar.open('Sinalização modificada com sucesso!', '', {
-          duration: 3000
-        })
-      } else {
-        job.status = oldStatus
-      }
-    })
-  }
-
   chronologicDisplay(iniDate) {
     let i: number = 0
     let fixedDateMax: Date = new Date(iniDate)
@@ -521,38 +450,6 @@ export class ScheduleComponent implements OnInit {
     })
   }
 
-  delete(task: Task) {
-    let lastDate = new Date(task.available_date + "T00:00:00")
-    if(['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0) {
-      this.jobService.delete(task.job.id).subscribe((data) => {
-        this.snackBar.open(data.message, '', {
-          duration: 5000
-        })
-
-        if (data.status) {
-          this.changeMonth(this.month, lastDate)
-        }
-      })
-    } else {
-      this.taskService.delete(task.id).subscribe((data) => {
-        this.snackBar.open(data.message, '', {
-          duration: 5000
-        })
-
-        if (data.status) {
-          this.changeMonth(this.month, lastDate)
-        }
-      })
-    }
-  }
-
-}
-
-export class Chrono {
-  day: number
-  month: number
-  dayOfWeek: DayOfWeek
-  tasks: Task[]
 }
 
 @Component({
