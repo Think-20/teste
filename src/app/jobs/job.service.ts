@@ -24,6 +24,11 @@ export class JobService {
         private auth: AuthService
     ) {}
 
+    displayNameEvent(job: Job): string {
+      let name = job.not_client == null ? job.client.fantasy_name : job.not_client
+      return name + ' - ' + job.event
+    }
+
     displayCreation(job: Job): string {
       return job.creation_responsible != null ? job.creation_responsible.name : 'Externo'
     }

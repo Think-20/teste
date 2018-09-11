@@ -43,10 +43,6 @@ export class JobTabsComponent implements OnInit {
 
   }
 
-  showId(job: Job) {
-    return this.jobService.showId(job)
-  }
-
   setJob(job: Job) {
     this.job = job
   }
