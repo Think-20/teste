@@ -110,12 +110,17 @@ export class ProjectFileFormComponent implements OnInit {
       id: this.formBuilder.control(projectFile.id),
       original_name: this.formBuilder.control({ value: (projectFile ? projectFile.original_name : ''), disabled: (this.typeForm === 'show' ? true : false) }),
       task_id: this.formBuilder.control(projectFile.task_id),
-      image: this.formBuilder.control(image)
+      image: this.formBuilder.control(image),
+      type: this.formBuilder.control(projectFile.type)
     }))
   }
 
   getImageUrl(group: FormGroup) {
     return group.controls.image.value
+  }
+
+  getType(group: FormGroup) {
+    return group.controls.type.value
   }
 
   save() {

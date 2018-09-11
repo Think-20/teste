@@ -2,7 +2,7 @@
   <div class="row" formArrayName="files">
     <div *ngFor="let control of getFilesControls(); let i = index" class="col-md-2 project-image-container">
       <form [formGroup]="getFilesControls()[i]" novalidate autocomplete="off" class="flex item">
-        <div class="project-image" [ngStyle]="{'background-image': 'url(' + getImageUrl(getFilesControls()[i]) + ')'}"></div>
+        <div class="project-image" [class.pdf]="getType(getFilesControls()[i]) == 'pdf'" [ngStyle]="{'background-image': 'url(' + getImageUrl(getFilesControls()[i]) + ')'}"></div>
         <input type="hidden" formControlName="original_name">
         <button type="button" class="download-file" mat-button (click)="previewFile(getFilesControls()[i].value)">
           <mat-icon>file_download</mat-icon>
@@ -19,8 +19,8 @@
         <mat-icon>add</mat-icon>
       </button>
       <div class="text-right">
-        <button *ngIf="getFilesControls().length > 0" type="button" class="cb-button" (click)="downloadAll()" mat-raised-button>
-          <mat-icon>folder</mat-icon> Download completo
+        <button mat-button matTooltip="Download completo" *ngIf="getFilesControls().length > 0" class="download-all-files" type="button" (click)="downloadAll()">
+          <mat-icon>folder</mat-icon>
         </button>
         <button *ngIf="getFilesControls().length == 0" type="button" class="cb-button" (click)="inputFiles.click()" mat-raised-button>
           <mat-icon>cloud_upload</mat-icon> &nbsp; Adicionar imagens
