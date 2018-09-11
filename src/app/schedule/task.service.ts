@@ -14,12 +14,14 @@ import { AuthService } from '../login/auth.service';
 import { Pagination } from 'app/shared/pagination.model';
 import { JobActivity } from '../job-activities/job-activity.model';
 import { DataInfo } from '../shared/data-info.model';
+import { DatePipe } from '@angular/common';
 
 
 @Injectable()
 export class TaskService {
   constructor(
     private http: Http,
+    private datePipe: DatePipe,
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) {}

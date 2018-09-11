@@ -1,6 +1,7 @@
+<p *ngIf="task?.project_files?.length > 0" class="lead subtitle">{{ task?.project_files[task.project_files.length - 1]?.responsible?.name + ' | ' + (task.project_files[task.project_files.length - 1].updated_at | date: 'dd/MM/yyyy HH:mm') }}</p>
 <mat-card [formGroup]="projectFileForm">
   <div class="row" formArrayName="files">
-    <div *ngFor="let control of getFilesControls(); let i = index" class="col-md-3 project-image-container">
+    <div *ngFor="let control of getFilesControls(); let i = index" class="col-md-2 project-image-container">
       <form [formGroup]="getFilesControls()[i]" novalidate autocomplete="off" class="flex item">
         <div class="project-image" [ngStyle]="{'background-image': 'url(' + getImageUrl(getFilesControls()[i]) + ')'}"></div>
         <input type="hidden" formControlName="original_name">
