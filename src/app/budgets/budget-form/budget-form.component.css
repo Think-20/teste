@@ -10,3 +10,8 @@
   color: #AAA;
 }
 
+.total-value {
+  font-size: 20px;
+  font-weight: bold;
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+}

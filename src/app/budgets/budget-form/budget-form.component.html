@@ -7,10 +7,11 @@
     <div class="row">
       <div class="col-md-6 text-left">
         <p class="lead">Valor</p>
-        <p *ngIf="budget?.id != null" class="lead subtitle">{{ budget?.responsible?.name + ' | ' + (budget.updated_at | date: 'dd/MM/yyyy HH:mm') }}</p>
+        <p *ngIf="budget != null" class="lead subtitle">{{ budget?.responsible?.name + ' | ' + (budget.updated_at | date: 'dd/MM/yyyy HH:mm') }}</p>
       </div>
-      <div class="col-md-6 text-right">
-        <p *ngIf="total > 0" class="lead">{{ total | currency: 'BRL' }}</p>
+      <div *ngIf="total > 0" class="col-md-6 text-right">
+        <p class="lead total-value">{{ total | currency: 'BRL' }}</p>
+        <p class="lead subtitle">Valor total da proposta</p>
       </div>
     </div>
     <hr class="divisor">
