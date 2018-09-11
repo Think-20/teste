@@ -160,7 +160,7 @@ export class ScheduleLineComponent implements OnInit {
     let date = new Date(task.available_date + 'T00:00:00')
 
     if(date.getDate() != chrono.day) {
-      return 'Continuação auto.'
+      return 'Continuação de ' + this.taskService.jobDisplay(task).toLowerCase()
     }
 
     return this.taskService.jobDisplay(task)
@@ -172,7 +172,7 @@ export class ScheduleLineComponent implements OnInit {
       return false
     }
 
-    let found = ['Modificação', 'Opção', 'Continuação', 'Continuação auto.', 'Detalhamento'].indexOf(text) >= 0
+    let found = ['Modificação', 'Opção', 'Continuação', 'Continuação de', 'Detalhamento'].indexOf(text) >= 0
     return found ? false : true
   }
 

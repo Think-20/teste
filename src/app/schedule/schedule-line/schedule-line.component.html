@@ -1,6 +1,6 @@
 <mat-menu #menu="matMenu">
   <ng-template matMenuContent let-task="task" let-chrono="chrono">
-    <div *ngIf="jobDisplay(task, chrono) != 'Continuação auto.'">
+    <div *ngIf="jobDisplay(task, chrono).indexOf('Continuação de') == -1">
       <a *ngIf="task.job.id == undefined" (click)="addTask(chrono.day)" mat-menu-item>
         <mat-icon>add</mat-icon> Adicionar
       </a>
@@ -31,10 +31,10 @@
     </div>
   </ng-template>
 </mat-menu>
-<div class="line-job" [class.no-border]="['Projeto', 'Orçamento'].indexOf(chrono.tasks[y + 1]?.job_activity?.description) >= 0 && [5,3].indexOf(chrono.tasks[y + 1]?.job?.status_id) >= 0  && jobDisplay(task, chrono) != 'Continuação auto.'"
-  [class.signal]="task.job?.status?.id == 5 && (['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono) != 'Continuação auto.'"
-  [class.approved-budget]="task.job?.status?.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono) != 'Continuação auto.'"
-  [class.approved-creation]="task.job?.status?.id == 3 && (['Projeto'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono) != 'Continuação auto.'"
+<div class="line-job" [class.no-border]="['Projeto', 'Orçamento'].indexOf(chrono.tasks[y + 1]?.job_activity?.description) >= 0 && [5,3].indexOf(chrono.tasks[y + 1]?.job?.status_id) >= 0  && jobDisplay(task, chrono).indexOf('Continuação de') == -1"
+  [class.signal]="task.job?.status?.id == 5 && (['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono).indexOf('Continuação de') == -1"
+  [class.approved-budget]="task.job?.status?.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono).indexOf('Continuação de') == -1"
+  [class.approved-creation]="task.job?.status?.id == 3 && (['Projeto'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono).indexOf('Continuação de') == -1"
   [class.other-attendance]="task.job?.attendance_id != authService.currentUser().employee.id && task.responsible_id != authService.currentUser().employee.id && task.job.id != undefined && !permissionVerify('edit', task.job)"
   [ngClass]="getLineClass(task, chrono.day, chrono.month)" *ngFor="let task of chrono.tasks; let y = index" [matMenuTriggerFor]="menu"
   [matMenuTriggerData]="{task: task, chrono: chrono}" draggable="true">
