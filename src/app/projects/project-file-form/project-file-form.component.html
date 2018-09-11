@@ -1,6 +1,6 @@
 <mat-card [formGroup]="projectFileForm">
   <div class="row" formArrayName="files">
-    <div *ngFor="let control of getFilesControls(); let i = index" class="col-md-3">
+    <div *ngFor="let control of getFilesControls(); let i = index" class="col-md-3 project-image-container">
       <form [formGroup]="getFilesControls()[i]" novalidate autocomplete="off" class="flex item">
         <div class="project-image" [ngStyle]="{'background-image': 'url(' + getImageUrl(getFilesControls()[i]) + ')'}"></div>
         <input type="hidden" formControlName="original_name">
@@ -23,7 +23,7 @@
           <mat-icon>folder</mat-icon> Download completo
         </button>
         <button *ngIf="getFilesControls().length == 0" type="button" class="cb-button" (click)="inputFiles.click()" mat-raised-button>
-          <mat-icon>cloud_upload</mat-icon> Adicionar imagens
+          <mat-icon>cloud_upload</mat-icon> &nbsp; Adicionar imagens
         </button>
       </div>
     </div>

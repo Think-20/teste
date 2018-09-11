@@ -17,10 +17,6 @@
   left: 0px;
 }
 
-.add-file {
-  top: -9px;
-}
-
 .delete-file, .download-file {
 position: absolute;
 z-index: 10;
@@ -30,6 +26,7 @@ right: -0px;
 .download-file {
   right: 22px;
 }
+
 
 .project-image {
   background: url('/assets/images/sem-foto.jpg');
