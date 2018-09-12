@@ -9,6 +9,7 @@ import { JobService } from '../../jobs/job.service';
 import { JobStatus } from '../../job-status/job-status.model';
 import { MatSnackBar } from '@angular/material';
 import { Month } from '../../shared/date/months';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'cb-schedule-line',
@@ -18,6 +19,7 @@ import { Month } from '../../shared/date/months';
 export class ScheduleLineComponent implements OnInit {
 
   @Input() month: Month
+  @Input() date: Date
   @Input() jobStatus: JobStatus[] = []
   @Input() tasks: Task[]
   @Input() chrono: Chrono
@@ -27,6 +29,7 @@ export class ScheduleLineComponent implements OnInit {
 
   constructor(
     private jobService: JobService,
+    private router: Router,
     private datePipe: DatePipe,
     private snackBar: MatSnackBar,
     private authService: AuthService,
@@ -100,6 +103,26 @@ export class ScheduleLineComponent implements OnInit {
         }
       })
     }
+  }
+
+  addTask(day: number) {
+    let month = this.date.getMonth() + 1
+    let tempMonth = month.toString()
+    let tempDay = day.toString()
+
+    if (month < 10) {
+      tempMonth = '0' + month
+    }
+
+    if (day < 10) {
+      tempDay = '0' + day
+    }
+
+    this.router.navigate(['/schedule/new'], {
+      queryParams: {
+        date: this.date.getUTCFullYear() + '-' + tempMonth + '-' + tempDay
+      }
+    })
   }
 
   permissionVerify(module: string, job: Job): boolean {

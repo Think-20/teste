@@ -157,7 +157,7 @@ export class ScheduleComponent implements OnInit {
               angular.subscription.unsubscribe()
             }
 
-            info.parentSenderPos = Array.prototype.indexOf.call(this.parentNode.parentNode.parentNode.children, this.parentNode.parentNode)
+            info.parentSenderPos = Array.prototype.indexOf.call(this.parentNode.parentNode.parentNode.parentNode.children, this.parentNode.parentNode.parentNode)
             info.senderPos = Array.prototype.indexOf.call(this.parentNode.children, this)
             event.dataTransfer.setData('type', JSON.stringify(info))
           })
@@ -183,7 +183,7 @@ export class ScheduleComponent implements OnInit {
             event.preventDefault()
 
             info = JSON.parse(event.dataTransfer.getData('type'))
-            info.parentRecipientPos = Array.prototype.indexOf.call(this.parentNode.parentNode.parentNode.children, this.parentNode.parentNode)
+            info.parentRecipientPos = Array.prototype.indexOf.call(this.parentNode.parentNode.parentNode.parentNode.children, this.parentNode.parentNode.parentNode)
             info.recipientPos = Array.prototype.indexOf.call(this.parentNode.children, this)
 
             let senderParent = document.querySelectorAll('.line-jobs')[info.parentSenderPos] as HTMLElement
@@ -191,8 +191,8 @@ export class ScheduleComponent implements OnInit {
             let parentRecipientPos: number = info.parentRecipientPos
             let parentSenderPos: number = info.parentSenderPos
 
-            let task1 = angular.chrono[parentSenderPos].tasks[info.senderPos]
-            let task2 = angular.chrono[parentRecipientPos].tasks[info.recipientPos]
+            let task1 = angular.chrono[parentSenderPos].tasks[info.senderPos - 1]
+            let task2 = angular.chrono[parentRecipientPos].tasks[info.recipientPos - 1]
             let job1 = task1.job
             let job2 = task2.job
 

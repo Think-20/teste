@@ -73,7 +73,7 @@
             <div class="line-jobs">
               <cb-schedule-line [chrono]="chrono[i]" [tasks]="tasks"
               [today]="today" [jobStatus]="jobStatus" [month]="month"
-              (changeMonthEmitter)="changeMonthByLine($event)"
+              [date]="date" (changeMonthEmitter)="changeMonthByLine($event)"
               (scrollStatusEmitter)="changeScrollStatus($event)"></cb-schedule-line>
             </div>
           </div>
