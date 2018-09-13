@@ -15,11 +15,11 @@
     <div class="col-md-12">
       <input [disabled]="typeForm == 'show'" #inputFiles type="file" multiple accept="image/jpeg,application/pdf" (change)="uploadFile(inputFiles)"
         style="display:none;" />
-      <button *ngIf="getFilesControls().length > 0" type="button" class="add-file" (click)="inputFiles.click()" mat-button>
-        <mat-icon>add</mat-icon>
-      </button>
       <div class="text-right">
-        <button mat-button matTooltip="Download completo" *ngIf="getFilesControls().length > 0" class="download-all-files" type="button" (click)="downloadAll()">
+        <button *ngIf="getFilesControls().length > 0" type="button" class="aux-button" (click)="inputFiles.click()" mat-button>
+          <mat-icon>add</mat-icon>
+        </button>
+        <button mat-button matTooltip="Download completo" *ngIf="getFilesControls().length > 0" class="aux-button" type="button" (click)="downloadAll()">
           <mat-icon>folder</mat-icon>
         </button>
         <button *ngIf="getFilesControls().length == 0" type="button" class="cb-button" (click)="inputFiles.click()" mat-raised-button>

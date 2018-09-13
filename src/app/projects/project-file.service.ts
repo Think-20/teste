@@ -25,61 +25,6 @@ export class ProjectFileService {
     private auth: AuthService
   ) { }
 
-  projectFiles(params?: {}, page: number = 0): Observable<Pagination> {
-    let url = params === {} ? `projectFiles/all?page=${page}` : `projectFiles/filter?page=${page}`
-    let prefix = this.auth.hasAccess('projectFiles/all') ? '' : 'my-'
-
-    url = prefix + url
-
-    return this.http.post(`${API}/${url}`,
-      JSON.stringify(params),
-      new RequestOptions()
-    )
-      .map(response => response.json())
-      .catch((err) => {
-        this.snackBar.open(ErrorHandler.message(err), '', {
-          duration: 3000
-        })
-        return ErrorHandler.capture(err)
-      })
-  }
-
-  projectFile(projectFileId: number): Observable<ProjectFile> {
-    let url = `projectFiles/get/${projectFileId}`
-    let prefix = this.auth.hasAccess('projectFiles/get/{id}') ? '' : 'my-'
-
-    url = prefix + url
-
-    return this.http.get(`${API}/${url}`)
-      .map(response => response.json())
-      .catch((err) => {
-        this.snackBar.open(ErrorHandler.message(err), '', {
-          duration: 3000
-        })
-        return ErrorHandler.capture(err)
-      })
-  }
-
-  save(projectFile: ProjectFile): Observable<any> {
-    let url = 'project-file/save'
-    let prefix = this.auth.hasAccess('project-file/save') ? '' : 'my-'
-
-    url = prefix + url
-
-    return this.http.post(
-      `${API}/${url}`,
-      JSON.stringify(projectFile),
-      new RequestOptions()
-    )
-      .map(response => response.json())
-      .catch((err) => {
-        this.snackBar.open(ErrorHandler.message(err), '', {
-          duration: 3000
-        })
-        return ErrorHandler.capture(err)
-      })
-  }
-
   saveMultiple(projectFiles: ProjectFile[]): Observable<any> {
     let url = 'project-files/save-multiple'
 
@@ -97,28 +42,8 @@ export class ProjectFileService {
       })
   }
 
-  edit(projectFile: ProjectFile): Observable<any> {
-    let url = 'project-file/edit'
-    let prefix = this.auth.hasAccess('project-file/edit') ? '' : 'my-'
-
-    url = prefix + url
-
-    return this.http.put(
-      `${API}/${url}`,
-      JSON.stringify(projectFile),
-      new RequestOptions()
-    )
-      .map(response => response.json())
-      .catch((err) => {
-        this.snackBar.open(ErrorHandler.message(err), '', {
-          duration: 3000
-        })
-        return ErrorHandler.capture(err)
-      })
-  }
-
   delete(id: number): Observable<any> {
-    let url = `project-file/remove/${id}`
+    let url = `project-files/remove/${id}`
 
     return this.http.delete(`${API}/${url}`)
       .map(response => response.json())
