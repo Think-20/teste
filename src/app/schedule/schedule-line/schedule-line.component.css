@@ -1,3 +1,7 @@
+.hidden {
+  display: none !important;
+}
+
 .container-schedule {
   height: calc(100% - 22px);
 }
@@ -83,13 +87,6 @@
   visibility: hidden;
   height: 0;
   font-size: 14px;
-}
-
-.add-chrono {
-  padding: 0;
-  border: none !important;
-  margin-top: 15px;
-  font-size: 10px;
 }
 
 .signal {

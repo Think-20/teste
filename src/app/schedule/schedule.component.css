@@ -1,3 +1,7 @@
+.hidden {
+  display: none !important;
+}
+
 .container-schedule {
   height: calc(100% - 22px);
 }
@@ -88,7 +92,7 @@
 .add-chrono {
   padding: 0;
   border: none !important;
-  margin-top: 15px;
+  margin-top: 5px;
   font-size: 10px;
 }
 
@@ -194,6 +198,10 @@
 }
 
 .mat-header-row, #searchForm .header-form {
+  width: calc(100% - 8px);
+}
+
+#searchForm .filter-grid {
   width: calc(100% - 8px);
 }
 

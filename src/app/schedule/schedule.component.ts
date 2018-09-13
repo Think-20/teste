@@ -27,6 +27,10 @@ import { JobStatusService } from '../job-status/job-status.service';
 import { JobStatus } from '../job-status/job-status.model';
 import { DataInfo } from '../shared/data-info.model';
 import { DatePipe } from '@angular/common';
+import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChanged';
+import { debounceTime } from 'rxjs/internal/operators/debounceTime';
+import { Client } from 'app/clients/client.model';
+import { ClientService } from 'app/clients/client.service';
 
 @Component({
   selector: 'cb-schedule',
@@ -58,12 +62,16 @@ export class ScheduleComponent implements OnInit {
   tasks: Task[] = []
   jobs: Job[] = []
   attendances: Employee[]
+  creations: Employee[]
+  clients: Client[] = []
+  params: any = {}
   searching = false
   filter = false
   scrollActive: boolean = true
   chrono: Chrono[] = []
   month: Month
   months: Month[] = MONTHS
+  paramsHasFilter: boolean = false
   year: number
   date: Date
   jobStatus: JobStatus[]
@@ -74,6 +82,7 @@ export class ScheduleComponent implements OnInit {
   subscription: Subscription
   subscriptions: Subscription[] = []
   lastUpdateMessage: string
+  paramAttendance: Employee = null
   counter: number = 0
 
   jobDrag: Job
@@ -83,6 +92,7 @@ export class ScheduleComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
+    private clientService: ClientService,
     private employeeService: EmployeeService,
     private taskService: TaskService,
     private jobService: JobService,
@@ -232,13 +242,75 @@ export class ScheduleComponent implements OnInit {
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
       search: this.search,
-      attendance: this.fb.control('')
+      attendance: this.fb.control({value: '', disabled: this.permissionVerify('new', new Job)}),
+      creation: this.fb.control(''),
+      job_type: this.fb.control(''),
+      client: this.fb.control(''),
+      status: this.fb.control('')
     })
+
+    this.loadFilterData()
+    this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
+    ? this.authService.currentUser().employee : null
+
+    this.searchForm.controls.client.valueChanges
+    .pipe(distinctUntilChanged(), debounceTime(500))
+    .subscribe(clientName => {
+      this.clientService.clients({ search: clientName, attendance: this.paramAttendance }).subscribe((dataInfo) => {
+        this.clients = dataInfo.pagination.data
+      })
+    })
+
+    let snackbar
+
+    this.searchForm.valueChanges
+      .do(() => {
+        snackbar = this.snackBar.open('Carregando jobs...')
+      })
+      .pipe(distinctUntilChanged())
+      .subscribe(() => {
+        let controls = this.searchForm.controls
+        let status = controls.status.value != undefined ? controls.status.value.id : null
+
+        this.params = {
+          clientName: controls.client.value,
+          status: status,
+          attendance: controls.attendance.value,
+          creation: controls.creation.value,
+          job_type: controls.job_type.value
+        }
+        this.checkParamsHasFilter()
+        this.changeMonth(this.month, this.date)
+      })
 
     this.today = new Date()
     this.activeDate()
     this.createTimerUpdater()
     this.loadJobStatus()
+  }
+
+  checkParamsHasFilter() {
+    this.paramsHasFilter = false
+    Object.keys(this.params).forEach((key) => {
+      if(this.params[key] != undefined
+        && this.params[key] != null
+        && this.params[key] != '')
+        this.paramsHasFilter = true
+    })
+  }
+
+  loadFilterData() {
+    this.jobStatusService.jobStatus().subscribe(status => this.jobStatus = status)
+
+    this.employeeService.canInsertClients().subscribe((attendances) => {
+      this.attendances = attendances
+    })
+
+    this.employeeService.employees().subscribe(employees => {
+      this.creations = employees.filter(employee => {
+        return employee.department.description === 'Criação'
+      })
+    })
   }
 
   activeDate() {
@@ -352,7 +424,8 @@ export class ScheduleComponent implements OnInit {
     this.taskService.tasks({
       iniDate: iniDate,
       finDate: finDate,
-      paginate: false
+      paginate: false,
+      ...this.params
     }).subscribe(dataInfo => {
       this.pagination = dataInfo.pagination
       this.searching = false
@@ -383,6 +456,7 @@ export class ScheduleComponent implements OnInit {
         ).length  > 0
       })
 
+      let count = filteredTasks.length
       let length = (date.getDay() == 6 || date.getDay() == 0) ? 3 : filteredTasks.length
 
       for(let index = 0; index < (5 - length); index++) {
@@ -399,7 +473,8 @@ export class ScheduleComponent implements OnInit {
         day: date.getDate(),
         month: (date.getMonth() + 1),
         dayOfWeek: DAYSOFWEEK.find(dayOfWeek => dayOfWeek.id == date.getDay()),
-        tasks: filteredTasks
+        tasks: filteredTasks,
+        length: count
       }
 
       i++
@@ -448,6 +523,14 @@ export class ScheduleComponent implements OnInit {
         date: this.date.getUTCFullYear() + '-' + tempMonth + '-' + tempDay
       }
     })
+  }
+
+  compareAttendance(var1: Employee, var2: Employee) {
+    return var1.id === var2.id
+  }
+
+  compareStatus(var1: JobStatus, var2: JobStatus) {
+    return var1.id === var2.id
   }
 
 }

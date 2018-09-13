@@ -31,7 +31,9 @@
     </div>
   </ng-template>
 </mat-menu>
-<div class="line-job" [class.no-border]="['Projeto', 'Orçamento'].indexOf(chrono.tasks[y + 1]?.job_activity?.description) >= 0 && [5,3].indexOf(chrono.tasks[y + 1]?.job?.status_id) >= 0  && jobDisplay(task, chrono).indexOf('Continuação de') == -1"
+<div class="line-job"
+  [class.no-border]="['Projeto', 'Orçamento'].indexOf(chrono.tasks[y + 1]?.job_activity?.description) >= 0 && [5,3].indexOf(chrono.tasks[y + 1]?.job?.status_id) >= 0  && jobDisplay(task, chrono).indexOf('Continuação de') == -1"
+  [class.hidden]="paramsHasFilter && task.job.id == null"
   [class.signal]="task.job?.status?.id == 5 && (['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono).indexOf('Continuação de') == -1"
   [class.approved-budget]="task.job?.status?.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono).indexOf('Continuação de') == -1"
   [class.approved-creation]="task.job?.status?.id == 3 && (['Projeto'].indexOf(task.job_activity.description) >= 0) && jobDisplay(task, chrono).indexOf('Continuação de') == -1"

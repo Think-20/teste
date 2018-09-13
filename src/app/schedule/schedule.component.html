@@ -38,6 +38,44 @@
           </div>
         </div>
       </mat-card-title>
+      <mat-card *ngIf="filter" class="filter-grid">
+        <div class="row">
+          <div class="col-md-12">
+            <mat-form-field class="col-md-3">
+              <input matInput formControlName="client" [matAutocomplete]="autocompleteclient" placeholder="Cliente">
+            </mat-form-field>
+            <mat-autocomplete #autocompleteclient="matAutocomplete">
+                <mat-option *ngFor="let client of clients" [value]="client.fantasy_name">
+                {{ client.fantasy_name }}
+              </mat-option>
+            </mat-autocomplete>
+            <mat-form-field class="col-md-3">
+              <mat-select placeholder="Atendimento" formControlName="attendance" [compareWith]="compareAttendance">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let attendance of attendances" [value]="attendance">
+                  {{ attendance.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+              <mat-select placeholder="Projetista" formControlName="creation" [compareWith]="compareAttendance">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let creation of creations" [value]="creation">
+                  {{ creation.name }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+              <mat-select placeholder="Status" formControlName="status" [compareWith]="compareStatus">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let s of jobStatus" [value]="s">
+                  {{ s.description }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-card>
     </form>
     <mat-card class="schedule-card">
       <table class="table mat-table schedule-table">
@@ -61,7 +99,7 @@
             -->
         </div>
         <div class="mat-row-scroll">
-          <div #list class="mat-row line-chrono" *ngFor="let chr of chrono; let i = index" [@rowAppeared]="rowAppearedState">
+          <div #list class="mat-row line-chrono" *ngFor="let chr of chrono; let i = index" [class.hidden]="paramsHasFilter && chr.length == 0" [@rowAppeared]="rowAppearedState">
             <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }} month-{{ chr.month }}">
               <div>
                 <span>{{ chr.day }}-{{ chr.dayOfWeek?.abbrev }}</span>
@@ -73,6 +111,7 @@
             <div class="line-jobs">
               <cb-schedule-line [chrono]="chrono[i]" [tasks]="tasks"
               [today]="today" [jobStatus]="jobStatus" [month]="month"
+              [paramsHasFilter]="paramsHasFilter"
               [date]="date" (changeMonthEmitter)="changeMonthByLine($event)"
               (scrollStatusEmitter)="changeScrollStatus($event)"></cb-schedule-line>
             </div>

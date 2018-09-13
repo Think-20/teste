@@ -6,4 +6,5 @@ export class Chrono {
   month: number
   dayOfWeek: DayOfWeek
   tasks: Task[]
+  length?: number
 }

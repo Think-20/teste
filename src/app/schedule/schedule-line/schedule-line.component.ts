@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 export class ScheduleLineComponent implements OnInit {
 
   @Input() month: Month
+  @Input() paramsHasFilter: boolean = false
   @Input() date: Date
   @Input() jobStatus: JobStatus[] = []
   @Input() tasks: Task[]
