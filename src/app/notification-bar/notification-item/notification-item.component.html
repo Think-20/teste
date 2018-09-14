@@ -1,7 +1,7 @@
 <mat-card
   [class.new]="printNew && userNotification.read == 0"
   class="notification-item-content">
-  <button class="button-fixed" mat-button>
+  <button class="button-fixed" mat-button (click)="goTo(userNotification?.notification)">
     <mat-icon>add</mat-icon>
   </button>
   <mat-card-header>

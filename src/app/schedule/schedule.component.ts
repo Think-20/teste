@@ -317,13 +317,13 @@ export class ScheduleComponent implements OnInit {
     this.date = new Date()
 
     this.route.queryParams.subscribe(params => {
-      if(params.date != undefined)
+      if(params.date != undefined) {
         this.date = new Date(params.date + "T00:00:00")
+        this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
+        this.year = this.date.getFullYear()
+        this.changeMonth(this.month, this.date)
+      }
     })
-
-    this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
-    this.year = this.date.getFullYear()
-    this.changeMonth(this.month, this.date)
   }
 
   loadJobStatus() {
