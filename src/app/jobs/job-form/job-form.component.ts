@@ -291,13 +291,15 @@ export class JobFormComponent implements OnInit {
   }
 
   loadJob() {
-    let snackBarStateCharging = this.snackBar.open('Carregando job...')
-    let jobId = parseInt(this.route.snapshot.url[1].path)
-    let promise = this.jobService.job(jobId).subscribe(job => {
-      this.job = job
-      this.jobEmitter.emit(job)
-      this.loadJobInForm(job)
-      snackBarStateCharging.dismiss()
+    let snackBar
+    let clientId = this.route.params.subscribe(param => {
+      snackBar = this.snackBar.open('Carregando job...')
+      this.jobService.job(this.route.snapshot.params['id']).subscribe(job => {
+        this.job = job
+        this.jobEmitter.emit(job)
+        this.loadJobInForm(job)
+        snackBar.dismiss()
+      })
     })
   }
 

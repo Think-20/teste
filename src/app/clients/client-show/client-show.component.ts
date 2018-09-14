@@ -21,15 +21,15 @@ export class ClientShowComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    let snackBar 
-    let clientId = this.route.snapshot.params['id']
-    snackBar = this.snackBar.open('Carregando cliente...')
-
-    this.clientService.client(clientId)
-    .subscribe(client => {
-      this.client = client
-      snackBar.dismiss()
-    })        
+    let snackBar
+    let clientId = this.route.params.subscribe(param => {
+      snackBar = this.snackBar.open('Carregando cliente...')
+      this.clientService.client(this.route.snapshot.params['id'])
+      .subscribe(client => {
+        this.client = client
+        snackBar.dismiss()
+      })
+    })
   }
 
 }
