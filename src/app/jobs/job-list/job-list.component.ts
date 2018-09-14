@@ -84,7 +84,6 @@ export class JobListComponent implements OnInit {
     ? this.authService.currentUser().employee : null
 
     this.searching = true
-    let snackBar = this.snackBar.open('Carregando jobs...')
 
     this.searchForm.controls.client.valueChanges
     .pipe(distinctUntilChanged(), debounceTime(500))
@@ -94,6 +93,7 @@ export class JobListComponent implements OnInit {
       })
     })
 
+    let snackBar = this.snackBar.open('Carregando jobs...')
     this.jobService.jobs().subscribe(pagination => {
       this.pagination = pagination
       this.searching = false
@@ -102,18 +102,16 @@ export class JobListComponent implements OnInit {
     })
 
     let snackbar
-
     this.searchForm.valueChanges
-      .do(() => {
-        snackbar = this.snackBar.open('Carregando jobs...')
-      })
+      .do(() => snackbar = this.snackBar.open('Carregando jobs...') )
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe(() => {
         let controls = this.searchForm.controls
         let status = controls.status.value != undefined ? controls.status.value.id : null
+        let clientName = controls.client.value != '' ? controls.client.value : controls.search.value
 
         this.jobService.jobs({
-          clientName: controls.client.value,
+          clientName: clientName,
           status: status,
           attendance: controls.attendance.value,
           creation: controls.creation.value,
