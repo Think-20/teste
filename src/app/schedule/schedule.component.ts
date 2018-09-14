@@ -242,7 +242,7 @@ export class ScheduleComponent implements OnInit {
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
       search: this.search,
-      attendance: this.fb.control({value: '', disabled: this.permissionVerify('new', new Job)}),
+      attendance: this.fb.control(''),
       creation: this.fb.control(''),
       job_type: this.fb.control(''),
       client: this.fb.control(''),
