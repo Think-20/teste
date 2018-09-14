@@ -267,7 +267,7 @@ export class ScheduleComponent implements OnInit {
       .do(() => {
         snackbar = this.snackBar.open('Carregando jobs...')
       })
-      .pipe(distinctUntilChanged())
+      .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe(() => {
         let controls = this.searchForm.controls
         let status = controls.status.value != undefined ? controls.status.value.id : null

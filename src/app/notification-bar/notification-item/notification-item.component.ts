@@ -29,12 +29,6 @@ export class NotificationItemComponent implements OnInit {
 
   goTo(notification: Notification) {
     let url
-    /*
-      Cadastro de tarefa
-      Alteração de tarefa
-      Deleção de tarefa
-      Movimentação de tarefa
-    */
     switch(notification.type.description) {
       case 'Cadastro de cliente': {
         url = '/clients/show/' + notification.info
