@@ -249,7 +249,6 @@ export class ScheduleComponent implements OnInit {
       status: this.fb.control('')
     })
 
-    this.loadFilterData()
     this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
     ? this.authService.currentUser().employee : null
 
@@ -287,6 +286,7 @@ export class ScheduleComponent implements OnInit {
     this.activeDate()
     this.createTimerUpdater()
     this.loadJobStatus()
+    this.loadFilterData()
   }
 
   checkParamsHasFilter() {
@@ -319,6 +319,11 @@ export class ScheduleComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       if(params.date != undefined) {
         this.date = new Date(params.date + "T00:00:00")
+        this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
+        this.year = this.date.getFullYear()
+        this.changeMonth(this.month, this.date)
+      } else {
+        this.date = new Date(this.datePipe.transform(this.today, 'yyyy-MM-dd') + "T00:00:00")
         this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
         this.year = this.date.getFullYear()
         this.changeMonth(this.month, this.date)
