@@ -13,6 +13,7 @@ import {
 } from '@angular/material';
 import { MatBadgeModule, MatBadge } from '@angular/material/badge';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NgxImageGalleryModule } from 'ngx-image-gallery';
 
 import { ROUTES } from './app.routes';
 
@@ -131,6 +132,7 @@ import { ProjectFileFormComponent } from './projects/project-file-form/project-f
 import { ProjectFileService } from './projects/project-file.service';
 import { ScheduleLineComponent } from './schedule/schedule-line/schedule-line.component';
 import { HttpClientModule } from '@angular/common/http';
+import { ImageViewerComponent } from './shared/image-viewer/image-viewer.component';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -197,7 +199,8 @@ registerLocaleData(localePt);
     ReloadComponent,
     ProjectsComponent,
     ProjectFileFormComponent,
-    ScheduleLineComponent
+    ScheduleLineComponent,
+    ImageViewerComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -209,6 +212,7 @@ registerLocaleData(localePt);
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    NgxImageGalleryModule,
     RouterModule.forRoot(ROUTES),
 
     MatTableModule,
@@ -285,7 +289,8 @@ registerLocaleData(localePt);
   bootstrap: [AppComponent],
   entryComponents: [
     StandItemFormComponent,
-    ReloadComponent
+    ReloadComponent,
+    ImageViewerComponent
   ]
 })
 export class AppModule { }

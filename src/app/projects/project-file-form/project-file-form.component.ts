@@ -1,12 +1,14 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { UploadFileService } from '../../shared/upload-file.service';
 import { ProjectFile } from '../project-file.model';
 import { ProjectFileService } from '../project-file.service';
 import { forEach } from '@angular/router/src/utils/collection';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
 import { Task } from '../../schedule/task.model';
 import { API } from '../../app.api';
+import { ImageViewerComponent } from '../../shared/image-viewer/image-viewer.component';
+import { GALLERY_IMAGE } from 'ngx-image-gallery';
 
 @Component({
   selector: 'cb-project-file-form',
@@ -14,8 +16,11 @@ import { API } from '../../app.api';
   styleUrls: ['./project-file-form.component.css']
 })
 export class ProjectFileFormComponent implements OnInit {
+  showingImages: boolean = false
+  @ViewChild(ImageViewerComponent) imageViewer: ImageViewerComponent;
   @Input() typeForm: string
   @Input() task: Task
+  images: GALLERY_IMAGE[] = []
   projectFileForm: FormGroup
   progress: number
 
@@ -23,6 +28,7 @@ export class ProjectFileFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private projectFileService: ProjectFileService,
     private snackbar: MatSnackBar,
+    private dialog: MatDialog,
     private uploadFileService: UploadFileService
   ) { }
 
@@ -86,6 +92,10 @@ export class ProjectFileFormComponent implements OnInit {
     }).subscribe((data) => {})
   }
 
+  openModal(i) {
+    this.imageViewer.openGallery(i)
+  }
+
   previewFile(projectFile: ProjectFile) {
     this.projectFileService.previewFile(projectFile)
   }
@@ -119,6 +129,13 @@ export class ProjectFileFormComponent implements OnInit {
       image: this.formBuilder.control(image),
       type: this.formBuilder.control(projectFile.type)
     }))
+
+    this.images.push({
+      altText: '',
+      extUrl: image,
+      title: projectFile.original_name,
+      url: image
+    })
   }
 
   getImageUrl(group: FormGroup) {
@@ -137,6 +154,7 @@ export class ProjectFileFormComponent implements OnInit {
     let snackbar = this.snackbar.open('Aguarde, estamos removendo...')
     const files = <FormArray>this.projectFileForm.controls.files
     let projectFile = <ProjectFile> files.at(i).value
+    this.images.splice(i, 1)
 
     this.projectFileService.delete(projectFile.id).subscribe((data) => {
       snackbar.dismiss()
