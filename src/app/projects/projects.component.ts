@@ -12,6 +12,7 @@ export class ProjectsComponent implements OnInit {
 
   @Input() job: Job
   sortedTasks: Task[]
+  expandedIndex: number = null
 
   constructor(
     private taskService: TaskService
@@ -23,6 +24,11 @@ export class ProjectsComponent implements OnInit {
     })
     this.sortedTasks = this.sortedTasks.sort((a, b) => {
       return a.available_date < b.available_date ? 1 : -1
+    })
+    this.sortedTasks.forEach((task, index) => {
+      if(task.project_files.length > 0 && this.expandedIndex == null) {
+        this.expandedIndex = index
+      }
     })
   }
 
