@@ -1,4 +1,5 @@
 <mat-card [formGroup]="projectFileForm">
+  <mat-progress-bar *ngIf="progress > 0" mode="determinate" value="{{progress}}"></mat-progress-bar>
   <div class="row" formArrayName="files">
     <div *ngFor="let control of getFilesControls(); let i = index" class="col-md-2 project-image-container">
       <form [formGroup]="getFilesControls()[i]" novalidate autocomplete="off" class="flex item">

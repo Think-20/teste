@@ -130,6 +130,7 @@ import { ProjectsComponent } from './projects/projects.component';
 import { ProjectFileFormComponent } from './projects/project-file-form/project-file-form.component';
 import { ProjectFileService } from './projects/project-file.service';
 import { ScheduleLineComponent } from './schedule/schedule-line/schedule-line.component';
+import { HttpClientModule } from '@angular/common/http';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -205,6 +206,7 @@ registerLocaleData(localePt);
     HeaderModule,
     LoginModule,
     HttpModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     RouterModule.forRoot(ROUTES),
@@ -230,6 +232,7 @@ registerLocaleData(localePt);
     MatBadgeModule,
     NotificationModule,
     MatExpansionModule,
+    MatProgressBarModule,
   ],
   providers: [
     ClientService,

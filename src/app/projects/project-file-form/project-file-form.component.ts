@@ -17,6 +17,7 @@ export class ProjectFileFormComponent implements OnInit {
   @Input() typeForm: string
   @Input() task: Task
   projectFileForm: FormGroup
+  progress: number
 
   constructor(
     private formBuilder: FormBuilder,
@@ -55,7 +56,9 @@ export class ProjectFileFormComponent implements OnInit {
     let snackbar = this.snackbar.open('Aguarde enquanto carregamos os arquivos...')
     let filenames: string[] = []
 
-    this.uploadFileService.uploadFile(inputFile).subscribe((data) => {
+    this.uploadFileService.uploadFile(inputFile, (percentDone) => {
+      this.progress = percentDone
+    }, (response) => {
       let projectFiles: ProjectFile[] = []
 
       for(let i = 0; i < inputFile.files.length; i++) {
@@ -65,6 +68,9 @@ export class ProjectFileFormComponent implements OnInit {
         projectFiles.push(projectFile)
       }
 
+      snackbar.dismiss()
+
+      snackbar = this.snackbar.open('Salvando arquivos e carregando para visualização...')
       this.projectFileService.saveMultiple(projectFiles).subscribe((data) => {
         snackbar.dismiss()
         if(data.status == false) {
@@ -77,7 +83,7 @@ export class ProjectFileFormComponent implements OnInit {
           this.addFile(projectFile)
         })
       })
-    })
+    }).subscribe((data) => {})
   }
 
   previewFile(projectFile: ProjectFile) {
