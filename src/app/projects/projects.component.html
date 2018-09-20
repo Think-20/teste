@@ -10,7 +10,7 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <cb-project-file-form class="projects" [task]="task"></cb-project-file-form>
-    <cb-budget-form *ngIf="task?.project_files?.length > 0" class="projects" [task]="task"></cb-budget-form>
+    <cb-budget-form *ngIf="task?.project_files?.length > 0" class="projects" [task]="task" [job]="job"></cb-budget-form>
   </mat-expansion-panel>
 </mat-accordion>
 

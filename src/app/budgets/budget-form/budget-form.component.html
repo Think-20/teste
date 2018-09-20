@@ -1,5 +1,5 @@
 <hr class="divisor">
-<form *ngIf="isAdmin" [formGroup]="budgetForm" novalidate autocomplete="off">
+<form *ngIf="isAdmin || isAttendance" [formGroup]="budgetForm" novalidate autocomplete="off">
   <input type="hidden" formControlName="id">
   <input type="hidden" formControlName="task_id">
   <input type="hidden" formControlName="tax_aliquot">
@@ -23,16 +23,13 @@
         <input currencyMask formControlName="bv_value" matInput placeholder="Valor BV*">
       </mat-form-field>
       <mat-form-field class="col-md-3">
-        <input currencyMask formControlName="optional_value" matInput placeholder="Opcionais">
-      </mat-form-field>
-      <mat-form-field class="col-md-3">
         <input currencyMask formControlName="equipments_value" matInput placeholder="Equipamentos*">
       </mat-form-field>
       <mat-form-field class="col-md-3">
         <input currencyMask formControlName="logistics_value" matInput placeholder="Logística*">
       </mat-form-field>
       <mat-form-field class="col-md-3">
-        <input currencyMask formControlName="sales_commission_value" matInput placeholder="Comissão de vendas">
+        <input currencyMask formControlName="optional_value" matInput placeholder="Opcionais">
       </mat-form-field>
       <mat-form-field class="col-md-3">
         <input currencyMask formControlName="tax_value" matInput placeholder="Impostos">
@@ -40,12 +37,23 @@
       <mat-form-field class="col-md-3">
         <input currencyMask formControlName="others_value" matInput placeholder="Outros">
       </mat-form-field>
+      <mat-form-field *ngIf="isAttendance" class="col-md-3">
+        <input currencyMask formControlName="discount_value" matInput placeholder="Descontos">
+      </mat-form-field>
+      <!--
       <mat-form-field class="col-md-3">
-        <input currencyMask [options]="{prefix: ''}" class="text-right" formControlName="discount_aliquot" matInput placeholder="Desconto">
+        <input currencyMask formControlName="sales_commission_value" matInput placeholder="Comissão de vendas">
+      </mat-form-field>
+      -->
+      <mat-form-field *ngIf="!isAttendance" class="col-md-1">
+        <input currencyMask [options]="{prefix: ''}" class="text-right" formControlName="markup_aliquot" matInput placeholder="Fator">
         <span matSuffix>%</span>
       </mat-form-field>
+      <mat-form-field *ngIf="!isAttendance" class="col-md-2">
+        <input currencyMask class="text-right" formControlName="markup_value" matInput placeholder="Markup">
+      </mat-form-field>
     </div>
-    <mat-card-actions class="col-md-12 text-right">
+    <mat-card-actions *ngIf="isAdmin" class="col-md-12 text-right">
       <button class="cb-button" *ngIf="typeForm === 'new' || budget == null" color="primary" (click)="save()" mat-raised-button>
         SALVAR
       </button>
