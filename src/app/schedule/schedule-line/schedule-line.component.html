@@ -1,4 +1,3 @@
-
 <mat-menu #menu="matMenu">
   <ng-template matMenuContent let-task="task" let-chrono="chrono">
     <div *ngIf="jobDisplay(task, chrono).indexOf('Continuação de') == -1">
@@ -33,8 +32,10 @@
   </ng-template>
 </mat-menu>
 
+<mat-menu #menu2="matMenu"></mat-menu>
+
 <div class="line-job"
-[matMenuTriggerFor]="menu"
+[matMenuTriggerFor]="jobDisplay(task, chrono).indexOf('Continuação de') > -1 ? menu2 : menu"
 [matMenuTriggerData]="{task: task, chrono: chrono}"
 [ngClass]="getLineClass(chrono, task, chrono.day, chrono.month)"
 *ngFor="let task of chrono.tasks; let y = index"
