@@ -10,6 +10,7 @@ import { JobStatus } from '../../job-status/job-status.model';
 import { MatSnackBar } from '@angular/material';
 import { Month } from '../../shared/date/months';
 import { Router } from '@angular/router';
+import { isObject } from 'util';
 
 @Component({
   selector: 'cb-schedule-line',
@@ -158,9 +159,43 @@ export class ScheduleLineComponent implements OnInit {
     return access
   }
 
-  getLineClass(task: Task, day: number, month: number) {
+  getLineClass(chrono: Chrono, task: Task, day: number, month: number, nextIndex: number) {
+    let className = ''
+
     if(task.job.id == null) {
-      return
+      return className
+    }
+
+    if(isObject(task.job_activity)
+      && ['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0
+      && this.jobDisplay(task, chrono).indexOf('Continuação de') == -1) {
+        if(task.job.attendance_id != this.authService.currentUser().employee.id
+          && task.responsible_id != this.authService.currentUser().employee.id
+          && task.job.id != undefined && !this.permissionVerify('edit', task.job))
+          className += ' other-attendance'
+
+        if(task.job.status.id == 3 && (['Projeto'].indexOf(task.job_activity.description) >= 0))
+          className += ' approved-creation'
+
+        if(task.job.status.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0))
+          className += ' approved-budget'
+
+        if(task.job.status.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0))
+          className += ' approved-budget'
+
+        if(task.job.status.id == 5)
+          className += ' signal'
+
+        if(this.paramsHasFilter && task.job.id == null)
+          className += ' hidden'
+    }
+
+    if(isObject(chrono.tasks[nextIndex + 1])
+    &&['Projeto', 'Orçamento'].indexOf(chrono.tasks[nextIndex + 1].job_activity.description) >= 0
+      && [5,3].indexOf(chrono.tasks[nextIndex + 1].job.status_id) >= 0
+      && this.jobDisplay(task, chrono).indexOf('Continuação de') == -1)
+    {
+      className += ' no-border'
     }
 
     let originalTask = this.tasks.filter(taskF => { return taskF.id == task.id }).pop()
@@ -170,10 +205,12 @@ export class ScheduleLineComponent implements OnInit {
     }).length
 
     if(ocurrences == 0) {
-      return 'department-' + departmentId + '-border'
+      className += ' department-' + departmentId + '-border'
+      return className
     }
 
-    return 'department-' + departmentId + '-transparent department-' + departmentId + '-border'
+    className += ' department-' + departmentId + '-transparent department-' + departmentId + '-border'
+    return className
   }
 
   jobDisplay(task: Task, chrono: Chrono) {
