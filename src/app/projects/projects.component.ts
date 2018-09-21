@@ -19,6 +19,14 @@ export class ProjectsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.sortTasks()
+  }
+
+  ngOnChanges() {
+    this.sortTasks()
+  }
+
+  sortTasks() {
     this.sortedTasks = this.job.tasks.filter((task) => {
       return ['Continuação', 'Detalhamento'].indexOf(task.job_activity.description) == -1
     })
@@ -31,5 +39,7 @@ export class ProjectsComponent implements OnInit {
       }
     })
   }
+
+
 
 }
