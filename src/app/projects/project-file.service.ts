@@ -56,7 +56,7 @@ export class ProjectFileService {
   }
 
   download(projectFile: ProjectFile) {
-    let url = `project-files/download/${projectFile.id}`
+    let url = this.downloadUrl(projectFile)
 
     return this.http.get(`${API}/${url}`, { responseType: ResponseContentType.Blob }).map(
       (res) => {
@@ -70,10 +70,18 @@ export class ProjectFileService {
       })
   }
 
+  downloadUrl(projectFile: ProjectFile) {
+    return `project-files/download/${projectFile.id}`
+  }
+
   previewFile(projectFile: ProjectFile) {
-    let url = `project-files/download/${projectFile.id}?access_token=${this.auth.token()}&user_id=${this.auth.currentUser().id}`
+    let url = this.previewFileUrl(projectFile)
 
     window.open(`${API}/${url}`, '_blank')
+  }
+
+  previewFileUrl(projectFile: ProjectFile) {
+    return `project-files/download/${projectFile.id}?access_token=${this.auth.token()}&user_id=${this.auth.currentUser().id}`
   }
 
   downloadAll(task: Task) {

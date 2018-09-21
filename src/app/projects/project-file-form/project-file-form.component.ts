@@ -132,7 +132,7 @@ export class ProjectFileFormComponent implements OnInit {
 
     this.images.push({
       altText: '',
-      extUrl: image,
+      extUrl: `${API}/${this.projectFileService.previewFileUrl(projectFile)}`,
       title: projectFile.original_name,
       url: image
     })
