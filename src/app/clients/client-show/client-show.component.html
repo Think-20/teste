@@ -67,5 +67,10 @@
   <mat-card-title>
     <p class="lead">Projetos relacionados</p>
   </mat-card-title>
-  <mat-card></mat-card>
+  <mat-card>
+    <dl *ngFor="let job of client.jobs; let i = index">
+      <dt>{{i + 1}}</dt>
+      <dd><a href="/jobs/show/{{job.id}}">{{job.event}}</a></dd>
+    </dl>
+  </mat-card>
 </div>
