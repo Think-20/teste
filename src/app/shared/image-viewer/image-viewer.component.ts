@@ -26,7 +26,7 @@ export class ImageViewerComponent implements OnInit {
   conf: GALLERY_CONF = {
     imageOffset: '0px',
     showDeleteControl: false,
-    showImageTitle: false,
+    showImageTitle: true
   };
 
   // gallery images
