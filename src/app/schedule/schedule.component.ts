@@ -31,6 +31,10 @@ import { distinctUntilChanged } from 'rxjs/internal/operators/distinctUntilChang
 import { debounceTime } from 'rxjs/internal/operators/debounceTime';
 import { Client } from 'app/clients/client.model';
 import { ClientService } from 'app/clients/client.service';
+import { JobActivityService } from '../job-activities/job-activity.service';
+import { JobTypeService } from '../job-types/job-type.service';
+import { JobActivity } from '../job-activities/job-activity.model';
+import { JobType } from '../job-types/job-type.model';
 
 @Component({
   selector: 'cb-schedule',
@@ -64,6 +68,8 @@ export class ScheduleComponent implements OnInit {
   attendances: Employee[]
   creations: Employee[]
   clients: Client[] = []
+  jobActivities: JobActivity[] = []
+  jobTypes: JobType[] = []
   params: any = {}
   searching = false
   filter = false
@@ -96,6 +102,8 @@ export class ScheduleComponent implements OnInit {
     private employeeService: EmployeeService,
     private taskService: TaskService,
     private jobService: JobService,
+    private jobActivityService: JobActivityService,
+    private jobTypeService: JobTypeService,
     private jobStatusService: JobStatusService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
@@ -245,6 +253,7 @@ export class ScheduleComponent implements OnInit {
       attendance: this.fb.control(''),
       creation: this.fb.control(''),
       job_type: this.fb.control(''),
+      job_activity: this.fb.control(''),
       client: this.fb.control(''),
       status: this.fb.control('')
     })
@@ -270,9 +279,10 @@ export class ScheduleComponent implements OnInit {
       .subscribe(() => {
         let controls = this.searchForm.controls
         let status = controls.status.value != undefined ? controls.status.value.id : null
+        let clientName = controls.client.value != '' ? controls.client.value : controls.search.value
 
         this.params = {
-          clientName: controls.client.value,
+          clientName: clientName,
           status: status,
           attendance: controls.attendance.value,
           creation: controls.creation.value,
@@ -300,6 +310,10 @@ export class ScheduleComponent implements OnInit {
   }
 
   loadFilterData() {
+    this.jobActivityService.jobActivities().subscribe(activities => this.jobActivities = activities)
+
+    this.jobTypeService.jobTypes().subscribe(jobTypes => this.jobTypes = jobTypes)
+
     this.jobStatusService.jobStatus().subscribe(status => this.jobStatus = status)
 
     this.employeeService.canInsertClients().subscribe((attendances) => {
@@ -528,6 +542,14 @@ export class ScheduleComponent implements OnInit {
         date: this.date.getUTCFullYear() + '-' + tempMonth + '-' + tempDay
       }
     })
+  }
+
+  compareJobActivity(var1: JobActivity, var2: JobActivity) {
+    return var1.id === var2.id
+  }
+
+  compareJobType(var1: JobType, var2: JobType) {
+    return var1.id === var2.id
   }
 
   compareAttendance(var1: Employee, var2: Employee) {
