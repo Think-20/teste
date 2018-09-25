@@ -12,6 +12,21 @@
 }
 
 #sidenav {
+  position: relative;
+}
+
+#sidenav > .version {
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  bottom: 0;
+  font-size: 10px;
+  background-color: white;
+  padding: 5px;
+  color: #ccc;
+}
+
+#sidenav {
   width: 100%;
   height: 100%;
   overflow: hidden;
