@@ -34,10 +34,12 @@
 
 <mat-menu #menu2="matMenu"></mat-menu>
 
-<div class="line-job"
+<div class="line-job" #trigger="matMenuTrigger"
 [matMenuTriggerFor]="jobDisplay(task, chrono).indexOf('Continuação de') > -1 ? menu2 : menu"
 [matMenuTriggerData]="{task: task, chrono: chrono}"
 [ngClass]="getLineClass(chrono, task, chrono.day, chrono.month)"
+(contextmenu)="contextMenu($event, task, chrono, trigger)"
+(click)="goToJob(task.job)"
 *ngFor="let task of chrono.tasks; let y = index"
 draggable="true">
   <div class="mat-cell mat-column-creation">

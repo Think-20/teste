@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { Chrono } from '../chrono.model';
 import { Task } from '../task.model';
 import { DatePipe } from '@angular/common';
@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material';
 import { Month } from '../../shared/date/months';
 import { Router } from '@angular/router';
 import { isObject } from 'util';
+import { MatMenuTrigger } from '@angular/material';
 
 @Component({
   selector: 'cb-schedule-line',
@@ -28,6 +29,7 @@ export class ScheduleLineComponent implements OnInit {
   @Input() today: Date
   @Output() scrollStatusEmitter: EventEmitter<boolean> = new EventEmitter()
   @Output() changeMonthEmitter: EventEmitter<any> = new EventEmitter()
+  @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
 
   constructor(
     private jobService: JobService,
@@ -41,7 +43,23 @@ export class ScheduleLineComponent implements OnInit {
   ngOnInit() {
   }
 
+  goToJob(job: Job) {
+    if(job.id == null) {
+      return ''
+    }
 
+    if(this.permissionVerify('edit', job)) {
+      this.router.navigateByUrl('/jobs/edit/' + job.id)
+    } else if(this.permissionVerify('show', job)) {
+      this.router.navigateByUrl('/jobs/show/' + job.id)
+    }
+  }
+
+  contextMenu(event: MouseEvent, task: Task, chrono: Chrono, menu: MatMenuTrigger) {
+    event.preventDefault()
+    menu.menuData = { chrono: chrono, task: task }
+    menu.openMenu()
+  }
 
   timeDisplay(task: Task, chrono: Chrono) {
     if(task.job.id == null) {
@@ -166,13 +184,14 @@ export class ScheduleLineComponent implements OnInit {
       return className
     }
 
+    if(task.job.attendance_id != this.authService.currentUser().employee.id
+      && task.responsible_id != this.authService.currentUser().employee.id
+      && task.job.id != undefined && !this.permissionVerify('edit', task.job))
+      className += ' other-attendance'
+
     if(isObject(task.job_activity)
       && ['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0
       && this.jobDisplay(task, chrono).indexOf('Continuação de') == -1) {
-        if(task.job.attendance_id != this.authService.currentUser().employee.id
-          && task.responsible_id != this.authService.currentUser().employee.id
-          && task.job.id != undefined && !this.permissionVerify('edit', task.job))
-          className += ' other-attendance'
 
         if(task.job.status.id == 3 && (['Projeto'].indexOf(task.job_activity.description) >= 0))
           className += ' approved-creation'
