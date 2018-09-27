@@ -175,8 +175,8 @@ export class ScheduleComponent implements OnInit {
               angular.subscription.unsubscribe()
             }
 
-            info.parentSenderPos = Array.prototype.indexOf.call(this.parentNode.parentNode.parentNode.parentNode.children, this.parentNode.parentNode.parentNode)
-            info.senderPos = Array.prototype.indexOf.call(this.parentNode.children, this)
+            info.parentSenderPos = Array.prototype.indexOf.call(this.closest('.mat-row-scroll').children, this.closest('.mat-row'))
+            info.senderPos = Array.prototype.indexOf.call(this.closest('.line-jobs').querySelectorAll('.line-job'), this)
             event.dataTransfer.setData('type', JSON.stringify(info))
           })
           draggable.addEventListener('dragover', function (event) {
@@ -201,16 +201,16 @@ export class ScheduleComponent implements OnInit {
             event.preventDefault()
 
             info = JSON.parse(event.dataTransfer.getData('type'))
-            info.parentRecipientPos = Array.prototype.indexOf.call(this.parentNode.parentNode.parentNode.parentNode.children, this.parentNode.parentNode.parentNode)
-            info.recipientPos = Array.prototype.indexOf.call(this.parentNode.children, this)
+            info.parentRecipientPos = Array.prototype.indexOf.call(this.closest('.mat-row-scroll').children, this.closest('.mat-row'))
+            info.recipientPos = Array.prototype.indexOf.call(this.closest('.line-jobs').querySelectorAll('.line-job'), this)
 
             let senderParent = document.querySelectorAll('.line-jobs')[info.parentSenderPos] as HTMLElement
             let recipientParent = document.querySelectorAll('.line-jobs')[info.parentRecipientPos] as HTMLElement
             let parentRecipientPos: number = info.parentRecipientPos
             let parentSenderPos: number = info.parentSenderPos
 
-            let task1 = angular.chrono[parentSenderPos].tasks[info.senderPos - 1]
-            let task2 = angular.chrono[parentRecipientPos].tasks[info.recipientPos - 1]
+            let task1 = angular.chrono[parentSenderPos].tasks[info.senderPos]
+            let task2 = angular.chrono[parentRecipientPos].tasks[info.recipientPos]
             let job1 = task1.job
             let job2 = task2.job
 
