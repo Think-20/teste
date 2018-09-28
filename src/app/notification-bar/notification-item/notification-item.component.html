@@ -5,8 +5,8 @@
     <mat-icon>add</mat-icon>
   </button>
   <mat-card-header>
-    <div mat-card-avatar class="mat-card-photo" [style.backgroundImage]="'url(/assets/images/users/' + userNotification.notification.notifier_id + '.jpg)'"></div>
-    <mat-card-title>{{userNotification?.notification?.notifier?.employee?.name}}</mat-card-title>
+    <div mat-card-avatar class="mat-card-photo" [style.backgroundImage]="'url(' + getBackgroundUrl(userNotification) + ')'"></div>
+    <mat-card-title>{{userNotification?.notification?.notifier?.name}}</mat-card-title>
     <mat-card-subtitle>{{userNotification?.notification?.date | date:'dd/MM/yyyy H:mm'}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>

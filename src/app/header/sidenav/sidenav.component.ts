@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '../../login/auth.service';
 import { User } from '../../user/user.model';
+import { API } from 'app/app.api';
 
 @Component({
   selector: 'cb-sidenav',
@@ -39,6 +40,7 @@ export class SidenavComponent implements OnInit {
   centroCusto = false
   atendimento = false
   clients = false
+  API = API
 
   constructor(
     private auth: AuthService,

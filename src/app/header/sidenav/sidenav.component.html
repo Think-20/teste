@@ -3,7 +3,7 @@
     <div id="logo-container" class="my-container">
       <div class="text-center">
         <a [routerLink]="['/home']">
-          <img src="/assets/images/logo.png" alt="Think Ideias">
+          <img src="{{ API }}/assets/images/logo/think-normal.png" alt="Think Ideias">
         </a>
       </div>
     </div>
@@ -14,7 +14,7 @@
             {{user.employee.name}}
           </div>
           <div class="user-photo">
-            <img width="55px" src="/assets/images/users/{{user.id}}.jpg" alt="Photo">
+            <img width="55px" src="{{ API }}/assets/images/{{user.employee.image}}" alt="Photo">
           </div>
         </div>
       </div>

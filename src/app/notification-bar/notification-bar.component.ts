@@ -25,6 +25,11 @@ export class NotificationBarComponent implements OnInit {
     this.listenInit()
   }
 
+  now() {
+    this.timerSubscription.unsubscribe()
+    this.listenInit()
+  }
+
   ngOnDestroy() {
     this.timerSubscription.unsubscribe()
   }

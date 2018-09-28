@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { TaskService } from '../../schedule/task.service';
 import { MatSnackBar } from '@angular/material';
 import { DatePipe } from '@angular/common';
+import { API } from 'app/app.api';
 
 @Component({
   selector: 'cb-notification-item',
@@ -25,6 +26,10 @@ export class NotificationItemComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  getUrl(userNotification: UserNotification): string {
+    return `/assets/images/users/${userNotification.notification.notifier_id}.jpg`
   }
 
   goTo(notification: Notification) {
@@ -115,8 +120,8 @@ export class NotificationItemComponent implements OnInit {
     })
   }
 
-  getUserBackground() {
-    return `'url(/assets/images/users/${this.userNotification.user_id}.jpg)'`
+  getBackgroundUrl(userNotification: UserNotification) {
+    return `${API}/assets/images/${userNotification.notification.notifier.image}`
   }
 
 }

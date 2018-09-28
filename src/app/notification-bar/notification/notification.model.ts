@@ -14,10 +14,7 @@ export class Notification {
 }
 
 export interface Notifiable {
-  id?: number
-  employee?: Employee
-
-  getName(): string;
-  getEmployee(): Employee | null;
-  hasEmployee(): boolean;
+  id: number
+  name: string
+  image: string
 }

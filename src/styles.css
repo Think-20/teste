@@ -685,6 +685,7 @@ cb-schedule {
 
 .menuNotifications cb-notification-item .mat-card {
   margin-bottom: 0 !important;
+  width: 100%;
 }
 
 .menuNotifications .mat-menu-content {
