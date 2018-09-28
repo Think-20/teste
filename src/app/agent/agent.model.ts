@@ -5,6 +5,7 @@ export class Agent implements Notifiable {
   id: number
   name: string
   description: string
+  image: string
 
   getName(): string {
     return this.name

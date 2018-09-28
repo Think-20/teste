@@ -1,7 +1,7 @@
 import { Employee } from '../employees/employee.model'
 import { Notifiable } from '../notification-bar/notification/notification.model';
 
-export class User implements Notifiable {
+export class User {
   id: number
   email: string
   password: string
@@ -9,18 +9,6 @@ export class User implements Notifiable {
   functionalities?: Functionality[]
   displays: Display[]
   coordinatesNow ?: string
-
-  getName(): string {
-    return this.employee.name
-  }
-
-  getEmployee(): Employee {
-    return this.employee
-  }
-
-  hasEmployee(): boolean {
-    return true
-  }
 }
 
 export class Functionality {
