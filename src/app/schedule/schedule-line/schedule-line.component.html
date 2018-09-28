@@ -39,7 +39,7 @@
 [matMenuTriggerData]="{task: task, chrono: chrono}"
 [ngClass]="getLineClass(chrono, task, chrono.day, chrono.month)"
 (contextmenu)="contextMenu($event, task, chrono, trigger)"
-(click)="goToJob(task.job)"
+(dblclick)="goToJob(task.job)"
 *ngFor="let task of chrono.tasks; let y = index"
 draggable="true">
   <div class="mat-cell mat-column-creation">
