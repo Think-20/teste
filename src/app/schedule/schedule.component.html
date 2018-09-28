@@ -58,10 +58,10 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="col-md-2">
-              <mat-select placeholder="Projetista" formControlName="creation" [compareWith]="compareAttendance">
+              <mat-select placeholder="Responsável" formControlName="responsible" [compareWith]="compareAttendance">
                 <mat-option></mat-option>
-                <mat-option *ngFor="let creation of creations" [value]="creation">
-                  {{ creation.name }}
+                <mat-option *ngFor="let employee of employees" [value]="employee">
+                  {{ employee.name }}
                 </mat-option>
               </mat-select>
             </mat-form-field>

@@ -66,7 +66,7 @@ export class ScheduleComponent implements OnInit {
   tasks: Task[] = []
   jobs: Job[] = []
   attendances: Employee[]
-  creations: Employee[]
+  employees: Employee[]
   clients: Client[] = []
   jobActivities: JobActivity[] = []
   jobTypes: JobType[] = []
@@ -251,7 +251,7 @@ export class ScheduleComponent implements OnInit {
     this.searchForm = this.fb.group({
       search: this.search,
       attendance: this.fb.control(''),
-      creation: this.fb.control(''),
+      responsible: this.fb.control(''),
       job_type: this.fb.control(''),
       job_activity: this.fb.control(''),
       client: this.fb.control(''),
@@ -285,7 +285,7 @@ export class ScheduleComponent implements OnInit {
           clientName: clientName,
           status: status,
           attendance: controls.attendance.value,
-          creation: controls.creation.value,
+          responsible: controls.responsible.value,
           job_type: controls.job_type.value
         }
         this.checkParamsHasFilter()
@@ -320,11 +320,7 @@ export class ScheduleComponent implements OnInit {
       this.attendances = attendances
     })
 
-    this.employeeService.employees().subscribe(employees => {
-      this.creations = employees.filter(employee => {
-        return employee.department.description === 'Criação'
-      })
-    })
+    this.employeeService.employees().subscribe(employees => { this.employees = employees })
   }
 
   activeDate() {
