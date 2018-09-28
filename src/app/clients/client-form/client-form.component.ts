@@ -310,9 +310,12 @@ constructor(
       let snackbar = this.snackBar.open(data.message, '', {
         duration: 5000
       })
-      snackbar.afterDismissed().subscribe(() => {
-        this.location.back()
-      })
+
+      if(data.status) {
+        snackbar.afterDismissed().subscribe(() => {
+          this.location.back()
+        })
+      }
     })
   }
 
