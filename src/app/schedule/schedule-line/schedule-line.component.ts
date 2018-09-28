@@ -55,12 +55,6 @@ export class ScheduleLineComponent implements OnInit {
     }
   }
 
-  contextMenu(event: MouseEvent, task: Task, chrono: Chrono, menu: MatMenuTrigger) {
-    event.preventDefault()
-    menu.menuData = { chrono: chrono, task: task }
-    menu.openMenu()
-  }
-
   timeDisplay(task: Task, chrono: Chrono) {
     if(task.job.id == null) {
       return ''
