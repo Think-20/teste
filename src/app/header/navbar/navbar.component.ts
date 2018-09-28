@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { UserNotification } from '../../notification-bar/user-notification/user-notification.model';
 import { UserNotificationService } from '../../notification-bar/user-notification/user-notification.service';
 import { DatePipe } from '@angular/common';
+import { API } from 'app/app.api';
 
 @Component({
   selector: 'cb-navbar',
@@ -14,6 +15,7 @@ export class NavbarComponent implements OnInit {
   @Output() toggleMenuEmitter = new EventEmitter()
   userNotifications: UserNotification[] = []
   notReads: number = 0
+  API = API
 
   constructor(
     private userNotificationService: UserNotificationService,

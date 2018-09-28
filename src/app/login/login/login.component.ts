@@ -7,6 +7,7 @@ import { AuthService } from '../auth.service'
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/timer'
+import { API } from 'app/app.api';
 
 @Component({
   selector: 'cb-login',
@@ -43,6 +44,7 @@ export class LoginComponent implements OnInit {
   state: string = 'standard'
   message: string = 'VAMOS COMEÇAR'
   loginForm: FormGroup
+  API = API
 
   returnUrl: string
 
