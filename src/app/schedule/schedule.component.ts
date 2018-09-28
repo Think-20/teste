@@ -320,7 +320,12 @@ export class ScheduleComponent implements OnInit {
       this.attendances = attendances
     })
 
-    this.employeeService.employees().subscribe(employees => { this.employees = employees })
+    this.employeeService.employees().subscribe(employees => {
+      let list = ['Planejamento', 'Atendimento', 'Criação', 'Orçamento']
+      this.employees = employees.filter(employee => {
+        if(list.indexOf(employee.department.description) > -1) return true;
+      })
+    })
   }
 
   activeDate() {
