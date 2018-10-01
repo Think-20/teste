@@ -19,4 +19,5 @@ export class Task {
   items?: TaskItem[]
   project_files?: ProjectFile[]
   budget?: Budget
+  project_file_done?: number
 }

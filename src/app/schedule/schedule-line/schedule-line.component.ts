@@ -73,6 +73,25 @@ export class ScheduleLineComponent implements OnInit {
     return 'D+' + (taskFound.items.length - index - 1)
   }
 
+  timeIconDisplay(task: Task, chrono: Chrono) {
+    if(task.job.id == null) {
+      return ''
+    }
+
+    if(task.project_file_done == 1) {
+      return 'done'
+    } else {
+      let finalDate = new Date(task.available_date + 'T00:00:00')
+      finalDate.setDate(finalDate.getDate() + parseInt(task.duration.toString()))
+
+      if(this.datePipe.transform(finalDate, 'yyyy-MM-dd') < this.datePipe.transform(new Date(), 'yyyy-MM-dd')) {
+        return 'highlight_off'
+      } else {
+        return 'alarm'
+      }
+    }
+  }
+
   signal(task: Task) {
     this.scrollStatusEmitter.emit(false)
     let job = task.job
