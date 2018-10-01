@@ -531,23 +531,24 @@ mat-card-title > p {
   background-color: rgba(0,175,239,.26);
 }
 
-.mat-radio-button.mat-accent .mat-radio-inner-circle, .mat-calendar-body-selected {
-  background-color: #00afef !important;
-}
-
-.mat-primary .mat-pseudo-checkbox-checked, .mat-primary .mat-pseudo-checkbox-indeterminate {
-  background-color: #00afef !important;
-}
-
 .mat-select-panel .mat-option-multiple {
   color: rgba(0,0,0,.38) !important;
 }
 
 .mat-select-panel .mat-option-multiple .mat-pseudo-checkbox {
-  color: rgba(0,0,0,.28) !important;
-  background-color: white !important;
+  color: rgba(0,0,0,.28);
+  background-color: white;
 }
 
+.mat-radio-button.mat-accent .mat-radio-inner-circle, .mat-calendar-body-selected {
+  background-color: #00afef !important;
+}
+
+.mat-pseudo-checkbox-checked, .mat-pseudo-checkbox-indeterminate {
+  background-color: #00afef !important;
+}
+
+/*
 .mat-select-panel .mat-option-multiple.mat-selected {
   color: black !important;
 }
@@ -556,6 +557,7 @@ mat-card-title > p {
   color: black !important;
   background-color: black !important;
 }
+*/
 
 #login-content .mat-focused .mat-form-field-label.mat-float, #login-content .mat-form-field-label.mat-float:not(.mat-empty) {
   opacity: 0 !important;

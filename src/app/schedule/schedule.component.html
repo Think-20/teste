@@ -50,7 +50,7 @@
               </mat-option>
             </mat-autocomplete>
             <mat-form-field class="col-md-2">
-              <mat-select placeholder="Atendimento" formControlName="attendance" [compareWith]="compareAttendance">
+              <mat-select placeholder="Atendimento" formControlName="attendance_array" [compareWith]="compareAttendance" multiple>
                 <mat-option></mat-option>
                 <mat-option *ngFor="let attendance of attendances" [value]="attendance">
                   {{ attendance.name }}
@@ -58,7 +58,7 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="col-md-2">
-              <mat-select placeholder="Responsável" formControlName="responsible" [compareWith]="compareAttendance">
+              <mat-select placeholder="Responsável" formControlName="responsible_array" [compareWith]="compareAttendance" multiple>
                 <mat-option></mat-option>
                 <mat-option *ngFor="let employee of employees" [value]="employee">
                   {{ employee.name }}
@@ -66,7 +66,7 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="col-md-2">
-              <mat-select placeholder="Status" formControlName="status" [compareWith]="compareStatus">
+              <mat-select placeholder="Status" formControlName="status_array" [compareWith]="compareStatus" multiple>
                 <mat-option></mat-option>
                 <mat-option *ngFor="let s of jobStatus" [value]="s">
                   {{ s.description }}
@@ -74,7 +74,7 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="col-md-2">
-              <mat-select placeholder="Tipo" formControlName="job_type" [compareWith]="compareJobType">
+              <mat-select placeholder="Tipo" formControlName="job_type_array" [compareWith]="compareJobType" multiple>
                 <mat-option></mat-option>
                 <mat-option *ngFor="let type of jobTypes" [value]="type">
                   {{ type.description }}
@@ -82,7 +82,7 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="col-md-2">
-              <mat-select placeholder="Job" formControlName="job_activity" [compareWith]="compareJobActivity">
+              <mat-select placeholder="Job" formControlName="job_activity_array" [compareWith]="compareJobActivity" multiple>
                 <mat-option></mat-option>
                 <mat-option *ngFor="let activity of jobActivities" [value]="activity">
                   {{ activity.description }}

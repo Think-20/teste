@@ -250,12 +250,12 @@ export class ScheduleComponent implements OnInit {
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
       search: this.search,
-      attendance: this.fb.control(''),
-      responsible: this.fb.control(''),
-      job_type: this.fb.control(''),
-      job_activity: this.fb.control(''),
+      attendance_array: this.fb.control(''),
+      responsible_array: this.fb.control(''),
+      job_type_array: this.fb.control(''),
+      job_activity_array: this.fb.control(''),
       client: this.fb.control(''),
-      status: this.fb.control('')
+      status_array: this.fb.control('')
     })
 
     this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
@@ -278,15 +278,15 @@ export class ScheduleComponent implements OnInit {
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe(() => {
         let controls = this.searchForm.controls
-        let status = controls.status.value != undefined ? controls.status.value.id : null
         let clientName = controls.client.value != '' ? controls.client.value : controls.search.value
 
         this.params = {
           clientName: clientName,
-          status: status,
-          attendance: controls.attendance.value,
-          responsible: controls.responsible.value,
-          job_type: controls.job_type.value
+          status_array: controls.status_array.value,
+          attendance_array: controls.attendance_array.value,
+          responsible_array: controls.responsible_array.value,
+          job_type_array: controls.job_type_array.value,
+          job_activity_array: controls.job_activity_array.value
         }
         this.checkParamsHasFilter()
         this.changeMonth(this.month, this.date)
