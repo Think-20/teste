@@ -1,7 +1,7 @@
 import { Component, OnInit, Injectable, Input } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
 
 import { Client } from '../client.model';
@@ -79,7 +79,8 @@ constructor(
     private location: Location,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -330,11 +331,13 @@ constructor(
     client.id = clientId
 
     this.clientService.edit(client).subscribe(data => {
-      this.snackBar.open(data.message, '', {
-        duration: data.status ? 1000 : 5000
-      }).afterDismissed().subscribe(observer => {
-        this.loadClient()
-      })
+      if(data.status) {
+        this.router.navigateByUrl('/clients')
+      } else {
+        this.snackBar.open(data.message, '', {
+          duration: data.status ? 1000 : 5000
+        })
+      }
     })
   }
 }
