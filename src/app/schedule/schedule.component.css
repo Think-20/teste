@@ -132,17 +132,26 @@
   background: transparent;
 }
 
+.mat-row-scroll > .mat-row {
+  display: block;
+}
+
+.mat-row-scroll > .mat-row .month-line {
+  font-size: 20px;
+  font-weight: lighter;
+  margin: 10px 0px 20px 0px;
+  padding: 0;
+  background-color: transparent;
+}
+
 .line-chrono {
   background-color: white;
   margin-bottom: 10px;
+  display: flex;
 }
 
 .line-chrono:first-child {
   border-top: 0 !important;
-}
-
-.line-chrono:last-child {
-  margin-bottom: 0px;
 }
 
 .line-jobs {
