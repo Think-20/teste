@@ -20,4 +20,6 @@ export class Task {
   project_files?: ProjectFile[]
   budget?: Budget
   project_file_done?: number
+  task_id?: number
+  task?: Task
 }
