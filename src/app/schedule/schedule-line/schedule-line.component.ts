@@ -260,12 +260,18 @@ export class ScheduleLineComponent implements OnInit {
   }
 
   canShowBudgetValue(task: Task, chrono: Chrono) {
+    const available = ['Modificação', 'Opção', 'Continuação', 'Continuação de', 'Detalhamento']
     let text = this.jobDisplay(task, chrono)
     if(text == '') {
       return false
     }
 
-    let found = ['Modificação', 'Opção', 'Continuação', 'Continuação de', 'Detalhamento'].indexOf(text) >= 0
+    let found = false
+
+    available.forEach((value) => {
+      if(text.indexOf(value) >= 0) found = true
+    })
+
     return found ? false : true
   }
 
