@@ -70,7 +70,7 @@ draggable="true">
   </div>
   <div class="mat-cell mat-column-time">
     <p>{{ timeDisplay(task, chrono) }}</p>
-    <mat-icon *ngIf="task?.job?.id != null">{{ timeIconDisplay(task, chrono) }}</mat-icon>
+    <mat-icon *ngIf="task?.job?.id != null" class="time-icon">{{ timeIconDisplay(task, chrono) }}</mat-icon>
   </div>
   <div class="mat-cell mat-column-deadline">
     {{ task.job?.deadline | date:'dd/MM' }}
