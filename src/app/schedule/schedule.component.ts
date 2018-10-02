@@ -493,7 +493,10 @@ export class ScheduleComponent implements OnInit {
         day: date.getDate(),
         month: (date.getMonth() + 1),
         dayOfWeek: DAYSOFWEEK.find(dayOfWeek => dayOfWeek.id == date.getDay()),
-        tasks: filteredTasks,
+        tasks: filteredTasks.sort((a,b) => {
+          if(a.responsible != null && b.responsible != null)
+          return a.responsible.department_id > b.responsible.department_id ? 1 : -1
+        }),
         length: count
       }
 
