@@ -150,6 +150,10 @@
   display: flex;
 }
 
+.line-chrono-block {
+  opacity: 0.5;
+}
+
 .line-chrono:first-child {
   border-top: 0 !important;
 }

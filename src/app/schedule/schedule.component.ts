@@ -3,8 +3,6 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatSnackBar, MatDialog } from '@angular/material';
 
-import { JobService } from '../jobs/job.service';
-import { Job } from '../jobs/job.model';
 import { Pagination } from 'app/shared/pagination.model';
 import { Employee } from '../employees/employee.model';
 import { EmployeeService } from '../employees/employee.service';
@@ -12,10 +10,6 @@ import { Month, MONTHS } from '../shared/date/months';
 import { DAYSOFWEEK, DayOfWeek } from '../shared/date/days-of-week';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../login/auth.service';
-import { BriefingService } from '../briefings/briefing.service';
-import { Briefing } from '../briefings/briefing.model';
-import { BudgetService } from '../budgets/budget.service';
-import { Budget } from '../budgets/budget.model';
 import { Task } from './task.model';
 import { TaskService } from './task.service';
 import { TaskItem } from './task-item.model';
@@ -35,6 +29,9 @@ import { JobActivityService } from '../job-activities/job-activity.service';
 import { JobTypeService } from '../job-types/job-type.service';
 import { JobActivity } from '../job-activities/job-activity.model';
 import { JobType } from '../job-types/job-type.model';
+import { ScheduleBlock } from './schedule-block/schedule-block.model';
+import { Job } from '../jobs/job.model';
+import { ScheduleBlockService } from './schedule-block/schedule-block.service';
 
 @Component({
   selector: 'cb-schedule',
@@ -62,9 +59,7 @@ export class ScheduleComponent implements OnInit {
   searchForm: FormGroup
   search: FormControl
   rowAppearedState: string = 'ready'
-  pagination: Pagination
   tasks: Task[] = []
-  jobs: Job[] = []
   attendances: Employee[]
   employees: Employee[]
   clients: Client[] = []
@@ -75,6 +70,7 @@ export class ScheduleComponent implements OnInit {
   filter = false
   scrollActive: boolean = true
   chrono: Chrono[] = []
+  dateBlocks: ScheduleBlock[] = []
   month: Month
   months: Month[] = MONTHS
   paramsHasFilter: boolean = false
@@ -84,6 +80,7 @@ export class ScheduleComponent implements OnInit {
   timer: Observable<number>
   timer2: Observable<number>
   today: Date
+  listenModification: boolean = true
   dataInfo: DataInfo
   subscription: Subscription
   subscriptions: Subscription[] = []
@@ -91,7 +88,6 @@ export class ScheduleComponent implements OnInit {
   paramAttendance: Employee = null
   counter: number = 0
 
-  jobDrag: Job
   lineJob: HTMLElement
   tempX: number
   tempY: number
@@ -101,14 +97,12 @@ export class ScheduleComponent implements OnInit {
     private clientService: ClientService,
     private employeeService: EmployeeService,
     private taskService: TaskService,
-    private jobService: JobService,
     private jobActivityService: JobActivityService,
     private jobTypeService: JobTypeService,
     private jobStatusService: JobStatusService,
+    private scheduleBlockService: ScheduleBlockService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private briefingService: BriefingService,
-    private budgetService: BudgetService,
     private dialog: MatDialog,
     private ngZone: NgZone,
     private el: ElementRef,
@@ -123,6 +117,61 @@ export class ScheduleComponent implements OnInit {
 
   changeScrollStatus(status: boolean) {
     this.scrollActive = status
+  }
+
+  lineChronoClass(chrono: Chrono) {
+    let count: number = this.dateBlocks.filter((scheduleBlock) => {
+      return chrono.tasks[0].items[0].date == scheduleBlock.date
+    }).length
+
+    if(count > 0) {
+      return 'line-chrono-block'
+    }
+
+    return ''
+  }
+
+  toggleBlock(chrono: Chrono) {
+    let date = chrono.tasks[0].items[0].date
+    let index
+    let found = this.dateBlocks.filter((scheduleBlock, index) => {
+      if(scheduleBlock.date == date) {
+        index = index
+        return true
+      }
+    })
+
+    if(found.length > 0) {
+      this.scheduleBlockService.delete(found.pop().id).subscribe((data) => {
+        if(data.status) {
+          const urlTree = this.router.createUrlTree([], {
+            queryParams: { date: this.datePipe.transform(date, 'yyyy-MM-dd') },
+            queryParamsHandling: "merge",
+            preserveFragment: true });
+
+          this.router.navigateByUrl(urlTree);
+          this.dateBlocks.splice(index, 1)
+        }
+
+        this.snackBar.open(data.message, '', { duration: 5000 })
+      })
+    } else {
+      let scheduleBlock = new ScheduleBlock()
+      scheduleBlock.date = date
+      this.scheduleBlockService.save(scheduleBlock).subscribe((data) => {
+        if(data.status) {
+          const urlTree = this.router.createUrlTree([], {
+            queryParams: { date: this.datePipe.transform(date, 'yyyy-MM-dd') },
+            queryParamsHandling: "merge",
+            preserveFragment: true });
+
+          this.router.navigateByUrl(urlTree);
+          this.dateBlocks.push(scheduleBlock)
+        }
+
+        this.snackBar.open(data.message, '', { duration: 5000 })
+      })
+    }
   }
 
   permissionVerify(module: string, job: Job): boolean {
@@ -160,6 +209,8 @@ export class ScheduleComponent implements OnInit {
   ngAfterViewInit() {
     this.list.changes.subscribe(() => {
       this.scrollToDate()
+
+      if(!this.listenModification) return
 
       let list = document.querySelectorAll("[draggable='true']")
       let info = { parentSenderPos: null, parentRecipientPos: null, senderPos: null, recipientPos: null }
@@ -295,7 +346,6 @@ export class ScheduleComponent implements OnInit {
     this.today = new Date()
     this.activeDate()
     this.createTimerUpdater()
-    this.loadJobStatus()
     this.loadFilterData()
   }
 
@@ -319,6 +369,8 @@ export class ScheduleComponent implements OnInit {
     this.employeeService.canInsertClients().subscribe((attendances) => {
       this.attendances = attendances
     })
+
+    this.scheduleBlockService.valid().subscribe((scheduleBlocks) => { this.dateBlocks = scheduleBlocks })
 
     this.employeeService.employees().subscribe(employees => {
       let list = ['Planejamento', 'Atendimento', 'Criação', 'Orçamento']
@@ -344,10 +396,6 @@ export class ScheduleComponent implements OnInit {
         this.changeMonth(this.month, this.date)
       }
     })
-  }
-
-  loadJobStatus() {
-    this.jobStatusService.jobStatus().subscribe(jobStatus => this.jobStatus = jobStatus)
   }
 
   ngOnDestroy() {
@@ -447,9 +495,8 @@ export class ScheduleComponent implements OnInit {
       paginate: false,
       ...this.params
     }).subscribe(dataInfo => {
-      this.pagination = dataInfo.pagination
       this.searching = false
-      this.tasks = this.pagination.data
+      this.tasks = dataInfo.pagination.data
       this.dataInfo = dataInfo
       this.setUpdatedMessage()
       this.chronologicDisplay(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
@@ -461,6 +508,8 @@ export class ScheduleComponent implements OnInit {
     let i: number = 0
     let fixedDateMax: Date = new Date(iniDate)
     let date: Date = new Date(iniDate)
+
+    this.listenModification = false
 
     date.setDate(date.getDate() - 5)
     fixedDateMax.setDate(fixedDateMax.getDate() + 35)
@@ -504,6 +553,7 @@ export class ScheduleComponent implements OnInit {
 
       date.setDate(date.getDate() + 1)
     }
+    this.listenModification = true
   }
 
   scrollToDate() {

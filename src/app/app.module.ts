@@ -133,6 +133,7 @@ import { ProjectFileService } from './projects/project-file.service';
 import { ScheduleLineComponent } from './schedule/schedule-line/schedule-line.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ImageViewerComponent } from './shared/image-viewer/image-viewer.component';
+import { ScheduleBlockService } from './schedule/schedule-block/schedule-block.service';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -275,6 +276,7 @@ registerLocaleData(localePt);
     ClientComissionService,
     UserNotificationService,
     ProjectFileService,
+    ScheduleBlockService,
 
     MatDialog,
     MatSnackBar,
