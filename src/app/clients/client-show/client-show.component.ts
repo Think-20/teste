@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material';
 
 import { ClientService } from '../client.service';
 import { Client } from '../client.model';
+import { JobService } from '../../jobs/job.service';
 
 @Component({
   selector: 'cb-client-show',
@@ -17,6 +18,7 @@ export class ClientShowComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private clientService: ClientService,
+    private jobService: JobService,
     private snackBar: MatSnackBar
   ) { }
 

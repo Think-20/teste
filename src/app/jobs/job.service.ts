@@ -12,6 +12,7 @@ import { ErrorHandler } from '../shared/error-handler.service';
 import { Job } from './job.model';
 import { AuthService } from '../login/auth.service';
 import { Pagination } from 'app/shared/pagination.model';
+import { Client } from '../clients/client.model';
 
 
 @Injectable()
@@ -24,7 +25,11 @@ export class JobService {
         private auth: AuthService
     ) {}
 
-    displayNameEvent(job: Job): string {
+    displayNameEvent(job: Job, client: Client = null): string {
+      if(client != null) {
+        job.client = client
+      }
+
       let name = job.not_client == null ? job.client.fantasy_name : job.not_client
       return name + ' - ' + job.event
     }

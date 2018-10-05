@@ -65,12 +65,42 @@
     </dl>
   </mat-card>
   <mat-card-title>
-    <p class="lead">Projetos relacionados</p>
+    <p class="lead">Histórico</p>
   </mat-card-title>
   <mat-card>
-    <dl *ngFor="let job of client.jobs; let i = index">
-      <dt>{{i + 1}}</dt>
-      <dd><a href="/jobs/show/{{job.id}}">{{job.event}}</a></dd>
-    </dl>
+    <table class="table mat-table">
+      <div class="mat-header-row">
+        <div class="mat-header-cell mat-column-id">ID</div>
+        <div class="mat-header-cell mat-column-name">Nome</div>
+        <div class="mat-header-cell mat-column-date">Data</div>
+        <div class="mat-header-cell mat-column-attendance">Atendimento</div>
+        <div class="mat-header-cell mat-column-creation">Criação</div>
+        <div class="mat-header-cell mat-column-budget_value">Valor</div>
+        <div class="mat-header-cell mat-column-status">Status</div>
+      </div>
+      <div class="mat-row" *ngFor="let job of client.jobs">
+        <div class="mat-cell mat-column-id">
+          <a [routerLink]="['/jobs/show/', job.id]">{{ jobService.showId(job) }}</a>
+        </div>
+        <div class="mat-cell mat-column-name">
+          {{ jobService.displayNameEvent(job, client) }}
+        </div>
+        <div class="mat-cell mat-column-date">
+          {{ job.created_at | date:'dd/MM/yy' }}
+        </div>
+        <div class="mat-cell mat-column-attendance">
+          {{ job.attendance.name }}
+        </div>
+        <div class="mat-cell mat-column-creation">
+          {{ jobService.displayCreation(job) }}
+        </div>
+        <div class="mat-cell mat-column-budget_value">
+          {{ job.budget_value | currency: 'BRL' }}
+        </div>
+        <div class="mat-cell mat-column-status">
+          {{ job.status.description }}
+        </div>
+      </div>
+    </table>
   </mat-card>
 </div>
