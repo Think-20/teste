@@ -11,19 +11,23 @@
 }
 
 .mat-column-date {
-    width: 10%;
+    width: 9%;
+}
+
+.mat-column-date-creation {
+    width: 9%;
 }
 
 .mat-column-type {
-    width: 12%;
+    width: 10%;
 }
 
 .mat-column-attendance {
-    width: 15%;
+    width: 12%;
 }
 
 .mat-column-creation {
-    width: 11%;
+    width: 10%;
 }
 
 .mat-column-status {
@@ -31,7 +35,7 @@
 }
 
 .mat-column-action {
-    width: 10%;
+    width: 8%;
 }
 
 ::ng-deep .langSelect div.mat-select-arrow-wrapper {

@@ -83,6 +83,7 @@
             <div class="mat-header-cell mat-column-attendance">Atendimento</div>
             <div class="mat-header-cell mat-column-creation">Criação</div>
             <div class="mat-header-cell mat-column-date">Data</div>
+            <div class="mat-header-cell mat-column-date-creation">Crono</div>
             <div class="mat-header-cell mat-column-status">Status</div>
             <div class="mat-header-cell mat-column-action">Ação</div>
           </div>
@@ -107,6 +108,9 @@
             </div>
             <div class="mat-cell mat-column-date">
               {{ job.created_at | date:'dd/MM/yy' }}
+            </div>
+            <div class="mat-cell mat-column-date-creation">
+              {{ job?.available_date_creation | date:'dd/MM/yy' }}
             </div>
             <div class="mat-cell mat-column-status">
               <!--(click)=select.open()-->
