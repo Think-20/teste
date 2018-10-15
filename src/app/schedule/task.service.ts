@@ -28,13 +28,16 @@ export class TaskService {
 
   jobDisplay(task: Task) {
     if(task.job_activity.description == 'Memorial descritivo') {
-      return 'M. descritivo de ' + task.task.job_activity.description.toLowerCase()
+      return 'M. descritivo de ' + task.task.job_activity.description.toLowerCase() + ' ' + this.padChar(task.task)
     }
 
+    return task.job_activity.description +  ' ' + this.padChar(task)
+  }
+
+  padChar(task: Task) {
     let size = 2
     let text = task.reopened
-    let padChar =  (task.reopened > 0 ? (' ' + String('0').repeat(size) + text).substr( (size * -1), size) : '')
-    return task.job_activity.description +  ' ' + padChar
+    return (task.reopened > 0 ? (' ' + String('0').repeat(size) + text).substr( (size * -1), size) : '')
   }
 
   loadFormData(): Observable<any> {
