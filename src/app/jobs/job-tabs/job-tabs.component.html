@@ -16,15 +16,15 @@
     <mat-tab label="Projeto">
       <cb-projects *ngIf="job?.id != undefined" [job]="job"></cb-projects>
     </mat-tab>
+    <mat-tab label="Proposta">
+      Proposta
+    </mat-tab>
     <mat-tab label="Orçamento">
       <!--
       <cb-budget-form *ngIf="job?.id != undefined && job?.job_activity?.description != 'Projeto'" [typeForm]="typeForm" [job]="job"
         [isAdmin]="isAdmin">
       </cb-budget-form>
       -->
-    </mat-tab>
-    <mat-tab label="Proposta">
-      Proposta
     </mat-tab>
     <mat-tab label="Check-in">
       Check-in
