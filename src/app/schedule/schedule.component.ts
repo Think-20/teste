@@ -32,6 +32,7 @@ import { JobType } from '../job-types/job-type.model';
 import { ScheduleBlock } from './schedule-block/schedule-block.model';
 import { Job } from '../jobs/job.model';
 import { ScheduleBlockService } from './schedule-block/schedule-block.service';
+import { Department } from '../department/department.model';
 
 @Component({
   selector: 'cb-schedule',
@@ -62,6 +63,7 @@ export class ScheduleComponent implements OnInit {
   tasks: Task[] = []
   attendances: Employee[]
   employees: Employee[]
+  departments: Department[] = []
   clients: Client[] = []
   jobActivities: JobActivity[] = []
   jobTypes: JobType[] = []
@@ -306,6 +308,7 @@ export class ScheduleComponent implements OnInit {
       job_type_array: this.fb.control(''),
       job_activity_array: this.fb.control(''),
       client: this.fb.control(''),
+      department_array: this.fb.control(''),
       status_array: this.fb.control('')
     })
 
@@ -337,7 +340,8 @@ export class ScheduleComponent implements OnInit {
           attendance_array: controls.attendance_array.value,
           responsible_array: controls.responsible_array.value,
           job_type_array: controls.job_type_array.value,
-          job_activity_array: controls.job_activity_array.value
+          job_activity_array: controls.job_activity_array.value,
+          department_array: controls.department_array.value
         }
         this.checkParamsHasFilter()
         this.changeMonth(this.month, this.date)
@@ -374,7 +378,12 @@ export class ScheduleComponent implements OnInit {
 
     this.employeeService.employees().subscribe(employees => {
       let list = ['Planejamento', 'Atendimento', 'Criação', 'Orçamento']
+
       this.employees = employees.filter(employee => {
+        if( !this.departments.some((item) => { return item.id == employee.department.id })
+        && list.indexOf(employee.department.description) > -1 )
+          this.departments.push(employee.department)
+
         if(list.indexOf(employee.department.description) > -1) return true;
       })
     })
@@ -599,6 +608,10 @@ export class ScheduleComponent implements OnInit {
   }
 
   compareJobActivity(var1: JobActivity, var2: JobActivity) {
+    return var1.id === var2.id
+  }
+
+  compareDepartment(var1: Department, var2: Department) {
     return var1.id === var2.id
   }
 
