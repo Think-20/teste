@@ -50,6 +50,7 @@ export class ClientListComponent implements OnInit {
   searching = false
   filter: boolean = false
   pagination: Pagination
+  pageIndex: number = 0
   dataInfo: DataInfo
 
   constructor(
@@ -217,6 +218,7 @@ export class ClientListComponent implements OnInit {
       this.pagination = dataInfo.pagination
       this.clients = <Client[]> this.pagination.data
     })
+    this.pageIndex = $event.pageIndex
   }
 
 }

@@ -70,7 +70,7 @@
         </div>
       </div>
     </mat-card>
-    <mat-paginator *ngIf="jobs" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageSizeOptions]="[pagination?.per_page]"
+    <mat-paginator *ngIf="jobs" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex" [pageSizeOptions]="[pagination?.per_page]"
       (page)="changePage($event)"></mat-paginator>
     <mat-card>
       <div *ngIf="jobs?.length > 0">
@@ -183,7 +183,7 @@
         </div>
       </table>
     </mat-card>
-    <mat-paginator *ngIf="jobs" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageSizeOptions]="[pagination?.per_page]"
+    <mat-paginator *ngIf="jobs" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex" [pageSizeOptions]="[pagination?.per_page]"
       (page)="changePage($event)"></mat-paginator>
   </form>
 </div>

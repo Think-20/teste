@@ -52,6 +52,7 @@ export class JobListComponent implements OnInit {
   status: JobStatus[]
   job_types: JobType[]
   searching = false
+  pageIndex: number = 0
   filter = false
   isAdmin: boolean = false
 
@@ -180,6 +181,7 @@ export class JobListComponent implements OnInit {
       this.jobs = pagination.data
       this.searching = false
     })
+    this.pageIndex = $event.pageIndex
   }
 
   delete(job: Job) {
