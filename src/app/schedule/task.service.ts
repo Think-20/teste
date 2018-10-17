@@ -26,9 +26,14 @@ export class TaskService {
     private auth: AuthService
   ) {}
 
-  jobDisplay(task: Task) {
+  jobDisplay(task: Task, noAbbreviation: boolean = false) {
     if(task.job_activity.description == 'Memorial descritivo') {
-      return 'M. descritivo de ' + task.task.job_activity.description.toLowerCase() + ' ' + this.padChar(task.task)
+      let jobDescription = 'M. descritivo'
+
+      if(noAbbreviation)
+        jobDescription = 'Memorial descritivo'
+
+      return jobDescription + ' de ' + task.task.job_activity.description.toLowerCase() + ' ' + this.padChar(task.task)
     }
 
     return task.job_activity.description +  ' ' + this.padChar(task)
