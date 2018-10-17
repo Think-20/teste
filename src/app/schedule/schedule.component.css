@@ -39,7 +39,7 @@
   display: block;
 }
 
-.actualMonth {
+.actualMonth, .actualYear {
   cursor: pointer;
 }
 
@@ -85,8 +85,14 @@
 
 .select-hidden {
   visibility: hidden;
-  height: 0;
+  /* min-height: 0; */
+  /* height: 0; */
+  /* min-width: 0; */
   font-size: 14px;
+  width: 0;
+  /* flex: 0; */
+  /* display: block; */
+  margin: -17px;
 }
 
 .add-chrono {

@@ -77,6 +77,7 @@ export class ScheduleComponent implements OnInit {
   months: Month[] = MONTHS
   paramsHasFilter: boolean = false
   year: number
+  years: number[] = []
   date: Date
   jobStatus: JobStatus[]
   timer: Observable<number>
@@ -348,6 +349,7 @@ export class ScheduleComponent implements OnInit {
       })
 
     this.today = new Date()
+    this.setYears()
     this.activeDate()
     this.createTimerUpdater()
     this.loadFilterData()
@@ -387,6 +389,16 @@ export class ScheduleComponent implements OnInit {
         if(list.indexOf(employee.department.description) > -1) return true;
       })
     })
+  }
+
+  setYears() {
+    let ini = 2018
+    let year = this.today.getFullYear()
+
+    while(ini <= (year + 1)) {
+      this.years.push(ini)
+      ini += 1
+    }
   }
 
   activeDate() {
@@ -475,6 +487,11 @@ export class ScheduleComponent implements OnInit {
     }
 
     this.changeMonth(month, date)
+  }
+
+  updateYear(year: number) {
+    this.date.setFullYear(year)
+    this.changeMonth(this.month, this.date)
   }
 
   changeMonth(month: Month, date?: Date) {

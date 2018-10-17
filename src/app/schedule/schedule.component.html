@@ -4,9 +4,15 @@
       <div class="col-md-6">
         Cronograma -
         <span class="actualMonth" (click)="monthSelect.open()">
-          {{ month.name }} {{ year }}
-          <mat-select panelClass="select-month-panel" class="select-hidden col-md-3" #monthSelect>
+          {{ month.name }}
+          <mat-select class="select-hidden col-md-3" #monthSelect>
             <mat-option *ngFor="let month of months" (click)="updateMonth(month)">{{month.name}}</mat-option>
+          </mat-select>
+        </span>
+        <span class="actualYear" (click)="yearSelect.open()">
+          {{ year }}
+          <mat-select class="select-hidden col-md-3" #yearSelect>
+            <mat-option *ngFor="let year of years" (click)="updateYear(year)">{{year}}</mat-option>
           </mat-select>
         </span>
       </div>
