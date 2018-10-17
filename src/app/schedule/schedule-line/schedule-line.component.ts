@@ -260,7 +260,7 @@ export class ScheduleLineComponent implements OnInit {
   }
 
   canShowBudgetValue(task: Task, chrono: Chrono) {
-    const available = ['Modificação', 'Opção', 'Continuação', 'Continuação de', 'Detalhamento']
+    const available = ['Modificação', 'Opção', 'Continuação', 'Continuação de', 'Detalhamento', 'M. descritivo']
     let text = this.jobDisplay(task, chrono)
     if(text == '') {
       return false
