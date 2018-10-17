@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 
 import { AuthService } from '../../login/auth.service';
 import { User } from '../../user/user.model';
-import { API } from 'app/app.api';
+import { API, FRONTEND_VERSION, BACKEND_VERSION } from 'app/app.api';
 
 @Component({
   selector: 'cb-sidenav',
@@ -41,6 +41,8 @@ export class SidenavComponent implements OnInit {
   atendimento = false
   clients = false
   API = API
+  FRONTEND_VERSION = FRONTEND_VERSION
+  BACKEND_VERSION = BACKEND_VERSION
 
   constructor(
     private auth: AuthService,
