@@ -9,8 +9,9 @@
         </p>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <!--<cb-project-file-form class="projects" [task]="task"></cb-project-file-form>-->
-    <!--<cb-budget-form *ngIf="task?.project_files?.length > 0" class="projects" [task]="task" [job]="job"></cb-budget-form>-->
+    <iframe [src]="getUrlMemorial(task)" class="iframe-memorial">
+      <p>Seu navegador não pôde carregar o PDF corretamente. Baixe diretamente por <a [href]="getUrlMemorial(task)">aqui.</a></p>
+    </iframe>
   </mat-expansion-panel>
 </mat-accordion>
 

@@ -135,6 +135,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { ImageViewerComponent } from './shared/image-viewer/image-viewer.component';
 import { ScheduleBlockService } from './schedule/schedule-block/schedule-block.service';
 import { ProposalsComponent } from './proposals/proposals.component';
+import { SafePipe } from './shared/safe.pipe';
 registerLocaleData(localePt);
 
 @NgModule({
@@ -204,6 +205,7 @@ registerLocaleData(localePt);
     ScheduleLineComponent,
     ImageViewerComponent,
     ProposalsComponent,
+    SafePipe,
   ],
   imports: [
     CurrencyMaskModule,

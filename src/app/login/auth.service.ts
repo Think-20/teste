@@ -47,6 +47,10 @@ export class AuthService {
         }
     }
 
+    queryAccess() {
+      return `access_token=${this.token()}&user_id=${this.currentUser().id}`
+    }
+
     setData(data) {
         localStorage.setItem('currentUser', JSON.stringify(data.user))
         localStorage.setItem('token', data.token)

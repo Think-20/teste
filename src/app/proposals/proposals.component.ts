@@ -4,6 +4,11 @@ import { TaskService } from '../schedule/task.service';
 import { Task } from '../schedule/task.model';
 import { ActivatedRoute } from '@angular/router';
 
+import { API } from '../app.api';
+import { SafePipe } from '../shared/safe.pipe';
+import { DomSanitizer } from '@angular/platform-browser';
+import { AuthService } from '../login/auth.service';
+
 @Component({
   selector: 'cb-proposals',
   templateUrl: './proposals.component.html',
@@ -17,7 +22,9 @@ export class ProposalsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private sanitizer: DomSanitizer,
+    private auth: AuthService
   ) { }
 
   ngOnInit() {
@@ -39,6 +46,10 @@ export class ProposalsComponent implements OnInit {
         }
       })
     })
+  }
+
+  getUrlMemorial(task: Task) {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(`${API}/task/memorial/${task.id}?${this.auth.queryAccess()}`)
   }
 
   sortTasks() {
