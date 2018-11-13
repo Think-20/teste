@@ -9,7 +9,7 @@ import {
   MatButtonModule, MatIconModule, MatTabsModule, MatAutocompleteModule, MatChipsModule,
   MatSnackBar, MatSnackBarModule, MatMenuModule, MAT_LABEL_GLOBAL_OPTIONS,
   MatDatepickerModule, MAT_DATE_LOCALE, MatNativeDateModule, MatPaginatorModule,
-  MatPaginatorIntl, MatTooltipModule, MatRadioModule, MatExpansionModule
+  MatPaginatorIntl, MatTooltipModule, MatRadioModule, MatExpansionModule, MatCheckboxModule
 } from '@angular/material';
 import { MatBadgeModule, MatBadge } from '@angular/material/badge';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -136,6 +136,9 @@ import { ImageViewerComponent } from './shared/image-viewer/image-viewer.compone
 import { ScheduleBlockService } from './schedule/schedule-block/schedule-block.service';
 import { ProposalsComponent } from './proposals/proposals.component';
 import { SafePipe } from './shared/safe.pipe';
+import { ProposalFormComponent } from './proposals/proposal-form/proposal-form.component';
+import { ItemProposalFormComponent } from './proposals/proposal-form/item-proposal-form/item-proposal-form.component';
+
 registerLocaleData(localePt);
 
 @NgModule({
@@ -206,6 +209,8 @@ registerLocaleData(localePt);
     ImageViewerComponent,
     ProposalsComponent,
     SafePipe,
+    ProposalFormComponent,
+    ItemProposalFormComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -242,6 +247,7 @@ registerLocaleData(localePt);
     NotificationModule,
     MatExpansionModule,
     MatProgressBarModule,
+    MatCheckboxModule
   ],
   providers: [
     ClientService,

@@ -33,6 +33,19 @@ export class ItemCategoryService {
             })
     }
 
+    itemsGroupByCategory(query: string = ''): Observable<ItemCategory[]> {
+        let url = query === '' ? `item-categories/items-group-by-category` : `item-categories/filter/${query}`
+
+        return this.http.get(`${API}/${url}`)
+            .map(response => response.json())
+            .catch((err) => {
+                this.snackBar.open(ErrorHandler.message(err), '', {
+                    duration: 3000
+                })
+                return ErrorHandler.capture(err)
+            })
+    }
+
     itemCategory(itemCategoryId: number): Observable<ItemCategory> {
         return this.http.get(`${API}/item-categories/get/${itemCategoryId}`)
             .map(response => response.json())
@@ -58,7 +71,7 @@ export class ItemCategoryService {
                 return ErrorHandler.capture(err)
             })
     }
-    
+
     edit(itemCategory: ItemCategory): Observable<any> {
         return this.http.put(
                 `${API}/item-category/edit`,
