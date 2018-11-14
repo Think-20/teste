@@ -1,13 +1,19 @@
 <div class="group" *ngFor="let category of categories; let i = index">
-
   <table class="title-table" *ngIf="category.items.length == 0">
-    <tr class="line-title">
-      <td class="nivel">{{ sequence != '' ? sequence + '.' : '' }}{{ i + 1 }}</td>
+    <tr class="line-title" (click)="showToggle()">
+      <td class="nivel">
+        {{ sequence != '' ? sequence + '.' : '' }}{{ i + 1 }}
+        <!--
+        <div class="icon-content">
+          <mat-icon>add</mat-icon>
+          <span>{{ sequence != '' ? sequence + '.' : '' }}{{ i + 1 }}</span>
+        </div>
+        -->
+      </td>
       <td class="title">{{ category.description }}</td>
       <td class="value">{{ 'R$ 0,00' }}</td>
     </tr>
   </table>
-
   <table class="subtitle-table" *ngIf="category.items.length > 0">
     <tr class="line-title">
       <td class="nivel">{{ sequence != '' ? sequence + '.' : '' }}{{ i + 1 }}</td>
@@ -28,5 +34,8 @@
       <td class="total">&nbsp;</td>
     </tr>
   </table>
-  <cb-item-proposal-form class="child" [categories]="category.item_categories" [sequence]="(sequence != '' ? sequence + '.' : '') + (i + 1)"></cb-item-proposal-form>
+  <cb-item-proposal-form [class.hidden]="!show && sequence.length == 0"
+    class="child" [categories]="category.item_categories"
+    [sequence]="(sequence != '' ? sequence + '.' : '') + (i + 1)">
+  </cb-item-proposal-form>
 </div>

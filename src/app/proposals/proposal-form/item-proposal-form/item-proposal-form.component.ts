@@ -10,6 +10,11 @@ export class ItemProposalFormComponent implements OnInit {
 
   @Input() categories: ItemCategory[] = []
   @Input() sequence: string = ''
+  show: boolean = false
+
+  showToggle() {
+    this.show = this.show ? false : true
+  }
 
   constructor() { }
 

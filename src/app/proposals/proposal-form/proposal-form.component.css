@@ -1,3 +1,16 @@
+.memorial {
+  background: url('/assets/images/timbrado-think.jpg');
+  background-size: cover;
+  padding: 24px;
+  height: 1100px;
+  margin-left: -24px;
+  margin-right: -24px;
+}
+
+.memorial form {
+  width: 100%;
+}
+
 cb-item-proposal-form {
   display: block;
 }

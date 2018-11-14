@@ -15,6 +15,12 @@ cb-item-proposal-form {
   padding-left: 5px;
 }
 
+.hidden {
+  display: none;
+  visibility: hidden;
+  height: 0;
+}
+
 .child > .group {
   border: none;
   margin-bottom: 0px;
@@ -47,6 +53,7 @@ td {
 
 .line-title {
   background-color: #edefee;
+  cursor: pointer;
 }
 
 .line-title .nivel, .line-title .title {
@@ -56,22 +63,32 @@ td {
 }
 
 .title {
-  width: 78.5%;
+  width: 75%;
   text-transform: uppercase;
 }
 
+.icon-content {
+  display: flex;
+  align-content: center;
+  align-items: center;
+}
+
 .nivel {
-  width: 5%;
+  width: 8%;
   text-align: center;
   padding: 0px;
   padding-right: 2px;
   padding-top: 9px;
-}  
+}
+
+.qtd {
+  width: 12%;
+}
 
 .description {
   width: 50%;
   padding-left: 15px;
-}    
+}
 
 .line-title .description {
   padding-left: 5px;

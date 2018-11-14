@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ItemCategory } from '../../item-categories/item-category.model';
 import { ItemCategoryService } from '../../item-categories/item-category.service';
+import { Job } from '../../jobs/job.model';
 
 @Component({
   selector: 'cb-proposal-form',
@@ -10,8 +11,10 @@ import { ItemCategoryService } from '../../item-categories/item-category.service
 })
 export class ProposalFormComponent implements OnInit {
 
+  @Input() job: Job
   proposalForm: FormGroup
   categories: ItemCategory[] = []
+  now: Date = new Date()
 
   constructor(
     private formBuilder: FormBuilder,
