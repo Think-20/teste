@@ -44,7 +44,7 @@
         </mat-form-field>
         <mat-form-field class="col-md-3">
           <mat-select placeholder="Responsável*" formControlName="responsible" [compareWith]="compareResponsible">
-            <mat-option *ngFor="let responsible of responsibles" [value]="responsible">
+            <mat-option *ngFor="let responsible of responsibles" [value]="responsible" [disabled]="scheduleForm.controls.job_activity.value.description != 'Modificação' && ! isAdmin && responsible.name == 'Miguel Rodrigues'">
               {{ responsible.name }}
             </mat-option>
           </mat-select>
