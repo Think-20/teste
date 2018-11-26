@@ -445,7 +445,7 @@ export class ScheduleFormComponent implements OnInit {
     let snack = this.snackBar.open('Aguarde enquanto carregamos as datas disponíveis')
     this.taskService.getAvailableDates({
       iniDate: date.getFullYear() + '-' + (date.getMonth() + 1) + '-01',
-      finDate: date.getFullYear() + '-' + (date.getMonth() + 1) + '-31',
+      finDate: date.getFullYear() + '-' + (date.getMonth() + 2) + '-31',
       job_activity: this.scheduleForm.controls.job_activity.value,
       duration: this.scheduleForm.controls.duration.value,
       only_employee: onlyEmployee
