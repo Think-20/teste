@@ -479,7 +479,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   updateMonth(month: Month) {
-    let date = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
+    let date = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-01T00:00:00')
     let now = new Date()
 
     if(month.id == (now.getMonth() + 1)) {
