@@ -441,11 +441,13 @@ export class ScheduleFormComponent implements OnInit {
 
   getAvailableDates(date: Date, onlyEmployee: Employee = null) {
     let open = this.availableDatepicker.opened
+    let finDate = new Date(date.getFullYear(), date.getMonth(), 31)
+    finDate.setDate(finDate.getDate() + 30)
     this.availableDatepicker.close()
     let snack = this.snackBar.open('Aguarde enquanto carregamos as datas disponíveis')
     this.taskService.getAvailableDates({
       iniDate: date.getFullYear() + '-' + (date.getMonth() + 1) + '-01',
-      finDate: date.getFullYear() + '-' + (date.getMonth() + 2) + '-31',
+      finDate: finDate.getFullYear() + '-' + (finDate.getMonth() + 1) + '-31',
       job_activity: this.scheduleForm.controls.job_activity.value,
       duration: this.scheduleForm.controls.duration.value,
       only_employee: onlyEmployee
