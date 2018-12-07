@@ -748,3 +748,24 @@ cb-schedule {
 .mat-expansion-panel:not(:last-child):not(.mat-expanded) {
   border-bottom: 1px solid rgba(0,0,0,.15);
 }
+
+.cb-checkbox-inside-control {
+  position: absolute;
+  right: 5px;
+  top: -18px;
+  z-index: 10;
+}
+
+.cb-checkbox-inside-control span {
+  font-size: 10px;
+  color: #999;
+}
+
+.cb-checkbox-inside-control .mat-checkbox-inner-container {
+  max-width: 12px;
+  max-height: 12px;
+}
+
+.cb-checkbox-inside-control .mat-checkbox-inner-container .mat-checkbox-frame {
+  border-color: #BBB;
+}

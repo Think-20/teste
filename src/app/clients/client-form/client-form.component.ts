@@ -126,6 +126,8 @@ constructor(
         Validators.minLength(10)
       ]),
       note: this.formBuilder.control(''),
+      external: this.formBuilder.control(''),
+      external_toggle: this.formBuilder.control(''),
       street: this.formBuilder.control('', [
         Validators.required,
         Validators.minLength(3),
@@ -148,6 +150,10 @@ constructor(
       city: cityControl,
       state: stateControl,
       contacts: this.formBuilder.array([])
+    })
+
+    this.clientForm.controls.external_toggle.valueChanges.subscribe(() => {
+      this.toggleExternal()
     })
 
     this.employeeService.canInsertClients().subscribe(employees => {
@@ -200,6 +206,23 @@ constructor(
       })
   }
 
+  toggleExternal() {
+    if(this.clientForm.controls.external_toggle.value) {
+      this.clientForm.controls.external.setValue(1)
+      this.clientForm.controls.cnpj.clearValidators()
+      this.clientForm.controls.cnpj.disable()
+    } else {
+      this.clientForm.controls.external.setValue(0)
+      this.clientForm.controls.cnpj.clearValidators()
+      this.clientForm.controls.cnpj.setValidators([
+        Validators.required,
+        Validators.minLength(14)
+      ])
+      this.clientForm.controls.cnpj.enable()
+      this.clientForm.controls.cnpj.updateValueAndValidity()
+    }
+  }
+
   loadClient() {
     let snackBarStateCharging = this.snackBar.open('Carregando cliente...')
     let clientId = parseInt(this.route.snapshot.url[1].path)
@@ -210,6 +233,7 @@ constructor(
       this.clientForm.controls.name.setValue(this.client.name)
       this.clientForm.controls.fantasy_name.setValue(this.client.fantasy_name)
       this.clientForm.controls.cnpj.setValue(this.client.cnpj)
+      this.clientForm.controls.external_toggle.setValue(this.client.external == 1 ? true : false)
       this.clientForm.controls.mainphone.setValue(this.client.mainphone)
       this.clientForm.controls.secundaryphone.setValue(this.client.secundaryphone)
       this.clientForm.controls.client_type.setValue(this.client.type)

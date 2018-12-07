@@ -20,6 +20,7 @@ export class Client {
     neighborhood: string
     complement?: string
     city?: City
+    external: number
     cep: number
     employee?: Employee
     type?: ClientType

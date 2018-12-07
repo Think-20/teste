@@ -56,6 +56,10 @@
         </cb-stars>
         <mat-form-field class="col-md-3">
           <input formControlName="cnpj" mask="99.999.999/9999-99" matInput placeholder="CNPJ*">
+          <div class="cb-checkbox-inside-control">
+            <mat-checkbox formControlName="external_toggle" [value]="1">Estrangeiro</mat-checkbox>
+            <input type="hidden" formControlName="external">
+          </div>
           <mat-error>
             Obrigatório
           </mat-error>
@@ -123,6 +127,13 @@
     </mat-card-title>
     <mat-card>
       <div class="row">
+        <div class="col-md-12">
+          <p>
+            <small>Para cadastro de cliente estrangeiro, utilizar os códigos de estado "EX" e cidade
+              "Exterior".
+            </small>
+        </p>
+        </div>
         <mat-form-field class="col-md-3">
           <input formControlName="cep" mask="99999-999" matInput placeholder="CEP*">
           <mat-error>
