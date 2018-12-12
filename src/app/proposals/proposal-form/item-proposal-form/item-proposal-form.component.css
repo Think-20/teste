@@ -9,7 +9,14 @@ cb-item-proposal-form {
 
 .group {
   margin-bottom: 10px;
+  margin-top: 10px;
 }
+
+/* Espaços conforme o nível aumenta
+.group .group {
+  margin-left: 10px;
+}
+*/
 
 .items {
   padding-left: 5px;
@@ -63,22 +70,15 @@ td {
 }
 
 .title {
-  width: 75%;
+  width: 73%;
   text-transform: uppercase;
-}
-
-.icon-content {
-  display: flex;
-  align-content: center;
-  align-items: center;
-}
+} 
 
 .nivel {
-  width: 8%;
+  width: 10%;
   text-align: center;
   padding: 0px;
-  padding-right: 2px;
-  padding-top: 9px;
+  padding-right: 5px;
 }
 
 .qtd {
@@ -86,7 +86,7 @@ td {
 }
 
 .description {
-  width: 50%;
+  width: 48%;
   padding-left: 15px;
 }
 

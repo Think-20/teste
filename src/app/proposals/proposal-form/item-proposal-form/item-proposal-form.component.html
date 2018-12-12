@@ -1,14 +1,9 @@
 <div class="group" *ngFor="let category of categories; let i = index">
   <table class="title-table" *ngIf="category.items.length == 0">
-    <tr class="line-title" (click)="showToggle()">
+    <tr class="line-title">
       <td class="nivel">
         {{ sequence != '' ? sequence + '.' : '' }}{{ i + 1 }}
-        <!--
-        <div class="icon-content">
-          <mat-icon>add</mat-icon>
-          <span>{{ sequence != '' ? sequence + '.' : '' }}{{ i + 1 }}</span>
-        </div>
-        -->
+        <mat-checkbox (click)="showToggle()"></mat-checkbox>
       </td>
       <td class="title">{{ category.description }}</td>
       <td class="value">{{ 'R$ 0,00' }}</td>

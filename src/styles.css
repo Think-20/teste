@@ -769,3 +769,15 @@ cb-schedule {
 .cb-checkbox-inside-control .mat-checkbox-inner-container .mat-checkbox-frame {
   border-color: #BBB;
 }
+
+.memorial mat-checkbox label {
+  margin-bottom: 3px;
+  margin-left: 5px;
+}
+
+.memorial .mat-checkbox-inner-container {
+  width: 15px;
+  height: 15px;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}

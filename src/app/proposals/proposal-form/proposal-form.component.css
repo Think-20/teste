@@ -1,10 +1,21 @@
+p {
+  margin: 10px 0;
+}
+
+.container-memorial {
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  margin-left: -24px;
+  margin-right: -24px;
+  background-color: #f1f1ef;
+}
+
 .memorial {
   background: url('/assets/images/timbrado-think.jpg');
   background-size: cover;
-  padding: 24px;
+  padding: 48px 24px 0 24px;
+  width: 840px;
   height: 1100px;
-  margin-left: -24px;
-  margin-right: -24px;
+  margin: auto;
 }
 
 .memorial form {
