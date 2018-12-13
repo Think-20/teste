@@ -175,18 +175,26 @@ export class ScheduleFormComponent implements OnInit {
         this.addContinuationEvents()
       else if (jobActivity.description == 'Opção')
         this.addOptionEvents()
+      else if (jobActivity.description == 'Outsider')
+        this.addOutsiderEvents()
       else this.addOtherEvents()
     })
 
-    this.subscriptions.push(this.scheduleForm.controls.budget_value.valueChanges
+    this.scheduleForm.controls.budget_value.valueChanges
       .pipe(debounceTime(500))
       .subscribe(value => {
-        if (value > 450000 && this.scheduleForm.controls.job_activity.value.description != 'Outsider') {
+        let job_activity = this.scheduleForm.controls.job_activity.value.description
+
+        if (value > 450000 &&  job_activity != 'Outsider') {
           this.scheduleForm.controls.job_activity.setValue(this.job_activities.find(jobActivity => {
             return jobActivity.description == 'Outsider'
           }))
+        } else if(value < 450000 && job_activity == 'Outsider') {
+          this.scheduleForm.controls.job_activity.setValue(this.job_activities.find(jobActivity => {
+            return jobActivity.description == 'Projeto'
+          }))
         }
-      }))
+      })
 
     this.scheduleForm.controls.duration.valueChanges
       .pipe(distinctUntilChanged())
@@ -377,6 +385,35 @@ export class ScheduleFormComponent implements OnInit {
         })
         return !detailed
       })
+    }
+
+    this.loadJobs()
+  }
+
+  addOutsiderEvents() {
+    this.clearEvents()
+    this.enableSearchForm()
+
+    this.scheduleForm.controls.responsible.enable()
+    this.scheduleForm.controls.budget_value.enable()
+    this.scheduleForm.controls.budget_value.setValue(450000.01)
+
+    let snackbar
+    let controls = this.searchForm.controls
+
+    this.params = () => {
+      return {
+        paginate: false,
+        clientName: controls.client.value,
+        status: controls.status.value != undefined ? controls.status.value.id : null,
+        attendance: controls.attendance.value,
+        creation: controls.creation.value,
+        job_type: controls.job_type.value
+      }
+    }
+
+    this.callback = (jobs: Job[]) => {
+      this.jobs = jobs
     }
 
     this.loadJobs()
