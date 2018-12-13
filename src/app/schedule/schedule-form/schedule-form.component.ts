@@ -397,6 +397,7 @@ export class ScheduleFormComponent implements OnInit {
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.enable()
     this.scheduleForm.controls.budget_value.setValue(450000.01)
+    
 
     let snackbar
     let controls = this.searchForm.controls
