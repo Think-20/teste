@@ -185,11 +185,11 @@ export class ScheduleFormComponent implements OnInit {
       .subscribe(value => {
         let job_activity = this.scheduleForm.controls.job_activity.value.description
 
-        if (value > 450000 &&  job_activity != 'Outsider') {
+        if (value > 390000 &&  job_activity != 'Outsider') {
           this.scheduleForm.controls.job_activity.setValue(this.job_activities.find(jobActivity => {
             return jobActivity.description == 'Outsider'
           }))
-        } else if(value < 450000 && job_activity == 'Outsider') {
+        } else if(value < 390000 && job_activity == 'Outsider') {
           this.scheduleForm.controls.job_activity.setValue(this.job_activities.find(jobActivity => {
             return jobActivity.description == 'Projeto'
           }))
@@ -396,8 +396,10 @@ export class ScheduleFormComponent implements OnInit {
 
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.enable()
-    this.scheduleForm.controls.budget_value.setValue(450000.01)
-    
+
+    if(this.scheduleForm.controls.budget_value.value < 390000.01) {
+      this.scheduleForm.controls.budget_value.setValue(390000.01)
+    }
 
     let snackbar
     let controls = this.searchForm.controls
