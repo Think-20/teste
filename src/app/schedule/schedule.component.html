@@ -138,7 +138,7 @@
                   <button *ngIf="permissionVerify('new', job)" class="cb-button add-chrono" (click)="addTask(chr.day)">
                     EXTRA
                   </button>
-                  <button *ngIf="permissionVerify('new', job)" class="cb-button add-chrono" (click)="toggleBlock(chr)">
+                  <button *ngIf="permissionVerify('new', job)" class="cb-button add-chrono" (click)="openBlockDialog(chr)">
                     BLOCK
                   </button>
                 </div>

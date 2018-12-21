@@ -4,6 +4,7 @@ import { Task } from "./task.model";
 export class Chrono {
   day: number
   month: number
+  year: number
   dayOfWeek: DayOfWeek
   tasks: Task[]
   length?: number

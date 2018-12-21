@@ -138,6 +138,7 @@ import { ProposalsComponent } from './proposals/proposals.component';
 import { SafePipe } from './shared/safe.pipe';
 import { ProposalFormComponent } from './proposals/proposal-form/proposal-form.component';
 import { ItemProposalFormComponent } from './proposals/proposal-form/item-proposal-form/item-proposal-form.component';
+import { BlockDialogComponent } from './schedule/schedule-block/block-dialog/block-dialog.component';
 
 registerLocaleData(localePt);
 
@@ -211,6 +212,7 @@ registerLocaleData(localePt);
     SafePipe,
     ProposalFormComponent,
     ItemProposalFormComponent,
+    BlockDialogComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -302,7 +304,8 @@ registerLocaleData(localePt);
   entryComponents: [
     StandItemFormComponent,
     ReloadComponent,
-    ImageViewerComponent
+    ImageViewerComponent,
+    BlockDialogComponent
   ]
 })
 export class AppModule { }

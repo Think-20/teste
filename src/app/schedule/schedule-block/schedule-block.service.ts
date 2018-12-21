@@ -19,12 +19,14 @@ export class ScheduleBlockService {
   constructor(
     private http: Http,
     private datePipe: DatePipe,
+    private authService: AuthService,
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) { }
 
   valid(): Observable<ScheduleBlock[]> {
-    let url = `schedule-blocks/valid`
+    let url = this.authService.hasAccess('schedule-blocks/valid')
+    ? `schedule-blocks/valid` : 'my-schedule-blocks/valid'
 
     return this.http.get(`${API}/${url}`,
       new RequestOptions()

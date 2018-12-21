@@ -33,6 +33,7 @@ import { ScheduleBlock } from './schedule-block/schedule-block.model';
 import { Job } from '../jobs/job.model';
 import { ScheduleBlockService } from './schedule-block/schedule-block.service';
 import { Department } from '../department/department.model';
+import { BlockDialogComponent } from './schedule-block/block-dialog/block-dialog.component';
 
 @Component({
   selector: 'cb-schedule',
@@ -123,17 +124,37 @@ export class ScheduleComponent implements OnInit {
   }
 
   lineChronoClass(chrono: Chrono) {
-    let count: number = this.dateBlocks.filter((scheduleBlock) => {
-      return chrono.tasks[0].items[0].date == scheduleBlock.date
-    }).length
+    let date = chrono.year + '-' + chrono.month + '-' + chrono.day
+    let count = this.dateBlocks.filter((scheduleBlock) => {
+      return this.datePipe.transform(scheduleBlock.date, 'yyyy-MM-dd')
+      == this.datePipe.transform(date, 'yyyy-MM-dd')
+    })
 
-    if(count > 0) {
+    if(count.length > 0) {
       return 'line-chrono-block'
     }
 
     return ''
   }
 
+  openBlockDialog(chrono: Chrono) {
+    let date = this.datePipe.transform(chrono.year + '-' + chrono.month + '-' + chrono.day, 'yyyy-MM-dd')
+        
+    const dialogRef = this.dialog.open(BlockDialogComponent, {
+      width: '250px',
+      data: { date: date, employees: this.employees, scheduleBlocks: this.dateBlocks }
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      const snackbar = this.snackBar.open('Aguarde enquanto atualizamos...')
+      this.scheduleBlockService.valid().subscribe((scheduleBlocks) => { 
+        this.dateBlocks = scheduleBlocks 
+        snackbar.dismiss()
+      })
+    });
+  }
+
+  /*
   toggleBlock(chrono: Chrono) {
     let date = chrono.tasks[0].items[0].date
     let index
@@ -176,6 +197,7 @@ export class ScheduleComponent implements OnInit {
       })
     }
   }
+  */
 
   permissionVerify(module: string, job: Job): boolean {
     let access: boolean
@@ -567,6 +589,7 @@ export class ScheduleComponent implements OnInit {
       this.chrono[i] = {
         day: date.getDate(),
         month: (date.getMonth() + 1),
+        year: date.getFullYear(),
         dayOfWeek: DAYSOFWEEK.find(dayOfWeek => dayOfWeek.id == date.getDay()),
         tasks: filteredTasks.sort((a,b) => {
           if(a.responsible != null && b.responsible != null)
