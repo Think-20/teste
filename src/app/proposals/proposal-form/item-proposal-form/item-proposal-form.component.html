@@ -2,17 +2,19 @@
   <table class="title-table" *ngIf="category.items.length == 0">
     <tr class="line-title">
       <td class="nivel">
-        {{ sequence != '' ? sequence + '.' : '' }}{{ i + 1 }}
-        <mat-checkbox (click)="showToggle()"></mat-checkbox>
+        <mat-checkbox *ngIf="sequence == ''" (click)="showToggle()"></mat-checkbox>
       </td>
-      <td class="title">{{ category.description }}</td>
+      <td class="title">
+        {{ sequence != '' ? sequence + '.' : '' }}{{ i + 1 }}{{ sequence == '' ? '.0' : '' }} 
+        - {{ category.description }}
+      </td>
       <td class="value">{{ 'R$ 0,00' }}</td>
     </tr>
   </table>
   <table class="subtitle-table" *ngIf="category.items.length > 0">
     <tr class="line-title">
-      <td class="nivel">{{ sequence != '' ? sequence + '.' : '' }}{{ i + 1 }}</td>
-      <td class="description">{{ category.description }}</td>
+      <td class="nivel"></td>
+      <td class="description">{{ sequence != '' ? sequence + '.' : '' }}{{ i + 1 }} - {{ category.description }}</td>
       <td class="un">unidade</td>
       <td class="qtd">quantidade</td>
       <td class="value">valor</td>

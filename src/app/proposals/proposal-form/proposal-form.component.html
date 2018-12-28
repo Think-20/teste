@@ -1,19 +1,29 @@
 <div class="container-memorial">
   <div class="memorial row">
     <form [formGroup]="proposalForm">
-      <p>São Paulo, {{ now | date: 'd' }} de {{ now | date: 'MMMM' }} de {{ now | date: 'y' }}.</p>
+      <p class="p1">São Paulo, {{ now | date: 'd' }} de {{ now | date: 'MMMM' | titlecase }} de {{ now | date: 'y' }}.</p>
+      <br>
       <br>
       <p>
-        <strong>À {{ (job?.not_client ? job?.agency?.name : job?.client?.name) | uppercase }}</strong>
+        <span class="pbold p2">À {{ (job?.not_client ? job?.agency?.name : job?.client?.name) }}</span>
       </p>
-      <p>Att. Sr(a). {{ (job?.not_client) ? job?.agency?.contacts[0]?.name : job?.client?.contacts[0]?.name }}</p>
+      <p class="p2">Att. Sr(a). {{ (job?.not_client) ? job?.agency?.contacts[0]?.name : job?.client?.contacts[0]?.name
+        }}</p>
       <br>
       <br>
-      <p class="text-center">
-        <strong>PROPOSTA E MEMORIAL DESCRITIVO DE PROJETO, MONTAGEM E DESMONTAGEM DE STAND</strong>
+      <p class="text-center pcx">
+        <span class="pbold p3">PROPOSTA E MEMORIAL DESCRITIVO DE PROJETO, MONTAGEM E DESMONTAGEM DE STAND</span>
       </p>
       <br>
-      <br>
+      <div class="p2">
+        <p>Stand: -</p>
+        <p>Área: -</p>
+        <p>Evento: -</p>
+        <p>Local: -</p>
+        <p>Cidade: -</p>
+        <p>Data: -</p>
+      </div>
+      <br>  
       <cb-item-proposal-form [categories]="categories"></cb-item-proposal-form>
     </form>
   </div>

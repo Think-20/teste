@@ -3,8 +3,9 @@ cb-item-proposal-form {
 }
 
 .title {
-  padding: 5px;
-  font-weight: bold;
+  color: #333;
+  letter-spacing: -1px;
+  font-weight: 500;
 }
 
 .group {
@@ -64,18 +65,24 @@ td {
 }
 
 .line-title .nivel, .line-title .title {
-  font-weight: bold;
+  color: #333;
+  letter-spacing: -1px;
+  font-weight: 500;
   padding: 5px;
   text-align: left;
 }
 
+.group .group .title, .group .group .nivel {
+  font-weight: lighter;
+}
+
 .title {
-  width: 73%;
+  width: 70%;
   text-transform: uppercase;
 } 
 
 .nivel {
-  width: 10%;
+  width: 5%;
   text-align: center;
   padding: 0px;
   padding-right: 5px;
@@ -85,8 +92,12 @@ td {
   width: 12%;
 }
 
+.un {
+  width: 11%;
+}
+
 .description {
-  width: 48%;
+  width: 47%;
   padding-left: 15px;
 }
 

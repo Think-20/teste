@@ -1,5 +1,6 @@
 <mat-accordion>
-  <mat-expansion-panel *ngFor="let task of sortedTasks; let i = index" [expanded]="i == expandedIndex">
+  <!--<mat-expansion-panel *ngFor="let task of sortedTasks; let i = index" [expanded]="i == expandedIndex">-->
+  <mat-expansion-panel *ngFor="let task of sortedTasks; let i = index" [expanded]="true">
     <mat-expansion-panel-header>
       <mat-panel-title>
         <p class="lead">
