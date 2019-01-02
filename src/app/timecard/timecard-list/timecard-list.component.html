@@ -75,8 +75,8 @@
           <mat-form-field [class.cb-hidden]="!filtering" class="col-md-2">
             <input matInput formControlName="year" placeholder="Ano">
           </mat-form-field>
-          <mat-form-field class="col-md-3">
-            <mat-select [class.cb-hidden]="!filtering" placeholder="Mês" formControlName="month" [compareWith]="compareMonth">
+          <mat-form-field [class.cb-hidden]="!filtering" class="col-md-3">
+            <mat-select placeholder="Mês" formControlName="month" [compareWith]="compareMonth">
               <mat-option *ngFor="let month of months" [value]="month">
                 {{ month.name }}
               </mat-option>
@@ -90,8 +90,8 @@
               </mat-option>
             </mat-autocomplete>
           </mat-form-field>
-          <mat-form-field class="col-md-3">
-            <mat-select [class.cb-hidden]="!filtering" placeholder="Local" formControlName="place" [compareWith]="comparePlace">
+          <mat-form-field [class.cb-hidden]="!filtering" class="col-md-3">
+            <mat-select placeholder="Local" formControlName="place" [compareWith]="comparePlace">
               <mat-option *ngFor="let place of places" [value]="place">
                 {{ place.description }}
               </mat-option>
