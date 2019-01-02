@@ -1,9 +1,9 @@
-p {  
+p {
   margin: 0px;
 }
 
 .p1 {
-  font-size: 16px;  
+  font-size: 16px;
 }
 
 .p2 {
@@ -14,13 +14,17 @@ p {
   font-size: 14px;
 }
 
+.p4 {
+  font-size: 13px;
+}
+
 .pcx {
   color: #333;
   border: 1px solid #e7e7e7;
   padding: 5px;
 }
 
-.pbold {    
+.pbold {
   color: #333;
   letter-spacing: -1px;
   font-weight: 500;

@@ -76,10 +76,16 @@ td {
   font-weight: lighter;
 }
 
+.tb-title {
+  text-align: center;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
 .title {
   width: 70%;
   text-transform: uppercase;
-} 
+}
 
 .nivel {
   width: 5%;
@@ -107,7 +113,7 @@ td {
 }
 
 .subtitle-table {
-  margin-top: 10px;
+  margin-top: 30px;
   margin-bottom: 0px;
 }
 

@@ -1,24 +1,24 @@
 <div class="group" *ngFor="let category of categories; let i = index">
   <table class="title-table" *ngIf="category.items.length == 0">
-    <tr class="line-title">
+    <tr class="line-title" (click)="showToggle()">
       <td class="nivel">
-        <mat-checkbox *ngIf="sequence == ''" (click)="showToggle()"></mat-checkbox>
+        &nbsp;
       </td>
       <td class="title">
-        {{ sequence != '' ? sequence + '.' : '' }}{{ i + 1 }}{{ sequence == '' ? '.0' : '' }} 
+        {{ sequence != '' ? sequence + '.' : '' }}{{ i + 1 }}{{ sequence == '' ? '.0' : '' }}
         - {{ category.description }}
       </td>
-      <td class="value">{{ 'R$ 0,00' }}</td>
+      <td class="value text-right">{{ 'R$ 0,00' }}</td>
     </tr>
   </table>
   <table class="subtitle-table" *ngIf="category.items.length > 0">
     <tr class="line-title">
       <td class="nivel"></td>
       <td class="description">{{ sequence != '' ? sequence + '.' : '' }}{{ i + 1 }} - {{ category.description }}</td>
-      <td class="un">unidade</td>
-      <td class="qtd">quantidade</td>
-      <td class="value">valor</td>
-      <td class="total">total</td>
+      <td class="un tb-title">unidade</td>
+      <td class="qtd tb-title">quantidade</td>
+      <td class="value tb-title">valor</td>
+      <td class="total tb-title">total</td>
     </tr>
     <tr *ngFor="let item of category.items; let y = index">
       <td class="nivel">
