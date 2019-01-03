@@ -1,5 +1,6 @@
 <div class="container-memorial">
-  <div class="memorial row">
+  <div class="memorial memorial-cabecalho">&nbsp;</div>
+  <div class="memorial memorial-corpo">
     <form [formGroup]="proposalForm">
       <p class="p1">São Paulo, {{ now | date: 'd' }} de {{ now | date: 'MMMM' | titlecase }} de {{ now | date: 'y' }}.</p>
       <br>
@@ -7,8 +8,8 @@
       <p>
         <span class="pbold p2">À {{ (job?.not_client ? job?.agency?.name : job?.client?.name) }}</span>
       </p>
-      <p class="p2">Att. Sr(a). {{ (job?.not_client) ? job?.agency?.contacts[0]?.name : job?.client?.contacts[0]?.name
-        }}</p>
+      <p class="p2">Att. Sr(a). {{ (job?.not_client) ? job?.agency?.contacts[0]?.name : job?.client?.contacts[0]?.name }}
+      </p>
       <br>
       <br>
       <p class="text-center pcx">
@@ -23,8 +24,8 @@
         <p>Cidade: -</p>
         <p>Data: -</p>
       </div>
-      <br>
       <cb-item-proposal-form [categories]="categories"></cb-item-proposal-form>
     </form>
   </div>
+  <div class="memorial memorial-rodape">&nbsp;</div>
 </div>

@@ -22,6 +22,7 @@ p {
   color: #333;
   border: 1px solid #e7e7e7;
   padding: 5px;
+  background-color: #edefee;
 }
 
 .pbold {
@@ -39,18 +40,35 @@ p {
 }
 
 .memorial {
-  background: url('/assets/images/timbrado-think.jpg');
-  background-repeat: repeat-y;
-  background-position-y: -30px;
-  padding: 48px 81px 0 81px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  padding: 48px 80px 0 80px;
   width: 840px;
-  min-height: 1015px;
   margin: auto;
 }
 
-.memorial form {
+.memorial-cabecalho {
+  background-image: url('/assets/images/timbrado_cabecalho.jpg');
+  min-height: 173px;
+}
+
+.memorial-corpo {
+  background-image: url('/assets/images/timbrado_corpo.jpg');
+  min-height: 730px;
+  padding-top: 0;
+  background-repeat: repeat-y;
+}
+
+.memorial-corpo form {
   width: 100%;
-  margin-top: 80px;
+}
+
+.memorial-rodape {
+  background-image: url('/assets/images/timbrado_rodape.jpg');
+  min-height: 273px;
 }
 
 cb-item-proposal-form {
