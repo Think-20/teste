@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
 import { ItemCategory } from '../../item-categories/item-category.model';
 import { ItemCategoryService } from '../../item-categories/item-category.service';
 import { Job } from '../../jobs/job.model';
+import { JobService } from 'app/jobs/job.service';
 
 @Component({
   selector: 'cb-proposal-form',
@@ -19,7 +20,8 @@ export class ProposalFormComponent implements OnInit, AfterViewInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private categoryService: ItemCategoryService
+    private categoryService: ItemCategoryService,
+    private jobService: JobService
   ) { }
 
   ngOnInit() {
@@ -27,6 +29,14 @@ export class ProposalFormComponent implements OnInit, AfterViewInit {
     this.categoryService.itemsGroupByCategory().subscribe((itemCategories) => {
       this.categories = itemCategories
     })
+  }
+
+  displayNameEvent(job: Job) {
+    return this.jobService.displayNameEvent(job)
+  }
+
+  showId(job: Job) {
+    return this.jobService.showId(job)
   }
 
   ngAfterViewInit() {
