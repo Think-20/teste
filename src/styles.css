@@ -468,6 +468,14 @@ mat-card-title > p {
   height: 43px;
 }
 
+.mat-checkbox-checked .mat-checkbox-background {
+  background-color: #00afef !important;
+}
+
+.mat-checkbox .mat-checkbox-ripple .mat-ripple-element {
+  background-color: #00afef2f !important;
+}
+
 .mat-form-field-underline.mat-form-field-underline,
 .mat-select:not(.mat-select-disabled).mat-primary .mat-select-underline {
    background-color: rgba(0,0,0,.15);
@@ -787,7 +795,7 @@ cb-schedule {
 }
 
 .memorial .mat-checkbox-checked .mat-checkbox-background {
-  background-color: transparent;
+  background-color: transparent !important;;
 }
 
 .memorial .mat-checkbox-checkmark-path {
@@ -798,9 +806,16 @@ cb-schedule {
   background-color: rgba(0, 0, 0, .1) !important;
 }
 
+.memorial mat-checkbox label {
+  margin-bottom: 3px;
+  margin-left: 3px;
+}
 
-
-
-
+.memorial .mat-checkbox-inner-container {
+  width: 15px;
+  height: 15px;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
 
 
