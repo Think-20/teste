@@ -1,6 +1,6 @@
-<div class="container-memorial">
-  <div class="memorial memorial-cabecalho">&nbsp;</div>
-  <div class="memorial memorial-corpo">
+<div #container class="container-memorial">
+  <div [style.zoom]="(containerWidth / 840) - 0.02" class="memorial memorial-cabecalho">&nbsp;</div>
+  <div [style.zoom]="(containerWidth / 840) - 0.02" class="memorial memorial-corpo">
     <form [formGroup]="proposalForm">
       <p class="p1">São Paulo, {{ now | date: 'd' }} de {{ now | date: 'MMMM' | titlecase }} de {{ now | date: 'y' }}.</p>
       <br>
@@ -27,5 +27,5 @@
       <cb-item-proposal-form [categories]="categories"></cb-item-proposal-form>
     </form>
   </div>
-  <div class="memorial memorial-rodape">&nbsp;</div>
+  <div [style.zoom]="(containerWidth / 840) - 0.02" class="memorial memorial-rodape">&nbsp;</div>
 </div>

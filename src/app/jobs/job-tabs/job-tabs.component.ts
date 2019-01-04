@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Injectable, ElementRef, ViewChild, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Job } from '../job.model';
 import { Observable } from 'rxjs/Observable';
@@ -11,6 +11,8 @@ import { JobService } from '../job.service';
 })
 @Injectable()
 export class JobTabsComponent implements OnInit {
+  @ViewChild('container') container: ElementRef
+  containerWidth: number
   typeForm: string
   job: Job
   isAdmin: boolean
@@ -45,6 +47,23 @@ export class JobTabsComponent implements OnInit {
       }
     })
 
+    this.initContainerWidthObservable()
+  }
+
+  initContainerWidthObservable() {
+    let target = document.querySelector('#containerJobTabs')
+    this.containerWidth = target.clientWidth
+
+    /* Melhorar com biblioteca Resize aceitável pelos navegadores */
+    Observable.timer(2000, 2000).subscribe(() => {
+      if(target.clientWidth == this.containerWidth)
+       return
+
+      this.containerWidth = target.clientWidth
+      console.log('Atualizando....', this.containerWidth)
+    })
+
+    console.log('Iniciando....', this.containerWidth)
   }
 
   displayNameEvent(job: Job) {

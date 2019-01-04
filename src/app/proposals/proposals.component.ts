@@ -17,6 +17,7 @@ import { AuthService } from '../login/auth.service';
 export class ProposalsComponent implements OnInit {
 
   @Input() job: Job
+  @Input() containerWidth: number
   sortedTasks: Task[]
   expandedIndex: number = null
 

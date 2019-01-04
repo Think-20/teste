@@ -1,7 +1,7 @@
 <div class="my-container">
   <h3 class="lead">{{ job?.id != undefined ? 'Job ' + showId(job) + ' | ' + displayNameEvent(job) : 'Jobs'}}</h3>
 </div>
-<div class="col-md-12">
+<div id="containerJobTabs" class="col-md-12">
   <mat-tab-group [selectedIndex]="selectedIndex">
     <mat-tab label="Informações">
       <cb-job-form [typeForm]="typeForm" (jobEmitter)="setJob($event)" (isAdminEmitter)="setIsAdmin($event)"></cb-job-form>
@@ -17,7 +17,7 @@
       <cb-projects *ngIf="job?.id != undefined" [job]="job"></cb-projects>
     </mat-tab>
     <mat-tab label="Proposta">
-      <cb-proposals *ngIf="job?.id != undefined" [job]="job"></cb-proposals>
+      <cb-proposals *ngIf="job?.id != undefined" [job]="job" [containerWidth]="containerWidth"></cb-proposals>
     </mat-tab>
     <mat-tab label="Orçamento">
       <!--

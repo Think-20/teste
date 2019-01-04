@@ -818,4 +818,8 @@ cb-schedule {
   margin-bottom: 0;
 }
 
+cb-proposals .mat-expansion-panel-body {
+  overflow-x: hidden;
+}
+
 

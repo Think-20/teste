@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { ItemCategory } from '../../item-categories/item-category.model';
 import { ItemCategoryService } from '../../item-categories/item-category.service';
@@ -9,9 +9,10 @@ import { Job } from '../../jobs/job.model';
   templateUrl: './proposal-form.component.html',
   styleUrls: ['./proposal-form.component.css']
 })
-export class ProposalFormComponent implements OnInit {
+export class ProposalFormComponent implements OnInit, AfterViewInit {
 
   @Input() job: Job
+  @Input() containerWidth: number
   proposalForm: FormGroup
   categories: ItemCategory[] = []
   now: Date = new Date()
@@ -26,6 +27,10 @@ export class ProposalFormComponent implements OnInit {
     this.categoryService.itemsGroupByCategory().subscribe((itemCategories) => {
       this.categories = itemCategories
     })
+  }
+
+  ngAfterViewInit() {
+
   }
 
 }
