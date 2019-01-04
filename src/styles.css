@@ -781,3 +781,26 @@ cb-schedule {
   padding-bottom: 0;
   margin-bottom: 0;
 }
+
+.memorial .mat-checkbox-frame {
+  border: 0;
+}
+
+.memorial .mat-checkbox-checked .mat-checkbox-background {
+  background-color: transparent;
+}
+
+.memorial .mat-checkbox-checkmark-path {
+  stroke: #888 !important;
+}
+
+.memorial .mat-checkbox .mat-checkbox-ripple .mat-ripple-element {
+  background-color: rgba(0, 0, 0, .1) !important;
+}
+
+
+
+
+
+
+
