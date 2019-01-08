@@ -123,18 +123,51 @@ export class ScheduleComponent implements OnInit {
     this.scrollActive = status
   }
 
-  lineChronoClass(chrono: Chrono) {
+  lineChronoClass(chrono: Chrono, employees: Employee[]) {
+    if(employees == undefined) return
+
     let date = chrono.year + '-' + chrono.month + '-' + chrono.day
-    let count = this.dateBlocks.filter((scheduleBlock) => {
+    let foundDate = this.dateBlocks.find((scheduleBlock) => {
       return this.datePipe.transform(scheduleBlock.date, 'yyyy-MM-dd')
       == this.datePipe.transform(date, 'yyyy-MM-dd')
     })
 
-    if(count.length > 0) {
+    /* Lista de funcionários não contempla todos os departamentos que usam o cronograma */
+    if(foundDate != undefined
+      && foundDate.blocks != undefined
+      && foundDate.blocks.length >= employees.length) {
       return 'line-chrono-block'
     }
 
     return ''
+  }
+
+  blockText(chrono: Chrono) {
+    let date = chrono.year + '-' + chrono.month + '-' + chrono.day
+    let foundDate = this.dateBlocks.find((scheduleBlock) => {
+      return this.datePipe.transform(scheduleBlock.date, 'yyyy-MM-dd')
+      == this.datePipe.transform(date, 'yyyy-MM-dd')
+    })
+
+    if(foundDate != undefined) {
+      return 'UNBLOCK'
+    }
+
+    return 'BLOCK'
+  }
+
+  blockedNumber(chrono: Chrono) {
+    let date = chrono.year + '-' + chrono.month + '-' + chrono.day
+    let foundDate = this.dateBlocks.find((scheduleBlock) => {
+      return this.datePipe.transform(scheduleBlock.date, 'yyyy-MM-dd')
+      == this.datePipe.transform(date, 'yyyy-MM-dd')
+    })
+
+    if(foundDate != undefined) {
+      return foundDate.blocks.length
+    }
+
+    return '0'
   }
 
   openBlockDialog(chrono: Chrono) {

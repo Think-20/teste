@@ -831,4 +831,12 @@ cb-proposals .mat-expansion-panel-body {
   overflow-x: hidden;
 }
 
+.schedule-table .add-block .mat-badge-medium .mat-badge-content {
+  right: -8px !important;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  font-size: 11px;
+  background-color: #00afef;
+}
 

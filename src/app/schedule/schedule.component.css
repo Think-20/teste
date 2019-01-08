@@ -97,9 +97,21 @@
 
 .add-chrono {
   padding: 0;
+  width: 100%;
   border: none !important;
   margin-top: 5px;
   font-size: 10px;
+}
+
+.add-block {
+  width: 100%;
+  padding: 0;
+  border: none !important;
+  margin-top: 10px;
+}
+
+.add-block .icon {
+  font-size: 20px;
 }
 
 .signal {
