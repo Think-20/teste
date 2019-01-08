@@ -818,6 +818,15 @@ cb-schedule {
   margin-bottom: 0;
 }
 
+.cb-normal-checkbox {
+  font-size: 14px;
+}
+
+.cb-normal-checkbox .mat-checkbox-inner-container {
+  width: 15px;
+  height: 15px;
+}
+
 cb-proposals .mat-expansion-panel-body {
   overflow-x: hidden;
 }

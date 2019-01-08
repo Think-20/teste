@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { ScheduleBlock } from '../schedule-block.model';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { User } from 'app/user/user.model';
 import { Employee } from 'app/employees/employee.model';
 import { ErrorHandler } from 'app/shared/error-handler.service';
@@ -20,6 +20,7 @@ export interface DialogBlockData {
 })
 export class BlockDialogComponent implements OnInit {
 
+  checked: boolean = false
   blockForm: FormGroup
 
   constructor(
@@ -54,10 +55,19 @@ export class BlockDialogComponent implements OnInit {
       }).pop()
 
       if(employee != undefined)
-        usersArray.push(employee.user)  
+        usersArray.push(employee.user)
     })
+  }
 
-    this.blockForm.controls.users.setValue(usersArray)
+  selectAll() {
+    if( this.checked ) {
+      this.blockForm.controls.users.setValue([])
+      return
+    }
+
+    this.blockForm.controls.users.setValue(this.data.employees.map((employee) => {
+      return employee.user
+    }))
   }
 
   compareEmployee(var1: User, var2: User) {
@@ -71,7 +81,7 @@ export class BlockDialogComponent implements OnInit {
       })
       return;
     }
-    
+
     this.scheduleBlockService.save(scheduleBlock).subscribe(data => {
       if (data.status) {
         this.dialogRef.close()

@@ -139,16 +139,16 @@ export class ScheduleComponent implements OnInit {
 
   openBlockDialog(chrono: Chrono) {
     let date = this.datePipe.transform(chrono.year + '-' + chrono.month + '-' + chrono.day, 'yyyy-MM-dd')
-        
+
     const dialogRef = this.dialog.open(BlockDialogComponent, {
-      width: '250px',
+      width: '400px',
       data: { date: date, employees: this.employees, scheduleBlocks: this.dateBlocks }
     });
 
     dialogRef.afterClosed().subscribe(() => {
       const snackbar = this.snackBar.open('Aguarde enquanto atualizamos...')
-      this.scheduleBlockService.valid().subscribe((scheduleBlocks) => { 
-        this.dateBlocks = scheduleBlocks 
+      this.scheduleBlockService.valid().subscribe((scheduleBlocks) => {
+        this.dateBlocks = scheduleBlocks
         snackbar.dismiss()
       })
     });
