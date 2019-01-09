@@ -31,10 +31,6 @@ export class ProposalFormComponent implements OnInit, AfterViewInit {
     })
   }
 
-  displayNameEvent(job: Job) {
-    return this.jobService.displayNameEvent(job)
-  }
-
   showId(job: Job) {
     return this.jobService.showId(job)
   }

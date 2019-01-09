@@ -17,13 +17,13 @@
       </p>
       <br>
       <div class="p4">
-        <p>Stand: -</p>
+        <p>Stand: {{ job.not_client == null ? job.client.fantasy_name : job.not_client }}</p>
         <p>Área: -</p>
-        <p>Evento: -</p>
+        <p>Evento: {{ job.event }}</p>
         <p>Local: -</p>
         <p>Cidade: -</p>
         <p>Data: -</p>
-        <p>{{ 'Job ' + showId(job) + ' | ' + displayNameEvent(job) }}</p>
+        <p>Job: {{ showId(job) }}</p>
       </div>
       <cb-item-proposal-form [categories]="categories"></cb-item-proposal-form>
     </form>
