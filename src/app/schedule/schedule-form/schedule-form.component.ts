@@ -184,6 +184,7 @@ export class ScheduleFormComponent implements OnInit {
       .pipe(debounceTime(500))
       .subscribe(value => {
         let job_activity = this.scheduleForm.controls.job_activity.value.description
+        if(['Outsider', 'Projeto'].indexOf(job_activity) < 0) return
 
         if (value > 390000 &&  job_activity != 'Outsider') {
           this.scheduleForm.controls.job_activity.setValue(this.job_activities.find(jobActivity => {
