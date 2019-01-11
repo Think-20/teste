@@ -28,7 +28,7 @@ import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
 import { ClientComission } from '../client-comission/client-comission.model';
 import { ClientComissionService } from '../client-comission/client-comission.service';
-import { ObjectValidator } from '../../shared/custom-validators';
+import { ObjectValidator, CnpjValidator } from '../../shared/custom-validators';
 import { Location } from '@angular/common';
 
 @Component({
@@ -115,7 +115,7 @@ constructor(
       rate: this.formBuilder.control(''),
       cnpj: this.formBuilder.control('', [
         Validators.required,
-        Validators.minLength(14)
+        CnpjValidator
       ]),
       ie: this.formBuilder.control(''),
       mainphone: this.formBuilder.control('', [
@@ -213,12 +213,11 @@ constructor(
       this.clientForm.controls.cnpj.disable()
     } else {
       this.clientForm.controls.external.setValue(0)
-      this.clientForm.controls.cnpj.clearValidators()
+      this.clientForm.controls.cnpj.enable()
       this.clientForm.controls.cnpj.setValidators([
         Validators.required,
-        Validators.minLength(14)
+        CnpjValidator
       ])
-      this.clientForm.controls.cnpj.enable()
       this.clientForm.controls.cnpj.updateValueAndValidity()
     }
   }
