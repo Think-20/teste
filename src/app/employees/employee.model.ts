@@ -14,4 +14,6 @@ export class Employee implements Notifiable {
     position_id?: number
     user?: User
     user_id?: number
+    updatedBy?: Employee
+    schedule_active: number
 }

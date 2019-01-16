@@ -20,6 +20,16 @@
       </div>
       <nav class="nav-navbar">
         <div class="nav-item">
+          <a (click)="administradores = !administradores" mat-raised-button class="department-container">
+            <span class="department department-2"></span> Administradores
+          </a>
+          <div [@rowAppeared]="state" *ngIf="administradores">
+            <div class="sub-navbar">
+              <a mat-raised-button [routerLink]="['/employees']" [disabled]="hasNoPermission(user, '/employees')">Funcionários</a>
+            </div>
+          </div>
+        </div>
+        <div class="nav-item">
           <a mat-raised-button class="department-container">
             <span class="department department-7"></span> Administrativo
           </a>

@@ -44,7 +44,7 @@ export class TimecardFormComponent implements OnInit {
   timecard: Timecard
   timecardForm: FormGroup
   justifyForm: FormGroup
-  employees: Observable<Employee[]>
+  employees: Employee[]
   accessNew: boolean = false
   justifyHours: boolean = false
   buttonText: string = 'AGUARDE...'
@@ -105,7 +105,9 @@ export class TimecardFormComponent implements OnInit {
     })
     .debounceTime(500)
     .subscribe(employeeName => {
-      this.employees = this.employeeService.employees(employeeName)
+      this.employeeService.employees({ name: employeeName }).subscribe((dataInfo) => {
+        this.employees = dataInfo.pagination.data
+      })
       Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
     })
 

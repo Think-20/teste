@@ -127,9 +127,9 @@ export class TimecardListComponent implements OnInit {
    .debounceTime(500)
    .subscribe(value => {
       let snackBar = this.snackBar.open('Carregando registros...')
-      this.employeeService.employees(value).subscribe(employees => {
+      this.employeeService.employees({ name: value }).subscribe(dataInfo => {
         this.searching = false
-        this.employees = employees
+        this.employees = dataInfo.pagination.data
         snackBar.dismiss()
       })
     })

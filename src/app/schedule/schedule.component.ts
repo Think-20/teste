@@ -433,9 +433,9 @@ export class ScheduleComponent implements OnInit {
 
     this.scheduleBlockService.valid().subscribe((scheduleBlocks) => { this.dateBlocks = scheduleBlocks })
 
-    this.employeeService.employees().subscribe(employees => {
+    this.employeeService.employees().subscribe(dataInfo => {
       let list = ['Planejamento', 'Atendimento', 'Criação', 'Orçamento']
-
+      let employees : Employee[] = dataInfo.pagination.data
       this.employees = employees.filter(employee => {
         if( !this.departments.some((item) => { return item.id == employee.department.id })
         && list.indexOf(employee.department.description) > -1 )

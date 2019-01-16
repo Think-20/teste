@@ -139,6 +139,12 @@ import { SafePipe } from './shared/safe.pipe';
 import { ProposalFormComponent } from './proposals/proposal-form/proposal-form.component';
 import { ItemProposalFormComponent } from './proposals/proposal-form/item-proposal-form/item-proposal-form.component';
 import { BlockDialogComponent } from './schedule/schedule-block/block-dialog/block-dialog.component';
+import { EmployeeFormComponent } from './employees/employee-form/employee-form.component';
+import { EmployeeListComponent } from './employees/employee-list/employee-list.component';
+import { EmployeesComponent } from './employees/employees.component';
+import { EmployeeShowComponent } from './employees/employee-show/employee-show.component';
+import { DepartmentService } from './department/department.service';
+import { PositionService } from './position/position.service';
 
 registerLocaleData(localePt);
 
@@ -213,6 +219,11 @@ registerLocaleData(localePt);
     ProposalFormComponent,
     ItemProposalFormComponent,
     BlockDialogComponent,
+
+    EmployeeFormComponent,
+    EmployeeListComponent,
+    EmployeesComponent,
+    EmployeeShowComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -289,6 +300,8 @@ registerLocaleData(localePt);
     UserNotificationService,
     ProjectFileService,
     ScheduleBlockService,
+    DepartmentService,
+    PositionService,
 
     MatDialog,
     MatSnackBar,

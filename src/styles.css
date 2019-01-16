@@ -117,6 +117,10 @@ button {
   background-color: #a4ce3a;
 }
 
+.department-2 {
+  background-color: #f44336;
+}
+
 .department-1 {
   background-color: #e5e6e8;
 }
@@ -139,6 +143,10 @@ button {
 
 .department-7-transparent {
   background-color: #a4ce3a15;
+}
+
+.department-2-transparent {
+  background-color: #f4433615;
 }
 
 .department-1-transparent {
@@ -825,6 +833,10 @@ cb-schedule {
 .cb-normal-checkbox .mat-checkbox-inner-container {
   width: 15px;
   height: 15px;
+}
+
+.cb-normal-checkbox .mat-checkbox-frame {
+  border-color: rgba(0,0,0,0.25);
 }
 
 cb-proposals .mat-expansion-panel-body {

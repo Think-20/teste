@@ -183,8 +183,8 @@ export class ProviderFormComponent implements OnInit {
         }
       })
 
-    this.employeeService.employees().subscribe(employees => {
-      this.employees = employees
+    this.employeeService.employees().subscribe(dataInfo => {
+      this.employees = dataInfo.pagination.data
       this.personTypeService.personTypes().subscribe(personTypes => {
         this.personTypes = personTypes
         if(this.typeForm === 'edit') {

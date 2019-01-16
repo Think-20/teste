@@ -1,0 +1,47 @@
+<div class="col-md-12">
+  <form [formGroup]="employeeForm" novalidate autocomplete="off">
+    <mat-card-title *ngIf="withHeader">
+      <p class="lead">Dados do funcionário</p>
+    </mat-card-title>
+    <mat-card>
+      <div class="row">
+        <mat-form-field class="col-md-3">
+          <input ucWords formControlName="name" matInput placeholder="Nome*">
+          <mat-error>
+            Obrigatório, entre 3 e 50 caract.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3">
+          <input currencyMask formControlName="payment" matInput placeholder="Salário*">
+        </mat-form-field>
+        <mat-form-field class="col-md-3">
+          <mat-select placeholder="Função" formControlName="position" [compareWith]="comparePosition">
+            <mat-option></mat-option>
+            <mat-option *ngFor="let position of positions" [value]="position">
+              {{ position.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field class="col-md-3">
+          <mat-select placeholder="Departamento" formControlName="department" [compareWith]="compareDepartment">
+            <mat-option></mat-option>
+            <mat-option *ngFor="let department of departments" [value]="department">
+              {{ department.description }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <div class="col-md-3">
+          <mat-checkbox class="cb-normal-checkbox" value="1" formControlName="schedule_active">Ativo no calendário</mat-checkbox>
+        </div>
+      </div>
+      <mat-card-actions class="col-md-12 text-right">
+        <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save(employeeForm.value)" mat-raised-button>
+          SALVAR
+        </button>
+        <button class="cb-button" *ngIf="typeForm === 'edit'" color="primary" (click)="edit(employeeForm.value, employee.id)" mat-raised-button>
+          EDITAR
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </form>
+</div>

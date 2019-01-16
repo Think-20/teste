@@ -43,6 +43,10 @@ import { TimecardApprovalsComponent } from './timecard/timecard-approvals/timeca
 import { ScheduleComponent } from './schedule/schedule.component';
 import { JobTabsComponent } from './jobs/job-tabs/job-tabs.component';
 import { ScheduleFormComponent } from './schedule/schedule-form/schedule-form.component'
+import { EmployeesComponent } from './employees/employees.component';
+import { EmployeeFormComponent } from './employees/employee-form/employee-form.component';
+import { EmployeeShowComponent } from './employees/employee-show/employee-show.component';
+import { EmployeeListComponent } from './employees/employee-list/employee-list.component';
 
 export const ROUTES: Routes = [
     {
@@ -132,6 +136,25 @@ export const ROUTES: Routes = [
                     },
                     {
                         path: 'import', component: ClientImportComponent, canActivate: [AuthGuard]
+                    }
+                ]
+            },
+            {
+                path : 'employees', component : EmployeesComponent, children: [
+                    {
+                        path: '', redirectTo: 'list', pathMatch: 'full'
+                    },
+                    {
+                        path: 'new', component: EmployeeFormComponent, canActivate: [AuthGuard]
+                    },
+                    {
+                        path: 'edit/:id', component: EmployeeFormComponent, canActivate: [AuthGuard]
+                    },
+                    {
+                        path: 'show/:id', component: EmployeeShowComponent, canActivate: [AuthGuard]
+                    },
+                    {
+                        path: 'list', component: EmployeeListComponent, canActivate: [AuthGuard]
                     }
                 ]
             },

@@ -25,7 +25,7 @@
             </mat-error>
           </mat-form-field>
           <mat-autocomplete #autocompleteEmployee="matAutocomplete" [displayWith]="displayEmployee">
-              <mat-option *ngFor="let employee of employees | async" [value]="employee">
+              <mat-option *ngFor="let employee of employees" [value]="employee">
                 {{ employee.name }}
               </mat-option>
           </mat-autocomplete>
