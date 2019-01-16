@@ -20,7 +20,7 @@
       </div>
       <nav class="nav-navbar">
         <div class="nav-item">
-          <a (click)="administradores = !administradores" mat-raised-button class="department-container">
+          <a *ngIf="!hasNoPermission(user, '/employees')" (click)="administradores = !administradores" mat-raised-button class="department-container">
             <span class="department department-2"></span> Administradores
           </a>
           <div [@rowAppeared]="state" *ngIf="administradores">

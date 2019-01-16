@@ -51,19 +51,9 @@ export class SidenavComponent implements OnInit {
   ) { }
 
   hasNoPermission(user: User, url: string): boolean {
-    let iterativeRoute = this.route.routerState.snapshot.root
-    let originalRoute = iterativeRoute.routeConfig !== null ? '/' + iterativeRoute.routeConfig.path : ''
-
-    while(iterativeRoute.parent !== null
-        && iterativeRoute.parent.routeConfig !== null
-        && iterativeRoute.parent.routeConfig.path != '')
-    {
-        iterativeRoute = iterativeRoute.parent
-        originalRoute = '/' + iterativeRoute.routeConfig.path + originalRoute
-    }
-
     return user.displays.filter(display => {
-        return display.url === originalRoute && display.access === 'N'
+        return display.url === url
+        && display.access === 'N'
     }).length > 0
   }
   ngOnInit() {
