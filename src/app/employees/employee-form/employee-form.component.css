@@ -1,25 +1,21 @@
- .contact-item {
-    position: relative;
-    flex-wrap: wrap;
- }
+.photo-container {
+  text-align: center;
+}
 
- .add-contact, .delete-contact {
-    z-index: 10;
-    min-width: 10px !important;
-    padding: 0px !important;
-    color: #BBB;
- }
- 
- .add-contact {
-    position: relative;
-    margin-top: -20px;
-    top: -16px;
-    left: 0px;
- }
+.photo-container img {
+  max-width: 250px;
+  border: 1px solid #ddd;
+  padding: 2px;
+  margin: 10px 0;
+  background-color: white;
+}
 
-.delete-contact {
-    position: absolute;
-    right: 6px;
-    top: 3px;
-    z-index: 10;
+.photo-container .progress {
+  max-width: 250px;
+  margin: auto;
+  margin-bottom: 10px;
+}
+
+.btn-upload {
+  margin-bottom: 10px;
 }

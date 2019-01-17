@@ -19,6 +19,8 @@ import { Department } from '../../department/department.model';
 import { DepartmentService } from '../../department/department.service';
 import { PositionService } from '../../position/position.service';
 import { Position } from '../../position/position.model';
+import { UploadFileService } from '../../shared/upload-file.service';
+import { API } from '../../app.api';
 
 @Component({
   selector: 'cb-employee-form',
@@ -43,6 +45,7 @@ import { Position } from '../../position/position.model';
 @Injectable()
 export class EmployeeFormComponent implements OnInit {
 
+  path: string = API + '/assets/images/'
   @Input('mode') typeForm: string
   @Input('withHeader') withHeader: boolean = true
   rowAppearedState = 'ready'
@@ -51,11 +54,14 @@ export class EmployeeFormComponent implements OnInit {
   positions: Position[]
   employeeForm: FormGroup
   contactsArray: FormArray
+  progress: number
+  imagePath: string
 
   constructor(
     private employeeService: EmployeeService,
     private departmentService: DepartmentService,
     private positionService: PositionService,
+    private uploadFileService: UploadFileService,
     private authService: AuthService,
     private location: Location,
     private formBuilder: FormBuilder,
@@ -67,6 +73,7 @@ export class EmployeeFormComponent implements OnInit {
   ngOnInit() {
     let snackBarStateCharging
     this.typeForm = this.route.snapshot.url[0].path
+    this.imagePath = this.path + 'sem-foto.jpg'
 
     this.employeeForm = this.formBuilder.group({
       name: this.formBuilder.control('', [
@@ -74,6 +81,7 @@ export class EmployeeFormComponent implements OnInit {
         Validators.minLength(3),
         Validators.maxLength(50)
       ]),
+      image: this.formBuilder.control('sem-foto.jpg'),
       payment: this.formBuilder.control('0.00', [
         Validators.required
       ]),
@@ -92,6 +100,13 @@ export class EmployeeFormComponent implements OnInit {
     }
 
     this.loadData()
+    this.listenImage()
+  }
+
+  listenImage() {
+    this.employeeForm.controls.image.valueChanges.subscribe((value) => {
+      this.imagePath = this.path + value
+    })
   }
 
   loadData() {
@@ -116,7 +131,22 @@ export class EmployeeFormComponent implements OnInit {
       this.employeeForm.controls.department.setValue(this.employee.department)
       this.employeeForm.controls.position.setValue(this.employee.position)
       this.employeeForm.controls.schedule_active.setValue(this.employee.schedule_active)
+      this.employeeForm.controls.image.setValue(this.employee.image)
     })
+  }
+
+  uploadFile(inputFile: HTMLInputElement) {
+    let snackbar = this.snackBar.open('Aguarde enquanto carregamos os arquivos...')
+    const path = API + '/assets/images/temp/'
+
+    this.uploadFileService.uploadFile(inputFile, (percentDone) => {
+      this.progress = percentDone
+    }, (response) => {
+      let filename = inputFile.files[0].name
+      this.employeeForm.controls.image.setValue(filename)
+      this.imagePath = this.path + 'temp/' + filename
+      snackbar.dismiss()
+    }).subscribe((data) => {})
   }
 
   compareDepartment(var1: Department, var2: Department) {

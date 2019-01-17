@@ -5,6 +5,17 @@
     </mat-card-title>
     <mat-card>
       <div class="row">
+        <div class="col-md-12 photo-container">
+          <img src="{{ imagePath }}" alt="Foto do funcionário">
+          <mat-progress-bar class="progress" *ngIf="progress > 0 && progress < 99" mode="determinate" value="{{progress}}"></mat-progress-bar>
+        </div>
+        <div class="col-md-12 text-center">
+          <input [disabled]="typeForm == 'show'" #inputFile type="file" accept="image/jpeg,image/png" (change)="uploadFile(inputFile)"
+            style="display:none;" />
+          <button type="button" class="btn-upload cb-button" (click)="inputFile.click()" mat-raised-button>
+            <mat-icon>cloud_upload</mat-icon> &nbsp; Editar imagem
+          </button>
+        </div>
         <mat-form-field class="col-md-3">
           <input ucWords formControlName="name" matInput placeholder="Nome*">
           <mat-error>
