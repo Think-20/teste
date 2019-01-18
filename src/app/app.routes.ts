@@ -47,6 +47,7 @@ import { EmployeesComponent } from './employees/employees.component';
 import { EmployeeFormComponent } from './employees/employee-form/employee-form.component';
 import { EmployeeShowComponent } from './employees/employee-show/employee-show.component';
 import { EmployeeListComponent } from './employees/employee-list/employee-list.component';
+import { EmployeeTabsComponent } from './employees/employee-tabs/employee-tabs.component';
 
 export const ROUTES: Routes = [
     {
@@ -145,10 +146,10 @@ export const ROUTES: Routes = [
                         path: '', redirectTo: 'list', pathMatch: 'full'
                     },
                     {
-                        path: 'new', component: EmployeeFormComponent, canActivate: [AuthGuard]
+                        path: 'new', component: EmployeeTabsComponent, canActivate: [AuthGuard]
                     },
                     {
-                        path: 'edit/:id', component: EmployeeFormComponent, canActivate: [AuthGuard]
+                        path: 'edit/:id', component: EmployeeTabsComponent, canActivate: [AuthGuard]
                     },
                     {
                         path: 'show/:id', component: EmployeeShowComponent, canActivate: [AuthGuard]

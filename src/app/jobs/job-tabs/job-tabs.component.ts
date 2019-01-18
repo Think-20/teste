@@ -60,10 +60,10 @@ export class JobTabsComponent implements OnInit {
        return
 
       this.containerWidth = target.clientWidth
-      console.log('Atualizando....', this.containerWidth)
+      //console.log('Atualizando....', this.containerWidth)
     })
 
-    console.log('Iniciando....', this.containerWidth)
+    //console.log('Iniciando....', this.containerWidth)
   }
 
   displayNameEvent(job: Job) {

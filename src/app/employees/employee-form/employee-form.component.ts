@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable, Input } from '@angular/core';
+import { Component, OnInit, Injectable, Input, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -46,8 +46,11 @@ import { API } from '../../app.api';
 export class EmployeeFormComponent implements OnInit {
 
   path: string = API + '/assets/images/'
-  @Input('mode') typeForm: string
+  @Input('typeForm') typeForm: string
   @Input('withHeader') withHeader: boolean = true
+  @Output('employeeEmitter') employeeEmitter: EventEmitter<Employee> = new EventEmitter()
+  @Output('isAdminEmitter') isAdminEmitter: EventEmitter<boolean> = new EventEmitter()
+
   rowAppearedState = 'ready'
   employee: Employee
   departments: Department[]
@@ -55,6 +58,7 @@ export class EmployeeFormComponent implements OnInit {
   employeeForm: FormGroup
   contactsArray: FormArray
   progress: number
+  isAdmin: boolean = false
   imagePath: string
 
   constructor(
@@ -94,6 +98,8 @@ export class EmployeeFormComponent implements OnInit {
       schedule_active: this.formBuilder.control('1'),
     })
 
+    this.isAdmin = this.authService.hasAccess('employee/save')
+    this.isAdminEmitter.emit(this.isAdmin)
 
     if (this.typeForm === 'edit') {
       this.loadEmployee()
@@ -124,6 +130,7 @@ export class EmployeeFormComponent implements OnInit {
     this.employeeService.employee(employeeId).subscribe(employee => {
       snackBarStateCharging.dismiss()
       this.employee = employee
+      this.employeeEmitter.emit(employee)
       let payment = this.employee.payment != null ? this.employee.payment : 0.00
 
       this.employeeForm.controls.name.setValue(this.employee.name)

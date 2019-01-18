@@ -145,6 +145,9 @@ import { EmployeesComponent } from './employees/employees.component';
 import { EmployeeShowComponent } from './employees/employee-show/employee-show.component';
 import { DepartmentService } from './department/department.service';
 import { PositionService } from './position/position.service';
+import { UserFormComponent } from './user/user-form/user-form.component';
+import { EmployeeTabsComponent } from './employees/employee-tabs/employee-tabs.component';
+import { UserService } from './user/user.service';
 
 registerLocaleData(localePt);
 
@@ -224,6 +227,9 @@ registerLocaleData(localePt);
     EmployeeListComponent,
     EmployeesComponent,
     EmployeeShowComponent,
+    EmployeeTabsComponent,
+
+    UserFormComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -302,6 +308,7 @@ registerLocaleData(localePt);
     ScheduleBlockService,
     DepartmentService,
     PositionService,
+    UserService,
 
     MatDialog,
     MatSnackBar,
