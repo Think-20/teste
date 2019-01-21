@@ -119,7 +119,7 @@ export class UserFormComponent implements OnInit {
       return;
     }
 
-    let url = this.authService.currentUser().id == userId ? '/logout' : '/employees'
+    let url = this.authService.currentUser().id == userId ? '/login' : '/employees'
     user.id = userId
 
     this.userService.edit(user).subscribe(data => {

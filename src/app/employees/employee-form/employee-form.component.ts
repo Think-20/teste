@@ -79,6 +79,9 @@ export class EmployeeFormComponent implements OnInit {
     this.typeForm = this.route.snapshot.url[0].path
     this.imagePath = this.path + 'sem-foto.jpg'
 
+    this.isAdmin = this.authService.hasAccess('employee/save')
+    this.isAdminEmitter.emit(this.isAdmin)
+
     this.employeeForm = this.formBuilder.group({
       name: this.formBuilder.control('', [
         Validators.required,
@@ -86,22 +89,19 @@ export class EmployeeFormComponent implements OnInit {
         Validators.maxLength(50)
       ]),
       image: this.formBuilder.control('sem-foto.jpg'),
-      payment: this.formBuilder.control('0.00', [
+      payment: this.formBuilder.control({ value: '0.00', disabled: !this.isAdmin }, [
         Validators.required
       ]),
-      department: this.formBuilder.control('', [
+      department: this.formBuilder.control({ value: '', disabled: !this.isAdmin }, [
         Validators.required
       ]),
-      position: this.formBuilder.control('', [
+      position: this.formBuilder.control({ value: '', disabled: !this.isAdmin }, [
         Validators.required
       ]),
-      schedule_active: this.formBuilder.control('1'),
+      schedule_active: this.formBuilder.control({ value: '1', disabled: !this.isAdmin }),
     })
 
-    this.isAdmin = this.authService.hasAccess('employee/save')
-    this.isAdminEmitter.emit(this.isAdmin)
-
-    if (this.typeForm === 'edit') {
+    if (this.typeForm === 'edit' || this.typeForm === 'profile') {
       this.loadEmployee()
     }
 
@@ -126,7 +126,7 @@ export class EmployeeFormComponent implements OnInit {
 
   loadEmployee() {
     let snackBarStateCharging = this.snackBar.open('Carregando funcionário...')
-    let employeeId = parseInt(this.route.snapshot.url[1].path)
+    let employeeId = this.typeForm == 'edit' ? parseInt(this.route.snapshot.url[1].path) : this.authService.currentUser().employee_id
     this.employeeService.employee(employeeId).subscribe(employee => {
       snackBarStateCharging.dismiss()
       this.employee = employee
@@ -193,11 +193,12 @@ export class EmployeeFormComponent implements OnInit {
       return;
     }
 
+    let url = this.typeForm === 'profile' || this.authService.currentUser().employee_id == employeeId ? '/login' : '/employees'
     employee.id = employeeId
 
     this.employeeService.edit(employee).subscribe(data => {
       if (data.status) {
-        this.router.navigateByUrl('/employees')
+        this.router.navigateByUrl(url)
       } else {
         this.snackBar.open(data.message, '', {
           duration: data.status ? 1000 : 5000

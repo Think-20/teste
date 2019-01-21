@@ -6,6 +6,7 @@ export class User {
   email: string
   password: string
   employee?: Employee
+  employee_id: number
   functionalities?: Functionality[]
   displays: Display[]
   coordinatesNow ?: string

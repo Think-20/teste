@@ -19,10 +19,10 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field class="col-md-3">
-        <input [disabled]="!isAdmin" currencyMask formControlName="payment" matInput placeholder="Salário*">
+        <input currencyMask formControlName="payment" matInput placeholder="Salário*">
       </mat-form-field>
       <mat-form-field class="col-md-3">
-        <mat-select [disabled]="!isAdmin" placeholder="Função" formControlName="position" [compareWith]="comparePosition">
+        <mat-select placeholder="Função" formControlName="position" [compareWith]="comparePosition">
           <mat-option></mat-option>
           <mat-option *ngFor="let position of positions" [value]="position">
             {{ position.name }}
@@ -30,7 +30,7 @@
         </mat-select>
       </mat-form-field>
       <mat-form-field class="col-md-3">
-        <mat-select [disabled]="!isAdmin" placeholder="Departamento" formControlName="department" [compareWith]="compareDepartment">
+        <mat-select placeholder="Departamento" formControlName="department" [compareWith]="compareDepartment">
           <mat-option></mat-option>
           <mat-option *ngFor="let department of departments" [value]="department">
             {{ department.description }}
@@ -38,14 +38,14 @@
         </mat-select>
       </mat-form-field>
       <div class="col-md-3">
-        <mat-checkbox [disabled]="!isAdmin" class="cb-normal-checkbox" value="1" formControlName="schedule_active">Ativo no calendário</mat-checkbox>
+        <mat-checkbox class="cb-normal-checkbox" value="1" formControlName="schedule_active">Ativo no calendário</mat-checkbox>
       </div>
     </div>
     <mat-card-actions class="col-md-12 text-right">
       <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save(employeeForm.value)" mat-raised-button>
         SALVAR
       </button>
-      <button class="cb-button" *ngIf="typeForm === 'edit'" color="primary" (click)="edit(employeeForm.value, employee.id)" mat-raised-button>
+      <button class="cb-button" *ngIf="typeForm === 'edit' || typeForm === 'profile'" color="primary" (click)="edit(employeeForm.value, employee.id)" mat-raised-button>
         EDITAR
       </button>
     </mat-card-actions>

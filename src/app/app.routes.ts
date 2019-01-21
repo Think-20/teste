@@ -149,6 +149,9 @@ export const ROUTES: Routes = [
                         path: 'new', component: EmployeeTabsComponent, canActivate: [AuthGuard]
                     },
                     {
+                        path: 'profile', component: EmployeeTabsComponent, canActivate: [AuthGuard]
+                    },
+                    {
                         path: 'edit/:id', component: EmployeeTabsComponent, canActivate: [AuthGuard]
                     },
                     {

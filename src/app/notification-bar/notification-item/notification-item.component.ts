@@ -7,6 +7,7 @@ import { TaskService } from '../../schedule/task.service';
 import { MatSnackBar } from '@angular/material';
 import { DatePipe } from '@angular/common';
 import { API } from 'app/app.api';
+import { SafePipe } from '../../shared/safe.pipe';
 
 @Component({
   selector: 'cb-notification-item',
@@ -17,6 +18,8 @@ export class NotificationItemComponent implements OnInit {
 
   @Input() printNew: boolean = false
   @Input() userNotification: UserNotification
+  image: string
+
 
   constructor(
     private router: Router,
@@ -121,7 +124,7 @@ export class NotificationItemComponent implements OnInit {
   }
 
   getBackgroundUrl(userNotification: UserNotification) {
-    return `${API}/assets/images/${userNotification.notification.notifier.image}`
+    this.image = `url('${API}/assets/images/${userNotification.notification.notifier.image}')`
   }
 
 }

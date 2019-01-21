@@ -18,7 +18,7 @@
       <button class="cb-button" *ngIf="typeForm === 'new'" color="primary" (click)="save(userForm.value)" mat-raised-button>
         SALVAR
       </button>
-      <button class="cb-button" *ngIf="typeForm === 'edit'" color="primary" (click)="edit(userForm.value, user.id)" mat-raised-button>
+      <button class="cb-button" *ngIf="typeForm === 'edit' || typeForm === 'profile'" color="primary" (click)="edit(userForm.value, user.id)" mat-raised-button>
         EDITAR
       </button>
     </mat-card-actions>

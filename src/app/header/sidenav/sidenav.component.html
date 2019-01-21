@@ -20,16 +20,6 @@
       </div>
       <nav class="nav-navbar">
         <div class="nav-item">
-          <a *ngIf="!hasNoPermission(user, '/employees')" (click)="administradores = !administradores" mat-raised-button class="department-container">
-            <span class="department department-2"></span> Administradores
-          </a>
-          <div [@rowAppeared]="state" *ngIf="administradores">
-            <div class="sub-navbar">
-              <a mat-raised-button [routerLink]="['/employees']" [disabled]="hasNoPermission(user, '/employees')">Funcionários</a>
-            </div>
-          </div>
-        </div>
-        <div class="nav-item">
           <a mat-raised-button class="department-container">
             <span class="department department-7"></span> Administrativo
           </a>
@@ -59,11 +49,18 @@
             </div>
           </div>
         </div>
+
         <div class="nav-item">
-          <a mat-raised-button class="department-container">
+          <a *ngIf="!hasNoPermission(user, '/employees')" (click)="administradores = !administradores" mat-raised-button class="department-container">
             <span class="department department-1"></span> Diretoria
           </a>
+          <div [@rowAppeared]="state" *ngIf="administradores">
+            <div class="sub-navbar">
+              <a mat-raised-button [routerLink]="['/employees']" [disabled]="hasNoPermission(user, '/employees')">Funcionários</a>
+            </div>
+          </div>
         </div>
+
         <div class="nav-item">
           <a (click)="planejamento = planejamento === true ? false : true" mat-raised-button class="department-container">
             <span class="department department-6"></span> Planejamento
