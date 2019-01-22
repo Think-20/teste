@@ -507,10 +507,9 @@ export class JobFormComponent implements OnInit {
           this.snackBar.open(data.message, '', {
             duration: 5000
           })
+          this.buttonEnable = true
           return
         }
-
-        this.buttonEnable = true
       })
     } else {
       this.jobService.save(job).subscribe(data => {
@@ -534,6 +533,7 @@ export class JobFormComponent implements OnInit {
               this.snackBar.open(data.message, '', {
                 duration: 5000
               })
+              this.buttonEnable = true
               return
             }
           })
@@ -541,10 +541,9 @@ export class JobFormComponent implements OnInit {
           this.snackBar.open(data.message, '', {
             duration: 5000
           })
+          this.buttonEnable = true
           return
         }
-
-        this.buttonEnable = true
       })
     }
   }

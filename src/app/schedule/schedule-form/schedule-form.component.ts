@@ -766,9 +766,8 @@ export class ScheduleFormComponent implements OnInit {
           this.snackBar.open(data.message, '', {
             duration: 5000
           })
+          this.buttonEnable = true
         }
-
-        this.buttonEnable = true
       })
     }
   }

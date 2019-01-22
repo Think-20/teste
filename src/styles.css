@@ -637,14 +637,14 @@ mat-card-title > p {
 
 .star-input .stars-container {
     position: relative;
-    height: 30px;
+    height: 33px;
     border-bottom: 1px solid #DDD;
 
 }
 
 .star-input .stars-content {
     text-align: right;
-    margin-top: 15px;
+    margin-top: 13px;
     background-color: white;
     z-index: 10;
 }
