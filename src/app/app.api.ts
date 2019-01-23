@@ -1,5 +1,5 @@
 import { environment } from '../environments/environment'
 
 export const API = environment.api
-export const FRONTEND_VERSION = '1.16.24'
+export const FRONTEND_VERSION = '1.16.25'
 export const BACKEND_VERSION = '1.16.13'

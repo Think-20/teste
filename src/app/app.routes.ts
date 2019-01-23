@@ -48,6 +48,14 @@ import { EmployeeFormComponent } from './employees/employee-form/employee-form.c
 import { EmployeeShowComponent } from './employees/employee-show/employee-show.component';
 import { EmployeeListComponent } from './employees/employee-list/employee-list.component';
 import { EmployeeTabsComponent } from './employees/employee-tabs/employee-tabs.component';
+import { DisplaysComponent } from './displays/displays.component';
+import { DisplayFormComponent } from './displays/display-form/display-form.component';
+import { DisplayListComponent } from './displays/display-list/display-list.component';
+import { DisplayShowComponent } from './displays/display-show/display-show.component';
+import { FunctionalitiesComponent } from './functionalities/functionalities.component';
+import { FunctionalityFormComponent } from './functionalities/functionality-form/functionality-form.component';
+import { FunctionalityShowComponent } from './functionalities/functionality-show/functionality-show.component';
+import { FunctionalityListComponent } from './functionalities/functionality-list/functionality-list.component';
 
 export const ROUTES: Routes = [
     {
@@ -178,6 +186,44 @@ export const ROUTES: Routes = [
                     },
                     {
                         path: 'list', component: ProviderListComponent, canActivate: [AuthGuard]
+                    }
+                ]
+            },
+            {
+                path : 'displays', component : DisplaysComponent, children: [
+                    {
+                        path: '', redirectTo: 'list', pathMatch: 'full'
+                    },
+                    {
+                        path: 'new', component: DisplayFormComponent, canActivate: [AuthGuard]
+                    },
+                    {
+                        path: 'edit/:id', component: DisplayFormComponent, canActivate: [AuthGuard]
+                    },
+                    {
+                        path: 'show/:id', component: DisplayShowComponent, canActivate: [AuthGuard]
+                    },
+                    {
+                        path: 'list', component: DisplayListComponent, canActivate: [AuthGuard]
+                    }
+                ]
+            },
+            {
+                path : 'functionalities', component : FunctionalitiesComponent, children: [
+                    {
+                        path: '', redirectTo: 'list', pathMatch: 'full'
+                    },
+                    {
+                        path: 'new', component: FunctionalityFormComponent, canActivate: [AuthGuard]
+                    },
+                    {
+                        path: 'edit/:id', component: FunctionalityFormComponent, canActivate: [AuthGuard]
+                    },
+                    {
+                        path: 'show/:id', component: FunctionalityShowComponent, canActivate: [AuthGuard]
+                    },
+                    {
+                        path: 'list', component: FunctionalityListComponent, canActivate: [AuthGuard]
                     }
                 ]
             },

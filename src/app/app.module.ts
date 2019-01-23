@@ -148,6 +148,16 @@ import { PositionService } from './position/position.service';
 import { UserFormComponent } from './user/user-form/user-form.component';
 import { EmployeeTabsComponent } from './employees/employee-tabs/employee-tabs.component';
 import { UserService } from './user/user.service';
+import { DisplayFormComponent } from './displays/display-form/display-form.component';
+import { DisplayListComponent } from './displays/display-list/display-list.component';
+import { DisplaysComponent } from './displays/displays.component';
+import { DisplayShowComponent } from './displays/display-show/display-show.component';
+import { DisplayService } from './displays/display.service';
+import { FunctionalityFormComponent } from './functionalities/functionality-form/functionality-form.component';
+import { FunctionalityListComponent } from './functionalities/functionality-list/functionality-list.component';
+import { FunctionalitiesComponent } from './functionalities/functionalities.component';
+import { FunctionalityShowComponent } from './functionalities/functionality-show/functionality-show.component';
+import { FunctionalityService } from './functionalities/functionality.service';
 
 registerLocaleData(localePt);
 
@@ -230,6 +240,16 @@ registerLocaleData(localePt);
     EmployeeTabsComponent,
 
     UserFormComponent,
+
+    DisplayFormComponent,
+    DisplayListComponent,
+    DisplaysComponent,
+    DisplayShowComponent,
+
+    FunctionalityFormComponent,
+    FunctionalityListComponent,
+    FunctionalitiesComponent,
+    FunctionalityShowComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -309,6 +329,8 @@ registerLocaleData(localePt);
     DepartmentService,
     PositionService,
     UserService,
+    DisplayService,
+    FunctionalityService,
 
     MatDialog,
     MatSnackBar,

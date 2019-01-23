@@ -34,6 +34,7 @@ export class SidenavComponent implements OnInit {
   user: User
 
   administradores = false
+  diretoria = false
   producao = false
   orcamento = false
   criacao = false

@@ -19,6 +19,17 @@
         </div>
       </div>
       <nav class="nav-navbar">
+        <div class="nav-item" *ngIf="user.employee.department_id == 2">
+          <a (click)="administradores = administradores === true ? false : true" mat-raised-button class="department-container">
+            <span class="department department-2"></span> Administradores
+          </a>
+          <div [@rowAppeared]="state" *ngIf="administradores">
+            <div class="sub-navbar">
+              <a [routerLink]="['/displays']"  mat-raised-button>Acesso das telas</a>
+              <a [routerLink]="['/functionalities']"  mat-raised-button>Funcionalidades da API</a>
+            </div>
+          </div>
+        </div>
         <div class="nav-item">
           <a mat-raised-button class="department-container">
             <span class="department department-7"></span> Administrativo
@@ -51,10 +62,10 @@
         </div>
 
         <div class="nav-item">
-          <a *ngIf="!hasNoPermission(user, '/employees')" (click)="administradores = !administradores" mat-raised-button class="department-container">
+          <a *ngIf="!hasNoPermission(user, '/employees')" (click)="diretoria = !diretoria" mat-raised-button class="department-container">
             <span class="department department-1"></span> Diretoria
           </a>
-          <div [@rowAppeared]="state" *ngIf="administradores">
+          <div [@rowAppeared]="state" *ngIf="diretoria">
             <div class="sub-navbar">
               <a mat-raised-button [routerLink]="['/employees']" [disabled]="hasNoPermission(user, '/employees')">Funcionários</a>
             </div>
