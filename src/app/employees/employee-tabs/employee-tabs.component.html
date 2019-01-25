@@ -6,5 +6,8 @@
     <mat-tab label="Usuário">
       <cb-user-form  *ngIf="employee != null" [typeForm]="typeForm" [employee]="employee"></cb-user-form>
     </mat-tab>
+    <mat-tab label="Permissões">
+      <cb-user-permission *ngIf="employee != null" [typeForm]="typeForm" [employee]="employee"></cb-user-permission>
+    </mat-tab>
   </mat-tab-group>
 </div>

@@ -158,6 +158,7 @@ import { FunctionalityListComponent } from './functionalities/functionality-list
 import { FunctionalitiesComponent } from './functionalities/functionalities.component';
 import { FunctionalityShowComponent } from './functionalities/functionality-show/functionality-show.component';
 import { FunctionalityService } from './functionalities/functionality.service';
+import { UserPermissionComponent } from './user/user-permission/user-permission.component';
 
 registerLocaleData(localePt);
 
@@ -250,6 +251,7 @@ registerLocaleData(localePt);
     FunctionalityListComponent,
     FunctionalitiesComponent,
     FunctionalityShowComponent,
+    UserPermissionComponent,
   ],
   imports: [
     CurrencyMaskModule,

@@ -1,5 +1,7 @@
 import { Employee } from '../employees/employee.model'
 import { Notifiable } from '../notification-bar/notification/notification.model';
+import { Functionality } from '../functionalities/functionality.model';
+import { Display } from '../displays/display.model';
 
 export class User {
   id: number
@@ -8,17 +10,6 @@ export class User {
   employee?: Employee
   employee_id: number
   functionalities?: Functionality[]
-  displays: Display[]
+  displays?: Display[]
   coordinatesNow ?: string
-}
-
-export class Functionality {
-    id: number
-    url: string
-    description: string
-}
-
-export class Display {
-    url: string
-    access: string
 }

@@ -112,6 +112,23 @@ export class UserService {
             })
     }
 
+    editPermission(data): Observable<any> {
+        let url = 'user/edit-permission'
+
+        return this.http.put(
+                `${API}/${url}`,
+                JSON.stringify(data),
+                new RequestOptions()
+            )
+            .map(response => response.json())
+            .catch((err) => {
+                this.snackBar.open(ErrorHandler.message(err), '', {
+                    duration: 3000
+                })
+                return ErrorHandler.capture(err)
+            })
+    }
+
     delete(id: number): Observable<any> {
         let url = `user/remove/${id}`
         let prefix = this.auth.hasAccess('user/remove/{id}') ? '' : 'my-'

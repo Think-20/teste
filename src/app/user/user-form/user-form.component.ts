@@ -49,7 +49,6 @@ export class UserFormComponent implements OnInit {
   path: string = API + '/assets/images/'
   @Input('typeForm') typeForm: string
   @Input('employee') employee: Employee
-  @Input('withHeader') withHeader: boolean = true
   rowAppearedState = 'ready'
   user: User
   departments: Department[]
