@@ -57,7 +57,7 @@
             <div class="mat-header-cell mat-column-department">Departamento</div>
             <div class="mat-header-cell mat-column-action">Ação</div>
           </div>
-          <div class="mat-row" *ngFor="let employee of employees" [@rowAppeared]="rowAppearedState">
+          <div class="mat-row" *ngFor="let employee of employees" [class.deleted]="employee.deleted_at != null" [@rowAppeared]="rowAppearedState">
             <div class="mat-cell mat-column-name">
               {{ employee.name }}
             </div>
@@ -77,8 +77,15 @@
                   mat-menu-item>
                   <mat-icon>mode_edit</mat-icon> Editar
                 </a>
-                <button [disabled]="!permissionVerify('delete', employee)" (click)="delete(employee)" mat-menu-item>
+                <button *ngIf="employee.deleted_at == null"
+                [disabled]="!permissionVerify('toggle-deleted', employee)"
+                (click)="toggleDeleted(employee)" mat-menu-item>
                   <mat-icon>delete</mat-icon> Remover
+                </button>
+                <button *ngIf="employee.deleted_at != null"
+                [disabled]="!permissionVerify('toggle-deleted', employee)"
+                (click)="toggleDeleted(employee)" mat-menu-item>
+                  <mat-icon>undo</mat-icon> Restaurar
                 </button>
               </mat-menu>
 

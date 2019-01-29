@@ -112,9 +112,9 @@ export class EmployeeService {
             })
     }
 
-    delete(id: number): Observable<any> {
-        let url = `employee/remove/${id}`
-        let prefix = this.auth.hasAccess('employee/remove/{id}') ? '' : 'my-'
+    toggleDeleted(id: number): Observable<any> {
+        let url = `employee/toggle-deleted/${id}`
+        let prefix = this.auth.hasAccess('employee/toggle-deleted/{id}') ? '' : 'my-'
 
         url = prefix + url
 

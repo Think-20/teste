@@ -15,6 +15,7 @@ import { DepartmentService } from '../../department/department.service';
 import { PositionService } from '../../position/position.service';
 import { Department } from '../../department/department.model';
 import { Position } from '../../position/position.model';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'cb-employee-list',
@@ -58,6 +59,7 @@ export class EmployeeListComponent implements OnInit {
     private departmentService: DepartmentService,
     private positionService: PositionService,
     private authService: AuthService,
+    private datePipe: DatePipe,
     private snackBar: MatSnackBar
   ) { }
 
@@ -76,8 +78,8 @@ export class EmployeeListComponent implements OnInit {
         access = employee.id != employee.id ? this.authService.hasAccess('employee/edit') : true
         break
       }
-      case 'delete': {
-        access = employee.id != employee.id ? this.authService.hasAccess('employee/remove/{id}') : true
+      case 'toggle-deleted': {
+        access = employee.id != employee.id ? this.authService.hasAccess('employee/toggle-deleted/{id}') : true
         break
       }
       default: {
@@ -96,7 +98,9 @@ export class EmployeeListComponent implements OnInit {
       position: this.fb.control(''),
     })
 
-    this.loadEmployees()
+    this.loadEmployees({
+      deleted: true
+    })
     this.loadData()
 
     this.searchForm.valueChanges
@@ -105,6 +109,7 @@ export class EmployeeListComponent implements OnInit {
     .subscribe(() => {
       let controls = this.searchForm.controls
       this.loadEmployees({
+        deleted: true,
         search: controls.search.value,
         department: controls.department.value,
         position: controls.position.value,
@@ -138,16 +143,6 @@ export class EmployeeListComponent implements OnInit {
     this.filter = this.filter ? false : true
   }
 
-  filterForm() {
-    this.searching = true
-    this.employeeService.employees(this.searchForm.value).subscribe(dataInfo => {
-      this.searching = false
-      this.dataInfo = dataInfo
-      this.pagination = dataInfo.pagination
-      this.employees = <Employee[]> this.pagination.data
-    })
-  }
-
   compareDepartment(var1: Department, var2: Department) {
     return var1.id === var2.id
   }
@@ -156,14 +151,18 @@ export class EmployeeListComponent implements OnInit {
     return var1.id === var2.id
   }
 
-  delete(employee: Employee) {
-    this.employeeService.delete(employee.id).subscribe((data) => {
+  toggleDeleted(employee: Employee) {
+    let employeeCopy = Object.create(employee)
+    this.employeeService.toggleDeleted(employee.id).subscribe((data) => {
       this.snackBar.open(data.message, '', {
         duration: 5000
       })
 
       if(data.status) {
-        this.employees.splice(this.employees.indexOf(employee), 1)
+        let index = this.employees.indexOf(employee)
+        this.employees[index].deleted_at = employeeCopy.deleted_at == null
+          ? this.datePipe.transform(new Date(), 'YYYY-MM-DD hh:mm:ss')
+          : null
       }
     })
   }
