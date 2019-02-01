@@ -65,7 +65,7 @@
     </dl>
   </mat-card>
   <mat-card-title>
-    <p class="lead">Histórico</p>
+    <p class="lead">Histórico de jobs</p>
   </mat-card-title>
   <mat-card>
     <table class="table mat-table">
@@ -99,6 +99,33 @@
         </div>
         <div class="mat-cell mat-column-status">
           {{ job.status.description }}
+        </div>
+      </div>
+    </table>
+  </mat-card>
+  <mat-card-title>
+    <p class="lead">Histórico do cadastro</p>
+  </mat-card-title>
+  <mat-card>
+    <table class="table mat-table">
+      <div class="mat-header-row">
+        <div class="mat-header-cell mat-column2-id">ID</div>
+        <div class="mat-header-cell mat-column2-description">Descrição</div>
+        <div class="mat-header-cell mat-column2-type">Tipo</div>
+        <div class="mat-header-cell mat-column2-date">Data</div>
+      </div>
+      <div class="mat-row" *ngFor="let log of client.logs">
+        <div class="mat-cell mat-column2-id">
+          {{ log.id }}
+        </div>
+        <div class="mat-cell mat-column2-description">
+          {{ log.description }}
+        </div>
+        <div class="mat-cell mat-column2-type">
+          {{ log.type }}
+        </div>
+        <div class="mat-cell mat-column2-date">
+          {{ log.date | date:'dd/MM/yy hh:mm:ss' }}
         </div>
       </div>
     </table>

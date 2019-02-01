@@ -30,3 +30,25 @@
   text-align: center;
   padding: 10px 5px;
 }
+
+.mat-column2-id {
+  width: 10%;
+}
+
+.mat-column2-description {
+    width: 45%;
+    text-align: left;
+}
+
+.mat-column2-type {
+    width: 25%;
+    text-align: left;
+}
+
+.mat-column2-date {
+    width: 20%;
+}
+
+mat-card > .table {
+  padding-bottom: 0 !important;
+}
