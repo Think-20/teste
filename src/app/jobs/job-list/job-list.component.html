@@ -67,6 +67,23 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <hr>
+          <div class="col-md-12">
+            <p><small>Você também pode filtrar por período do cronograma</small></p>
+            <br>
+          </div>
+          <mat-form-field class="col-md-3">
+            <input [matDatepicker]="initialDatepicker" formControlName="initial_date"
+              matInput placeholder="Data inicial">
+            <mat-datepicker-toggle matSuffix [for]="initialDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #initialDatepicker></mat-datepicker>
+          </mat-form-field>
+          <mat-form-field class="col-md-3">
+            <input [matDatepicker]="finalDatepicker" formControlName="final_date"
+              matInput placeholder="Data final">
+            <mat-datepicker-toggle matSuffix [for]="finalDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #finalDatepicker></mat-datepicker>
+          </mat-form-field>
         </div>
       </div>
     </mat-card>

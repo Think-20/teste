@@ -77,7 +77,9 @@ export class JobListComponent implements OnInit {
       creation: this.fb.control(''),
       job_type: this.fb.control(''),
       client: this.fb.control(''),
-      status: this.fb.control('')
+      status: this.fb.control(''),
+      initial_date: this.fb.control(''),
+      final_date: this.fb.control(''),
     })
 
     this.loadFilterData()
@@ -116,7 +118,9 @@ export class JobListComponent implements OnInit {
           status: status,
           attendance: controls.attendance.value,
           creation: controls.creation.value,
-          job_type: controls.job_type.value
+          job_type: controls.job_type.value,
+          final_date: controls.final_date.value,
+          initial_date: controls.initial_date.value,
         }).subscribe(pagination => {
           snackbar.dismiss()
           this.pagination = pagination
