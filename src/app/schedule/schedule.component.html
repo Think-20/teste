@@ -124,9 +124,6 @@
           <div class="mat-header-cell mat-column-deadline">Deadline</div>
           <div class="mat-header-cell mat-column-attendance">Atend.</div>
           <div class="mat-header-cell mat-column-stat">Status</div>
-          <!--
-            <div class="mat-header-cell mat-column-action">Ação</div>
-            -->
         </div>
         <div class="mat-row-scroll">
           <div #list class="mat-row" *ngFor="let chr of chrono; let i = index" [class.hidden]="paramsHasFilter && chr.length == 0">
@@ -135,10 +132,10 @@
               <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }} month-{{ chr.month }}">
                 <div>
                   <span>{{ chr.day }}-{{ chr.dayOfWeek?.abbrev }}</span>
-                  <button *ngIf="permissionVerify('new', job)" class="cb-button add-chrono" (click)="addTask(chr.day)">
+                  <button *ngIf="isAdmin" class="cb-button add-chrono" (click)="addTask(chr.day)">
                     EXTRA
                   </button>
-                  <button *ngIf="permissionVerify('new', job)" class="cb-button add-block" (click)="openBlockDialog(chr)">
+                  <button *ngIf="isAdmin" class="cb-button add-block" (click)="openBlockDialog(chr)">
                     <mat-icon class="icon" *ngIf="blockText(chr) == 'BLOCK'">lock</mat-icon>
                     <mat-icon class="icon" *ngIf="blockText(chr) == 'UNBLOCK'" matBadge="{{blockedNumber(chr)}}">lock_open</mat-icon>
                   </button>

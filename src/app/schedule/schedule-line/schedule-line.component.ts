@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Chrono } from '../chrono.model';
 import { Task } from '../task.model';
 import { DatePipe } from '@angular/common';
@@ -16,7 +16,8 @@ import { MatMenuTrigger } from '@angular/material';
 @Component({
   selector: 'cb-schedule-line',
   templateUrl: './schedule-line.component.html',
-  styleUrls: ['./schedule-line.component.css']
+  styleUrls: ['./schedule-line.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ScheduleLineComponent implements OnInit {
 

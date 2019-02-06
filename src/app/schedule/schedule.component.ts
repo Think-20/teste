@@ -90,6 +90,7 @@ export class ScheduleComponent implements OnInit {
   subscriptions: Subscription[] = []
   lastUpdateMessage: string
   paramAttendance: Employee = null
+  isAdmin: boolean = false
   counter: number = 0
 
   lineJob: HTMLElement
@@ -367,6 +368,8 @@ export class ScheduleComponent implements OnInit {
       department_array: this.fb.control(''),
       status_array: this.fb.control('')
     })
+
+    this.isAdmin = this.permissionVerify('new', new Job())
 
     this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
     ? this.authService.currentUser().employee : null
