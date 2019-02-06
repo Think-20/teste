@@ -301,15 +301,18 @@ export class ProviderFormComponent implements OnInit {
       id: this.formBuilder.control(account ? account.id : '' || ''),
       favored: this.formBuilder.control(account ? account.favored : '' || '', [
         Validators.required,
-        Validators.minLength(3)
+        Validators.minLength(3),
+        Validators.maxLength(100)
       ]),
       agency: this.formBuilder.control(account ? account.agency : '' || '', [
         Validators.required,
-        Validators.minLength(4)
+        Validators.minLength(4),
+        Validators.maxLength(6)
       ]),
       account_number: this.formBuilder.control(account ? account.account_number : '', [
         Validators.required,
-        Validators.minLength(6)
+        Validators.minLength(6),
+        Validators.maxLength(20)
       ]),
       bank_account_type: this.formBuilder.control(account ? account.bank_account_type : '' || '', [
         Validators.required
