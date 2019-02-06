@@ -360,13 +360,13 @@ export class ScheduleComponent implements OnInit {
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
       search: this.search,
-      attendance_array: this.fb.control(''),
-      responsible_array: this.fb.control(''),
-      job_type_array: this.fb.control(''),
-      job_activity_array: this.fb.control(''),
+      attendance_array: this.fb.control([]),
+      responsible_array: this.fb.control([]),
+      job_type_array: this.fb.control([]),
+      job_activity_array: this.fb.control([]),
       client: this.fb.control(''),
-      department_array: this.fb.control(''),
-      status_array: this.fb.control('')
+      department_array: this.fb.control([]),
+      status_array: this.fb.control([])
     })
 
     this.isAdmin = this.permissionVerify('new', new Job())
@@ -447,6 +447,54 @@ export class ScheduleComponent implements OnInit {
         if(list.indexOf(employee.department.description) > -1) return true;
       })
     })
+  }
+
+  toggleDepartments() {
+    let array = this.searchForm.controls.department_array.value as Department[]
+
+    array.length > 0
+    ? this.searchForm.controls.department_array.setValue([])
+    : this.searchForm.controls.department_array.setValue(this.departments)
+  }
+
+  toggleResponsibles() {
+    let array = this.searchForm.controls.responsible_array.value as Employee[]
+
+    array.length > 0
+    ? this.searchForm.controls.responsible_array.setValue([])
+    : this.searchForm.controls.responsible_array.setValue(this.employees)
+  }
+
+  toggleAttendances() {
+    let array = this.searchForm.controls.attendance_array.value as Employee[]
+
+    array.length > 0
+    ? this.searchForm.controls.attendance_array.setValue([])
+    : this.searchForm.controls.attendance_array.setValue(this.attendances)
+  }
+
+  toggleJobTypes() {
+    let array = this.searchForm.controls.job_type_array.value as JobType[]
+
+    array.length > 0
+    ? this.searchForm.controls.job_type_array.setValue([])
+    : this.searchForm.controls.job_type_array.setValue(this.jobTypes)
+  }
+
+  toggleJobActivities() {
+    let array = this.searchForm.controls.job_activity_array.value as JobActivity[]
+
+    array.length > 0
+    ? this.searchForm.controls.job_activity_array.setValue([])
+    : this.searchForm.controls.job_activity_array.setValue(this.jobActivities)
+  }
+
+  toggleStatus() {
+    let array = this.searchForm.controls.status_array.value as JobStatus[]
+
+    array.length > 0
+    ? this.searchForm.controls.status_array.setValue([])
+    : this.searchForm.controls.status_array.setValue(this.jobStatus)
   }
 
   setYears() {
