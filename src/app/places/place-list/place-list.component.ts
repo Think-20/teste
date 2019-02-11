@@ -7,8 +7,6 @@ import { PlaceService } from '../place.service';
 import { Place } from '../place.model';
 import { AuthService } from '../../login/auth.service';
 import { Pagination } from '../../shared/pagination.model';
-import { EmployeeService } from '../../employees/employee.service';
-import { Employee } from '../../employees/employee.model';
 import { DataInfo } from '../../shared/data-info.model';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { debounceTime } from 'rxjs/operator/debounceTime';
@@ -40,7 +38,6 @@ export class PlaceListComponent implements OnInit {
   searchForm: FormGroup
   search: FormControl
   places: Place[] = []
-  attendances: Employee[]
   searching = false
   filter: boolean = false
   pagination: Pagination
@@ -50,7 +47,6 @@ export class PlaceListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private placeService: PlaceService,
-    private employeeService: EmployeeService,
     private authService: AuthService,
     private snackBar: MatSnackBar
   ) { }
@@ -87,10 +83,6 @@ export class PlaceListComponent implements OnInit {
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
       search: this.search,
-      attendance: this.fb.control(''),
-      place_status: this.fb.control(''),
-      rate: this.fb.control(''),
-      place_type: this.fb.control('')
     })
 
     this.loadPlaces()
@@ -102,10 +94,6 @@ export class PlaceListComponent implements OnInit {
       let controls = this.searchForm.controls
       this.loadPlaces({
         search: controls.search.value,
-        attendance: controls.attendance.value,
-        place_status: controls.place_status.value,
-        place_type: controls.place_type.value,
-        rate: controls.rate.value,
       })
     })
   }
@@ -135,10 +123,6 @@ export class PlaceListComponent implements OnInit {
       this.pagination = dataInfo.pagination
       this.places = <Place[]> this.pagination.data
     })
-  }
-
-  compareAttendance(var1: Employee, var2: Employee) {
-    return var1.id === var2.id
   }
 
   delete(place: Place) {

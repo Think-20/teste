@@ -45,6 +45,7 @@
               <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Cronograma</a>
               <a mat-raised-button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events')">Eventos</a>
               <a mat-raised-button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs/list')">Jobs</a>
+              <a mat-raised-button [routerLink]="['/places']" [disabled]="hasNoPermission(user, '/places/list')">Locais</a>
             </div>
           </div>
         </div>

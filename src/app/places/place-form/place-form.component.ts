@@ -9,12 +9,9 @@ import { PlaceService } from '../place.service';
 
 import { CityService } from '../../address/city.service';
 import { StateService } from '../../address/state.service';
-import { EmployeeService } from '../../employees/employee.service';
-import { AuthService } from '../../login/auth.service';
 import { Employee } from '../../employees/employee.model';
 import { City } from '../../address/city.model';
 import { State } from '../../address/state.model';
-import { Contact } from '../../contacts/contact.model';
 
 import { ErrorHandler } from '../../shared/error-handler.service';
 import { Patterns } from '../../shared/patterns.model';
@@ -54,16 +51,12 @@ export class PlaceFormComponent implements OnInit {
   place: Place
   cities: Observable<City[]>
   states: Observable<State[]>
-  employees: Employee[]
   placeForm: FormGroup
-  contactsArray: FormArray
 
 constructor(
     private stateService: StateService,
     private cityService: CityService,
-    private employeeService: EmployeeService,
     private placeService: PlaceService,
-    private authService: AuthService,
     private location: Location,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
@@ -77,10 +70,6 @@ constructor(
 
     let stateControl: FormControl = this.formBuilder.control('', [Validators.required, ObjectValidator])
     let cityControl: FormControl = this.formBuilder.control('', [Validators.required, ObjectValidator])
-    let placeTypeControl: FormControl = this.formBuilder.control('', [Validators.required])
-    let comissionControl: FormControl = this.formBuilder.control('', [Validators.required])
-    let placeStatusControl: FormControl = this.formBuilder.control('', [Validators.required])
-    let employeeControl: FormControl = this.formBuilder.control('', [Validators.required])
 
     this.placeForm = this.formBuilder.group({
       name: this.formBuilder.control('', [
@@ -88,34 +77,6 @@ constructor(
         Validators.minLength(3),
         Validators.maxLength(100)
       ]),
-      fantasy_name: this.formBuilder.control('', [
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(50)
-      ]),
-      site: this.formBuilder.control('', [
-        Validators.minLength(7),
-      ]),
-      place_type: placeTypeControl,
-      comission: comissionControl,
-      place_status: placeStatusControl,
-      employee: employeeControl,
-      rate: this.formBuilder.control(''),
-      cnpj: this.formBuilder.control('', [
-        Validators.required,
-        Validators.minLength(14)
-      ]),
-      ie: this.formBuilder.control(''),
-      mainphone: this.formBuilder.control('', [
-        Validators.required,
-        Validators.minLength(10)
-      ]),
-      secundaryphone: this.formBuilder.control('', [
-        Validators.minLength(10)
-      ]),
-      note: this.formBuilder.control(''),
-      external: this.formBuilder.control(''),
-      external_toggle: this.formBuilder.control(''),
       street: this.formBuilder.control('', [
         Validators.required,
         Validators.minLength(3),
@@ -136,12 +97,7 @@ constructor(
         Validators.required
       ]),
       city: cityControl,
-      state: stateControl,
-      contacts: this.formBuilder.array([])
-    })
-
-    this.placeForm.controls.external_toggle.valueChanges.subscribe(() => {
-      this.toggleExternal()
+      state: stateControl
     })
 
     if(this.typeForm === 'edit') {
@@ -170,25 +126,9 @@ constructor(
       })
   }
 
-  toggleExternal() {
-    if(this.placeForm.controls.external_toggle.value) {
-      this.placeForm.controls.external.setValue(1)
-      this.placeForm.controls.cnpj.clearValidators()
-      this.placeForm.controls.cnpj.disable()
-    } else {
-      this.placeForm.controls.external.setValue(0)
-      this.placeForm.controls.cnpj.clearValidators()
-      this.placeForm.controls.cnpj.setValidators([
-        Validators.required,
-        Validators.minLength(14)
-      ])
-      this.placeForm.controls.cnpj.enable()
-      this.placeForm.controls.cnpj.updateValueAndValidity()
-    }
-  }
 
   loadPlace() {
-    let snackBarStateCharging = this.snackBar.open('Carregando placee...')
+    let snackBarStateCharging = this.snackBar.open('Carregando local...')
     let placeId = parseInt(this.route.snapshot.url[1].path)
     this.placeService.place(placeId).subscribe(place => {
       snackBarStateCharging.dismiss()
@@ -209,16 +149,8 @@ constructor(
     return state.code
   }
 
-  displayEmployee(employee: Employee) {
-    return employee.name
-  }
-
   displayCity(city: City) {
     return city.name
-  }
-
-  getContactsControls(placeForm: FormGroup) {
-    return (<FormArray>this.placeForm.get('contacts')).controls
   }
 
   save(place: Place) {

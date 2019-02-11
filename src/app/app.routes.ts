@@ -56,6 +56,9 @@ import { FunctionalitiesComponent } from './functionalities/functionalities.comp
 import { FunctionalityFormComponent } from './functionalities/functionality-form/functionality-form.component';
 import { FunctionalityShowComponent } from './functionalities/functionality-show/functionality-show.component';
 import { FunctionalityListComponent } from './functionalities/functionality-list/functionality-list.component';
+import { PlacesComponent } from './places/places.component';
+import { PlaceFormComponent } from './places/place-form/place-form.component';
+import { PlaceListComponent } from './places/place-list/place-list.component';
 
 export const ROUTES: Routes = [
     {
@@ -247,6 +250,22 @@ export const ROUTES: Routes = [
                     {
                         path: 'list', component: JobListComponent, canActivate: [AuthGuard]
                     }
+                ]
+            },
+            {
+                path : 'places', component : PlacesComponent, children: [
+                  {
+                      path: '', redirectTo: 'list', pathMatch: 'full'
+                  },
+                  {
+                      path: 'new', component: PlaceFormComponent, canActivate: [AuthGuard]
+                  },
+                  {
+                      path: 'edit/:id', component: PlaceFormComponent, canActivate: [AuthGuard]
+                  },
+                  {
+                      path: 'list', component: PlaceListComponent, canActivate: [AuthGuard]
+                  }
                 ]
             },
             {

@@ -159,6 +159,10 @@ import { FunctionalitiesComponent } from './functionalities/functionalities.comp
 import { FunctionalityShowComponent } from './functionalities/functionality-show/functionality-show.component';
 import { FunctionalityService } from './functionalities/functionality.service';
 import { UserPermissionComponent } from './user/user-permission/user-permission.component';
+import { PlaceFormComponent } from './places/place-form/place-form.component';
+import { PlaceListComponent } from './places/place-list/place-list.component';
+import { PlacesComponent } from './places/places.component';
+import { PlaceService } from './places/place.service';
 
 registerLocaleData(localePt);
 
@@ -241,6 +245,7 @@ registerLocaleData(localePt);
     EmployeeTabsComponent,
 
     UserFormComponent,
+    UserPermissionComponent,
 
     DisplayFormComponent,
     DisplayListComponent,
@@ -251,7 +256,10 @@ registerLocaleData(localePt);
     FunctionalityListComponent,
     FunctionalitiesComponent,
     FunctionalityShowComponent,
-    UserPermissionComponent,
+
+    PlaceFormComponent,
+    PlaceListComponent,
+    PlacesComponent
   ],
   imports: [
     CurrencyMaskModule,
@@ -333,6 +341,7 @@ registerLocaleData(localePt);
     UserService,
     DisplayService,
     FunctionalityService,
+    PlaceService,
 
     MatDialog,
     MatSnackBar,

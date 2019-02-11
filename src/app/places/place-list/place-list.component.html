@@ -24,33 +24,9 @@
     <mat-card *ngIf="filter" class="filter-grid">
       <div class="row">
         <div class="col-md-12">
-          <mat-form-field class="col-md-3">
-            <mat-select placeholder="Atendimento" formControlName="attendance" [compareWith]="compareAttendance">
-              <mat-option></mat-option>
-              <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-                {{ attendance.name }}
-              </mat-option>
-            </mat-select>
+          <mat-form-field class="col-md-4">
+            <input matInput formControlName="search" placeholder="Nome">
           </mat-form-field>
-          <mat-form-field class="col-md-3">
-            <mat-select placeholder="Tipo" formControlName="place_type" [compareWith]="compareClientType">
-                <mat-option></mat-option>
-              <mat-option *ngFor="let type of placeTypes" [value]="type">
-                {{ type.description }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="col-md-3">
-            <mat-select placeholder="Status" formControlName="place_status" [compareWith]="compareClientStatus">
-              <mat-option></mat-option>
-              <mat-option *ngFor="let status of placeStatus" [value]="status">
-                {{ status.description }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <cb-stars class="col-md-3 star-input" label="Score" [rate]="null" [input]="searchForm.controls.rate">
-            <input formControlName="rate" matInput>
-          </cb-stars>
         </div>
       </div>
     </mat-card>
@@ -61,27 +37,19 @@
         <table class="table mat-table">
           <div class="mat-header-row">
             <div class="mat-header-cell mat-column-name">Nome</div>
-            <div class="mat-header-cell mat-column-type">Tipo</div>
-            <div class="mat-header-cell mat-column-status">Status</div>
-            <div class="mat-header-cell mat-column-employee">Atendimento</div>
-            <div class="mat-header-cell mat-column-rate">Score</div>
+            <div class="mat-header-cell mat-column-city">Cidade</div>
+            <div class="mat-header-cell mat-column-state">Estado</div>
             <div class="mat-header-cell mat-column-action">Ação</div>
           </div>
           <div class="mat-row" *ngFor="let place of places" [@rowAppeared]="rowAppearedState">
             <div class="mat-cell mat-column-name">
-              {{ place.fantasy_name }}
+              {{ place.name }}
             </div>
-            <div class="mat-cell mat-column-type">
-              {{ place.type.description }}
+            <div class="mat-cell mat-column-city">
+              {{ place.city.description }}
             </div>
-            <div class="mat-cell mat-column-status">
-              {{ place.status.description }}
-            </div>
-            <div class="mat-cell mat-column-employee">
-              {{ place.employee.name }}
-            </div>
-            <div class="mat-cell mat-column-rate">
-              <cb-stars [readonly]="true" [rate]="place.rate"></cb-stars>
+            <div class="mat-cell mat-column-state">
+              {{ place.city.state.description }}
             </div>
             <div class="mat-cell mat-column-action">
               <mat-menu #menu="matMenu">
