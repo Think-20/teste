@@ -25,9 +25,6 @@ export class PlaceService {
 
     places(params?: {}, page: number = 0): Observable<DataInfo> {
       let url = params === {} ? `places/all?page=${page}` : `places/filter?page=${page}`
-      let prefix = this.auth.hasAccess('places/all') ? '' : 'my-'
-
-        url = prefix + url
 
         return this.http.post(
               `${API}/${url}`,
@@ -45,9 +42,6 @@ export class PlaceService {
 
     place(placeId: number): Observable<Place> {
         let url = `places/get/${placeId}`
-        let prefix = this.auth.hasAccess('places/get/{id}') ? '' : 'my-'
-
-        url = prefix + url
 
         return this.http.get(`${API}/${url}`)
             .map(response => response.json())
@@ -59,36 +53,8 @@ export class PlaceService {
             })
     }
 
-    uploadSheet(file: any): Observable<any> {
-        let requestOptions = new RequestOptions()
-        let headers = new Headers()
-
-        let user = this.auth.currentUser()
-        let token = this.auth.token()
-
-        headers.set('Authorization', `${token}`)
-        headers.set('User', `${user.id}`)
-        requestOptions.headers = headers
-
-        let url = 'place/import'
-        let data = new FormData()
-        data.append('file', file, file.name)
-
-        return this.http.post(`${API}/${url}`, data, requestOptions)
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
-
     save(place: Place): Observable<any> {
         let url = 'place/save'
-        let prefix = this.auth.hasAccess('place/save') ? '' : 'my-'
-
-        url = prefix + url
 
         return this.http.post(
                 `${API}/${url}`,
@@ -106,9 +72,6 @@ export class PlaceService {
 
     edit(place: Place): Observable<any> {
         let url = 'place/edit'
-        let prefix = this.auth.hasAccess('place/edit') ? '' : 'my-'
-
-        url = prefix + url
 
         return this.http.put(
                 `${API}/${url}`,
@@ -126,9 +89,6 @@ export class PlaceService {
 
     delete(id: number): Observable<any> {
         let url = `place/remove/${id}`
-        let prefix = this.auth.hasAccess('place/remove/{id}') ? '' : 'my-'
-
-        url = prefix + url
 
         return this.http.delete(`${API}/${url}`)
             .map(response => response.json())
