@@ -100,7 +100,7 @@ constructor(
       state: stateControl
     })
 
-    if(['edit', 'show'].indexOf(this.typeForm) > 0) {
+    if(['edit', 'show'].indexOf(this.typeForm) > -1) {
       this.loadPlace()
     }
 
