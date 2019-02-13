@@ -60,28 +60,24 @@
       <div *ngIf="events?.length > 0">
         <table class="table mat-table">
           <div class="mat-header-row">
-            <div class="mat-header-cell mat-column-name">Nome</div>
-            <div class="mat-header-cell mat-column-type">Tipo</div>
-            <div class="mat-header-cell mat-column-status">Status</div>
-            <div class="mat-header-cell mat-column-employee">Atendimento</div>
-            <div class="mat-header-cell mat-column-rate">Score</div>
+            <div class="mat-header-cell mat-column-description">Descrição</div>
+            <div class="mat-header-cell mat-column-edition">Edição</div>
+            <div class="mat-header-cell mat-column-place">Local</div>
+            <div class="mat-header-cell mat-column-date">Data</div>
             <div class="mat-header-cell mat-column-action">Ação</div>
           </div>
           <div class="mat-row" *ngFor="let event of events" [@rowAppeared]="rowAppearedState">
-            <div class="mat-cell mat-column-name">
-              {{ event.fantasy_name }}
+            <div class="mat-cell mat-column-description">
+              {{ event.description }}
             </div>
-            <div class="mat-cell mat-column-type">
-              {{ event.type.description }}
+            <div class="mat-cell mat-column-edition">
+              {{ event.edition }}
             </div>
-            <div class="mat-cell mat-column-status">
-              {{ event.status.description }}
+            <div class="mat-cell mat-column-place">
+              {{ event.place.name }}
             </div>
-            <div class="mat-cell mat-column-employee">
-              {{ event.employee.name }}
-            </div>
-            <div class="mat-cell mat-column-rate">
-              <cb-stars [readonly]="true" [rate]="event.rate"></cb-stars>
+            <div class="mat-cell mat-column-date">
+              {{ event.ini_date | date:'dd/MM/yyyy' }} a {{ event.fin_date | date:'dd/MM/yyyy' }}
             </div>
             <div class="mat-cell mat-column-action">
               <mat-menu #menu="matMenu">

@@ -100,7 +100,7 @@ constructor(
       state: stateControl
     })
 
-    if(this.typeForm === 'edit') {
+    if(['edit', 'show'].indexOf(this.typeForm) > 0) {
       this.loadPlace()
     }
 
@@ -142,6 +142,10 @@ constructor(
       this.placeForm.controls.city.setValue(this.place.city)
       this.placeForm.controls.state.setValue(this.place.city.state)
       this.placeForm.controls.complement.setValue(this.place.complement)
+
+      if(this.typeForm == 'show') {
+        this.placeForm.disable()
+      }
     })
   }
 

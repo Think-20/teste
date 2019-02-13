@@ -9,4 +9,6 @@ export class Place {
     complement?: string
     city?: City
     cep: number
+    created_at: string
+    updated_at: string
 }

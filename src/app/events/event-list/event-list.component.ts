@@ -7,8 +7,6 @@ import { EventService } from '../event.service';
 import { Event } from '../event.model';
 import { AuthService } from '../../login/auth.service';
 import { Pagination } from '../../shared/pagination.model';
-import { EmployeeService } from '../../employees/employee.service';
-import { Employee } from '../../employees/employee.model';
 import { DataInfo } from '../../shared/data-info.model';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { debounceTime } from 'rxjs/operator/debounceTime';
@@ -40,7 +38,6 @@ export class EventListComponent implements OnInit {
   searchForm: FormGroup
   search: FormControl
   events: Event[] = []
-  attendances: Employee[]
   searching = false
   filter: boolean = false
   pagination: Pagination
@@ -50,7 +47,6 @@ export class EventListComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private eventService: EventService,
-    private employeeService: EmployeeService,
     private authService: AuthService,
     private snackBar: MatSnackBar
   ) { }
@@ -61,18 +57,17 @@ export class EventListComponent implements OnInit {
 
   permissionVerify(module: string, event: Event): boolean {
     let access: boolean
-    let employee = this.authService.currentUser().employee
     switch(module) {
       case 'show': {
-        access = event.employee.id != employee.id ? this.authService.hasAccess('events/get/{id}') : true
+        access = this.authService.hasAccess('events/get/{id}')
         break
       }
       case 'edit': {
-        access = event.employee.id != employee.id ? this.authService.hasAccess('event/edit') : true
+        access = this.authService.hasAccess('event/edit')
         break
       }
       case 'delete': {
-        access = event.employee.id != employee.id ? this.authService.hasAccess('event/remove/{id}') : true
+        access = this.authService.hasAccess('event/remove/{id}')
         break
       }
       default: {
@@ -135,10 +130,6 @@ export class EventListComponent implements OnInit {
       this.pagination = dataInfo.pagination
       this.events = <Event[]> this.pagination.data
     })
-  }
-
-  compareAttendance(var1: Employee, var2: Employee) {
-    return var1.id === var2.id
   }
 
   delete(event: Event) {

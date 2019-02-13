@@ -59,241 +59,266 @@ import { FunctionalityListComponent } from './functionalities/functionality-list
 import { PlacesComponent } from './places/places.component';
 import { PlaceFormComponent } from './places/place-form/place-form.component';
 import { PlaceListComponent } from './places/place-list/place-list.component';
+import { EventsComponent } from './events/events.component';
+import { EventListComponent } from './events/event-list/event-list.component';
+import { EventFormComponent } from './events/event-form/event-form.component';
 
 export const ROUTES: Routes = [
-    {
-        path : 'login', component : LoginComponent
-    },
-    {
-        path: '', component: LayoutComponent, children : [
-            {
-                path: '', redirectTo: 'home', pathMatch: 'full'
-            },
-            {
-                path : 'home', component : HomeComponent, canActivate: [AuthGuard]
-            },
-            {
-                path : 'cost-categories', component : CostCategoriesComponent, children: [
-                    {
-                        path: '', redirectTo: 'list', pathMatch: 'full', canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'new', component: CostCategoryFormComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'edit/:id', component: CostCategoryFormComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'show/:id', component: CostCategoryShowComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'list', component: CostCategoryListComponent, canActivate: [AuthGuard]
-                    }
-                ]
-            },
-            {
-                path : 'item-categories', component : ItemCategoriesComponent, children: [
-                    {
-                        path: '', redirectTo: 'list', pathMatch: 'full'
-                    },
-                    {
-                        path: 'new', component: ItemCategoryFormComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'edit/:id', component: ItemCategoryFormComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'show/:id', component: ItemCategoryShowComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'list', component: ItemCategoryListComponent, canActivate: [AuthGuard]
-                    }
-                ]
-            },
-            {
-                path : 'items', component : ItemsComponent, children: [
-                    {
-                        path: '', redirectTo: 'list', pathMatch: 'full'
-                    },
-                    {
-                        path: 'new', component: ItemFormComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'edit/:id', component: ItemFormComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'show/:id', component: ItemShowComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'list', component: ItemListComponent, canActivate: [AuthGuard]
-                    }
-                ]
-            },
-            {
-                path : 'clients', component : ClientsComponent, children: [
-                    {
-                        path: '', redirectTo: 'list', pathMatch: 'full'
-                    },
-                    {
-                        path: 'new', component: ClientFormComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'edit/:id', component: ClientFormComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'show/:id', component: ClientShowComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'list', component: ClientListComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'import', component: ClientImportComponent, canActivate: [AuthGuard]
-                    }
-                ]
-            },
-            {
-                path : 'employees', component : EmployeesComponent, children: [
-                    {
-                        path: '', redirectTo: 'list', pathMatch: 'full'
-                    },
-                    {
-                        path: 'new', component: EmployeeTabsComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'profile', component: EmployeeTabsComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'edit/:id', component: EmployeeTabsComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'show/:id', component: EmployeeShowComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'list', component: EmployeeListComponent, canActivate: [AuthGuard]
-                    }
-                ]
-            },
-            {
-                path : 'providers', component : ProvidersComponent, children: [
-                    {
-                        path: '', redirectTo: 'list', pathMatch: 'full'
-                    },
-                    {
-                        path: 'new', component: ProviderFormComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'edit/:id', component: ProviderFormComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'show/:id', component: ProviderShowComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'list', component: ProviderListComponent, canActivate: [AuthGuard]
-                    }
-                ]
-            },
-            {
-                path : 'displays', component : DisplaysComponent, children: [
-                    {
-                        path: '', redirectTo: 'list', pathMatch: 'full'
-                    },
-                    {
-                        path: 'new', component: DisplayFormComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'edit/:id', component: DisplayFormComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'show/:id', component: DisplayShowComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'list', component: DisplayListComponent, canActivate: [AuthGuard]
-                    }
-                ]
-            },
-            {
-                path : 'functionalities', component : FunctionalitiesComponent, children: [
-                    {
-                        path: '', redirectTo: 'list', pathMatch: 'full'
-                    },
-                    {
-                        path: 'new', component: FunctionalityFormComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'edit/:id', component: FunctionalityFormComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'show/:id', component: FunctionalityShowComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'list', component: FunctionalityListComponent, canActivate: [AuthGuard]
-                    }
-                ]
-            },
-            {
-                path : 'jobs', component : JobsComponent, children: [
-                    {
-                        path: '', redirectTo: 'list', pathMatch: 'full'
-                    },
-                    {
-                        path: 'new', component: JobTabsComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'new/:available_date', component: JobTabsComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'edit/:id', component: JobTabsComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'show/:id', component: JobTabsComponent, canActivate: [AuthGuard]
-                    },
-                    {
-                        path: 'list', component: JobListComponent, canActivate: [AuthGuard]
-                    }
-                ]
-            },
-            {
-                path : 'places', component : PlacesComponent, children: [
-                  {
-                      path: '', redirectTo: 'list', pathMatch: 'full'
-                  },
-                  {
-                      path: 'new', component: PlaceFormComponent, canActivate: [AuthGuard]
-                  },
-                  {
-                      path: 'edit/:id', component: PlaceFormComponent, canActivate: [AuthGuard]
-                  },
-                  {
-                      path: 'list', component: PlaceListComponent, canActivate: [AuthGuard]
-                  }
-                ]
-            },
-            {
-                path : 'timecard', component : TimecardComponent, children: [
-                  {
-                      path: '', redirectTo: 'list', pathMatch: 'full'
-                  },
-                  {
-                      path: 'new', component: TimecardFormComponent, canActivate: [AuthGuard]
-                  },
-                  {
-                      path: 'edit/:id', component: TimecardFormComponent, canActivate: [AuthGuard]
-                  },
-                  {
-                      path: 'list', component: TimecardListComponent, canActivate: [AuthGuard]
-                  },
-                  {
-                      path: 'approvals', component: TimecardApprovalsComponent, canActivate: [AuthGuard]
-                  }
-                ]
-            },
-            {
-              path : 'schedule', component: ScheduleComponent, canActivate: [AuthGuard]
-            }, {
-              path : 'schedule/new', component: ScheduleFormComponent, canActivate: [AuthGuard]
-            }, {
-              path : 'schedule/edit/:id', component: ScheduleFormComponent, canActivate: [AuthGuard]
-            }
+  {
+    path: 'login', component: LoginComponent
+  },
+  {
+    path: '', component: LayoutComponent, children: [
+      {
+        path: '', redirectTo: 'home', pathMatch: 'full'
+      },
+      {
+        path: 'home', component: HomeComponent, canActivate: [AuthGuard]
+      },
+      {
+        path: 'cost-categories', component: CostCategoriesComponent, children: [
+          {
+            path: '', redirectTo: 'list', pathMatch: 'full', canActivate: [AuthGuard]
+          },
+          {
+            path: 'new', component: CostCategoryFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'edit/:id', component: CostCategoryFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'show/:id', component: CostCategoryShowComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'list', component: CostCategoryListComponent, canActivate: [AuthGuard]
+          }
         ]
-    }
+      },
+      {
+        path: 'item-categories', component: ItemCategoriesComponent, children: [
+          {
+            path: '', redirectTo: 'list', pathMatch: 'full'
+          },
+          {
+            path: 'new', component: ItemCategoryFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'edit/:id', component: ItemCategoryFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'show/:id', component: ItemCategoryShowComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'list', component: ItemCategoryListComponent, canActivate: [AuthGuard]
+          }
+        ]
+      },
+      {
+        path: 'items', component: ItemsComponent, children: [
+          {
+            path: '', redirectTo: 'list', pathMatch: 'full'
+          },
+          {
+            path: 'new', component: ItemFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'edit/:id', component: ItemFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'show/:id', component: ItemShowComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'list', component: ItemListComponent, canActivate: [AuthGuard]
+          }
+        ]
+      },
+      {
+        path: 'clients', component: ClientsComponent, children: [
+          {
+            path: '', redirectTo: 'list', pathMatch: 'full'
+          },
+          {
+            path: 'new', component: ClientFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'edit/:id', component: ClientFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'show/:id', component: ClientShowComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'list', component: ClientListComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'import', component: ClientImportComponent, canActivate: [AuthGuard]
+          }
+        ]
+      },
+      {
+        path: 'employees', component: EmployeesComponent, children: [
+          {
+            path: '', redirectTo: 'list', pathMatch: 'full'
+          },
+          {
+            path: 'new', component: EmployeeTabsComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'profile', component: EmployeeTabsComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'edit/:id', component: EmployeeTabsComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'show/:id', component: EmployeeShowComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'list', component: EmployeeListComponent, canActivate: [AuthGuard]
+          }
+        ]
+      },
+      {
+        path: 'providers', component: ProvidersComponent, children: [
+          {
+            path: '', redirectTo: 'list', pathMatch: 'full'
+          },
+          {
+            path: 'new', component: ProviderFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'edit/:id', component: ProviderFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'show/:id', component: ProviderShowComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'list', component: ProviderListComponent, canActivate: [AuthGuard]
+          }
+        ]
+      },
+      {
+        path: 'displays', component: DisplaysComponent, children: [
+          {
+            path: '', redirectTo: 'list', pathMatch: 'full'
+          },
+          {
+            path: 'new', component: DisplayFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'edit/:id', component: DisplayFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'show/:id', component: DisplayShowComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'list', component: DisplayListComponent, canActivate: [AuthGuard]
+          }
+        ]
+      },
+      {
+        path: 'functionalities', component: FunctionalitiesComponent, children: [
+          {
+            path: '', redirectTo: 'list', pathMatch: 'full'
+          },
+          {
+            path: 'new', component: FunctionalityFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'edit/:id', component: FunctionalityFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'show/:id', component: FunctionalityShowComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'list', component: FunctionalityListComponent, canActivate: [AuthGuard]
+          }
+        ]
+      },
+      {
+        path: 'jobs', component: JobsComponent, children: [
+          {
+            path: '', redirectTo: 'list', pathMatch: 'full'
+          },
+          {
+            path: 'new', component: JobTabsComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'new/:available_date', component: JobTabsComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'edit/:id', component: JobTabsComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'show/:id', component: JobTabsComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'list', component: JobListComponent, canActivate: [AuthGuard]
+          }
+        ]
+      },
+      {
+        path: 'places', component: PlacesComponent, children: [
+          {
+            path: '', redirectTo: 'list', pathMatch: 'full'
+          },
+          {
+            path: 'new', component: PlaceFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'edit/:id', component: PlaceFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'show/:id', component: PlaceFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'list', component: PlaceListComponent, canActivate: [AuthGuard]
+          }
+        ]
+      },
+      {
+        path: 'events', component: EventsComponent, children: [
+          {
+            path: '', redirectTo: 'list', pathMatch: 'full'
+          },
+          {
+            path: 'new', component: EventFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'edit/:id', component: EventFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'show/:id', component: EventFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'list', component: EventListComponent, canActivate: [AuthGuard]
+          }
+        ]
+      },
+      {
+        path: 'timecard', component: TimecardComponent, children: [
+          {
+            path: '', redirectTo: 'list', pathMatch: 'full'
+          },
+          {
+            path: 'new', component: TimecardFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'edit/:id', component: TimecardFormComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'list', component: TimecardListComponent, canActivate: [AuthGuard]
+          },
+          {
+            path: 'approvals', component: TimecardApprovalsComponent, canActivate: [AuthGuard]
+          }
+        ]
+      },
+      {
+        path: 'schedule', component: ScheduleComponent, canActivate: [AuthGuard]
+      }, {
+        path: 'schedule/new', component: ScheduleFormComponent, canActivate: [AuthGuard]
+      }, {
+        path: 'schedule/edit/:id', component: ScheduleFormComponent, canActivate: [AuthGuard]
+      }
+    ]
+  }
 ]

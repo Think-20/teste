@@ -163,6 +163,10 @@ import { PlaceFormComponent } from './places/place-form/place-form.component';
 import { PlaceListComponent } from './places/place-list/place-list.component';
 import { PlacesComponent } from './places/places.component';
 import { PlaceService } from './places/place.service';
+import { EventFormComponent } from './events/event-form/event-form.component';
+import { EventListComponent } from './events/event-list/event-list.component';
+import { EventsComponent } from './events/events.component';
+import { EventService } from './events/event.service';
 
 registerLocaleData(localePt);
 
@@ -259,7 +263,11 @@ registerLocaleData(localePt);
 
     PlaceFormComponent,
     PlaceListComponent,
-    PlacesComponent
+    PlacesComponent,
+
+    EventFormComponent,
+    EventListComponent,
+    EventsComponent
   ],
   imports: [
     CurrencyMaskModule,
@@ -342,6 +350,7 @@ registerLocaleData(localePt);
     DisplayService,
     FunctionalityService,
     PlaceService,
+    EventService,
 
     MatDialog,
     MatSnackBar,
