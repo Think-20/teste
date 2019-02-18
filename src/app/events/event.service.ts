@@ -23,6 +23,15 @@ export class EventService {
         private auth: AuthService
     ) {}
 
+    previewFile(event: Event, type: string,  file: string) {
+      let url = `event/download/${event.id}/${type}/${file}?access_token=${this.auth.token()}&user_id=${this.auth.currentUser().id}`
+      //let prefix = this.auth.hasAccess('event/download/{id}/{type}/{file}') ? '' : 'my-'
+
+      //url = prefix + url
+
+      window.open(`${API}/${url}`, '_blank')
+    }
+
     events(params?: {}, page: number = 0): Observable<DataInfo> {
       let url = params === {} ? `events/all?page=${page}` : `events/filter?page=${page}`
 

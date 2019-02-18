@@ -82,10 +82,6 @@ export class EventListComponent implements OnInit {
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
       search: this.search,
-      attendance: this.fb.control(''),
-      event_status: this.fb.control(''),
-      rate: this.fb.control(''),
-      event_type: this.fb.control('')
     })
 
     this.loadEvents()

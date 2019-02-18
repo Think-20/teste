@@ -1,5 +1,5 @@
 import { Component, OnInit, Injectable, Input } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material';
@@ -9,9 +9,7 @@ import { EventService } from '../event.service';
 import { AuthService } from '../../login/auth.service';
 
 import { ErrorHandler } from '../../shared/error-handler.service';
-import { Patterns } from '../../shared/patterns.model';
 
-import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
 import { ObjectValidator } from '../../shared/custom-validators';
@@ -19,6 +17,8 @@ import { Location } from '@angular/common';
 import { Place } from '../../places/place.model';
 import { PlaceService } from '../../places/place.service';
 import { isObject } from 'util';
+import { Patterns } from 'app/shared/patterns.model';
+import { UploadFileService } from 'app/shared/upload-file.service';
 
 @Component({
   selector: 'cb-event-form',
@@ -54,6 +54,7 @@ export class EventFormComponent implements OnInit {
 constructor(
     private placeService: PlaceService,
     private eventService: EventService,
+    private uploadFileService: UploadFileService,
     private authService: AuthService,
     private location: Location,
     private formBuilder: FormBuilder,
@@ -63,11 +64,10 @@ constructor(
   ) { }
 
   ngOnInit() {
-    let snackBarStateCharging
     this.typeForm = this.route.snapshot.url[0].path
 
     this.eventForm = this.formBuilder.group({
-      description: this.formBuilder.control('', [
+      name: this.formBuilder.control('', [
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(100)
@@ -95,6 +95,62 @@ constructor(
       fin_hour: this.formBuilder.control('', [
         Validators.required
       ]),
+      ini_date_mounting: this.formBuilder.control('', [
+        Validators.required
+      ]),
+      fin_date_mounting: this.formBuilder.control('', [
+        Validators.required
+      ]),
+      ini_hour_mounting: this.formBuilder.control('', [
+        Validators.required
+      ]),
+      fin_hour_mounting: this.formBuilder.control('', [
+        Validators.required
+      ]),
+      ini_date_unmounting: this.formBuilder.control('', [
+        Validators.required
+      ]),
+      fin_date_unmounting: this.formBuilder.control('', [
+        Validators.required
+      ]),
+      ini_hour_unmounting: this.formBuilder.control('', [
+        Validators.required
+      ]),
+      fin_hour_unmounting: this.formBuilder.control('', [
+        Validators.required
+      ]),
+      organizer: this.formBuilder.control('', [
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(100)
+      ]),
+      email: this.formBuilder.control('', [
+        Validators.required,
+        Validators.pattern(Patterns.email),
+        Validators.maxLength(80)
+      ]),
+      phone: this.formBuilder.control('', [
+        Validators.required,
+        Validators.minLength(10),
+        Validators.pattern(Patterns.phone)
+      ]),
+      site: this.formBuilder.control('', [
+        Validators.required,
+        Validators.minLength(7),
+        Validators.maxLength(100)
+      ]),
+      plan: this.formBuilder.control('', [
+        Validators.required
+      ]),
+      regulation: this.formBuilder.control('', [
+        Validators.required
+      ]),
+      manual: this.formBuilder.control('', [
+        Validators.required
+      ]),
+      created_at: this.formBuilder.control(''),
+      updated_at: this.formBuilder.control(''),
+      employee: this.formBuilder.control(''),
     })
 
     this.listenPlaces()
@@ -121,6 +177,25 @@ constructor(
     })
   }
 
+  uploadFile(field: string, inputFile: HTMLInputElement) {
+    let file: File = inputFile.files[0]
+    this.eventForm.controls[field].setValue('Carregando arquivo...')
+
+    this.uploadFileService.uploadFile(inputFile,
+    (percentDone) => {
+      this.eventForm.controls[field].setValue('Carregando ' + percentDone + '%')
+    },
+    (response) => {
+      this.eventForm.controls[field].setValue(file.name)
+    }).subscribe()
+  }
+
+  previewFile(filename: string, type: string) {
+    if(this.typeForm != 'show') return
+
+    this.eventService.previewFile(this.event, type, filename)
+  }
+
   loadEvent() {
     let snackBarStateCharging = this.snackBar.open('Carregando evento...')
     let eventId = parseInt(this.route.snapshot.url[1].path)
@@ -128,14 +203,38 @@ constructor(
       snackBarStateCharging.dismiss()
       this.event = event
 
-      this.eventForm.controls.description.setValue(this.event.description)
+      this.eventForm.controls.name.setValue(this.event.name)
       this.eventForm.controls.edition.setValue(this.event.edition)
       this.eventForm.controls.note.setValue(this.event.note)
       this.eventForm.controls.place.setValue(this.event.place)
-      this.eventForm.controls.ini_date.setValue(this.event.ini_date)
-      this.eventForm.controls.fin_date.setValue(this.event.fin_date)
+
+      this.eventForm.controls.ini_date.setValue(new Date(this.event.ini_date + "T00:00:00"))
+      this.eventForm.controls.fin_date.setValue(new Date(this.event.fin_date + "T00:00:00"))
       this.eventForm.controls.ini_hour.setValue(this.event.ini_hour)
       this.eventForm.controls.fin_hour.setValue(this.event.fin_hour)
+
+      this.eventForm.controls.ini_date_mounting.setValue(new Date(this.event.ini_date_mounting + "T00:00:00"))
+      this.eventForm.controls.fin_date_mounting.setValue(new Date(this.event.fin_date_mounting + "T00:00:00"))
+      this.eventForm.controls.ini_hour_mounting.setValue(this.event.ini_hour_mounting)
+      this.eventForm.controls.fin_hour_mounting.setValue(this.event.fin_hour_mounting)
+
+      this.eventForm.controls.ini_date_unmounting.setValue(new Date(this.event.ini_date_unmounting + "T00:00:00"))
+      this.eventForm.controls.fin_date_unmounting.setValue(new Date(this.event.fin_date_unmounting + "T00:00:00"))
+      this.eventForm.controls.ini_hour_unmounting.setValue(this.event.ini_hour_unmounting)
+      this.eventForm.controls.fin_hour_unmounting.setValue(this.event.fin_hour_unmounting)
+
+      this.eventForm.controls.created_at.setValue(new Date(this.event.created_at))
+      this.eventForm.controls.updated_at.setValue(new Date(this.event.updated_at))
+      this.eventForm.controls.employee.setValue(this.event.employee.name)
+
+      this.eventForm.controls.organizer.setValue(this.event.organizer)
+      this.eventForm.controls.site.setValue(this.event.site)
+      this.eventForm.controls.phone.setValue(this.event.phone)
+      this.eventForm.controls.email.setValue(this.event.email)
+
+      this.eventForm.controls.plan.setValue(this.event.plan)
+      this.eventForm.controls.regulation.setValue(this.event.regulation)
+      this.eventForm.controls.manual.setValue(this.event.manual)
 
       if(this.typeForm == 'show') {
         this.eventForm.disable()

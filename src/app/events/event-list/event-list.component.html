@@ -24,33 +24,7 @@
     <mat-card *ngIf="filter" class="filter-grid">
       <div class="row">
         <div class="col-md-12">
-          <mat-form-field class="col-md-3">
-            <mat-select placeholder="Atendimento" formControlName="attendance" [compareWith]="compareAttendance">
-              <mat-option></mat-option>
-              <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-                {{ attendance.name }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="col-md-3">
-            <mat-select placeholder="Tipo" formControlName="event_type" [compareWith]="compareClientType">
-                <mat-option></mat-option>
-              <mat-option *ngFor="let type of eventTypes" [value]="type">
-                {{ type.description }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <mat-form-field class="col-md-3">
-            <mat-select placeholder="Status" formControlName="event_status" [compareWith]="compareClientStatus">
-              <mat-option></mat-option>
-              <mat-option *ngFor="let status of eventStatus" [value]="status">
-                {{ status.description }}
-              </mat-option>
-            </mat-select>
-          </mat-form-field>
-          <cb-stars class="col-md-3 star-input" label="Score" [rate]="null" [input]="searchForm.controls.rate">
-            <input formControlName="rate" matInput>
-          </cb-stars>
+          
         </div>
       </div>
     </mat-card>
@@ -60,15 +34,15 @@
       <div *ngIf="events?.length > 0">
         <table class="table mat-table">
           <div class="mat-header-row">
-            <div class="mat-header-cell mat-column-description">Descrição</div>
+            <div class="mat-header-cell mat-column-name">Nome</div>
             <div class="mat-header-cell mat-column-edition">Edição</div>
             <div class="mat-header-cell mat-column-place">Local</div>
             <div class="mat-header-cell mat-column-date">Data</div>
             <div class="mat-header-cell mat-column-action">Ação</div>
           </div>
           <div class="mat-row" *ngFor="let event of events" [@rowAppeared]="rowAppearedState">
-            <div class="mat-cell mat-column-description">
-              {{ event.description }}
+            <div class="mat-cell mat-column-name">
+              {{ event.name }}
             </div>
             <div class="mat-cell mat-column-edition">
               {{ event.edition }}
