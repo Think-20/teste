@@ -1,5 +1,6 @@
 import { Employee } from '../employees/employee.model';
 import { Place } from '../places/place.model';
+import { Job } from '../jobs/job.model';
 
 export class Event {
   id: number
@@ -30,4 +31,5 @@ export class Event {
   updated_at: string
   employee_id?: number
   employee: Employee
+  jobs?: Job[]
 }

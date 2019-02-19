@@ -19,6 +19,7 @@ import { PlaceService } from '../../places/place.service';
 import { isObject } from 'util';
 import { Patterns } from 'app/shared/patterns.model';
 import { UploadFileService } from 'app/shared/upload-file.service';
+import { JobService } from '../../jobs/job.service';
 
 @Component({
   selector: 'cb-event-form',
@@ -54,6 +55,7 @@ export class EventFormComponent implements OnInit {
 constructor(
     private placeService: PlaceService,
     private eventService: EventService,
+    private jobService: JobService,
     private uploadFileService: UploadFileService,
     private authService: AuthService,
     private location: Location,
