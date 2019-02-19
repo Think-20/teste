@@ -38,6 +38,7 @@ export class SidenavComponent implements OnInit {
   producao = false
   orcamento = false
   criacao = false
+  events = false
   planejamento = false
   centroCusto = false
   atendimento = false

@@ -25,8 +25,8 @@
           </a>
           <div [@rowAppeared]="state" *ngIf="administradores">
             <div class="sub-navbar">
-              <a [routerLink]="['/displays']"  mat-raised-button>Acesso das telas</a>
-              <a [routerLink]="['/functionalities']"  mat-raised-button>Funcionalidades da API</a>
+              <a [routerLink]="['/displays']" mat-raised-button>Acesso das telas</a>
+              <a [routerLink]="['/functionalities']" mat-raised-button>Funcionalidades da API</a>
             </div>
           </div>
         </div>
@@ -43,9 +43,14 @@
             <div class="sub-navbar">
               <a [routerLink]="['/clients']" [disabled]="hasNoPermission(user, '/clients/list')" mat-raised-button>Clientes</a>
               <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Cronograma</a>
-              <a mat-raised-button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events')">Eventos</a>
+              <a (click)="events = !events" mat-raised-button>Eventos</a>
+              <div [@rowAppeared]="state" *ngIf="events">
+                <div class="sub-navbar">
+                  <a mat-raised-button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events/list')">Eventos</a>
+                  <a mat-raised-button [routerLink]="['/places']" [disabled]="hasNoPermission(user, '/places/list')">Locais</a>
+                </div>
+              </div>
               <a mat-raised-button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs/list')">Jobs</a>
-              <a mat-raised-button [routerLink]="['/places']" [disabled]="hasNoPermission(user, '/places/list')">Locais</a>
             </div>
           </div>
         </div>
@@ -56,7 +61,13 @@
           <div [@rowAppeared]="state" *ngIf="criacao">
             <div class="sub-navbar">
               <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Cronograma</a>
-              <a mat-raised-button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events')">Eventos</a>
+              <a (click)="events = !events" mat-raised-button>Eventos</a>
+              <div [@rowAppeared]="state" *ngIf="events">
+                <div class="sub-navbar">
+                  <a mat-raised-button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events/list')">Eventos</a>
+                  <a mat-raised-button [routerLink]="['/places']" [disabled]="hasNoPermission(user, '/places/list')">Locais</a>
+                </div>
+              </div>
               <a mat-raised-button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs/list')">Jobs</a>
             </div>
           </div>
@@ -88,7 +99,13 @@
             </div>
             <div class="sub-navbar">
               <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Cronograma</a>
-              <a mat-raised-button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events')">Eventos</a>
+              <a (click)="events = !events" mat-raised-button>Eventos</a>
+              <div [@rowAppeared]="state" *ngIf="events">
+                <div class="sub-navbar">
+                  <a mat-raised-button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events/list')">Eventos</a>
+                  <a mat-raised-button [routerLink]="['/places']" [disabled]="hasNoPermission(user, '/places/list')">Locais</a>
+                </div>
+              </div>
               <a disabled [routerLink]="['/costs-sheet']" [disabled]="hasNoPermission(user, '/costs-sheet')" mat-raised-button>Ficha de custos</a>
               <a mat-raised-button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs/list')">Jobs</a>
             </div>
@@ -107,7 +124,13 @@
           </a>
           <div [@rowAppeared]="state" *ngIf="producao">
             <div class="sub-navbar">
-              <a mat-raised-button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events')">Eventos</a>
+              <a (click)="events = !events" mat-raised-button>Eventos</a>
+              <div [@rowAppeared]="state" *ngIf="events">
+                <div class="sub-navbar">
+                  <a mat-raised-button [routerLink]="['/events']" [disabled]="hasNoPermission(user, '/events/list')">Eventos</a>
+                  <a mat-raised-button [routerLink]="['/places']" [disabled]="hasNoPermission(user, '/places/list')">Locais</a>
+                </div>
+              </div>
               <a [routerLink]="['/providers']" [disabled]="hasNoPermission(user, '/providers/list')" mat-raised-button>Fornecedores</a>
             </div>
           </div>
