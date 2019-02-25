@@ -63,7 +63,7 @@ draggable="true">
     &nbsp;
   </div>
   <div class="mat-cell mat-column-budget">
-    {{ (canShowBudgetValue(task, chrono) ? task.job.budget_value : '') | number: '1.2' }}
+    {{ (canShowDetails(task, chrono) ? task.job.budget_value : '') | number: '1.2' }}
   </div>
   <div class="mat-cell mat-column-area">
     &nbsp;
@@ -79,6 +79,6 @@ draggable="true">
     {{ task.job?.attendance?.name }}
   </div>
   <div class="mat-cell mat-column-stat">
-    {{ task.job?.status?.description }}
+    {{ canShowDetails(task, chrono) ? task.job?.status?.description : '' }}
   </div>
 </div>
