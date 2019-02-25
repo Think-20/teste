@@ -601,9 +601,9 @@ export class ScheduleFormComponent implements OnInit {
   loadJobs() {
     let params = this.params()
     let snackbar = this.snackBar.open('Carregando jobs...')
-    this.jobService.jobs(params).subscribe(data => {
+    this.jobService.jobs(params).subscribe(dataInfo => {
       snackbar.dismiss()
-      let jobs = <Job[]> data.data
+      let jobs = <Job[]> dataInfo.pagination.data
       this.callback(jobs)
     })
   }

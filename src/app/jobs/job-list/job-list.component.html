@@ -194,9 +194,16 @@
       <table class="table mat-table report">
         <div class="mat-header-row">
           <div class="mat-header-cell col-md-2 text-center">Total</div>
+          <div class="mat-header-cell col-md-3 text-right">Última atualização</div>
         </div>
         <div class="mat-row">
           <div class="mat-cell col-md-2 text-center">{{ pagination?.total }}</div>
+          <div class="mat-cell col-md-3 text-right">
+            {{ dataInfo?.updatedInfo?.date }}
+            <p class="updated-info-employee">
+              {{ dataInfo?.updatedInfo?.employee }}
+            </p>
+          </div>
         </div>
       </table>
     </mat-card>

@@ -13,6 +13,7 @@ import { Job } from './job.model';
 import { AuthService } from '../login/auth.service';
 import { Pagination } from 'app/shared/pagination.model';
 import { Client } from '../clients/client.model';
+import { DataInfo } from '../shared/data-info.model';
 
 
 @Injectable()
@@ -57,7 +58,7 @@ export class JobService {
           })
     }
 
-    jobs(params?: {}, page: number = 0): Observable<Pagination> {
+    jobs(params?: {}, page: number = 0): Observable<DataInfo> {
         let url = params === {} ? `jobs/all?page=${page}` : `jobs/filter?page=${page}`
         let prefix = this.auth.hasAccess('jobs/all') ? '' : 'my-'
 

@@ -16,6 +16,7 @@ import { AuthService } from '../../login/auth.service';
 import { ClientService } from '../../clients/client.service';
 import { JobType } from '../../job-types/job-type.model';
 import { JobTypeService } from '../../job-types/job-type.service';
+import { DataInfo } from '../../shared/data-info.model';
 
 @Component({
   selector: 'cb-job-list',
@@ -45,6 +46,7 @@ export class JobListComponent implements OnInit {
   search: FormControl
   pagination: Pagination
   jobs: Job[] = []
+  dataInfo: DataInfo
   paramAttendance: Employee = null
   attendances: Employee[]
   creations: Employee[]
@@ -97,10 +99,11 @@ export class JobListComponent implements OnInit {
     })
 
     let snackBar = this.snackBar.open('Carregando jobs...')
-    this.jobService.jobs().subscribe(pagination => {
-      this.pagination = pagination
+    this.jobService.jobs().subscribe(dataInfo => {
+      this.dataInfo = dataInfo
+      this.pagination = dataInfo.pagination
+      this.jobs = dataInfo.pagination.data
       this.searching = false
-      this.jobs = pagination.data
       snackBar.dismiss()
     })
 
@@ -121,11 +124,12 @@ export class JobListComponent implements OnInit {
           job_type: controls.job_type.value,
           final_date: controls.final_date.value,
           initial_date: controls.initial_date.value,
-        }).subscribe(pagination => {
+        }).subscribe(dataInfo => {
           snackbar.dismiss()
-          this.pagination = pagination
+          this.dataInfo = dataInfo
+          this.pagination = dataInfo.pagination
           this.searching = false
-          this.jobs = pagination.data
+          this.jobs = dataInfo.pagination.data
           snackBar.dismiss()
         })
       })
@@ -181,9 +185,10 @@ export class JobListComponent implements OnInit {
   changePage($event) {
     this.searching = true
     this.jobs = []
-    this.jobService.jobs(this.search.value, ($event.pageIndex + 1)).subscribe(pagination => {
-      this.pagination = pagination
-      this.jobs = pagination.data
+    this.jobService.jobs(this.search.value, ($event.pageIndex + 1)).subscribe(dataInfo => {
+      this.dataInfo = dataInfo
+      this.pagination = dataInfo.pagination
+      this.jobs = dataInfo.pagination.data
       this.searching = false
     })
     this.pageIndex = $event.pageIndex

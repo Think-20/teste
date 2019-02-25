@@ -58,3 +58,7 @@
 .mat-cell, .mat-header-cell {
   text-align: center;
 }
+
+.updated-info-employee {
+  font-size: 12px;
+}
