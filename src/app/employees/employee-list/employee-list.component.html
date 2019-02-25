@@ -80,7 +80,7 @@
                 <button *ngIf="employee.deleted_at == null"
                 [disabled]="!permissionVerify('toggle-deleted', employee)"
                 (click)="toggleDeleted(employee)" mat-menu-item>
-                  <mat-icon>delete</mat-icon> Remover
+                  <mat-icon>delete</mat-icon> Desativar
                 </button>
                 <button *ngIf="employee.deleted_at != null"
                 [disabled]="!permissionVerify('toggle-deleted', employee)"
