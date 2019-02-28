@@ -30,6 +30,8 @@ export class Job {
     attendance_id: number
     attendance: Employee
     rate: number
+    moments: number
+    area: number
     budget_value: number
     budget_id?: number
     budget: Budget

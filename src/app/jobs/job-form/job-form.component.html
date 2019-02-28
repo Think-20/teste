@@ -22,6 +22,12 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
+      <mat-form-field [class.cb-invisible]="jobForm.controls.job_type?.value?.description != 'Stand'" class="col-md-3">
+        <input matInput formControlName="area" placeholder="Área (m²)*">
+      </mat-form-field>
+      <mat-form-field [class.cb-invisible]="jobForm.controls.job_type?.value?.description != 'Cenografia'" class="col-md-3">
+        <input matInput formControlName="moments" placeholder="Momentos*">
+      </mat-form-field>
       <mat-form-field class="col-md-3">
         <input [matDatepicker]="availableDatepicker" formControlName="available_date_creation" matInput placeholder="Data disponível para início*">
         <mat-datepicker-toggle matSuffix [for]="availableDatepicker"></mat-datepicker-toggle>

@@ -66,7 +66,10 @@ draggable="true">
     {{ (canShowDetails(task, chrono) ? task.job.budget_value : '') | number: '1.2' }}
   </div>
   <div class="mat-cell mat-column-area">
-    &nbsp;
+    {{ canShowDetails(task, chrono)
+      && task.job.job_type.description == 'Stand'
+      && task.job.area != null
+      ? (task.job.area | number ) + ' m²' : '' }}
   </div>
   <div class="mat-cell mat-column-time">
     <p>{{ timeDisplay(task, chrono) }}</p>

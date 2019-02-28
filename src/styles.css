@@ -34,6 +34,13 @@ html, body, cb-login {
   display: none !important;
 }
 
+.cb-invisible {
+  visibility: hidden;
+  margin-top: -9999px;
+  height: 0;
+  position: absolute !important;
+}
+
 .cb-button {
     background-color: transparent !important;
     box-shadow: none !important;

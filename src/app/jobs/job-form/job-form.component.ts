@@ -128,7 +128,9 @@ export class JobFormComponent implements OnInit {
       detailing_responsible: this.formBuilder.control({value: '', disabled: true}),
       budget_responsible: this.formBuilder.control({value: '', disabled: true}),
       production_responsible: this.formBuilder.control({value: '', disabled: true}),
-      place: this.formBuilder.control('')
+      place: this.formBuilder.control(''),
+      area: this.formBuilder.control(''),
+      moments: this.formBuilder.control('')
     })
 
     this.setPreviousData()
@@ -152,7 +154,24 @@ export class JobFormComponent implements OnInit {
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
       })
 
-    this.jobForm.get('agency').valueChanges
+    this.jobForm.get('job_type').valueChanges
+      .subscribe(value => {
+        if (!isObject(value)) {
+          return;
+        }
+
+        let job_type = <JobType> value
+
+        if(job_type.description == 'Stand') {
+          this.enableArea()
+          this.disableMoments()
+        } else {
+          this.enableMoments()
+          this.disableArea()
+        }
+      })
+
+      this.jobForm.get('agency').valueChanges
       .do(name => {
         snackBarStateCharging = this.snackBar.open('Aguarde...')
       })
@@ -212,6 +231,32 @@ export class JobFormComponent implements OnInit {
 
       snackBarStateCharging.dismiss()
     })
+  }
+
+  enableArea() {
+    this.jobForm.controls.area.setValidators([
+      Validators.required,
+      Validators.pattern(Patterns.float)
+    ])
+    this.jobForm.controls.area.updateValueAndValidity()
+  }
+
+  disableArea() {
+    this.jobForm.controls.area.clearValidators()
+    this.jobForm.controls.area.updateValueAndValidity()
+  }
+
+  enableMoments() {
+    this.jobForm.controls.moments.setValidators([
+      Validators.required,
+      Validators.pattern(Patterns.number)
+    ])
+    this.jobForm.controls.moments.updateValueAndValidity()
+  }
+
+  disableMoments() {
+    this.jobForm.controls.area.clearValidators()
+    this.jobForm.controls.moments.updateValueAndValidity()
   }
 
   setPreviousData() {
@@ -339,6 +384,8 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.note.setValue(job.note)
     this.jobForm.controls.place.setValue(job.place)
     this.jobForm.controls.history.setValue(job.history)
+    this.jobForm.controls.moments.setValue(job.moments)
+    this.jobForm.controls.area.setValue(job.area.toString().replace('.', ','))
 
     if(job.budget_responsible != null) {
       this.jobForm.controls.budget_responsible.setValue(job.budget_responsible.name)
