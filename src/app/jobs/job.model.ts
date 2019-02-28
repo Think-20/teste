@@ -47,6 +47,7 @@ export class Job {
     approval_expectation_rate: number
     created_at: string
     updated_at: string
+    status_updated_at: string
     note?: string
     history: string
     task?: Task

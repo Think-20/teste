@@ -102,6 +102,7 @@
             <div class="mat-header-cell mat-column-date">Data</div>
             <div class="mat-header-cell mat-column-date-creation">Crono</div>
             <div class="mat-header-cell mat-column-status">Status</div>
+            <div class="mat-header-cell mat-column-status_updated">Definição</div>
             <div class="mat-header-cell mat-column-action">Ação</div>
           </div>
           <div class="mat-row" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState">
@@ -139,6 +140,9 @@
                 </mat-option>
               </mat-select>
               -->
+            </div>
+            <div class="mat-cell mat-column-status_updated">
+              {{ job?.status_updated_at | date:'dd/MM/yy' }}
             </div>
             <div class="mat-cell mat-column-action">
               <mat-menu #menu="matMenu">
