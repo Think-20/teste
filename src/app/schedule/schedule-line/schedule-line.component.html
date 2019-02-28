@@ -10,7 +10,7 @@
       </a>
       <a [disabled]="!permissionVerify('task.edit', task.job)" *ngIf="task.id != undefined" [routerLink]="['/schedule/edit', task.id]"
         mat-menu-item>
-        <mat-icon>mode_edit</mat-icon> Editar tarefa
+        <mat-icon>mode_edit</mat-icon> Editar agendamento
       </a>
       <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/edit', task.job.id]"
         mat-menu-item>
