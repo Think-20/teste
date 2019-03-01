@@ -167,6 +167,7 @@ import { EventFormComponent } from './events/event-form/event-form.component';
 import { EventListComponent } from './events/event-list/event-list.component';
 import { EventsComponent } from './events/events.component';
 import { EventService } from './events/event.service';
+import { PerformanceReportLiteComponent } from './reports/performance-report-lite/performance-report-lite.component';
 
 registerLocaleData(localePt);
 
@@ -267,7 +268,8 @@ registerLocaleData(localePt);
 
     EventFormComponent,
     EventListComponent,
-    EventsComponent
+    EventsComponent,
+    PerformanceReportLiteComponent
   ],
   imports: [
     CurrencyMaskModule,

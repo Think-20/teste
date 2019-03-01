@@ -81,6 +81,14 @@
             <div class="sub-navbar">
               <a mat-raised-button [routerLink]="['/employees']" [disabled]="hasNoPermission(user, '/employees/list')">Colaboradores</a>
             </div>
+            <div class="sub-navbar">
+              <a (click)="reports = !reports" mat-raised-button>Relatórios</a>
+              <div [@rowAppeared]="state" *ngIf="reports">
+                <div class="sub-navbar">
+                  <a mat-raised-button [routerLink]="['/performance-lite']" [disabled]="hasNoPermission(user, '/performance-lite')">Performance (Lite)</a>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 

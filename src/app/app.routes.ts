@@ -62,6 +62,7 @@ import { PlaceListComponent } from './places/place-list/place-list.component';
 import { EventsComponent } from './events/events.component';
 import { EventListComponent } from './events/event-list/event-list.component';
 import { EventFormComponent } from './events/event-form/event-form.component';
+import { PerformanceReportLiteComponent } from './reports/performance-report-lite/performance-report-lite.component';
 
 export const ROUTES: Routes = [
   {
@@ -74,6 +75,9 @@ export const ROUTES: Routes = [
       },
       {
         path: 'home', component: HomeComponent, canActivate: [AuthGuard]
+      },
+      {
+        path: 'performance-lite', component: PerformanceReportLiteComponent, canActivate: [AuthGuard]
       },
       {
         path: 'cost-categories', component: CostCategoriesComponent, children: [
