@@ -135,7 +135,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { ImageViewerComponent } from './shared/image-viewer/image-viewer.component';
 import { ScheduleBlockService } from './schedule/schedule-block/schedule-block.service';
 import { ProposalsComponent } from './proposals/proposals.component';
-import { SafePipe } from './shared/safe.pipe';
 import { ProposalFormComponent } from './proposals/proposal-form/proposal-form.component';
 import { ItemProposalFormComponent } from './proposals/proposal-form/item-proposal-form/item-proposal-form.component';
 import { BlockDialogComponent } from './schedule/schedule-block/block-dialog/block-dialog.component';
@@ -168,6 +167,8 @@ import { EventListComponent } from './events/event-list/event-list.component';
 import { EventsComponent } from './events/events.component';
 import { EventService } from './events/event.service';
 import { PerformanceReportLiteComponent } from './reports/performance-report-lite/performance-report-lite.component';
+import { SafePipe } from './shared/safe.pipe';
+import { NumberAbbreviationPipe } from './shared/number-abbreviation.pipe';
 
 registerLocaleData(localePt);
 
@@ -175,6 +176,7 @@ registerLocaleData(localePt);
   declarations: [
     MaskDirective,
     UcWordsDirective,
+    NumberAbbreviationPipe,
 
     AppComponent,
     HomeComponent,

@@ -79,8 +79,12 @@
   margin: auto;
 }
 
-.report .cb-items.opportunity .title, .report .cb-items.opportunity .content {
+.report .cb-items.opportunity-quantity .title, .report .cb-items.opportunity-quantity .content {
   max-width: 75px;
+}
+
+.report .cb-items.opportunity-value .title, .report .cb-items.opportunity-value .content {
+  max-width: 100px;
 }
 
 

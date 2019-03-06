@@ -56,31 +56,41 @@
 </div>
 
 <!-- Quando houver algum registro -->
-<div *ngIf="1==1" class="col-md-12 data">
+<div *ngIf="performanceLite" class="col-md-12 data">
   <mat-card class="col-md-12">
     <table class="table mat-table report">
       <div class="mat-header-row">
-        <div class="cb-title">Resultado {{ searchForm.controls.initial_date.value | date: 'dd/MM/yy' }} à {{ searchForm.controls.final_date.value | date: 'dd/MM/yy' }}</div>
-        <div class="cb-items opportunity">
+        <div class="cb-title">
+          Resultado
+          <br>
+          <small>{{ searchForm.controls.initial_date.value | date: 'dd/MM/yy' }} à {{ searchForm.controls.final_date.value | date:
+            'dd/MM/yy' }}
+          </small>
+        </div>
+        <div class="cb-items opportunity opportunity-quantity">
           <div class="title">oportunidades un:</div>
           <div class="content">
-            <div class="percent positive">+12%</div>
-            <div class="value">42</div>
+            <div class="percent {{ percentOpportunityQuantity() > 0 ? 'positive' : 'negative' }}">
+              {{ percentOpportunityQuantity() >= 0 ? '+' : '' }}{{ percentOpportunityQuantity() }}%
+            </div>
+            <div class="value">{{ performanceLite.opportunity_quantity }}</div>
           </div>
           <div class="title">meta:</div>
           <div class="content">
-            <div class="value">42</div>
+            <div class="value">{{ opportunity_quantity_goal }}</div>
           </div>
         </div>
-        <div class="cb-items opportunity">
+        <div class="cb-items opportunity opportunity-value">
           <div class="title">oportunidades $:</div>
           <div class="content">
-            <div class="percent negative">-3%</div>
-            <div class="value strong">4.3mi</div>
+            <div class="percent {{ percentOpportunityValue() > 0 ? 'positive' : 'negative' }}">
+              {{ percentOpportunityValue() >= 0 ? '+' : '' }}{{ percentOpportunityValue() }}%
+            </div>
+            <div class="value strong">{{ performanceLite.opportunity_value | numberAbrev }}</div>
           </div>
           <div class="title">meta:</div>
           <div class="content">
-            <div class="value">4.5mi</div>
+            <div class="value">{{ opportunity_value_goal | numberAbrev }}</div>
           </div>
         </div>
         <div class="cb-items">
