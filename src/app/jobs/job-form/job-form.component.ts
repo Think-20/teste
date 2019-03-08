@@ -168,6 +168,9 @@ export class JobFormComponent implements OnInit {
         } else if(job_type.description == 'Cenografia') {
           this.enableMoments()
           this.disableArea()
+        } else {
+          this.disableArea()
+          this.disableMoments()
         }
       })
 
