@@ -170,8 +170,15 @@ export class EmployeeListComponent implements OnInit {
   changePage($event) {
     this.searching = true
     this.employees = []
+    let controls = this.searchForm.controls
 
-    this.employeeService.employees(this.searchForm.value, ($event.pageIndex + 1)).subscribe(dataInfo => {
+    this.employeeService.employees(
+    {
+      deleted: true,
+      search: controls.search.value,
+      department: controls.department.value,
+      position: controls.position.value,
+    }, ($event.pageIndex + 1)).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
