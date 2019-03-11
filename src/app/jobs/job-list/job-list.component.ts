@@ -144,7 +144,10 @@ export class JobListComponent implements OnInit {
       this.attendances = attendances
     })
 
-    this.employeeService.employees().subscribe(dataInfo => {
+    this.employeeService.employees({
+      paginate: false,
+      deleted: true
+    }).subscribe(dataInfo => {
       let employees = dataInfo.pagination.data
       this.creations = employees.filter(employee => {
         return employee.department.description === 'Criação'
