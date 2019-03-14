@@ -260,6 +260,18 @@ export class ScheduleLineComponent implements OnInit {
     return this.taskService.jobDisplay(task)
   }
 
+  calcValue(job: Job) {
+    let text = 0.00
+
+    if(job.area != null) {
+      text = parseFloat((job.budget_value / job.area).toFixed(2))
+    } else if(job.moments != null) {
+      text = parseFloat((job.budget_value / job.moments).toFixed(2))
+    }
+
+    return text
+  }
+
   canShowDetails(task: Task, chrono: Chrono) {
     const available = ['Modificação', 'Opção', 'Continuação', 'Continuação de', 'Detalhamento', 'M. descritivo']
     let text = this.jobDisplay(task, chrono)
