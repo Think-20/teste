@@ -10,7 +10,7 @@ import { Employee } from '../../employees/employee.model';
 import { EmployeeService } from '../../employees/employee.service';
 import { JobStatus } from 'app/job-status/job-status.model';
 import { JobStatusService } from 'app/job-status/job-status.service';
-import { distinctUntilChanged, debounceTime, tap } from 'rxjs/operators';
+import { distinctUntilChanged, debounceTime, tap, isEmpty } from 'rxjs/operators';
 import { Client } from '../../clients/client.model';
 import { AuthService } from '../../login/auth.service';
 import { ClientService } from '../../clients/client.service';
@@ -54,8 +54,10 @@ export class JobListComponent implements OnInit {
   status: JobStatus[]
   job_types: JobType[]
   searching = false
-  pageIndex: number = 0
+  pageIndex: number
   filter = false
+  params = {}
+  hasFilterActive = false
   isAdmin: boolean = false
 
   constructor(
@@ -72,10 +74,21 @@ export class JobListComponent implements OnInit {
   ngOnInit() {
     this.isAdmin = this.authService.hasAccess('job/save')
 
+    this.loadFilterData()
+    this.pageIndex = this.jobService.pageIndex
+
+    this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
+      ? this.authService.currentUser().employee : null
+
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  createForm() {
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
       search: this.search,
-      attendance: this.fb.control({value: '', disabled: !this.isAdmin}),
+      attendance: this.fb.control({ value: '', disabled: !this.isAdmin }),
       creation: this.fb.control(''),
       job_type: this.fb.control(''),
       client: this.fb.control(''),
@@ -84,39 +97,26 @@ export class JobListComponent implements OnInit {
       final_date: this.fb.control(''),
     })
 
-    this.loadFilterData()
-    this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
-    ? this.authService.currentUser().employee : null
-
-    this.searching = true
-
     this.searchForm.controls.client.valueChanges
-    .pipe(distinctUntilChanged(), debounceTime(500))
-    .subscribe(clientName => {
-      this.clientService.clients({ search: clientName, attendance: this.paramAttendance }).subscribe((dataInfo) => {
-        this.clients = dataInfo.pagination.data
+      .pipe(distinctUntilChanged(), debounceTime(500))
+      .subscribe(clientName => {
+        this.clientService.clients({ search: clientName, attendance: this.paramAttendance }).subscribe((dataInfo) => {
+          this.clients = dataInfo.pagination.data
+        })
       })
-    })
-
-    let snackBar = this.snackBar.open('Carregando jobs...')
-    this.jobService.jobs().subscribe(dataInfo => {
-      this.dataInfo = dataInfo
-      this.pagination = dataInfo.pagination
-      this.jobs = dataInfo.pagination.data
-      this.searching = false
-      snackBar.dismiss()
-    })
 
     let snackbar
     this.searchForm.valueChanges
-      .do(() => snackbar = this.snackBar.open('Carregando jobs...') )
+      .do(() => snackbar = this.snackBar.open('Carregando jobs...'))
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe(() => {
         let controls = this.searchForm.controls
         let status = controls.status.value != undefined ? controls.status.value.id : null
         let clientName = controls.client.value != '' ? controls.client.value : controls.search.value
 
-        this.jobService.jobs({
+        this.pageIndex = 0
+        this.jobService.pageIndex = 0
+        this.params = {
           clientName: clientName,
           status: status,
           attendance: controls.attendance.value,
@@ -124,15 +124,51 @@ export class JobListComponent implements OnInit {
           job_type: controls.job_type.value,
           final_date: controls.final_date.value,
           initial_date: controls.initial_date.value,
-        }).subscribe(dataInfo => {
+        }
+
+        this.jobService.jobs(this.params, this.jobService.pageIndex + 1).subscribe(dataInfo => {
           snackbar.dismiss()
           this.dataInfo = dataInfo
           this.pagination = dataInfo.pagination
           this.searching = false
           this.jobs = dataInfo.pagination.data
-          snackBar.dismiss()
         })
+
+        this.jobService.searchValue = this.searchForm.value
+        this.updateFilterActive()
       })
+  }
+
+  updateFilterActive() {
+    if (JSON.stringify(this.jobService.searchValue) === JSON.stringify({})) {
+      this.hasFilterActive = false
+    } else {
+      this.hasFilterActive = true
+    }
+  }
+
+  clearFilter() {
+    this.jobService.searchValue = {}
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  loadInitialData() {
+    if (JSON.stringify(this.jobService.searchValue) === JSON.stringify({})) {
+      this.searching = true
+      let snackBar = this.snackBar.open('Carregando jobs...')
+      this.jobService.jobs({}, this.pageIndex + 1).subscribe(dataInfo => {
+        this.dataInfo = dataInfo
+        this.pagination = dataInfo.pagination
+        this.jobs = dataInfo.pagination.data
+        this.searching = false
+        snackBar.dismiss()
+      })
+    } else {
+      this.searchForm.setValue(this.jobService.searchValue)
+    }
+
+    this.updateFilterActive()
   }
 
   loadFilterData() {
@@ -188,13 +224,14 @@ export class JobListComponent implements OnInit {
   changePage($event) {
     this.searching = true
     this.jobs = []
-    this.jobService.jobs(this.search.value, ($event.pageIndex + 1)).subscribe(dataInfo => {
+    this.jobService.jobs(this.params, ($event.pageIndex + 1)).subscribe(dataInfo => {
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.jobs = dataInfo.pagination.data
       this.searching = false
+      this.pageIndex = $event.pageIndex
+      this.jobService.pageIndex = this.pageIndex
     })
-    this.pageIndex = $event.pageIndex
   }
 
   delete(job: Job) {

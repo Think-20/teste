@@ -15,7 +15,7 @@
           <a mat-button (click)="search.focus()">
             <mat-icon>search</mat-icon>
           </a>
-          <a mat-button (click)="filter = filter ? false : true">
+          <a mat-button (click)="filter = filter ? false : true" [class.filter-button-active]="hasFilterActive">
             <mat-icon>keyboard_arrow_down</mat-icon>
           </a>
           <a [routerLink]="['/jobs/new']" mat-button>
@@ -84,6 +84,11 @@
             <mat-datepicker-toggle matSuffix [for]="finalDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #finalDatepicker></mat-datepicker>
           </mat-form-field>
+          <div *ngIf="hasFilterActive" class="col-md-12">
+            <mat-card-actions class="col-md-12 text-right">
+              <button (click)="clearFilter()" class="cb-button" mat-raised-button>LIMPAR</button>
+            </mat-card-actions>
+          </div>
         </div>
       </div>
     </mat-card>

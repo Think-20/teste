@@ -435,6 +435,10 @@ mat-card-title > p {
   padding-right: 10px;
 }
 
+.filter-button-active .mat-icon {
+  color: #00afef !important;
+}
+
 .search-bar-group .mat-form-field-element {
   text-align: right;
   color: #AAA;
@@ -475,7 +479,7 @@ mat-card-title > p {
 }
 
 .filter-grid {
-  padding: 15px 0px 8px 0px !important;
+  padding: 15px 0px 15px 0px !important;
   border-bottom: 1px solid #eee;
 }
 

@@ -20,6 +20,8 @@ import { PerformanceReportLite } from '../reports/performance-report-lite/perfor
 @Injectable()
 export class JobService {
   data: Job = new Job
+  searchValue = {}
+  pageIndex = 0
 
   constructor(
     private http: Http,
