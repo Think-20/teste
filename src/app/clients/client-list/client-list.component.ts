@@ -50,8 +50,10 @@ export class ClientListComponent implements OnInit {
   searching = false
   filter: boolean = false
   pagination: Pagination
-  pageIndex: number = 0
+  pageIndex: number
   dataInfo: DataInfo
+  params = {}
+  hasFilterActive = false
 
   constructor(
     private fb: FormBuilder,
@@ -120,6 +122,14 @@ export class ClientListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadFilterData()
+    this.pageIndex = this.clientService.pageIndex
+
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  createForm() {
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
       search: this.search,
@@ -129,8 +139,54 @@ export class ClientListComponent implements OnInit {
       client_type: this.fb.control('')
     })
 
-    this.loadClients()
+    this.searchForm.valueChanges
+    .pipe(distinctUntilChanged())
+    .debounceTime(500)
+    .subscribe(() => {
+      let controls = this.searchForm.controls
+      this.params = {
+        search: controls.search.value,
+        attendance: controls.attendance.value,
+        client_status: controls.client_status.value,
+        client_type: controls.client_type.value,
+        rate: controls.rate.value,
+      }
 
+      this.loadClients(this.params,  1)
+
+      this.pageIndex = 0
+      this.clientService.pageIndex = 0
+      this.clientService.searchValue = this.searchForm.value
+      this.updateFilterActive()
+    })
+  }
+
+  updateFilterActive() {
+    if (JSON.stringify(this.clientService.searchValue) === JSON.stringify({})) {
+      this.hasFilterActive = false
+    } else {
+      this.hasFilterActive = true
+    }
+  }
+
+  clearFilter() {
+    this.clientService.searchValue = {}
+    this.clientService.pageIndex = 0
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  loadInitialData() {
+    if (JSON.stringify(this.clientService.searchValue) === JSON.stringify({})) {
+      this.loadClients({}, this.pageIndex + 1)
+    } else {
+      this.loadClients(this.clientService.searchValue, this.clientService.pageIndex + 1)
+    }
+
+    this.updateFilterActive()
+  }
+
+  loadFilterData() {
     this.clientTypeService.types().subscribe((clientTypes) => {
       this.clientTypes = clientTypes
     })
@@ -142,37 +198,19 @@ export class ClientListComponent implements OnInit {
     this.employeeService.canInsertClients().subscribe((attendances) => {
       this.attendances = attendances
     })
-
-    this.searchForm.valueChanges
-    .pipe(distinctUntilChanged())
-    .debounceTime(500)
-    .subscribe(() => {
-      let controls = this.searchForm.controls
-      this.loadClients({
-        search: controls.search.value,
-        attendance: controls.attendance.value,
-        client_status: controls.client_status.value,
-        client_type: controls.client_type.value,
-        rate: controls.rate.value,
-      })
-    })
   }
 
-  loadClients(params = {}) {
+  loadClients(params = {}, page: number) {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando clientes...')
 
-    this.clientService.clients(params).subscribe(dataInfo => {
+    this.clientService.clients(params, page).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.clients = <Client[]> this.pagination.data
       snackBar.dismiss()
     })
-  }
-
-  filterToggle() {
-    this.filter = this.filter ? false : true
   }
 
   filterForm() {
@@ -212,13 +250,14 @@ export class ClientListComponent implements OnInit {
   changePage($event) {
     this.searching = true
     this.clients = []
-    this.clientService.clients(this.searchForm.value, ($event.pageIndex + 1)).subscribe(dataInfo => {
+    this.clientService.clients(this.params, ($event.pageIndex + 1)).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.clients = <Client[]> this.pagination.data
+      this.pageIndex = $event.pageIndex
+      this.clientService.pageIndex = this.pageIndex
     })
-    this.pageIndex = $event.pageIndex
   }
 
 }
