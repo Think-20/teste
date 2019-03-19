@@ -43,6 +43,7 @@ export class JobListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
+  formCopy: FormGroup
   search: FormControl
   pagination: Pagination
   jobs: Job[] = []
@@ -86,7 +87,7 @@ export class JobListComponent implements OnInit {
 
   createForm() {
     this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
+    this.formCopy = this.fb.group({
       search: this.search,
       attendance: this.fb.control({ value: '', disabled: !this.isAdmin }),
       creation: this.fb.control(''),
@@ -97,6 +98,15 @@ export class JobListComponent implements OnInit {
       final_date: this.fb.control(''),
     })
 
+    this.searchForm = Object.create(this.formCopy)
+
+    console.log(JSON.stringify(this.jobService.searchValue) == JSON.stringify({}), this.jobService.searchValue)
+    if(JSON.stringify(this.jobService.searchValue) == JSON.stringify({})) {
+      this.jobService.searchValue = this.searchForm.value
+    } else {
+      this.searchForm.setValue(this.jobService.searchValue)
+    }
+
     this.searchForm.controls.client.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe(clientName => {
@@ -105,10 +115,9 @@ export class JobListComponent implements OnInit {
         })
       })
 
-    let snackbar
     this.searchForm.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(500))
-      .subscribe(() => {
+      .subscribe((searchValue) => {
         let controls = this.searchForm.controls
         let status = controls.status.value != undefined ? controls.status.value.id : null
         let clientName = controls.client.value != '' ? controls.client.value : controls.search.value
@@ -126,13 +135,13 @@ export class JobListComponent implements OnInit {
 
         this.pageIndex = 0
         this.jobService.pageIndex = 0
-        this.jobService.searchValue = this.searchForm.value
+        this.jobService.searchValue = searchValue
         this.updateFilterActive()
       })
   }
 
   updateFilterActive() {
-    if (JSON.stringify(this.jobService.searchValue) === JSON.stringify({})) {
+    if (JSON.stringify(this.jobService.searchValue) === JSON.stringify(this.formCopy.value)) {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -142,12 +151,13 @@ export class JobListComponent implements OnInit {
   clearFilter() {
     this.jobService.searchValue = {}
     this.jobService.pageIndex = 0
+    this.pageIndex = 0
     this.createForm()
     this.loadInitialData()
   }
 
   loadInitialData() {
-    if (JSON.stringify(this.jobService.searchValue) === JSON.stringify({})) {
+    if (JSON.stringify(this.jobService.searchValue) === JSON.stringify(this.formCopy.value)) {
       this.loadJobs({}, 1)
     } else {
       this.loadJobs(this.jobService.searchValue, this.pageIndex + 1)

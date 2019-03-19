@@ -37,12 +37,15 @@ export class DisplayListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
+  formCopy: FormGroup
   search: FormControl
   displays: Display[] = []
   searching = false
   filter: boolean = false
   pagination: Pagination
-  pageIndex: number = 0
+  pageIndex: number
+  params = {}
+  hasFilterActive = false
   dataInfo: DataInfo
   API = API
 
@@ -81,48 +84,80 @@ export class DisplayListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.pageIndex = this.displayService.pageIndex
+
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  createForm() {
     this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
+    this.formCopy = this.fb.group({
       search: this.search,
     })
 
-    this.loadDisplays()
+    this.searchForm = Object.create(this.formCopy)
+
+    if(JSON.stringify(this.displayService.searchValue) == JSON.stringify({})) {
+      this.displayService.searchValue = this.searchForm.value
+    } else {
+      this.searchForm.setValue(this.displayService.searchValue)
+    }
 
     this.searchForm.valueChanges
     .pipe(distinctUntilChanged())
     .debounceTime(500)
-    .subscribe(() => {
+    .subscribe((searchValue) => {
       let controls = this.searchForm.controls
-      this.loadDisplays({
+      this.params = {
         search: controls.search.value,
-      })
+      }
+
+      this.loadDisplays(this.params, 1)
+
+      this.pageIndex = 0
+      this.displayService.pageIndex = 0
+      this.displayService.searchValue = searchValue
+      this.updateFilterActive()
     })
   }
 
-  loadDisplays(params = {}) {
+  updateFilterActive() {
+    if (JSON.stringify(this.displayService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.hasFilterActive = false
+    } else {
+      this.hasFilterActive = true
+    }
+  }
+
+  clearFilter() {
+    this.displayService.searchValue = {}
+    this.displayService.pageIndex = 0
+    this.pageIndex = 0
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  loadInitialData() {
+    if (JSON.stringify(this.displayService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.loadDisplays({}, 1)
+    } else {
+      this.loadDisplays(this.displayService.searchValue, this.pageIndex + 1)
+    }
+
+    this.updateFilterActive()
+  }
+
+  loadDisplays(params, page: number) {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando dados...')
 
-    this.displayService.displays(params).subscribe(dataInfo => {
+    this.displayService.displays(params, page).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.displays = <Display[]> this.pagination.data
       snackBar.dismiss()
-    })
-  }
-
-  filterToggle() {
-    this.filter = this.filter ? false : true
-  }
-
-  filterForm() {
-    this.searching = true
-    this.displayService.displays(this.searchForm.value).subscribe(dataInfo => {
-      this.searching = false
-      this.dataInfo = dataInfo
-      this.pagination = dataInfo.pagination
-      this.displays = <Display[]> this.pagination.data
     })
   }
 
@@ -142,14 +177,14 @@ export class DisplayListComponent implements OnInit {
     this.searching = true
     this.displays = []
 
-    this.displayService.displays(this.searchForm.value, ($event.pageIndex + 1)).subscribe(dataInfo => {
+    this.displayService.displays(this.displayService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.displays = <Display[]> this.pagination.data
+      this.pageIndex = $event.pageIndex
+      this.displayService.pageIndex = this.pageIndex
     })
-
-    this.pageIndex = $event.pageIndex
   }
 
 }

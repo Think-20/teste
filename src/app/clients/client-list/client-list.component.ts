@@ -42,6 +42,7 @@ export class ClientListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
+  formCopy: FormGroup
   search: FormControl
   clients: Client[] = []
   clientTypes: ClientType[]
@@ -131,7 +132,7 @@ export class ClientListComponent implements OnInit {
 
   createForm() {
     this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
+    this.formCopy = this.fb.group({
       search: this.search,
       attendance: this.fb.control(''),
       client_status: this.fb.control(''),
@@ -139,10 +140,18 @@ export class ClientListComponent implements OnInit {
       client_type: this.fb.control('')
     })
 
+    this.searchForm = Object.create(this.formCopy)
+
+    if(JSON.stringify(this.clientService.searchValue) != JSON.stringify({})) {
+      this.clientService.searchValue = this.searchForm.value
+    } else {
+      this.searchForm.setValue(this.clientService.searchValue)
+    }
+
     this.searchForm.valueChanges
     .pipe(distinctUntilChanged())
     .debounceTime(500)
-    .subscribe(() => {
+    .subscribe((searchValue) => {
       let controls = this.searchForm.controls
       this.params = {
         search: controls.search.value,
@@ -156,13 +165,13 @@ export class ClientListComponent implements OnInit {
 
       this.pageIndex = 0
       this.clientService.pageIndex = 0
-      this.clientService.searchValue = this.searchForm.value
+      this.clientService.searchValue = searchValue
       this.updateFilterActive()
     })
   }
 
   updateFilterActive() {
-    if (JSON.stringify(this.clientService.searchValue) === JSON.stringify({})) {
+    if (JSON.stringify(this.clientService.searchValue) === JSON.stringify(this.formCopy.value)) {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -172,12 +181,13 @@ export class ClientListComponent implements OnInit {
   clearFilter() {
     this.clientService.searchValue = {}
     this.clientService.pageIndex = 0
+    this.pageIndex = 0
     this.createForm()
     this.loadInitialData()
   }
 
   loadInitialData() {
-    if (JSON.stringify(this.clientService.searchValue) === JSON.stringify({})) {
+    if (JSON.stringify(this.clientService.searchValue) === JSON.stringify(this.formCopy.value)) {
       this.loadClients({}, this.pageIndex + 1)
     } else {
       this.loadClients(this.clientService.searchValue, this.clientService.pageIndex + 1)
