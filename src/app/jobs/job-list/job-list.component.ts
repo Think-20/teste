@@ -107,15 +107,11 @@ export class JobListComponent implements OnInit {
 
     let snackbar
     this.searchForm.valueChanges
-      .do(() => snackbar = this.snackBar.open('Carregando jobs...'))
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe(() => {
         let controls = this.searchForm.controls
         let status = controls.status.value != undefined ? controls.status.value.id : null
         let clientName = controls.client.value != '' ? controls.client.value : controls.search.value
-
-        this.pageIndex = 0
-        this.jobService.pageIndex = 0
         this.params = {
           clientName: clientName,
           status: status,
@@ -126,14 +122,10 @@ export class JobListComponent implements OnInit {
           initial_date: controls.initial_date.value,
         }
 
-        this.jobService.jobs(this.params, this.jobService.pageIndex + 1).subscribe(dataInfo => {
-          snackbar.dismiss()
-          this.dataInfo = dataInfo
-          this.pagination = dataInfo.pagination
-          this.searching = false
-          this.jobs = dataInfo.pagination.data
-        })
+        this.loadJobs(this.params, 1)
 
+        this.pageIndex = 0
+        this.jobService.pageIndex = 0
         this.jobService.searchValue = this.searchForm.value
         this.updateFilterActive()
       })
@@ -149,26 +141,31 @@ export class JobListComponent implements OnInit {
 
   clearFilter() {
     this.jobService.searchValue = {}
+    this.jobService.pageIndex = 0
     this.createForm()
     this.loadInitialData()
   }
 
   loadInitialData() {
     if (JSON.stringify(this.jobService.searchValue) === JSON.stringify({})) {
-      this.searching = true
-      let snackBar = this.snackBar.open('Carregando jobs...')
-      this.jobService.jobs({}, this.pageIndex + 1).subscribe(dataInfo => {
-        this.dataInfo = dataInfo
-        this.pagination = dataInfo.pagination
-        this.jobs = dataInfo.pagination.data
-        this.searching = false
-        snackBar.dismiss()
-      })
+      this.loadJobs({}, 1)
     } else {
-      this.searchForm.setValue(this.jobService.searchValue)
+      this.loadJobs(this.jobService.searchValue, this.pageIndex + 1)
     }
 
     this.updateFilterActive()
+  }
+
+  loadJobs(params, page: number) {
+    this.searching = true
+    let snackBar = this.snackBar.open('Carregando jobs...')
+    this.jobService.jobs(params, page).subscribe(dataInfo => {
+      this.dataInfo = dataInfo
+      this.pagination = dataInfo.pagination
+      this.jobs = dataInfo.pagination.data
+      this.searching = false
+      snackBar.dismiss()
+    })
   }
 
   loadFilterData() {
@@ -224,7 +221,7 @@ export class JobListComponent implements OnInit {
   changePage($event) {
     this.searching = true
     this.jobs = []
-    this.jobService.jobs(this.params, ($event.pageIndex + 1)).subscribe(dataInfo => {
+    this.jobService.jobs(this.jobService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.jobs = dataInfo.pagination.data

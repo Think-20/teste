@@ -250,7 +250,7 @@ export class ClientListComponent implements OnInit {
   changePage($event) {
     this.searching = true
     this.clients = []
-    this.clientService.clients(this.params, ($event.pageIndex + 1)).subscribe(dataInfo => {
+    this.clientService.clients(this.clientService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
