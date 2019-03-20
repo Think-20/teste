@@ -16,6 +16,9 @@ import { DataInfo } from '../shared/data-info.model';
 
 @Injectable()
 export class FunctionalityService {
+  searchValue = {}
+  pageIndex = 0
+
     constructor(
         private http: Http,
         private snackBar: MatSnackBar,

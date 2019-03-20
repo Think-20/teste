@@ -158,7 +158,7 @@ export class JobListComponent implements OnInit {
 
   loadInitialData() {
     if (JSON.stringify(this.jobService.searchValue) === JSON.stringify(this.formCopy.value)) {
-      this.loadJobs({}, 1)
+      this.loadJobs({}, this.pageIndex + 1)
     } else {
       this.loadJobs(this.jobService.searchValue, this.pageIndex + 1)
     }

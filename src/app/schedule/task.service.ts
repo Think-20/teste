@@ -19,6 +19,9 @@ import { DatePipe } from '@angular/common';
 
 @Injectable()
 export class TaskService {
+  searchValue = {}
+  pageIndex = 0
+
   constructor(
     private http: Http,
     private datePipe: DatePipe,

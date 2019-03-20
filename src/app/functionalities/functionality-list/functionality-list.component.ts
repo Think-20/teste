@@ -37,13 +37,16 @@ export class FunctionalityListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
+  formCopy: FormGroup
   search: FormControl
   functionalities: Functionality[] = []
   searching = false
   filter: boolean = false
   pagination: Pagination
-  pageIndex: number = 0
   dataInfo: DataInfo
+  pageIndex: number
+  params = {}
+  hasFilterActive = false
   API = API
 
   constructor(
@@ -81,48 +84,80 @@ export class FunctionalityListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.pageIndex = this.functionalityService.pageIndex
+
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  createForm() {
     this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
+    this.formCopy = this.fb.group({
       search: this.search,
     })
 
-    this.loadFunctionalities()
+    this.searchForm = Object.create(this.formCopy)
+
+    if(JSON.stringify(this.functionalityService.searchValue) == JSON.stringify({})) {
+      this.functionalityService.searchValue = this.searchForm.value
+    } else {
+      this.searchForm.setValue(this.functionalityService.searchValue)
+    }
 
     this.searchForm.valueChanges
     .pipe(distinctUntilChanged())
     .debounceTime(500)
-    .subscribe(() => {
+    .subscribe((searchValue) => {
       let controls = this.searchForm.controls
-      this.loadFunctionalities({
+      this.params = {
         search: controls.search.value,
-      })
+      }
+
+      this.loadFunctionalities(this.params, 1)
+
+      this.pageIndex = 0
+      this.functionalityService.pageIndex = 0
+      this.functionalityService.searchValue = searchValue
+      this.updateFilterActive()
     })
   }
 
-  loadFunctionalities(params = {}) {
+  updateFilterActive() {
+    if (JSON.stringify(this.functionalityService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.hasFilterActive = false
+    } else {
+      this.hasFilterActive = true
+    }
+  }
+
+  clearFilter() {
+    this.functionalityService.searchValue = {}
+    this.functionalityService.pageIndex = 0
+    this.pageIndex = 0
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  loadInitialData() {
+    if (JSON.stringify(this.functionalityService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.loadFunctionalities({}, this.pageIndex + 1)
+    } else {
+      this.loadFunctionalities(this.functionalityService.searchValue, this.functionalityService.pageIndex + 1)
+    }
+
+    this.updateFilterActive()
+  }
+
+  loadFunctionalities(params, page: number) {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando dados...')
 
-    this.functionalityService.functionalities(params).subscribe(dataInfo => {
+    this.functionalityService.functionalities(params, page).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.functionalities = <Functionality[]> this.pagination.data
       snackBar.dismiss()
-    })
-  }
-
-  filterToggle() {
-    this.filter = this.filter ? false : true
-  }
-
-  filterForm() {
-    this.searching = true
-    this.functionalityService.functionalities(this.searchForm.value).subscribe(dataInfo => {
-      this.searching = false
-      this.dataInfo = dataInfo
-      this.pagination = dataInfo.pagination
-      this.functionalities = <Functionality[]> this.pagination.data
     })
   }
 
@@ -142,14 +177,14 @@ export class FunctionalityListComponent implements OnInit {
     this.searching = true
     this.functionalities = []
 
-    this.functionalityService.functionalities(this.searchForm.value, ($event.pageIndex + 1)).subscribe(dataInfo => {
+    this.functionalityService.functionalities(this.functionalityService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.functionalities = <Functionality[]> this.pagination.data
+      this.pageIndex = $event.pageIndex
+      this.functionalityService.pageIndex = this.pageIndex
     })
-
-    this.pageIndex = $event.pageIndex
   }
 
 }

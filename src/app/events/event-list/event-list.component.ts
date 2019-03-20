@@ -36,12 +36,15 @@ export class EventListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
+  formCopy: FormGroup
   search: FormControl
   events: Event[] = []
   searching = false
   filter: boolean = false
   pagination: Pagination
-  pageIndex: number = 0
+  pageIndex: number
+  params = {}
+  hasFilterActive = false
   dataInfo: DataInfo
 
   constructor(
@@ -79,29 +82,71 @@ export class EventListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.pageIndex = this.eventService.pageIndex
+
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  createForm() {
     this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
+    this.formCopy = this.fb.group({
       search: this.search,
     })
 
-    this.loadEvents()
+    this.searchForm = Object.create(this.formCopy)
+
+    if(JSON.stringify(this.eventService.searchValue) == JSON.stringify({})) {
+      this.eventService.searchValue = this.searchForm.value
+    } else {
+      this.searchForm.setValue(this.eventService.searchValue)
+    }
 
     this.searchForm.valueChanges
     .pipe(distinctUntilChanged())
     .debounceTime(500)
-    .subscribe(() => {
+    .subscribe((searchValue) => {
       let controls = this.searchForm.controls
-      this.loadEvents({
+      this.params = {
         search: controls.search.value,
-        attendance: controls.attendance.value,
-        event_status: controls.event_status.value,
-        event_type: controls.event_type.value,
-        rate: controls.rate.value,
-      })
+      }
+
+      this.loadEvents(this.params, 1)
+
+      this.pageIndex = 0
+      this.eventService.pageIndex = 0
+      this.eventService.searchValue = searchValue
+      this.updateFilterActive()
     })
   }
 
-  loadEvents(params = {}) {
+  updateFilterActive() {
+    if (JSON.stringify(this.eventService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.hasFilterActive = false
+    } else {
+      this.hasFilterActive = true
+    }
+  }
+
+  clearFilter() {
+    this.eventService.searchValue = {}
+    this.eventService.pageIndex = 0
+    this.pageIndex = 0
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  loadInitialData() {
+    if (JSON.stringify(this.eventService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.loadEvents({}, this.pageIndex + 1)
+    } else {
+      this.loadEvents(this.eventService.searchValue, this.eventService.pageIndex + 1)
+    }
+
+    this.updateFilterActive()
+  }
+
+  loadEvents(params = {}, page: number) {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando eventos...')
 
@@ -111,20 +156,6 @@ export class EventListComponent implements OnInit {
       this.pagination = dataInfo.pagination
       this.events = <Event[]> this.pagination.data
       snackBar.dismiss()
-    })
-  }
-
-  filterToggle() {
-    this.filter = this.filter ? false : true
-  }
-
-  filterForm() {
-    this.searching = true
-    this.eventService.events(this.searchForm.value).subscribe(dataInfo => {
-      this.searching = false
-      this.dataInfo = dataInfo
-      this.pagination = dataInfo.pagination
-      this.events = <Event[]> this.pagination.data
     })
   }
 
@@ -143,13 +174,14 @@ export class EventListComponent implements OnInit {
   changePage($event) {
     this.searching = true
     this.events = []
-    this.eventService.events(this.searchForm.value, ($event.pageIndex + 1)).subscribe(dataInfo => {
+    this.eventService.events(this.eventService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.events = <Event[]> this.pagination.data
+      this.pageIndex = $event.pageIndex
+      this.eventService.pageIndex = this.pageIndex
     })
-    this.pageIndex = $event.pageIndex
   }
 
 }

@@ -142,7 +142,7 @@ export class ClientListComponent implements OnInit {
 
     this.searchForm = Object.create(this.formCopy)
 
-    if(JSON.stringify(this.clientService.searchValue) != JSON.stringify({})) {
+    if(JSON.stringify(this.clientService.searchValue) == JSON.stringify({})) {
       this.clientService.searchValue = this.searchForm.value
     } else {
       this.searchForm.setValue(this.clientService.searchValue)
@@ -220,16 +220,6 @@ export class ClientListComponent implements OnInit {
       this.pagination = dataInfo.pagination
       this.clients = <Client[]> this.pagination.data
       snackBar.dismiss()
-    })
-  }
-
-  filterForm() {
-    this.searching = true
-    this.clientService.clients(this.searchForm.value).subscribe(dataInfo => {
-      this.searching = false
-      this.dataInfo = dataInfo
-      this.pagination = dataInfo.pagination
-      this.clients = <Client[]> this.pagination.data
     })
   }
 

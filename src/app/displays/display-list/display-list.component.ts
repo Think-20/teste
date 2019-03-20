@@ -140,9 +140,9 @@ export class DisplayListComponent implements OnInit {
 
   loadInitialData() {
     if (JSON.stringify(this.displayService.searchValue) === JSON.stringify(this.formCopy.value)) {
-      this.loadDisplays({}, 1)
+      this.loadDisplays({}, this.pageIndex + 1)
     } else {
-      this.loadDisplays(this.displayService.searchValue, this.pageIndex + 1)
+      this.loadDisplays(this.displayService.searchValue, this.displayService.pageIndex + 1)
     }
 
     this.updateFilterActive()

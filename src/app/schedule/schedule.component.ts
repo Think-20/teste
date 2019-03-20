@@ -59,6 +59,7 @@ export class ScheduleComponent implements OnInit {
 
   @ViewChildren('list') list: QueryList<any>
   searchForm: FormGroup
+  formCopy: FormGroup
   search: FormControl
   rowAppearedState: string = 'ready'
   tasks: Task[] = []
@@ -92,6 +93,7 @@ export class ScheduleComponent implements OnInit {
   paramAttendance: Employee = null
   isAdmin: boolean = false
   counter: number = 0
+  hasFilterActive = false
 
   lineJob: HTMLElement
   tempX: number
@@ -125,16 +127,16 @@ export class ScheduleComponent implements OnInit {
   }
 
   lineChronoClass(chrono: Chrono, employees: Employee[]) {
-    if(employees == undefined) return
+    if (employees == undefined) return
 
     let date = chrono.year + '-' + chrono.month + '-' + chrono.day
     let foundDate = this.dateBlocks.find((scheduleBlock) => {
       return this.datePipe.transform(scheduleBlock.date, 'yyyy-MM-dd')
-      == this.datePipe.transform(date, 'yyyy-MM-dd')
+        == this.datePipe.transform(date, 'yyyy-MM-dd')
     })
 
     /* Lista de funcionários não contempla todos os departamentos que usam o cronograma */
-    if(foundDate != undefined
+    if (foundDate != undefined
       && foundDate.blocks != undefined
       && foundDate.blocks.length >= employees.length) {
       return 'line-chrono-block'
@@ -147,10 +149,10 @@ export class ScheduleComponent implements OnInit {
     let date = chrono.year + '-' + chrono.month + '-' + chrono.day
     let foundDate = this.dateBlocks.find((scheduleBlock) => {
       return this.datePipe.transform(scheduleBlock.date, 'yyyy-MM-dd')
-      == this.datePipe.transform(date, 'yyyy-MM-dd')
+        == this.datePipe.transform(date, 'yyyy-MM-dd')
     })
 
-    if(foundDate != undefined) {
+    if (foundDate != undefined) {
       return 'UNBLOCK'
     }
 
@@ -161,10 +163,10 @@ export class ScheduleComponent implements OnInit {
     let date = chrono.year + '-' + chrono.month + '-' + chrono.day
     let foundDate = this.dateBlocks.find((scheduleBlock) => {
       return this.datePipe.transform(scheduleBlock.date, 'yyyy-MM-dd')
-      == this.datePipe.transform(date, 'yyyy-MM-dd')
+        == this.datePipe.transform(date, 'yyyy-MM-dd')
     })
 
-    if(foundDate != undefined) {
+    if (foundDate != undefined) {
       return foundDate.blocks.length
     }
 
@@ -269,7 +271,7 @@ export class ScheduleComponent implements OnInit {
     this.list.changes.subscribe(() => {
       this.scrollToDate()
 
-      if(!this.listenModification) return
+      if (!this.listenModification) return
 
       let list = document.querySelectorAll("[draggable='true']")
       let info = { parentSenderPos: null, parentRecipientPos: null, senderPos: null, recipientPos: null }
@@ -281,7 +283,7 @@ export class ScheduleComponent implements OnInit {
           let info = { parentSenderPos: null, senderPos: null }
           draggable = list.item(i) as HTMLElement
           draggable.addEventListener('dragstart', function (event: DragEvent) {
-            if( ! angular.subscription.closed) {
+            if (!angular.subscription.closed) {
               angular.subscription.unsubscribe()
             }
 
@@ -327,19 +329,19 @@ export class ScheduleComponent implements OnInit {
             let jobStep1 = task1.job_activity != null ? task1.job_activity.description : ''
             let jobStep2 = task2.job_activity != null ? task2.job_activity.description : ''
 
-            if(jobStep1 != jobStep2 && jobStep1 != '' && jobStep2 != '' ) {
+            if (jobStep1 != jobStep2 && jobStep1 != '' && jobStep2 != '') {
               angular.snackBar.open('Não é possível mudar data de tipos diferentes', '', {
                 duration: 3000
               })
               return
-            } else if(jobStep1 == '' && jobStep2 == '') {
+            } else if (jobStep1 == '' && jobStep2 == '') {
               return
             }
 
             let snackBar = angular.snackBar.open('Aguarde enquanto mudamos a data...')
 
             angular.taskService.editAvailableDate(task1, task2).subscribe((data) => {
-              if(data.status == true) {
+              if (data.status == true) {
                 snackBar.dismiss()
                 angular.changeMonth(angular.month, new Date(task2.items[0].date + "T00:00:00"))
               } else {
@@ -357,8 +359,22 @@ export class ScheduleComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isAdmin = this.permissionVerify('new', new Job())
+
+    this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
+      ? this.authService.currentUser().employee : null
+
+    this.createForm()
+    this.today = new Date()
+    this.setYears()
+    this.createTimerUpdater()
+    this.loadFilterData()
+    this.loadInitialData()
+  }
+
+  createForm() {
     this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
+    this.formCopy = this.fb.group({
       search: this.search,
       attendance_array: this.fb.control([]),
       responsible_array: this.fb.control([]),
@@ -369,10 +385,35 @@ export class ScheduleComponent implements OnInit {
       status_array: this.fb.control([])
     })
 
-    this.isAdmin = this.permissionVerify('new', new Job())
+    this.searchForm = Object.create(this.formCopy)
 
-    this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
-    ? this.authService.currentUser().employee : null
+    if (JSON.stringify(this.taskService.searchValue) == JSON.stringify({})) {
+      this.taskService.searchValue = this.searchForm.value
+    } else {
+      this.searchForm.setValue(this.taskService.searchValue)
+    }
+
+    this.searchForm.valueChanges
+    .pipe(distinctUntilChanged(), debounceTime(500))
+    .subscribe((searchValue) => {
+      let controls = this.searchForm.controls
+      let clientName = controls.client.value != '' ? controls.client.value : controls.search.value
+
+      this.params = {
+        clientName: clientName,
+        status_array: controls.status_array.value,
+        attendance_array: controls.attendance_array.value,
+        responsible_array: controls.responsible_array.value,
+        job_type_array: controls.job_type_array.value,
+        job_activity_array: controls.job_activity_array.value,
+        department_array: controls.department_array.value
+      }
+
+      this.taskService.searchValue = searchValue
+      this.updateFilterActive()
+      this.checkParamsHasFilter()
+      this.changeMonth(this.month, this.date)
+    })
 
     this.searchForm.controls.client.valueChanges
     .pipe(distinctUntilChanged(), debounceTime(500))
@@ -381,42 +422,40 @@ export class ScheduleComponent implements OnInit {
         this.clients = dataInfo.pagination.data
       })
     })
+  }
 
-    let snackbar
+  updateFilterActive() {
+    if (JSON.stringify(this.taskService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.hasFilterActive = false
+    } else {
+      this.hasFilterActive = true
+    }
+  }
 
-    this.searchForm.valueChanges
-      .do(() => {
-        snackbar = this.snackBar.open('Carregando jobs...')
-      })
-      .pipe(distinctUntilChanged(), debounceTime(500))
-      .subscribe(() => {
-        let controls = this.searchForm.controls
-        let clientName = controls.client.value != '' ? controls.client.value : controls.search.value
+  clearFilter() {
+    this.taskService.searchValue = {}
+    this.createForm()
+    this.loadInitialData()
+  }
 
-        this.params = {
-          clientName: clientName,
-          status_array: controls.status_array.value,
-          attendance_array: controls.attendance_array.value,
-          responsible_array: controls.responsible_array.value,
-          job_type_array: controls.job_type_array.value,
-          job_activity_array: controls.job_activity_array.value,
-          department_array: controls.department_array.value
-        }
-        this.checkParamsHasFilter()
-        this.changeMonth(this.month, this.date)
-      })
+  loadInitialData() {
+    this.setDate()
 
-    this.today = new Date()
-    this.setYears()
-    this.activeDate()
-    this.createTimerUpdater()
-    this.loadFilterData()
+    if (JSON.stringify(this.taskService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.params = {}
+    } else {
+      this.params = this.taskService.searchValue
+    }
+
+    this.updateFilterActive()
+    this.checkParamsHasFilter()
+    this.changeMonth(this.month, this.date)
   }
 
   checkParamsHasFilter() {
     this.paramsHasFilter = false
     Object.keys(this.params).forEach((key) => {
-      if(this.params[key] != undefined
+      if (this.params[key] != undefined
         && this.params[key] != null
         && this.params[key] != '')
         this.paramsHasFilter = true
@@ -438,13 +477,13 @@ export class ScheduleComponent implements OnInit {
 
     this.employeeService.employees().subscribe(dataInfo => {
       let list = ['Planejamento', 'Atendimento', 'Criação', 'Orçamento']
-      let employees : Employee[] = dataInfo.pagination.data
+      let employees: Employee[] = dataInfo.pagination.data
       this.employees = employees.filter(employee => {
-        if( !this.departments.some((item) => { return item.id == employee.department.id })
-        && list.indexOf(employee.department.description) > -1 )
+        if (!this.departments.some((item) => { return item.id == employee.department.id })
+          && list.indexOf(employee.department.description) > -1)
           this.departments.push(employee.department)
 
-        if(list.indexOf(employee.department.description) > -1) return true;
+        if (list.indexOf(employee.department.description) > -1) return true;
       })
     })
   }
@@ -453,74 +492,72 @@ export class ScheduleComponent implements OnInit {
     let array = this.searchForm.controls.department_array.value as Department[]
 
     array.length > 0
-    ? this.searchForm.controls.department_array.setValue([])
-    : this.searchForm.controls.department_array.setValue(this.departments)
+      ? this.searchForm.controls.department_array.setValue([])
+      : this.searchForm.controls.department_array.setValue(this.departments)
   }
 
   toggleResponsibles() {
     let array = this.searchForm.controls.responsible_array.value as Employee[]
 
     array.length > 0
-    ? this.searchForm.controls.responsible_array.setValue([])
-    : this.searchForm.controls.responsible_array.setValue(this.employees)
+      ? this.searchForm.controls.responsible_array.setValue([])
+      : this.searchForm.controls.responsible_array.setValue(this.employees)
   }
 
   toggleAttendances() {
     let array = this.searchForm.controls.attendance_array.value as Employee[]
 
     array.length > 0
-    ? this.searchForm.controls.attendance_array.setValue([])
-    : this.searchForm.controls.attendance_array.setValue(this.attendances)
+      ? this.searchForm.controls.attendance_array.setValue([])
+      : this.searchForm.controls.attendance_array.setValue(this.attendances)
   }
 
   toggleJobTypes() {
     let array = this.searchForm.controls.job_type_array.value as JobType[]
 
     array.length > 0
-    ? this.searchForm.controls.job_type_array.setValue([])
-    : this.searchForm.controls.job_type_array.setValue(this.jobTypes)
+      ? this.searchForm.controls.job_type_array.setValue([])
+      : this.searchForm.controls.job_type_array.setValue(this.jobTypes)
   }
 
   toggleJobActivities() {
     let array = this.searchForm.controls.job_activity_array.value as JobActivity[]
 
     array.length > 0
-    ? this.searchForm.controls.job_activity_array.setValue([])
-    : this.searchForm.controls.job_activity_array.setValue(this.jobActivities)
+      ? this.searchForm.controls.job_activity_array.setValue([])
+      : this.searchForm.controls.job_activity_array.setValue(this.jobActivities)
   }
 
   toggleStatus() {
     let array = this.searchForm.controls.status_array.value as JobStatus[]
 
     array.length > 0
-    ? this.searchForm.controls.status_array.setValue([])
-    : this.searchForm.controls.status_array.setValue(this.jobStatus)
+      ? this.searchForm.controls.status_array.setValue([])
+      : this.searchForm.controls.status_array.setValue(this.jobStatus)
   }
 
   setYears() {
     let ini = 2018
     let year = this.today.getFullYear()
 
-    while(ini <= (year + 1)) {
+    while (ini <= (year + 1)) {
       this.years.push(ini)
       ini += 1
     }
   }
 
-  activeDate() {
+  setDate() {
     this.date = new Date()
 
     this.route.queryParams.subscribe(params => {
-      if(params.date != undefined) {
+      if (params.date != undefined) {
         this.date = new Date(params.date + "T00:00:00")
         this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
         this.year = this.date.getFullYear()
-        this.changeMonth(this.month, this.date)
       } else {
         this.date = new Date(this.datePipe.transform(this.today, 'yyyy-MM-dd') + "T00:00:00")
         this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
         this.year = this.date.getFullYear()
-        this.changeMonth(this.month, this.date)
       }
     })
   }
@@ -536,7 +573,7 @@ export class ScheduleComponent implements OnInit {
     this.timer = timer(time * 2, time)
     this.subscription = this.timer.subscribe(timer => {
       this.taskService.updatedInfo().subscribe(data => {
-        if(data.date == this.dataInfo.updatedInfo.date) {
+        if (data.date == this.dataInfo.updatedInfo.date) {
           return
         }
         this.dataInfo.updatedInfo = data
@@ -547,12 +584,12 @@ export class ScheduleComponent implements OnInit {
 
     this.subscriptions.push(this.subscription)
 
-    if(this.authService.currentUser().email == 'tv@thinkideias.com.br') {
+    if (this.authService.currentUser().email == 'tv@thinkideias.com.br') {
       this.timer2 = timer(5000, 60 * 1000 * 30)
       this.subscriptions.push(this.timer2.subscribe(timer => {
         this.counter += 1
 
-        if(this.counter > 2) {
+        if (this.counter > 2) {
           window.location.reload()
         }
 
@@ -568,16 +605,16 @@ export class ScheduleComponent implements OnInit {
   }
 
   setUpdatedMessage() {
-    if(this.dataInfo.updatedInfo.date == undefined) {
+    if (this.dataInfo.updatedInfo.date == undefined) {
       this.lastUpdateMessage = 'Sem atualizações'
       return
     }
 
-    this.lastUpdateMessage = 'Última atualização ' + this.dataInfo.updatedInfo.date + ' por ' +  this.dataInfo.updatedInfo.employee
+    this.lastUpdateMessage = 'Última atualização ' + this.dataInfo.updatedInfo.date + ' por ' + this.dataInfo.updatedInfo.employee
   }
 
   checkIfDeadlineIsMinor(job: Job, availableDate: string) {
-    if(job.id == null) {
+    if (job.id == null) {
       return false
     }
 
@@ -588,7 +625,7 @@ export class ScheduleComponent implements OnInit {
     let date = new Date(this.date.getUTCFullYear(), (month.id - 1), 1)
     let now = new Date()
 
-    if(month.id == (now.getMonth() + 1)) {
+    if (month.id == (now.getMonth() + 1)) {
       date.setDate(now.getDate())
     }
 
@@ -607,11 +644,12 @@ export class ScheduleComponent implements OnInit {
     let iniDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
     let finDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-31')
 
-    if(date != null) {
+    if (date != null) {
       const urlTree = this.router.createUrlTree([], {
         queryParams: { date: this.datePipe.transform(date, 'yyyy-MM-dd') },
         queryParamsHandling: "merge",
-        preserveFragment: true });
+        preserveFragment: true
+      });
 
       this.router.navigateByUrl(urlTree);
     }
@@ -650,17 +688,17 @@ export class ScheduleComponent implements OnInit {
     while (date.getTime() < fixedDateMax.getTime()) {
       let filteredTasks = this.tasks.filter(task => {
         return task.items.filter(item => {
-            let itemDate = new Date(item.date + 'T00:00:00')
-            return date.getDate() == itemDate.getDate()
+          let itemDate = new Date(item.date + 'T00:00:00')
+          return date.getDate() == itemDate.getDate()
             && date.getMonth() == itemDate.getMonth()
-          }
-        ).length  > 0
+        }
+        ).length > 0
       })
 
       let count = filteredTasks.length
       let length = (date.getDay() == 6 || date.getDay() == 0) ? 3 : filteredTasks.length
 
-      for(let index = 0; index < (5 - length); index++) {
+      for (let index = 0; index < (5 - length); index++) {
         let task = new Task
         let item = new TaskItem
         item.date = this.datePipe.transform(date, 'yyyy-MM-dd')
@@ -675,9 +713,9 @@ export class ScheduleComponent implements OnInit {
         month: (date.getMonth() + 1),
         year: date.getFullYear(),
         dayOfWeek: DAYSOFWEEK.find(dayOfWeek => dayOfWeek.id == date.getDay()),
-        tasks: filteredTasks.sort((a,b) => {
-          if(a.responsible != null && b.responsible != null)
-          return a.responsible.department_id > b.responsible.department_id ? 1 : -1
+        tasks: filteredTasks.sort((a, b) => {
+          if (a.responsible != null && b.responsible != null)
+            return a.responsible.department_id > b.responsible.department_id ? 1 : -1
         }),
         length: count
       }
@@ -690,7 +728,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   scrollToDate() {
-    if( ! this.scrollActive ) {
+    if (!this.scrollActive) {
       return
     }
 
@@ -698,7 +736,7 @@ export class ScheduleComponent implements OnInit {
     let query: string
     const elementBodyTable = document.querySelectorAll('.mat-row-scroll')[0] as HTMLElement;
 
-    if(this.month.id == date.getMonth() + 1) {
+    if (this.month.id == date.getMonth() + 1) {
       query = '.day-' + this.date.getDate() + '.month-' + (this.date.getMonth() + 1)
       const elementList = document.querySelectorAll(query);
 
@@ -757,6 +795,6 @@ export class ScheduleComponent implements OnInit {
   selector: 'cb-reload',
   template: ''
 })
-export class ReloadComponent {}
+export class ReloadComponent { }
 
 

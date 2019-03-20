@@ -17,95 +17,98 @@ import { DataInfo } from '../shared/data-info.model';
 
 @Injectable()
 export class EventService {
-    constructor(
-        private http: Http,
-        private snackBar: MatSnackBar,
-        private auth: AuthService
-    ) {}
+  searchValue = {}
+  pageIndex = 0
 
-    previewFile(event: Event, type: string,  file: string) {
-      let url = `event/download/${event.id}/${type}/${file}?access_token=${this.auth.token()}&user_id=${this.auth.currentUser().id}`
-      //let prefix = this.auth.hasAccess('event/download/{id}/{type}/{file}') ? '' : 'my-'
+  constructor(
+    private http: Http,
+    private snackBar: MatSnackBar,
+    private auth: AuthService
+  ) { }
 
-      //url = prefix + url
+  previewFile(event: Event, type: string, file: string) {
+    let url = `event/download/${event.id}/${type}/${file}?access_token=${this.auth.token()}&user_id=${this.auth.currentUser().id}`
+    //let prefix = this.auth.hasAccess('event/download/{id}/{type}/{file}') ? '' : 'my-'
 
-      window.open(`${API}/${url}`, '_blank')
-    }
+    //url = prefix + url
 
-    events(params?: {}, page: number = 0): Observable<DataInfo> {
-      let url = params === {} ? `events/all?page=${page}` : `events/filter?page=${page}`
+    window.open(`${API}/${url}`, '_blank')
+  }
 
-        return this.http.post(
-              `${API}/${url}`,
-              JSON.stringify(params),
-              new RequestOptions()
-            )
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+  events(params?: {}, page: number = 0): Observable<DataInfo> {
+    let url = params === {} ? `events/all?page=${page}` : `events/filter?page=${page}`
 
-    event(eventId: number): Observable<Event> {
-        let url = `events/get/${eventId}`
+    return this.http.post(
+      `${API}/${url}`,
+      JSON.stringify(params),
+      new RequestOptions()
+    )
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+  event(eventId: number): Observable<Event> {
+    let url = `events/get/${eventId}`
 
-    save(event: Event): Observable<any> {
-        let url = 'event/save'
+    return this.http.get(`${API}/${url}`)
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 
-        return this.http.post(
-                `${API}/${url}`,
-                JSON.stringify(event),
-                new RequestOptions()
-            )
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+  save(event: Event): Observable<any> {
+    let url = 'event/save'
 
-    edit(event: Event): Observable<any> {
-        let url = 'event/edit'
+    return this.http.post(
+      `${API}/${url}`,
+      JSON.stringify(event),
+      new RequestOptions()
+    )
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 
-        return this.http.put(
-                `${API}/${url}`,
-                JSON.stringify(event),
-                new RequestOptions()
-            )
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+  edit(event: Event): Observable<any> {
+    let url = 'event/edit'
 
-    delete(id: number): Observable<any> {
-        let url = `event/remove/${id}`
+    return this.http.put(
+      `${API}/${url}`,
+      JSON.stringify(event),
+      new RequestOptions()
+    )
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 
-        return this.http.delete(`${API}/${url}`)
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+  delete(id: number): Observable<any> {
+    let url = `event/remove/${id}`
+
+    return this.http.delete(`${API}/${url}`)
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 }
