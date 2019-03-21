@@ -12,7 +12,7 @@
           <a mat-button (click)="search.focus()">
             <mat-icon>search</mat-icon>
           </a>
-          <a mat-button (click)="filterToggle()">
+          <a mat-button (click)="filter = !filter" [class.filter-button-active]="hasFilterActive">
             <mat-icon>keyboard_arrow_down</mat-icon>
           </a>
           <a [routerLink]="['/places/new']" mat-button>
@@ -27,11 +27,16 @@
           <mat-form-field class="col-md-4">
             <input matInput formControlName="search" placeholder="Nome">
           </mat-form-field>
+          <div *ngIf="hasFilterActive" class="col-md-12">
+            <mat-card-actions class="col-md-12 text-right">
+              <button (click)="clearFilter()" class="cb-button" mat-raised-button>LIMPAR</button>
+            </mat-card-actions>
+          </div>
         </div>
       </div>
     </mat-card>
     <mat-paginator *ngIf="places" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex" [pageSizeOptions]="[pagination?.per_page]"
-      (page)="changePage($place)"></mat-paginator>
+      (page)="changePage($event)"></mat-paginator>
     <mat-card>
       <div *ngIf="places?.length > 0">
         <table class="table mat-table">
@@ -120,6 +125,6 @@
       </table>
     </mat-card>
     <mat-paginator *ngIf="places" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex" [pageSizeOptions]="[pagination?.per_page]"
-      (page)="changePage($place)"></mat-paginator>
+      (page)="changePage($event)"></mat-paginator>
   </form>
 </div>

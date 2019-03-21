@@ -36,12 +36,15 @@ export class PlaceListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
+  formCopy: FormGroup
   search: FormControl
   places: Place[] = []
   searching = false
   filter: boolean = false
   pagination: Pagination
-  pageIndex: number = 0
+  pageIndex: number
+  params = {}
+  hasFilterActive = false
   dataInfo: DataInfo
 
   constructor(
@@ -80,48 +83,80 @@ export class PlaceListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.pageIndex = this.placeService.pageIndex
+
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  createForm() {
     this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
+    this.formCopy = this.fb.group({
       search: this.search,
     })
 
-    this.loadPlaces()
+    this.searchForm = Object.create(this.formCopy)
+
+    if(JSON.stringify(this.placeService.searchValue) == JSON.stringify({})) {
+      this.placeService.searchValue = this.searchForm.value
+    } else {
+      this.searchForm.setValue(this.placeService.searchValue)
+    }
 
     this.searchForm.valueChanges
     .pipe(distinctUntilChanged())
     .debounceTime(500)
-    .subscribe(() => {
+    .subscribe((searchValue) => {
       let controls = this.searchForm.controls
-      this.loadPlaces({
+      this.params = {
         search: controls.search.value,
-      })
+      }
+
+      this.loadPlaces(this.params, 1)
+
+      this.pageIndex = 0
+      this.placeService.pageIndex = 0
+      this.placeService.searchValue = searchValue
+      this.updateFilterActive()
     })
   }
 
-  loadPlaces(params = {}) {
+  updateFilterActive() {
+    if (JSON.stringify(this.placeService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.hasFilterActive = false
+    } else {
+      this.hasFilterActive = true
+    }
+  }
+
+  clearFilter() {
+    this.placeService.searchValue = {}
+    this.placeService.pageIndex = 0
+    this.pageIndex = 0
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  loadInitialData() {
+    if (JSON.stringify(this.placeService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.loadPlaces({}, this.pageIndex + 1)
+    } else {
+      this.loadPlaces(this.placeService.searchValue, this.placeService.pageIndex + 1)
+    }
+
+    this.updateFilterActive()
+  }
+
+  loadPlaces(params = {}, page: number) {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando locais...')
 
-    this.placeService.places(params).subscribe(dataInfo => {
+    this.placeService.places(params, page).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.places = <Place[]> this.pagination.data
       snackBar.dismiss()
-    })
-  }
-
-  filterToggle() {
-    this.filter = this.filter ? false : true
-  }
-
-  filterForm() {
-    this.searching = true
-    this.placeService.places(this.searchForm.value).subscribe(dataInfo => {
-      this.searching = false
-      this.dataInfo = dataInfo
-      this.pagination = dataInfo.pagination
-      this.places = <Place[]> this.pagination.data
     })
   }
 
@@ -137,16 +172,17 @@ export class PlaceListComponent implements OnInit {
     })
   }
 
-  changePage($place) {
+  changePage($event) {
     this.searching = true
     this.places = []
-    this.placeService.places(this.searchForm.value, ($place.pageIndex + 1)).subscribe(dataInfo => {
+    this.placeService.places(this.placeService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.places = <Place[]> this.pagination.data
+      this.pageIndex = $event.pageIndex
+      this.placeService.pageIndex = this.pageIndex
     })
-    this.pageIndex = $place.pageIndex
   }
 
 }

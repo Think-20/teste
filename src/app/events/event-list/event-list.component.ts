@@ -150,7 +150,7 @@ export class EventListComponent implements OnInit {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando eventos...')
 
-    this.eventService.events(params).subscribe(dataInfo => {
+    this.eventService.events(params, page).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination

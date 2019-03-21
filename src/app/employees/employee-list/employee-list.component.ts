@@ -42,6 +42,7 @@ export class EmployeeListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
+  formCopy: FormGroup
   search: FormControl
   employees: Employee[] = []
   departments: Department[]
@@ -49,7 +50,9 @@ export class EmployeeListComponent implements OnInit {
   searching = false
   filter: boolean = false
   pagination: Pagination
-  pageIndex: number = 0
+  pageIndex: number
+  params = {}
+  hasFilterActive = false
   dataInfo: DataInfo
   API = API
 
@@ -91,30 +94,73 @@ export class EmployeeListComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.pageIndex = this.employeeService.pageIndex
+
+    this.loadData()
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  createForm() {
     this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
+    this.formCopy = this.fb.group({
       search: this.search,
       department: this.fb.control(''),
       position: this.fb.control(''),
     })
 
-    this.loadEmployees({
-      deleted: true
-    })
-    this.loadData()
+    this.searchForm = Object.create(this.formCopy)
+
+    if(JSON.stringify(this.employeeService.searchValue) == JSON.stringify({})) {
+      this.employeeService.searchValue = this.searchForm.value
+    } else {
+      this.searchForm.setValue(this.employeeService.searchValue)
+    }
 
     this.searchForm.valueChanges
     .pipe(distinctUntilChanged())
     .debounceTime(500)
-    .subscribe(() => {
+    .subscribe((searchValue) => {
       let controls = this.searchForm.controls
-      this.loadEmployees({
-        deleted: true,
+      this.params = {
         search: controls.search.value,
         department: controls.department.value,
         position: controls.position.value,
-      })
+      }
+
+      this.loadEmployees(this.params, 1)
+
+      this.pageIndex = 0
+      this.employeeService.pageIndex = 0
+      this.employeeService.searchValue = searchValue
+      this.updateFilterActive()
     })
+  }
+
+  updateFilterActive() {
+    if (JSON.stringify(this.employeeService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.hasFilterActive = false
+    } else {
+      this.hasFilterActive = true
+    }
+  }
+
+  clearFilter() {
+    this.employeeService.searchValue = {}
+    this.employeeService.pageIndex = 0
+    this.pageIndex = 0
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  loadInitialData() {
+    if (JSON.stringify(this.employeeService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.loadEmployees({}, this.pageIndex + 1)
+    } else {
+      this.loadEmployees(this.employeeService.searchValue, this.employeeService.pageIndex + 1)
+    }
+
+    this.updateFilterActive()
   }
 
   loadData() {
@@ -126,21 +172,21 @@ export class EmployeeListComponent implements OnInit {
     })
   }
 
-  loadEmployees(params = {}) {
+  loadEmployees(params = {}, page: number) {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando funcionários...')
+    let paramsWithDeleted = {
+      deleted: true,
+      ...params
+    }
 
-    this.employeeService.employees(params).subscribe(dataInfo => {
+    this.employeeService.employees(paramsWithDeleted, page).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.employees = <Employee[]> this.pagination.data
       snackBar.dismiss()
     })
-  }
-
-  filterToggle() {
-    this.filter = this.filter ? false : true
   }
 
   compareDepartment(var1: Department, var2: Department) {
@@ -183,9 +229,9 @@ export class EmployeeListComponent implements OnInit {
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
       this.employees = <Employee[]> this.pagination.data
+      this.pageIndex = $event.pageIndex
+      this.employeeService.pageIndex = this.pageIndex
     })
-
-    this.pageIndex = $event.pageIndex
   }
 
 }

@@ -17,86 +17,89 @@ import { DataInfo } from '../shared/data-info.model';
 
 @Injectable()
 export class PlaceService {
-    constructor(
-        private http: Http,
-        private snackBar: MatSnackBar,
-        private auth: AuthService
-    ) {}
+  searchValue = {}
+  pageIndex = 0
 
-    places(params?: {}, page: number = 0): Observable<DataInfo> {
-      let url = params === {} ? `places/all?page=${page}` : `places/filter?page=${page}`
+  constructor(
+    private http: Http,
+    private snackBar: MatSnackBar,
+    private auth: AuthService
+  ) { }
 
-        return this.http.post(
-              `${API}/${url}`,
-              JSON.stringify(params),
-              new RequestOptions()
-            )
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+  places(params?: {}, page: number = 0): Observable<DataInfo> {
+    let url = params === {} ? `places/all?page=${page}` : `places/filter?page=${page}`
 
-    place(placeId: number): Observable<Place> {
-        let url = `places/get/${placeId}`
+    return this.http.post(
+      `${API}/${url}`,
+      JSON.stringify(params),
+      new RequestOptions()
+    )
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+  place(placeId: number): Observable<Place> {
+    let url = `places/get/${placeId}`
 
-    save(place: Place): Observable<any> {
-        let url = 'place/save'
+    return this.http.get(`${API}/${url}`)
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 
-        return this.http.post(
-                `${API}/${url}`,
-                JSON.stringify(place),
-                new RequestOptions()
-            )
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+  save(place: Place): Observable<any> {
+    let url = 'place/save'
 
-    edit(place: Place): Observable<any> {
-        let url = 'place/edit'
+    return this.http.post(
+      `${API}/${url}`,
+      JSON.stringify(place),
+      new RequestOptions()
+    )
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 
-        return this.http.put(
-                `${API}/${url}`,
-                JSON.stringify(place),
-                new RequestOptions()
-            )
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+  edit(place: Place): Observable<any> {
+    let url = 'place/edit'
 
-    delete(id: number): Observable<any> {
-        let url = `place/remove/${id}`
+    return this.http.put(
+      `${API}/${url}`,
+      JSON.stringify(place),
+      new RequestOptions()
+    )
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 
-        return this.http.delete(`${API}/${url}`)
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+  delete(id: number): Observable<any> {
+    let url = `place/remove/${id}`
+
+    return this.http.delete(`${API}/${url}`)
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 }
