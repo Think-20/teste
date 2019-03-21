@@ -15,82 +15,85 @@ import { AuthService } from '../login/auth.service';
 
 @Injectable()
 export class ProviderService {
-    constructor(
-        private http: Http,
-        private snackBar: MatSnackBar,
-        private auth: AuthService
-    ) {}
+  searchValue = ''
+  pageIndex = 0
 
-    providers(query: string = ''): Observable<Provider[]> {
-        let url = query === '' ? `providers/all` : `providers/filter/${query}`
+  constructor(
+    private http: Http,
+    private snackBar: MatSnackBar,
+    private auth: AuthService
+  ) { }
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+  providers(query: string = ''): Observable<Provider[]> {
+    let url = query === '' ? `providers/all` : `providers/filter/${query}`
 
-    provider(providerId: number): Observable<Provider> {
-        let url = `providers/get/${providerId}`
+    return this.http.get(`${API}/${url}`)
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+  provider(providerId: number): Observable<Provider> {
+    let url = `providers/get/${providerId}`
 
-    save(provider: Provider): Observable<any> {
-        let url = 'provider/save'
+    return this.http.get(`${API}/${url}`)
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 
-        return this.http.post(
-                `${API}/${url}`,
-                JSON.stringify(provider),
-                new RequestOptions()
-            )
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
-    
-    edit(provider: Provider): Observable<any> {
-        let url = 'provider/edit'
+  save(provider: Provider): Observable<any> {
+    let url = 'provider/save'
 
-        return this.http.put(
-                `${API}/${url}`,
-                JSON.stringify(provider),
-                new RequestOptions()
-            )
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+    return this.http.post(
+      `${API}/${url}`,
+      JSON.stringify(provider),
+      new RequestOptions()
+    )
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 
-    delete(id: number): Observable<any> {
-        let url = `provider/remove/${id}`
+  edit(provider: Provider): Observable<any> {
+    let url = 'provider/edit'
 
-        return this.http.delete(`${API}/${url}`)
-            .map(response => response.json())
-            .catch((err) => {
-                this.snackBar.open(ErrorHandler.message(err), '', {
-                    duration: 3000
-                })
-                return ErrorHandler.capture(err)
-            })
-    }
+    return this.http.put(
+      `${API}/${url}`,
+      JSON.stringify(provider),
+      new RequestOptions()
+    )
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
+
+  delete(id: number): Observable<any> {
+    let url = `provider/remove/${id}`
+
+    return this.http.delete(`${API}/${url}`)
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 }

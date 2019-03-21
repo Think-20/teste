@@ -8,11 +8,11 @@
         <mat-form-field class="bar">
           <input #search matInput formControlName="search" placeholder="Qual fornecedor você procura?" autocomplete="off">
         </mat-form-field>
-        <div class="buttons">  
+        <div class="buttons">
           <a mat-button (click)="search.focus()">
             <mat-icon>search</mat-icon>
           </a>
-          <a mat-button>
+          <a mat-button (click)="filter = !filter" [class.filter-button-active]="hasFilterActive">
             <mat-icon>keyboard_arrow_down</mat-icon>
           </a>
           <a [routerLink]="['/providers/new']" mat-button>
@@ -21,6 +21,17 @@
         </div>
       </div>
     </mat-card-title>
+    <mat-card *ngIf="filter" class="filter-grid">
+      <div class="row">
+        <div class="col-md-12">
+          <div *ngIf="hasFilterActive" class="col-md-12">
+            <mat-card-actions class="col-md-12 text-right">
+              <button (click)="clearFilter()" class="cb-button" mat-raised-button>LIMPAR</button>
+            </mat-card-actions>
+          </div>
+        </div>
+      </div>
+    </mat-card>
     <mat-card>
       <div *ngIf="providers?.length > 0">
         <table class="table mat-table">
