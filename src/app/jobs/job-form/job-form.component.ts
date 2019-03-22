@@ -390,7 +390,7 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.place.setValue(job.place)
     this.jobForm.controls.history.setValue(job.history)
     this.jobForm.controls.moments.setValue(job.moments)
-    this.jobForm.controls.area.setValue(job.area.toString().replace('.', ','))
+    this.jobForm.controls.area.setValue(job.area > 0 ? job.area.toString().replace('.', ',') : '')
 
     if(job.budget_responsible != null) {
       this.jobForm.controls.budget_responsible.setValue(job.budget_responsible.name)
