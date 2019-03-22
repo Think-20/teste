@@ -5,7 +5,7 @@
     </mat-card-title>
     <mat-card>
       <div class="row">
-          <div class="col-md-12 image-container text-center"> 
+          <div class="col-md-12 image-container text-center">
             <div class="text-right">
               <mat-slide-toggle formControlName="item_type">Item composto</mat-slide-toggle>
             </div>
@@ -21,13 +21,13 @@
           <mat-form-field class="col-md-6">
             <input formControlName="name" matInput placeholder="Nome*">
             <mat-error>
-              Obrigatório, entre 3 e 50 caract. 
+              Obrigatório, entre 3 e 50 caract.
             </mat-error>
           </mat-form-field>
           <mat-form-field class="col-md-6">
             <input formControlName="description" matInput placeholder="Descrição*">
             <mat-error>
-              Obrigatório, entre 3 e 255 caract. 
+              Obrigatório, entre 3 e 255 caract.
             </mat-error>
           </mat-form-field>
           <mat-form-field class="col-md-6">
@@ -103,19 +103,19 @@
                   </mat-error>
                 </mat-form-field>
                 <mat-autocomplete #autocompleteProvider="matAutocomplete" [displayWith]="displayProvider">
-                    <mat-option *ngFor="let provider of providers | async" [value]="provider">
+                    <mat-option *ngFor="let provider of providers" [value]="provider">
                       {{ provider.fantasy_name }}
                     </mat-option>
                 </mat-autocomplete>
-                <button 
-                  *ngIf="getPricingsControls(itemForm)[i].enabled == true"  
-                  type="button" 
+                <button
+                  *ngIf="getPricingsControls(itemForm)[i].enabled == true"
+                  type="button"
                   class="save-pricing" (click)="savePricing(i)" mat-button>
                   <mat-icon>done</mat-icon>
                 </button>
-                <button 
-                  *ngIf="getPricingsControls(itemForm)[i].enabled == false" 
-                  type="button" 
+                <button
+                  *ngIf="getPricingsControls(itemForm)[i].enabled == false"
+                  type="button"
                   class="edit-pricing" (click)="editPricing(i)" mat-button>
                   <mat-icon>mode_edit</mat-icon>
                 </button>
@@ -172,15 +172,15 @@
                     Obrigatório
                   </mat-error>
                 </mat-form-field>
-                <button 
-                  *ngIf="getChildItemsControls(itemForm)[i].enabled == true"  
-                  type="button" 
+                <button
+                  *ngIf="getChildItemsControls(itemForm)[i].enabled == true"
+                  type="button"
                   class="save-pricing" (click)="saveChildItem(i)" mat-button>
                   <mat-icon>done</mat-icon>
                 </button>
-                <button 
-                  *ngIf="getChildItemsControls(itemForm)[i].enabled == false" 
-                  type="button" 
+                <button
+                  *ngIf="getChildItemsControls(itemForm)[i].enabled == false"
+                  type="button"
                   class="edit-pricing" (click)="editChildItem(i)" mat-button>
                   <mat-icon>mode_edit</mat-icon>
                 </button>
@@ -197,6 +197,6 @@
           </div>
         </div>
       </mat-card>
-    </div> 
+    </div>
   </form>
 </div>

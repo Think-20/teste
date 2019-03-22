@@ -11,11 +11,12 @@ import { API } from '../app.api';
 import { ErrorHandler } from '../shared/error-handler.service';
 import { Provider } from './provider.model';
 import { AuthService } from '../login/auth.service';
+import { DataInfo } from '../shared/data-info.model';
 
 
 @Injectable()
 export class ProviderService {
-  searchValue = ''
+  searchValue = {}
   pageIndex = 0
 
   constructor(
@@ -24,10 +25,13 @@ export class ProviderService {
     private auth: AuthService
   ) { }
 
-  providers(query: string = ''): Observable<Provider[]> {
-    let url = query === '' ? `providers/all` : `providers/filter/${query}`
+  providers(params = {}, page: number = 0): Observable<DataInfo> {
+    let url = params == {} ? `providers/all?page=${page}` : `providers/filter?page=${page}`
 
-    return this.http.get(`${API}/${url}`)
+    return this.http.post(`${API}/${url}`,
+        JSON.stringify(params),
+        new RequestOptions()
+      )
       .map(response => response.json())
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {

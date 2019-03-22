@@ -6,6 +6,8 @@ import { MatSnackBar } from '@angular/material';
 import { ProviderService } from '../provider.service';
 import { Provider } from '../provider.model';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { DataInfo } from '../../shared/data-info.model';
+import { Pagination } from '../../shared/pagination.model';
 
 @Component({
   selector: 'cb-provider-list',
@@ -39,6 +41,8 @@ export class ProviderListComponent implements OnInit {
   params = {}
   hasFilterActive = false
   searching = false
+  dataInfo: DataInfo
+  pagination: Pagination
 
   constructor(
     private fb: FormBuilder,
@@ -58,14 +62,6 @@ export class ProviderListComponent implements OnInit {
     return providers.filter((provider) => { return provider.rate < 3 }).length
   }
 
-  lastUpdate(providers: Provider[]) {
-    if (providers.length === 0) return
-
-    return providers.reduce((previousValue, currentValue) => {
-      return currentValue.updated_at > previousValue.updated_at ? currentValue : previousValue
-    })
-  }
-
   ngOnInit() {
     this.pageIndex = this.providerService.pageIndex
 
@@ -82,11 +78,9 @@ export class ProviderListComponent implements OnInit {
     this.searchForm = Object.create(this.formCopy)
 
     if (JSON.stringify(this.providerService.searchValue) == JSON.stringify({})) {
-      //this.providerService.searchValue = this.searchForm.value
-      this.providerService.searchValue = ''
+      this.providerService.searchValue = this.searchForm.value
     } else {
-      //this.searchForm.setValue(this.providerService.searchValue)
-      this.searchForm.controls.search.setValue(this.providerService.searchValue)
+      this.searchForm.setValue(this.providerService.searchValue)
     }
 
     this.searchForm.valueChanges
@@ -95,32 +89,21 @@ export class ProviderListComponent implements OnInit {
       .subscribe((searchValue) => {
         let controls = this.searchForm.controls
 
-        /*
         this.params = {
           search: controls.search.value,
         }
 
         this.loadProviders(this.params, 1)
-        */
-        this.loadProviders(controls.search.value, 1)
 
         this.pageIndex = 0
         this.providerService.pageIndex = 0
-        //this.providerService.searchValue = searchValue
-        this.providerService.searchValue = controls.search.value
+        this.providerService.searchValue = searchValue
         this.updateFilterActive()
       })
   }
 
   updateFilterActive() {
-    /*
     if (JSON.stringify(this.providerService.searchValue) === JSON.stringify(this.formCopy.value)) {
-      this.hasFilterActive = false
-    } else {
-      this.hasFilterActive = true
-    }
-    */
-    if (this.providerService.searchValue == '') {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -128,7 +111,7 @@ export class ProviderListComponent implements OnInit {
   }
 
   clearFilter() {
-    this.providerService.searchValue = ''
+    this.providerService.searchValue = {}
     this.providerService.pageIndex = 0
     this.pageIndex = 0
     this.createForm()
@@ -136,16 +119,8 @@ export class ProviderListComponent implements OnInit {
   }
 
   loadInitialData() {
-    /*
     if (JSON.stringify(this.providerService.searchValue) === JSON.stringify(this.formCopy.value)) {
       this.loadProviders({}, this.pageIndex + 1)
-    } else {
-      this.loadProviders(this.providerService.searchValue, this.providerService.pageIndex + 1)
-    }
-    */
-
-    if (this.providerService.searchValue == '') {
-      this.loadProviders('', this.pageIndex + 1)
     } else {
       this.loadProviders(this.providerService.searchValue, this.providerService.pageIndex + 1)
     }
@@ -157,9 +132,11 @@ export class ProviderListComponent implements OnInit {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando fornecedores...')
 
-    this.providerService.providers(params).subscribe(providers => {
+    this.providerService.providers(params, page).subscribe(dataInfo => {
       this.searching = false
-      this.providers = providers
+      this.dataInfo = dataInfo
+      this.pagination = dataInfo.pagination
+      this.providers = <Provider[]> dataInfo.pagination.data
       snackBar.dismiss()
     })
   }
