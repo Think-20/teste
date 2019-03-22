@@ -319,6 +319,7 @@ export class JobFormComponent implements OnInit {
       Validators.maxLength(100)
     ])
     this.jobForm.controls.not_client.updateValueAndValidity()
+    this.jobForm.controls.client.setValue('')
     this.jobForm.controls.client.disable()
     this.jobForm.controls.client.clearValidators()
   }
@@ -328,6 +329,7 @@ export class JobFormComponent implements OnInit {
       return
     }
 
+    this.jobForm.controls.not_client.setValue('')
     this.jobForm.controls.not_client.disable()
     this.jobForm.controls.not_client.clearValidators()
     this.jobForm.controls.client.enable()
