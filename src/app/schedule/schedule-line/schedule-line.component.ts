@@ -263,9 +263,9 @@ export class ScheduleLineComponent implements OnInit {
   calcValue(job: Job) {
     let text = 0.00
 
-    if(job.area != null) {
+    if(job.area > 0) {
       text = parseFloat((job.budget_value / job.area).toFixed(2))
-    } else if(job.moments != null) {
+    } else if(job.moments > 0) {
       text = parseFloat((job.budget_value / job.moments).toFixed(2))
     }
 
