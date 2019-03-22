@@ -153,4 +153,17 @@ export class ProviderListComponent implements OnInit {
     })
   }
 
+  changePage($event) {
+    this.searching = true
+    this.providers = []
+    this.providerService.providers(this.providerService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
+      this.searching = false
+      this.dataInfo = dataInfo
+      this.pagination = dataInfo.pagination
+      this.providers = <Provider[]> this.pagination.data
+      this.pageIndex = $event.pageIndex
+      this.providerService.pageIndex = this.pageIndex
+    })
+  }
+
 }

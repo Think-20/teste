@@ -32,6 +32,8 @@
         </div>
       </div>
     </mat-card>
+    <mat-paginator *ngIf="providers" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex" [pageSizeOptions]="[pagination?.per_page]"
+      (page)="changePage($event)"></mat-paginator>
     <mat-card>
       <div *ngIf="providers?.length > 0">
         <table class="table mat-table">
@@ -119,5 +121,7 @@
         </div>
       </table>
     </mat-card>
+    <mat-paginator *ngIf="providers" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex" [pageSizeOptions]="[pagination?.per_page]"
+      (page)="changePage($event)"></mat-paginator>
   </form>
 </div>
