@@ -41,6 +41,7 @@ export class ProviderListComponent implements OnInit {
   params = {}
   hasFilterActive = false
   searching = false
+  filter: boolean = false
   dataInfo: DataInfo
   pagination: Pagination
 
