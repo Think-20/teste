@@ -19,6 +19,12 @@ export class PerformanceReportLiteComponent implements OnInit {
   attendances: Employee[]
   opportunity_quantity_goal: number = 42
   opportunity_value_goal: number = 4500000
+  tendency_quantity_goal: number = 30
+  tendency_value_goal: number = 1200000
+  monthly_approval_quantity_goal: number = 30
+  monthly_approval_value_goal: number = 1000000
+  consolidated_annual_quantity_goal: number = 30
+  consolidated_annual_value_goal: number = 1200000
 
   constructor(
     private formBuilder: FormBuilder,
@@ -26,6 +32,12 @@ export class PerformanceReportLiteComponent implements OnInit {
     private snackbar: MatSnackBar,
     private employeeService: EmployeeService
   ) { }
+
+  test() {
+    this.searchForm.controls.initial_date.setValue('2019-03-01')
+    this.searchForm.controls.final_date.setValue('2019-04-30')
+    this.searchForm.controls.time_to_analyze.setValue('30')
+  }
 
   ngOnInit() {
     this.searchForm = this.formBuilder.group({
@@ -69,14 +81,12 @@ export class PerformanceReportLiteComponent implements OnInit {
         snackbar.dismiss()
       })
     })
+
+    this.test()
   }
 
-  percentOpportunityQuantity() {
-    return ((this.performanceLite.opportunity_quantity * 100 / this.opportunity_quantity_goal) - 100).toFixed(1)
-  }
-
-  percentOpportunityValue() {
-    return ((this.performanceLite.opportunity_value * 100 / this.opportunity_value_goal) - 100).toFixed(1)
+  percent(value: number, goal: number) {
+    return ((value * 100 / goal) - 100).toFixed(0)
   }
 
   compareAttendance(var1: Employee, var2: Employee) {

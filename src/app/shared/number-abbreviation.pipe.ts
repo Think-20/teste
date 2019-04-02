@@ -5,7 +5,7 @@ export class NumberAbbreviationPipe implements PipeTransform {
   transform(value) {
     let suffix = ['', 'k', 'mi', 'bi']
     let suffixSelected = ''
-    let string = String(parseFloat(value))
+    let string = String(parseInt(value))
     let newValue: string
     let index: number
     let pow: number

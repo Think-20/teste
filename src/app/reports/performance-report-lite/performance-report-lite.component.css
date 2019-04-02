@@ -58,6 +58,7 @@
 }
 
 .report .split {
+  position: relative;
   width: 50%;
 }
 
@@ -75,7 +76,7 @@
 }
 
 .report .cb-items .title, .report .cb-items .content {
-  max-width: 155px;
+  max-width: 175px;
   margin: auto;
 }
 
