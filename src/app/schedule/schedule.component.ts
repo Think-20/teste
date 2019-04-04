@@ -469,7 +469,9 @@ export class ScheduleComponent implements OnInit {
 
     this.jobStatusService.jobStatus().subscribe(status => this.jobStatus = status)
 
-    this.employeeService.canInsertClients().subscribe((attendances) => {
+    this.employeeService.canInsertClients({
+      deleted: true
+    }).subscribe((attendances) => {
       this.attendances = attendances
     })
 

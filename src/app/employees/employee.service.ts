@@ -62,10 +62,10 @@ export class EmployeeService {
       })
   }
 
-  canInsertClients(): Observable<Employee[]> {
+  canInsertClients(params: { deleted : boolean } = { deleted : false }): Observable<Employee[]> {
     let url = `employees/can-insert-clients`
 
-    return this.http.get(`${API}/${url}`)
+    return this.http.get(`${API}/${url}?deleted=${ params.deleted }`)
       .map(response => response.json())
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {

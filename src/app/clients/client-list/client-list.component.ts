@@ -205,7 +205,9 @@ export class ClientListComponent implements OnInit {
       this.clientStatus = clientStatus
     })
 
-    this.employeeService.canInsertClients().subscribe((attendances) => {
+    this.employeeService.canInsertClients({
+      deleted: true
+    }).subscribe((attendances) => {
       this.attendances = attendances
     })
   }

@@ -183,7 +183,9 @@ export class JobListComponent implements OnInit {
 
     this.jobTypeService.jobTypes().subscribe(job_types => this.job_types = job_types)
 
-    this.employeeService.canInsertClients().subscribe((attendances) => {
+    this.employeeService.canInsertClients({
+      deleted: true
+    }).subscribe((attendances) => {
       this.attendances = attendances
     })
 
