@@ -69,6 +69,9 @@ draggable="true">
       <span *ngIf="calcValue(task.job) > 0">
         {{ calcValue(task.job) | number: '1.2' }}{{ task.job.job_type.description == 'Stand' ? '/m²' : '' }}{{ task.job.job_type.description == 'Cenografia' ? '/mom.' : '' }}
       </span>
+      <span *ngIf="task.job.moments > 0">
+        {{ task.job.moments }} mom.
+      </span>
     </span>
   </div>
   <div class="mat-cell mat-column-area">
