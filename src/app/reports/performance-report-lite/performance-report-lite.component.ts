@@ -5,6 +5,8 @@ import { EmployeeService } from '../../employees/employee.service';
 import { JobService } from '../../jobs/job.service';
 import { PerformanceReportLite } from './performance-report-lite.model';
 import { MatSnackBar } from '@angular/material';
+import { MONTHS, Month } from '../../shared/date/months';
+import { Patterns } from '../../shared/patterns.model';
 
 @Component({
   selector: 'cb-performance-report-lite',
@@ -13,6 +15,8 @@ import { MatSnackBar } from '@angular/material';
 })
 export class PerformanceReportLiteComponent implements OnInit {
 
+  months: Month[] = MONTHS
+  date: Date
   filterOpen: boolean = true
   searchForm: FormGroup
   performanceLite: PerformanceReportLite
@@ -33,19 +37,14 @@ export class PerformanceReportLiteComponent implements OnInit {
     private employeeService: EmployeeService
   ) { }
 
-  test() {
-    this.searchForm.controls.initial_date.setValue('2019-03-01')
-    this.searchForm.controls.final_date.setValue('2019-04-30')
-    this.searchForm.controls.time_to_analyze.setValue('30')
-  }
-
   ngOnInit() {
     this.searchForm = this.formBuilder.group({
-      initial_date: this.formBuilder.control('', [
+      month: this.formBuilder.control('', [
         Validators.required
       ]),
-      final_date: this.formBuilder.control('', [
-        Validators.required
+      year: this.formBuilder.control('', [
+        Validators.required,
+        Validators.pattern(Patterns.number)
       ]),
       time_to_analyze: this.formBuilder.control('', [
         Validators.required
@@ -62,6 +61,14 @@ export class PerformanceReportLiteComponent implements OnInit {
       let employees = <Employee[]> dataInfo.pagination.data
       this.attendances = employees.filter((employee) => employee.department.description == 'Atendimento')
     })
+
+    this.date = new Date
+    this.searchForm.controls.year.setValue(this.date.getFullYear())
+
+    let month = this.months.find((month) => {
+      return month.id == (this.date.getMonth() + 1)
+    })
+    this.searchForm.controls.month.setValue(month)
   }
 
   listenForm() {
@@ -81,8 +88,6 @@ export class PerformanceReportLiteComponent implements OnInit {
         snackbar.dismiss()
       })
     })
-
-    this.test()
   }
 
   percent(value: number, goal: number) {
@@ -90,6 +95,10 @@ export class PerformanceReportLiteComponent implements OnInit {
   }
 
   compareAttendance(var1: Employee, var2: Employee) {
+    return var1.id === var2.id
+  }
+
+  compareMonth(var1: Month, var2: Month) {
     return var1.id === var2.id
   }
 }
