@@ -107,9 +107,8 @@
               </div>
             </div>
             <div class="split">
-              <div
-                class="percent {{ percent(performanceLite.tendency.budget_approved, tendency_value_goal) > 0 ? 'positive' : 'negative' }}">
-                {{ percent(performanceLite.tendency.budget_approved, tendency_value_goal) >= 0 ? '+' : '' }}{{ percent(performanceLite.tendency.budget_approved, tendency_value_goal) }}%
+              <div class="percent {{ percent((performanceLite.tendency.budget_approved / (searchForm.controls.time_to_analyze.value / 30)), tendency_value_goal) > 0 ? 'positive' : 'negative' }}">
+                {{ percent((performanceLite.tendency.budget_approved / (searchForm.controls.time_to_analyze.value / 30)), tendency_value_goal) >= 0 ? '+' : '' }}{{ percent((performanceLite.tendency.budget_approved / (searchForm.controls.time_to_analyze.value / 30)), tendency_value_goal) }}%
               </div>
               <div class="value">
                 {{ (performanceLite.tendency.budget_approved / (searchForm.controls.time_to_analyze.value / 30) | numberAbrev) }}

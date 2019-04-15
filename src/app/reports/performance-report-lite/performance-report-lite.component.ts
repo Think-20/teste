@@ -26,7 +26,7 @@ export class PerformanceReportLiteComponent implements OnInit {
   tendency_quantity_goal: number = 30
   tendency_value_goal: number = 1200000
   monthly_approval_quantity_goal: number = 30
-  monthly_approval_value_goal: number = 1000000
+  monthly_approval_value_goal: number = 1200000
   consolidated_annual_quantity_goal: number = 30
   consolidated_annual_value_goal: number = 1200000
 
