@@ -17,7 +17,6 @@
 
 .report .cb-items .content .value {
   font-size: 18px;
-  width: 100%;
   position: relative;
 }
 
@@ -26,10 +25,8 @@
 }
 
 .report .cb-items .content .percent {
-  position: absolute;
-  left: 5px;
-  bottom: 5px;
   font-size: 10px;
+  padding-right: 3px;
 }
 
 .report .cb-items .content .percent.positive {
@@ -60,6 +57,13 @@
 .report .split {
   position: relative;
   width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.report .full {
+  width: 100%;
 }
 
 .report .cb-items:first-child {
@@ -76,7 +80,7 @@
 }
 
 .report .cb-items .title, .report .cb-items .content {
-  max-width: 175px;
+  max-width: 187px;
   margin: auto;
 }
 

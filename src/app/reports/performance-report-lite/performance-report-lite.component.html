@@ -42,8 +42,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col-md-3">
-            <mat-select formControlName="attendances" placeholder="Atendimento" [compareWith]="compareAttendance"
-              multiple>
+            <mat-select formControlName="attendances" placeholder="Atendimento" [compareWith]="compareAttendance" multiple>
               <mat-option></mat-option>
               <mat-option *ngFor="let attendance of attendances" [value]="attendance">
                 {{ attendance.name }}
@@ -69,38 +68,47 @@
         <div class="cb-items opportunity opportunity-quantity">
           <div class="title">oportunidades un:</div>
           <div class="content">
-            <div
-              class="percent {{ percent(performanceLite.opportunity.quantity, opportunity_quantity_goal) > 0 ? 'positive' : 'negative' }}">
-              {{ percent(performanceLite.opportunity.quantity, opportunity_quantity_goal) >= 0 ? '+' : '' }}{{ percent(performanceLite.opportunity.quantity, opportunity_quantity_goal) }}%
+            <div class="split full">
+              <div class="percent {{ percent(performanceLite.opportunity.quantity, opportunity_quantity_goal) > 0 ? 'positive' : 'negative' }}">
+                {{ percent(performanceLite.opportunity.quantity, opportunity_quantity_goal) >= 0 ? '+' : '' }}{{ percent(performanceLite.opportunity.quantity,
+                opportunity_quantity_goal) }}%
+              </div>
+              <div class="value">{{ performanceLite.opportunity.quantity }}</div>
             </div>
-            <div class="value">{{ performanceLite.opportunity.quantity }}</div>
           </div>
           <div class="title">meta:</div>
           <div class="content">
-            <div class="value">{{ opportunity_quantity_goal }}</div>
+            <div class="split full">
+              <div class="value">{{ opportunity_quantity_goal }}</div>
+            </div>
           </div>
         </div>
         <div class="cb-items opportunity opportunity-value">
           <div class="title">oportunidades $:</div>
           <div class="content">
-            <div
-              class="percent {{ percent(performanceLite.opportunity.value, opportunity_value_goal) > 0 ? 'positive' : 'negative' }}">
-              {{ percent(performanceLite.opportunity.value, opportunity_value_goal) >= 0 ? '+' : '' }}{{ percent(performanceLite.opportunity.value, opportunity_value_goal) }}%
+            <div class="split full">
+              <div class="percent {{ percent(performanceLite.opportunity.value, opportunity_value_goal) > 0 ? 'positive' : 'negative' }}">
+                {{ percent(performanceLite.opportunity.value, opportunity_value_goal) >= 0 ? '+' : '' }}{{ percent(performanceLite.opportunity.value,
+                opportunity_value_goal) }}%
+              </div>
+              <div class="value strong">{{ performanceLite.opportunity.value | numberAbrev }}</div>
             </div>
-            <div class="value strong">{{ performanceLite.opportunity.value | numberAbrev }}</div>
           </div>
           <div class="title">meta:</div>
           <div class="content">
-            <div class="value">{{ opportunity_value_goal | numberAbrev }}</div>
+            <div class="split full">
+              <div class="value">{{ opportunity_value_goal | numberAbrev }}</div>
+            </div>
           </div>
         </div>
         <div class="cb-items">
           <div class="title">tendencia mensal de aprovação % | $:</div>
           <div class="content">
             <div class="split">
-              <div
-                class="percent {{ percent((performanceLite.tendency.quantity_approved * 100 / performanceLite.tendency.quantity_total), tendency_quantity_goal) > 0 ? 'positive' : 'negative' }}">
-                {{ percent((performanceLite.tendency.quantity_approved * 100 / performanceLite.tendency.quantity_total), tendency_quantity_goal) >= 0 ? '+' : '' }}{{ percent((performanceLite.tendency.quantity_approved * 100 / performanceLite.tendency.quantity_total), tendency_quantity_goal) }}%
+              <div class="percent {{ percent((performanceLite.tendency.quantity_approved * 100 / performanceLite.tendency.quantity_total), tendency_quantity_goal) > 0 ? 'positive' : 'negative' }}">
+                {{ percent((performanceLite.tendency.quantity_approved * 100 / performanceLite.tendency.quantity_total), tendency_quantity_goal)
+                >= 0 ? '+' : '' }}{{ percent((performanceLite.tendency.quantity_approved * 100 / performanceLite.tendency.quantity_total),
+                tendency_quantity_goal) }}%
               </div>
               <div class="value">
                 {{ (performanceLite.tendency.quantity_approved * 100 / performanceLite.tendency.quantity_total) | number : '1.1-1' }}%
@@ -108,7 +116,9 @@
             </div>
             <div class="split">
               <div class="percent {{ percent((performanceLite.tendency.budget_approved / (searchForm.controls.time_to_analyze.value / 30)), tendency_value_goal) > 0 ? 'positive' : 'negative' }}">
-                {{ percent((performanceLite.tendency.budget_approved / (searchForm.controls.time_to_analyze.value / 30)), tendency_value_goal) >= 0 ? '+' : '' }}{{ percent((performanceLite.tendency.budget_approved / (searchForm.controls.time_to_analyze.value / 30)), tendency_value_goal) }}%
+                {{ percent((performanceLite.tendency.budget_approved / (searchForm.controls.time_to_analyze.value / 30)), tendency_value_goal)
+                >= 0 ? '+' : '' }}{{ percent((performanceLite.tendency.budget_approved / (searchForm.controls.time_to_analyze.value
+                / 30)), tendency_value_goal) }}%
               </div>
               <div class="value">
                 {{ (performanceLite.tendency.budget_approved / (searchForm.controls.time_to_analyze.value / 30) | numberAbrev) }}
@@ -129,18 +139,20 @@
           <div class="title">aprovação atual mês % | $:</div>
           <div class="content">
             <div class="split">
-              <div
-                class="percent {{ percent((performanceLite.monthly_approval.quantity_approved * 100 / performanceLite.monthly_approval.quantity_total), monthly_approval_quantity_goal) > 0 ? 'positive' : 'negative' }}">
-                {{ percent((performanceLite.monthly_approval.quantity_approved * 100 / performanceLite.monthly_approval.quantity_total), monthly_approval_quantity_goal) >= 0 ? '+' : '' }}{{ percent((performanceLite.monthly_approval.quantity_approved * 100 / performanceLite.monthly_approval.quantity_total), monthly_approval_quantity_goal) }}%
+              <div class="percent {{ percent((performanceLite.monthly_approval.quantity_approved * 100 / performanceLite.monthly_approval.quantity_total), monthly_approval_quantity_goal) > 0 ? 'positive' : 'negative' }}">
+                {{ percent((performanceLite.monthly_approval.quantity_approved * 100 / performanceLite.monthly_approval.quantity_total),
+                monthly_approval_quantity_goal) >= 0 ? '+' : '' }}{{ percent((performanceLite.monthly_approval.quantity_approved
+                * 100 / performanceLite.monthly_approval.quantity_total), monthly_approval_quantity_goal) }}%
               </div>
               <div class="value">
-                {{ (performanceLite.monthly_approval.quantity_approved * 100 / performanceLite.monthly_approval.quantity_total) | number : '1.1-1' }}%
+                {{ (performanceLite.monthly_approval.quantity_approved * 100 / performanceLite.monthly_approval.quantity_total) | number
+                : '1.1-1' }}%
               </div>
             </div>
             <div class="split">
-              <div
-                class="percent {{ percent(performanceLite.monthly_approval.budget_approved, monthly_approval_value_goal) > 0 ? 'positive' : 'negative' }}">
-                {{ percent(performanceLite.monthly_approval.budget_approved, monthly_approval_value_goal) >= 0 ? '+' : '' }}{{ percent(performanceLite.monthly_approval.budget_approved, monthly_approval_value_goal) }}%
+              <div class="percent {{ percent(performanceLite.monthly_approval.budget_approved, monthly_approval_value_goal) > 0 ? 'positive' : 'negative' }}">
+                {{ percent(performanceLite.monthly_approval.budget_approved, monthly_approval_value_goal) >= 0 ? '+' : '' }}{{ percent(performanceLite.monthly_approval.budget_approved,
+                monthly_approval_value_goal) }}%
               </div>
               <div class="value">{{ performanceLite.monthly_approval.budget_approved | numberAbrev }}</div>
             </div>
@@ -160,16 +172,19 @@
           <div class="content">
             <div class="split">
               <div class="percent {{ percent(performanceLite.consolidated_annual.quantity_approved, consolidated_annual_quantity_goal) > 0 ? 'positive' : 'negative' }}">
-                {{ percent((performanceLite.consolidated_annual.quantity_approved * 100 / performanceLite.consolidated_annual.quantity_total), consolidated_annual_quantity_goal) >= 0 ? '+' : '' }}{{ percent((performanceLite.consolidated_annual.quantity_approved * 100 / performanceLite.consolidated_annual.quantity_total), consolidated_annual_quantity_goal) }}%
+                {{ percent((performanceLite.consolidated_annual.quantity_approved * 100 / performanceLite.consolidated_annual.quantity_total),
+                consolidated_annual_quantity_goal) >= 0 ? '+' : '' }}{{ percent((performanceLite.consolidated_annual.quantity_approved
+                * 100 / performanceLite.consolidated_annual.quantity_total), consolidated_annual_quantity_goal) }}%
               </div>
               <div class="value">
-                {{ (performanceLite.consolidated_annual.quantity_approved * 100 / performanceLite.consolidated_annual.quantity_total) | number : '1.1-1' }}%
+                {{ (performanceLite.consolidated_annual.quantity_approved * 100 / performanceLite.consolidated_annual.quantity_total) | number
+                : '1.1-1' }}%
               </div>
             </div>
             <div class="split">
-              <div
-                class="percent {{ percent(performanceLite.consolidated_annual.budget_approved, consolidated_annual_value_goal) > 0 ? 'positive' : 'negative' }}">
-                {{ percent(performanceLite.consolidated_annual.budget_approved, consolidated_annual_value_goal) >= 0 ? '+' : '' }}{{ percent(performanceLite.consolidated_annual.budget_approved, consolidated_annual_value_goal) }}%
+              <div class="percent {{ percent(performanceLite.consolidated_annual.budget_approved, consolidated_annual_value_goal) > 0 ? 'positive' : 'negative' }}">
+                {{ percent(performanceLite.consolidated_annual.budget_approved, consolidated_annual_value_goal) >= 0 ? '+' : '' }}{{ percent(performanceLite.consolidated_annual.budget_approved,
+                consolidated_annual_value_goal) }}%
               </div>
               <div class="value">{{ performanceLite.consolidated_annual.budget_approved | numberAbrev }}</div>
             </div>
