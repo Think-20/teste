@@ -35,7 +35,7 @@
               {{ client.fantasy_name }}
             </mat-option>
           </mat-autocomplete>
-          <mat-form-field class="col-md-2-4">
+          <mat-form-field *ngIf="isAdmin" class="col-md-2-4">
             <mat-select placeholder="Atendimento" formControlName="attendance" [compareWith]="compareAttendance">
               <mat-option></mat-option>
               <mat-option *ngFor="let attendance of attendances" [value]="attendance">

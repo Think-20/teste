@@ -89,7 +89,6 @@ export class JobListComponent implements OnInit {
     this.search = this.fb.control('')
     this.formCopy = this.fb.group({
       search: this.search,
-      attendance: this.fb.control({ value: '', disabled: !this.isAdmin }),
       creation: this.fb.control(''),
       job_type: this.fb.control(''),
       client: this.fb.control(''),
@@ -98,9 +97,11 @@ export class JobListComponent implements OnInit {
       final_date: this.fb.control(''),
     })
 
+    if(this.isAdmin)
+      this.formCopy.addControl('attendance', this.fb.control({ value: '' }))
+
     this.searchForm = Object.create(this.formCopy)
 
-    console.log(JSON.stringify(this.jobService.searchValue) == JSON.stringify({}), this.jobService.searchValue)
     if(JSON.stringify(this.jobService.searchValue) == JSON.stringify({})) {
       this.jobService.searchValue = this.searchForm.value
     } else {
