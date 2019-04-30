@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ValidatorFn } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
-import { MatSnackBar, MatCalendarHeader, MatDatepicker } from '@angular/material';
+import { MatSnackBar, MatDatepicker } from '@angular/material';
 import { JobActivity } from 'app/job-activities/job-activity.model';
 import { JobService } from 'app/jobs/job.service';
 import { BriefingService } from 'app/briefings/briefing.service';
@@ -18,8 +18,7 @@ import { DatePipe } from '@angular/common';
 import { JobStatusService } from '../../job-status/job-status.service';
 import { JobStatus } from '../../job-status/job-status.model';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
-import { Subscription, Observable } from 'rxjs';
-import { Pagination } from '../../shared/pagination.model';
+import { Subscription } from 'rxjs';
 import { ClientService } from '../../clients/client.service';
 import { Client } from '../../clients/client.model';
 import { JobType } from '../../job-types/job-type.model';
@@ -82,11 +81,9 @@ export class ScheduleFormComponent implements OnInit {
     private jobActivityService: JobActivityService,
     private jobStatusService: JobStatusService,
     private taskService: TaskService,
-    private briefingService: BriefingService,
     private employeeService: EmployeeService,
     private jobTypeService: JobTypeService,
     private clientService: ClientService,
-    private budgetService: BudgetService,
     private authService: AuthService,
     private router: Router,
     private datePipe: DatePipe,
@@ -590,7 +587,7 @@ export class ScheduleFormComponent implements OnInit {
       let flag = false
 
       for(let key in value) {
-        if(value[key] != '') flag = true
+        if(value[key] != '' && key != 'job') flag = true
       }
 
       if(flag)
