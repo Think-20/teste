@@ -34,7 +34,7 @@ export class JobService {
       job.client = client
     }
 
-    let name = job.not_client == null ? job.client.fantasy_name : job.not_client
+    let name = (job.not_client == '' || job.not_client == null) ? job.client.fantasy_name : job.not_client
     return name + ' - ' + job.event
   }
 
