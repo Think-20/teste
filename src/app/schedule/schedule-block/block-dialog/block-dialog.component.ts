@@ -43,10 +43,10 @@ export class BlockDialogComponent implements OnInit {
     this.blockForm.controls.date.setValue(new Date(this.data.date + "T00:00:00"))
 
     let scheduleDate = this.data.scheduleBlocks.filter((scheduleBlock) => {
-      return scheduleBlock.date == this.data.date
+      return scheduleBlock.date === this.data.date
     })
 
-    if(scheduleDate.length == 0) return;
+    if(scheduleDate.length === 0) return;
 
     let usersArray = []
     scheduleDate.pop().blocks.forEach(block => {
@@ -57,6 +57,8 @@ export class BlockDialogComponent implements OnInit {
       if(employee != undefined)
         usersArray.push(employee.user)
     })
+
+    this.blockForm.controls.users.setValue(usersArray)
   }
 
   selectAll() {
