@@ -42,7 +42,7 @@
           <div [@rowAppeared]="state" *ngIf="atendimento">
             <div class="sub-navbar">
               <a [routerLink]="['/clients']" [disabled]="hasNoPermission(user, '/clients/list')" mat-raised-button>Clientes</a>
-              <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Cronograma</a>
+              <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Agendamento</a>
               <a (click)="events = !events" mat-raised-button>Eventos</a>
               <div [@rowAppeared]="state" *ngIf="events">
                 <div class="sub-navbar">
@@ -60,7 +60,7 @@
           </a>
           <div [@rowAppeared]="state" *ngIf="criacao">
             <div class="sub-navbar">
-              <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Cronograma</a>
+              <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Agendamento</a>
               <a (click)="events = !events" mat-raised-button>Eventos</a>
               <div [@rowAppeared]="state" *ngIf="events">
                 <div class="sub-navbar">
@@ -106,7 +106,7 @@
               </div>
             </div>
             <div class="sub-navbar">
-              <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Cronograma</a>
+              <a mat-raised-button [routerLink]="['/schedule']" [disabled]="hasNoPermission(user, '/schedule')">Agendamento</a>
               <a (click)="events = !events" mat-raised-button>Eventos</a>
               <div [@rowAppeared]="state" *ngIf="events">
                 <div class="sub-navbar">
