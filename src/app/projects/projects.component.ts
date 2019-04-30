@@ -3,6 +3,8 @@ import { Job } from '../jobs/job.model';
 import { TaskService } from '../schedule/task.service';
 import { Task } from '../schedule/task.model';
 import { ActivatedRoute } from '@angular/router';
+import { ProjectFileService } from './project-file.service';
+import { API } from 'app/app.api';
 
 @Component({
   selector: 'cb-projects',
@@ -10,14 +12,14 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent implements OnInit {
-
   @Input() job: Job
   sortedTasks: Task[]
   expandedIndex: number = null
 
   constructor(
     private route: ActivatedRoute,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private projectFileService: ProjectFileService
   ) { }
 
   ngOnInit() {
@@ -55,6 +57,9 @@ export class ProjectsComponent implements OnInit {
     })
   }
 
-
+  downloadAll() {
+    let url = this.projectFileService.downloadAllUrl(this.job.task)
+    window.open(`${API}/${url}`, '_blank')
+  }
 
 }

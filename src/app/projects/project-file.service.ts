@@ -11,13 +11,15 @@ import { API } from '../app.api';
 import { ErrorHandler } from '../shared/error-handler.service';
 import { ProjectFile } from './project-file.model';
 import { AuthService } from '../login/auth.service';
-import { Pagination } from 'app/shared/pagination.model';
 import { Task } from '../schedule/task.model';
+import { FileUploadServiceInterface } from 'app/shared/file-upload/file-upload-service.interface';
+import { FileUploadInterface } from 'app/shared/file-upload/file-upload.interface';
 
 
 @Injectable()
-export class ProjectFileService {
+export class ProjectFileService implements FileUploadServiceInterface {
   data: ProjectFile = new ProjectFile
+  task: Task = null
 
   constructor(
     private http: Http,
@@ -25,21 +27,8 @@ export class ProjectFileService {
     private auth: AuthService
   ) { }
 
-  saveMultiple(projectFiles: ProjectFile[]): Observable<any> {
-    let url = 'project-files/save-multiple'
-
-    return this.http.post(
-      `${API}/${url}`,
-      JSON.stringify(projectFiles),
-      new RequestOptions()
-    )
-      .map(response => response.json())
-      .catch((err) => {
-        this.snackBar.open(ErrorHandler.message(err), '', {
-          duration: 3000
-        })
-        return ErrorHandler.capture(err)
-      })
+  create(): FileUploadInterface {
+    return new ProjectFile()
   }
 
   delete(id: number): Observable<any> {
@@ -55,38 +44,23 @@ export class ProjectFileService {
       })
   }
 
-  download(projectFile: ProjectFile) {
-    let url = this.downloadUrl(projectFile)
-
-    return this.http.get(`${API}/${url}`, { responseType: ResponseContentType.Blob }).map(
-      (res) => {
-        return new Blob([res.blob()], { type: res.headers.get('content-type') })
-      })
-      .catch((err) => {
-        this.snackBar.open(ErrorHandler.message(err), '', {
-          duration: 3000
-        })
-        return ErrorHandler.capture(err)
-      })
+  saveMultipleUrl(): string {
+    return 'project-files/save-multiple'
   }
 
-  downloadUrl(projectFile: ProjectFile) {
+  downloadUrl(projectFile: FileUploadInterface) {
     return `project-files/download/${projectFile.id}`
   }
 
-  previewFile(projectFile: ProjectFile) {
-    let url = this.previewFileUrl(projectFile)
-
-    window.open(`${API}/${url}`, '_blank')
+  viewUrl(projectFile: FileUploadInterface) {
+    return `${API}/project-files/view/${projectFile.id}`
   }
 
-  previewFileUrl(projectFile: ProjectFile) {
+  previewFileUrl(projectFile: FileUploadInterface) {
     return `project-files/download/${projectFile.id}?access_token=${this.auth.token()}&user_id=${this.auth.currentUser().id}`
   }
 
-  downloadAll(task: Task) {
-    let url = `project-files/download-all/${task.id}?access_token=${this.auth.token()}&user_id=${this.auth.currentUser().id}`
-
-    window.open(`${API}/${url}`, '_blank')
+  downloadAllUrl(task: Task) {
+    return `project-files/download-all/${task.id}?access_token=${this.auth.token()}&user_id=${this.auth.currentUser().id}`
   }
 }

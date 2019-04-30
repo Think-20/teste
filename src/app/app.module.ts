@@ -128,7 +128,6 @@ import { UserNotificationService } from './notification-bar/user-notification/us
 import { NotificationItemComponent } from './notification-bar/notification-item/notification-item.component';
 import { NotificationModule } from './notification-bar/notification.module';
 import { ProjectsComponent } from './projects/projects.component';
-import { ProjectFileFormComponent } from './projects/project-file-form/project-file-form.component';
 import { ProjectFileService } from './projects/project-file.service';
 import { ScheduleLineComponent } from './schedule/schedule-line/schedule-line.component';
 import { HttpClientModule } from '@angular/common/http';
@@ -171,6 +170,8 @@ import { SafePipe } from './shared/safe.pipe';
 import { NumberAbbreviationPipe } from './shared/number-abbreviation.pipe';
 import { SpecificationComponent } from './specification/specification.component';
 import { SpecificationFormComponent } from './specification/specification-form/specification-form.component';
+import { FileUploadComponent } from './shared/file-upload/file-upload.component';
+import { FileUploadService } from './shared/file-upload/file-upload.service';
 
 registerLocaleData(localePt);
 
@@ -238,7 +239,6 @@ registerLocaleData(localePt);
     ScheduleFormComponent,
     ReloadComponent,
     ProjectsComponent,
-    ProjectFileFormComponent,
     ScheduleLineComponent,
     ImageViewerComponent,
     ProposalsComponent,
@@ -275,7 +275,8 @@ registerLocaleData(localePt);
     EventsComponent,
     PerformanceReportLiteComponent,
     SpecificationComponent,
-    SpecificationFormComponent
+    SpecificationFormComponent,
+    FileUploadComponent
   ],
   imports: [
     CurrencyMaskModule,
@@ -359,6 +360,7 @@ registerLocaleData(localePt);
     FunctionalityService,
     PlaceService,
     EventService,
+    FileUploadService,
 
     MatDialog,
     MatSnackBar,

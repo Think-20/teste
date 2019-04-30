@@ -1,7 +1,8 @@
 import { Task } from "../schedule/task.model";
 import { Employee } from "../employees/employee.model";
+import { FileUploadInterface } from "app/shared/file-upload/file-upload.interface";
 
-export class ProjectFile {
+export class ProjectFile implements FileUploadInterface {
   id: number
   responsible_id?: number
   responsible?: Employee

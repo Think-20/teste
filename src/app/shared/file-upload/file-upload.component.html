@@ -1,12 +1,11 @@
-<mat-card [formGroup]="projectFileForm">
-  <cb-image-viewer [images]="images"></cb-image-viewer>
+<cb-image-viewer [images]="images"></cb-image-viewer>
+
+<div [formGroup]="fileForm">
   <mat-progress-bar *ngIf="progress > 0" mode="determinate" value="{{progress}}"></mat-progress-bar>
   <div class="row" formArrayName="files">
     <div *ngFor="let control of getFilesControls(); let i = index" class="col-md-2 project-image-container">
       <form [formGroup]="getFilesControls()[i]" novalidate autocomplete="off" class="flex item">
-        <div class="project-image"
-          (click)="openModal(i)"
-          [class.pdf]="getType(getFilesControls()[i]) == 'pdf'"
+        <div class="project-image" (click)="openModal(i)" [class.pdf]="getType(getFilesControls()[i]) == 'pdf'"
           [ngStyle]="{'background-image': 'url(' + getImageUrl(getFilesControls()[i]) + ')'}"></div>
         <input type="hidden" formControlName="original_name">
         <button type="button" class="download-file" mat-button (click)="previewFile(getFilesControls()[i].value)">
@@ -18,19 +17,18 @@
       </form>
     </div>
     <div class="col-md-12">
-      <input [disabled]="typeForm == 'show'" #inputFiles type="file" multiple accept="image/jpeg,application/pdf" (change)="uploadFile(inputFiles)"
-        style="display:none;" />
+      <input [disabled]="typeForm == 'show'" #inputFiles type="file" multiple accept="image/jpeg,application/pdf"
+        (change)="uploadFile(inputFiles)" style="display:none;" />
       <div class="text-right">
-        <button *ngIf="getFilesControls().length > 0" type="button" class="aux-button" (click)="inputFiles.click()" mat-button>
+        <button *ngIf="getFilesControls().length > 0" type="button" class="aux-button" (click)="inputFiles.click()"
+          mat-button>
           <mat-icon>add</mat-icon>
         </button>
-        <button mat-button matTooltip="Download completo" *ngIf="getFilesControls().length > 0" class="aux-button" type="button" (click)="downloadAll()">
-          <mat-icon>folder</mat-icon>
-        </button>
-        <button *ngIf="getFilesControls().length == 0" type="button" class="cb-button" (click)="inputFiles.click()" mat-raised-button>
+        <button *ngIf="getFilesControls().length == 0" type="button" class="cb-button" (click)="inputFiles.click()"
+          mat-raised-button>
           <mat-icon>cloud_upload</mat-icon> &nbsp; Adicionar imagens
         </button>
       </div>
     </div>
   </div>
-</mat-card>
+</div>
