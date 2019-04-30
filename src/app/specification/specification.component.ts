@@ -4,27 +4,20 @@ import { TaskService } from '../schedule/task.service';
 import { Task } from '../schedule/task.model';
 import { ActivatedRoute } from '@angular/router';
 
-import { API } from '../app.api';
-import { DomSanitizer } from '@angular/platform-browser';
-import { AuthService } from '../login/auth.service';
-
 @Component({
-  selector: 'cb-proposals',
-  templateUrl: './proposals.component.html',
-  styleUrls: ['./proposals.component.css']
+  selector: 'cb-specification',
+  templateUrl: './specification.component.html',
+  styleUrls: ['./specification.component.css']
 })
-export class ProposalsComponent implements OnInit {
+export class SpecificationComponent implements OnInit {
 
   @Input() job: Job
-  @Input() containerWidth: number
   sortedTasks: Task[]
   expandedIndex: number = null
 
   constructor(
     private route: ActivatedRoute,
-    private taskService: TaskService,
-    private sanitizer: DomSanitizer,
-    private auth: AuthService
+    private taskService: TaskService
   ) { }
 
   ngOnInit() {
@@ -48,13 +41,9 @@ export class ProposalsComponent implements OnInit {
     })
   }
 
-  getUrlMemorial(task: Task) {
-    return this.sanitizer.bypassSecurityTrustResourceUrl(`${API}/task/memorial/${task.id}?${this.auth.queryAccess()}`)
-  }
-
   sortTasks() {
     this.sortedTasks = this.job.tasks.filter((task) => {
-      return ['Memorial descritivo'].indexOf(task.job_activity.description) == 0
+      return ['Continuação', 'Detalhamento', 'Memorial descritivo'].indexOf(task.job_activity.description) == -1
     })
     this.sortedTasks = this.sortedTasks.sort((a, b) => {
       return a.available_date < b.available_date ? 1 : -1
@@ -65,5 +54,7 @@ export class ProposalsComponent implements OnInit {
       }
     })
   }
+
+
 
 }

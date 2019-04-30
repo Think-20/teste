@@ -169,6 +169,8 @@ import { EventService } from './events/event.service';
 import { PerformanceReportLiteComponent } from './reports/performance-report-lite/performance-report-lite.component';
 import { SafePipe } from './shared/safe.pipe';
 import { NumberAbbreviationPipe } from './shared/number-abbreviation.pipe';
+import { SpecificationComponent } from './specification/specification.component';
+import { SpecificationFormComponent } from './specification/specification-form/specification-form.component';
 
 registerLocaleData(localePt);
 
@@ -271,7 +273,9 @@ registerLocaleData(localePt);
     EventFormComponent,
     EventListComponent,
     EventsComponent,
-    PerformanceReportLiteComponent
+    PerformanceReportLiteComponent,
+    SpecificationComponent,
+    SpecificationFormComponent
   ],
   imports: [
     CurrencyMaskModule,
