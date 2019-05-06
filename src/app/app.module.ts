@@ -169,9 +169,10 @@ import { PerformanceReportLiteComponent } from './reports/performance-report-lit
 import { SafePipe } from './shared/safe.pipe';
 import { NumberAbbreviationPipe } from './shared/number-abbreviation.pipe';
 import { SpecificationComponent } from './specification/specification.component';
-import { SpecificationFormComponent } from './specification/specification-form/specification-form.component';
 import { FileUploadComponent } from './shared/file-upload/file-upload.component';
 import { FileUploadService } from './shared/file-upload/file-upload.service';
+import { SpecificationFileService } from './specification/specification-file.service';
+import { LoggerService } from './shared/logger.service';
 
 registerLocaleData(localePt);
 
@@ -275,7 +276,6 @@ registerLocaleData(localePt);
     EventsComponent,
     PerformanceReportLiteComponent,
     SpecificationComponent,
-    SpecificationFormComponent,
     FileUploadComponent
   ],
   imports: [
@@ -361,6 +361,8 @@ registerLocaleData(localePt);
     PlaceService,
     EventService,
     FileUploadService,
+    SpecificationFileService,
+    LoggerService,
 
     MatDialog,
     MatSnackBar,

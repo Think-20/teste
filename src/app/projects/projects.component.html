@@ -9,12 +9,12 @@
         </p>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <cb-file-upload class="projects" [properties]="{ task : task }" [files]="task.project_files" [fileServiceInterface]="projectFileService" [typeForm]="typeForm"></cb-file-upload>
+    <cb-file-upload [properties]="{ task : task }" [files]="task.project_files" [fileServiceInterface]="projectFileService" [typeForm]="typeForm"></cb-file-upload>
     <button mat-button matTooltip="Download completo" class="aux-button"
       type="button" (click)="downloadAll()">
       <mat-icon>folder</mat-icon>
     </button>
-    <cb-budget-form *ngIf="task?.project_files?.length > 0" class="projects" [task]="task" [job]="job"></cb-budget-form>
+    <cb-budget-form *ngIf="task?.project_files?.length > 0" class="inside-mat-card" [task]="task" [job]="job"></cb-budget-form>
   </mat-expansion-panel>
 </mat-accordion>
 

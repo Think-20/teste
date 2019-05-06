@@ -11,3 +11,12 @@ h3 {
   color: #AAA;
 }
 
+.aux-button {
+  z-index: 10;
+  min-width: 40px !important;
+  margin-top: 10px;
+  padding: 0px !important;
+  color: rgba(0,0,0,0.2);
+  top: -45px;
+  position: relative;
+}

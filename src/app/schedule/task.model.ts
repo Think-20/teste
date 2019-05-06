@@ -4,6 +4,7 @@ import { Job } from "../jobs/job.model";
 import { TaskItem } from "./task-item.model";
 import { ProjectFile } from "../projects/project-file.model";
 import { Budget } from "../budgets/budget.model";
+import { SpecificationFile } from "app/specification/specification-file.model";
 
 export class Task {
   id: number
@@ -18,6 +19,7 @@ export class Task {
   reopened?: number
   items?: TaskItem[]
   project_files?: ProjectFile[]
+  specification_files?: SpecificationFile[]
   budget?: Budget
   project_file_done?: number
   task_id?: number

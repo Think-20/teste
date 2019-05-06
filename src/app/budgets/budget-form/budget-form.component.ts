@@ -140,13 +140,13 @@ export class BudgetFormComponent implements OnInit {
 
     this.budgetService.save(budget).subscribe(data => {
       if (!data.status) {
-        let snack = this.snackBar.open(data.message, '', {
+        this.snackBar.open(data.message, '', {
           duration: 3000
         })
         return
       }
 
-      let snack = this.snackBar.open('Orçamento salvo com sucesso!', '', {
+      this.snackBar.open('Orçamento salvo com sucesso!', '', {
         duration: 3000
       })
       this.budget = data.budget as Budget

@@ -8,6 +8,7 @@ import { FileUploadServiceInterface } from './file-upload-service.interface';
 import { FileUploadService } from './file-upload.service';
 import { ImageViewerComponent } from '../../shared/image-viewer/image-viewer.component';
 import { GALLERY_IMAGE } from 'ngx-image-gallery';
+import { LoggerService } from '../logger.service';
 
 @Component({
   selector: 'cb-file-upload',
@@ -28,9 +29,15 @@ export class FileUploadComponent implements OnInit {
     private formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
     private fileUploadService: FileUploadService,
+    private logger: LoggerService,
     private uploadFileService: UploadFileService) { }
 
   ngOnInit() {
+    if( [null, undefined].indexOf(this.fileServiceInterface) >= 0) {
+      this.logger.error('Você deve passar um fileServiceInterface válido para o componente file-upload.')
+      return;
+    }
+
     this.fileForm = this.formBuilder.group({
       files: this.formBuilder.array([]),
     })

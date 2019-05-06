@@ -275,6 +275,10 @@ h1, h2, h3, h4 {
   box-shadow: none !important;
 }
 
+.inside-mat-card .mat-card {
+  padding: 5px 0px !important;
+}
+
 .mat-form-field-flex, .mat-select-placeholder, .mat-select-value-text, .mat-radio-label-content {
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif !important;
   -webkit-font-smoothing: antialiased;

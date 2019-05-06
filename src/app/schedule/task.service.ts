@@ -15,6 +15,7 @@ import { Pagination } from 'app/shared/pagination.model';
 import { JobActivity } from '../job-activities/job-activity.model';
 import { DataInfo } from '../shared/data-info.model';
 import { DatePipe } from '@angular/common';
+import { StringHelper } from 'app/shared/string-helper.model';
 
 
 @Injectable()
@@ -36,16 +37,10 @@ export class TaskService {
       if(noAbbreviation)
         jobDescription = 'Memorial descritivo'
 
-      return jobDescription + ' de ' + task.task.job_activity.description.toLowerCase() + ' ' + this.padChar(task.task)
+      return jobDescription + ' de ' + task.task.job_activity.description.toLowerCase() + ' ' + StringHelper.padChar(task.task.reopened)
     }
 
-    return task.job_activity.description +  ' ' + this.padChar(task)
-  }
-
-  padChar(task: Task) {
-    let size = 2
-    let text = task.reopened
-    return (task.reopened > 0 ? (' ' + String('0').repeat(size) + text).substr( (size * -1), size) : '')
+    return task.job_activity.description +  ' ' + StringHelper.padChar(task.reopened)
   }
 
   loadFormData(): Observable<any> {

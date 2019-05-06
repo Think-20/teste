@@ -3,6 +3,8 @@ import { Job } from '../jobs/job.model';
 import { TaskService } from '../schedule/task.service';
 import { Task } from '../schedule/task.model';
 import { ActivatedRoute } from '@angular/router';
+import { SpecificationFileService } from './specification-file.service';
+import { StringHelper } from 'app/shared/string-helper.model';
 
 @Component({
   selector: 'cb-specification',
@@ -17,6 +19,7 @@ export class SpecificationComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private specificationFileService: SpecificationFileService,
     private taskService: TaskService
   ) { }
 
@@ -28,6 +31,20 @@ export class SpecificationComponent implements OnInit {
   ngOnChanges() {
     this.sortTasks()
     this.loadTaskFromRoute()
+  }
+
+  description(task: Task) {
+    let text = ''
+
+    if(task.specification_files.length == 0) return text
+
+    if(task.job_activity.description == 'Projeto')
+      text = '- Memorial descritivo'
+    else if(task.reopened > 0) {
+      text = '- Memorial ' + StringHelper.padChar(task.reopened)
+    }
+
+    return text
   }
 
   loadTaskFromRoute() {
@@ -43,7 +60,7 @@ export class SpecificationComponent implements OnInit {
 
   sortTasks() {
     this.sortedTasks = this.job.tasks.filter((task) => {
-      return ['Continuação', 'Detalhamento', 'Memorial descritivo'].indexOf(task.job_activity.description) == -1
+      return ['Continuação', 'Detalhamento', 'Memorial descritivo', 'Orçamento'].indexOf(task.job_activity.description) == -1
     })
     this.sortedTasks = this.sortedTasks.sort((a, b) => {
       return a.available_date < b.available_date ? 1 : -1
