@@ -168,11 +168,15 @@ import { EventService } from './events/event.service';
 import { PerformanceReportLiteComponent } from './reports/performance-report-lite/performance-report-lite.component';
 import { SafePipe } from './shared/safe.pipe';
 import { NumberAbbreviationPipe } from './shared/number-abbreviation.pipe';
+<<<<<<< HEAD
 import { SpecificationComponent } from './specification/specification.component';
 import { FileUploadComponent } from './shared/file-upload/file-upload.component';
 import { FileUploadService } from './shared/file-upload/file-upload.service';
 import { SpecificationFileService } from './specification/specification-file.service';
 import { LoggerService } from './shared/logger.service';
+=======
+import { RouterExtService } from './shared/router-ext.service';
+>>>>>>> v1.17.5.3
 
 registerLocaleData(localePt);
 
@@ -360,9 +364,13 @@ registerLocaleData(localePt);
     FunctionalityService,
     PlaceService,
     EventService,
+<<<<<<< HEAD
     FileUploadService,
     SpecificationFileService,
     LoggerService,
+=======
+    RouterExtService,
+>>>>>>> v1.17.5.3
 
     MatDialog,
     MatSnackBar,

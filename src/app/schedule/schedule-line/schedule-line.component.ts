@@ -204,10 +204,10 @@ export class ScheduleLineComponent implements OnInit {
       className += ' other-attendance'
 
     if(isObject(task.job_activity)
-      && ['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0
+      && ['Projeto', 'Orçamento', 'Outsider'].indexOf(task.job_activity.description) >= 0
       && this.jobDisplay(task, chrono).indexOf('Continuação de') == -1) {
 
-        if(task.job.status.id == 3 && (['Projeto'].indexOf(task.job_activity.description) >= 0))
+        if(task.job.status.id == 3 && (['Projeto', 'Outsider'].indexOf(task.job_activity.description) >= 0))
           className += ' approved-creation'
 
         if(task.job.status.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0))
