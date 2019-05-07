@@ -34,6 +34,7 @@ import { JobStatus } from 'app/job-status/job-status.model';
 import { TaskService } from '../../schedule/task.service';
 import { DatePipe, Location } from '@angular/common';
 import { ObjectValidator } from '../../shared/custom-validators';
+import { RouterExtService } from 'app/shared/router-ext.service';
 
 @Component({
   selector: 'cb-job-form',
@@ -72,7 +73,7 @@ export class JobFormComponent implements OnInit {
     private authService: AuthService,
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
-    private dialog: MatDialog,
+    private routerExtService: RouterExtService,
     private route: ActivatedRoute,
     private location: Location,
     private router: Router,
@@ -625,14 +626,16 @@ export class JobFormComponent implements OnInit {
         duration: data.status ? 1000 : 5000
       }).afterDismissed().subscribe(observer => {
         if (data.status) {
-          this.location.back()
-          /*
-          this.router.navigate(['/schedule'], {
-            queryParams: {
-              date: this.datePipe.transform(job.available_date_creation, 'yyyy-MM-dd')
-            }
-          })
-          */
+          console.log(this.routerExtService.getPreviousUrl())
+          if( this.routerExtService.getPreviousUrl().indexOf('schedule') >= 0 ) {
+            this.router.navigate(['/schedule'], {
+              queryParams: {
+                date: this.datePipe.transform(job.available_date_creation, 'yyyy-MM-dd')
+              }
+            })
+          } else {
+            this.location.back()
+          }
         }
       })
 
