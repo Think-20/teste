@@ -169,6 +169,7 @@ import { EventService } from './events/event.service';
 import { PerformanceReportLiteComponent } from './reports/performance-report-lite/performance-report-lite.component';
 import { SafePipe } from './shared/safe.pipe';
 import { NumberAbbreviationPipe } from './shared/number-abbreviation.pipe';
+import { RouterExtService } from './shared/router-ext.service';
 
 registerLocaleData(localePt);
 
@@ -355,6 +356,7 @@ registerLocaleData(localePt);
     FunctionalityService,
     PlaceService,
     EventService,
+    RouterExtService,
 
     MatDialog,
     MatSnackBar,
