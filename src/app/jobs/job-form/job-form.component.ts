@@ -542,6 +542,8 @@ export class JobFormComponent implements OnInit {
       return;
     }
 
+    let jobActivityDescription = (<JobActivity> this.jobForm.controls.job_activity.value).description
+
     let task = this.jobService.data.task
     this.buttonEnable = false
 
@@ -569,8 +571,19 @@ export class JobFormComponent implements OnInit {
         if (data.status) {
           this.job = data.job as Job
           task.job = this.job
+
           this.taskService.save(task).subscribe((data) => {
             if (data.status) {
+              if(jobActivityDescription == 'Orçamento') {
+                let snack = this.snackBar.open('Salvo com sucesso, redirecionando para upload do memorial.', '', {
+                  duration: 3000
+                })
+                snack.afterDismissed().subscribe(() => {
+                  this.router.navigateByUrl('/jobs/edit/' + this.job.id + '?tab=specification')
+                  return
+                })
+              }
+
               let snack = this.snackBar.open('Salvo com sucesso, redirecionando para o cronograma.', '', {
                 duration: 3000
               })

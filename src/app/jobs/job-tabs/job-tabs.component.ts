@@ -37,7 +37,7 @@ export class JobTabsComponent implements OnInit {
           this.selectedIndex = 2
           break
         }
-        case 'proposal' :{
+        case 'specification' :{
           this.selectedIndex = 3
           break
         }
