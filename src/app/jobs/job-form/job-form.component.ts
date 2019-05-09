@@ -580,8 +580,8 @@ export class JobFormComponent implements OnInit {
                 })
                 snack.afterDismissed().subscribe(() => {
                   this.router.navigateByUrl('/jobs/edit/' + this.job.id + '?tab=specification')
-                  return
                 })
+                return
               }
 
               let snack = this.snackBar.open('Salvo com sucesso, redirecionando para o cronograma.', '', {
