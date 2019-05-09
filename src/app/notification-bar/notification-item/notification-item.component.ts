@@ -73,6 +73,9 @@ export class NotificationItemComponent implements OnInit {
       case 'Entrega de projeto': {
         return this.goToProject(notification.info)
       }
+      case 'Entrega de memorial': {
+        return this.goToSpecification(notification.info)
+      }
       case 'Cadastro de tarefa': {
         return this.goToTask(notification.info)
       }
@@ -114,6 +117,22 @@ export class NotificationItemComponent implements OnInit {
       if(task) {
         this.router.navigate([`/jobs/show/${task.job.id}`], {
           queryParams: { tab: 'project', taskId: taskId }
+        })
+      } else {
+        this.snackbar.open('A tarefa que você busca não existe.', '', {
+          duration: 3000
+        })
+      }
+    })
+  }
+
+  goToSpecification(taskId) {
+    let snackbar = this.snackbar.open('Aguarde...')
+    this.taskService.task(taskId).subscribe((task) => {
+      snackbar.dismiss()
+      if(task) {
+        this.router.navigate([`/jobs/show/${task.job.id}`], {
+          queryParams: { tab: 'specification', taskId: taskId }
         })
       } else {
         this.snackbar.open('A tarefa que você busca não existe.', '', {
