@@ -63,27 +63,27 @@ export class ImageViewerComponent implements OnInit {
   // EVENTS
   // callback on gallery opened
   galleryOpened(index) {
-    console.info('Gallery opened at index ', index);
+    //console.info('Gallery opened at index ', index);
   }
 
   // callback on gallery closed
   galleryClosed() {
-    console.info('Gallery closed.');
+    //console.info('Gallery closed.');
   }
 
   // callback on gallery image clicked
   galleryImageClicked(index) {
-    console.info('Gallery image clicked with index ', index);
+    //console.info('Gallery image clicked with index ', index);
   }
 
   // callback on gallery image changed
   galleryImageChanged(index) {
-    console.info('Gallery image changed to index ', index);
+    //console.info('Gallery image changed to index ', index);
   }
 
   // callback on user clicked delete button
   deleteImage(index) {
-    console.info('Delete image at index ', index);
+    //console.info('Delete image at index ', index);
   }
 
 }
