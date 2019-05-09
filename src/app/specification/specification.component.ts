@@ -15,7 +15,7 @@ export class SpecificationComponent implements OnInit {
 
   @Input() job: Job
   sortedTasks: Task[]
-  expandedIndex: number = null
+  expandedIndex: number = 0
 
   constructor(
     private route: ActivatedRoute,
