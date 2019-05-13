@@ -133,7 +133,7 @@ export class ScheduleFormComponent implements OnInit {
 
     let snack = this.snackBar.open('Carregando informações...')
     this.taskService.task(taskId).subscribe(task => {
-      this.taskService.getNextAvailableDate(this.datePipe.transform(date, 'yyyy-MM-dd'), 1, task.job_activity).subscribe((data) => {
+      this.taskService.getNextAvailableDate(this.datePipe.transform(date, 'yyyy-MM-dd'), 1, task.job_activity, 0).subscribe((data) => {
         this.responsibles = data.responsibles
         this.scheduleForm.controls.responsible.setValue(task.responsible)
         snack.dismiss()
@@ -165,8 +165,6 @@ export class ScheduleFormComponent implements OnInit {
 
       if (jobActivity.description == 'Modificação')
         this.addModificationEvents()
-      else if (jobActivity.description == 'Orçamento')
-        this.addBudgetEvents()
       else if (jobActivity.description == 'Detalhamento')
         this.addDetailingEvents()
       else if (jobActivity.description == 'Continuação')
@@ -338,13 +336,6 @@ export class ScheduleFormComponent implements OnInit {
     }))
   }
 
-  addBudgetEvents() {
-    this.clearEvents()
-
-    this.scheduleForm.controls.responsible.enable()
-    this.scheduleForm.controls.budget_value.disable()
-  }
-
   addDetailingEvents() {
     this.clearEvents()
     this.enableSearchForm()
@@ -391,7 +382,6 @@ export class ScheduleFormComponent implements OnInit {
 
   addOutsiderEvents() {
     this.clearEvents()
-    this.enableSearchForm()
 
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.enable()
@@ -400,7 +390,8 @@ export class ScheduleFormComponent implements OnInit {
       this.scheduleForm.controls.budget_value.setValue(390000.01)
     }
 
-    let snackbar
+    /*
+    this.enableSearchForm()
     let controls = this.searchForm.controls
 
     this.params = () => {
@@ -419,16 +410,17 @@ export class ScheduleFormComponent implements OnInit {
     }
 
     this.loadJobs()
+    */
   }
 
   addOtherEvents() {
     this.clearEvents()
-    this.enableSearchForm()
 
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.enable()
 
-    let snackbar
+    /*
+    this.enableSearchForm()
     let controls = this.searchForm.controls
 
     this.params = () => {
@@ -447,6 +439,7 @@ export class ScheduleFormComponent implements OnInit {
     }
 
     this.loadJobs()
+    */
   }
 
   addContinuationEvents() {
@@ -484,11 +477,13 @@ export class ScheduleFormComponent implements OnInit {
     finDate.setDate(finDate.getDate() + 30)
     this.availableDatepicker.close()
     let snack = this.snackBar.open('Aguarde enquanto carregamos as datas disponíveis')
+    let budgetValue = this.scheduleForm.controls.budget_value.value > 0 ? this.scheduleForm.controls.budget_value.value : 0
     this.taskService.getAvailableDates({
       iniDate: date.getFullYear() + '-' + (date.getMonth() + 1) + '-01',
       finDate: finDate.getFullYear() + '-' + (finDate.getMonth() + 1) + '-31',
       job_activity: this.scheduleForm.controls.job_activity.value,
       duration: this.scheduleForm.controls.duration.value,
+      budget_value: budgetValue,
       only_employee: onlyEmployee
     }).subscribe(data => {
       this.availableDates = data.dates
@@ -683,8 +678,9 @@ export class ScheduleFormComponent implements OnInit {
     let dateString = now.getFullYear() + '-' + (now.getMonth() + 1) + '-' + now.getDate()
     let estimatedTime = this.scheduleForm.controls.duration.value
     let jobActivity = this.scheduleForm.controls.job_activity.value
+    let budgetValue = this.scheduleForm.controls.budget_value.value > 0 ? this.scheduleForm.controls.budget_value.value : 0
     this.nextDateMessage = 'Aguarde...'
-    this.taskService.getNextAvailableDate(dateString, estimatedTime, jobActivity).subscribe((data) => {
+    this.taskService.getNextAvailableDate(dateString, estimatedTime, jobActivity, budgetValue).subscribe((data) => {
       if( ! this.isAdmin ) {
         this.responsibles = data.available_responsibles
         this.scheduleForm.controls.responsible.setValue(data.available_responsibles[0])

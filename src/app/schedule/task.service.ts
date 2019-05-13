@@ -119,8 +119,8 @@ export class TaskService {
           })
   }
 
-  getNextAvailableDate(availableDate: string, estimatedTime: number, jobActivity: JobActivity): Observable<any> {
-      let url = `tasks/get-next-available-date/${availableDate}/${estimatedTime}/${jobActivity.description}`
+  getNextAvailableDate(availableDate: string, estimatedTime: number, jobActivity: JobActivity, budgetValue: number): Observable<any> {
+      let url = `tasks/get-next-available-date/${availableDate}/${estimatedTime}/${jobActivity.description}/${budgetValue}`
 
       return this.http.get(`${API}/${url}`)
           .map(response => response.json())
