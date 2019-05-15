@@ -122,15 +122,18 @@ export class JobListComponent implements OnInit {
         let controls = this.searchForm.controls
         let status = controls.status.value != undefined ? controls.status.value.id : null
         let clientName = controls.client.value != '' ? controls.client.value : controls.search.value
+        let attendanceFilter = this.isAdmin ? { attendance: controls.attendance.value } : {}
         this.params = {
           clientName: clientName,
           status: status,
-          attendance: controls.attendance.value,
+          ...attendanceFilter,
           creation: controls.creation.value,
           job_type: controls.job_type.value,
           final_date: controls.final_date.value,
           initial_date: controls.initial_date.value,
         }
+
+        console.log(this.params)
 
         this.loadJobs(this.params, 1)
 
