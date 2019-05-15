@@ -133,6 +133,8 @@ export class JobListComponent implements OnInit {
           initial_date: controls.initial_date.value,
         }
 
+        console.log(this.params)
+
         this.loadJobs(this.params, 1)
 
         this.pageIndex = 0
