@@ -55,7 +55,7 @@ export class Job {
     task?: Task
     place?: string
     tasks?: Task[]
-    available_date_creation?: string
+    available_date?: string
     attendance_responsible?: Employee
     creation_responsible?: Employee
     detailing_responsible?: Employee

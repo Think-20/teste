@@ -123,7 +123,7 @@ export class JobFormComponent implements OnInit {
       approval_expectation_rate: this.formBuilder.control('', [Validators.required]),
       history: this.formBuilder.control('0/0'),
       note: this.formBuilder.control('', [Validators.max(5000)]),
-      available_date_creation: this.formBuilder.control({value: '', disabled: true}),
+      available_date: this.formBuilder.control({value: '', disabled: true}),
       attendance_responsible: this.formBuilder.control({value: '', disabled: true}),
       creation_responsible: this.formBuilder.control({value: '', disabled: true}),
       detailing_responsible: this.formBuilder.control({value: '', disabled: true}),
@@ -285,12 +285,12 @@ export class JobFormComponent implements OnInit {
 
     if(job.job_activity.description == 'Orçamento') {
       this.jobForm.controls.creation_responsible.setValue('Externa')
-      this.jobForm.controls.available_date_creation.setValue(job.task.available_date)
+      this.jobForm.controls.available_date.setValue(job.task.available_date)
       this.jobForm.controls.budget_responsible.setValue(job.task.responsible.name)
       return
     }
 
-    this.jobForm.controls.available_date_creation.setValue(job.task.available_date)
+    this.jobForm.controls.available_date.setValue(job.task.available_date)
     this.jobForm.controls.creation_responsible.setValue(job.task.responsible.name)
   }
 
@@ -395,14 +395,14 @@ export class JobFormComponent implements OnInit {
 
     if(job.budget_responsible != null) {
       this.jobForm.controls.budget_responsible.setValue(job.budget_responsible.name)
-      this.jobForm.controls.available_date_creation.setValue(new Date(job.available_date_creation + "T00:00:00"))
+      this.jobForm.controls.available_date.setValue(new Date(job.available_date + "T00:00:00"))
     } else {
       this.jobForm.controls.budget_responsible.setValue('Sem informações')
     }
 
     if(job.creation_responsible != null) {
       this.jobForm.controls.creation_responsible.setValue(job.creation_responsible.name)
-      this.jobForm.controls.available_date_creation.setValue(new Date(job.available_date_creation + "T00:00:00"))
+      this.jobForm.controls.available_date.setValue(new Date(job.available_date + "T00:00:00"))
     } else {
       this.jobForm.controls.creation_responsible.setValue('Externo')
     }
@@ -643,7 +643,7 @@ export class JobFormComponent implements OnInit {
           if( this.routerExtService.getPreviousUrl().indexOf('schedule') >= 0 ) {
             this.router.navigate(['/schedule'], {
               queryParams: {
-                date: this.datePipe.transform(job.available_date_creation, 'yyyy-MM-dd')
+                date: this.datePipe.transform(job.available_date, 'yyyy-MM-dd')
               }
             })
           } else {
