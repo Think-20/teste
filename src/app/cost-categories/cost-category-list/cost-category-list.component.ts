@@ -5,6 +5,9 @@ import { MatSnackBar } from '@angular/material';
 
 import { CostCategoryService } from '../cost-category.service';
 import { CostCategory } from '../cost-category.model';
+import { Pagination } from 'app/shared/pagination.model';
+import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
+import { DataInfo } from 'app/shared/data-info.model';
 
 @Component({
   selector: 'cb-costCategory-list',
@@ -31,8 +34,15 @@ export class CostCategoryListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
+  formCopy: FormGroup
   search: FormControl
   costCategories: CostCategory[] = []
+  dataInfo: DataInfo
+  pagination: Pagination
+  pageIndex: number
+  params = {}
+  filter = false
+  hasFilterActive = false
   searching = false
 
   constructor(
@@ -42,22 +52,90 @@ export class CostCategoryListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.pageIndex = this.costCategoryService.pageIndex
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  createForm() {
     this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
+    this.formCopy = this.fb.group({
       search: this.search
     })
 
-    let snackBar = this.snackBar.open('Carregando categorias de custo...')
+    this.searchForm = Object.create(this.formCopy)
 
-    this.costCategoryService.costCategories().subscribe(costCategories => {
-      this.costCategories = costCategories
+    if(JSON.stringify(this.costCategoryService.searchValue) == JSON.stringify({})) {
+      this.costCategoryService.searchValue = this.searchForm.value
+    } else {
+      this.searchForm.setValue(this.costCategoryService.searchValue)
+    }
+
+    this.searchForm.valueChanges
+      .pipe(distinctUntilChanged(), debounceTime(500))
+      .subscribe((searchValue) => {
+        let controls = this.searchForm.controls
+
+        this.params = {
+          search: controls.search.value
+        }
+
+        this.loadCostCategories(this.params, 1)
+
+        this.pageIndex = 0
+        this.costCategoryService.pageIndex = 0
+        this.costCategoryService.searchValue = searchValue
+        this.updateFilterActive()
+      })
+  }
+
+  updateFilterActive() {
+    if (JSON.stringify(this.costCategoryService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.hasFilterActive = false
+    } else {
+      this.hasFilterActive = true
+    }
+  }
+
+  clearFilter() {
+    this.costCategoryService.searchValue = {}
+    this.costCategoryService.pageIndex = 0
+    this.pageIndex = 0
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  loadInitialData() {
+    if (JSON.stringify(this.costCategoryService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.loadCostCategories({}, this.pageIndex + 1)
+    } else {
+      this.loadCostCategories(this.costCategoryService.searchValue, this.pageIndex + 1)
+    }
+
+    this.updateFilterActive()
+  }
+
+  loadCostCategories(params, page: number) {
+    let snackBar = this.snackBar.open('Carregando categorias de custo...')
+    this.searching = true
+    this.costCategoryService.costCategories(params, page).subscribe(dataInfo => {
+      this.pagination = dataInfo.pagination
+      this.costCategories = dataInfo.pagination.data
+      this.searching = false
       snackBar.dismiss()
     })
+  }
 
-    this.search.valueChanges
-      .debounceTime(500)
-      .subscribe(value => {
-        this.costCategoryService.costCategories(value).subscribe(costCategories => this.costCategories = costCategories)
+  changePage($event) {
+    this.searching = true
+    this.costCategories = []
+    this.costCategoryService.costCategories(this.costCategoryService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
+      this.dataInfo = dataInfo
+      this.pagination = dataInfo.pagination
+      this.costCategories = dataInfo.pagination.data
+      this.searching = false
+      this.pageIndex = $event.pageIndex
+      this.costCategoryService.pageIndex = this.pageIndex
     })
   }
 

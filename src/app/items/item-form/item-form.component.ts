@@ -26,6 +26,7 @@ import { API } from '../../app.api';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
 import { isObject } from 'util';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'cb-item-form',
@@ -58,7 +59,7 @@ export class ItemFormComponent implements OnInit {
   compositeItem: boolean = false
   items: Observable<Item[]>
   itemCategories: Observable<ItemCategory[]>
-  costCategories: Observable<CostCategory[]>
+  costCategories: CostCategory[]
   measures: Observable<Measure[]>
   providers: Provider[]
   pricingsArray: FormArray
@@ -107,8 +108,13 @@ export class ItemFormComponent implements OnInit {
       this.itemCategories = this.itemCategoryService.itemCategories(itemCategory)
     })
 
-    this.itemForm.get('cost_category').valueChanges.subscribe(costCategory => {
-      this.costCategories = this.costCategoryService.costCategories(costCategory)
+    this.itemForm.get('cost_category').valueChanges
+    .pipe(debounceTime(500), distinctUntilChanged())
+    .subscribe(costCategory => {
+      if(costCategory == '' || isObject(costCategory)) return
+      this.costCategoryService.costCategories({ search: costCategory, pagination: false }).subscribe(dataInfo => {
+        this.costCategories = dataInfo.pagination.data
+      })
     })
 
     this.itemForm.get('item_type').valueChanges.subscribe(value => {
