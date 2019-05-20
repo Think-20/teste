@@ -58,7 +58,7 @@ export class ItemFormComponent implements OnInit {
   itemForm: FormGroup
   compositeItem: boolean = false
   items: Observable<Item[]>
-  itemCategories: Observable<ItemCategory[]>
+  itemCategories: ItemCategory[]
   costCategories: CostCategory[]
   measures: Observable<Measure[]>
   providers: Provider[]
@@ -104,13 +104,26 @@ export class ItemFormComponent implements OnInit {
       childItems: this.formBuilder.array([])
     })
 
-    this.itemForm.get('item_category').valueChanges.subscribe(itemCategory => {
-      this.itemCategories = this.itemCategoryService.itemCategories(itemCategory)
+    let snackbar = null
+
+    this.itemForm.get('item_category').valueChanges
+    .do(() => snackbar = this.snackBar.open('Pesquisando categoria de item...'))
+    .pipe(debounceTime(500), distinctUntilChanged())
+    .subscribe(itemDescription => {
+      snackbar.dismiss()
+
+      if(itemDescription == '' || isObject(itemDescription)) return
+      this.itemCategoryService.itemCategories({ search: itemDescription, paginate: false }).subscribe(dataInfo => {
+        this.itemCategories = dataInfo.pagination.data
+      })
     })
 
     this.itemForm.get('cost_category').valueChanges
+    .do(() => snackbar = this.snackBar.open('Pesquisando categoria de custo...'))
     .pipe(debounceTime(500), distinctUntilChanged())
     .subscribe(costCategory => {
+      snackbar.dismiss()
+
       if(costCategory == '' || isObject(costCategory)) return
       this.costCategoryService.costCategories({ search: costCategory, pagination: false }).subscribe(dataInfo => {
         this.costCategories = dataInfo.pagination.data

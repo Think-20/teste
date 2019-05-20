@@ -13,6 +13,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
 import 'rxjs/add/operator/do';
 import { ErrorHandler } from '../../shared/error-handler.service';
+import { isObject } from 'util';
 
 @Component({
   selector: 'cb-item-category-form',
@@ -40,7 +41,7 @@ export class ItemCategoryFormComponent implements OnInit {
   rowAppearedState = 'ready'
   itemCategory: ItemCategory
   itemCategoryForm: FormGroup
-  itemCategories: Observable<ItemCategory[]>
+  itemCategories: ItemCategory[]
 
   constructor(
     private itemCategoryService: ItemCategoryService,
@@ -70,8 +71,11 @@ export class ItemCategoryFormComponent implements OnInit {
       })
       .debounceTime(500)
       .subscribe(itemDescription => {
-        this.itemCategories = this.itemCategoryService.itemCategories(itemDescription)
-        Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
+        if(itemDescription == '' || isObject(itemDescription)) return
+        this.itemCategoryService.itemCategories({ search: itemDescription, paginate: false }).subscribe(dataInfo => {
+          this.itemCategories = dataInfo.pagination.data
+          snackBarStateCharging.dismiss()
+        })
       })
 
     if(this.typeForm === 'edit') {

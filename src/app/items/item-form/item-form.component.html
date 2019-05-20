@@ -37,7 +37,7 @@
             </mat-error>
           </mat-form-field>
           <mat-autocomplete #autocompleteItemCategory="matAutocomplete" [displayWith]="displayItemCategory">
-              <mat-option *ngFor="let itemCategory of itemCategories | async" [value]="itemCategory">
+              <mat-option *ngFor="let itemCategory of itemCategories" [value]="itemCategory">
                 {{ itemCategory.description }}
               </mat-option>
           </mat-autocomplete>

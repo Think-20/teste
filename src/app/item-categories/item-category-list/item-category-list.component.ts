@@ -5,6 +5,9 @@ import { MatSnackBar } from '@angular/material';
 
 import { ItemCategoryService } from '../item-category.service';
 import { ItemCategory } from '../item-category.model';
+import { Pagination } from 'app/shared/pagination.model';
+import { DataInfo } from 'app/shared/data-info.model';
+import { distinctUntilChanged, debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'cb-itemCategory-list',
@@ -12,16 +15,16 @@ import { ItemCategory } from '../item-category.model';
   styleUrls: ['./item-category-list.component.css'],
   animations: [
     trigger('rowAppeared', [
-      state('ready', style({opacity: 1})),
+      state('ready', style({ opacity: 1 })),
       transition('void => ready', animate('300ms 0s ease-in', keyframes([
-        style({opacity: 0, transform: 'translateX(-30px)', offset: 0}),
-        style({opacity: 0.8, transform: 'translateX(10px)', offset: 0.8}),
-        style({opacity: 1, transform: 'translateX(0px)', offset: 1})
+        style({ opacity: 0, transform: 'translateX(-30px)', offset: 0 }),
+        style({ opacity: 0.8, transform: 'translateX(10px)', offset: 0.8 }),
+        style({ opacity: 1, transform: 'translateX(0px)', offset: 1 })
       ]))),
       transition('ready => void', animate('300ms 0s ease-out', keyframes([
-        style({opacity: 1, transform: 'translateX(0px)', offset: 0}),
-        style({opacity: 0.8, transform: 'translateX(-10px)', offset: 0.2}),
-        style({opacity: 0, transform: 'translateX(30px)', offset: 1})
+        style({ opacity: 1, transform: 'translateX(0px)', offset: 0 }),
+        style({ opacity: 0.8, transform: 'translateX(-10px)', offset: 0.2 }),
+        style({ opacity: 0, transform: 'translateX(30px)', offset: 1 })
       ])))
     ])
   ]
@@ -33,6 +36,13 @@ export class ItemCategoryListComponent implements OnInit {
   searchForm: FormGroup
   search: FormControl
   itemCategories: ItemCategory[] = []
+  dataInfo: DataInfo
+  pagination: Pagination
+  pageIndex: number
+  formCopy: FormGroup
+  params = {}
+  filter = false
+  hasFilterActive = false
   searching = false
 
   constructor(
@@ -42,22 +52,90 @@ export class ItemCategoryListComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.pageIndex = this.itemCategoryService.pageIndex
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  createForm() {
     this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
+    this.formCopy = this.fb.group({
       search: this.search
     })
 
-    let snackBar = this.snackBar.open('Carregando categorias de item...')
+    this.searchForm = Object.create(this.formCopy)
 
-    this.itemCategoryService.itemCategories().subscribe(itemCategories => {
-      this.itemCategories = itemCategories
+    if (JSON.stringify(this.itemCategoryService.searchValue) == JSON.stringify({})) {
+      this.itemCategoryService.searchValue = this.searchForm.value
+    } else {
+      this.searchForm.setValue(this.itemCategoryService.searchValue)
+    }
+
+    this.searchForm.valueChanges
+      .pipe(distinctUntilChanged(), debounceTime(500))
+      .subscribe((searchValue) => {
+        let controls = this.searchForm.controls
+
+        this.params = {
+          search: controls.search.value
+        }
+
+        this.loadCostCategories(this.params, 1)
+
+        this.pageIndex = 0
+        this.itemCategoryService.pageIndex = 0
+        this.itemCategoryService.searchValue = searchValue
+        this.updateFilterActive()
+      })
+  }
+
+  updateFilterActive() {
+    if (JSON.stringify(this.itemCategoryService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.hasFilterActive = false
+    } else {
+      this.hasFilterActive = true
+    }
+  }
+
+  clearFilter() {
+    this.itemCategoryService.searchValue = {}
+    this.itemCategoryService.pageIndex = 0
+    this.pageIndex = 0
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  loadInitialData() {
+    if (JSON.stringify(this.itemCategoryService.searchValue) === JSON.stringify(this.formCopy.value)) {
+      this.loadCostCategories({}, this.pageIndex + 1)
+    } else {
+      this.loadCostCategories(this.itemCategoryService.searchValue, this.pageIndex + 1)
+    }
+
+    this.updateFilterActive()
+  }
+
+  loadCostCategories(params, page: number) {
+    let snackBar = this.snackBar.open('Carregando categorias de item...')
+    this.searching = true
+    this.itemCategoryService.itemCategories(params, page).subscribe(dataInfo => {
+      this.pagination = dataInfo.pagination
+      this.itemCategories = dataInfo.pagination.data
+      this.searching = false
       snackBar.dismiss()
     })
+  }
 
-    this.search.valueChanges
-      .debounceTime(500)
-      .subscribe(value => {
-        this.itemCategoryService.itemCategories(value).subscribe(itemCategories => this.itemCategories = itemCategories)
+  changePage($event) {
+    this.searching = true
+    this.itemCategories = []
+    this.itemCategoryService.itemCategories(this.itemCategoryService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
+      this.dataInfo = dataInfo
+      this.pagination = dataInfo.pagination
+      this.itemCategories = dataInfo.pagination.data
+      this.searching = false
+      this.pageIndex = $event.pageIndex
+      this.itemCategoryService.pageIndex = this.pageIndex
     })
   }
 
