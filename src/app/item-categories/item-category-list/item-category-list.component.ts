@@ -80,7 +80,7 @@ export class ItemCategoryListComponent implements OnInit {
           search: controls.search.value
         }
 
-        this.loadCostCategories(this.params, 1)
+        this.loadItemCategories(this.params, 1)
 
         this.pageIndex = 0
         this.itemCategoryService.pageIndex = 0
@@ -107,15 +107,15 @@ export class ItemCategoryListComponent implements OnInit {
 
   loadInitialData() {
     if (JSON.stringify(this.itemCategoryService.searchValue) === JSON.stringify(this.formCopy.value)) {
-      this.loadCostCategories({}, this.pageIndex + 1)
+      this.loadItemCategories({}, this.pageIndex + 1)
     } else {
-      this.loadCostCategories(this.itemCategoryService.searchValue, this.pageIndex + 1)
+      this.loadItemCategories(this.itemCategoryService.searchValue, this.pageIndex + 1)
     }
 
     this.updateFilterActive()
   }
 
-  loadCostCategories(params, page: number) {
+  loadItemCategories(params, page: number) {
     let snackBar = this.snackBar.open('Carregando categorias de item...')
     this.searching = true
     this.itemCategoryService.itemCategories(params, page).subscribe(dataInfo => {

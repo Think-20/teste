@@ -151,7 +151,7 @@
               <form [formGroup]="getChildItemsControls(itemForm)[i]" novalidate autocomplete="off" class="flex pricing-item">
                 <input formControlName="id" type="hidden">
                 <mat-autocomplete #autocompleteItem="matAutocomplete" [displayWith]="displayItem">
-                    <mat-option *ngFor="let item of items | async" [value]="item">
+                    <mat-option *ngFor="let item of items" [value]="item">
                       {{ item.name }}
                     </mat-option>
                 </mat-autocomplete>

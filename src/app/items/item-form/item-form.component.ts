@@ -57,7 +57,7 @@ export class ItemFormComponent implements OnInit {
   item: Item
   itemForm: FormGroup
   compositeItem: boolean = false
-  items: Observable<Item[]>
+  items: Item[]
   itemCategories: ItemCategory[]
   costCategories: CostCategory[]
   measures: Observable<Measure[]>
@@ -319,12 +319,22 @@ export class ItemFormComponent implements OnInit {
       childItemForm.disable()
     }
 
+    let snackbar = null
+
     childItemForm.get('measure').valueChanges.subscribe(measure => {
       this.measures = this.measureService.measures(measure)
     })
 
-    childItemForm.get('item').valueChanges.subscribe(item => {
-      this.items = this.itemService.items(item)
+    childItemForm.get('item').valueChanges
+    .do(() => snackbar = this.snackBar.open('Pesquisando itens...'))
+    .pipe(debounceTime(500), distinctUntilChanged())
+    .subscribe(item => {
+      snackbar.dismiss()
+
+      if(item == '' || isObject(item)) return
+      this.itemService.items({ search: item, pagination: false }).subscribe(dataInfo => {
+        this.items = dataInfo.pagination.data
+      })
     })
   }
 
