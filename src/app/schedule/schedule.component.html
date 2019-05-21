@@ -2,19 +2,27 @@
   <div class="my-container">
     <h3 class="lead row">
       <div class="col-md-6">
-        Cronograma -
-        <span class="actualMonth" (click)="monthSelect.open()">
-          {{ month.name }}
-          <mat-select class="select-hidden col-md-3" #monthSelect>
-            <mat-option *ngFor="let month of months" (click)="updateMonth(month)">{{month.name}}</mat-option>
-          </mat-select>
-        </span>
-        <span class="actualYear" (click)="yearSelect.open()">
-          {{ year }}
-          <mat-select class="select-hidden col-md-3" #yearSelect>
-            <mat-option *ngFor="let year of years" (click)="updateYear(year)">{{year}}</mat-option>
-          </mat-select>
-        </span>
+        <div class="flex center">
+          <button mat-button type="button" class="month-arrow">
+            <mat-icon (click)="addMonth(-1)">keyboard_arrow_left</mat-icon>
+          </button>
+          &nbsp;Cronograma -
+          <span class="actualMonth" (click)="monthSelect.open()">
+            &nbsp;{{ month.name }}
+            <mat-select class="select-hidden col-md-3" #monthSelect>
+              <mat-option *ngFor="let month of months" (click)="updateMonth(month)">{{month.name}}</mat-option>
+            </mat-select>
+          </span>
+          <span class="actualYear" (click)="yearSelect.open()">
+            {{ year }}
+            <mat-select class="select-hidden col-md-3" #yearSelect>
+              <mat-option *ngFor="let year of years" (click)="updateYear(year)">{{year}}</mat-option>
+            </mat-select>
+          </span>
+          <button mat-button type="button" class="month-arrow">
+            <mat-icon (click)="addMonth(1)">keyboard_arrow_right</mat-icon>
+          </button>
+        </div>
       </div>
       <div class="col-md-6 updated-message" *ngIf="dataInfo != null">
         <small>{{lastUpdateMessage}}</small>
@@ -48,7 +56,8 @@
         <div class="row">
           <div class="col-md-12">
             <mat-form-field class="col-md-1-7">
-              <mat-select placeholder="Departamento" formControlName="department_array" [compareWith]="compareDepartment" multiple>
+              <mat-select placeholder="Departamento" formControlName="department_array"
+                [compareWith]="compareDepartment" multiple>
                 <mat-option disabled (click)="toggleDepartments()">Selecionar todos</mat-option>
                 <mat-option *ngFor="let department of departments" [value]="department">
                   {{ department.description }}
@@ -56,7 +65,8 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="col-md-1-7">
-              <mat-select placeholder="Responsável" formControlName="responsible_array" [compareWith]="compareAttendance" multiple>
+              <mat-select placeholder="Responsável" formControlName="responsible_array"
+                [compareWith]="compareAttendance" multiple>
                 <mat-option disabled (click)="toggleResponsibles()">Selecionar todos</mat-option>
                 <mat-option *ngFor="let employee of employees" [value]="employee">
                   {{ employee.name }}
@@ -64,7 +74,8 @@
               </mat-select>
             </mat-form-field>
             <mat-form-field class="col-md-1-7">
-              <mat-select placeholder="Job" formControlName="job_activity_array" [compareWith]="compareJobActivity" multiple>
+              <mat-select placeholder="Job" formControlName="job_activity_array" [compareWith]="compareJobActivity"
+                multiple>
                 <mat-option disabled (click)="toggleJobActivities()">Selecionar todos</mat-option>
                 <mat-option *ngFor="let activity of jobActivities" [value]="activity">
                   {{ activity.description }}
@@ -88,7 +99,8 @@
               </mat-option>
             </mat-autocomplete>
             <mat-form-field class="col-md-1-7">
-              <mat-select placeholder="Atendimento" formControlName="attendance_array" [compareWith]="compareAttendance" multiple>
+              <mat-select placeholder="Atendimento" formControlName="attendance_array" [compareWith]="compareAttendance"
+                multiple>
                 <mat-option disabled (click)="toggleAttendances()">Selecionar todos</mat-option>
                 <mat-option *ngFor="let attendance of attendances" [value]="attendance">
                   {{ attendance.name }}
@@ -131,8 +143,10 @@
           <div class="mat-header-cell mat-column-stat">Status</div>
         </div>
         <div class="mat-row-scroll">
-          <div #list class="mat-row" *ngFor="let chr of chrono; let i = index" [class.hidden]="paramsHasFilter && chr.length == 0">
-            <h4 *ngIf="chrono[i - 1]?.month != chrono[i]?.month" class="month-line">{{ months[chrono[i]?.month - 1].name }}</h4>
+          <div #list class="mat-row" *ngFor="let chr of chrono; let i = index"
+            [class.hidden]="paramsHasFilter && chr.length == 0">
+            <h4 *ngIf="chrono[i - 1]?.month != chrono[i]?.month" class="month-line">
+              {{ months[chrono[i]?.month - 1].name }}</h4>
             <div class="line-chrono" [ngClass]="lineChronoClass(chr, employees)">
               <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }} month-{{ chr.month }}">
                 <div>
@@ -142,13 +156,16 @@
                   </button>
                   <button *ngIf="isAdmin" class="cb-button add-block" (click)="openBlockDialog(chr)">
                     <mat-icon class="icon" *ngIf="blockText(chr) == 'BLOCK'">lock</mat-icon>
-                    <mat-icon class="icon" *ngIf="blockText(chr) == 'UNBLOCK'" matBadge="{{blockedNumber(chr)}}">lock_open</mat-icon>
+                    <mat-icon class="icon" *ngIf="blockText(chr) == 'UNBLOCK'" matBadge="{{blockedNumber(chr)}}">
+                      lock_open</mat-icon>
                   </button>
                 </div>
               </div>
               <div class="line-jobs">
-                <cb-schedule-line [chrono]="chrono[i]" [tasks]="tasks" [today]="today" [jobStatus]="jobStatus" [month]="month" [paramsHasFilter]="paramsHasFilter"
-                  [date]="date" (changeMonthEmitter)="changeMonthByLine($event)" (scrollStatusEmitter)="changeScrollStatus($event)"></cb-schedule-line>
+                <cb-schedule-line [chrono]="chrono[i]" [tasks]="tasks" [today]="today" [jobStatus]="jobStatus"
+                  [month]="month" [paramsHasFilter]="paramsHasFilter" [date]="date"
+                  (changeMonthEmitter)="changeMonthByLine($event)" (scrollStatusEmitter)="changeScrollStatus($event)">
+                </cb-schedule-line>
               </div>
             </div>
           </div>

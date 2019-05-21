@@ -93,6 +93,10 @@ html, body, cb-login {
   display: flex;
 }
 
+.flex.center {
+  align-items: center;
+}
+
 .flex-spacer {
     flex-grow: 5;
 }

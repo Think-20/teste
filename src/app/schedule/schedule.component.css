@@ -250,3 +250,10 @@
     border-radius: 9px;
     background-color: rgba(231,230,239,0.5);
 }
+
+.month-arrow {
+  z-index: 10;
+  min-width: 10px !important;
+  padding: 0px !important;
+  color: rgba(0,0,0,0.5);
+}

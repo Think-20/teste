@@ -634,6 +634,15 @@ export class ScheduleComponent implements OnInit {
     this.changeMonth(month, date)
   }
 
+  addMonth(inc: number) {
+    this.date.setDate(1)
+    this.date.setMonth(this.date.getMonth() + inc)
+    this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
+    this.year = this.date.getFullYear()
+
+    this.changeMonth(this.month, this.date)
+  }
+
   updateYear(year: number) {
     this.date.setFullYear(year)
     this.changeMonth(this.month, this.date)
