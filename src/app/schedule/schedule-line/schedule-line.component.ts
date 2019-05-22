@@ -113,30 +113,17 @@ export class ScheduleLineComponent implements OnInit {
     })
   }
 
-
   delete(task: Task) {
     let lastDate = new Date(task.available_date + "T00:00:00")
-    if(['Projeto', 'Orçamento'].indexOf(task.job_activity.description) >= 0) {
-      this.jobService.delete(task.job.id).subscribe((data) => {
-        this.snackBar.open(data.message, '', {
-          duration: 5000
-        })
-
-        if (data.status) {
-          this.changeMonthEmitter.emit({month: this.month, lastDate: lastDate})
-        }
+    this.taskService.delete(task.id).subscribe((data) => {
+      this.snackBar.open(data.message, '', {
+        duration: 5000
       })
-    } else {
-      this.taskService.delete(task.id).subscribe((data) => {
-        this.snackBar.open(data.message, '', {
-          duration: 5000
-        })
 
-        if (data.status) {
-          this.changeMonthEmitter.emit({month: this.month, lastDate: lastDate})
-        }
-      })
-    }
+      if (data.status) {
+        this.changeMonthEmitter.emit({month: this.month, lastDate: lastDate})
+      }
+    })
   }
 
   addTask(day: number) {
