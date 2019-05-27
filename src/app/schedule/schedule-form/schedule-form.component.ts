@@ -159,6 +159,10 @@ export class ScheduleFormComponent implements OnInit {
 
   addEvents() {
     this.scheduleForm.controls.job_activity.valueChanges.subscribe(status => {
+      this.scheduleForm.controls.responsible.enable()
+      this.scheduleForm.controls.available_date.enable()
+      this.scheduleForm.controls.duration.enable()
+
       this.getAvailableDates(new Date())
       let jobActivity = this.scheduleForm.controls.job_activity.value as JobActivity
       this.setButtons()
@@ -173,6 +177,8 @@ export class ScheduleFormComponent implements OnInit {
         this.addOptionEvents()
       else if (jobActivity.description == 'Outsider')
         this.addOutsiderEvents()
+      else if (jobActivity.no_params == 1)
+        this.noEvents()
       else this.addOtherEvents()
     })
 
@@ -221,6 +227,15 @@ export class ScheduleFormComponent implements OnInit {
       })
 
     this.addValidationBudget()
+  }
+
+  noEvents() {
+    let responsible = this.authService.currentUser().employee
+    this.responsibles = [responsible]
+    this.scheduleForm.controls.responsible.setValue(responsible)
+
+    this.scheduleForm.controls.available_date.disable()
+    this.scheduleForm.controls.duration.disable()
   }
 
   enableSearchForm() {
@@ -472,6 +487,9 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   getAvailableDates(date: Date, onlyEmployee: Employee = null) {
+    let jobActivity = <JobActivity> this.scheduleForm.controls.job_activity.value
+    if(jobActivity.no_params === 1) return
+
     let open = this.availableDatepicker.opened
     let finDate = new Date(date.getFullYear(), date.getMonth(), 31)
     finDate.setDate(finDate.getDate() + 30)
@@ -619,8 +637,8 @@ export class ScheduleFormComponent implements OnInit {
   setButtons() {
     let jobActivity = this.scheduleForm.controls.job_activity.value as JobActivity
     if (jobActivity.description == 'Projeto'
-      || jobActivity.description == 'Orçamento'
-      || jobActivity.description == 'Outsider') {
+      || jobActivity.description == 'Outsider'
+      || jobActivity.no_params === 1) {
       this.setJob(null)
       this.buttonText = 'PRÓXIMO'
       this.hasPreviousActivity = false
@@ -730,8 +748,8 @@ export class ScheduleFormComponent implements OnInit {
     let task = this.scheduleForm.getRawValue() as Task
 
     if (task.job_activity.description == 'Projeto'
-      || task.job_activity.description == 'Orçamento'
-      || task.job_activity.description == 'Outsider') {
+      || task.job_activity.description == 'Outsider'
+      || task.job_activity.no_params === 1) {
       this.jobService.data = new Job
       this.jobService.data.task = task
       this.jobService.data.budget_value = this.scheduleForm.controls.budget_value.value
