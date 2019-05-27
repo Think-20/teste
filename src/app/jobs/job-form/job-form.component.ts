@@ -283,10 +283,9 @@ export class JobFormComponent implements OnInit {
     if( ! this.isAdmin)
     this.jobForm.controls.budget_value.disable()
 
-    if(job.job_activity.description == 'Orçamento') {
+    if(job.job_activity.description == 'Criação externa') {
       this.jobForm.controls.creation_responsible.setValue('Externa')
       this.jobForm.controls.available_date.setValue(job.task.available_date)
-      this.jobForm.controls.budget_responsible.setValue(job.task.responsible.name)
       return
     }
 
@@ -542,7 +541,7 @@ export class JobFormComponent implements OnInit {
       return;
     }
 
-    let jobActivityDescription = (<JobActivity> this.jobForm.controls.job_activity.value).description
+    let jobActivity = <JobActivity> this.jobForm.controls.job_activity.value
 
     let task = this.jobService.data.task
     this.buttonEnable = false
@@ -572,14 +571,18 @@ export class JobFormComponent implements OnInit {
           this.job = data.job as Job
           task.job = this.job
 
+          let snack = this.snackBar.open('Job salvo com sucesso, salvando agenda...', '', {
+            duration: 3000
+          })
           this.taskService.save(task).subscribe((data) => {
             if (data.status) {
-              if(jobActivityDescription == 'Orçamento') {
-                let snack = this.snackBar.open('Salvo com sucesso, redirecionando para upload do memorial.', '', {
+              if(jobActivity.redirect_after_save != null) {
+                let snack = this.snackBar.open('Salvo com sucesso, redirecionando para próxima etapa.', '', {
                   duration: 3000
                 })
                 snack.afterDismissed().subscribe(() => {
-                  this.router.navigateByUrl('/jobs/edit/' + this.job.id + '?tab=specification')
+                  let url = jobActivity.redirect_after_save.replace(':id', this.job.id.toString())
+                  this.router.navigateByUrl(url)
                 })
                 return
               }
