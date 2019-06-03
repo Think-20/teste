@@ -698,11 +698,14 @@ export class ScheduleComponent implements OnInit {
 
     while (date.getTime() < fixedDateMax.getTime()) {
       let filteredTasks = this.tasks.filter(task => {
-        return task.items.filter(item => {
-          let itemDate = new Date(item.date + 'T00:00:00')
-          return date.getDate() == itemDate.getDate()
-            && date.getMonth() == itemDate.getMonth()
-        }
+        return task.items.filter((item, index) => {
+          //Ao filtrar, não selecionar continuações
+          if(!this.paramsHasFilter || index == 0) {
+              let itemDate = new Date(item.date + 'T00:00:00')
+              return date.getDate() == itemDate.getDate()
+                && date.getMonth() == itemDate.getMonth()
+            }
+          }
         ).length > 0
       })
 
