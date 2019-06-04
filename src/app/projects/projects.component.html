@@ -14,6 +14,15 @@
       type="button" (click)="downloadAll()">
       <mat-icon>folder</mat-icon>
     </button>
+    <div class="row">
+      <div class="col-md-12">
+        <button *ngIf="showButtonSpecification(task)"
+          mat-button matTooltip="Ir para próxima etapa" class="cb-button button-specification"
+          type="button" (click)="navigateToSpecification()">
+          PRÓXIMO
+        </button>
+      </div>
+    </div>
     <cb-budget-form *ngIf="task?.project_files?.length > 0" class="inside-mat-card" [task]="task" [job]="job"></cb-budget-form>
   </mat-expansion-panel>
 </mat-accordion>

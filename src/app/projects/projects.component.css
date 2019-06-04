@@ -20,3 +20,10 @@ h3 {
   top: -45px;
   position: relative;
 }
+
+.button-specification {
+  margin-bottom: 10px;
+  margin-top: -10px;
+  position: relative;
+  top: -15px;
+}

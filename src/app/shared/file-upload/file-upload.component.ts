@@ -149,6 +149,7 @@ export class FileUploadComponent implements OnInit {
         let files = <FileUploadInterface[]> data.files
         files.forEach((fileInterface) => {
           this.addFile(fileInterface)
+          this.files.push(fileInterface)
         })
       })
     }).subscribe(() => {})

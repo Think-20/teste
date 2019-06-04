@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Job } from '../jobs/job.model';
 import { TaskService } from '../schedule/task.service';
 import { Task } from '../schedule/task.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ProjectFileService } from './project-file.service';
 import { API } from 'app/app.api';
 
@@ -18,6 +18,7 @@ export class ProjectsComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private taskService: TaskService,
     private projectFileService: ProjectFileService
   ) { }
@@ -30,6 +31,18 @@ export class ProjectsComponent implements OnInit {
   ngOnChanges() {
     this.sortTasks()
     this.loadTaskFromRoute()
+  }
+
+  navigateToSpecification() {
+    this.router.navigateByUrl(`/jobs/edit/${this.job.id}?tab=specification`)
+  }
+
+  showButtonSpecification(task: Task) {
+    if(task.project_files.length == 0
+    || task.specification_files.length > 0)
+      return false
+
+    return true
   }
 
   loadTaskFromRoute() {
