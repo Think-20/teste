@@ -169,6 +169,8 @@ export class JobListComponent implements OnInit {
   }
 
   loadJobs(params, page: number) {
+    if(this.searching) return
+
     this.searching = true
     let snackBar = this.snackBar.open('Carregando jobs...')
     this.jobService.jobs(params, page).subscribe(dataInfo => {
