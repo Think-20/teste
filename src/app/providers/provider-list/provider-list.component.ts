@@ -72,11 +72,11 @@ export class ProviderListComponent implements OnInit {
 
   createForm() {
     this.search = this.fb.control('')
-    this.formCopy = this.fb.group({
+    this.searchForm = this.fb.group({
       search: this.search,
     })
 
-    this.searchForm = Object.create(this.formCopy)
+    this.formCopy = this.searchForm.value
 
     if (JSON.stringify(this.providerService.searchValue) == JSON.stringify({})) {
       this.providerService.searchValue = this.searchForm.value
@@ -88,12 +88,7 @@ export class ProviderListComponent implements OnInit {
       .pipe(distinctUntilChanged())
       .debounceTime(500)
       .subscribe((searchValue) => {
-        let controls = this.searchForm.controls
-
-        this.params = {
-          search: controls.search.value,
-        }
-
+        this.params = this.getParams(searchValue)
         this.loadProviders(this.params, 1)
 
         this.pageIndex = 0
@@ -103,8 +98,14 @@ export class ProviderListComponent implements OnInit {
       })
   }
 
+  getParams(searchValue) {
+    return {
+      search: searchValue.search,
+    }
+  }
+
   updateFilterActive() {
-    if (JSON.stringify(this.providerService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.providerService.searchValue) === JSON.stringify(this.formCopy)) {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -120,10 +121,11 @@ export class ProviderListComponent implements OnInit {
   }
 
   loadInitialData() {
-    if (JSON.stringify(this.providerService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.providerService.searchValue) === JSON.stringify(this.formCopy)) {
       this.loadProviders({}, this.pageIndex + 1)
     } else {
-      this.loadProviders(this.providerService.searchValue, this.providerService.pageIndex + 1)
+      this.params = this.getParams(this.providerService.searchValue)
+      this.loadProviders(this.params, this.providerService.pageIndex + 1)
     }
 
     this.updateFilterActive()

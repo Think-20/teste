@@ -37,7 +37,7 @@ export class FunctionalityListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
-  formCopy: FormGroup
+  formCopy: any
   search: FormControl
   functionalities: Functionality[] = []
   searching = false
@@ -92,11 +92,11 @@ export class FunctionalityListComponent implements OnInit {
 
   createForm() {
     this.search = this.fb.control('')
-    this.formCopy = this.fb.group({
+    this.searchForm = this.fb.group({
       search: this.search,
     })
 
-    this.searchForm = Object.create(this.formCopy)
+    this.formCopy = this.searchForm.value
 
     if(JSON.stringify(this.functionalityService.searchValue) == JSON.stringify({})) {
       this.functionalityService.searchValue = this.searchForm.value
@@ -108,11 +108,7 @@ export class FunctionalityListComponent implements OnInit {
     .pipe(distinctUntilChanged())
     .debounceTime(500)
     .subscribe((searchValue) => {
-      let controls = this.searchForm.controls
-      this.params = {
-        search: controls.search.value,
-      }
-
+      this.params = this.getParams(searchValue)
       this.loadFunctionalities(this.params, 1)
 
       this.pageIndex = 0
@@ -122,8 +118,14 @@ export class FunctionalityListComponent implements OnInit {
     })
   }
 
+  getParams(searchValue) {
+    return {
+      search: searchValue.search,
+    }
+  }
+
   updateFilterActive() {
-    if (JSON.stringify(this.functionalityService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.functionalityService.searchValue) === JSON.stringify(this.formCopy)) {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -139,10 +141,11 @@ export class FunctionalityListComponent implements OnInit {
   }
 
   loadInitialData() {
-    if (JSON.stringify(this.functionalityService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.functionalityService.searchValue) === JSON.stringify(this.formCopy)) {
       this.loadFunctionalities({}, this.pageIndex + 1)
     } else {
-      this.loadFunctionalities(this.functionalityService.searchValue, this.functionalityService.pageIndex + 1)
+      this.params = this.getParams(this.functionalityService.searchValue)
+      this.loadFunctionalities(this.params, this.functionalityService.pageIndex + 1)
     }
 
     this.updateFilterActive()

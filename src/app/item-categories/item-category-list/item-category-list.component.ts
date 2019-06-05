@@ -39,7 +39,7 @@ export class ItemCategoryListComponent implements OnInit {
   dataInfo: DataInfo
   pagination: Pagination
   pageIndex: number
-  formCopy: FormGroup
+  formCopy: any
   params = {}
   filter = false
   hasFilterActive = false
@@ -59,11 +59,11 @@ export class ItemCategoryListComponent implements OnInit {
 
   createForm() {
     this.search = this.fb.control('')
-    this.formCopy = this.fb.group({
-      search: this.search
+    this.searchForm = this.fb.group({
+      search: this.search,
     })
 
-    this.searchForm = Object.create(this.formCopy)
+    this.formCopy = this.searchForm.value
 
     if (JSON.stringify(this.itemCategoryService.searchValue) == JSON.stringify({})) {
       this.itemCategoryService.searchValue = this.searchForm.value
@@ -74,12 +74,7 @@ export class ItemCategoryListComponent implements OnInit {
     this.searchForm.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe((searchValue) => {
-        let controls = this.searchForm.controls
-
-        this.params = {
-          search: controls.search.value
-        }
-
+        this.params = this.getParams(searchValue)
         this.loadItemCategories(this.params, 1)
 
         this.pageIndex = 0
@@ -89,8 +84,14 @@ export class ItemCategoryListComponent implements OnInit {
       })
   }
 
+  getParams(searchValue) {
+    return {
+      search: searchValue.search,
+    }
+  }
+
   updateFilterActive() {
-    if (JSON.stringify(this.itemCategoryService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.itemCategoryService.searchValue) === JSON.stringify(this.formCopy)) {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -106,10 +107,11 @@ export class ItemCategoryListComponent implements OnInit {
   }
 
   loadInitialData() {
-    if (JSON.stringify(this.itemCategoryService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.itemCategoryService.searchValue) === JSON.stringify(this.formCopy)) {
       this.loadItemCategories({}, this.pageIndex + 1)
     } else {
-      this.loadItemCategories(this.itemCategoryService.searchValue, this.pageIndex + 1)
+      this.params = this.getParams(this.itemCategoryService.searchValue)
+      this.loadItemCategories(this.params, this.pageIndex + 1)
     }
 
     this.updateFilterActive()

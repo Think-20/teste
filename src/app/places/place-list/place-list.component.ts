@@ -36,7 +36,7 @@ export class PlaceListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
-  formCopy: FormGroup
+  formCopy: any
   search: FormControl
   places: Place[] = []
   searching = false
@@ -91,11 +91,11 @@ export class PlaceListComponent implements OnInit {
 
   createForm() {
     this.search = this.fb.control('')
-    this.formCopy = this.fb.group({
+    this.searchForm = this.fb.group({
       search: this.search,
     })
 
-    this.searchForm = Object.create(this.formCopy)
+    this.formCopy = this.searchForm.value
 
     if(JSON.stringify(this.placeService.searchValue) == JSON.stringify({})) {
       this.placeService.searchValue = this.searchForm.value
@@ -107,11 +107,7 @@ export class PlaceListComponent implements OnInit {
     .pipe(distinctUntilChanged())
     .debounceTime(500)
     .subscribe((searchValue) => {
-      let controls = this.searchForm.controls
-      this.params = {
-        search: controls.search.value,
-      }
-
+      this.params = this.getParams(searchValue)
       this.loadPlaces(this.params, 1)
 
       this.pageIndex = 0
@@ -121,8 +117,14 @@ export class PlaceListComponent implements OnInit {
     })
   }
 
+  getParams(searchValue) {
+    return {
+      search: searchValue.search,
+    }
+  }
+
   updateFilterActive() {
-    if (JSON.stringify(this.placeService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.placeService.searchValue) === JSON.stringify(this.formCopy)) {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -138,10 +140,11 @@ export class PlaceListComponent implements OnInit {
   }
 
   loadInitialData() {
-    if (JSON.stringify(this.placeService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.placeService.searchValue) === JSON.stringify(this.formCopy)) {
       this.loadPlaces({}, this.pageIndex + 1)
     } else {
-      this.loadPlaces(this.placeService.searchValue, this.placeService.pageIndex + 1)
+      this.params = this.getParams(this.placeService.searchValue)
+      this.loadPlaces(this.params, this.placeService.pageIndex + 1)
     }
 
     this.updateFilterActive()

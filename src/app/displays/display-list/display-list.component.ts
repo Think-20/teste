@@ -37,7 +37,7 @@ export class DisplayListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
-  formCopy: FormGroup
+  formCopy: any
   search: FormControl
   displays: Display[] = []
   searching = false
@@ -92,11 +92,11 @@ export class DisplayListComponent implements OnInit {
 
   createForm() {
     this.search = this.fb.control('')
-    this.formCopy = this.fb.group({
+    this.searchForm = this.fb.group({
       search: this.search,
     })
 
-    this.searchForm = Object.create(this.formCopy)
+    this.formCopy = this.searchForm.value
 
     if(JSON.stringify(this.displayService.searchValue) == JSON.stringify({})) {
       this.displayService.searchValue = this.searchForm.value
@@ -108,11 +108,7 @@ export class DisplayListComponent implements OnInit {
     .pipe(distinctUntilChanged())
     .debounceTime(500)
     .subscribe((searchValue) => {
-      let controls = this.searchForm.controls
-      this.params = {
-        search: controls.search.value,
-      }
-
+      this.params = this.getParams(searchValue)
       this.loadDisplays(this.params, 1)
 
       this.pageIndex = 0
@@ -122,8 +118,14 @@ export class DisplayListComponent implements OnInit {
     })
   }
 
+  getParams(searchValue) {
+    return {
+      search: searchValue.search,
+    }
+  }
+
   updateFilterActive() {
-    if (JSON.stringify(this.displayService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.displayService.searchValue) === JSON.stringify(this.formCopy)) {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -139,10 +141,11 @@ export class DisplayListComponent implements OnInit {
   }
 
   loadInitialData() {
-    if (JSON.stringify(this.displayService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.displayService.searchValue) === JSON.stringify(this.formCopy)) {
       this.loadDisplays({}, this.pageIndex + 1)
     } else {
-      this.loadDisplays(this.displayService.searchValue, this.displayService.pageIndex + 1)
+      this.params = this.getParams(this.displayService.searchValue)
+      this.loadDisplays(this.params, this.displayService.pageIndex + 1)
     }
 
     this.updateFilterActive()
