@@ -59,7 +59,7 @@ export class ScheduleComponent implements OnInit {
 
   @ViewChildren('list') list: QueryList<any>
   searchForm: FormGroup
-  formCopy: FormGroup
+  formCopy: any
   search: FormControl
   rowAppearedState: string = 'ready'
   tasks: Task[] = []
@@ -374,7 +374,7 @@ export class ScheduleComponent implements OnInit {
 
   createForm() {
     this.search = this.fb.control('')
-    this.formCopy = this.fb.group({
+    this.searchForm = this.fb.group({
       search: this.search,
       attendance_array: this.fb.control([]),
       responsible_array: this.fb.control([]),
@@ -385,7 +385,7 @@ export class ScheduleComponent implements OnInit {
       status_array: this.fb.control([])
     })
 
-    this.searchForm = Object.create(this.formCopy)
+    this.formCopy = this.searchForm.value
 
     if (JSON.stringify(this.taskService.searchValue) == JSON.stringify({})) {
       this.taskService.searchValue = this.searchForm.value
@@ -396,19 +396,7 @@ export class ScheduleComponent implements OnInit {
     this.searchForm.valueChanges
     .pipe(distinctUntilChanged(), debounceTime(500))
     .subscribe((searchValue) => {
-      let controls = this.searchForm.controls
-      let clientName = controls.client.value != '' ? controls.client.value : controls.search.value
-
-      this.params = {
-        clientName: clientName,
-        status_array: controls.status_array.value,
-        attendance_array: controls.attendance_array.value,
-        responsible_array: controls.responsible_array.value,
-        job_type_array: controls.job_type_array.value,
-        job_activity_array: controls.job_activity_array.value,
-        department_array: controls.department_array.value
-      }
-
+      this.params = this.getParams(searchValue)
       this.taskService.searchValue = searchValue
       this.updateFilterActive()
       this.checkParamsHasFilter()
@@ -424,8 +412,21 @@ export class ScheduleComponent implements OnInit {
     })
   }
 
+  getParams(searchValue) {
+    let clientName = searchValue.client != '' ? searchValue.client : searchValue.search
+    return  {
+      clientName: clientName,
+      status_array: searchValue.status_array,
+      attendance_array: searchValue.attendance_array,
+      responsible_array: searchValue.responsible_array,
+      job_type_array: searchValue.job_type_array,
+      job_activity_array: searchValue.job_activity_array,
+      department_array: searchValue.department_array
+    }
+  }
+
   updateFilterActive() {
-    if (JSON.stringify(this.taskService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.taskService.searchValue) === JSON.stringify(this.formCopy)) {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -441,10 +442,10 @@ export class ScheduleComponent implements OnInit {
   loadInitialData() {
     this.setDate()
 
-    if (JSON.stringify(this.taskService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.taskService.searchValue) === JSON.stringify(this.formCopy)) {
       this.params = {}
     } else {
-      this.params = this.taskService.searchValue
+      this.params = this.getParams(this.taskService.searchValue)
     }
 
     this.updateFilterActive()

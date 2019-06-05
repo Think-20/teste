@@ -43,7 +43,7 @@ export class JobListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
-  formCopy: FormGroup
+  formCopy: any
   search: FormControl
   pagination: Pagination
   jobs: Job[] = []
@@ -87,7 +87,7 @@ export class JobListComponent implements OnInit {
 
   createForm() {
     this.search = this.fb.control('')
-    this.formCopy = this.fb.group({
+    this.searchForm = this.fb.group({
       search: this.search,
       creation: this.fb.control(''),
       job_type: this.fb.control(''),
@@ -98,9 +98,9 @@ export class JobListComponent implements OnInit {
     })
 
     if(this.isAdmin)
-      this.formCopy.addControl('attendance', this.fb.control({ value: '' }))
+      this.searchForm.addControl('attendance', this.fb.control({ value: '' }))
 
-    this.searchForm = Object.create(this.formCopy)
+    this.formCopy = this.searchForm.value
 
     if(JSON.stringify(this.jobService.searchValue) == JSON.stringify({})) {
       this.jobService.searchValue = this.searchForm.value
@@ -119,20 +119,7 @@ export class JobListComponent implements OnInit {
     this.searchForm.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe((searchValue) => {
-        let controls = this.searchForm.controls
-        let status = controls.status.value != undefined ? controls.status.value.id : null
-        let clientName = controls.client.value != '' ? controls.client.value : controls.search.value
-        let attendanceFilter = this.isAdmin ? { attendance: controls.attendance.value } : {}
-        this.params = {
-          clientName: clientName,
-          status: status,
-          ...attendanceFilter,
-          creation: controls.creation.value,
-          job_type: controls.job_type.value,
-          final_date: controls.final_date.value,
-          initial_date: controls.initial_date.value,
-        }
-
+        this.params = this.getParams(searchValue)
         this.loadJobs(this.params, 1)
 
         this.pageIndex = 0
@@ -142,8 +129,24 @@ export class JobListComponent implements OnInit {
       })
   }
 
+  getParams(searchValue) {
+    let status = searchValue.status != undefined ? searchValue.status.id : null
+    let clientName = searchValue.client != '' ? searchValue.client : searchValue.search
+    let attendanceFilter = this.isAdmin ? { attendance: searchValue.attendance } : {}
+
+    return {
+      clientName: clientName,
+      status: status,
+      ...attendanceFilter,
+      creation: searchValue.creation.value,
+      job_type: searchValue.job_type.value,
+      final_date: searchValue.final_date.value,
+      initial_date: searchValue.initial_date.value,
+    }
+  }
+
   updateFilterActive() {
-    if (JSON.stringify(this.jobService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.jobService.searchValue) === JSON.stringify(this.formCopy)) {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -159,10 +162,11 @@ export class JobListComponent implements OnInit {
   }
 
   loadInitialData() {
-    if (JSON.stringify(this.jobService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.jobService.searchValue) === JSON.stringify(this.formCopy)) {
       this.loadJobs({}, this.pageIndex + 1)
     } else {
-      this.loadJobs(this.jobService.searchValue, this.pageIndex + 1)
+      this.params = this.getParams(this.jobService.searchValue)
+      this.loadJobs(this.params, this.pageIndex + 1)
     }
 
     this.updateFilterActive()

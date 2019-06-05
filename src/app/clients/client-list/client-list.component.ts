@@ -42,7 +42,7 @@ export class ClientListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
-  formCopy: FormGroup
+  formCopy: any
   search: FormControl
   clients: Client[] = []
   clientTypes: ClientType[]
@@ -132,7 +132,7 @@ export class ClientListComponent implements OnInit {
 
   createForm() {
     this.search = this.fb.control('')
-    this.formCopy = this.fb.group({
+    this.searchForm = this.fb.group({
       search: this.search,
       attendance: this.fb.control(''),
       client_status: this.fb.control(''),
@@ -140,7 +140,7 @@ export class ClientListComponent implements OnInit {
       client_type: this.fb.control('')
     })
 
-    this.searchForm = Object.create(this.formCopy)
+    this.formCopy = this.searchForm.value
 
     if(JSON.stringify(this.clientService.searchValue) == JSON.stringify({})) {
       this.clientService.searchValue = this.searchForm.value
@@ -152,15 +152,7 @@ export class ClientListComponent implements OnInit {
     .pipe(distinctUntilChanged())
     .debounceTime(500)
     .subscribe((searchValue) => {
-      let controls = this.searchForm.controls
-      this.params = {
-        search: controls.search.value,
-        attendance: controls.attendance.value,
-        client_status: controls.client_status.value,
-        client_type: controls.client_type.value,
-        rate: controls.rate.value,
-      }
-
+      this.params = this.getParams(searchValue)
       this.loadClients(this.params,  1)
 
       this.pageIndex = 0
@@ -170,8 +162,18 @@ export class ClientListComponent implements OnInit {
     })
   }
 
+  getParams(searchValue) {
+    return {
+      search: searchValue.search,
+      attendance: searchValue.attendance,
+      client_status: searchValue.client_status,
+      client_type: searchValue.client_type,
+      rate: searchValue.rate,
+    }
+  }
+
   updateFilterActive() {
-    if (JSON.stringify(this.clientService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.clientService.searchValue) === JSON.stringify(this.formCopy)) {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -187,10 +189,11 @@ export class ClientListComponent implements OnInit {
   }
 
   loadInitialData() {
-    if (JSON.stringify(this.clientService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.clientService.searchValue) === JSON.stringify(this.formCopy)) {
       this.loadClients({}, this.pageIndex + 1)
     } else {
-      this.loadClients(this.clientService.searchValue, this.clientService.pageIndex + 1)
+      this.params = this.clientService.searchValue
+      this.loadClients(this.params, this.clientService.pageIndex + 1)
     }
 
     this.updateFilterActive()

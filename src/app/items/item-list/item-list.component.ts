@@ -40,7 +40,7 @@ export class ItemListComponent implements OnInit {
   dataInfo: DataInfo
   pagination: Pagination
   pageIndex: number
-  formCopy: FormGroup
+  formCopy: any
   params = {}
   filter = false
   hasFilterActive = false
@@ -63,11 +63,11 @@ export class ItemListComponent implements OnInit {
 
   createForm() {
     this.search = this.fb.control('')
-    this.formCopy = this.fb.group({
-      search: this.search
+    this.searchForm = this.fb.group({
+      search: this.search,
     })
 
-    this.searchForm = Object.create(this.formCopy)
+    this.formCopy = this.searchForm.value
 
     if (JSON.stringify(this.itemService.searchValue) == JSON.stringify({})) {
       this.itemService.searchValue = this.searchForm.value
@@ -78,12 +78,7 @@ export class ItemListComponent implements OnInit {
     this.searchForm.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe((searchValue) => {
-        let controls = this.searchForm.controls
-
-        this.params = {
-          search: controls.search.value
-        }
-
+        this.params = this.getParams(searchValue)
         this.loadItems(this.params, 1)
 
         this.pageIndex = 0
@@ -93,8 +88,14 @@ export class ItemListComponent implements OnInit {
       })
   }
 
+  getParams(searchValue) {
+    return {
+      search: searchValue.search,
+    }
+  }
+
   updateFilterActive() {
-    if (JSON.stringify(this.itemService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.itemService.searchValue) === JSON.stringify(this.formCopy)) {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -110,10 +111,11 @@ export class ItemListComponent implements OnInit {
   }
 
   loadInitialData() {
-    if (JSON.stringify(this.itemService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.itemService.searchValue) === JSON.stringify(this.formCopy)) {
       this.loadItems({}, this.pageIndex + 1)
     } else {
-      this.loadItems(this.itemService.searchValue, this.pageIndex + 1)
+      this.params = this.getParams(this.itemService.searchValue)
+      this.loadItems(this.params, this.pageIndex + 1)
     }
 
     this.updateFilterActive()

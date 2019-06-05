@@ -36,7 +36,7 @@ export class EventListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
-  formCopy: FormGroup
+  formCopy: any
   search: FormControl
   events: Event[] = []
   searching = false
@@ -90,11 +90,11 @@ export class EventListComponent implements OnInit {
 
   createForm() {
     this.search = this.fb.control('')
-    this.formCopy = this.fb.group({
+    this.searchForm = this.fb.group({
       search: this.search,
     })
 
-    this.searchForm = Object.create(this.formCopy)
+    this.formCopy = this.searchForm.value
 
     if(JSON.stringify(this.eventService.searchValue) == JSON.stringify({})) {
       this.eventService.searchValue = this.searchForm.value
@@ -106,11 +106,7 @@ export class EventListComponent implements OnInit {
     .pipe(distinctUntilChanged())
     .debounceTime(500)
     .subscribe((searchValue) => {
-      let controls = this.searchForm.controls
-      this.params = {
-        search: controls.search.value,
-      }
-
+      this.params = this.getParams(searchValue)
       this.loadEvents(this.params, 1)
 
       this.pageIndex = 0
@@ -120,8 +116,14 @@ export class EventListComponent implements OnInit {
     })
   }
 
+  getParams(searchValue) {
+    return {
+      search: searchValue.search,
+    }
+  }
+
   updateFilterActive() {
-    if (JSON.stringify(this.eventService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.eventService.searchValue) === JSON.stringify(this.formCopy)) {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -137,10 +139,11 @@ export class EventListComponent implements OnInit {
   }
 
   loadInitialData() {
-    if (JSON.stringify(this.eventService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.eventService.searchValue) === JSON.stringify(this.formCopy)) {
       this.loadEvents({}, this.pageIndex + 1)
     } else {
-      this.loadEvents(this.eventService.searchValue, this.eventService.pageIndex + 1)
+      this.params = this.getParams(this.eventService.searchValue)
+      this.loadEvents(this.params, this.eventService.pageIndex + 1)
     }
 
     this.updateFilterActive()

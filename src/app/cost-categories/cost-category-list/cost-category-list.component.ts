@@ -34,7 +34,7 @@ export class CostCategoryListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
-  formCopy: FormGroup
+  formCopy: any
   search: FormControl
   costCategories: CostCategory[] = []
   dataInfo: DataInfo
@@ -59,11 +59,11 @@ export class CostCategoryListComponent implements OnInit {
 
   createForm() {
     this.search = this.fb.control('')
-    this.formCopy = this.fb.group({
+    this.searchForm = this.fb.group({
       search: this.search
     })
 
-    this.searchForm = Object.create(this.formCopy)
+    this.formCopy = this.searchForm.value
 
     if(JSON.stringify(this.costCategoryService.searchValue) == JSON.stringify({})) {
       this.costCategoryService.searchValue = this.searchForm.value
@@ -74,12 +74,7 @@ export class CostCategoryListComponent implements OnInit {
     this.searchForm.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe((searchValue) => {
-        let controls = this.searchForm.controls
-
-        this.params = {
-          search: controls.search.value
-        }
-
+        this.params = this.getParams(searchValue)
         this.loadCostCategories(this.params, 1)
 
         this.pageIndex = 0
@@ -89,8 +84,14 @@ export class CostCategoryListComponent implements OnInit {
       })
   }
 
+  getParams(searchValue) {
+    return {
+      search: searchValue.search
+    }
+  }
+
   updateFilterActive() {
-    if (JSON.stringify(this.costCategoryService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.costCategoryService.searchValue) === JSON.stringify(this.formCopy)) {
       this.hasFilterActive = false
     } else {
       this.hasFilterActive = true
@@ -106,10 +107,11 @@ export class CostCategoryListComponent implements OnInit {
   }
 
   loadInitialData() {
-    if (JSON.stringify(this.costCategoryService.searchValue) === JSON.stringify(this.formCopy.value)) {
+    if (JSON.stringify(this.costCategoryService.searchValue) === JSON.stringify(this.formCopy)) {
       this.loadCostCategories({}, this.pageIndex + 1)
     } else {
-      this.loadCostCategories(this.costCategoryService.searchValue, this.pageIndex + 1)
+      this.params = this.getParams(this.costCategoryService.searchValue)
+      this.loadCostCategories(this.params, this.pageIndex + 1)
     }
 
     this.updateFilterActive()
