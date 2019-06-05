@@ -572,6 +572,8 @@ export class ScheduleComponent implements OnInit {
 
   createTimerUpdater() {
     let time = 60000
+    let date = new Date()
+
     this.timer = timer(time * 2, time)
     this.subscription = this.timer.subscribe(timer => {
       this.taskService.updatedInfo().subscribe(data => {
@@ -588,11 +590,16 @@ export class ScheduleComponent implements OnInit {
 
     if (this.authService.currentUser().email == 'tv@thinkideias.com.br') {
       this.timer2 = timer(5000, 60 * 1000 * 30)
+
       this.subscriptions.push(this.timer2.subscribe(timer => {
+        date = new Date()
+        this.date = new Date(this.datePipe.transform(date, 'yyyy-MM-dd') + "T00:00:00")
+        this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
+        this.changeMonth(this.month, this.date)
         this.counter += 1
 
         if (this.counter > 2) {
-          window.location.reload()
+          window.location.reload();
         }
 
         let dialog = this.dialog.open(ReloadComponent, {
