@@ -1,4 +1,4 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output, ChangeDetectionStrategy } from '@angular/core';
 import { UserNotification } from './user-notification/user-notification.model';
 import { UserNotificationService } from './user-notification/user-notification.service';
 
@@ -8,7 +8,8 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'cb-notification-bar',
   templateUrl: './notification-bar.component.html',
-  styleUrls: ['./notification-bar.component.css']
+  styleUrls: ['./notification-bar.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NotificationBarComponent implements OnInit {
 

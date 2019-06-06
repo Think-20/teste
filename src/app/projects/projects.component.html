@@ -15,11 +15,11 @@
       <mat-icon>folder</mat-icon>
     </button>
     <div class="row">
-      <div class="col-md-12">
-        <button *ngIf="showButtonSpecification(task)"
-          mat-button matTooltip="Ir para próxima etapa" class="cb-button button-specification"
-          type="button" (click)="navigateToSpecification()">
-          PRÓXIMO
+      <div class="col-md-12 text-right">
+        <button *ngIf="showButtonSpecification(task) && isAttendance != null"
+          mat-button matTooltip="Ir para próxima etapa" class="cb-button button-navigate"
+          type="button" (click)="navigateTo(getRoute(task))">
+          {{ getText() }}
         </button>
       </div>
     </div>
