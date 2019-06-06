@@ -4,8 +4,8 @@
 }
 
 cb-sidenav.opened {
-    width: 17.5%;
-    flex: 17.5%;
+    width: 14.5%;
+    flex: 14.5%;
 }
 
 #container-box > .row,
@@ -15,20 +15,33 @@ cb-sidenav.opened {
     overflow: auto;
 }
 
+#my-master-container {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+
+#my-second-container {
+  flex: 1 90%;
+  max-height: 100%;
+  max-width: 90%;
+}
+
 #my-second-container {
   z-index: 10;
 }
 
 #timeline-container {
-    max-width: 21.25%;
+  max-width: 19.25%;
 }
 
 #all-container {
-    padding: 0;
-    width: 78.75%;
-    flex: 78.75%;
-    max-width: 78.75%;
-    overflow-x: hidden !important;
+  padding: 0;
+  width: 80.75%;
+  flex: 80.75%;
+  max-width: 80.75%;
+  overflow-x: hidden !important;
 }
 
 .max-size {
