@@ -23,9 +23,9 @@ cb-sidenav.opened {
 }
 
 #my-second-container {
-  flex: 1 90%;
+  flex: 1 85%;
   max-height: 100%;
-  max-width: 90%;
+  max-width: 85%;
 }
 
 #my-second-container {
