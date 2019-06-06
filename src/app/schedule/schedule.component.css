@@ -6,6 +6,10 @@
   height: calc(100% - 22px);
 }
 
+.container-schedule .my-container .lead {
+  height: 24px;
+}
+
 .other-attendance .mat-cell {
   color: #888 !important;
 }
@@ -209,7 +213,7 @@
 }
 
 #searchForm {
-  height: calc(100% - 64px);
+  height: calc(100% - 76px);
 }
 
 #searchForm .mat-card {
