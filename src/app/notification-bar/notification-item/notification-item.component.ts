@@ -29,6 +29,7 @@ export class NotificationItemComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.userNotification.notification.notifier.image = this.getBackgroundUrl(this.userNotification)
   }
 
   getUrl(userNotification: UserNotification): string {
@@ -143,7 +144,7 @@ export class NotificationItemComponent implements OnInit {
   }
 
   getBackgroundUrl(userNotification: UserNotification) {
-    this.image = `url('${API}/assets/images/${userNotification.notification.notifier.image}')`
+    return `url('${API}/assets/images/${userNotification.notification.notifier.image}')`
   }
 
 }

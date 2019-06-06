@@ -5,8 +5,8 @@
     <mat-icon>add</mat-icon>
   </button>
   <mat-card-header>
-    <div mat-card-avatar class="mat-card-photo" [ngStyle]="{ 'background-image' : image }"></div>
-    <mat-card-title>{{userNotification?.notification?.notifier?.name}} {{getBackgroundUrl(userNotification)}}</mat-card-title>
+    <div mat-card-avatar class="mat-card-photo" [ngStyle]="{ 'background-image' : userNotification?.notification?.notifier?.image }"></div>
+    <mat-card-title>{{userNotification?.notification?.notifier?.name}}</mat-card-title>
     <mat-card-subtitle>{{userNotification?.notification?.date | date:'dd/MM/yyyy H:mm'}}</mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
