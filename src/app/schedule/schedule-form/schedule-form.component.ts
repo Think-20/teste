@@ -60,6 +60,7 @@ export class ScheduleFormComponent implements OnInit {
   params: () => {} = () => { return {} }
   callback: (jobs: Job[]) => void = (jobs) => {}
   isAdmin: boolean = false
+  showExtraParams: boolean = true
   paramAttendance: Employee = null
   responsibles: Employee[] = []
   clients: Client[] = []
@@ -159,6 +160,7 @@ export class ScheduleFormComponent implements OnInit {
 
   addEvents() {
     this.scheduleForm.controls.job_activity.valueChanges.subscribe(status => {
+      this.showExtraParams = true
       this.scheduleForm.controls.responsible.enable()
       this.scheduleForm.controls.available_date.enable()
       this.scheduleForm.controls.duration.enable()
@@ -230,6 +232,7 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   noEvents() {
+    this.showExtraParams = false
     let jobActivity = this.scheduleForm.controls.job_activity.value as JobActivity
 
     let snack = this.snackBar.open('Aguarde enquanto buscamos os responsáveis...')

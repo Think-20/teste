@@ -25,7 +25,7 @@
       <div class="row">
         <input formControlName="job" type="hidden">
         <input formControlName="id" type="hidden">
-        <cb-production-time class="col-md-9 production-time-input" label="Tempo estimado" [rate]="1" [input]="scheduleForm.controls.duration"
+        <cb-production-time *ngIf="showExtraParams" class="col-md-9 production-time-input" label="Tempo estimado" [rate]="1" [input]="scheduleForm.controls.duration"
           [min]="0" [max]="10">
           <input formControlName="duration" type="hidden">
         </cb-production-time>
@@ -54,7 +54,7 @@
           <input type="date" [readonly]="true" formControlName="available_date" matInput placeholder="Data disponível para início*">
         </mat-form-field>
         -->
-        <mat-form-field class="col-md-3">
+        <mat-form-field *ngIf="showExtraParams" class="col-md-3">
           <input [matDatepicker]="availableDatepicker" [matDatepickerFilter]="filterAvailableDates.bind(this)" formControlName="available_date"
             matInput placeholder="Data disponível para início*">
           <mat-datepicker-toggle matSuffix [for]="availableDatepicker"></mat-datepicker-toggle>
