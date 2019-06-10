@@ -283,7 +283,7 @@ export class JobFormComponent implements OnInit {
     if( ! this.isAdmin)
     this.jobForm.controls.budget_value.disable()
 
-    if(job.job_activity.description == 'Criação externa') {
+    if(job.job_activity.description == 'Projeto externo') {
       this.jobForm.controls.creation_responsible.setValue('Externa')
       this.jobForm.controls.available_date.setValue(job.task.available_date)
       return

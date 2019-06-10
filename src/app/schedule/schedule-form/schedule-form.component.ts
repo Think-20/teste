@@ -230,9 +230,14 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   noEvents() {
-    let responsible = this.authService.currentUser().employee
-    this.responsibles = [responsible]
-    this.scheduleForm.controls.responsible.setValue(responsible)
+    let jobActivity = this.scheduleForm.controls.job_activity.value as JobActivity
+
+    let snack = this.snackBar.open('Aguarde enquanto buscamos os responsáveis...')
+    this.taskService.responsiblesByActivity(jobActivity.id).subscribe(employees => {
+      this.responsibles = employees
+      this.scheduleForm.controls.responsible.setValue(employees[0])
+      snack.dismiss()
+    })
 
     this.scheduleForm.controls.available_date.disable()
     this.scheduleForm.controls.duration.disable()

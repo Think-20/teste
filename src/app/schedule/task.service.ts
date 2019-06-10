@@ -16,6 +16,7 @@ import { JobActivity } from '../job-activities/job-activity.model';
 import { DataInfo } from '../shared/data-info.model';
 import { DatePipe } from '@angular/common';
 import { StringHelper } from 'app/shared/string-helper.model';
+import { Employee } from 'app/employees/employee.model';
 
 
 @Injectable()
@@ -70,6 +71,19 @@ export class TaskService {
         })
   }
   */
+
+  responsiblesByActivity(jobActivityId: number): Observable<Employee[]> {
+    let url = `tasks/${jobActivityId}/responsibles`
+
+    return this.http.get(`${API}/${url}`)
+        .map(response => response.json())
+        .catch((err) => {
+            this.snackBar.open(ErrorHandler.message(err), '', {
+                duration: 3000
+            })
+            return ErrorHandler.capture(err)
+        })
+  }
 
   tasks(params?: {}, page: number = 0): Observable<DataInfo> {
       let url = params === {} ? `tasks/all?page=${page}` : `tasks/filter?page=${page}`
