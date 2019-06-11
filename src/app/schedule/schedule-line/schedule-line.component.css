@@ -93,6 +93,14 @@
   font-size: 18px !important;
 }
 
+.time-icon-done {
+  color: #9EB25D;
+}
+
+.time-icon-highlight_off {
+  color: #C44536;
+}
+
 .signal {
   background-color: #fbfbfb;
   border-top: 1px solid #ccc !important;
