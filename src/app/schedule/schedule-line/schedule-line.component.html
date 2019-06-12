@@ -6,7 +6,7 @@
       </a>
       <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/show', task.job.id]" [queryParams]="getQueryParams(task)"
         mat-menu-item>
-        <mat-icon>done</mat-icon> Realizar tarefa
+        <mat-icon>done</mat-icon> {{ task.done ? 'Tarefa realizada' : 'Realizar tarefa' }}
       </a>
       <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/show', task.job.id]"
         mat-menu-item>
