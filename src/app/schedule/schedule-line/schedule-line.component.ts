@@ -79,17 +79,25 @@ export class ScheduleLineComponent implements OnInit {
       return ''
     }
 
-    if(task.project_file_done == 1) {
+    if(task.done == 1) {
       return 'done'
     } else {
       let finalDate = new Date(task.available_date + 'T00:00:00')
-      finalDate.setDate(finalDate.getDate() + parseInt(task.duration.toString()))
+      finalDate.setDate(finalDate.getDate() + (parseInt(task.duration.toString()) - 1))
 
       if(this.datePipe.transform(finalDate, 'yyyy-MM-dd') < this.datePipe.transform(new Date(), 'yyyy-MM-dd')) {
-        return 'highlight_off'
-      } else {
         return 'alarm'
+      } else {
+        return 'access_alarm'
       }
+    }
+  }
+
+  getQueryParams(task: Task) {
+    switch(task.job_activity.description) {
+      case 'Projeto': return { taskId: task.id, tab: 'project' }
+      case 'Memorial descritivo': return { taskId: task.id, tab: 'specification' }
+      default: return ''
     }
   }
 

@@ -4,9 +4,13 @@
       <a *ngIf="task.job.id == undefined" (click)="addTask(chrono.day)" mat-menu-item>
         <mat-icon>add</mat-icon> Adicionar
       </a>
+      <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/show', task.job.id]" [queryParams]="getQueryParams(task)"
+        mat-menu-item>
+        <mat-icon>done</mat-icon> {{ task.done ? 'Tarefa realizada' : 'Realizar tarefa' }}
+      </a>
       <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/show', task.job.id]"
         mat-menu-item>
-        <mat-icon>subject</mat-icon> Visualização
+        <mat-icon>subject</mat-icon> Visualizar job
       </a>
       <a [disabled]="!permissionVerify('task.edit', task.job)" *ngIf="task.id != undefined" [routerLink]="['/schedule/edit', task.id]"
         mat-menu-item>
@@ -82,8 +86,8 @@ draggable="true">
   </div>
   <div class="mat-cell mat-column-time">
     <p>{{ timeDisplay(task, chrono) }}</p>
-    <mat-icon *ngIf="task?.job?.id != null" class="time-icon" 
-    [class.time-icon-highlight_off]="timeIconDisplay(task, chrono) == 'highlight_off'"
+    <mat-icon *ngIf="task?.job?.id != null" class="time-icon"
+    [class.time-icon-alarm]="timeIconDisplay(task, chrono) == 'alarm'"
     [class.time-icon-done]="timeIconDisplay(task, chrono) == 'done'">
       {{ timeIconDisplay(task, chrono) }}
     </mat-icon>
