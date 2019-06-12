@@ -10,6 +10,14 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <cb-file-upload [properties]="{ task : task }" [files]="task.specification_files" [fileServiceInterface]="specificationFileService" [typeForm]="typeForm"></cb-file-upload>
+    <div *ngIf="task?.specification_files?.length > 0" class="row">
+      <div class="col-md-12 text-right">
+        <button mat-button class="cb-button button-navigate"
+          type="button" (click)="navigateToBudget(task)">
+          IR PARA AGENDA DO ORÇAMENTO
+        </button>
+      </div>
+    </div>
     <cb-budget-form class="inside-mat-card" *ngIf="task?.specification_files?.length > 0" [task]="task" [job]="job"></cb-budget-form>
   </mat-expansion-panel>
 </mat-accordion>

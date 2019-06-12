@@ -2,9 +2,12 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Job } from '../jobs/job.model';
 import { TaskService } from '../schedule/task.service';
 import { Task } from '../schedule/task.model';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SpecificationFileService } from './specification-file.service';
 import { StringHelper } from 'app/shared/string-helper.model';
+import { JobService } from 'app/jobs/job.service';
+import { MatSnackBar } from '@angular/material';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'cb-specification',
@@ -19,8 +22,12 @@ export class SpecificationComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private snackbar: MatSnackBar,
+    private datePipe: DatePipe,
+    private router: Router,
     private specificationFileService: SpecificationFileService,
-    private taskService: TaskService
+    private taskService: TaskService,
+    private jobService: JobService
   ) { }
 
   ngOnInit() {
@@ -31,6 +38,18 @@ export class SpecificationComponent implements OnInit {
   ngOnChanges() {
     this.sortTasks()
     this.loadTaskFromRoute()
+  }
+
+  navigateToBudget(task: Task) {
+    let snack = this.snackbar.open('Aguarde...')
+    this.jobService.job(this.job.id).subscribe((job) => {
+      snack.dismiss()
+      let available_date = job.tasks.filter((t) => {
+        return t.job_activity.description == 'Orçamento' && t.task_id == task.id
+      }).pop().available_date
+      let url = '/schedule?date=' + this.datePipe.transform(available_date, 'yyyy-MM-dd')
+      return this.router.navigateByUrl(url)
+    })
   }
 
   description(task: Task) {
