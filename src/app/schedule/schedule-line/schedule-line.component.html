@@ -82,8 +82,8 @@ draggable="true">
   </div>
   <div class="mat-cell mat-column-time">
     <p>{{ timeDisplay(task, chrono) }}</p>
-    <mat-icon *ngIf="task?.job?.id != null" class="time-icon" 
-    [class.time-icon-highlight_off]="timeIconDisplay(task, chrono) == 'highlight_off'"
+    <mat-icon *ngIf="task?.job?.id != null" class="time-icon"
+    [class.time-icon-alarm]="timeIconDisplay(task, chrono) == 'alarm'"
     [class.time-icon-done]="timeIconDisplay(task, chrono) == 'done'">
       {{ timeIconDisplay(task, chrono) }}
     </mat-icon>

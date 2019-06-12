@@ -83,12 +83,12 @@ export class ScheduleLineComponent implements OnInit {
       return 'done'
     } else {
       let finalDate = new Date(task.available_date + 'T00:00:00')
-      finalDate.setDate(finalDate.getDate() + parseInt(task.duration.toString()))
+      finalDate.setDate(finalDate.getDate() + (parseInt(task.duration.toString()) - 1))
 
       if(this.datePipe.transform(finalDate, 'yyyy-MM-dd') < this.datePipe.transform(new Date(), 'yyyy-MM-dd')) {
-        return 'highlight_off'
-      } else {
         return 'alarm'
+      } else {
+        return 'access_alarm'
       }
     }
   }
