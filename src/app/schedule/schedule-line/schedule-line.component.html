@@ -4,9 +4,13 @@
       <a *ngIf="task.job.id == undefined" (click)="addTask(chrono.day)" mat-menu-item>
         <mat-icon>add</mat-icon> Adicionar
       </a>
+      <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/show', task.job.id]" [queryParams]="getQueryParams(task)"
+        mat-menu-item>
+        <mat-icon>done</mat-icon> Realizar tarefa
+      </a>
       <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/show', task.job.id]"
         mat-menu-item>
-        <mat-icon>subject</mat-icon> Visualização
+        <mat-icon>subject</mat-icon> Visualizar job
       </a>
       <a [disabled]="!permissionVerify('task.edit', task.job)" *ngIf="task.id != undefined" [routerLink]="['/schedule/edit', task.id]"
         mat-menu-item>

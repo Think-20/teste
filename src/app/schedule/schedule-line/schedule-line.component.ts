@@ -93,6 +93,14 @@ export class ScheduleLineComponent implements OnInit {
     }
   }
 
+  getQueryParams(task: Task) {
+    switch(task.job_activity.description) {
+      case 'Projeto': return { taskId: task.id, tab: 'project' }
+      case 'Memorial descritivo': return { taskId: task.id, tab: 'specification' }
+      default: return ''
+    }
+  }
+
   signal(task: Task) {
     this.scrollStatusEmitter.emit(false)
     let job = task.job
