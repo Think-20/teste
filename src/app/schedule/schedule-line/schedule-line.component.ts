@@ -79,7 +79,7 @@ export class ScheduleLineComponent implements OnInit {
       return ''
     }
 
-    if(task.project_file_done == 1) {
+    if(task.done == 1) {
       return 'done'
     } else {
       let finalDate = new Date(task.available_date + 'T00:00:00')
