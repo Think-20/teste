@@ -13,7 +13,7 @@ export class AuthGuard implements CanActivate {
         private snackBar: MatSnackBar
     ) {}
 
-    canActivate(
+    async canActivate(
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ) {
@@ -29,7 +29,9 @@ export class AuthGuard implements CanActivate {
             originalRoute = '/' + iterativeRoute.routeConfig.path + originalRoute
         }
 
-        if(user === null || this.auth.token() == '' || this.auth.token() == null) {
+        let isLogged = await this.auth.isLogged()
+
+        if( !isLogged ) {
             this.snackBar.open('Desculpe, sua sessão expirou.', '', { duration: 3000 })
             this.router.navigate(['/login'], { queryParams: { returnUrl: state.url } })
             return false;

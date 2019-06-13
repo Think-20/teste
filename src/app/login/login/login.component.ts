@@ -80,10 +80,11 @@ export class LoginComponent implements OnInit {
         return true;
       }
 
+      this.auth.setValidToken(true)
       this.state = 'success'
       this.message = 'OK'
 
-      Observable.timer(1500).subscribe(timer => {  
+      Observable.timer(1500).subscribe(timer => {
         this.auth.setData(data)
         this.router.navigate([this.returnUrl])
       })
