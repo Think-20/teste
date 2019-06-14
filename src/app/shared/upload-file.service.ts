@@ -53,8 +53,6 @@ export class UploadFileService {
 
   uploadFile(inputFile: HTMLInputElement, callbackProgress = (percentDone) => {}, callbackResponse = (response) => {}) {
     let files = inputFile.files
-    let filenames = []
-
     return this.sendToServer(files, callbackProgress, callbackResponse)
   }
 
@@ -68,7 +66,7 @@ export class UploadFileService {
 
       let url = 'upload-file'
       let data = new FormData()
-      
+
       for(var i = 0; i < files.length; i++)
       data.append(i.toString(), files.item(i), files.item(i).name)
 
@@ -80,10 +78,10 @@ export class UploadFileService {
       return this.http.request(req)
           .map(event => {
             if(event.type == HttpEventType.UploadProgress) {
-              const percentDone = Math.round(100 * event.loaded / event.total);        
+              const percentDone = Math.round(100 * event.loaded / event.total);
               callbackProgress(percentDone)
             }
-            if(event.type == HttpEventType.Response) {   
+            if(event.type == HttpEventType.Response) {
               callbackResponse(event.body)
             }
           })
