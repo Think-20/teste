@@ -7,6 +7,7 @@ export class User {
   id: number
   email: string
   password: string
+  lastAccess: string
   employee?: Employee
   employee_id: number
   functionalities?: Functionality[]

@@ -7,13 +7,29 @@ import { ErrorHandler } from '../shared/error-handler.service';
 
 import { User } from '../user/user.model';
 import { Observable } from 'rxjs/Observable';
+import { DatePipe } from '@angular/common';
 
 @Injectable()
 export class AuthService {
     constructor(
         private http: Http,
+        private datePipe: DatePipe,
         private snackBar: MatSnackBar
     ) { }
+
+    async isLogged() {
+      return this.token() != null && (await this.validToken())
+    }
+
+    async validToken() {
+      if(sessionStorage.getItem('validToken') != null) {
+        return sessionStorage.getItem('validToken') === 'true'
+      }
+
+      let data = await this.checkToken().toPromise()
+      this.setValidToken(data.status)
+      return sessionStorage.getItem('validToken') === 'true'
+    }
 
     login(data): Observable<any> {
         let url = `${API}/login`
@@ -27,6 +43,18 @@ export class AuthService {
                 })
                 return ErrorHandler.capture(err)
             })
+    }
+
+    checkToken(): Observable<any> {
+        let url = `${API}/check-token`
+
+        return this.http
+            .get(url)
+            .map(response => response.json())
+    }
+
+    setValidToken(status: boolean) {
+      sessionStorage.setItem('validToken', status ? 'true' : 'false')
     }
 
     logout() {
