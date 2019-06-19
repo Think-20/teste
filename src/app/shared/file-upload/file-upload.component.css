@@ -3,6 +3,10 @@
   flex-wrap: wrap;
 }
 
+.cb-progress {
+  margin-bottom: 10px;
+}
+
 .add-file, .delete-file, .download-file, .aux-button {
   z-index: 10;
   min-width: 10px !important;

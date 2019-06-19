@@ -29,8 +29,11 @@
           <mat-icon>outlined_flag</mat-icon> Remover sinalização
         </span>
       </a>
-      <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined" (click)="delete(task)" mat-menu-item>
-        <mat-icon>delete</mat-icon> Remover
+      <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined" (click)="deleteTask(task)" mat-menu-item>
+        <mat-icon>delete</mat-icon> Remover tarefa
+      </button>
+      <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined" (click)="deleteJob(task)" mat-menu-item>
+        <mat-icon>delete</mat-icon> Remover job
       </button>
     </div>
   </ng-template>

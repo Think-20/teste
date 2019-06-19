@@ -80,6 +80,9 @@ export class NotificationItemComponent implements OnInit {
       case 'Cadastro de tarefa': {
         return this.goToTask(notification.info)
       }
+      case 'Atraso de tarefa': {
+        return this.goToTask(notification.info)
+      }
       case 'Alteração de tarefa': {
         return this.goToTask(notification.info)
       }

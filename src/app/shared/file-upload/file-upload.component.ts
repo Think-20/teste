@@ -21,6 +21,7 @@ export class FileUploadComponent implements OnInit {
   fileForm: FormGroup
   progress: number
   @Input() properties: any
+  @Input() accept: String[] = ['application/pdf', 'image/jpeg']
   @Input() typeForm: string
   @Input() files: FileUploadInterface[] = []
   @Input() fileServiceInterface: FileUploadServiceInterface
@@ -123,6 +124,16 @@ export class FileUploadComponent implements OnInit {
   uploadFile(inputFile: HTMLInputElement) {
     let snackbar = this.snackbar.open('Aguarde enquanto carregamos os arquivos...')
     let filenames: string[] = []
+
+    for(let i = 0; i < inputFile.files.length; i++) {
+      if(this.accept.indexOf(inputFile.files.item(i).type) < 0) {
+        snackbar.dismiss()
+        snackbar = this.snackbar.open('Só é permitido fazer upload de ' + this.accept.join(', '), '', {
+          duration: 5000
+        })
+        return;
+      }
+    }
 
     this.uploadFileService.uploadFile(inputFile, (percentDone) => {
       this.progress = percentDone

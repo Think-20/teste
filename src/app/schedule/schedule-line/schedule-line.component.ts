@@ -121,9 +121,22 @@ export class ScheduleLineComponent implements OnInit {
     })
   }
 
-  delete(task: Task) {
+  deleteTask(task: Task) {
     let lastDate = new Date(task.available_date + "T00:00:00")
     this.taskService.delete(task.id).subscribe((data) => {
+      this.snackBar.open(data.message, '', {
+        duration: 5000
+      })
+
+      if (data.status) {
+        this.changeMonthEmitter.emit({month: this.month, lastDate: lastDate})
+      }
+    })
+  }
+
+  deleteJob(task: Task) {
+    let lastDate = new Date(task.available_date + "T00:00:00")
+    this.jobService.delete(task.job.id).subscribe((data) => {
       this.snackBar.open(data.message, '', {
         duration: 5000
       })
