@@ -67,11 +67,11 @@
   display: flex;
   justify-content: flex-end;
   align-items: flex-end;
-  padding-top: 32px;
+  padding-top: 27px;
 }
 
 .user-photo img {
-  margin-top: -47px;
+  display: block;
 }
 
 .user-name {
@@ -79,6 +79,7 @@
   font-size: 20px;
   margin-right: 12px;
   font-weight: 300;
+  line-height: 21px;
 }
 
 .nav-navbar {
