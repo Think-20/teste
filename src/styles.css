@@ -771,6 +771,10 @@ cb-schedule {
   border-bottom: 1px solid rgba(0,0,0,.15);
 }
 
+.cb-progress {
+  height: 2px !important;
+}
+
 .cb-checkbox-inside-control {
   position: absolute;
   right: 5px;
