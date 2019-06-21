@@ -2,7 +2,7 @@
   <h3 class="lead">{{ job?.id != undefined ? 'Job ' + showId(job) + ' | ' + displayNameEvent(job) : 'Jobs'}}</h3>
 </div>
 <div id="containerJobTabs" class="col-md-12">
-  <mat-tab-group [selectedIndex]="selectedIndex">
+  <mat-tab-group [selectedIndex]="selectedIndex" (selectedTabChange)="tab($event)">
     <mat-tab label="Informações">
       <cb-job-form [typeForm]="typeForm" (jobEmitter)="setJob($event)" (isAdminEmitter)="setIsAdmin($event)"></cb-job-form>
     </mat-tab>

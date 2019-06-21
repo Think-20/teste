@@ -79,9 +79,16 @@ export class ProjectsComponent implements OnInit {
   }
 
   showButtonSpecification(task: Task) {
-    if(task.project_files.length == 0
-    || task.specification_files.length > 0)
+    if(task.project_files.length == 0)
       return false
+
+    let specificationTask = this.job.tasks.filter((t) => {
+      return t.task_id == task.id && t.specification_files.length > 0
+    })
+
+    if(specificationTask.length > 0) {
+      return false
+    }
 
     return true
   }
