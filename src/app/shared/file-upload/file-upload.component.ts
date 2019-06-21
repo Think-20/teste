@@ -9,6 +9,9 @@ import { FileUploadService } from './file-upload.service';
 import { ImageViewerComponent } from '../../shared/image-viewer/image-viewer.component';
 import { GALLERY_IMAGE } from 'ngx-image-gallery';
 import { LoggerService } from '../logger.service';
+import { MessageLoadingComponent } from './message-loading/message-loading';
+import { MessageLoadingService } from './message-loading/message-loading.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'cb-file-upload',
@@ -30,6 +33,7 @@ export class FileUploadComponent implements OnInit {
     private formBuilder: FormBuilder,
     private snackbar: MatSnackBar,
     private fileUploadService: FileUploadService,
+    private messageLoadingService: MessageLoadingService,
     private logger: LoggerService,
     private uploadFileService: UploadFileService) { }
 
@@ -122,8 +126,7 @@ export class FileUploadComponent implements OnInit {
   }
 
   uploadFile(inputFile: HTMLInputElement) {
-    let snackbar = this.snackbar.open('Aguarde enquanto carregamos os arquivos...')
-    let filenames: string[] = []
+    let snackbar = this.snackbar.open('Aguarde enquanto carregamos os arquivos. O upload pode demorar dependendo do tamanho e quantidade de arquivos...')
 
     for(let i = 0; i < inputFile.files.length; i++) {
       if(this.accept.indexOf(inputFile.files.item(i).type) < 0) {
@@ -135,8 +138,13 @@ export class FileUploadComponent implements OnInit {
       }
     }
 
+    snackbar.dismiss()
+    snackbar = this.snackbar.openFromComponent(MessageLoadingComponent)
+    this.messageLoadingService.counter.next(0)
+
     this.uploadFileService.uploadFile(inputFile, (percentDone) => {
       this.progress = percentDone
+      this.messageLoadingService.counter.next(percentDone.toFixed(0))
     }, (response) => {
       let files: FileUploadInterface[] = []
 
