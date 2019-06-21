@@ -1,8 +1,9 @@
-import { Component, OnInit, Injectable, ElementRef, ViewChild, HostListener } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnInit, Injectable, ElementRef, ViewChild } from '@angular/core';
+import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Job } from '../job.model';
 import { Observable } from 'rxjs/Observable';
 import { JobService } from '../job.service';
+import { MatTabChangeEvent } from '@angular/material';
 
 @Component({
   selector: 'cb-job-tabs',
@@ -17,9 +18,15 @@ export class JobTabsComponent implements OnInit {
   job: Job
   isAdmin: boolean
   selectedIndex: number = 0
+  tabs = [
+    {index: 1, description: 'briefing'},
+    {index: 2, description: 'project'},
+    {index: 3, description: 'specification'}
+  ]
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private jobService: JobService,
   ) { }
 
@@ -27,27 +34,23 @@ export class JobTabsComponent implements OnInit {
     this.typeForm = this.route.snapshot.url[0].path
     this.route.queryParams.subscribe((params) => {
       let next = params['tab']
-
-      switch(next) {
-        case 'briefing' :{
-          this.selectedIndex = 1
-          break
-        }
-        case 'project' :{
-          this.selectedIndex = 2
-          break
-        }
-        case 'specification' :{
-          this.selectedIndex = 3
-          break
-        }
-        default :{
-          this.selectedIndex = 0
-        }
-      }
+      this.selectedIndex = this.tabs.find(tab => tab.description == next).index
     })
 
     this.initContainerWidthObservable()
+  }
+
+  tab($event: MatTabChangeEvent) {
+    let target = this.tabs.find(tab => tab.index == $event.index).description
+
+    const queryParams: Params = { tab: target };
+    this.router.navigate(
+      [],
+      {
+        relativeTo: this.route,
+        queryParams: queryParams,
+        queryParamsHandling: "merge",
+      });
   }
 
   initContainerWidthObservable() {

@@ -174,6 +174,8 @@ import { FileUploadService } from './shared/file-upload/file-upload.service';
 import { SpecificationFileService } from './specification/specification-file.service';
 import { LoggerService } from './shared/logger.service';
 import { RouterExtService } from './shared/router-ext.service';
+import { MessageLoadingComponent } from './shared/file-upload/message-loading/message-loading';
+import { MessageLoadingService } from './shared/file-upload/message-loading/message-loading.service';
 
 registerLocaleData(localePt);
 
@@ -277,7 +279,8 @@ registerLocaleData(localePt);
     EventsComponent,
     PerformanceReportLiteComponent,
     SpecificationComponent,
-    FileUploadComponent
+    FileUploadComponent,
+    MessageLoadingComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -369,6 +372,7 @@ registerLocaleData(localePt);
     MatDialog,
     MatSnackBar,
     MatSlideToggle,
+    MessageLoadingService,
     DatePipe,
     {provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
     {provide: LOCALE_ID, useValue: 'pt-BR'},
@@ -381,7 +385,8 @@ registerLocaleData(localePt);
     StandItemFormComponent,
     ReloadComponent,
     ImageViewerComponent,
-    BlockDialogComponent
+    BlockDialogComponent,
+    MessageLoadingComponent
   ]
 })
 export class AppModule { }

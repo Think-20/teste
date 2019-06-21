@@ -143,11 +143,12 @@
           <div class="mat-header-cell mat-column-stat">Status</div>
         </div>
         <div class="mat-row-scroll">
-          <div #list class="mat-row" *ngFor="let chr of chrono; let i = index"
-            [class.hidden]="paramsHasFilter && chr.length == 0">
+          <div #list class="mat-row" *ngFor="let chr of chrono; let i = index">
             <h4 *ngIf="chrono[i - 1]?.month != chrono[i]?.month" class="month-line">
-              {{ months[chrono[i]?.month - 1].name }}</h4>
-            <div class="line-chrono" [ngClass]="lineChronoClass(chr, employees)">
+              {{ months[chrono[i]?.month - 1].name }}
+            </h4>
+            <div class="line-chrono" [class.hidden]="paramsHasFilter && chr.length == 0"
+             [ngClass]="lineChronoClass(chr, employees)">
               <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }} month-{{ chr.month }}">
                 <div>
                   <span>{{ chr.day }}-{{ chr.dayOfWeek?.abbrev }}</span>

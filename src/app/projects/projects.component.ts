@@ -16,6 +16,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent implements OnInit {
+  @Input('typeForm') typeForm: string
   @Input() job: Job
   actionText: string
   actionUrl: string
@@ -52,9 +53,16 @@ export class ProjectsComponent implements OnInit {
     })
   }
 
+  uploadDone(task: Task) {
+    let newTask = this.sortedTasks.find(t => t.id == task.id)
+    newTask.project_files[newTask.project_files.length - 1].responsible = this.authService.currentUser().employee
+    this.sortedTasks[this.sortedTasks.findIndex(t => t.id == newTask.id)] = newTask
+  }
+
   ngOnChanges() {
     this.sortTasks()
     this.loadTaskFromRoute()
+    this.expandedIndex = this.expandedIndex == null ? 0 : this.expandedIndex
   }
 
   getText() {
@@ -71,9 +79,16 @@ export class ProjectsComponent implements OnInit {
   }
 
   showButtonSpecification(task: Task) {
-    if(task.project_files.length == 0
-    || task.specification_files.length > 0)
+    if(task.project_files.length == 0)
       return false
+
+    let specificationTask = this.job.tasks.filter((t) => {
+      return t.task_id == task.id && t.specification_files.length > 0
+    })
+
+    if(specificationTask.length > 0) {
+      return false
+    }
 
     return true
   }

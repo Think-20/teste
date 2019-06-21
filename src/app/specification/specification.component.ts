@@ -8,6 +8,7 @@ import { StringHelper } from 'app/shared/string-helper.model';
 import { JobService } from 'app/jobs/job.service';
 import { MatSnackBar } from '@angular/material';
 import { DatePipe } from '@angular/common';
+import { AuthService } from 'app/login/auth.service';
 
 @Component({
   selector: 'cb-specification',
@@ -15,7 +16,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./specification.component.css']
 })
 export class SpecificationComponent implements OnInit {
-
+  @Input('typeForm') typeForm: string
   @Input() job: Job
   sortedTasks: Task[]
   expandedIndex: number = 0
@@ -24,6 +25,7 @@ export class SpecificationComponent implements OnInit {
     private route: ActivatedRoute,
     private snackbar: MatSnackBar,
     private datePipe: DatePipe,
+    private authService: AuthService,
     private router: Router,
     private specificationFileService: SpecificationFileService,
     private taskService: TaskService,
@@ -38,6 +40,13 @@ export class SpecificationComponent implements OnInit {
   ngOnChanges() {
     this.sortTasks()
     this.loadTaskFromRoute()
+    this.expandedIndex = this.expandedIndex == null ? 0 : this.expandedIndex
+  }
+
+  uploadDone(task: Task) {
+    let newTask = this.sortedTasks.find(t => t.id == task.id)
+    newTask.specification_files[newTask.specification_files.length - 1].responsible = this.authService.currentUser().employee
+    this.sortedTasks[this.sortedTasks.findIndex(t => t.id == newTask.id)] = newTask
   }
 
   navigateToBudget(task: Task) {
