@@ -16,7 +16,7 @@ import { AuthService } from 'app/login/auth.service';
   styleUrls: ['./specification.component.css']
 })
 export class SpecificationComponent implements OnInit {
-
+  @Input('typeForm') typeForm: string
   @Input() job: Job
   sortedTasks: Task[]
   expandedIndex: number = 0

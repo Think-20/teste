@@ -11,7 +11,9 @@
     </mat-expansion-panel-header>
     <cb-file-upload [properties]="{ task : task }" [files]="task.project_files"
       [fileServiceInterface]="projectFileService" [typeForm]="typeForm"
-      (uploadEmitter)="uploadDone(task)"></cb-file-upload>
+      (uploadEmitter)="uploadDone(task)"
+      [readOnly]="task.budget != null" [readOnlyMessage]="'Após orçamento preenchido, não é possível alterar os arquivos'">
+    </cb-file-upload>
     <button mat-button matTooltip="Download completo" class="aux-button"
       type="button" (click)="downloadAll()">
       <mat-icon>folder</mat-icon>

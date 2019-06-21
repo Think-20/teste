@@ -22,6 +22,8 @@ export class FileUploadComponent implements OnInit {
   images: GALLERY_IMAGE[] = []
   fileForm: FormGroup
   progress: number
+  @Input() readOnly: boolean = false
+  @Input() readOnlyMessage: string = 'Não é possível alterar, somente leitura'
   @Input() properties: any
   @Input() accept: String[] = ['application/pdf', 'image/jpeg']
   @Input() typeForm: string
@@ -109,6 +111,11 @@ export class FileUploadComponent implements OnInit {
   }
 
   deleteFile(i) {
+    if(this.readOnly) {
+      this.snackbar.open(this.readOnlyMessage, '', { duration: 3000 })
+      return
+    }
+
     let snackbar = this.snackbar.open('Aguarde, estamos removendo...')
     const files = <FormArray>this.fileForm.controls.files
     let fileInterface = <FileUploadInterface> files.at(i).value
@@ -126,6 +133,11 @@ export class FileUploadComponent implements OnInit {
   }
 
   uploadFile(inputFile: HTMLInputElement) {
+    if(this.readOnly) {
+      this.snackbar.open(this.readOnlyMessage, '', { duration: 3000 })
+      return
+    }
+
     let snackbar = this.snackbar.open('Aguarde enquanto carregamos os arquivos. O upload pode demorar dependendo do tamanho e quantidade de arquivos...')
 
     for(let i = 0; i < inputFile.files.length; i++) {

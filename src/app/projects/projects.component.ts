@@ -16,6 +16,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent implements OnInit {
+  @Input('typeForm') typeForm: string
   @Input() job: Job
   actionText: string
   actionUrl: string
