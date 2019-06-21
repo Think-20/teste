@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { UploadFileService } from '../upload-file.service';
@@ -11,7 +11,6 @@ import { GALLERY_IMAGE } from 'ngx-image-gallery';
 import { LoggerService } from '../logger.service';
 import { MessageLoadingComponent } from './message-loading/message-loading';
 import { MessageLoadingService } from './message-loading/message-loading.service';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'cb-file-upload',
@@ -28,6 +27,7 @@ export class FileUploadComponent implements OnInit {
   @Input() typeForm: string
   @Input() files: FileUploadInterface[] = []
   @Input() fileServiceInterface: FileUploadServiceInterface
+  @Output() uploadEmitter: EventEmitter<boolean> = new EventEmitter()
 
   constructor(
     private formBuilder: FormBuilder,
@@ -159,6 +159,8 @@ export class FileUploadComponent implements OnInit {
 
       let url = this.fileServiceInterface.saveMultipleUrl()
       this.fileUploadService.saveMultiple(files, url).subscribe((data) => {
+        this.uploadEmitter.emit(true)
+
         snackbar.dismiss()
         if(data.status == false) {
           this.snackbar.open(data.message, '', { duration: 3000 })

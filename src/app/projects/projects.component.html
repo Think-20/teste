@@ -9,7 +9,9 @@
         </p>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    <cb-file-upload [properties]="{ task : task }" [files]="task.project_files" [fileServiceInterface]="projectFileService" [typeForm]="typeForm"></cb-file-upload>
+    <cb-file-upload [properties]="{ task : task }" [files]="task.project_files"
+      [fileServiceInterface]="projectFileService" [typeForm]="typeForm"
+      (uploadEmitter)="uploadDone(task)"></cb-file-upload>
     <button mat-button matTooltip="Download completo" class="aux-button"
       type="button" (click)="downloadAll()">
       <mat-icon>folder</mat-icon>
