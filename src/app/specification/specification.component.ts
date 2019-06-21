@@ -38,6 +38,7 @@ export class SpecificationComponent implements OnInit {
   ngOnChanges() {
     this.sortTasks()
     this.loadTaskFromRoute()
+    this.expandedIndex = this.expandedIndex == null ? 0 : this.expandedIndex
   }
 
   navigateToBudget(task: Task) {
