@@ -9,7 +9,6 @@
         </p>
       </mat-panel-title>
     </mat-expansion-panel-header>
-    {{ task | json }}
     <cb-file-upload [properties]="{ task : task }" [files]="task.specification_files"
       [fileServiceInterface]="specificationFileService" [typeForm]="typeForm"
       (uploadEmitter)="uploadDone(task)"></cb-file-upload>
