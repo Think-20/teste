@@ -152,7 +152,7 @@ export class FileUploadComponent implements OnInit {
 
     snackbar.dismiss()
     snackbar = this.snackbar.openFromComponent(MessageLoadingComponent)
-    this.messageLoadingService.counter.next(0)
+    this.messageLoadingService.counter.next(1)
 
     this.uploadFileService.uploadFile(inputFile, (percentDone) => {
       this.progress = percentDone
@@ -171,8 +171,6 @@ export class FileUploadComponent implements OnInit {
 
       let url = this.fileServiceInterface.saveMultipleUrl()
       this.fileUploadService.saveMultiple(files, url).subscribe((data) => {
-        this.uploadEmitter.emit(true)
-
         snackbar.dismiss()
         if(data.status == false) {
           this.snackbar.open(data.message, '', { duration: 3000 })
@@ -184,6 +182,8 @@ export class FileUploadComponent implements OnInit {
           this.addFile(fileInterface)
           this.files.push(fileInterface)
         })
+
+        this.uploadEmitter.emit(true)
       })
     }).subscribe(() => {})
   }

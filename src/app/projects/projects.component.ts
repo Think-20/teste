@@ -55,7 +55,7 @@ export class ProjectsComponent implements OnInit {
 
   uploadDone(task: Task) {
     let newTask = this.sortedTasks.find(t => t.id == task.id)
-    newTask.specification_files[newTask.specification_files.length - 1].responsible = this.authService.currentUser().employee
+    newTask.project_files[newTask.project_files.length - 1].responsible = this.authService.currentUser().employee
     this.sortedTasks[this.sortedTasks.findIndex(t => t.id == newTask.id)] = newTask
   }
 
