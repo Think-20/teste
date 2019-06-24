@@ -188,7 +188,7 @@ export class ScheduleLineComponent implements OnInit {
         break
       }
       case 'delete': {
-        access = job.attendance.id != employee.id ? this.authService.hasAccess('job/remove/{id}') : true
+        access = this.authService.hasAccess('job/remove/{id}')
         break
       }
       default: {
