@@ -22,6 +22,7 @@ export class FileUploadComponent implements OnInit {
   images: GALLERY_IMAGE[] = []
   fileForm: FormGroup
   progress: number
+  @Input() max: number = null
   @Input() readOnly: boolean = false
   @Input() readOnlyMessage: string = 'Não é possível alterar, somente leitura'
   @Input() properties: any
