@@ -47,6 +47,10 @@ right: -0px;
   border: 1px solid #ddd;
 }
 
+.project-image-container {
+  min-width: 145px;
+}
+
 .project-image-container, .project-image {
   position: relative;
   overflow: hidden;

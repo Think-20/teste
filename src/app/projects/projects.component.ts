@@ -118,8 +118,8 @@ export class ProjectsComponent implements OnInit {
     })
   }
 
-  downloadAll() {
-    let url = this.projectFileService.downloadAllUrl(this.job.task)
+  downloadAll(task: Task) {
+    let url = this.projectFileService.downloadAllUrl(task)
     window.open(`${API}/${url}`, '_blank')
   }
 
