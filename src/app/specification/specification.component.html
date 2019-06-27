@@ -10,7 +10,7 @@
       </mat-panel-title>
     </mat-expansion-panel-header>
     <div class="row container-files">
-      <cb-file-upload class="col-md-8"
+      <cb-file-upload class="col-md-8" [class.col-md-12]="task?.specification_files?.length == 0"
         [properties]="{ task : task }" [files]="task.specification_files"
         [fileServiceInterface]="specificationFileService" [typeForm]="typeForm"
         (uploadEmitter)="uploadDone(task)"
