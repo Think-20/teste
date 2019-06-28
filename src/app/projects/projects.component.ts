@@ -7,7 +7,7 @@ import { ProjectFileService } from './project-file.service';
 import { API } from 'app/app.api';
 import { EmployeeService } from 'app/employees/employee.service';
 import { AuthService } from 'app/login/auth.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 
 @Component({

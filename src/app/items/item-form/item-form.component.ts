@@ -2,7 +2,9 @@ import { Component, OnInit, Injectable, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar, MatDialog, MatSlideToggle } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Item } from '../item.model';
 import { ChildItem } from '../../child-items/child-item.model';
@@ -51,7 +53,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 @Injectable()
 export class ItemFormComponent implements OnInit {
 
-  @ViewChild('fileInput') fileInput
+  @ViewChild('fileInput', { static: false }) fileInput
   typeForm: string
   rowAppearedState = 'ready'
   item: Item

@@ -39,10 +39,9 @@
   </ng-template>
 </mat-menu>
 
-<mat-menu #menu2="matMenu"></mat-menu>
-
 <div class="line-job"
-[matMenuTriggerFor]="jobDisplay(task, chrono).indexOf('Continuação de') > -1 ? menu2 : menu"
+(menuOpened)="openMenu(task, chrono)"
+[matMenuTriggerFor]="menu"
 [matMenuTriggerData]="{task: task, chrono: chrono}"
 [ngClass]="getLineClass(chrono, task, chrono.day, chrono.month)"
 (dblclick)="goToJob(task.job)"

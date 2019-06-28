@@ -2,7 +2,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ValidatorFn } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
-import { MatSnackBar, MatDatepicker } from '@angular/material';
+import { MatDatepicker } from '@angular/material/datepicker';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { JobActivity } from 'app/job-activities/job-activity.model';
 import { JobService } from 'app/jobs/job.service';
 import { BriefingService } from 'app/briefings/briefing.service';
@@ -73,7 +74,7 @@ export class ScheduleFormComponent implements OnInit {
   buttonText: string = 'PRÓXIMO'
   budgetValueMessage: string
   subscriptions: Subscription[] = []
-  @ViewChild('availableDatepicker') availableDatepicker: MatDatepicker<Date>
+  @ViewChild('availableDatepicker', { static: false }) availableDatepicker: MatDatepicker<Date>
   buttonEnable: boolean = true
 
   constructor(

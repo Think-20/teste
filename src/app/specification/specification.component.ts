@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { SpecificationFileService } from './specification-file.service';
 import { StringHelper } from 'app/shared/string-helper.model';
 import { JobService } from 'app/jobs/job.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import { AuthService } from 'app/login/auth.service';
 

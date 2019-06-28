@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewChildren, QueryList, NgZone, ElementRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Pagination } from 'app/shared/pagination.model';
 import { Employee } from '../employees/employee.model';

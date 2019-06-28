@@ -3,7 +3,7 @@ import { ActivatedRoute, Router, Params } from '@angular/router';
 import { Job } from '../job.model';
 import { Observable } from 'rxjs/Observable';
 import { JobService } from '../job.service';
-import { MatTabChangeEvent } from '@angular/material';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 
 @Component({
   selector: 'cb-job-tabs',
@@ -12,7 +12,7 @@ import { MatTabChangeEvent } from '@angular/material';
 })
 @Injectable()
 export class JobTabsComponent implements OnInit {
-  @ViewChild('container') container: ElementRef
+  @ViewChild('container', { static: false }) container: ElementRef
   containerWidth: number
   typeForm: string
   job: Job

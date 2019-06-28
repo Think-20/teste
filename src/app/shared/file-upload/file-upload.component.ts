@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { UploadFileService } from '../upload-file.service';
 import { API } from '../../app.api';
 import { FileUploadInterface } from './file-upload.interface';
@@ -18,7 +18,7 @@ import { MessageLoadingService } from './message-loading/message-loading.service
   styleUrls: ['./file-upload.component.css']
 })
 export class FileUploadComponent implements OnInit {
-  @ViewChild(ImageViewerComponent) imageViewer: ImageViewerComponent;
+  @ViewChild(ImageViewerComponent, { static: false }) imageViewer: ImageViewerComponent;
   images: GALLERY_IMAGE[] = []
   fileForm: FormGroup
   progress: number

@@ -24,6 +24,7 @@ h1, h2, h3, h4, h5, h6, dd, dt, p, div, span, table {
 .lead {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-weight: lighter;
 }
 
 html, body, cb-login {
@@ -318,6 +319,7 @@ mat-card-title {
     border-top-right-radius: 2px;
     margin-bottom: 0px !important;
     padding: 15px 15px 15px 15px;
+    font-weight: 400 !important;
     /*
     box-shadow: 0px 0px 0px rgba(0,0,0,.1),
         -1px 1px 2px rgba(0,0,0,.1),
@@ -862,3 +864,14 @@ cb-proposals .mat-expansion-panel-body {
   background-color: #00afef;
 }
 
+.mat-drawer-side {
+  border-right: 0 !important;
+}
+
+.mat-drawer-inner-container {
+  overflow: hidden !important;
+}
+
+.mat-card-header-text {
+  margin: 0px 7px !important;
+}

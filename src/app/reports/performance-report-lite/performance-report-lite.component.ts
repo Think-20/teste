@@ -4,7 +4,7 @@ import { Employee } from '../../employees/employee.model';
 import { EmployeeService } from '../../employees/employee.service';
 import { JobService } from '../../jobs/job.service';
 import { PerformanceReportLite } from './performance-report-lite.model';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MONTHS, Month } from '../../shared/date/months';
 import { Patterns } from '../../shared/patterns.model';
 
