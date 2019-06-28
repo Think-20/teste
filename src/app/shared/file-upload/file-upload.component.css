@@ -77,3 +77,16 @@ right: -0px;
   background-size: 32px 32px !important;
 
 }
+
+.container-bar-add {
+  align-content: center;
+}
+
+.content-bar {
+  flex: 8;
+  padding-right: 10px;
+}
+
+.content-add {
+  flex: 2;
+}
