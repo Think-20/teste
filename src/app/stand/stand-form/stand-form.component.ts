@@ -2,7 +2,8 @@ import { Component, OnInit, Injectable, Input, Output, EventEmitter } from '@ang
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute } from '@angular/router';
-import { MatSnackBar, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Stand } from '../stand.model';
 import { StandService } from '../stand.service';

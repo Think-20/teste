@@ -4,7 +4,7 @@ import { NotificationType } from '../notification-type/notification-type.model';
 import { Notification } from '../notification/notification.model';
 import { Router } from '@angular/router';
 import { TaskService } from '../../schedule/task.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { DatePipe } from '@angular/common';
 import { API } from 'app/app.api';
 import { SafePipe } from '../../shared/safe.pipe';

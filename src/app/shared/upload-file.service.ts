@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
 import { Http, Headers, RequestOptions } from '@angular/http';
-import { MatSnackBar } from '@angular/material'
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';

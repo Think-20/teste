@@ -5,7 +5,7 @@ import { BriefingService } from '../briefing.service';
 import { UploadFileService } from '../../shared/upload-file.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Employee } from '../../employees/employee.model';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ErrorHandler } from '../../shared/error-handler.service';
 import { Patterns } from '../../shared/patterns.model';
@@ -31,7 +31,7 @@ export class BriefingFormComponent implements OnInit {
   @Input('briefing') briefing: Briefing
   @Input('isAdmin') isAdmin: boolean = false
   @Input('typeForm') typeForm: string
-  @ViewChild('responsible') responsibleSelect
+  @ViewChild('responsible', { static: false }) responsibleSelect
 
   constructor(
     private briefingService: BriefingService,

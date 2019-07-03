@@ -7,11 +7,11 @@ import { AuthService } from '../../login/auth.service';
 import { Job } from '../../jobs/job.model';
 import { JobService } from '../../jobs/job.service';
 import { JobStatus } from '../../job-status/job-status.model';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Month } from '../../shared/date/months';
 import { Router } from '@angular/router';
 import { isObject } from 'util';
-import { MatMenuTrigger } from '@angular/material';
+import { MatMenuTrigger } from '@angular/material/menu';
 
 @Component({
   selector: 'cb-schedule-line',
@@ -30,7 +30,7 @@ export class ScheduleLineComponent implements OnInit {
   @Input() today: Date
   @Output() scrollStatusEmitter: EventEmitter<boolean> = new EventEmitter()
   @Output() changeMonthEmitter: EventEmitter<any> = new EventEmitter()
-  @ViewChild(MatMenuTrigger) menu: MatMenuTrigger;
+  @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
 
   constructor(
     private jobService: JobService,
@@ -42,6 +42,12 @@ export class ScheduleLineComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+  }
+
+  openMenu(task: Task, chrono: Chrono) {
+    if(this.jobDisplay(task, chrono).indexOf('Continuação de') >= 0) {
+      this.menu.closeMenu();
+    }
   }
 
   goToJob(job: Job) {
@@ -290,8 +296,8 @@ export class ScheduleLineComponent implements OnInit {
     available.forEach((value) => {
       if(text.indexOf(value) >= 0) found = true
     })
-    
-    if(text.indexOf('Orçamento') >= 0 
+
+    if(text.indexOf('Orçamento') >= 0
     && task.job.job_activity.description != 'Projeto externo') {
       found = true
     }

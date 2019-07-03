@@ -1,5 +1,5 @@
 import { OnInit, Component } from '@angular/core';
-import { SimpleSnackBar, MatSnackBarRef } from '@angular/material';
+import { SimpleSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import { MessageLoadingService } from './message-loading.service';
 import { Subject } from 'rxjs';
 

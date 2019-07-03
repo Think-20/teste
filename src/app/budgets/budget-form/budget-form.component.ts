@@ -3,7 +3,7 @@ import { Budget } from '../budget.model';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { BudgetService } from '../budget.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ErrorHandler } from '../../shared/error-handler.service';
 import { Task } from '../../schedule/task.model';
 import { distinctUntilChanged } from 'rxjs/operators';

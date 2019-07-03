@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ClientService } from '../client.service';
 
@@ -11,7 +11,7 @@ import { ClientService } from '../client.service';
 })
 export class ClientImportComponent implements OnInit {
 
-  @ViewChild('fileInput') fileInput
+  @ViewChild('fileInput', { static: false }) fileInput
   informations: Array<any> = []
   clientForm: FormGroup
 
