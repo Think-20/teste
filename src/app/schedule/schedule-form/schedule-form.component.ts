@@ -170,19 +170,27 @@ export class ScheduleFormComponent implements OnInit {
       let jobActivity = this.scheduleForm.controls.job_activity.value as JobActivity
       this.setButtons()
 
-      if (jobActivity.description == 'Modificação')
+      if (jobActivity.description == 'Modificação') {
         this.addModificationEvents()
-      else if (jobActivity.description == 'Detalhamento')
+      }
+      else if (jobActivity.description == 'Detalhamento') {
         this.addDetailingEvents()
-      else if (jobActivity.description == 'Continuação')
+      }
+      else if (jobActivity.description == 'Continuação') {
         this.addContinuationEvents()
-      else if (jobActivity.description == 'Opção')
+      }
+      else if (jobActivity.description == 'Opção') {
         this.addOptionEvents()
-      else if (jobActivity.description == 'Outsider')
+      }
+      else if (jobActivity.description == 'Outsider') {
         this.addOutsiderEvents()
-      else if (jobActivity.no_params == 1)
+      }
+      else if (jobActivity.no_params == 1) {
         this.noEvents()
-      else this.addOtherEvents()
+      }
+      else {
+        this.addOtherEvents()
+      }
     })
 
     this.scheduleForm.controls.budget_value.valueChanges
@@ -228,11 +236,11 @@ export class ScheduleFormComponent implements OnInit {
         if(this.scheduleForm.controls.job_activity.value.description != 'Modificação')
           this.scheduleForm.controls.responsible.setValue(this.responsibles.length > 0 ? this.responsibles[0] : '')
       })
-
-    this.addValidationBudget()
   }
 
   noEvents() {
+    this.clearEvents()
+
     this.showExtraParams = false
     let jobActivity = this.scheduleForm.controls.job_activity.value as JobActivity
 
@@ -243,8 +251,11 @@ export class ScheduleFormComponent implements OnInit {
       snack.dismiss()
     })
 
+
     this.scheduleForm.controls.available_date.disable()
     this.scheduleForm.controls.duration.disable()
+    this.scheduleForm.controls.budget_value.setValidators([])
+    this.scheduleForm.controls.budget_value.updateValueAndValidity()
   }
 
   enableSearchForm() {
@@ -269,7 +280,6 @@ export class ScheduleFormComponent implements OnInit {
     this.scheduleForm.controls.budget_value.disable()
     this.nextDateMessage = 'Escolha primeiro o job, para verificarmos o responsável e a data disponível.'
 
-    let snackbar
     let controls = this.searchForm.controls
     let types = ['Projeto', 'Modificação', 'Outsider', 'Opção']
 
@@ -409,6 +419,7 @@ export class ScheduleFormComponent implements OnInit {
 
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.enable()
+    this.addValidationBudget()
 
     if(this.scheduleForm.controls.budget_value.value < 390000.01) {
       this.scheduleForm.controls.budget_value.setValue(390000.01)
@@ -439,9 +450,9 @@ export class ScheduleFormComponent implements OnInit {
 
   addOtherEvents() {
     this.clearEvents()
-
     this.scheduleForm.controls.responsible.enable()
     this.scheduleForm.controls.budget_value.enable()
+    this.addValidationBudget()
 
     /*
     this.enableSearchForm()
