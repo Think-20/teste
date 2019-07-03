@@ -1,3 +1,8 @@
 <div class="my-container">
   <h3 class="lead">Home</h3>
 </div>
+
+<cb-list-data *ngIf="dataLoaded" page="clientList"
+searchPlaceholder="Qual cliente você procura?" addActionUrl="/clients/new"
+[filterFields]="filterFields" loadingMessage="Carregando clientes...">
+</cb-list-data>

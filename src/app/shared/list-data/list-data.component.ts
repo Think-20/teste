@@ -1,0 +1,247 @@
+import { Component, OnInit, Input } from '@angular/core';
+import { Client } from 'app/clients/client.model';
+import { Employee } from 'app/employees/employee.model';
+import { ClientStatus } from 'app/clients/client-status/client-status.model';
+import { ClientType } from 'app/clients/client-types/client-type.model';
+import { distinctUntilChanged } from 'rxjs/operators';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'app/login/auth.service';
+import { ClientService } from 'app/clients/client.service';
+import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { DataInfo } from '../data-info.model';
+import { Pagination } from '../pagination.model';
+import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
+import { FilterField } from 'app/home/home.component';
+import { ListDataService } from './list-data.service';
+
+@Component({
+  selector: 'cb-list-data',
+  templateUrl: './list-data.component.html',
+  styleUrls: ['./list-data.component.css'],
+  animations: [
+    trigger('rowAppeared', [
+      state('ready', style({opacity: 1})),
+      transition('void => ready', animate('300ms 0s ease-in', keyframes([
+        style({opacity: 0, transform: 'translateX(-30px)', offset: 0}),
+        style({opacity: 0.8, transform: 'translateX(10px)', offset: 0.8}),
+        style({opacity: 1, transform: 'translateX(0px)', offset: 1})
+      ]))),
+      transition('ready => void', animate('300ms 0s ease-out', keyframes([
+        style({opacity: 1, transform: 'translateX(0px)', offset: 0}),
+        style({opacity: 0.8, transform: 'translateX(-10px)', offset: 0.2}),
+        style({opacity: 0, transform: 'translateX(30px)', offset: 1})
+      ])))
+    ])
+  ]
+})
+export class ListDataComponent implements OnInit {
+  @Input() page: string
+  @Input() searchPlaceholder: string = 'Qual registro você procura?'
+  @Input() loadingMessage: string = 'Carregando...'
+  @Input() addActionUrl: string = ''
+  @Input() filterFields: FilterField[]
+
+  rowAppearedState: string = 'ready'
+  filter: boolean = false
+  hasFilterActive: boolean = false
+
+  searchForm: FormGroup
+  formCopy: any
+  search: FormControl
+  clients: Client[] = []
+  searching = false
+  pagination: Pagination
+  pageIndex: number
+  dataInfo: DataInfo
+  params = {}
+
+  constructor(
+    private fb: FormBuilder,
+    private clientService: ClientService,
+    private listDataService: ListDataService,
+    private authService: AuthService,
+    private snackBar: MatSnackBar
+  ) { }
+
+  total(clients: Client[]) {
+    return clients.length
+  }
+
+  permissionVerify(module: string, client: Client): boolean {
+    let access: boolean
+    let employee = this.authService.currentUser().employee
+    switch(module) {
+      case 'show': {
+        access = client.employee.id != employee.id ? this.authService.hasAccess('clients/get/{id}') : true
+        break
+      }
+      case 'edit': {
+        access = client.employee.id != employee.id ? this.authService.hasAccess('client/edit') : true
+        break
+      }
+      case 'delete': {
+        access = client.employee.id != employee.id ? this.authService.hasAccess('client/remove/{id}') : true
+        break
+      }
+      default: {
+        access = false
+        break
+      }
+    }
+    return access
+  }
+
+  statusActive(clients: Client[]) {
+    return clients.filter((client) => { return client.status.description == 'Ativo' }).length
+  }
+
+  statusInactive(clients: Client[]) {
+    return clients.filter((client) => { return client.status.description == 'Inativo' }).length
+  }
+
+  typeAgencia(clients: Client[]) {
+    return clients.filter((client) => { return client.type.description == 'Agência' }).length
+  }
+
+  typeExpositor(clients: Client[]) {
+    return clients.filter((client) => { return client.type.description == 'Expositor' }).length
+  }
+
+  typeAutonomo(clients: Client[]) {
+    return clients.filter((client) => { return client.type.description == 'Autônomo' }).length
+  }
+
+  score3Plus(clients: Client[]) {
+    return clients.filter((client) => { return client.rate >= 3 }).length
+  }
+
+  score3Minus(clients: Client[]) {
+    return clients.filter((client) => { return client.rate < 3 }).length
+  }
+
+  ngOnInit() {
+    this.pageIndex = this.listDataService.getIndex(this.page)
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  createForm() {
+    this.search =  this.fb.control('')
+    this.searchForm = this.fb.group({
+      search: this.search
+    })
+
+    this.filterFields.forEach(filterField => {
+      this.searchForm.addControl(filterField.formcontrolname, this.fb.control(''))
+    })
+
+    this.formCopy = this.searchForm.value
+
+    if(JSON.stringify(this.listDataService.getSearchValue(this.page)) == JSON.stringify({})) {
+      this.listDataService.saveSearchValue(this.page, this.searchForm.value)
+    } else {
+      this.searchForm.setValue(this.listDataService.getSearchValue(this.page))
+    }
+
+    this.searchForm.valueChanges
+    .pipe(distinctUntilChanged())
+    .debounceTime(500)
+    .subscribe((searchValue) => {
+      this.params = this.getParams(searchValue)
+      this.loadClients(this.params,  1)
+
+      this.pageIndex = 0
+      this.listDataService.saveIndex(this.page, 0)
+      this.listDataService.saveSearchValue(this.page, searchValue)
+      this.updateFilterActive()
+    })
+  }
+
+  getParams(searchValue) {
+    return {
+      search: searchValue.search,
+      attendance: searchValue.attendance,
+      client_status: searchValue.client_status,
+      client_type: searchValue.client_type,
+      rate: searchValue.rate,
+    }
+  }
+
+  updateFilterActive() {
+    if (JSON.stringify(this.listDataService.getSearchValue(this.page)) === JSON.stringify(this.formCopy)) {
+      this.hasFilterActive = false
+    } else {
+      this.hasFilterActive = true
+    }
+  }
+
+  clearFilter() {
+    this.listDataService.saveIndex(this.page, 0)
+    this.listDataService.saveSearchValue(this.page, {})
+    this.pageIndex = 0
+    this.createForm()
+    this.loadInitialData()
+  }
+
+  loadInitialData() {
+    if (JSON.stringify(this.listDataService.getSearchValue(this.page)) === JSON.stringify(this.formCopy)) {
+      this.loadClients({}, this.pageIndex + 1)
+    } else {
+      this.params = this.listDataService.getSearchValue(this.page)
+      this.loadClients(this.params, this.listDataService.getIndex(this.page) + 1)
+    }
+
+    this.updateFilterActive()
+  }
+
+  loadClients(params = {}, page: number) {
+    this.searching = true
+    let snackBar = this.snackBar.open(this.loadingMessage)
+
+    this.clientService.clients(params, page).subscribe(dataInfo => {
+      this.searching = false
+      this.dataInfo = dataInfo
+      this.pagination = dataInfo.pagination
+      this.clients = <Client[]> this.pagination.data
+      snackBar.dismiss()
+    })
+  }
+
+  compareClientType(clientType1: ClientType, clientType2: ClientType) {
+    return clientType1.id === clientType2.id
+  }
+
+  compareClientStatus(clientStatus1: ClientStatus, clientStatus2: ClientStatus) {
+    return clientStatus1.id === clientStatus2.id
+  }
+
+  compareAttendance(var1: Employee, var2: Employee) {
+    return var1.id === var2.id
+  }
+
+  delete(client: Client) {
+    this.clientService.delete(client.id).subscribe((data) => {
+      this.snackBar.open(data.message, '', {
+        duration: 5000
+      })
+
+      if(data.status) {
+        this.clients.splice(this.clients.indexOf(client), 1)
+      }
+    })
+  }
+
+  changePage($event) {
+    this.searching = true
+    this.clients = []
+    this.clientService.clients(this.listDataService.getSearchValue(this.page), ($event.pageIndex + 1)).subscribe(dataInfo => {
+      this.searching = false
+      this.dataInfo = dataInfo
+      this.pagination = dataInfo.pagination
+      this.clients = <Client[]> this.pagination.data
+      this.pageIndex = $event.pageIndex
+      this.listDataService.saveIndex(this.page, this.pageIndex)
+    })
+  }
+
+}

@@ -189,6 +189,8 @@ import { LoggerService } from './shared/logger.service';
 import { RouterExtService } from './shared/router-ext.service';
 import { MessageLoadingComponent } from './shared/file-upload/message-loading/message-loading';
 import { MessageLoadingService } from './shared/file-upload/message-loading/message-loading.service';
+import { ListDataComponent } from './shared/list-data/list-data.component';
+import { ListDataService } from './shared/list-data/list-data.service';
 
 registerLocaleData(localePt);
 
@@ -294,6 +296,7 @@ registerLocaleData(localePt);
     SpecificationComponent,
     FileUploadComponent,
     MessageLoadingComponent,
+    ListDataComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -381,6 +384,7 @@ registerLocaleData(localePt);
     SpecificationFileService,
     LoggerService,
     RouterExtService,
+    ListDataService,
 
     MatDialog,
     MatSnackBar,

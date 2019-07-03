@@ -1,0 +1,32 @@
+.mat-column-name {
+  width: 20%;
+}
+
+.mat-column-type {
+  width: 13%;
+}
+
+.mat-column-status {
+  width: 12%;
+}
+
+.mat-column-rate {
+  width: 25%;
+}
+
+.mat-column-employee {
+  width: 20%;
+}
+
+.mat-column-action {
+  width: 5%;
+}
+
+.updated-info-employee {
+font-size: 12px;
+}
+
+.filter-grid .row .col-md-12 {
+display: flex;
+flex-wrap: wrap;
+}
