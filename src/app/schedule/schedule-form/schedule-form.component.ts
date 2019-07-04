@@ -254,7 +254,11 @@ export class ScheduleFormComponent implements OnInit {
 
     this.scheduleForm.controls.available_date.disable()
     this.scheduleForm.controls.duration.disable()
+<<<<<<< HEAD
     this.scheduleForm.controls.budget_value.setValidators([Validators.required])
+=======
+    this.scheduleForm.controls.budget_value.setValidators([Validators.required, Validators.min(1)])
+>>>>>>> bugfix
     this.scheduleForm.controls.budget_value.updateValueAndValidity()
   }
 
