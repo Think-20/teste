@@ -124,7 +124,6 @@ export class ClientListComponent implements OnInit {
 
   ngOnInit() {
     this.loadFilterData()
-    this.pageIndex = this.clientService.pageIndex
 
     this.createForm()
     this.loadInitialData()
@@ -142,12 +141,6 @@ export class ClientListComponent implements OnInit {
 
     this.formCopy = this.searchForm.value
 
-    if(JSON.stringify(this.clientService.searchValue) == JSON.stringify({})) {
-      this.clientService.searchValue = this.searchForm.value
-    } else {
-      this.searchForm.setValue(this.clientService.searchValue)
-    }
-
     this.searchForm.valueChanges
     .pipe(distinctUntilChanged())
     .debounceTime(500)
@@ -156,8 +149,6 @@ export class ClientListComponent implements OnInit {
       this.loadClients(this.params,  1)
 
       this.pageIndex = 0
-      this.clientService.pageIndex = 0
-      this.clientService.searchValue = searchValue
       this.updateFilterActive()
     })
   }
@@ -173,28 +164,15 @@ export class ClientListComponent implements OnInit {
   }
 
   updateFilterActive() {
-    if (JSON.stringify(this.clientService.searchValue) === JSON.stringify(this.formCopy)) {
-      this.hasFilterActive = false
-    } else {
-      this.hasFilterActive = true
-    }
   }
 
   clearFilter() {
-    this.clientService.searchValue = {}
-    this.clientService.pageIndex = 0
     this.pageIndex = 0
     this.createForm()
     this.loadInitialData()
   }
 
   loadInitialData() {
-    if (JSON.stringify(this.clientService.searchValue) === JSON.stringify(this.formCopy)) {
-      this.loadClients({}, this.pageIndex + 1)
-    } else {
-      this.params = this.clientService.searchValue
-      this.loadClients(this.params, this.clientService.pageIndex + 1)
-    }
 
     this.updateFilterActive()
   }
@@ -255,14 +233,6 @@ export class ClientListComponent implements OnInit {
   changePage($event) {
     this.searching = true
     this.clients = []
-    this.clientService.clients(this.clientService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
-      this.searching = false
-      this.dataInfo = dataInfo
-      this.pagination = dataInfo.pagination
-      this.clients = <Client[]> this.pagination.data
-      this.pageIndex = $event.pageIndex
-      this.clientService.pageIndex = this.pageIndex
-    })
   }
 
 }

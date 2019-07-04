@@ -1,3 +1,11 @@
+<mat-menu #menu="matMenu">
+  <ng-template *ngIf="bodyData.hasMenuButton" matMenuContent let-obj="obj">
+    <button *ngFor="let menuItem of bodyData.menuItems" [disabled]="menuItem.actions.disabled(obj)" (click)="clickMenuItem(menuItem, obj)" mat-menu-item>
+      <mat-icon>{{ menuItem.icon }}</mat-icon> {{ menuItem.label }}
+    </button>
+  </ng-template>
+</mat-menu>
+
 <div class="col-md-12" id="searchForm">
   <form [formGroup]="searchForm" autocomplete="off">
     <mat-card-title>
@@ -12,10 +20,12 @@
           <a mat-button (click)="search.focus()">
             <mat-icon>search</mat-icon>
           </a>
-          <a *ngIf="!filter" matTooltip="Abrir filtro" mat-button (click)="filter = !filter" [class.filter-button-active]="hasFilterActive">
+          <a *ngIf="!filter" matTooltip="Abrir filtro" mat-button (click)="filter = !filter"
+            [class.filter-button-active]="hasFilterActive">
             <mat-icon>keyboard_arrow_down</mat-icon>
           </a>
-          <a *ngIf="filter" matTooltip="Fechar filtro" mat-button (click)="filter = !filter" [class.filter-button-active]="hasFilterActive">
+          <a *ngIf="filter" matTooltip="Fechar filtro" mat-button (click)="filter = !filter"
+            [class.filter-button-active]="hasFilterActive">
             <mat-icon>keyboard_arrow_up</mat-icon>
           </a>
           <a matTooltip="Adicionar novo" [routerLink]="[addActionUrl]" mat-button>
@@ -31,67 +41,41 @@
       <div class="row">
         <div class="col-md-12">
           <div *ngFor="let filterField of filterFields" [class]="filterField.class">
-              <mat-form-field *ngIf="filterField.type == 'select'">
-                <mat-select [placeholder]="filterField.placeholder" [formControlName]="filterField.formcontrolname" [compareWith]="filterField.compareWith">
-                  <mat-option></mat-option>
-                  <mat-option *ngFor="let obj of filterField.arrayValues" [value]="filterField.showOptionValue(obj)">
-                    {{ filterField.showOptionDescription(obj) }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <cb-stars *ngIf="filterField.type == 'stars'" [label]="filterField.placeholder" [rate]="filterField.starsRate" [input]="searchForm.controls[filterField.formcontrolname]">
-                <input [formControlName]="filterField.formcontrolname" matInput>
-              </cb-stars>
+            <mat-form-field *ngIf="filterField.type == 'select'">
+              <mat-select [placeholder]="filterField.placeholder" [formControlName]="filterField.formcontrolname"
+                [compareWith]="filterField.compareWith">
+                <mat-option></mat-option>
+                <mat-option *ngFor="let obj of filterField.arrayValues" [value]="filterField.showOptionValue(obj)">
+                  {{ filterField.showOptionDescription(obj) }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <cb-stars *ngIf="filterField.type == 'stars'" [label]="filterField.placeholder"
+              [rate]="filterField.starsRate" [input]="searchForm.controls[filterField.formcontrolname]">
+              <input [formControlName]="filterField.formcontrolname" matInput>
+            </cb-stars>
           </div>
         </div>
       </div>
     </mat-card>
-    <mat-paginator *ngIf="clients" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex" [pageSizeOptions]="[pagination?.per_page]"
-      (page)="changePage($event)"></mat-paginator>
+    <mat-paginator *ngIf="data" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex"
+      [pageSizeOptions]="[pagination?.per_page]" (page)="changePage($event)"></mat-paginator>
     <mat-card>
-      <div *ngIf="clients?.length > 0">
+      <div *ngIf="data?.length > 0">
         <table class="table mat-table">
           <div class="mat-header-row">
-            <div class="mat-header-cell mat-column-name">Nome</div>
-            <div class="mat-header-cell mat-column-type">Tipo</div>
-            <div class="mat-header-cell mat-column-status">Status</div>
-            <div class="mat-header-cell mat-column-employee">Atendimento</div>
-            <div class="mat-header-cell mat-column-rate">Score</div>
-            <div class="mat-header-cell mat-column-action">Ação</div>
+            <div *ngFor="let dataField of bodyData.dataFields" class="mat-header-cell"
+              [ngStyle]="dataField.style">
+              {{ dataField.label }}
+            </div>
           </div>
-          <div class="mat-row" *ngFor="let client of clients" [@rowAppeared]="rowAppearedState">
-            <div class="mat-cell mat-column-name">
-              {{ client.fantasy_name }}
-            </div>
-            <div class="mat-cell mat-column-type">
-              {{ client.type.description }}
-            </div>
-            <div class="mat-cell mat-column-status">
-              {{ client.status.description }}
-            </div>
-            <div class="mat-cell mat-column-employee">
-              {{ client.employee.name }}
-            </div>
-            <div class="mat-cell mat-column-rate">
-              <cb-stars [readonly]="true" [rate]="client.rate"></cb-stars>
-            </div>
-            <div class="mat-cell mat-column-action">
-              <mat-menu #menu="matMenu">
-                <a [disabled]="!permissionVerify('show', client)" [routerLink]="permissionVerify('show', client) ? ['/clients/show', client.id] : null"
-                  mat-menu-item>
-                  <mat-icon>subject</mat-icon> Detalhes
-                </a>
-                <a [disabled]="!permissionVerify('edit', client)" [routerLink]="permissionVerify('edit', client) ? ['/clients/edit', client.id] : null"
-                  mat-menu-item>
-                  <mat-icon>mode_edit</mat-icon> Editar
-                </a>
-                <button [disabled]="!permissionVerify('delete', client)" (click)="delete(client)" mat-menu-item>
-                  <mat-icon>delete</mat-icon> Remover
-                </button>
-              </mat-menu>
-
-              <button mat-icon-button [matMenuTriggerFor]="menu">
-                <mat-icon>menu</mat-icon>
+          <div class="mat-row" *ngFor="let line of data" [@rowAppeared]="rowAppearedState">
+            <cb-data-field *ngFor="let dataField of bodyData.dataFields" class="mat-cell"
+              [ngStyle]="dataField.style" [dataField]="dataField" [data]="line">
+            </cb-data-field>
+            <div *ngIf="bodyData.hasMenuButton" [ngStyle]="bodyData.buttonStyle" class="mat-cell">
+              <button mat-icon-button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ obj: line }">
+                  <mat-icon>menu</mat-icon>
               </button>
             </div>
           </div>
@@ -104,18 +88,20 @@
           </small>
         </p>
       </div>
-      <div *ngIf="clients.length == 0 && searchForm.controls.search.value != '' && !searching" class="col-md-12 records-not-found">
+      <div *ngIf="data.length == 0 && searchForm.controls.search.value != '' && !searching"
+        class="col-md-12 records-not-found">
         <p>
           <small>
             Não encontramos resultados para sua busca. :(
           </small>
         </p>
       </div>
-      <div *ngIf="clients.length == 0 && searchForm.controls.search.value == '' && !searching" class="col-md-12 records-not-found">
+      <div *ngIf="data.length == 0 && searchForm.controls.search.value == '' && !searching"
+        class="col-md-12 records-not-found">
         <p>
           <small>
-            Ainda não existe nenhum cliente cadastrado. Que tal
-            <a [routerLink]="['/clients/new']">cadastrar</a> agora?
+            Ainda não existe nenhum registro. Que tal
+            <a [routerLink]="[addActionUrl]">cadastrar</a> agora?
           </small>
         </p>
       </div>
@@ -139,7 +125,8 @@
         <div class="mat-row">
           <div class="mat-cell col-md-2 text-center">{{ total(clients) }}</div>
           <div class="mat-cell col-md-2 text-right">{{ statusInactive(clients) }}/{{ statusActive(clients) }}</div>
-          <div class="mat-cell col-md-3 text-right">{{ typeAgencia(clients) }}/{{ typeExpositor(clients) }}/{{ typeAutonomo(clients) }}</div>
+          <div class="mat-cell col-md-3 text-right">
+            {{ typeAgencia(clients) }}/{{ typeExpositor(clients) }}/{{ typeAutonomo(clients) }}</div>
           <div class="mat-cell col-md-2 text-right">{{ score3Plus(clients) }}/{{ score3Minus(clients) }}</div>
           <div class="mat-cell col-md-3 text-right">
             {{ dataInfo?.updatedInfo?.date }}
@@ -150,8 +137,8 @@
         </div>
       </table>
     </mat-card>
-    <mat-paginator *ngIf="clients" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex" [pageSizeOptions]="[pagination?.per_page]"
-      (page)="changePage($event)"></mat-paginator>
+    <mat-paginator *ngIf="data" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex"
+      [pageSizeOptions]="[pagination?.per_page]" (page)="changePage($event)"></mat-paginator>
   </form>
 </div>
 

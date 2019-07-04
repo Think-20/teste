@@ -1,8 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Client } from 'app/clients/client.model';
-import { Employee } from 'app/employees/employee.model';
-import { ClientStatus } from 'app/clients/client-status/client-status.model';
-import { ClientType } from 'app/clients/client-types/client-type.model';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'app/login/auth.service';
@@ -11,8 +8,10 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DataInfo } from '../data-info.model';
 import { Pagination } from '../pagination.model';
 import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
-import { FilterField } from 'app/home/home.component';
+import { FilterField, HeaderFilter, BodyData, ListDataMenuItem } from 'app/home/home.component';
 import { ListDataService } from './list-data.service';
+import { Observable } from 'rxjs';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'cb-list-data',
@@ -39,11 +38,14 @@ export class ListDataComponent implements OnInit {
   @Input() searchPlaceholder: string = 'Qual registro você procura?'
   @Input() loadingMessage: string = 'Carregando...'
   @Input() addActionUrl: string = ''
-  @Input() filterFields: FilterField[]
+  @Input() headerFilter: HeaderFilter
+  @Input() bodyData: BodyData
+  @Input() data: Array<any> = []
 
   rowAppearedState: string = 'ready'
   filter: boolean = false
   hasFilterActive: boolean = false
+  filterFields: FilterField[]
 
   searchForm: FormGroup
   formCopy: any
@@ -59,36 +61,12 @@ export class ListDataComponent implements OnInit {
     private fb: FormBuilder,
     private clientService: ClientService,
     private listDataService: ListDataService,
-    private authService: AuthService,
+    private sanitizer: DomSanitizer,
     private snackBar: MatSnackBar
   ) { }
 
   total(clients: Client[]) {
     return clients.length
-  }
-
-  permissionVerify(module: string, client: Client): boolean {
-    let access: boolean
-    let employee = this.authService.currentUser().employee
-    switch(module) {
-      case 'show': {
-        access = client.employee.id != employee.id ? this.authService.hasAccess('clients/get/{id}') : true
-        break
-      }
-      case 'edit': {
-        access = client.employee.id != employee.id ? this.authService.hasAccess('client/edit') : true
-        break
-      }
-      case 'delete': {
-        access = client.employee.id != employee.id ? this.authService.hasAccess('client/remove/{id}') : true
-        break
-      }
-      default: {
-        access = false
-        break
-      }
-    }
-    return access
   }
 
   statusActive(clients: Client[]) {
@@ -120,6 +98,7 @@ export class ListDataComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.filterFields = this.headerFilter.filterFields
     this.pageIndex = this.listDataService.getIndex(this.page)
     this.createForm()
     this.loadInitialData()
@@ -148,7 +127,7 @@ export class ListDataComponent implements OnInit {
     .debounceTime(500)
     .subscribe((searchValue) => {
       this.params = this.getParams(searchValue)
-      this.loadClients(this.params,  1)
+      this.loadData(this.params,  1)
 
       this.pageIndex = 0
       this.listDataService.saveIndex(this.page, 0)
@@ -157,14 +136,8 @@ export class ListDataComponent implements OnInit {
     })
   }
 
-  getParams(searchValue) {
-    return {
-      search: searchValue.search,
-      attendance: searchValue.attendance,
-      client_status: searchValue.client_status,
-      client_type: searchValue.client_type,
-      rate: searchValue.rate,
-    }
+  getParams(formValue) {
+    return this.headerFilter.getParams(formValue)
   }
 
   updateFilterActive() {
@@ -185,60 +158,48 @@ export class ListDataComponent implements OnInit {
 
   loadInitialData() {
     if (JSON.stringify(this.listDataService.getSearchValue(this.page)) === JSON.stringify(this.formCopy)) {
-      this.loadClients({}, this.pageIndex + 1)
+      this.loadData({}, this.pageIndex + 1)
     } else {
       this.params = this.listDataService.getSearchValue(this.page)
-      this.loadClients(this.params, this.listDataService.getIndex(this.page) + 1)
+      this.loadData(this.params, this.listDataService.getIndex(this.page) + 1)
     }
 
     this.updateFilterActive()
   }
 
-  loadClients(params = {}, page: number) {
+  loadDataObservable(params, page: number): Observable<DataInfo> {
+    return this.bodyData.loadData(params, page)
+  }
+
+  loadData(params = {}, page: number) {
     this.searching = true
     let snackBar = this.snackBar.open(this.loadingMessage)
 
-    this.clientService.clients(params, page).subscribe(dataInfo => {
+    this.loadDataObservable(params, page).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
-      this.clients = <Client[]> this.pagination.data
+      this.data = this.pagination.data
       snackBar.dismiss()
     })
   }
 
-  compareClientType(clientType1: ClientType, clientType2: ClientType) {
-    return clientType1.id === clientType2.id
-  }
-
-  compareClientStatus(clientStatus1: ClientStatus, clientStatus2: ClientStatus) {
-    return clientStatus1.id === clientStatus2.id
-  }
-
-  compareAttendance(var1: Employee, var2: Employee) {
-    return var1.id === var2.id
-  }
-
-  delete(client: Client) {
-    this.clientService.delete(client.id).subscribe((data) => {
-      this.snackBar.open(data.message, '', {
-        duration: 5000
-      })
-
-      if(data.status) {
-        this.clients.splice(this.clients.indexOf(client), 1)
+  clickMenuItem(menuItem: ListDataMenuItem, data) {
+    menuItem.actions.click(data).then((value) => {
+      if(menuItem.removeWhenClickTrue && value) {
+        this.data.splice(this.data.indexOf(data), 1)
       }
-    })
+    });
   }
 
   changePage($event) {
     this.searching = true
-    this.clients = []
-    this.clientService.clients(this.listDataService.getSearchValue(this.page), ($event.pageIndex + 1)).subscribe(dataInfo => {
+    this.data = []
+    this.loadDataObservable(this.listDataService.getSearchValue(this.page), ($event.pageIndex + 1)).subscribe(dataInfo => {
       this.searching = false
       this.dataInfo = dataInfo
       this.pagination = dataInfo.pagination
-      this.clients = <Client[]> this.pagination.data
+      this.data = this.pagination.data
       this.pageIndex = $event.pageIndex
       this.listDataService.saveIndex(this.page, this.pageIndex)
     })

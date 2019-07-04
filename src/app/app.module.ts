@@ -191,11 +191,13 @@ import { MessageLoadingComponent } from './shared/file-upload/message-loading/me
 import { MessageLoadingService } from './shared/file-upload/message-loading/message-loading.service';
 import { ListDataComponent } from './shared/list-data/list-data.component';
 import { ListDataService } from './shared/list-data/list-data.service';
+import { DataFieldComponent } from './shared/list-data/data-field/data-field.component';
 
 registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
+    StarsComponent,
     MaskDirective,
     UcWordsDirective,
     NumberAbbreviationPipe,
@@ -240,7 +242,6 @@ registerLocaleData(localePt);
     ItemFormComponent,
     ItemListComponent,
     ItemShowComponent,
-    StarsComponent,
     ProductionTimeComponent,
     ReadMoreComponent,
     ClientImportComponent,
@@ -297,6 +298,7 @@ registerLocaleData(localePt);
     FileUploadComponent,
     MessageLoadingComponent,
     ListDataComponent,
+    DataFieldComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -399,11 +401,12 @@ registerLocaleData(localePt);
   ],
   bootstrap: [AppComponent],
   entryComponents: [
+    StarsComponent,
     StandItemFormComponent,
     ReloadComponent,
     ImageViewerComponent,
     BlockDialogComponent,
-    MessageLoadingComponent
+    MessageLoadingComponent,
   ]
 })
 export class AppModule { }
