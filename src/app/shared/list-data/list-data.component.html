@@ -45,7 +45,7 @@
               <mat-select [placeholder]="filterField.placeholder" [formControlName]="filterField.formcontrolname"
                 [compareWith]="filterField.compareWith">
                 <mat-option></mat-option>
-                <mat-option *ngFor="let obj of filterField.arrayValues" [value]="filterField.showOptionValue(obj)">
+                <mat-option *ngFor="let obj of (filterField.arrayValues | async)" [value]="filterField.showOptionValue(obj)">
                   {{ filterField.showOptionDescription(obj) }}
                 </mat-option>
               </mat-select>

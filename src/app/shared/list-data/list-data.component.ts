@@ -6,7 +6,7 @@ import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DataInfo } from '../data-info.model';
 import { Pagination } from '../pagination.model';
 import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
-import { FilterField, HeaderData, BodyData, ListDataMenuItem, FooterData, ListData } from 'app/shared/list-data/list-data.model';
+import { FilterField, HeaderData, BodyData, ListDataMenuItem, FooterData, ListData, Identifiable } from 'app/shared/list-data/list-data.model';
 import { ListDataService } from './list-data.service';
 import { Observable } from 'rxjs';
 

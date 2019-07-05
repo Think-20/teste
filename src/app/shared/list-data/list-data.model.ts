@@ -12,7 +12,7 @@ export class FilterField {
   class: string
   placeholder: string
   formcontrolname: string
-  arrayValues: Array<any>
+  arrayValues?: Promise<Array<any>>
   type: string
   optionValue?: string
   optionDescription?: string
@@ -44,6 +44,16 @@ export class FilterField {
     this.optionValue = params.optionValue
     this.starsRate = params.starsRate
   }
+}
+
+/*
+  Função para instanciar o objeto e permitindo assim fazer uso das funções
+  pré-determinadas na classe.
+*/
+export function mF(params: FilterField) {
+  let fF = new FilterField(params)
+  console.log(fF)
+  return fF
 }
 
 export class DataField {

@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Injectable, AfterViewInit } from '@angular/core';
 import { EmployeeService } from 'app/employees/employee.service';
 import { Employee } from 'app/employees/employee.model';
 import { ClientType } from 'app/clients/client-types/client-type.model';
@@ -13,7 +13,7 @@ import { AuthService } from 'app/login/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UpdatedInfoComponent } from 'app/shared/list-data/updated-info/updated-info.component';
-import { ListData } from 'app/shared/list-data/list-data.model';
+import { ListData, mF } from 'app/shared/list-data/list-data.model';
 
 @Component({
   selector: 'cb-client-list',
@@ -23,10 +23,8 @@ import { ListData } from 'app/shared/list-data/list-data.model';
 @Injectable()
 export class ClientListComponent implements OnInit {
   listData: ListData;
-  attendances: Employee[];
+  filterData: {[key: string]: Array<any>};
   clients: Client[];
-  clientTypes: ClientType[];
-  clientStatus: ClientStatus[];
   dataLoaded: boolean = false
 
   constructor(
@@ -38,13 +36,6 @@ export class ClientListComponent implements OnInit {
     private clientService: ClientService,
     private authService: AuthService,
   ) { }
-
-  async loadData() {
-    this.employeeService.canInsertClients({deleted: true})
-    .toPromise().then(value => this.attendances = value);
-    this.clientTypeService.types().toPromise().then(value => this.clientTypes = value);
-    this.clientStatusService.status().toPromise().then(value => this.clientStatus = value);
-  }
 
   permissionVerify(module: string, client: Client): boolean {
     let access: boolean
@@ -71,8 +62,6 @@ export class ClientListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.loadData();
-
     this.listData = {
       header: {
         getParams: (formValue) => {
@@ -85,38 +74,37 @@ export class ClientListComponent implements OnInit {
           }
         },
         filterFields: [
-          {
-            arrayValues: this.attendances,
+          mF({
+            arrayValues: this.employeeService.canInsertClients({deleted: true}).toPromise(),
             class: 'col-md-3',
             formcontrolname: 'attendance',
             placeholder: 'Atendimento',
             type: 'select',
             optionDescription: 'name',
-          },
-          {
-            arrayValues: this.clientStatus,
+          }),
+          mF({
+            arrayValues: this.clientTypeService.types().toPromise(),
             class: 'col-md-3',
             formcontrolname: 'client_type',
             placeholder: 'Tipo',
             type: 'select',
             optionDescription: 'description',
-          },
-          {
-            arrayValues: this.clientTypes,
+          }),
+          mF({
+            arrayValues: this.clientStatusService.status().toPromise(),
             class: 'col-md-3',
             formcontrolname: 'client_status',
             placeholder: 'Status',
             type: 'select',
             optionDescription: 'description',
-          },
-          {
-            arrayValues: this.clientTypes,
+          }),
+          mF({
             class: 'col-md-3 star-input',
             formcontrolname: 'rate',
             placeholder: 'Score',
             type: 'stars',
             starsRate: null,
-          },
+          }),
         ]
       },
       body: {
