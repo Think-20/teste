@@ -1,11 +1,3 @@
 <div class="my-container">
   <h3 class="lead">Home</h3>
 </div>
-<cb-list-data *ngIf="dataLoaded" page="clientList" loadingMessage="Carregando clientes..."
-  searchPlaceholder="Qual cliente você procura?" addActionUrl="/clients/new" [listData]="listData">
-</cb-list-data>
-<div class="col-md-12 button-section">
-  <a class="cb-button" [routerLink]="['/clients/import']" mat-raised-button>
-    Importar
-  </a>
-</div>
