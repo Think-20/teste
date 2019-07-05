@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ComponentFactoryResolver, Type, ViewChild, ViewContainerRef  } from '@angular/core';
-import { DataField } from 'app/home/home.component';
-import { StarsComponent } from 'app/shared/stars/stars.component';
+import { DataField } from 'app/shared/list-data/list-data.model';
+import { DataInfo } from 'app/shared/data-info.model';
 
 @Component({
   selector: 'cb-data-field',
@@ -9,6 +9,7 @@ import { StarsComponent } from 'app/shared/stars/stars.component';
 })
 export class DataFieldComponent implements OnInit {
   @Input() data: any;
+  @Input() dataInfo: DataInfo;
   @Input() dataField: DataField;
   @ViewChild('containerRef', {static: true, read: ViewContainerRef}) containerRef: ViewContainerRef;
 
@@ -28,6 +29,6 @@ export class DataFieldComponent implements OnInit {
     const factory = this.componentFactoryResolver.resolveComponentFactory(renderComponent)
     let createComponent = this.containerRef.createComponent(factory)
     let instance = createComponent.instance
-    this.dataField.afterCreateComponent(this.data, instance)
+    this.dataField.afterCreateComponent(this.data, this.dataInfo, instance)
   }
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, Type, ViewContainerRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EmployeeService } from 'app/employees/employee.service';
 import { Employee } from 'app/employees/employee.model';
 import { ClientType } from 'app/clients/client-types/client-type.model';
@@ -7,12 +7,13 @@ import { ClientStatusService } from 'app/clients/client-status/client-status.ser
 import { ClientStatus } from 'app/clients/client-status/client-status.model';
 import { Client } from 'app/clients/client.model';
 import { ClientService } from 'app/clients/client.service';
-import { Observable } from 'rxjs';
 import { DataInfo } from 'app/shared/data-info.model';
 import { StarsComponent } from 'app/shared/stars/stars.component';
 import { AuthService } from 'app/login/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UpdatedInfoComponent } from 'app/shared/list-data/updated-info/updated-info.component';
+import { ListData } from 'app/shared/list-data/list-data.model';
 
 @Component({
   selector: 'cb-home',
@@ -20,8 +21,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  headerFilter: HeaderFilter;
-  bodyData: BodyData;
+  listData: ListData;
   attendances: Employee[];
   clients: Client[];
   clientTypes: ClientType[];
@@ -73,129 +73,167 @@ export class HomeComponent implements OnInit {
   async ngOnInit() {
     await this.loadData();
 
-    this.headerFilter = {
-      getParams: (formValue) => {
-        return {
-          search: formValue.search,
-          attendance: formValue.attendance,
-          client_status: formValue.client_status,
-          client_type: formValue.client_type,
-          rate: formValue.rate,
-        }
+    this.listData = {
+      header: {
+        getParams: (formValue) => {
+          return {
+            search: formValue.search,
+            attendance: formValue.attendance,
+            client_status: formValue.client_status,
+            client_type: formValue.client_type,
+            rate: formValue.rate,
+          }
+        },
+        filterFields: [
+          {
+            arrayValues: this.attendances,
+            class: 'col-md-3',
+            formcontrolname: 'attendance',
+            placeholder: 'Atendimento',
+            type: 'select',
+            optionDescription: 'name',
+          },
+          {
+            arrayValues: this.clientStatus,
+            class: 'col-md-3',
+            formcontrolname: 'client_type',
+            placeholder: 'Tipo',
+            type: 'select',
+            optionDescription: 'description',
+          },
+          {
+            arrayValues: this.clientTypes,
+            class: 'col-md-3',
+            formcontrolname: 'client_status',
+            placeholder: 'Status',
+            type: 'select',
+            optionDescription: 'description',
+          },
+          {
+            arrayValues: this.clientTypes,
+            class: 'col-md-3 star-input',
+            formcontrolname: 'rate',
+            placeholder: 'Score',
+            type: 'stars',
+            starsRate: null,
+          },
+        ]
       },
-      filterFields: [
-        {
-          arrayValues: this.attendances,
-          class: 'col-md-3',
-          formcontrolname: 'attendance',
-          placeholder: 'Atendimento',
-          type: 'select',
-          optionDescription: 'name',
+      body: {
+        dataFields: [
+          {
+            style: { width: '20%' },
+            label: 'Nome',
+            showData: (client: Client) => { return client.fantasy_name }
+          },
+          {
+            style: { width: '13%' },
+            label: 'Tipo',
+            showData: (client: Client) => { return client.type.description }
+          },
+          {
+            style: { width: '12%' },
+            label: 'Status',
+            showData: (client: Client) => { return client.status.description }
+          },
+          {
+            style: { width: '25%' },
+            label: 'Atendimento',
+            showData: (client: Client) => { return client.employee.name }
+          },
+          {
+            style: { width: '20%' },
+            label: 'Score',
+            component: StarsComponent,
+            afterCreateComponent: (client: Client, dataInfo: DataInfo, stars: StarsComponent) => {
+              stars.rate = client.rate
+              stars.readonly = true
+            }
+          },
+        ],
+        hasMenuButton: true,
+        loadData: (params, page) => {
+          return this.clientService.clients(params, page)
         },
-        {
-          arrayValues: this.clientStatus,
-          class: 'col-md-3',
-          formcontrolname: 'client_type',
-          placeholder: 'Tipo',
-          type: 'select',
-          optionDescription: 'description',
-        },
-        {
-          arrayValues: this.clientTypes,
-          class: 'col-md-3',
-          formcontrolname: 'client_status',
-          placeholder: 'Status',
-          type: 'select',
-          optionDescription: 'description',
-        },
-        {
-          arrayValues: this.clientTypes,
-          class: 'col-md-3 star-input',
-          formcontrolname: 'rate',
-          placeholder: 'Score',
-          type: 'stars',
-          starsRate: null,
-        },
-      ]
-    }
+        menuItems: [
+          {
+            icon: 'subject',
+            label: 'Detalhes',
+            actions: {
+              click: (client: Client) => {
+                return this.router.navigate(['/clients/show', client.id])
+              },
+              disabled: (client: Client) => {
+                return !this.permissionVerify('show', client)
+              }
+            }
+          },
+          {
+            icon: 'mode_edit',
+            label: 'Editar',
+            actions: {
+              click: (client: Client) => {
+                return this.router.navigate(['/clients/edit', client.id])
+              },
+              disabled: (client: Client) => {
+                return !this.permissionVerify('edit', client)
+              }
+            }
+          },
 
-    this.bodyData = {
-      dataFields: [
-        {
-          style: { width: '20%' },
-          label: 'Nome',
-          showData: (client: Client) => { return client.fantasy_name }
-        },
-        {
-          style: { width: '13%' },
-          label: 'Tipo',
-          showData: (client: Client) => { return client.type.description }
-        },
-        {
-          style: { width: '12%' },
-          label: 'Status',
-          showData: (client: Client) => { return client.status.description }
-        },
-        {
-          style: { width: '25%' },
-          label: 'Atendimento',
-          showData: (client: Client) => { return client.employee.name }
-        },
-        {
-          style: { width: '20%' },
-          label: 'Score',
-          component: StarsComponent,
-          afterCreateComponent: (client: Client, stars: StarsComponent) => {
-            stars.rate = client.rate
-            stars.readonly = true
-          }
-        },
-      ],
-      hasMenuButton: true,
-      loadData: (params, page) => {
-        return this.clientService.clients(params, page)
+          {
+            icon: 'delete',
+            label: 'Remover',
+            removeWhenClickTrue: true,
+            actions: {
+              click: (client: Client) => {
+                return this.delete(client)
+              },
+              disabled: (client: Client) => {
+                return !this.permissionVerify('delete', client)
+              }
+            }
+          },
+        ]
       },
-      menuItems: [
-        {
-          icon: 'subject',
-          label: 'Detalhes',
-          actions: {
-            click: (client: Client) => {
-              return this.router.navigate(['/clients/show', client.id])
-            },
-            disabled: (client: Client) => {
-              console.log(client)
-              return !this.permissionVerify('show', client)
+      footer: {
+        dataFields: [
+          {
+            style: { width: '16.66%', 'text-align': 'center' },
+            label: 'Total',
+            showData: (clients: Client[]) => { return clients.length }
+          },
+          {
+            style: { width: '16.66%', 'text-align': 'right' },
+            label: 'Inativo/Ativo',
+            showData: (clients: Client[]) => {
+              return this.statusInactive(clients) + '/' + this.statusActive(clients)
             }
-          }
-        },
-        {
-          icon: 'mode_edit',
-          label: 'Editar',
-          actions: {
-            click: (client: Client) => {
-              return this.router.navigate(['/clients/edit', client.id])
-            },
-            disabled: (client: Client) => {
-              return !this.permissionVerify('edit', client)
+          },
+          {
+            style: { width: '25%', 'text-align': 'right' },
+            label: 'Agência/Expositor/Autônomo',
+            showData: (clients: Client[]) => {
+              return this.typeAgencia(clients) + '/' + this.typeExpositor(clients) + '/' + this.typeAutonomo(clients)
             }
-          }
-        },
-
-        {
-          icon: 'delete',
-          label: 'Remover',
-          removeWhenClickTrue: true,
-          actions: {
-            click: (client: Client) => {
-              return this.delete(client)
-            },
-            disabled: (client: Client) => {
-              return !this.permissionVerify('delete', client)
+          },
+          {
+            style: { width: '16.66%', 'text-align': 'right' },
+            label: 'Score +3/-3',
+            showData: (clients: Client[]) => {
+              return this.score3Plus(clients) + '/' + this.score3Minus(clients)
             }
-          }
-        },
-      ]
+          },
+          {
+            style: { width: '25%', 'text-align': 'right' },
+            label: 'Última atualização',
+            component: UpdatedInfoComponent,
+            afterCreateComponent: (obj, dataInfo: DataInfo, updatedInfo: UpdatedInfoComponent) => {
+              updatedInfo.dataInfo = dataInfo
+            }
+          },
+        ]
+      }
     }
 
     this.dataLoaded = true;
@@ -211,87 +249,32 @@ export class HomeComponent implements OnInit {
     return data.status
   }
 
-}
-
-export class FilterField {
-  class: string
-  placeholder: string
-  formcontrolname: string
-  arrayValues: Array<any>
-  type: string
-  optionValue?: string
-  optionDescription?: string
-  starsRate?: number
-
-  compareWith? = function(var1: Identifiable, var2: Identifiable) {
-    return var1.id === var2.id
+  statusActive(clients: Client[]) {
+    return clients.filter((client) => { return client.status.description == 'Ativo' }).length
   }
 
-  showOptionValue? = function(obj) {
-    if(this.optionValue != undefined)
-      return obj[this.optionValue]
-
-    return obj
+  statusInactive(clients: Client[]) {
+    return clients.filter((client) => { return client.status.description == 'Inativo' }).length
   }
 
-  showOptionDescription? = function (obj) {
-    if(this.optionDescription != undefined)
-      return obj[this.optionDescription]
+  typeAgencia(clients: Client[]) {
+    return clients.filter((client) => { return client.type.description == 'Agência' }).length
   }
 
-  constructor(params: FilterField) {
-    this.class = params.class
-    this.placeholder = params.placeholder
-    this.formcontrolname = params.formcontrolname
-    this.type = params.type
-    this.arrayValues = params.arrayValues
-    this.optionDescription = params.optionDescription
-    this.optionValue = params.optionValue
-    this.starsRate = params.starsRate
-  }
-}
-
-export class DataField {
-  style: {[key:string]: string}
-  component?: Type<any>
-  label: string
-
-  showData? = function (obj) {
-    this.hasData = true;
-
-    if(this.optionDescription != undefined)
-      return obj[this.optionDescription]
+  typeExpositor(clients: Client[]) {
+    return clients.filter((client) => { return client.type.description == 'Expositor' }).length
   }
 
-  afterCreateComponent? = function (obj, instance) {
-    return null
-  };
-}
+  typeAutonomo(clients: Client[]) {
+    return clients.filter((client) => { return client.type.description == 'Autônomo' }).length
+  }
 
-export class HeaderFilter {
-  filterFields: FilterField[];
-  getParams: (formValue) => {[key: string]: string};
-}
+  score3Plus(clients: Client[]) {
+    return clients.filter((client) => { return client.rate >= 3 }).length
+  }
 
-export class BodyData {
-  dataFields: DataField[];
-  hasMenuButton?: boolean = false
-  buttonStyle?: {[key: string]: string} = { width: '5%' };
-  menuData?: {[key: string]: string} = {};
-  menuItems: ListDataMenuItem[]
-  loadData: (params, page: number) => Observable<DataInfo>;
-}
+  score3Minus(clients: Client[]) {
+    return clients.filter((client) => { return client.rate < 3 }).length
+  }
 
-export class ListDataMenuItem {
-  icon: string;
-  label: string;
-  removeWhenClickTrue?: boolean = false;
-  actions: {
-    disabled: (obj) => boolean,
-    click: (obj) => Promise<boolean>,
-  };
-}
-
-export interface Identifiable {
-  id: number
 }

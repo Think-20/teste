@@ -192,6 +192,7 @@ import { MessageLoadingService } from './shared/file-upload/message-loading/mess
 import { ListDataComponent } from './shared/list-data/list-data.component';
 import { ListDataService } from './shared/list-data/list-data.service';
 import { DataFieldComponent } from './shared/list-data/data-field/data-field.component';
+import { UpdatedInfoComponent } from './shared/list-data/updated-info/updated-info.component';
 
 registerLocaleData(localePt);
 
@@ -299,6 +300,7 @@ registerLocaleData(localePt);
     MessageLoadingComponent,
     ListDataComponent,
     DataFieldComponent,
+    UpdatedInfoComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -407,6 +409,7 @@ registerLocaleData(localePt);
     ImageViewerComponent,
     BlockDialogComponent,
     MessageLoadingComponent,
+    UpdatedInfoComponent,
   ]
 })
 export class AppModule { }

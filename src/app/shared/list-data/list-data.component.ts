@@ -2,16 +2,13 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Client } from 'app/clients/client.model';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from 'app/login/auth.service';
-import { ClientService } from 'app/clients/client.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { DataInfo } from '../data-info.model';
 import { Pagination } from '../pagination.model';
 import { trigger, state, style, animate, transition, keyframes } from '@angular/animations';
-import { FilterField, HeaderFilter, BodyData, ListDataMenuItem } from 'app/home/home.component';
+import { FilterField, HeaderData, BodyData, ListDataMenuItem, FooterData, ListData } from 'app/shared/list-data/list-data.model';
 import { ListDataService } from './list-data.service';
 import { Observable } from 'rxjs';
-import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'cb-list-data',
@@ -38,9 +35,12 @@ export class ListDataComponent implements OnInit {
   @Input() searchPlaceholder: string = 'Qual registro você procura?'
   @Input() loadingMessage: string = 'Carregando...'
   @Input() addActionUrl: string = ''
-  @Input() headerFilter: HeaderFilter
-  @Input() bodyData: BodyData
-  @Input() data: Array<any> = []
+  @Input() listData: ListData
+
+  headerData: HeaderData
+  bodyData: BodyData
+  footerData: FooterData
+  data: Array<any> = []
 
   rowAppearedState: string = 'ready'
   filter: boolean = false
@@ -59,46 +59,16 @@ export class ListDataComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private clientService: ClientService,
     private listDataService: ListDataService,
-    private sanitizer: DomSanitizer,
     private snackBar: MatSnackBar
   ) { }
 
-  total(clients: Client[]) {
-    return clients.length
-  }
-
-  statusActive(clients: Client[]) {
-    return clients.filter((client) => { return client.status.description == 'Ativo' }).length
-  }
-
-  statusInactive(clients: Client[]) {
-    return clients.filter((client) => { return client.status.description == 'Inativo' }).length
-  }
-
-  typeAgencia(clients: Client[]) {
-    return clients.filter((client) => { return client.type.description == 'Agência' }).length
-  }
-
-  typeExpositor(clients: Client[]) {
-    return clients.filter((client) => { return client.type.description == 'Expositor' }).length
-  }
-
-  typeAutonomo(clients: Client[]) {
-    return clients.filter((client) => { return client.type.description == 'Autônomo' }).length
-  }
-
-  score3Plus(clients: Client[]) {
-    return clients.filter((client) => { return client.rate >= 3 }).length
-  }
-
-  score3Minus(clients: Client[]) {
-    return clients.filter((client) => { return client.rate < 3 }).length
-  }
-
   ngOnInit() {
-    this.filterFields = this.headerFilter.filterFields
+    this.headerData = this.listData.header
+    this.bodyData = this.listData.body
+    this.footerData = this.listData.footer
+
+    this.filterFields = this.headerData.filterFields
     this.pageIndex = this.listDataService.getIndex(this.page)
     this.createForm()
     this.loadInitialData()
@@ -137,7 +107,7 @@ export class ListDataComponent implements OnInit {
   }
 
   getParams(formValue) {
-    return this.headerFilter.getParams(formValue)
+    return this.headerData.getParams(formValue)
   }
 
   updateFilterActive() {
