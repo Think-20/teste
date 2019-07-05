@@ -38,12 +38,12 @@ export class ClientListComponent implements OnInit {
     private clientService: ClientService,
     private authService: AuthService,
   ) { }
+
   async loadData() {
-    this.attendances = await this.employeeService.canInsertClients({
-      deleted: true
-    }).toPromise();
-    this.clientTypes = await this.clientTypeService.types().toPromise();
-    this.clientStatus = await this.clientStatusService.status().toPromise();
+    this.employeeService.canInsertClients({deleted: true})
+    .toPromise().then(value => this.attendances = value);
+    this.clientTypeService.types().toPromise().then(value => this.clientTypes = value);
+    this.clientStatusService.status().toPromise().then(value => this.clientStatus = value);
   }
 
   permissionVerify(module: string, client: Client): boolean {
@@ -70,8 +70,8 @@ export class ClientListComponent implements OnInit {
     return access
   }
 
-  async ngOnInit() {
-    await this.loadData();
+  ngOnInit() {
+    this.loadData();
 
     this.listData = {
       header: {
