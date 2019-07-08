@@ -534,7 +534,11 @@ export class ScheduleFormComponent implements OnInit {
         let date = new Date(this.availableDates[0]['date'] + "T00:00:00")
         this.scheduleForm.controls.available_date.setValue(date.toISOString())
         this.responsibles = this.availableDates[0]['available_responsibles']
-        this.scheduleForm.controls.responsible.setValue(this.availableDates[0]['available_responsibles'][0])
+
+        let employee = this.firstScheduleActive(this.availableDates[0]['available_responsibles'])
+        if(employee != null) {        
+          this.scheduleForm.controls.responsible.setValue(employee)
+        }
       } else {
         this.responsibles = data.responsibles
 
@@ -542,6 +546,10 @@ export class ScheduleFormComponent implements OnInit {
         this.scheduleForm.controls.responsible.setValue(this.availableDates[0]['available_responsibles'][0])
       }
     })
+  }
+
+  firstScheduleActive = (employees: Employee[]): Employee => {
+    return employees.filter((employee) => employee.schedule_active == 1).pop()
   }
 
   filterAvailableDates = (calendarDate: Date): boolean => {
