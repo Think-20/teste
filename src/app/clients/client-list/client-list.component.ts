@@ -1,74 +1,41 @@
-import { Component, OnInit, Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
+import { Component, OnInit, Injectable, AfterViewInit } from '@angular/core';
+import { EmployeeService } from 'app/employees/employee.service';
+import { Employee } from 'app/employees/employee.model';
+import { ClientType } from 'app/clients/client-types/client-type.model';
+import { ClientTypeService } from 'app/clients/client-types/client-type.service';
+import { ClientStatusService } from 'app/clients/client-status/client-status.service';
+import { ClientStatus } from 'app/clients/client-status/client-status.model';
+import { Client } from 'app/clients/client.model';
+import { ClientService } from 'app/clients/client.service';
+import { DataInfo } from 'app/shared/data-info.model';
+import { StarsComponent } from 'app/shared/stars/stars.component';
+import { AuthService } from 'app/login/auth.service';
+import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-import { ClientService } from '../client.service';
-import { Client } from '../client.model';
-import { AuthService } from '../../login/auth.service';
-import { Pagination } from '../../shared/pagination.model';
-import { EmployeeService } from '../../employees/employee.service';
-import { Employee } from '../../employees/employee.model';
-import { DataInfo } from '../../shared/data-info.model';
-import { ClientType } from '../client-types/client-type.model';
-import { ClientStatus } from '../client-status/client-status.model';
-import { ClientStatusService } from '../client-status/client-status.service';
-import { ClientTypeService } from '../client-types/client-type.service';
-import { distinctUntilChanged } from 'rxjs/operators';
-import { debounceTime } from 'rxjs/operator/debounceTime';
+import { UpdatedInfoComponent } from 'app/shared/list-data/updated-info/updated-info.component';
+import { ListData, mF } from 'app/shared/list-data/list-data.model';
 
 @Component({
   selector: 'cb-client-list',
   templateUrl: './client-list.component.html',
-  styleUrls: ['./client-list.component.css'],
-  animations: [
-    trigger('rowAppeared', [
-      state('ready', style({opacity: 1})),
-      transition('void => ready', animate('300ms 0s ease-in', keyframes([
-        style({opacity: 0, transform: 'translateX(-30px)', offset: 0}),
-        style({opacity: 0.8, transform: 'translateX(10px)', offset: 0.8}),
-        style({opacity: 1, transform: 'translateX(0px)', offset: 1})
-      ]))),
-      transition('ready => void', animate('300ms 0s ease-out', keyframes([
-        style({opacity: 1, transform: 'translateX(0px)', offset: 0}),
-        style({opacity: 0.8, transform: 'translateX(-10px)', offset: 0.2}),
-        style({opacity: 0, transform: 'translateX(30px)', offset: 1})
-      ])))
-    ])
-  ]
+  styleUrls: ['./client-list.component.css']
 })
 @Injectable()
 export class ClientListComponent implements OnInit {
-
-  rowAppearedState: string = 'ready'
-  searchForm: FormGroup
-  formCopy: any
-  search: FormControl
-  clients: Client[] = []
-  clientTypes: ClientType[]
-  clientStatus: ClientStatus[]
-  attendances: Employee[]
-  searching = false
-  filter: boolean = false
-  pagination: Pagination
-  pageIndex: number
-  dataInfo: DataInfo
-  params = {}
-  hasFilterActive = false
+  listData: ListData;
+  filterData: {[key: string]: Array<any>};
+  clients: Client[];
+  dataLoaded: boolean = false
 
   constructor(
-    private fb: FormBuilder,
-    private clientService: ClientService,
-    private clientStatusService: ClientStatusService,
-    private clientTypeService: ClientTypeService,
     private employeeService: EmployeeService,
+    private clientTypeService: ClientTypeService,
+    private clientStatusService: ClientStatusService,
+    private router: Router,
+    private snackbar: MatSnackBar,
+    private clientService: ClientService,
     private authService: AuthService,
-    private snackBar: MatSnackBar
   ) { }
-
-  total(clients: Client[]) {
-    return clients.length
-  }
 
   permissionVerify(module: string, client: Client): boolean {
     let access: boolean
@@ -92,6 +59,182 @@ export class ClientListComponent implements OnInit {
       }
     }
     return access
+  }
+
+  ngOnInit() {
+    this.listData = {
+      header: {
+        getParams: (formValue) => {
+          return {
+            search: formValue.search,
+            attendance: formValue.attendance,
+            client_status: formValue.client_status,
+            client_type: formValue.client_type,
+            rate: formValue.rate,
+          }
+        },
+        filterFields: [
+          mF({
+            arrayValues: this.employeeService.canInsertClients({deleted: true}).toPromise(),
+            class: 'col-md-3',
+            formcontrolname: 'attendance',
+            placeholder: 'Atendimento',
+            type: 'select',
+            optionDescription: 'name',
+          }),
+          mF({
+            arrayValues: this.clientTypeService.types().toPromise(),
+            class: 'col-md-3',
+            formcontrolname: 'client_type',
+            placeholder: 'Tipo',
+            type: 'select',
+            optionDescription: 'description',
+          }),
+          mF({
+            arrayValues: this.clientStatusService.status().toPromise(),
+            class: 'col-md-3',
+            formcontrolname: 'client_status',
+            placeholder: 'Status',
+            type: 'select',
+            optionDescription: 'description',
+          }),
+          mF({
+            class: 'col-md-3 star-input',
+            formcontrolname: 'rate',
+            placeholder: 'Score',
+            type: 'stars',
+            starsRate: null,
+          }),
+        ]
+      },
+      body: {
+        dataFields: [
+          {
+            style: { width: '20%' },
+            label: 'Nome',
+            showData: (client: Client) => { return client.fantasy_name }
+          },
+          {
+            style: { width: '13%' },
+            label: 'Tipo',
+            showData: (client: Client) => { return client.type.description }
+          },
+          {
+            style: { width: '12%' },
+            label: 'Status',
+            showData: (client: Client) => { return client.status.description }
+          },
+          {
+            style: { width: '25%' },
+            label: 'Atendimento',
+            showData: (client: Client) => { return client.employee.name }
+          },
+          {
+            style: { width: '20%' },
+            label: 'Score',
+            component: StarsComponent,
+            afterCreateComponent: (client: Client, dataInfo: DataInfo, stars: StarsComponent) => {
+              stars.rate = client.rate
+              stars.readonly = true
+            }
+          },
+        ],
+        hasMenuButton: true,
+        loadData: (params, page) => {
+          return this.clientService.clients(params, page)
+        },
+        menuItems: [
+          {
+            icon: 'subject',
+            label: 'Detalhes',
+            actions: {
+              click: (client: Client) => {
+                return this.router.navigate(['/clients/show', client.id])
+              },
+              disabled: (client: Client) => {
+                return !this.permissionVerify('show', client)
+              }
+            }
+          },
+          {
+            icon: 'mode_edit',
+            label: 'Editar',
+            actions: {
+              click: (client: Client) => {
+                return this.router.navigate(['/clients/edit', client.id])
+              },
+              disabled: (client: Client) => {
+                return !this.permissionVerify('edit', client)
+              }
+            }
+          },
+
+          {
+            icon: 'delete',
+            label: 'Remover',
+            removeWhenClickTrue: true,
+            actions: {
+              click: (client: Client) => {
+                return this.delete(client)
+              },
+              disabled: (client: Client) => {
+                return !this.permissionVerify('delete', client)
+              }
+            }
+          },
+        ]
+      },
+      footer: {
+        dataFields: [
+          {
+            style: { width: '16.66%', 'text-align': 'center' },
+            label: 'Total',
+            showData: (clients: Client[]) => { return clients.length }
+          },
+          {
+            style: { width: '16.66%', 'text-align': 'right' },
+            label: 'Inativo/Ativo',
+            showData: (clients: Client[]) => {
+              return this.statusInactive(clients) + '/' + this.statusActive(clients)
+            }
+          },
+          {
+            style: { width: '25%', 'text-align': 'right' },
+            label: 'Agência/Expositor/Autônomo',
+            showData: (clients: Client[]) => {
+              return this.typeAgencia(clients) + '/' + this.typeExpositor(clients) + '/' + this.typeAutonomo(clients)
+            }
+          },
+          {
+            style: { width: '16.66%', 'text-align': 'right' },
+            label: 'Score +3/-3',
+            showData: (clients: Client[]) => {
+              return this.score3Plus(clients) + '/' + this.score3Minus(clients)
+            }
+          },
+          {
+            style: { width: '25%', 'text-align': 'right' },
+            label: 'Última atualização',
+            component: UpdatedInfoComponent,
+            afterCreateComponent: (obj, dataInfo: DataInfo, updatedInfo: UpdatedInfoComponent) => {
+              updatedInfo.dataInfo = dataInfo
+            }
+          },
+        ]
+      }
+    }
+
+    this.dataLoaded = true;
+  }
+
+  async delete(client: Client): Promise<boolean> {
+    let data = await this.clientService.delete(client.id).toPromise()
+
+    this.snackbar.open(data.message, '', {
+      duration: 5000
+    })
+
+    return data.status
   }
 
   statusActive(clients: Client[]) {
@@ -121,148 +264,4 @@ export class ClientListComponent implements OnInit {
   score3Minus(clients: Client[]) {
     return clients.filter((client) => { return client.rate < 3 }).length
   }
-
-  ngOnInit() {
-    this.loadFilterData()
-    this.pageIndex = this.clientService.pageIndex
-
-    this.createForm()
-    this.loadInitialData()
-  }
-
-  createForm() {
-    this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
-      search: this.search,
-      attendance: this.fb.control(''),
-      client_status: this.fb.control(''),
-      rate: this.fb.control(''),
-      client_type: this.fb.control('')
-    })
-
-    this.formCopy = this.searchForm.value
-
-    if(JSON.stringify(this.clientService.searchValue) == JSON.stringify({})) {
-      this.clientService.searchValue = this.searchForm.value
-    } else {
-      this.searchForm.setValue(this.clientService.searchValue)
-    }
-
-    this.searchForm.valueChanges
-    .pipe(distinctUntilChanged())
-    .debounceTime(500)
-    .subscribe((searchValue) => {
-      this.params = this.getParams(searchValue)
-      this.loadClients(this.params,  1)
-
-      this.pageIndex = 0
-      this.clientService.pageIndex = 0
-      this.clientService.searchValue = searchValue
-      this.updateFilterActive()
-    })
-  }
-
-  getParams(searchValue) {
-    return {
-      search: searchValue.search,
-      attendance: searchValue.attendance,
-      client_status: searchValue.client_status,
-      client_type: searchValue.client_type,
-      rate: searchValue.rate,
-    }
-  }
-
-  updateFilterActive() {
-    if (JSON.stringify(this.clientService.searchValue) === JSON.stringify(this.formCopy)) {
-      this.hasFilterActive = false
-    } else {
-      this.hasFilterActive = true
-    }
-  }
-
-  clearFilter() {
-    this.clientService.searchValue = {}
-    this.clientService.pageIndex = 0
-    this.pageIndex = 0
-    this.createForm()
-    this.loadInitialData()
-  }
-
-  loadInitialData() {
-    if (JSON.stringify(this.clientService.searchValue) === JSON.stringify(this.formCopy)) {
-      this.loadClients({}, this.pageIndex + 1)
-    } else {
-      this.params = this.clientService.searchValue
-      this.loadClients(this.params, this.clientService.pageIndex + 1)
-    }
-
-    this.updateFilterActive()
-  }
-
-  loadFilterData() {
-    this.clientTypeService.types().subscribe((clientTypes) => {
-      this.clientTypes = clientTypes
-    })
-
-    this.clientStatusService.status().subscribe((clientStatus) => {
-      this.clientStatus = clientStatus
-    })
-
-    this.employeeService.canInsertClients({
-      deleted: true
-    }).subscribe((attendances) => {
-      this.attendances = attendances
-    })
-  }
-
-  loadClients(params = {}, page: number) {
-    this.searching = true
-    let snackBar = this.snackBar.open('Carregando clientes...')
-
-    this.clientService.clients(params, page).subscribe(dataInfo => {
-      this.searching = false
-      this.dataInfo = dataInfo
-      this.pagination = dataInfo.pagination
-      this.clients = <Client[]> this.pagination.data
-      snackBar.dismiss()
-    })
-  }
-
-  compareClientType(clientType1: ClientType, clientType2: ClientType) {
-    return clientType1.id === clientType2.id
-  }
-
-  compareClientStatus(clientStatus1: ClientStatus, clientStatus2: ClientStatus) {
-    return clientStatus1.id === clientStatus2.id
-  }
-
-  compareAttendance(var1: Employee, var2: Employee) {
-    return var1.id === var2.id
-  }
-
-  delete(client: Client) {
-    this.clientService.delete(client.id).subscribe((data) => {
-      this.snackBar.open(data.message, '', {
-        duration: 5000
-      })
-
-      if(data.status) {
-        this.clients.splice(this.clients.indexOf(client), 1)
-      }
-    })
-  }
-
-  changePage($event) {
-    this.searching = true
-    this.clients = []
-    this.clientService.clients(this.clientService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
-      this.searching = false
-      this.dataInfo = dataInfo
-      this.pagination = dataInfo.pagination
-      this.clients = <Client[]> this.pagination.data
-      this.pageIndex = $event.pageIndex
-      this.clientService.pageIndex = this.pageIndex
-    })
-  }
-
 }

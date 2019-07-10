@@ -267,6 +267,9 @@ export class ScheduleLineComponent implements OnInit {
 
     let date = new Date(task.available_date + 'T00:00:00')
 
+    if(task.job_activity.description == 'Continuação') {
+      return 'Continuação de ' + this.taskService.jobDisplay(task.task).toLowerCase()
+    }
     if(date.getDate() != chrono.day) {
       return 'Continuação de ' + this.taskService.jobDisplay(task).toLowerCase()
     }

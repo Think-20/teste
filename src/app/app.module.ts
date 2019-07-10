@@ -189,11 +189,16 @@ import { LoggerService } from './shared/logger.service';
 import { RouterExtService } from './shared/router-ext.service';
 import { MessageLoadingComponent } from './shared/file-upload/message-loading/message-loading';
 import { MessageLoadingService } from './shared/file-upload/message-loading/message-loading.service';
+import { ListDataComponent } from './shared/list-data/list-data.component';
+import { ListDataService } from './shared/list-data/list-data.service';
+import { DataFieldComponent } from './shared/list-data/data-field/data-field.component';
+import { UpdatedInfoComponent } from './shared/list-data/updated-info/updated-info.component';
 
 registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
+    StarsComponent,
     MaskDirective,
     UcWordsDirective,
     NumberAbbreviationPipe,
@@ -238,7 +243,6 @@ registerLocaleData(localePt);
     ItemFormComponent,
     ItemListComponent,
     ItemShowComponent,
-    StarsComponent,
     ProductionTimeComponent,
     ReadMoreComponent,
     ClientImportComponent,
@@ -294,6 +298,9 @@ registerLocaleData(localePt);
     SpecificationComponent,
     FileUploadComponent,
     MessageLoadingComponent,
+    ListDataComponent,
+    DataFieldComponent,
+    UpdatedInfoComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -381,6 +388,7 @@ registerLocaleData(localePt);
     SpecificationFileService,
     LoggerService,
     RouterExtService,
+    ListDataService,
 
     MatDialog,
     MatSnackBar,
@@ -395,11 +403,13 @@ registerLocaleData(localePt);
   ],
   bootstrap: [AppComponent],
   entryComponents: [
+    StarsComponent,
     StandItemFormComponent,
     ReloadComponent,
     ImageViewerComponent,
     BlockDialogComponent,
-    MessageLoadingComponent
+    MessageLoadingComponent,
+    UpdatedInfoComponent,
   ]
 })
 export class AppModule { }
