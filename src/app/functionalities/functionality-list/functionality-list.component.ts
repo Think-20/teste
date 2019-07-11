@@ -91,7 +91,7 @@ export class FunctionalityListComponent implements OnInit {
             label: 'Detalhes',
             actions: {
               click: (functionality: Functionality) => {
-                return this.router.navigate(['/cost-categories/show', functionality.id])
+                return this.router.navigate(['/functionalities/show', functionality.id])
               },
               disabled: (functionality: Functionality) => {
                 return !this.permissionVerify('show', functionality)
@@ -103,7 +103,7 @@ export class FunctionalityListComponent implements OnInit {
             label: 'Editar',
             actions: {
               click: (functionality: Functionality) => {
-                return this.router.navigate(['/cost-categories/edit', functionality.id])
+                return this.router.navigate(['/functionalities/edit', functionality.id])
               },
               disabled: (functionality: Functionality) => {
                 return !this.permissionVerify('edit', functionality)

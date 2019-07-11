@@ -91,7 +91,7 @@ export class DisplayListComponent implements OnInit {
             label: 'Detalhes',
             actions: {
               click: (display: Display) => {
-                return this.router.navigate(['/cost-categories/show', display.id])
+                return this.router.navigate(['/displays/show', display.id])
               },
               disabled: (display: Display) => {
                 return !this.permissionVerify('show', display)
@@ -103,7 +103,7 @@ export class DisplayListComponent implements OnInit {
             label: 'Editar',
             actions: {
               click: (display: Display) => {
-                return this.router.navigate(['/cost-categories/edit', display.id])
+                return this.router.navigate(['/displays/edit', display.id])
               },
               disabled: (display: Display) => {
                 return !this.permissionVerify('edit', display)
