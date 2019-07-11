@@ -119,6 +119,20 @@
         </div>
       </div>
     </mat-card-title>
+    <mat-card *ngIf="!footerData">
+      <table class="table mat-table report">
+        <div class="mat-header-row">
+          <div class="mat-header-cell col-md-2 text-center">
+            Total
+          </div>
+        </div>
+        <div class="mat-row">
+          <div class="mat-cell col-md-2 text-center default">
+            {{ data?.length }}
+          </div>
+        </div>
+      </table>
+    </mat-card>
     <mat-card *ngIf="footerData && data?.length > 0">
       <table class="table mat-table report">
         <div class="mat-header-row">
