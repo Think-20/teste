@@ -23,7 +23,6 @@ import { ListData, mF } from 'app/shared/list-data/list-data.model';
 @Injectable()
 export class ClientListComponent implements OnInit {
   listData: ListData;
-  clients: Client[];
 
   constructor(
     private employeeService: EmployeeService,
