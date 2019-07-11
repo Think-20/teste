@@ -125,10 +125,16 @@
           <div class="mat-header-cell col-md-2 text-center">
             Total
           </div>
+          <div *ngIf="dataInfo?.updatedInfo?.date" class="mat-header-cell col-md-10 text-right">
+            Última atualização
+          </div>
         </div>
         <div class="mat-row">
           <div class="mat-cell col-md-2 text-center default">
             {{ data?.length }}
+          </div>
+          <div *ngIf="dataInfo?.updatedInfo?.date" class="mat-cell col-md-10 text-right">
+            <cb-updated-info [dataInfo]="dataInfo"></cb-updated-info>
           </div>
         </div>
       </table>
