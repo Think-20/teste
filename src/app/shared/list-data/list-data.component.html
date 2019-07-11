@@ -71,6 +71,9 @@
               [ngStyle]="dataField.style">
               {{ dataField.label }}
             </div>
+            <div *ngIf="bodyData.hasMenuButton" [ngStyle]="bodyData.buttonStyle" class="mat-header-cell">
+              Ação
+            </div>
           </div>
           <div class="mat-row" *ngFor="let line of data" [@rowAppeared]="rowAppearedState">
             <cb-data-field *ngFor="let dataField of bodyData.dataFields" class="mat-cell"
