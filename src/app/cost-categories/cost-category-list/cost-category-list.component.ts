@@ -6,7 +6,7 @@ import { ListData, mF } from 'app/shared/list-data/list-data.model';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'cb-costCategory-list',
+  selector: 'cb-cost-category-list',
   templateUrl: './cost-category-list.component.html'
 })
 @Injectable()
