@@ -51,9 +51,7 @@ export class FilterField {
   pré-determinadas na classe.
 */
 export function mF(params: FilterField) {
-  let fF = new FilterField(params)
-  console.log(fF)
-  return fF
+  return new FilterField(params)
 }
 
 export class DataField {
