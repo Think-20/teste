@@ -23,9 +23,7 @@ import { ListData, mF } from 'app/shared/list-data/list-data.model';
 @Injectable()
 export class ClientListComponent implements OnInit {
   listData: ListData;
-  filterData: {[key: string]: Array<any>};
   clients: Client[];
-  dataLoaded: boolean = false
 
   constructor(
     private employeeService: EmployeeService,
@@ -223,8 +221,6 @@ export class ClientListComponent implements OnInit {
         ]
       }
     }
-
-    this.dataLoaded = true;
   }
 
   async delete(client: Client): Promise<boolean> {
