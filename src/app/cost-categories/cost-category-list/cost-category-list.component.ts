@@ -95,6 +95,7 @@ export class CostCategoryListComponent implements OnInit {
         loadData: (params, page) => {
           return this.costCategoryService.costCategories(params, page)
         },
+        buttonStyle: { width: '10%' }
       }
     }
   }

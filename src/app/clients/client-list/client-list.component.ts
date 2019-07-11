@@ -179,7 +179,8 @@ export class ClientListComponent implements OnInit {
               }
             }
           },
-        ]
+        ],
+        buttonStyle: { width: '5%' }
       },
       footer: {
         dataFields: [
