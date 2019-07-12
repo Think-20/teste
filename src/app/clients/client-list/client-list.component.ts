@@ -17,15 +17,11 @@ import { ListData, mF } from 'app/shared/list-data/list-data.model';
 
 @Component({
   selector: 'cb-client-list',
-  templateUrl: './client-list.component.html',
-  styleUrls: ['./client-list.component.css']
+  templateUrl: './client-list.component.html'
 })
 @Injectable()
 export class ClientListComponent implements OnInit {
   listData: ListData;
-  filterData: {[key: string]: Array<any>};
-  clients: Client[];
-  dataLoaded: boolean = false
 
   constructor(
     private employeeService: EmployeeService,
@@ -182,7 +178,8 @@ export class ClientListComponent implements OnInit {
               }
             }
           },
-        ]
+        ],
+        buttonStyle: { width: '5%' }
       },
       footer: {
         dataFields: [
@@ -223,8 +220,6 @@ export class ClientListComponent implements OnInit {
         ]
       }
     }
-
-    this.dataLoaded = true;
   }
 
   async delete(client: Client): Promise<boolean> {

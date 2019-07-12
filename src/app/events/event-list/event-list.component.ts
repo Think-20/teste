@@ -1,76 +1,40 @@
 import { Component, OnInit, Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
 import { EventService } from '../event.service';
 import { Event } from '../event.model';
 import { AuthService } from '../../login/auth.service';
-import { Pagination } from '../../shared/pagination.model';
-import { DataInfo } from '../../shared/data-info.model';
-import { distinctUntilChanged } from 'rxjs/operators';
-import { debounceTime } from 'rxjs/operator/debounceTime';
+import { ListData, mF } from 'app/shared/list-data/list-data.model';
+import { Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'cb-event-list',
-  templateUrl: './event-list.component.html',
-  styleUrls: ['./event-list.component.css'],
-  animations: [
-    trigger('rowAppeared', [
-      state('ready', style({opacity: 1})),
-      transition('void => ready', animate('300ms 0s ease-in', keyframes([
-        style({opacity: 0, transform: 'translateX(-30px)', offset: 0}),
-        style({opacity: 0.8, transform: 'translateX(10px)', offset: 0.8}),
-        style({opacity: 1, transform: 'translateX(0px)', offset: 1})
-      ]))),
-      transition('ready => void', animate('300ms 0s ease-out', keyframes([
-        style({opacity: 1, transform: 'translateX(0px)', offset: 0}),
-        style({opacity: 0.8, transform: 'translateX(-10px)', offset: 0.2}),
-        style({opacity: 0, transform: 'translateX(30px)', offset: 1})
-      ])))
-    ])
-  ]
+  templateUrl: './event-list.component.html'
 })
 @Injectable()
 export class EventListComponent implements OnInit {
-
-  rowAppearedState: string = 'ready'
-  searchForm: FormGroup
-  formCopy: any
-  search: FormControl
-  events: Event[] = []
-  searching = false
-  filter: boolean = false
-  pagination: Pagination
-  pageIndex: number
-  params = {}
-  hasFilterActive = false
-  dataInfo: DataInfo
-
+  listData: ListData;
   constructor(
-    private fb: FormBuilder,
     private eventService: EventService,
     private authService: AuthService,
+    private datePipe: DatePipe,
+    private router: Router,
     private snackBar: MatSnackBar
   ) { }
-
-  total(events: Event[]) {
-    return events.length
-  }
 
   permissionVerify(module: string, event: Event): boolean {
     let access: boolean
     switch(module) {
       case 'show': {
-        access = this.authService.hasAccess('events/get/{id}')
+        access = event.id != event.id ? this.authService.hasAccess('events/get/{id}') : true
         break
       }
       case 'edit': {
-        access = this.authService.hasAccess('event/edit')
+        access = event.id != event.id ? this.authService.hasAccess('event/edit') : true
         break
       }
       case 'delete': {
-        access = this.authService.hasAccess('event/remove/{id}')
+        access = event.id != event.id ? this.authService.hasAccess('event/remove/{id}') : true
         break
       }
       default: {
@@ -82,109 +46,110 @@ export class EventListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.pageIndex = this.eventService.pageIndex
+    this.listData = {
+      header: {
+        filterFields: [
+          mF({
+            class: 'col-md-3',
+            formcontrolname: 'search',
+            placeholder: 'Nome',
+            type: 'input'
+          }),
+        ],
+        getParams: (formValue) => {
+          return {
+            search: formValue.search
+          }
+        }
+      },
+      body: {
+        dataFields: [
+          {
+            label: 'Nome',
+            style: { width: '20%' },
+            showData: (event: Event) => {
+              return event.name
+            }
+          },
+          {
+            label: 'Edição',
+            style: { width: '10%' },
+            showData: (event: Event) => {
+              return event.edition
+            }
+          },
+          {
+            label: 'Local',
+            style: { width: '30%' },
+            showData: (event: Event) => {
+              return event.place.name
+            }
+          },
+          {
+            label: 'Data',
+            style: { width: '30%' },
+            showData: (event: Event) => {
+              return this.datePipe.transform(event.ini_date, 'dd/MM/yyyy')
+              + ' a ' + this.datePipe.transform(event.fin_date, 'dd/MM/yyyy')
+            }
+          },
 
-    this.createForm()
-    this.loadInitialData()
-  }
-
-  createForm() {
-    this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
-      search: this.search,
-    })
-
-    this.formCopy = this.searchForm.value
-
-    if(JSON.stringify(this.eventService.searchValue) == JSON.stringify({})) {
-      this.eventService.searchValue = this.searchForm.value
-    } else {
-      this.searchForm.setValue(this.eventService.searchValue)
-    }
-
-    this.searchForm.valueChanges
-    .pipe(distinctUntilChanged())
-    .debounceTime(500)
-    .subscribe((searchValue) => {
-      this.params = this.getParams(searchValue)
-      this.loadEvents(this.params, 1)
-
-      this.pageIndex = 0
-      this.eventService.pageIndex = 0
-      this.eventService.searchValue = searchValue
-      this.updateFilterActive()
-    })
-  }
-
-  getParams(searchValue) {
-    return {
-      search: searchValue.search,
-    }
-  }
-
-  updateFilterActive() {
-    if (JSON.stringify(this.eventService.searchValue) === JSON.stringify(this.formCopy)) {
-      this.hasFilterActive = false
-    } else {
-      this.hasFilterActive = true
-    }
-  }
-
-  clearFilter() {
-    this.eventService.searchValue = {}
-    this.eventService.pageIndex = 0
-    this.pageIndex = 0
-    this.createForm()
-    this.loadInitialData()
-  }
-
-  loadInitialData() {
-    if (JSON.stringify(this.eventService.searchValue) === JSON.stringify(this.formCopy)) {
-      this.loadEvents({}, this.pageIndex + 1)
-    } else {
-      this.params = this.getParams(this.eventService.searchValue)
-      this.loadEvents(this.params, this.eventService.pageIndex + 1)
-    }
-
-    this.updateFilterActive()
-  }
-
-  loadEvents(params = {}, page: number) {
-    this.searching = true
-    let snackBar = this.snackBar.open('Carregando eventos...')
-
-    this.eventService.events(params, page).subscribe(dataInfo => {
-      this.searching = false
-      this.dataInfo = dataInfo
-      this.pagination = dataInfo.pagination
-      this.events = <Event[]> this.pagination.data
-      snackBar.dismiss()
-    })
-  }
-
-  delete(event: Event) {
-    this.eventService.delete(event.id).subscribe((data) => {
-      this.snackBar.open(data.message, '', {
-        duration: 5000
-      })
-
-      if(data.status) {
-        this.events.splice(this.events.indexOf(event), 1)
+        ],
+        hasMenuButton: true,
+        menuItems: [
+          {
+            icon: 'subject',
+            label: 'Detalhes',
+            actions: {
+              click: (event: Event) => {
+                return this.router.navigate(['/events/show', event.id])
+              },
+              disabled: (event: Event) => {
+                return !this.permissionVerify('show', event)
+              }
+            }
+          },
+          {
+            icon: 'mode_edit',
+            label: 'Editar',
+            actions: {
+              click: (event: Event) => {
+                return this.router.navigate(['/events/edit', event.id])
+              },
+              disabled: (event: Event) => {
+                return !this.permissionVerify('edit', event)
+              }
+            }
+          },
+          {
+            icon: 'delete',
+            label: 'Remover',
+            removeWhenClickTrue: true,
+            actions: {
+              click: (event: Event) => {
+                return this.delete(event)
+              },
+              disabled: (event: Event) => {
+                return !this.permissionVerify('delete', event)
+              }
+            }
+          },
+        ],
+        loadData: (params, page) => {
+          return this.eventService.events(params, page)
+        },
+        buttonStyle: { width: '10%' }
       }
-    })
+    }
   }
 
-  changePage($event) {
-    this.searching = true
-    this.events = []
-    this.eventService.events(this.eventService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
-      this.searching = false
-      this.dataInfo = dataInfo
-      this.pagination = dataInfo.pagination
-      this.events = <Event[]> this.pagination.data
-      this.pageIndex = $event.pageIndex
-      this.eventService.pageIndex = this.pageIndex
-    })
-  }
+  async delete(event: Event) {
+    let data = await this.eventService.delete(event.id).toPromise()
 
+    this.snackBar.open(data.message, '', {
+      duration: 5000
+    })
+
+    return data.status
+  }
 }

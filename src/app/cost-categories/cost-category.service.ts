@@ -80,7 +80,7 @@ export class CostCategoryService {
       })
   }
 
-  delete(id: number): Observable<CostCategory> {
+  delete(id: number): Observable<any> {
     return this.http.delete(`${API}/cost-category/remove/${id}`)
       .map(response => response.json())
       .catch((err) => {

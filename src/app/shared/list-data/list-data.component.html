@@ -50,6 +50,9 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
+            <mat-form-field *ngIf="filterField.type == 'input'">
+              <input matInput [placeholder]="filterField.placeholder" [formControlName]="filterField.formcontrolname">
+            </mat-form-field>
             <cb-stars *ngIf="filterField.type == 'stars'" [label]="filterField.placeholder"
               [rate]="filterField.starsRate" [input]="searchForm.controls[filterField.formcontrolname]">
               <input [formControlName]="filterField.formcontrolname" matInput>
@@ -67,6 +70,9 @@
             <div *ngFor="let dataField of bodyData.dataFields" class="mat-header-cell"
               [ngStyle]="dataField.style">
               {{ dataField.label }}
+            </div>
+            <div *ngIf="bodyData.hasMenuButton" [ngStyle]="bodyData.buttonStyle" class="mat-header-cell">
+              Ação
             </div>
           </div>
           <div class="mat-row" *ngFor="let line of data" [@rowAppeared]="rowAppearedState">
@@ -113,6 +119,26 @@
         </div>
       </div>
     </mat-card-title>
+    <mat-card *ngIf="!footerData">
+      <table class="table mat-table report">
+        <div class="mat-header-row">
+          <div class="mat-header-cell col-md-2 text-center">
+            Total
+          </div>
+          <div *ngIf="dataInfo?.updatedInfo?.date" class="mat-header-cell col-md-10 text-right">
+            Última atualização
+          </div>
+        </div>
+        <div class="mat-row">
+          <div class="mat-cell col-md-2 text-center default">
+            {{ data?.length }}
+          </div>
+          <div *ngIf="dataInfo?.updatedInfo?.date" class="mat-cell col-md-10 text-right">
+            <cb-updated-info [dataInfo]="dataInfo"></cb-updated-info>
+          </div>
+        </div>
+      </table>
+    </mat-card>
     <mat-card *ngIf="footerData && data?.length > 0">
       <table class="table mat-table report">
         <div class="mat-header-row">
