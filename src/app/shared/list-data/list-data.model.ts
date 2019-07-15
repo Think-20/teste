@@ -77,6 +77,7 @@ export class HeaderData {
 }
 
 export class BodyData {
+  customRowStyle: (list: any) => {[key: string]: any};
   dataFields: DataField[];
   hasMenuButton?: boolean = false
   buttonStyle?: {[key: string]: string} = { width: '5%' };

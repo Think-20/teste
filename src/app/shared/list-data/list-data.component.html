@@ -75,7 +75,7 @@
               Ação
             </div>
           </div>
-          <div class="mat-row" *ngFor="let line of data" [@rowAppeared]="rowAppearedState">
+          <div class="mat-row" *ngFor="let line of data" [ngStyle]="bodyData.customRowStyle(line)" [@rowAppeared]="rowAppearedState">
             <cb-data-field *ngFor="let dataField of bodyData.dataFields" class="mat-cell"
               [ngStyle]="dataField.style" [dataField]="dataField" [data]="line">
             </cb-data-field>
