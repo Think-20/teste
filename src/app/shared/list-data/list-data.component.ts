@@ -154,8 +154,8 @@ export class ListDataComponent implements OnInit {
     })
   }
 
-  clickMenuItem(menuItem: ListDataMenuItem, data) {
-    menuItem.actions.click(data).then((value) => {
+  clickMenuItem(menuItem: ListDataMenuItem, obj, data: Array<any>) {
+    menuItem.actions.click(obj, data).then((value) => {
       if(menuItem.removeWhenClickTrue && value) {
         this.data.splice(this.data.indexOf(data), 1)
       }

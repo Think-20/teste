@@ -95,7 +95,7 @@ export class ListDataMenuItem {
   removeWhenClickTrue?: boolean = false;
   actions: {
     disabled: (obj) => boolean,
-    click: (obj) => Promise<boolean>,
+    click: (obj, objList: Array<any>) => Promise<boolean>,
   };
 }
 
