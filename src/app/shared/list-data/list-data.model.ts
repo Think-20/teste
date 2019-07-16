@@ -77,6 +77,7 @@ export class HeaderData {
 }
 
 export class BodyData {
+  customRowStyle?: (list: any) => {[key: string]: any} = () => { return {} };
   dataFields: DataField[];
   hasMenuButton?: boolean = false
   buttonStyle?: {[key: string]: string} = { width: '5%' };
@@ -95,7 +96,7 @@ export class ListDataMenuItem {
   removeWhenClickTrue?: boolean = false;
   actions: {
     disabled: (obj) => boolean,
-    click: (obj) => Promise<boolean>,
+    click: (obj, objList: Array<any>) => Promise<boolean>,
   };
 }
 

@@ -1,74 +1,30 @@
 import { Component, OnInit, Injectable } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
+import { ListData, mF } from 'app/shared/list-data/list-data.model';
 import { EmployeeService } from '../employee.service';
+import { Router } from '@angular/router';
+import { AuthService } from 'app/login/auth.service';
 import { Employee } from '../employee.model';
-import { AuthService } from '../../login/auth.service';
-import { Pagination } from '../../shared/pagination.model';
-import { DataInfo } from '../../shared/data-info.model';
-import { distinctUntilChanged } from 'rxjs/operators';
-import { debounceTime } from 'rxjs/operator/debounceTime';
-import { API } from '../../app.api';
-import { DepartmentService } from '../../department/department.service';
-import { PositionService } from '../../position/position.service';
-import { Department } from '../../department/department.model';
-import { Position } from '../../position/position.model';
+import { DepartmentService } from 'app/department/department.service';
+import { PositionService } from 'app/position/position.service';
 import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'cb-employee-list',
-  templateUrl: './employee-list.component.html',
-  styleUrls: ['./employee-list.component.css'],
-  animations: [
-    trigger('rowAppeared', [
-      state('ready', style({opacity: 1})),
-      transition('void => ready', animate('300ms 0s ease-in', keyframes([
-        style({opacity: 0, transform: 'translateX(-30px)', offset: 0}),
-        style({opacity: 0.8, transform: 'translateX(10px)', offset: 0.8}),
-        style({opacity: 1, transform: 'translateX(0px)', offset: 1})
-      ]))),
-      transition('ready => void', animate('300ms 0s ease-out', keyframes([
-        style({opacity: 1, transform: 'translateX(0px)', offset: 0}),
-        style({opacity: 0.8, transform: 'translateX(-10px)', offset: 0.2}),
-        style({opacity: 0, transform: 'translateX(30px)', offset: 1})
-      ])))
-    ])
-  ]
+  templateUrl: './employee-list.component.html'
 })
 @Injectable()
 export class EmployeeListComponent implements OnInit {
-
-  rowAppearedState: string = 'ready'
-  searchForm: FormGroup
-  formCopy: any
-  search: FormControl
-  employees: Employee[] = []
-  departments: Department[]
-  positions: Position[]
-  searching = false
-  filter: boolean = false
-  pagination: Pagination
-  pageIndex: number
-  params = {}
-  hasFilterActive = false
-  dataInfo: DataInfo
-  API = API
-
+  listData: ListData;
   constructor(
-    private fb: FormBuilder,
     private employeeService: EmployeeService,
     private departmentService: DepartmentService,
     private positionService: PositionService,
-    private authService: AuthService,
     private datePipe: DatePipe,
+    private authService: AuthService,
+    private router: Router,
     private snackBar: MatSnackBar
   ) { }
-
-  total(employees: Employee[]) {
-    return employees.length
-  }
 
   permissionVerify(module: string, employee: Employee): boolean {
     let access: boolean
@@ -94,147 +50,143 @@ export class EmployeeListComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.pageIndex = this.employeeService.pageIndex
-
-    this.loadData()
-    this.createForm()
-    this.loadInitialData()
-  }
-
-  createForm() {
-    this.search = this.fb.control('')
-    this.searchForm = this.fb.group({
-      search: this.search,
-      department: this.fb.control(''),
-      position: this.fb.control(''),
-    })
-
-    this.formCopy = this.searchForm.value
-
-    if(JSON.stringify(this.employeeService.searchValue) == JSON.stringify({})) {
-      this.employeeService.searchValue = this.searchForm.value
-    } else {
-      this.searchForm.setValue(this.employeeService.searchValue)
-    }
-
-    this.searchForm.valueChanges
-    .pipe(distinctUntilChanged())
-    .debounceTime(500)
-    .subscribe((searchValue) => {
-      this.params = this.getParams(searchValue)
-      this.loadEmployees(this.params, 1)
-
-      this.pageIndex = 0
-      this.employeeService.pageIndex = 0
-      this.employeeService.searchValue = searchValue
-      this.updateFilterActive()
-    })
-  }
-
-  getParams(searchValue) {
-    return {
-      search: searchValue.search,
-      department: searchValue.department,
-      position: searchValue.position,
-    }
-  }
-
-  updateFilterActive() {
-    if (JSON.stringify(this.employeeService.searchValue) === JSON.stringify(this.formCopy)) {
-      this.hasFilterActive = false
-    } else {
-      this.hasFilterActive = true
-    }
-  }
-
-  clearFilter() {
-    this.employeeService.searchValue = {}
-    this.employeeService.pageIndex = 0
-    this.pageIndex = 0
-    this.createForm()
-    this.loadInitialData()
-  }
-
-  loadInitialData() {
-    if (JSON.stringify(this.employeeService.searchValue) === JSON.stringify(this.formCopy)) {
-      this.loadEmployees({}, this.pageIndex + 1)
-    } else {
-      this.params = this.getParams(this.employeeService.searchValue)
-      this.loadEmployees(this.params, this.employeeService.pageIndex + 1)
-    }
-
-    this.updateFilterActive()
-  }
-
-  loadData() {
-    this.departmentService.departments().subscribe((dataInfo) => {
-      this.departments = <Department[]> dataInfo.pagination.data
-    })
-    this.positionService.positions().subscribe((dataInfo) => {
-      this.positions = <Position[]> dataInfo.pagination.data
-    })
-  }
-
-  loadEmployees(params = {}, page: number) {
-    this.searching = true
-    let snackBar = this.snackBar.open('Carregando funcionários...')
-    let paramsWithDeleted = {
-      deleted: true,
-      ...params
-    }
-
-    this.employeeService.employees(paramsWithDeleted, page).subscribe(dataInfo => {
-      this.searching = false
-      this.dataInfo = dataInfo
-      this.pagination = dataInfo.pagination
-      this.employees = <Employee[]> this.pagination.data
-      snackBar.dismiss()
-    })
-  }
-
-  compareDepartment(var1: Department, var2: Department) {
-    return var1.id === var2.id
-  }
-
-  comparePosition(var1: Position, var2: Position) {
-    return var1.id === var2.id
-  }
-
-  toggleDeleted(employee: Employee) {
-    let employeeCopy = Object.create(employee)
-    this.employeeService.toggleDeleted(employee.id).subscribe((data) => {
-      this.snackBar.open(data.message, '', {
-        duration: 5000
-      })
-
-      if(data.status) {
-        let index = this.employees.indexOf(employee)
-        this.employees[index].deleted_at = employeeCopy.deleted_at == null
-          ? this.datePipe.transform(new Date(), 'YYYY-MM-DD hh:mm:ss')
-          : null
+    this.listData = {
+      header: {
+        filterFields: [
+          mF({
+            arrayValues: this.positionService.positions()
+            .map(dataInfo => dataInfo.pagination.data)
+            .toPromise(),
+            class: 'col-md-4',
+            formcontrolname: 'position',
+            placeholder: 'Função',
+            type: 'select',
+            optionDescription: 'name'
+          }),
+          mF({
+            arrayValues: this.departmentService.departments()
+            .map(dataInfo => dataInfo.pagination.data)
+            .toPromise(),
+            class: 'col-md-4',
+            formcontrolname: 'department',
+            placeholder: 'Departamento',
+            type: 'select',
+            optionDescription: 'description'
+          }),
+        ],
+        getParams: (formValue) => {
+          return {
+            search: formValue.search,
+            department: formValue.department,
+            position: formValue.position,
+          }
+        }
+      },
+      body: {
+        customRowStyle: (employee: Employee) => {
+          return {
+            'background-color': (employee.deleted_at != null ? 'rgba(0,0,0,0.03)' : 'inherit')
+          };
+        },
+        dataFields: [
+          {
+            label: 'Nome',
+            style: { width: '32%' },
+            showData: (employee: Employee) => {
+              return employee.name
+            }
+          },
+          {
+            label: 'Função',
+            style: { width: '30%' },
+            showData: (employee: Employee) => {
+              return employee.position.name
+            }
+          },
+          {
+            label: 'Departamento',
+            style: { width: '30%' },
+            showData: (employee: Employee) => {
+              return employee.department.description
+            }
+          },
+        ],
+        hasMenuButton: true,
+        menuItems: [
+          {
+            icon: 'subject',
+            label: 'Detalhes',
+            actions: {
+              click: (employee: Employee) => {
+                return this.router.navigate(['/employees/show', employee.id])
+              },
+              disabled: (employee: Employee) => {
+                return !this.permissionVerify('show', employee)
+              }
+            }
+          },
+          {
+            icon: 'mode_edit',
+            label: 'Editar',
+            actions: {
+              click: (employee: Employee) => {
+                return this.router.navigate(['/employees/edit', employee.id])
+              },
+              disabled: (employee: Employee) => {
+                return !this.permissionVerify('edit', employee)
+              }
+            }
+          },
+          {
+            icon: 'delete',
+            label: 'Desativar',
+            removeWhenClickTrue: true,
+            actions: {
+              click: (employee: Employee, employeeList: Employee[]) => {
+                return this.toggleDelete(employee, employeeList)
+              },
+              disabled: (employee: Employee) => {
+                return (!this.permissionVerify('delete', employee)) && (employee.deleted_at != null)
+              }
+            }
+          },
+          {
+            icon: 'undo',
+            label: 'Restaurar',
+            removeWhenClickTrue: true,
+            actions: {
+              click: (employee: Employee, employeeList: Employee[]) => {
+                return this.toggleDelete(employee, employeeList)
+              },
+              disabled: (employee: Employee) => {
+                return (!this.permissionVerify('delete', employee)) && (employee.deleted_at == null)
+              }
+            }
+          },
+        ],
+        loadData: (params, page) => {
+          return this.employeeService.employees({ deleted: true, ...params }, page)
+        },
+        buttonStyle: { width: '8%' }
       }
-    })
+    }
   }
 
-  changePage($event) {
-    this.searching = true
-    this.employees = []
-    let controls = this.searchForm.controls
+  async toggleDelete(employee: Employee, employees: Employee[]) {
+    let employeeCopy = Object.create(employee)
+    let data = await this.employeeService.toggleDeleted(employee.id).toPromise()
 
-    this.employeeService.employees(
-    {
-      deleted: true,
-      search: controls.search.value,
-      department: controls.department.value,
-      position: controls.position.value,
-    }, ($event.pageIndex + 1)).subscribe(dataInfo => {
-      this.searching = false
-      this.dataInfo = dataInfo
-      this.pagination = dataInfo.pagination
-      this.employees = <Employee[]> this.pagination.data
-      this.pageIndex = $event.pageIndex
-      this.employeeService.pageIndex = this.pageIndex
+    this.snackBar.open(data.message, '', {
+      duration: 5000
     })
-  }
 
+    if(data.status) {
+      let index = employees.indexOf(employee)
+      employees[index].deleted_at = employeeCopy.deleted_at == null
+        ? this.datePipe.transform(new Date(), 'YYYY-MM-DD hh:mm:ss')
+        : null
+    }
+
+    return data.status
+  }
 }
