@@ -649,6 +649,10 @@ export class ScheduleFormComponent implements OnInit {
   loadJobActivities() {
     this.jobActivityService.jobActivities().subscribe(jobActivities => {
       this.job_activities = jobActivities
+
+      if(this.typeForm != 'edit') {
+        this.job_activities = jobActivities.filter((jobActivity) => { return jobActivity.only_edit == 0 })
+      }
     })
   }
 
