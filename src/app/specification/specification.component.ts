@@ -54,7 +54,7 @@ export class SpecificationComponent implements OnInit {
     this.jobService.job(this.job.id).subscribe((job) => {
       snack.dismiss()
       let available_date = job.tasks.filter((t) => {
-        return t.job_activity.description == 'Orçamento' && t.task_id == task.id
+        return ['Orçamento', 'Modificação de orçamento'].indexOf(t.job_activity.description) >= 0 && t.task_id == task.id
       }).pop().available_date
       let url = '/schedule?date=' + this.datePipe.transform(available_date, 'yyyy-MM-dd')
       return this.router.navigateByUrl(url)
