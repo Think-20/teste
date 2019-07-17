@@ -62,7 +62,7 @@ export class ItemCategoryFormComponent implements OnInit {
         Validators.minLength(3),
         Validators.maxLength(50)
       ]),
-      itemCategory: itemCategoryControl
+      item_category: itemCategoryControl
     })
 
     itemCategoryControl.valueChanges
@@ -71,7 +71,11 @@ export class ItemCategoryFormComponent implements OnInit {
       })
       .debounceTime(500)
       .subscribe(itemDescription => {
-        if(itemDescription == '' || isObject(itemDescription)) return
+        if(itemDescription == '' || isObject(itemDescription)) {
+          snackBarStateCharging.dismiss()
+          return
+        }
+
         this.itemCategoryService.itemCategories({ search: itemDescription, paginate: false }).subscribe(dataInfo => {
           this.itemCategories = dataInfo.pagination.data
           snackBarStateCharging.dismiss()
@@ -86,7 +90,7 @@ export class ItemCategoryFormComponent implements OnInit {
         this.itemCategory = itemCategory
 
         this.itemCategoryForm.controls.description.setValue(this.itemCategory.description)
-        this.itemCategoryForm.controls.itemCategory.setValue(this.itemCategory.item_category || '')
+        this.itemCategoryForm.controls.item_category.setValue(this.itemCategory.item_category || '')
       })
     }
 

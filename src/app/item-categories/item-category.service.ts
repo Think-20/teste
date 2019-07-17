@@ -88,7 +88,7 @@ export class ItemCategoryService {
       .map(response => response.json())
   }
 
-  delete(id: number): Observable<ItemCategory> {
+  delete(id: number): Observable<any> {
     return this.http.delete(`${API}/item-category/remove/${id}`)
       .map(response => response.json())
       .catch((err) => {
