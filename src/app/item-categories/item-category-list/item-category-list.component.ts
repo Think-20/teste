@@ -24,9 +24,9 @@ export class ItemCategoryListComponent implements OnInit {
       header: {
         filterFields: [
           mF({
-            class: 'col-md-3',
+            class: 'col-md-6',
             formcontrolname: 'search',
-            placeholder: 'Descrição',
+            placeholder: 'Nome',
             type: 'input'
           }),
         ],
