@@ -1,6 +1,21 @@
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent let-job="job">
+      <a [routerLink]="['/jobs/show', job.id]" mat-menu-item>
+        <mat-icon>subject</mat-icon> Visualização
+      </a>
+      <a [routerLink]="['/jobs/edit', job.id]" mat-menu-item>
+        <mat-icon>mode_edit</mat-icon> Editar
+      </a>
+      <button (click)="delete(job)" mat-menu-item>
+        <mat-icon>delete</mat-icon> Remover
+      </button>
+  </ng-template>
+</mat-menu>
+
 <div class="my-container">
   <h3 class="lead">Jobs</h3>
 </div>
+
 <div class="col-md-12" id="searchForm">
   <form [formGroup]="searchForm" autocomplete="off">
     <mat-card-title>
@@ -20,6 +35,9 @@
           </a>
           <a [routerLink]="['/jobs/new']" mat-button>
             <mat-icon>add</mat-icon>
+          </a>
+          <a matTooltip="Limpar filtro" *ngIf="hasFilterActive" (click)="clearFilter()" mat-button>
+            <mat-icon>clear</mat-icon>
           </a>
         </div>
       </div>
@@ -84,11 +102,6 @@
             <mat-datepicker-toggle matSuffix [for]="finalDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #finalDatepicker></mat-datepicker>
           </mat-form-field>
-          <div *ngIf="hasFilterActive" class="col-md-12">
-            <mat-card-actions class="col-md-12 text-right">
-              <button (click)="clearFilter()" class="cb-button" mat-raised-button>LIMPAR</button>
-            </mat-card-actions>
-          </div>
         </div>
       </div>
     </mat-card>
@@ -150,19 +163,7 @@
               {{ job?.status_updated_at | date:'dd/MM/yy' }}
             </div>
             <div class="mat-cell mat-column-action">
-              <mat-menu #menu="matMenu">
-                <a [routerLink]="['/jobs/show', job.id]" mat-menu-item>
-                  <mat-icon>subject</mat-icon> Visualização
-                </a>
-                <a [routerLink]="['/jobs/edit', job.id]" mat-menu-item>
-                  <mat-icon>mode_edit</mat-icon> Editar
-                </a>
-                <button (click)="delete(job)" mat-menu-item>
-                  <mat-icon>delete</mat-icon> Remover
-                </button>
-              </mat-menu>
-
-              <button mat-icon-button [matMenuTriggerFor]="menu">
+              <button mat-icon-button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }">
                 <mat-icon>menu</mat-icon>
               </button>
             </div>
