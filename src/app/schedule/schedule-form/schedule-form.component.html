@@ -36,29 +36,17 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <mat-select placeholder="Atividade*" formControlName="job_activity" [compareWith]="compareJobActivity">
+          <mat-select placeholder="Atividade*" formControlName="job_activity" [compareWith]="compareJobActivity" (selectionChange)="getAvailableDates()">
             <mat-option *ngFor="let job_activity of job_activities" [value]="job_activity" [disabled]="job_activity.master == 1 && ! isAdmin">
               {{ job_activity.description }}
             </mat-option>
           </mat-select>
         </mat-form-field>
-        <mat-form-field class="col-md-3">
-          <mat-select placeholder="Responsável*" formControlName="responsible" [compareWith]="compareResponsible">
-            <mat-option *ngFor="let responsible of responsibles" [value]="responsible" [disabled]="scheduleForm.controls.job_activity.value.description != 'Modificação' && ! isAdmin && responsible.name == 'Miguel Rodrigues'">
-              {{ responsible.name }}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <!--
-        <mat-form-field class="col-md-3">
-          <input type="date" [readonly]="true" formControlName="available_date" matInput placeholder="Data disponível para início*">
-        </mat-form-field>
-        -->
         <mat-form-field *ngIf="showExtraParams" class="col-md-3">
-          <input [matDatepicker]="availableDatepicker" [matDatepickerFilter]="filterAvailableDates.bind(this)" formControlName="available_date"
-            matInput placeholder="Data disponível para início*">
+          <input readonly [matDatepicker]="availableDatepicker" formControlName="available_date"
+            matInput placeholder="Data disponível para início*" (dateChange)="getAvailableDates()">
           <mat-datepicker-toggle matSuffix [for]="availableDatepicker"></mat-datepicker-toggle>
-          <mat-datepicker (monthSelected)="changeMonth($event)" #availableDatepicker></mat-datepicker>
+          <mat-datepicker #availableDatepicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="col-md-3">
           <input [min]="scheduleForm.controls.available_date.value" [matDatepicker]="deadlineDatepicker" formControlName="deadline"
@@ -66,7 +54,25 @@
           <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #deadlineDatepicker></mat-datepicker>
         </mat-form-field>
+        <mat-form-field class="col-md-3">
+          <mat-select placeholder="Responsável*" formControlName="responsible" [compareWith]="compareResponsible" (selectionChange)="filterItemsByResponsible()">
+            <mat-option *ngFor="let responsible of responsibles" [value]="responsible" [disabled]="scheduleForm.controls.job_activity.value.description != 'Modificação' && ! isAdmin && responsible.name == 'Miguel Rodrigues'">
+              {{ responsible.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
       </div>
+      <mat-button-toggle-group *ngIf="scheduleForm.controls.responsible.value != ''"
+        class="items-container" #group="matButtonToggleGroup" multiple>
+        <mat-button-toggle class="item-container"
+          *ngFor="let item of itemsByResponsible; let i = index"
+          [class.selected]="item.selected === true"
+          [matTooltip]="item.message" [disabled]="item.status == 'false'"
+          [value]="item.date" aria-label="Selecionar data"
+          (click)="toggleDate(item)">
+          <cb-schedule-date [item]="item"></cb-schedule-date>
+        </mat-button-toggle>
+      </mat-button-toggle-group>
       <p *ngIf="nextDateMessage != ''">
         <small>{{ nextDateMessage }}</small>
       </p>

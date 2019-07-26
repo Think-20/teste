@@ -876,3 +876,8 @@ cb-proposals .mat-expansion-panel-body {
 .mat-card-header-text {
   margin: 0px 7px !important;
 }
+
+.items-container .item-container .mat-button-toggle-label-content {
+  line-height: normal;
+  padding: 0;
+}

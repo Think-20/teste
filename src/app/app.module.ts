@@ -23,6 +23,7 @@ import { MatSlideToggleModule, MatSlideToggle } from '@angular/material/slide-to
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule, MatBadge } from '@angular/material/badge';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -193,6 +194,7 @@ import { ListDataComponent } from './shared/list-data/list-data.component';
 import { ListDataService } from './shared/list-data/list-data.service';
 import { DataFieldComponent } from './shared/list-data/data-field/data-field.component';
 import { UpdatedInfoComponent } from './shared/list-data/updated-info/updated-info.component';
+import { ScheduleDateComponent } from './schedule/schedule-date/schedule-date.component';
 
 registerLocaleData(localePt);
 
@@ -301,6 +303,7 @@ registerLocaleData(localePt);
     ListDataComponent,
     DataFieldComponent,
     UpdatedInfoComponent,
+    ScheduleDateComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -316,6 +319,7 @@ registerLocaleData(localePt);
     RouterModule.forRoot(ROUTES),
 
     MatTableModule,
+    MatButtonToggleModule,
     MatProgressBarModule,
     MatCardModule,
     MatInputModule,
