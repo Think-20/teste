@@ -137,11 +137,11 @@ export class JobListComponent implements OnInit {
     return {
       clientName: clientName,
       status: status,
+      creation: searchValue.creation,
+      job_type: searchValue.job_type,
+      final_date: searchValue.final_date,
+      initial_date: searchValue.initial_date,
       ...attendanceFilter,
-      creation: searchValue.creation.value,
-      job_type: searchValue.job_type.value,
-      final_date: searchValue.final_date.value,
-      initial_date: searchValue.initial_date.value,
     }
   }
 
