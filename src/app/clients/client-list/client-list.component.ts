@@ -63,7 +63,7 @@ export class ClientListComponent implements OnInit {
         getParams: (formValue) => {
           return {
             search: formValue.search,
-            attendance: formValue.attendance,
+            attendance_array: formValue.attendance_array,
             client_status: formValue.client_status,
             client_type: formValue.client_type,
             rate: formValue.rate,
@@ -73,9 +73,10 @@ export class ClientListComponent implements OnInit {
           mF({
             arrayValues: this.employeeService.canInsertClients({deleted: true}).toPromise(),
             class: 'col-md-3',
-            formcontrolname: 'attendance',
+            formcontrolname: 'attendance_array',
             placeholder: 'Atendimento',
             type: 'select',
+            multiple: true,
             optionDescription: 'name',
           }),
           mF({

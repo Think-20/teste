@@ -42,7 +42,8 @@
         <div class="col-md-12">
           <div *ngFor="let filterField of filterFields" [class]="filterField.class">
             <mat-form-field *ngIf="filterField.type == 'select'">
-              <mat-select [placeholder]="filterField.placeholder" [formControlName]="filterField.formcontrolname"
+              <mat-select [placeholder]="filterField.placeholder" [multiple]="filterField.multiple"
+                [formControlName]="filterField.formcontrolname"
                 [compareWith]="filterField.compareWith">
                 <mat-option></mat-option>
                 <mat-option *ngFor="let obj of (filterField.arrayValues | async)" [value]="filterField.showOptionValue(obj)">

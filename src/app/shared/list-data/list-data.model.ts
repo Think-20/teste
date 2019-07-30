@@ -14,6 +14,7 @@ export class FilterField {
   formcontrolname: string
   arrayValues?: Promise<Array<any>>
   type: string
+  multiple?: boolean = false
   optionValue?: string
   optionDescription?: string
   starsRate?: number
@@ -37,6 +38,7 @@ export class FilterField {
   constructor(params: FilterField) {
     this.class = params.class
     this.placeholder = params.placeholder
+    this.multiple = params.multiple
     this.formcontrolname = params.formcontrolname
     this.type = params.type
     this.arrayValues = params.arrayValues
