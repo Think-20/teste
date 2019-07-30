@@ -23,7 +23,7 @@ export class ScheduleDateComponent implements OnInit {
   }
 
   ngOnInit() {
-    let date = new Date(this.item.date)
+    let date = new Date(this.item.date + "T00:00:00")
 
     this.day = this.datePipe.transform(date, 'dd')
     this.month = MONTHS.find((month) => month.id == date.getMonth() + 1).name

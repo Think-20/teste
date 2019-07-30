@@ -20,6 +20,7 @@ import { ActivatedRoute } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { isObject } from 'util';
 import { Month, MONTHS } from 'app/shared/date/months';
+import { ScheduleDate } from '../schedule-date/schedule-date.model';
 
 @Component({
   selector: 'cb-schedule-form',
@@ -27,8 +28,9 @@ import { Month, MONTHS } from 'app/shared/date/months';
   styleUrls: ['./schedule-form.component.css']
 })
 export class ScheduleFormComponent implements OnInit {
-  items: any[]
-  itemsByResponsible: any[]
+  selectedItems: ScheduleDate[] = []
+  items: ScheduleDate[]
+  itemsByResponsible: ScheduleDate[] = []
   typeForm: string = 'new'
   hasPreviousActivity: boolean = false
   filter: boolean = false
@@ -41,6 +43,8 @@ export class ScheduleFormComponent implements OnInit {
   params: () => {} = () => { return {} }
   callback: (jobs: Job[]) => void = (jobs) => {}
   isAdmin: boolean = false
+  adminMode: boolean = false
+  minDate: Date
   showExtraParams: boolean = true
   paramAttendance: Employee = null
   responsibles: Employee[] = []
@@ -49,7 +53,6 @@ export class ScheduleFormComponent implements OnInit {
   job_types: JobType[] = []
   attendances: Employee[] = []
   creations: Employee[] = []
-  nextDateMessage: string = ''
   url: string = '/jobs/new'
   buttonText: string = 'PRÓXIMO'
   budgetValueMessage: string
@@ -73,7 +76,7 @@ export class ScheduleFormComponent implements OnInit {
 
   ngOnInit() {
     this.typeForm = this.route.snapshot.url[1].path
-    this.isAdmin = this.authService.hasAccess('task/save')
+    this.isAdmin = this.authService.hasAccess('task/edit')
 
     this.createForm()
 
@@ -86,6 +89,7 @@ export class ScheduleFormComponent implements OnInit {
     })
 
     this.loadFilterData()
+    this.loadAdminPrivileges()
 
     this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
     ? this.authService.currentUser().employee : null
@@ -93,6 +97,24 @@ export class ScheduleFormComponent implements OnInit {
     if (this.typeForm == 'edit') {
       this.loadTask()
     }
+
+
+  }
+
+  loadAdminPrivileges() {
+    let date = new Date()
+
+    if( !this.isAdmin ) {
+      this.adminMode = false
+      this.minDate = new Date(date.getFullYear(), date.getMonth(), date.getDate())
+      return
+    }
+
+    this.scheduleForm.controls.admin.valueChanges.subscribe((value) => {
+      this.adminMode = value
+      this.minDate = this.adminMode
+        ? null : new Date(date.getFullYear(), date.getMonth(), date.getDate())
+    })
   }
 
   loadFilterData() {
@@ -113,7 +135,6 @@ export class ScheduleFormComponent implements OnInit {
   loadTask() {
     let date = new Date()
     let taskId = parseInt(this.route.snapshot.url[2].path)
-    this.nextDateMessage = ''
 
     let snack = this.snackBar.open('Carregando informações...')
     this.taskService.task(taskId).subscribe(task => {
@@ -138,6 +159,7 @@ export class ScheduleFormComponent implements OnInit {
   createForm() {
     this.scheduleForm = this.formBuilder.group({
       id: this.formBuilder.control(''),
+      admin: this.formBuilder.control(''),
       job_activity: this.formBuilder.control('', [Validators.required]),
       duration: this.formBuilder.control('', [Validators.required]),
       available_date: this.formBuilder.control('', [Validators.required]),
@@ -158,6 +180,20 @@ export class ScheduleFormComponent implements OnInit {
     if(this.paramAttendance != null) {
       this.searchForm.controls.attendance.setValue(this.paramAttendance)
       this.searchForm.controls.attendance.disable()
+    }
+  }
+
+  toggleDate(item: ScheduleDate) {
+    let i = -1
+
+    this.selectedItems.forEach((selectedItem, index) => {
+      if(selectedItem.date == item.date) i = index
+    })
+
+    if(i != -1) {
+      this.selectedItems.splice(i, 1)
+    } else {
+      this.selectedItems.push(item)
     }
   }
 
@@ -227,6 +263,11 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   getAvailableDates() {
+    this.items = []
+    this.itemsByResponsible = []
+    this.selectedItems = []
+    this.scheduleForm.controls.responsible.setValue('')
+
     let availableDate = this.scheduleForm.controls.available_date.value
     let jobActivity = this.scheduleForm.controls.job_activity.value
 
@@ -249,6 +290,9 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   filterItemsByResponsible() {
+    this.itemsByResponsible = []
+    this.selectedItems = []
+
     let responsible = <Employee> this.scheduleForm.controls.responsible.value
     this.itemsByResponsible = this.items.filter((item) => {
       return responsible.id == item.responsible_id

@@ -25,6 +25,11 @@
       <div class="row">
         <input formControlName="job" type="hidden">
         <input formControlName="id" type="hidden">
+        <input *ngIf="!isAdmin" formControlName="admin" type="hidden">
+        <mat-slide-toggle *ngIf="isAdmin" formControlName="admin"
+        class="col-md-12 slider text-right" [checked]="adminMode">
+          Forçar privilégios administrativos
+        </mat-slide-toggle>
         <cb-production-time *ngIf="showExtraParams" class="col-md-9 production-time-input" label="Tempo estimado" [rate]="1" [input]="scheduleForm.controls.duration"
           [min]="0" [max]="10">
           <input formControlName="duration" type="hidden">
@@ -44,6 +49,7 @@
         </mat-form-field>
         <mat-form-field *ngIf="showExtraParams" class="col-md-3">
           <input readonly [matDatepicker]="availableDatepicker" formControlName="available_date"
+            [min]="minDate"
             matInput placeholder="Data disponível para início*" (dateChange)="getAvailableDates()">
           <mat-datepicker-toggle matSuffix [for]="availableDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #availableDatepicker></mat-datepicker>
@@ -67,19 +73,12 @@
         <mat-button-toggle class="item-container"
           *ngFor="let item of itemsByResponsible; let i = index"
           [class.selected]="item.selected === true"
-          [matTooltip]="item.message" [disabled]="item.status == 'false'"
+          [matTooltip]="item.message" [disabled]="item.status == 'false' && !adminMode"
           [value]="item.date" aria-label="Selecionar data"
           (click)="toggleDate(item)">
           <cb-schedule-date [item]="item"></cb-schedule-date>
         </mat-button-toggle>
       </mat-button-toggle-group>
-      <p *ngIf="nextDateMessage != ''">
-        <small>{{ nextDateMessage }}</small>
-      </p>
-      <p *ngIf="scheduleForm.controls.duration.value > 1">
-        <small>Para agendamento de projetos com mais de 1 dia de duração, será necessário a agenda em datas subsequentes e atender
-          pré-requisitos mínimos de budget checados no briefing.</small>
-      </p>
       <div *ngIf="hasPreviousActivity" class="job-container">
         <p class="lead">Selecione o job</p>
         <div *ngIf="filter" [formGroup]="searchForm" class="row">

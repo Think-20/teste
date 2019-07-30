@@ -4,4 +4,5 @@ export class ScheduleDate {
   message: string
   selected: boolean
   duration: number
+  responsible_id: number
 }
