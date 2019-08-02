@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, ResponseContentType } from '@angular/http';
+import { Http, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -26,6 +27,7 @@ export class TaskService {
 
   constructor(
     private http: Http,
+    private httpClient: HttpClient,
     private datePipe: DatePipe,
     private snackBar: MatSnackBar,
     private auth: AuthService
@@ -85,17 +87,15 @@ export class TaskService {
         })
   }
 
-  tasks(params?: {}, page: number = 0): Observable<DataInfo> {
+  tasks(params?: {}, page: number = 0): Observable<any> {
       let url = params === {} ? `tasks/all?page=${page}` : `tasks/filter?page=${page}`
       let prefix = (this.auth.hasAccess('tasks/all') ||  this.auth.hasAccess('tasks/filter')) ? '' : 'my-'
 
       url = prefix + url
 
-      return this.http.post(`${API}/${url}`,
-            JSON.stringify(params),
-            new RequestOptions()
+      return this.httpClient.post(`${API}/${url}`,
+            JSON.stringify(params)
           )
-          .map(response => response.json())
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000

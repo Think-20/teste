@@ -5,4 +5,6 @@ export class TaskItem {
   task_id: number
   task?: Task
   date: string
+  budget_value: number
+  duration: number
 }

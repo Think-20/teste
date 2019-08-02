@@ -4,14 +4,12 @@ import { trigger, style, state, transition, animate, keyframes } from '@angular/
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { Pagination } from 'app/shared/pagination.model';
 import { Employee } from '../employees/employee.model';
 import { EmployeeService } from '../employees/employee.service';
 import { Month, MONTHS } from '../shared/date/months';
-import { DAYSOFWEEK, DayOfWeek } from '../shared/date/days-of-week';
+import { DAYSOFWEEK } from '../shared/date/days-of-week';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../login/auth.service';
-import { Task } from './task.model';
 import { TaskService } from './task.service';
 import { TaskItem } from './task-item.model';
 import { Chrono } from './chrono.model';
@@ -35,6 +33,7 @@ import { Job } from '../jobs/job.model';
 import { ScheduleBlockService } from './schedule-block/schedule-block.service';
 import { Department } from '../department/department.model';
 import { BlockDialogComponent } from './schedule-block/block-dialog/block-dialog.component';
+import { Task } from './task.model';
 
 @Component({
   selector: 'cb-schedule',
@@ -63,7 +62,7 @@ export class ScheduleComponent implements OnInit {
   formCopy: any
   search: FormControl
   rowAppearedState: string = 'ready'
-  tasks: Task[] = []
+  items: TaskItem[] = []
   attendances: Employee[]
   employees: Employee[]
   departments: Department[] = []
@@ -113,7 +112,6 @@ export class ScheduleComponent implements OnInit {
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
     private ngZone: NgZone,
-    private el: ElementRef,
     private router: Router,
     private datePipe: DatePipe,
     private route: ActivatedRoute
@@ -190,51 +188,6 @@ export class ScheduleComponent implements OnInit {
       })
     });
   }
-
-  /*
-  toggleBlock(chrono: Chrono) {
-    let date = chrono.tasks[0].items[0].date
-    let index
-    let found = this.dateBlocks.filter((scheduleBlock, index) => {
-      if(scheduleBlock.date == date) {
-        index = index
-        return true
-      }
-    })
-
-    if(found.length > 0) {
-      this.scheduleBlockService.delete(found.pop().id).subscribe((data) => {
-        if(data.status) {
-          const urlTree = this.router.createUrlTree([], {
-            queryParams: { date: this.datePipe.transform(date, 'yyyy-MM-dd') },
-            queryParamsHandling: "merge",
-            preserveFragment: true });
-
-          this.router.navigateByUrl(urlTree);
-          this.dateBlocks.splice(index, 1)
-        }
-
-        this.snackBar.open(data.message, '', { duration: 5000 })
-      })
-    } else {
-      let scheduleBlock = new ScheduleBlock()
-      scheduleBlock.date = date
-      this.scheduleBlockService.save(scheduleBlock).subscribe((data) => {
-        if(data.status) {
-          const urlTree = this.router.createUrlTree([], {
-            queryParams: { date: this.datePipe.transform(date, 'yyyy-MM-dd') },
-            queryParamsHandling: "merge",
-            preserveFragment: true });
-
-          this.router.navigateByUrl(urlTree);
-          this.dateBlocks.push(scheduleBlock)
-        }
-
-        this.snackBar.open(data.message, '', { duration: 5000 })
-      })
-    }
-  }
-  */
 
   permissionVerify(module: string, job: Job): boolean {
     let access: boolean
@@ -322,13 +275,11 @@ export class ScheduleComponent implements OnInit {
             let parentRecipientPos: number = info.parentRecipientPos
             let parentSenderPos: number = info.parentSenderPos
 
-            let task1 = angular.chrono[parentSenderPos].tasks[info.senderPos]
-            let task2 = angular.chrono[parentRecipientPos].tasks[info.recipientPos]
-            let job1 = task1.job
-            let job2 = task2.job
+            let task1 = angular.chrono[parentSenderPos].items[info.senderPos]
+            let task2 = angular.chrono[parentRecipientPos].items[info.recipientPos]
 
-            let jobStep1 = task1.job_activity != null ? task1.job_activity.description : ''
-            let jobStep2 = task2.job_activity != null ? task2.job_activity.description : ''
+            let jobStep1 = task1.task.job_activity != null ? task1.task.job_activity.description : ''
+            let jobStep2 = task2.task.job_activity != null ? task2.task.job_activity.description : ''
 
             if (jobStep1 != jobStep2 && jobStep1 != '' && jobStep2 != '') {
               angular.snackBar.open('Não é possível mudar data de tipos diferentes', '', {
@@ -341,10 +292,10 @@ export class ScheduleComponent implements OnInit {
 
             let snackBar = angular.snackBar.open('Aguarde enquanto mudamos a data...')
 
-            angular.taskService.editAvailableDate(task1, task2).subscribe((data) => {
+            angular.taskService.editAvailableDate(task1.task, task2.task).subscribe((data) => {
               if (data.status == true) {
                 snackBar.dismiss()
-                angular.changeMonth(angular.month, new Date(task2.items[0].date + "T00:00:00"))
+                angular.changeMonth(angular.month, new Date(task2.task.items[0].date + "T00:00:00"))
               } else {
                 snackBar.dismiss()
                 angular.snackBar.open(data.message, '', {
@@ -662,8 +613,8 @@ export class ScheduleComponent implements OnInit {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando tarefas...')
     this.month = month
-    let iniDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
-    let finDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-31')
+    let iniDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-' + this.date.getDate())
+    let finDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-' + this.date.getDate())
 
     if (date != null) {
       const urlTree = this.router.createUrlTree([], {
@@ -675,8 +626,8 @@ export class ScheduleComponent implements OnInit {
       this.router.navigateByUrl(urlTree);
     }
 
-    iniDateWithoutLimits.setDate(iniDateWithoutLimits.getDate() - 15)
-    finDateWithoutLimits.setDate(finDateWithoutLimits.getDate() + 15)
+    iniDateWithoutLimits.setDate(iniDateWithoutLimits.getDate() - 5)
+    finDateWithoutLimits.setDate(finDateWithoutLimits.getDate() + 5)
     let iniDate = iniDateWithoutLimits.getUTCFullYear() + '-' + (iniDateWithoutLimits.getMonth() + 1) + '-' + iniDateWithoutLimits.getDate()
     let finDate = finDateWithoutLimits.getUTCFullYear() + '-' + (finDateWithoutLimits.getMonth() + 1) + '-' + finDateWithoutLimits.getDate()
 
@@ -686,8 +637,9 @@ export class ScheduleComponent implements OnInit {
       paginate: false,
       ...this.params
     }).subscribe(dataInfo => {
+      console.log(dataInfo)
       this.searching = false
-      this.tasks = dataInfo.pagination.data
+      this.items = dataInfo.pagination.data
       this.dataInfo = dataInfo
       this.setUpdatedMessage()
       this.chronologicDisplay(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
@@ -704,32 +656,30 @@ export class ScheduleComponent implements OnInit {
 
     date.setDate(date.getDate() - 5)
     fixedDateMax.setDate(fixedDateMax.getDate() + 35)
-    let days: number[]
+
+    console.log(this.items)
 
     while (date.getTime() < fixedDateMax.getTime()) {
-      let filteredTasks = this.tasks.filter(task => {
-        return task.items.filter((item, index) => {
-          //Ao filtrar, não selecionar continuações
-          if(!this.paramsHasFilter || index == 0) {
-              let itemDate = new Date(item.date + 'T00:00:00')
-              return date.getDate() == itemDate.getDate()
-                && date.getMonth() == itemDate.getMonth()
-            }
+      let filteredTasks = this.items.filter(item => {
+        //Ao filtrar, não selecionar continuações
+        if(!this.paramsHasFilter) {
+            let itemDate = new Date(item.date + 'T00:00:00')
+            return date.getDate() == itemDate.getDate()
+              && date.getMonth() == itemDate.getMonth()
           }
-        ).length > 0
       })
 
       let count = filteredTasks.length
       let length = (date.getDay() == 6 || date.getDay() == 0) ? 3 : filteredTasks.length
 
       for (let index = 0; index < (5 - length); index++) {
-        let task = new Task
         let item = new TaskItem
         item.date = this.datePipe.transform(date, 'yyyy-MM-dd')
-        task.job = new Job
-        task.items = []
-        task.items.push(item)
-        filteredTasks.push(task)
+        item.task = new Task
+        item.task.job = new Job
+        item.task.items = []
+        item.task.items.push(item)
+        filteredTasks.push(item)
       }
 
       this.chrono[i] = {
@@ -737,13 +687,12 @@ export class ScheduleComponent implements OnInit {
         month: (date.getMonth() + 1),
         year: date.getFullYear(),
         dayOfWeek: DAYSOFWEEK.find(dayOfWeek => dayOfWeek.id == date.getDay()),
-        tasks: filteredTasks.sort((a, b) => {
-          if (a.responsible != null && b.responsible != null)
-            return a.responsible.department_id > b.responsible.department_id ? 1 : -1
+        items: filteredTasks.sort((a, b) => {
+          if (a.task.responsible != null && b.task.responsible != null)
+            return a.task.responsible.department_id > b.task.responsible.department_id ? 1 : -1
         }),
         length: count
       }
-
       i++
 
       date.setDate(date.getDate() + 1)

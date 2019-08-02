@@ -68,12 +68,20 @@
           </mat-select>
         </mat-form-field>
       </div>
+      <p *ngIf="itemsByResponsible.length > 0 && !checkValidDuration()" class="text-center">
+        <small>
+          {{ sumDuration() }} de {{ scheduleForm.controls.duration.value }} item(ns) selecionado(s)
+        </small>
+        <br>
+      </p>
       <mat-button-toggle-group *ngIf="scheduleForm.controls.responsible.value != ''"
         class="items-container" #group="matButtonToggleGroup" multiple>
         <mat-button-toggle class="item-container"
           *ngFor="let item of itemsByResponsible; let i = index"
-          [class.selected]="item.selected === true"
-          [matTooltip]="item.message" [disabled]="item.status == 'false' && !adminMode"
+          [checked]="item?.selected == true"
+          [matTooltip]="item.message"
+          [disabled]="((item.status == 'false' || checkValidDuration()) && !adminMode)
+            || (hasSelectedItem(item) && !adminMode)"
           [value]="item.date" aria-label="Selecionar data"
           (click)="toggleDate(item)">
           <cb-schedule-date [item]="item"></cb-schedule-date>
@@ -164,8 +172,10 @@
         </table>
       </div>
       <mat-card-actions class="col-md-12 text-right">
-        <button [disabled]="!buttonEnable" *ngIf="typeForm != 'edit'" mat-button class="cb-button" (click)="go()">{{ buttonText }}</button>
-        <button [disabled]="!buttonEnable" *ngIf="typeForm == 'edit'" mat-button class="cb-button" (click)="edit()">EDITAR</button>
+        <button type="button" [disabled]="!buttonEnable" *ngIf="typeForm != 'edit'" mat-button
+          class="cb-button" (click)="go()">{{ buttonText }}</button>
+        <button type="button" [disabled]="!buttonEnable" *ngIf="typeForm == 'edit'" mat-button
+          class="cb-button" (click)="edit()">EDITAR</button>
       </mat-card-actions>
     </form>
   </mat-card>

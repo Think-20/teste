@@ -16,11 +16,14 @@ import { EmployeeService } from 'app/employees/employee.service';
 import { JobTypeService } from 'app/job-types/job-type.service';
 import { AuthService } from 'app/login/auth.service';
 import { DatePipe } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { isObject } from 'util';
 import { Month, MONTHS } from 'app/shared/date/months';
 import { ScheduleDate } from '../schedule-date/schedule-date.model';
+import { ErrorHandler } from 'app/shared/error-handler.service';
+import { Task } from '../task.model';
+import { TaskItem } from '../task-item.model';
 
 @Component({
   selector: 'cb-schedule-form',
@@ -71,6 +74,7 @@ export class ScheduleFormComponent implements OnInit {
     private authService: AuthService,
     private datePipe: DatePipe,
     private route: ActivatedRoute,
+    private router: Router,
     private snackBar: MatSnackBar
   ) { }
 
@@ -184,6 +188,8 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   toggleDate(item: ScheduleDate) {
+    if(item.status == 'false' && !this.adminMode) return;
+
     let i = -1
 
     this.selectedItems.forEach((selectedItem, index) => {
@@ -191,10 +197,18 @@ export class ScheduleFormComponent implements OnInit {
     })
 
     if(i != -1) {
+      this.selectedItems[i].selected = false
       this.selectedItems.splice(i, 1)
     } else {
-      this.selectedItems.push(item)
+      if( !this.checkValidDuration() || this.adminMode ) {
+        this.selectedItems.push(item)
+        this.selectedItems[(this.selectedItems.length - 1)].selected = true
+      }
     }
+  }
+
+  hasSelectedItem(item: ScheduleDate) {
+    return this.selectedItems.some(i => i.date == item.date && i.responsible_id == item.responsible_id)
   }
 
   loadJobs(params) {
@@ -299,7 +313,58 @@ export class ScheduleFormComponent implements OnInit {
     })
   }
 
-  go() {}
+  checkValidation() {
+    return this.checkValidDuration()
+  }
+
+  checkValidDuration() {
+    return this.selectedItems.length == parseInt(this.scheduleForm.controls.duration.value)
+      || this.adminMode
+  }
+
+  go() {
+    if (ErrorHandler.formIsInvalid(this.scheduleForm)) {
+      this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
+        duration: 5000
+      })
+      return;
+    }
+
+    let task = this.scheduleForm.getRawValue() as Task
+    let jobActivity = <JobActivity> this.scheduleForm.controls.job_activity.value
+    let url = jobActivity.redirect_after_save != null ? jobActivity.redirect_after_save : '/jobs/new'
+
+    this.jobService.data = new Job
+    this.jobService.data.task = task
+    this.jobService.data.task.items = this.transformInTaskItems()
+    this.jobService.data.budget_value = this.scheduleForm.controls.budget_value.value
+    this.jobService.data.deadline = this.scheduleForm.controls.deadline.value
+    this.jobService.data.job_activity = task.job_activity
+
+    console.log(this.jobService.data.task.items)
+    this.router.navigateByUrl(url)
+  }
+
+  sumDuration() {
+    return this.selectedItems
+      .map(selectedItem => this.calculateAvailableDuration(selectedItem.duration))
+      .reduce((prev, next) => prev + next, 0)
+  }
+
+  calculateAvailableDuration(duration: number): number {
+    return (1 - duration)
+  }
+
+  transformInTaskItems(): TaskItem[] {
+    return this.selectedItems.map(selectedItem => {
+      let taskItem = new TaskItem;
+      taskItem.date = selectedItem.date
+      taskItem.duration = selectedItem.duration
+      taskItem.budget_value = selectedItem.budget_value
+      return taskItem;
+    })
+  }
+
 
   edit() {}
 

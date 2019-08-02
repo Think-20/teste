@@ -1,106 +1,64 @@
-<mat-menu #menu="matMenu">
-  <ng-template matMenuContent let-task="task" let-chrono="chrono">
-    <div *ngIf="jobDisplay(task, chrono).indexOf('Continuação de') == -1">
-      <a *ngIf="task.job.id == undefined" (click)="addTask(chrono.day)" mat-menu-item>
-        <mat-icon>add</mat-icon> Adicionar
-      </a>
-      <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/show', task.job.id]" [queryParams]="getQueryParams(task)"
-        mat-menu-item>
-        <mat-icon>done</mat-icon> {{ task.done ? 'Tarefa realizada' : 'Realizar tarefa' }}
-      </a>
-      <a [disabled]="!permissionVerify('show', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/show', task.job.id]"
-        mat-menu-item>
-        <mat-icon>subject</mat-icon> Visualizar job
-      </a>
-      <a [disabled]="!permissionVerify('task.edit', task.job)" *ngIf="task.id != undefined" [routerLink]="['/schedule/edit', task.id]"
-        mat-menu-item>
-        <mat-icon>mode_edit</mat-icon> Editar agendamento
-      </a>
-      <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/edit', task.job.id]"
-        mat-menu-item>
-        <mat-icon>mode_edit</mat-icon> Editar job
-      </a>
-      <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined && (task.job.status?.id == 5 || task.job.status?.id == 1)"
-        (click)="signal(task)" mat-menu-item>
-        <span *ngIf="task.job.status?.id == 1">
-          <mat-icon>flag</mat-icon> Sinalizar
-        </span>
-        <span *ngIf="task.job.status?.id == 5">
-          <mat-icon>outlined_flag</mat-icon> Remover sinalização
-        </span>
-      </a>
-      <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined" (click)="deleteTask(task)" mat-menu-item>
-        <mat-icon>delete</mat-icon> Remover tarefa
-      </button>
-      <button [disabled]="!permissionVerify('delete', task.job)" *ngIf="task.job.id != undefined" (click)="deleteJob(task)" mat-menu-item>
-        <mat-icon>delete</mat-icon> Remover job
-      </button>
-    </div>
-  </ng-template>
-</mat-menu>
-
 <div class="line-job"
-(menuOpened)="openMenu(task, chrono)"
+(menuOpened)="openMenu(item.task, chrono)"
 [matMenuTriggerFor]="menu"
-[matMenuTriggerData]="{task: task, chrono: chrono}"
-[ngClass]="getLineClass(chrono, task, chrono.day, chrono.month)"
-(dblclick)="goToJob(task.job)"
-*ngFor="let task of chrono.tasks"
+[matMenuTriggerData]="{task: item.task, chrono: chrono}"
+[ngClass]="getLineClass(chrono, item.task, chrono.day, chrono.month)"
+(dblclick)="goToJob(item.task.job)"
 draggable="true">
   <div class="mat-cell mat-column-creation">
-    {{ task?.responsible?.name }}
+    {{ item.task?.responsible?.name }}
   </div>
   <div class="mat-cell mat-column-job">
-    {{ jobDisplay(task, chrono) }}
+    {{ jobDisplay(item.task, chrono) }}
   </div>
   <div class="mat-cell mat-column-type">
-    {{ task.job.job_type?.description }}
+    {{ item.task.job.job_type?.description }}
   </div>
   <div class="mat-cell mat-column-client">
-    {{ task.job.client != null ? task.job.client.fantasy_name : task.job.not_client }}
+    {{ item.task.job.client != null ? item.task.job.client.fantasy_name : item.task.job.not_client }}
   </div>
   <div class="mat-cell mat-column-agency">
-    {{ task.job.agency ? task.job.agency.fantasy_name : '' }}
+    {{ item.task.job.agency ? item.task.job.agency.fantasy_name : '' }}
   </div>
   <div class="mat-cell mat-column-event">
-    {{ task.job.event }}
+    {{ item.task.job.event }}
   </div>
   <div class="mat-cell mat-column-event-date">
     &nbsp;
   </div>
   <div class="mat-cell mat-column-budget">
-    <span *ngIf="canShowDetails(task, chrono)">
-      {{ task.job.budget_value | number: '1.2' }}
+    <span *ngIf="canShowDetails(item.task, chrono)">
+      {{ item.task.job.budget_value | number: '1.2' }}
       <br>
-      <span *ngIf="calcValue(task.job) > 0">
-        {{ calcValue(task.job) | number: '1.2' }}{{ task.job.job_type.description == 'Stand' ? '/m²' : '' }}{{ task.job.job_type.description == 'Cenografia' ? '/mom.' : '' }}
+      <span *ngIf="calcValue(item.task.job) > 0">
+        {{ calcValue(item.task.job) | number: '1.2' }}{{ item.task.job.job_type.description == 'Stand' ? '/m²' : '' }}{{ item.task.job.job_type.description == 'Cenografia' ? '/mom.' : '' }}
       </span>
-      <span *ngIf="task.job.moments > 0">
-        {{ task.job.moments }} mom.
+      <span *ngIf="item.task.job.moments > 0">
+        {{ item.task.job.moments }} mom.
       </span>
     </span>
   </div>
   <div class="mat-cell mat-column-area">
-    {{ canShowDetails(task, chrono)
-      && task.job.job_type.description == 'Stand'
-      && task.job.area != null
-      ? (task.job.area | number ) + ' m²' : '' }}
+    {{ canShowDetails(item.task, chrono)
+      && item.task.job.job_type.description == 'Stand'
+      && item.task.job.area != null
+      ? (item.task.job.area | number ) + ' m²' : '' }}
   </div>
   <div class="mat-cell mat-column-time">
-    <p>{{ timeDisplay(task, chrono) }}</p>
-    <mat-icon *ngIf="task?.job?.id != null" class="time-icon"
-    [class.time-icon-alarm]="timeIconDisplay(task, chrono) == 'alarm'"
-    [class.time-icon-done]="timeIconDisplay(task, chrono) == 'done'">
-      {{ timeIconDisplay(task, chrono) }}
+    <p>{{ timeDisplay(item, chrono) }}</p>
+    <mat-icon *ngIf="item.task?.job?.id != null" class="time-icon"
+    [class.time-icon-alarm]="timeIconDisplay() == 'alarm'"
+    [class.time-icon-done]="timeIconDisplay() == 'done'">
+      {{ timeIconDisplay() }}
     </mat-icon>
   </div>
   <div class="mat-cell mat-column-deadline">
-    {{ task.job?.deadline | date:'dd/MM' }}
+    {{ item.task.job?.deadline | date:'dd/MM' }}
   </div>
   <div class="mat-cell mat-column-attendance">
-    {{ task.job?.attendance?.name }}
+    {{ item.task.job?.attendance?.name }}
   </div>
   <div class="mat-cell mat-column-stat">
-    {{ canShowDetails(task, chrono) ? task.job?.status?.description : '' }}
+    {{ canShowDetails(item.task, chrono) ? item.task.job?.status?.description : '' }}
   </div>
 </div>

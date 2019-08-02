@@ -144,7 +144,7 @@ import { NotificationModule } from './notification-bar/notification.module';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectFileService } from './projects/project-file.service';
 import { ScheduleLineComponent } from './schedule/schedule-line/schedule-line.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ImageViewerComponent } from './shared/image-viewer/image-viewer.component';
 import { ScheduleBlockService } from './schedule/schedule-block/schedule-block.service';
 import { ProposalsComponent } from './proposals/proposals.component';
@@ -195,6 +195,7 @@ import { ListDataService } from './shared/list-data/list-data.service';
 import { DataFieldComponent } from './shared/list-data/data-field/data-field.component';
 import { UpdatedInfoComponent } from './shared/list-data/updated-info/updated-info.component';
 import { ScheduleDateComponent } from './schedule/schedule-date/schedule-date.component';
+import { AddHeaderInterceptor } from './shared/add-header-interceptor.config';
 
 registerLocaleData(localePt);
 
@@ -403,7 +404,8 @@ registerLocaleData(localePt);
     {provide: LOCALE_ID, useValue: 'pt-BR'},
     {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
     {provide: MatPaginatorIntl, useClass: PaginatorIntl},
-    {provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
+    {provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
+    {provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true}
   ],
   bootstrap: [AppComponent],
   entryComponents: [

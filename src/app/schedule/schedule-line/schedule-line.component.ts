@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Chrono } from '../chrono.model';
-import { Task } from '../task.model';
 import { DatePipe } from '@angular/common';
 import { TaskService } from '../task.service';
 import { AuthService } from '../../login/auth.service';
@@ -11,7 +10,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Month } from '../../shared/date/months';
 import { Router } from '@angular/router';
 import { isObject } from 'util';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { MatMenuTrigger, MatMenu } from '@angular/material/menu';
+import { TaskItem } from '../task-item.model';
+import { Task } from '../task.model';
 
 @Component({
   selector: 'cb-schedule-line',
@@ -21,16 +22,16 @@ import { MatMenuTrigger } from '@angular/material/menu';
 })
 export class ScheduleLineComponent implements OnInit {
 
+  @Input() menu: MatMenuTrigger
   @Input() month: Month
   @Input() paramsHasFilter: boolean = false
   @Input() date: Date
   @Input() jobStatus: JobStatus[] = []
-  @Input() tasks: Task[]
+  @Input() item: TaskItem
   @Input() chrono: Chrono
   @Input() today: Date
   @Output() scrollStatusEmitter: EventEmitter<boolean> = new EventEmitter()
   @Output() changeMonthEmitter: EventEmitter<any> = new EventEmitter()
-  @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
 
   constructor(
     private jobService: JobService,
@@ -62,34 +63,34 @@ export class ScheduleLineComponent implements OnInit {
     }
   }
 
-  timeDisplay(task: Task, chrono: Chrono) {
-    if(task.job.id == null) {
+  timeDisplay(item: TaskItem, chrono: Chrono) {
+    if(item.task.job.id == null) {
       return ''
     }
 
-    let index = task.items.findIndex(arrayItem => {
+    let index = item.task.items.findIndex(arrayItem => {
       let date = new Date(arrayItem.date + "T00:00:00")
       return chrono.day == date.getDate()
     })
-    let taskFound = this.tasks.find(arrayTask => { return task.id == arrayTask.id })
+    let taskFound = this.item.task
 
     if(taskFound == null) {
       return
     }
 
-    return 'D+' + (taskFound.items.length - index - 1)
+    return 'D+' + (item.task.items.length - index - 1)
   }
 
-  timeIconDisplay(task: Task, chrono: Chrono) {
-    if(task.job.id == null) {
+  timeIconDisplay() {
+    if(this.item.task.job.id == null) {
       return ''
     }
 
-    if(task.done == 1) {
+    if(this.item.task.done == 1) {
       return 'done'
     } else {
-      let finalDate = new Date(task.available_date + 'T00:00:00')
-      finalDate.setDate(finalDate.getDate() + (parseInt(task.duration.toString()) - 1))
+      let lastItem = this.item.task.items.pop()
+      let finalDate = new Date(lastItem.date + 'T00:00:00')
 
       if(this.datePipe.transform(finalDate, 'yyyy-MM-dd') < this.datePipe.transform(new Date(), 'yyyy-MM-dd')) {
         return 'alarm'
@@ -237,15 +238,15 @@ export class ScheduleLineComponent implements OnInit {
           className += ' hidden'
     }
 
-    if(isObject(chrono.tasks[nextIndex + 1])
-    &&['Projeto', 'Orçamento'].indexOf(chrono.tasks[nextIndex + 1].job_activity.description) >= 0
-      && [5,3].indexOf(chrono.tasks[nextIndex + 1].job.status_id) >= 0
+    if(isObject(chrono.items[nextIndex + 1])
+    &&['Projeto', 'Orçamento'].indexOf(chrono.items[nextIndex + 1].task.job_activity.description) >= 0
+      && [5,3].indexOf(chrono.items[nextIndex + 1].task.job.status_id) >= 0
       && this.jobDisplay(task, chrono).indexOf('Continuação de') == -1)
     {
       className += ' no-border'
     }
 
-    let originalTask = this.tasks.filter(taskF => { return taskF.id == task.id }).pop()
+    let originalTask = task
     let departmentId = task.responsible.department_id
     let ocurrences = originalTask.items.filter(item => {
       return item.date == this.datePipe.transform(this.today, 'yyyy-MM-dd')
