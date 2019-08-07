@@ -261,3 +261,13 @@
   padding: 0px !important;
   color: rgba(0,0,0,0.5);
 }
+
+.line-job {
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+}
+
+.line-job:last-child {
+  border-bottom: 0;
+}

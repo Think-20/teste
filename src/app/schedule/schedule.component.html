@@ -181,8 +181,8 @@
           <div class="mat-header-cell mat-column-attendance">Atend.</div>
           <div class="mat-header-cell mat-column-stat">Status</div>
         </div>
-        <div class="mat-row-scroll">
-          <div #list class="mat-row" *ngFor="let chr of chrono; let i = index">
+        <div class="mat-row-scroll" (scroll)="scrolling($event)">
+          <div #list class="mat-row" *ngFor="let chr of chrono; let i = index" [@rowAppeared]="rowAppearedState">
             <h4 *ngIf="chrono[i - 1]?.month != chrono[i]?.month" class="month-line">
               {{ months[chrono[i]?.month - 1].name }}
             </h4>
@@ -202,23 +202,16 @@
                 </div>
               </div>
               <div class="line-jobs">
-                <cb-schedule-line *ngFor="let item of chrono[i].items" [menu]="menu"
+                <cb-schedule-line class="line-job" *ngFor="let item of chrono[i].items" [menu]="menu"
                   [chrono]="chrono[i]" [item]="item" [today]="today" [jobStatus]="jobStatus"
                   [month]="month" [paramsHasFilter]="paramsHasFilter" [date]="date"
-                  (changeMonthEmitter)="changeMonthByLine($event)" (scrollStatusEmitter)="changeScrollStatus($event)">
+                  (changeMonthEmitter)="changeMonthByLine($event)">
                 </cb-schedule-line>
               </div>
             </div>
           </div>
         </div>
       </table>
-      <div *ngIf="searching" class="col-md-12 records-not-found">
-        <p>
-          <small>
-            Aguarde...
-          </small>
-        </p>
-      </div>
     </mat-card>
   </div>
 </div>

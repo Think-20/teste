@@ -72,7 +72,6 @@ export class ScheduleComponent implements OnInit {
   params: any = {}
   searching = false
   filter = false
-  scrollActive: boolean = true
   chrono: Chrono[] = []
   dateBlocks: ScheduleBlock[] = []
   month: Month
@@ -81,11 +80,15 @@ export class ScheduleComponent implements OnInit {
   year: number
   years: number[] = []
   date: Date
+  iniDate: Date
+  finDate: Date
+  stepDate: number = 10
+  scrollToElement: string = ''
+  scrollToDateFlag: boolean = false
+  scrollParams: ScrollIntoViewOptions = { behavior: 'smooth' }
   jobStatus: JobStatus[]
   timer: Observable<number>
   timer2: Observable<number>
-  today: Date
-  listenModification: boolean = true
   dataInfo: DataInfo
   subscription: Subscription
   subscriptions: Subscription[] = []
@@ -94,10 +97,6 @@ export class ScheduleComponent implements OnInit {
   isAdmin: boolean = false
   counter: number = 0
   hasFilterActive = false
-
-  lineJob: HTMLElement
-  tempX: number
-  tempY: number
 
   constructor(
     private fb: FormBuilder,
@@ -111,18 +110,15 @@ export class ScheduleComponent implements OnInit {
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private ngZone: NgZone,
     private router: Router,
     private datePipe: DatePipe,
     private route: ActivatedRoute
   ) { }
 
   changeMonthByLine(data: any) {
-    this.changeMonth(data.month, data.lastDate)
-  }
-
-  changeScrollStatus(status: boolean) {
-    this.scrollActive = status
+    this.month = data.month
+    this.date = data.lastDate
+    this.changeMonth()
   }
 
   lineChronoClass(chrono: Chrono, employees: Employee[]) {
@@ -221,95 +217,6 @@ export class ScheduleComponent implements OnInit {
     return access
   }
 
-  ngAfterViewInit() {
-    this.list.changes.subscribe(() => {
-      this.scrollToDate()
-
-      if (!this.listenModification) return
-
-      let list = document.querySelectorAll("[draggable='true']")
-      let info = { parentSenderPos: null, parentRecipientPos: null, senderPos: null, recipientPos: null }
-      let draggable
-      let angular = this
-
-      this.ngZone.runOutsideAngular(() => {
-        for (let i = 0; i < list.length; i++) {
-          let info = { parentSenderPos: null, senderPos: null }
-          draggable = list.item(i) as HTMLElement
-          draggable.addEventListener('dragstart', function (event: DragEvent) {
-            if (!angular.subscription.closed) {
-              angular.subscription.unsubscribe()
-            }
-
-            info.parentSenderPos = Array.prototype.indexOf.call(this.closest('.mat-row-scroll').children, this.closest('.mat-row'))
-            info.senderPos = Array.prototype.indexOf.call(this.closest('.line-jobs').querySelectorAll('.line-job'), this)
-            event.dataTransfer.setData('type', JSON.stringify(info))
-          })
-          draggable.addEventListener('dragover', function (event) {
-            event.preventDefault()
-          })
-          draggable.addEventListener('dragend', function (event) {
-            event.preventDefault()
-          })
-        }
-      })
-
-      this.ngZone.run(() => {
-        for (let i = 0; i < list.length; i++) {
-          draggable = list.item(i) as HTMLElement
-          draggable.addEventListener('drop', function (event: DragEvent) {
-            angular.createTimerUpdater()
-
-            if (this.parentNode == null) {
-              return
-            }
-
-            event.preventDefault()
-
-            info = JSON.parse(event.dataTransfer.getData('type'))
-            info.parentRecipientPos = Array.prototype.indexOf.call(this.closest('.mat-row-scroll').children, this.closest('.mat-row'))
-            info.recipientPos = Array.prototype.indexOf.call(this.closest('.line-jobs').querySelectorAll('.line-job'), this)
-
-            let senderParent = document.querySelectorAll('.line-jobs')[info.parentSenderPos] as HTMLElement
-            let recipientParent = document.querySelectorAll('.line-jobs')[info.parentRecipientPos] as HTMLElement
-            let parentRecipientPos: number = info.parentRecipientPos
-            let parentSenderPos: number = info.parentSenderPos
-
-            let task1 = angular.chrono[parentSenderPos].items[info.senderPos]
-            let task2 = angular.chrono[parentRecipientPos].items[info.recipientPos]
-
-            let jobStep1 = task1.task.job_activity != null ? task1.task.job_activity.description : ''
-            let jobStep2 = task2.task.job_activity != null ? task2.task.job_activity.description : ''
-
-            if (jobStep1 != jobStep2 && jobStep1 != '' && jobStep2 != '') {
-              angular.snackBar.open('Não é possível mudar data de tipos diferentes', '', {
-                duration: 3000
-              })
-              return
-            } else if (jobStep1 == '' && jobStep2 == '') {
-              return
-            }
-
-            let snackBar = angular.snackBar.open('Aguarde enquanto mudamos a data...')
-
-            angular.taskService.editAvailableDate(task1.task, task2.task).subscribe((data) => {
-              if (data.status == true) {
-                snackBar.dismiss()
-                angular.changeMonth(angular.month, new Date(task2.task.items[0].date + "T00:00:00"))
-              } else {
-                snackBar.dismiss()
-                angular.snackBar.open(data.message, '', {
-                  duration: 3000
-                })
-                return false
-              }
-            })
-          })
-        }
-      })
-    })
-  }
-
   ngOnInit() {
     this.isAdmin = this.permissionVerify('new', new Job())
 
@@ -317,11 +224,14 @@ export class ScheduleComponent implements OnInit {
       ? this.authService.currentUser().employee : null
 
     this.createForm()
-    this.today = new Date()
     this.setYears()
     this.createTimerUpdater()
     this.loadFilterData()
     this.loadInitialData()
+  }
+
+  ngAfterViewInit() {
+    this.list.changes.subscribe(() => this.scrollToDate())
   }
 
   createForm() {
@@ -352,7 +262,7 @@ export class ScheduleComponent implements OnInit {
       this.taskService.searchValue = searchValue
       this.updateFilterActive()
       this.checkParamsHasFilter()
-      this.changeMonth(this.month, this.date)
+      this.changeMonth()
     })
 
     this.searchForm.controls.client.valueChanges
@@ -392,8 +302,6 @@ export class ScheduleComponent implements OnInit {
   }
 
   loadInitialData() {
-    this.setDate()
-
     if (JSON.stringify(this.taskService.searchValue) === JSON.stringify(this.formCopy)) {
       this.params = {}
     } else {
@@ -402,7 +310,7 @@ export class ScheduleComponent implements OnInit {
 
     this.updateFilterActive()
     this.checkParamsHasFilter()
-    this.changeMonth(this.month, this.date)
+    this.setDataByParams()
   }
 
   checkParamsHasFilter() {
@@ -494,7 +402,7 @@ export class ScheduleComponent implements OnInit {
 
   setYears() {
     let ini = 2018
-    let year = this.today.getFullYear()
+    let year = (new Date).getFullYear()
 
     while (ini <= (year + 1)) {
       this.years.push(ini)
@@ -502,7 +410,7 @@ export class ScheduleComponent implements OnInit {
     }
   }
 
-  setDate() {
+  setDataByParams() {
     this.date = new Date()
 
     this.route.queryParams.subscribe(params => {
@@ -511,10 +419,12 @@ export class ScheduleComponent implements OnInit {
         this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
         this.year = this.date.getFullYear()
       } else {
-        this.date = new Date(this.datePipe.transform(this.today, 'yyyy-MM-dd') + "T00:00:00")
+        this.date = new Date(this.datePipe.transform(new Date, 'yyyy-MM-dd') + "T00:00:00")
         this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
         this.year = this.date.getFullYear()
       }
+
+      this.changeMonth()
     })
   }
 
@@ -536,7 +446,7 @@ export class ScheduleComponent implements OnInit {
         }
         this.dataInfo.updatedInfo = data
         this.setUpdatedMessage()
-        this.changeMonth(this.month)
+        this.changeMonth()
       })
     })
 
@@ -549,7 +459,7 @@ export class ScheduleComponent implements OnInit {
         date = new Date()
         this.date = new Date(this.datePipe.transform(date, 'yyyy-MM-dd') + "T00:00:00")
         this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
-        this.changeMonth(this.month, this.date)
+        this.changeMonth()
         this.counter += 1
 
         if (this.counter > 2) {
@@ -576,23 +486,9 @@ export class ScheduleComponent implements OnInit {
     this.lastUpdateMessage = 'Última atualização ' + this.dataInfo.updatedInfo.date + ' por ' + this.dataInfo.updatedInfo.employee
   }
 
-  checkIfDeadlineIsMinor(job: Job, availableDate: string) {
-    if (job.id == null) {
-      return false
-    }
-
-    return new Date(job.deadline) <= new Date(availableDate)
-  }
-
   updateMonth(month: Month) {
-    let date = new Date(this.date.getUTCFullYear(), (month.id - 1), 1)
-    let now = new Date()
-
-    if (month.id == (now.getMonth() + 1)) {
-      date.setDate(now.getDate())
-    }
-
-    this.changeMonth(month, date)
+    this.month = month
+    this.changeMonth()
   }
 
   addMonth(inc: number) {
@@ -601,72 +497,66 @@ export class ScheduleComponent implements OnInit {
     this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
     this.year = this.date.getFullYear()
 
-    this.changeMonth(this.month, this.date)
+    this.changeMonth()
   }
 
   updateYear(year: number) {
-    this.date.setFullYear(year)
-    this.changeMonth(this.month, this.date)
+    this.year = year
+    this.changeMonth()
   }
 
-  changeMonth(month: Month, date?: Date) {
+  changeMonth() {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando tarefas...')
-    this.month = month
-    let iniDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-' + this.date.getDate())
-    let finDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-' + this.date.getDate())
 
-    if (date != null) {
-      const urlTree = this.router.createUrlTree([], {
-        queryParams: { date: this.datePipe.transform(date, 'yyyy-MM-dd') },
-        queryParamsHandling: "merge",
-        preserveFragment: true
-      });
+    this.items = []
+    this.chrono = []
 
-      this.router.navigateByUrl(urlTree);
-    }
+    this.iniDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate())
+    this.finDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate())
 
-    iniDateWithoutLimits.setDate(iniDateWithoutLimits.getDate() - 5)
-    finDateWithoutLimits.setDate(finDateWithoutLimits.getDate() + 5)
-    let iniDate = iniDateWithoutLimits.getUTCFullYear() + '-' + (iniDateWithoutLimits.getMonth() + 1) + '-' + iniDateWithoutLimits.getDate()
-    let finDate = finDateWithoutLimits.getUTCFullYear() + '-' + (finDateWithoutLimits.getMonth() + 1) + '-' + finDateWithoutLimits.getDate()
+    const urlTree = this.router.createUrlTree([], {
+      queryParams: { date: this.datePipe.transform(this.iniDate, 'yyyy-MM-dd') },
+      queryParamsHandling: "merge",
+      preserveFragment: true
+    });
+
+    this.iniDate.setDate(this.iniDate.getDate() - 5)
+    this.finDate.setDate(this.finDate.getDate() + 5)
+
+    this.router.navigateByUrl(urlTree)
 
     this.taskService.tasks({
-      iniDate: iniDate,
-      finDate: finDate,
+      iniDate: this.datePipe.transform(this.iniDate, 'yyyy-MM-dd'),
+      finDate: this.datePipe.transform(this.finDate, 'yyyy-MM-dd'),
       paginate: false,
       ...this.params
     }).subscribe(dataInfo => {
-      console.log(dataInfo)
       this.searching = false
       this.items = dataInfo.pagination.data
       this.dataInfo = dataInfo
       this.setUpdatedMessage()
-      this.chronologicDisplay(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
+      this.mountDates(this.iniDate, this.finDate)
+
+      this.scrollToDateFlag = true
       snackBar.dismiss()
     })
   }
 
-  chronologicDisplay(iniDate) {
-    let i: number = 0
-    let fixedDateMax: Date = new Date(iniDate)
-    let date: Date = new Date(iniDate)
+  /*
+   * Mescla os itens da agenda com as datas do calendário
+   */
+  mountDates(iniDate: Date, finDate: Date, insertInBegin = false) {
+    let chrono: Chrono
+    let date: Date = new Date(iniDate.getTime())
+    let fixedDateMax: Date = new Date(finDate.getTime())
+    let dates: Chrono[] = []
 
-    this.listenModification = false
-
-    date.setDate(date.getDate() - 5)
-    fixedDateMax.setDate(fixedDateMax.getDate() + 35)
-
-    console.log(this.items)
-
-    while (date.getTime() < fixedDateMax.getTime()) {
+    while (date.getTime() <= fixedDateMax.getTime()) {
       let filteredTasks = this.items.filter(item => {
-        //Ao filtrar, não selecionar continuações
-        if(!this.paramsHasFilter) {
-            let itemDate = new Date(item.date + 'T00:00:00')
-            return date.getDate() == itemDate.getDate()
-              && date.getMonth() == itemDate.getMonth()
-          }
+        let itemDate = new Date(item.date + 'T00:00:00')
+        return date.getDate() == itemDate.getDate()
+          && date.getMonth() == itemDate.getMonth()
       })
 
       let count = filteredTasks.length
@@ -682,7 +572,7 @@ export class ScheduleComponent implements OnInit {
         filteredTasks.push(item)
       }
 
-      this.chrono[i] = {
+      chrono = {
         day: date.getDate(),
         month: (date.getMonth() + 1),
         year: date.getFullYear(),
@@ -693,33 +583,105 @@ export class ScheduleComponent implements OnInit {
         }),
         length: count
       }
-      i++
 
+      dates.push(chrono)
       date.setDate(date.getDate() + 1)
     }
-    this.listenModification = true
+
+    if(insertInBegin) {
+      this.chrono = dates.concat(this.chrono)
+    } else {
+      this.chrono = this.chrono.concat(dates)
+    }
   }
 
   scrollToDate() {
-    if (!this.scrollActive) {
-      return
+    let query: string = ''
+    let element: HTMLElement
+
+    if( !this.scrollToDateFlag ) return;
+
+    query = this.scrollToElement != '' ? this.scrollToElement : '.day-' + this.date.getDate()
+    element = document.querySelector(query);
+
+    if (element != null) {
+      element.scrollIntoView(this.scrollParams)
     }
 
-    let date = this.date
-    let query: string
-    const elementBodyTable = document.querySelectorAll('.mat-row-scroll')[0] as HTMLElement;
+    this.scrollToDateFlag = false
+    this.scrollToElement = ''
+    this.scrollParams = { behavior: 'smooth' }
+  }
 
-    if (this.month.id == date.getMonth() + 1) {
-      query = '.day-' + this.date.getDate() + '.month-' + (this.date.getMonth() + 1)
-      const elementList = document.querySelectorAll(query);
+  scrolling($event) {
+    if( this.searching ) return;
 
-      if (elementList.length > 0) {
-        const element = elementList[0] as HTMLElement;
-        elementBodyTable.scrollTo(0, element.offsetTop - 45)
-      }
-    } else {
-      elementBodyTable.scrollTo(0, 0)
+    let scrollTop = $event.target.scrollTop
+    if((scrollTop + $event.target.offsetHeight) >= $event.target.scrollHeight) {
+      this.loadItemsAfter()
+    } else if(scrollTop == 0) {
+      this.loadItemsBefore()
     }
+  }
+
+  loadItemsAfter() {
+    let snackBar = this.snackBar.open('Carregando datas posteriores...')
+    let iniDate = new Date(this.finDate.getTime())
+
+    iniDate.setDate(this.finDate.getDate() + 1)
+    this.finDate.setDate(this.finDate.getDate() + this.stepDate)
+
+    this.searching = true
+
+    this.taskService.tasks({
+      iniDate: this.datePipe.transform(iniDate, 'yyyy-MM-dd'),
+      finDate: this.datePipe.transform(this.finDate, 'yyyy-MM-dd'),
+      paginate: false,
+      ...this.params
+    }).subscribe((dataInfo) => {
+      this.items = this.items.concat(dataInfo.pagination.data)
+      this.dataInfo = dataInfo
+      this.setUpdatedMessage()
+      this.mountDates(iniDate, this.finDate)
+      snackBar.dismiss()
+
+      this.scrollToElement = '.day-' + this.datePipe.transform(iniDate, 'd')
+      this.scrollToElement += '.month-' + this.datePipe.transform(iniDate, 'M')
+      this.scrollToDateFlag = true
+      this.scrollParams = { behavior: 'smooth' }
+
+      this.searching = false
+    })
+  }
+
+  loadItemsBefore() {
+    let snackBar = this.snackBar.open('Carregando datas anteriores...')
+    let finDate = new Date(this.iniDate.getTime())
+
+    finDate.setDate(this.iniDate.getDate() - 1)
+    this.iniDate.setDate(this.iniDate.getDate() - this.stepDate)
+
+    this.searching = true
+
+    this.taskService.tasks({
+      iniDate: this.datePipe.transform(this.iniDate, 'yyyy-MM-dd'),
+      finDate: this.datePipe.transform(finDate, 'yyyy-MM-dd'),
+      paginate: false,
+      ...this.params
+    }).subscribe((dataInfo) => {
+      this.items = dataInfo.pagination.data.concat(this.items)
+      this.dataInfo = dataInfo
+      this.setUpdatedMessage()
+      this.mountDates(this.iniDate, finDate, true)
+      snackBar.dismiss()
+
+      this.scrollToElement = '.day-' + this.datePipe.transform(finDate, 'd')
+      this.scrollToElement += '.month-' + this.datePipe.transform(finDate, 'M')
+      this.scrollToDateFlag = true
+      this.scrollParams = { behavior: 'auto' }
+
+      this.searching = false
+    })
   }
 
   addTask(day: number) {

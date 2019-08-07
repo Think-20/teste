@@ -139,19 +139,6 @@
   margin-bottom: 0px;
 }
 
-.line-jobs {
-  width: 100%;
-}
-
-.line-job {
-  display: flex;
-  border-bottom: 1px solid #ccc;
-}
-
-.line-job:last-child {
-  border-bottom: 0;
-}
-
 .day-chrono {
   align-self: stretch;
   justify-content: center;
@@ -166,5 +153,8 @@
   padding: 3px;
 }
 
-
+.line-job {
+  display: flex;
+  width: 100%;
+}
 

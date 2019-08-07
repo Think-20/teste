@@ -30,7 +30,6 @@ export class ScheduleLineComponent implements OnInit {
   @Input() item: TaskItem
   @Input() chrono: Chrono
   @Input() today: Date
-  @Output() scrollStatusEmitter: EventEmitter<boolean> = new EventEmitter()
   @Output() changeMonthEmitter: EventEmitter<any> = new EventEmitter()
 
   constructor(
@@ -89,7 +88,7 @@ export class ScheduleLineComponent implements OnInit {
     if(this.item.task.done == 1) {
       return 'done'
     } else {
-      let lastItem = this.item.task.items.pop()
+      let lastItem = this.item.task.items[(this.item.task.items.length - 1)]
       let finalDate = new Date(lastItem.date + 'T00:00:00')
 
       if(this.datePipe.transform(finalDate, 'yyyy-MM-dd') < this.datePipe.transform(new Date(), 'yyyy-MM-dd')) {
@@ -109,7 +108,6 @@ export class ScheduleLineComponent implements OnInit {
   }
 
   signal(task: Task) {
-    this.scrollStatusEmitter.emit(false)
     let job = task.job
     let oldStatus = job.status
     let wanted = job.status.id == 5 ? 1 : 5
@@ -117,7 +115,6 @@ export class ScheduleLineComponent implements OnInit {
     job.status = wantedStatus
 
     this.jobService.edit(job).subscribe((data) => {
-      this.scrollStatusEmitter.emit(true)
       if(data.status) {
         this.snackBar.open('Sinalização modificada com sucesso!', '', {
           duration: 3000
@@ -128,9 +125,9 @@ export class ScheduleLineComponent implements OnInit {
     })
   }
 
-  deleteTask(task: Task) {
-    let lastDate = new Date(task.available_date + "T00:00:00")
-    this.taskService.delete(task.id).subscribe((data) => {
+  deleteTask(item: TaskItem) {
+    let lastDate = new Date(item.date + "T00:00:00")
+    this.taskService.delete(item.task.id).subscribe((data) => {
       this.snackBar.open(data.message, '', {
         duration: 5000
       })
