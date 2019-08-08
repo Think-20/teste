@@ -217,6 +217,29 @@ export class ScheduleComponent implements OnInit {
     return access
   }
 
+  jobDisplay(item: TaskItem, chrono: Chrono) {
+    if(item.task.job.id == null) {
+      return ''
+    }
+
+    let activity = this.taskService.jobDisplay(item.task)
+    let date = new Date(item.date + 'T00:00:00')
+
+    if(date.getDate() != chrono.day) {
+      return 'Continuação de ' + activity.toLowerCase()
+    }
+
+    return activity
+  }
+
+  getQueryParams(task: Task) {
+    switch(task.job_activity.description) {
+      case 'Projeto': return { taskId: task.id, tab: 'project' }
+      case 'Memorial descritivo': return { taskId: task.id, tab: 'specification' }
+      default: return ''
+    }
+  }
+
   ngOnInit() {
     this.isAdmin = this.permissionVerify('new', new Job())
 

@@ -19,6 +19,7 @@ export class JobTabsComponent implements OnInit {
   isAdmin: boolean
   selectedIndex: number = 0
   tabs = [
+    {index: 0, description: 'info'},
     {index: 1, description: 'briefing'},
     {index: 2, description: 'project'},
     {index: 3, description: 'specification'}
@@ -34,7 +35,8 @@ export class JobTabsComponent implements OnInit {
     this.typeForm = this.route.snapshot.url[0].path
     this.route.queryParams.subscribe((params) => {
       let next = params['tab']
-      this.selectedIndex = this.tabs.find(tab => tab.description == next).index
+      let tab = this.tabs.find(tab => tab.description == next)
+      this.selectedIndex = tab != undefined ? tab.index : 0
     })
 
     this.initContainerWidthObservable()

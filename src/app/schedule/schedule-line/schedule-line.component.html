@@ -1,15 +1,14 @@
 <div class="line-job"
-(menuOpened)="openMenu(item.task, chrono)"
+(menuOpened)="openMenu(item, chrono)"
 [matMenuTriggerFor]="menu"
-[matMenuTriggerData]="{task: item.task, chrono: chrono}"
-[ngClass]="getLineClass(chrono, item.task, chrono.day, chrono.month)"
-(dblclick)="goToJob(item.task.job)"
-draggable="true">
+[matMenuTriggerData]="{item: item, chrono: chrono}"
+[ngClass]="getLineClass(chrono, item, chrono.day, chrono.month)"
+(dblclick)="goToJob(item.task.job)">
   <div class="mat-cell mat-column-creation">
     {{ item.task?.responsible?.name }}
   </div>
   <div class="mat-cell mat-column-job">
-    {{ jobDisplay(item.task, chrono) }}
+    {{ jobDisplay(item, chrono) }}
   </div>
   <div class="mat-cell mat-column-type">
     {{ item.task.job.job_type?.description }}
@@ -27,7 +26,7 @@ draggable="true">
     &nbsp;
   </div>
   <div class="mat-cell mat-column-budget">
-    <span *ngIf="canShowDetails(item.task, chrono)">
+    <span *ngIf="canShowDetails(item, chrono)">
       {{ item.task.job.budget_value | number: '1.2' }}
       <br>
       <span *ngIf="calcValue(item.task.job) > 0">
@@ -39,7 +38,7 @@ draggable="true">
     </span>
   </div>
   <div class="mat-cell mat-column-area">
-    {{ canShowDetails(item.task, chrono)
+    {{ canShowDetails(item, chrono)
       && item.task.job.job_type.description == 'Stand'
       && item.task.job.area != null
       ? (item.task.job.area | number ) + ' m²' : '' }}
@@ -59,6 +58,6 @@ draggable="true">
     {{ item.task.job?.attendance?.name }}
   </div>
   <div class="mat-cell mat-column-stat">
-    {{ canShowDetails(item.task, chrono) ? item.task.job?.status?.description : '' }}
+    {{ canShowDetails(item, chrono) ? item.task.job?.status?.description : '' }}
   </div>
 </div>

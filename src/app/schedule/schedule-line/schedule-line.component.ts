@@ -44,8 +44,8 @@ export class ScheduleLineComponent implements OnInit {
   ngOnInit() {
   }
 
-  openMenu(task: Task, chrono: Chrono) {
-    if(this.jobDisplay(task, chrono).indexOf('Continuação de') >= 0) {
+  openMenu(item: TaskItem, chrono: Chrono) {
+    if(this.jobDisplay(item, chrono).indexOf('Continuação de') >= 0) {
       this.menu.closeMenu();
     }
   }
@@ -96,14 +96,6 @@ export class ScheduleLineComponent implements OnInit {
       } else {
         return 'access_alarm'
       }
-    }
-  }
-
-  getQueryParams(task: Task) {
-    switch(task.job_activity.description) {
-      case 'Projeto': return { taskId: task.id, tab: 'project' }
-      case 'Memorial descritivo': return { taskId: task.id, tab: 'specification' }
-      default: return ''
     }
   }
 
@@ -203,48 +195,48 @@ export class ScheduleLineComponent implements OnInit {
     return access
   }
 
-  getLineClass(chrono: Chrono, task: Task, day: number, month: number, nextIndex: number) {
+  getLineClass(chrono: Chrono, item: TaskItem, day: number, month: number, nextIndex: number) {
     let className = ''
 
-    if(task.job.id == null) {
+    if(item.task.job.id == null) {
       return className
     }
 
-    if(task.job.attendance_id != this.authService.currentUser().employee.id
-      && task.responsible_id != this.authService.currentUser().employee.id
-      && task.job.id != undefined && !this.permissionVerify('edit', task.job))
+    if(item.task.job.attendance_id != this.authService.currentUser().employee.id
+      && item.task.responsible_id != this.authService.currentUser().employee.id
+      && item.task.job.id != undefined && !this.permissionVerify('edit', item.task.job))
       className += ' other-attendance'
 
-    if(isObject(task.job_activity)
-      && ['Projeto', 'Orçamento', 'Outsider'].indexOf(task.job_activity.description) >= 0
-      && this.jobDisplay(task, chrono).indexOf('Continuação de') == -1) {
+    if(isObject(item.task.job_activity)
+      && ['Projeto', 'Orçamento', 'Outsider'].indexOf(item.task.job_activity.description) >= 0
+      && this.jobDisplay(item, chrono).indexOf('Continuação de') == -1) {
 
-        if(task.job.status.id == 3 && (['Projeto', 'Outsider'].indexOf(task.job_activity.description) >= 0))
+        if(item.task.job.status.id == 3 && (['Projeto', 'Outsider'].indexOf(item.task.job_activity.description) >= 0))
           className += ' approved-creation'
 
-        if(task.job.status.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0))
+        if(item.task.job.status.id == 3 && (['Orçamento'].indexOf(item.task.job_activity.description) >= 0))
           className += ' approved-budget'
 
-        if(task.job.status.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0))
+        if(item.task.job.status.id == 3 && (['Orçamento'].indexOf(item.task.job_activity.description) >= 0))
           className += ' approved-budget'
 
-        if(task.job.status.id == 5)
+        if(item.task.job.status.id == 5)
           className += ' signal'
 
-        if(this.paramsHasFilter && task.job.id == null)
+        if(this.paramsHasFilter && item.task.job.id == null)
           className += ' hidden'
     }
 
     if(isObject(chrono.items[nextIndex + 1])
     &&['Projeto', 'Orçamento'].indexOf(chrono.items[nextIndex + 1].task.job_activity.description) >= 0
       && [5,3].indexOf(chrono.items[nextIndex + 1].task.job.status_id) >= 0
-      && this.jobDisplay(task, chrono).indexOf('Continuação de') == -1)
+      && this.jobDisplay(item, chrono).indexOf('Continuação de') == -1)
     {
       className += ' no-border'
     }
 
-    let originalTask = task
-    let departmentId = task.responsible.department_id
+    let originalTask = item.task
+    let departmentId = item.task.responsible.department_id
     let ocurrences = originalTask.items.filter(item => {
       return item.date == this.datePipe.transform(this.today, 'yyyy-MM-dd')
     }).length
@@ -258,21 +250,19 @@ export class ScheduleLineComponent implements OnInit {
     return className
   }
 
-  jobDisplay(task: Task, chrono: Chrono) {
-    if(task.job.id == null) {
+  jobDisplay(item: TaskItem, chrono: Chrono) {
+    if(item.task.job.id == null) {
       return ''
     }
 
-    let date = new Date(task.available_date + 'T00:00:00')
+    let activity = this.taskService.jobDisplay(item.task)
+    let date = new Date(item.date + 'T00:00:00')
 
-    if(task.job_activity.description == 'Continuação') {
-      return 'Continuação de ' + this.taskService.jobDisplay(task.task).toLowerCase()
-    }
     if(date.getDate() != chrono.day) {
-      return 'Continuação de ' + this.taskService.jobDisplay(task).toLowerCase()
+      return 'Continuação de ' + activity.toLowerCase()
     }
 
-    return this.taskService.jobDisplay(task)
+    return activity
   }
 
   calcValue(job: Job) {
@@ -285,9 +275,10 @@ export class ScheduleLineComponent implements OnInit {
     return text
   }
 
-  canShowDetails(task: Task, chrono: Chrono) {
+  canShowDetails(item: TaskItem, chrono: Chrono) {
     const available = ['Modificação', 'Opção', 'Continuação', 'Continuação de', 'Detalhamento', 'M. descritivo']
-    let text = this.jobDisplay(task, chrono)
+    let text = this.jobDisplay(item, chrono)
+
     if(text == '') {
       return false
     }
@@ -299,7 +290,7 @@ export class ScheduleLineComponent implements OnInit {
     })
 
     if(text.indexOf('Orçamento') >= 0
-    && task.job.job_activity.description != 'Projeto externo') {
+    && item.task.job.job_activity.description != 'Projeto externo') {
       found = true
     }
 

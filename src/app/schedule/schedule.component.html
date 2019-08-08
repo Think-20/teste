@@ -1,6 +1,6 @@
 <mat-menu #menu="matMenu">
-  <ng-template matMenuContent let-task="task" let-chrono="chrono">
-    <div *ngIf="jobDisplay(task, chrono).indexOf('Continuação de') == -1">
+  <ng-template matMenuContent let-item="item" let-task="item.task" let-chrono="chrono">
+    <div *ngIf="jobDisplay(item, chrono).indexOf('Continuação de') == -1">
       <a *ngIf="task.job.id == undefined" (click)="addTask(chrono.day)" mat-menu-item>
         <mat-icon>add</mat-icon> Adicionar
       </a>
