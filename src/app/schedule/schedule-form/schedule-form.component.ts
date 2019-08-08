@@ -341,7 +341,6 @@ export class ScheduleFormComponent implements OnInit {
     this.jobService.data.deadline = this.scheduleForm.controls.deadline.value
     this.jobService.data.job_activity = task.job_activity
 
-    console.log(this.jobService.data.task.items)
     this.router.navigateByUrl(url)
   }
 

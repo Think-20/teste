@@ -223,9 +223,8 @@ export class ScheduleComponent implements OnInit {
     }
 
     let activity = this.taskService.jobDisplay(item.task)
-    let date = new Date(item.date + 'T00:00:00')
 
-    if(date.getDate() != chrono.day) {
+    if(item.id != item.task.items[0].id) {
       return 'Continuação de ' + activity.toLowerCase()
     }
 

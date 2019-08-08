@@ -22,7 +22,8 @@ import { Task } from '../task.model';
 })
 export class ScheduleLineComponent implements OnInit {
 
-  @Input() menu: MatMenuTrigger
+  @Input() menu: MatMenu
+  @ViewChild('menuTrigger', { static: false }) menuTrigger: MatMenuTrigger
   @Input() month: Month
   @Input() paramsHasFilter: boolean = false
   @Input() date: Date
@@ -44,9 +45,9 @@ export class ScheduleLineComponent implements OnInit {
   ngOnInit() {
   }
 
-  openMenu(item: TaskItem, chrono: Chrono) {
-    if(this.jobDisplay(item, chrono).indexOf('Continuação de') >= 0) {
-      this.menu.closeMenu();
+  openMenu(item: TaskItem) {
+    if(this.jobDisplay(item).indexOf('Continuação de') >= 0) {
+      this.menuTrigger.closeMenu();
     }
   }
 
@@ -209,7 +210,7 @@ export class ScheduleLineComponent implements OnInit {
 
     if(isObject(item.task.job_activity)
       && ['Projeto', 'Orçamento', 'Outsider'].indexOf(item.task.job_activity.description) >= 0
-      && this.jobDisplay(item, chrono).indexOf('Continuação de') == -1) {
+      && this.jobDisplay(item).indexOf('Continuação de') == -1) {
 
         if(item.task.job.status.id == 3 && (['Projeto', 'Outsider'].indexOf(item.task.job_activity.description) >= 0))
           className += ' approved-creation'
@@ -230,7 +231,7 @@ export class ScheduleLineComponent implements OnInit {
     if(isObject(chrono.items[nextIndex + 1])
     &&['Projeto', 'Orçamento'].indexOf(chrono.items[nextIndex + 1].task.job_activity.description) >= 0
       && [5,3].indexOf(chrono.items[nextIndex + 1].task.job.status_id) >= 0
-      && this.jobDisplay(item, chrono).indexOf('Continuação de') == -1)
+      && this.jobDisplay(item).indexOf('Continuação de') == -1)
     {
       className += ' no-border'
     }
@@ -250,15 +251,14 @@ export class ScheduleLineComponent implements OnInit {
     return className
   }
 
-  jobDisplay(item: TaskItem, chrono: Chrono) {
+  jobDisplay(item: TaskItem) {
     if(item.task.job.id == null) {
       return ''
     }
 
     let activity = this.taskService.jobDisplay(item.task)
-    let date = new Date(item.date + 'T00:00:00')
 
-    if(date.getDate() != chrono.day) {
+    if(item.id != item.task.items[0].id) {
       return 'Continuação de ' + activity.toLowerCase()
     }
 
@@ -275,9 +275,9 @@ export class ScheduleLineComponent implements OnInit {
     return text
   }
 
-  canShowDetails(item: TaskItem, chrono: Chrono) {
+  canShowDetails(item: TaskItem) {
     const available = ['Modificação', 'Opção', 'Continuação', 'Continuação de', 'Detalhamento', 'M. descritivo']
-    let text = this.jobDisplay(item, chrono)
+    let text = this.jobDisplay(item)
 
     if(text == '') {
       return false

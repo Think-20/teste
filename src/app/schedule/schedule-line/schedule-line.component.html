@@ -1,4 +1,5 @@
 <div class="line-job"
+#menuTrigger="matMenuTrigger"
 (menuOpened)="openMenu(item, chrono)"
 [matMenuTriggerFor]="menu"
 [matMenuTriggerData]="{item: item, chrono: chrono}"
@@ -8,7 +9,7 @@
     {{ item.task?.responsible?.name }}
   </div>
   <div class="mat-cell mat-column-job">
-    {{ jobDisplay(item, chrono) }}
+    {{ jobDisplay(item) }}
   </div>
   <div class="mat-cell mat-column-type">
     {{ item.task.job.job_type?.description }}
@@ -26,7 +27,7 @@
     &nbsp;
   </div>
   <div class="mat-cell mat-column-budget">
-    <span *ngIf="canShowDetails(item, chrono)">
+    <span *ngIf="canShowDetails(item)">
       {{ item.task.job.budget_value | number: '1.2' }}
       <br>
       <span *ngIf="calcValue(item.task.job) > 0">
@@ -38,7 +39,7 @@
     </span>
   </div>
   <div class="mat-cell mat-column-area">
-    {{ canShowDetails(item, chrono)
+    {{ canShowDetails(item)
       && item.task.job.job_type.description == 'Stand'
       && item.task.job.area != null
       ? (item.task.job.area | number ) + ' m²' : '' }}
