@@ -58,7 +58,8 @@ export class ScheduleFormComponent implements OnInit {
   creations: Employee[] = []
   url: string = '/jobs/new'
   buttonText: string = 'PRÓXIMO'
-  budgetValueMessage: string
+  durationErrorMessage: string
+  budgetErrorMessage: string
   subscriptions: Subscription = new Subscription
   @ViewChild('availableDatepicker', { static: false }) availableDatepicker: MatDatepicker<Date>
   buttonEnable: boolean = true
@@ -126,6 +127,10 @@ export class ScheduleFormComponent implements OnInit {
         durationControl.clearValidators()
 
         if(jobActivity.min_duration == 0 && jobActivity.max_duration == 0) return;
+
+        this.durationErrorMessage = 'Duração válida para a atividade selecionada:'
+        this.durationErrorMessage += ' de ' + jobActivity.min_duration + ' a ' + jobActivity.max_duration
+        this.durationErrorMessage += ' dia(s)'
 
         durationControl.setValidators([
           Validators.min(jobActivity.min_duration),
@@ -251,26 +256,26 @@ export class ScheduleFormComponent implements OnInit {
     if (days <= 1) {
       validators.push(Validators.min(0))
       validators.push(Validators.max(70000))
-      this.budgetValueMessage = 'O valor deve estar entre 0,00 e 70.000,00 para até 1 dia'
+      this.budgetErrorMessage = 'O valor deve estar entre 0,00 e 70.000,00 para até 1 dia'
     } else if (days <= 2) {
       validators.push(Validators.min(70000.01))
       validators.push(Validators.max(150000))
-      this.budgetValueMessage = 'O valor deve estar entre 70.000,00 e 150.000,00 para até 2 dias'
+      this.budgetErrorMessage = 'O valor deve estar entre 70.000,00 e 150.000,00 para até 2 dias'
     } else if (days <= 3) {
       validators.push(Validators.min(150000.01))
       validators.push(Validators.max(240000))
-      this.budgetValueMessage = 'O valor deve estar entre 150.000,00 e 240.000,00 para até 3 dias'
+      this.budgetErrorMessage = 'O valor deve estar entre 150.000,00 e 240.000,00 para até 3 dias'
     } else if (days <= 4) {
       validators.push(Validators.min(240000.01))
       validators.push(Validators.max(340000))
-      this.budgetValueMessage = 'O valor deve estar entre 240.000,00 e 340.000,00 para até 4 dias'
+      this.budgetErrorMessage = 'O valor deve estar entre 240.000,00 e 340.000,00 para até 4 dias'
     } else if (days <= 5) {
       validators.push(Validators.min(340000.01))
       validators.push(Validators.max(450000))
-      this.budgetValueMessage = 'O valor deve estar entre 340.000,00 e 450.000,00 para até 5 dias'
+      this.budgetErrorMessage = 'O valor deve estar entre 340.000,00 e 450.000,00 para até 5 dias'
     } else if (days > 5) {
       validators.push(Validators.min(450000.01))
-      this.budgetValueMessage = 'O valor deve ser maior que 450.000,00 para mais de 5 dias'
+      this.budgetErrorMessage = 'O valor deve ser maior que 450.000,00 para mais de 5 dias'
     }
 
     return validators

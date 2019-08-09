@@ -13,6 +13,10 @@
     background-color: #CCC;
 }
 
+.invalid .label {
+  color: #f44336 !important;
+}
+
 .production-time-container {
     padding-top: 20px;
 }
@@ -32,4 +36,5 @@
 
 .production-time-content {
   margin-top: 8px;
+  margin-bottom: 3px;
 }

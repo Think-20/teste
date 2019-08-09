@@ -30,18 +30,19 @@
         class="col-md-12 slider text-right" [checked]="adminMode">
           Forçar privilégios administrativos
         </mat-slide-toggle>
-        <cb-production-time *ngIf="showExtraParams" class="col-md-9 production-time-input" label="Tempo estimado" [rate]="1" [input]="scheduleForm.controls.duration"
-          [min]="0" [max]="10">
+        <cb-production-time *ngIf="showExtraParams" class="col-md-9 production-time-input"
+          label="Tempo estimado" [rate]="1" [input]="scheduleForm.controls.duration"
+          [errorMessage]="durationErrorMessage" [min]="0" [max]="10">
           <input formControlName="duration" type="hidden">
         </cb-production-time>
         <mat-form-field class="col-md-3">
           <input currencyMask formControlName="budget_value" matInput placeholder="Verba estimada*">
           <mat-error>
-            {{ budgetValueMessage }}
+            {{ budgetErrorMessage }}
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <mat-select placeholder="Atividade*" formControlName="job_activity" [compareWith]="compareJobActivity" (selectionChange)="getAvailableDates()">
+          <mat-select #jobActivity placeholder="Atividade*" formControlName="job_activity" [compareWith]="compareJobActivity" (selectionChange)="getAvailableDates()">
             <mat-option *ngFor="let job_activity of job_activities" [value]="job_activity" [disabled]="job_activity.master == 1 && ! isAdmin">
               {{ job_activity.description }}
             </mat-option>
