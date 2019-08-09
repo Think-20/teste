@@ -46,7 +46,7 @@ export class ScheduleFormComponent implements OnInit {
   params: () => {} = () => { return {} }
   callback: (jobs: Job[]) => void = (jobs) => {}
   isAdmin: boolean = false
-  adminMode: boolean = false
+  adminMode: boolean
   minDate: Date
   showExtraParams: boolean = true
   paramAttendance: Employee = null
@@ -59,7 +59,7 @@ export class ScheduleFormComponent implements OnInit {
   url: string = '/jobs/new'
   buttonText: string = 'PRÓXIMO'
   budgetValueMessage: string
-  subscriptions: Subscription[] = []
+  subscriptions: Subscription = new Subscription
   @ViewChild('availableDatepicker', { static: false }) availableDatepicker: MatDatepicker<Date>
   buttonEnable: boolean = true
 
@@ -82,8 +82,61 @@ export class ScheduleFormComponent implements OnInit {
     this.typeForm = this.route.snapshot.url[1].path
     this.isAdmin = this.authService.hasAccess('task/edit')
 
+    this.adminMode = false
     this.createForm()
+    this.createValidations()
+    this.loadFilterData()
+    this.subscribeChangesOnAdminMode()
 
+    this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
+    ? this.authService.currentUser().employee : null
+
+    if (this.typeForm == 'edit') {
+      this.loadTask()
+    }
+  }
+
+  subscribeChangesOnAdminMode() {
+    this.subscriptions.add(
+      this.scheduleForm.controls.admin.valueChanges.subscribe((value) => {
+        if(value == true) this.createValidations()
+        if(value == false) this.destroyValidations()
+      })
+    );
+  }
+
+  createValidations() {
+    this.addValidationBudget()
+    this.subscribeChangesOnActivity()
+  }
+
+  destroyValidations() {
+    this.subscriptions.unsubscribe()
+    this.subscribeChangesOnAdminMode()
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe()
+  }
+
+  subscribeChangesOnActivity() {
+    this.subscriptions.add(
+      this.scheduleForm.controls.job_activity.valueChanges.subscribe((jobActivity: JobActivity) => {
+        let durationControl = this.scheduleForm.controls.duration
+        durationControl.clearValidators()
+
+        if(jobActivity.min_duration == 0 && jobActivity.max_duration == 0) return;
+
+        durationControl.setValidators([
+          Validators.min(jobActivity.min_duration),
+          Validators.max(jobActivity.max_duration)
+        ])
+        durationControl.updateValueAndValidity()
+      })
+    );
+  }
+
+  loadFilterData() {
     this.jobStatusService.jobStatus().subscribe(jobStatus => {
       this.job_status = jobStatus
     })
@@ -92,36 +145,6 @@ export class ScheduleFormComponent implements OnInit {
       this.job_activities = jobActivities
     })
 
-    this.loadFilterData()
-    this.loadAdminPrivileges()
-
-    this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
-    ? this.authService.currentUser().employee : null
-
-    if (this.typeForm == 'edit') {
-      this.loadTask()
-    }
-
-
-  }
-
-  loadAdminPrivileges() {
-    let date = new Date()
-
-    if( !this.isAdmin ) {
-      this.adminMode = false
-      this.minDate = new Date(date.getFullYear(), date.getMonth(), date.getDate())
-      return
-    }
-
-    this.scheduleForm.controls.admin.valueChanges.subscribe((value) => {
-      this.adminMode = value
-      this.minDate = this.adminMode
-        ? null : new Date(date.getFullYear(), date.getMonth(), date.getDate())
-    })
-  }
-
-  loadFilterData() {
     this.jobTypeService.jobTypes().subscribe(job_types => this.job_types = job_types)
 
     this.employeeService.canInsertClients().subscribe((attendances) => {
@@ -220,9 +243,7 @@ export class ScheduleFormComponent implements OnInit {
     })
   }
 
-  addValidationBudget() {
-    if(this.isAdmin) return
-
+  getBudgetValidators(): ValidatorFn[] {
     let days = this.scheduleForm.controls.duration.value
     let validators: ValidatorFn[] = []
     validators.push(Validators.required)
@@ -252,8 +273,16 @@ export class ScheduleFormComponent implements OnInit {
       this.budgetValueMessage = 'O valor deve ser maior que 450.000,00 para mais de 5 dias'
     }
 
-    this.scheduleForm.controls.budget_value.setValidators(validators)
-    this.scheduleForm.controls.budget_value.updateValueAndValidity()
+    return validators
+  }
+
+  addValidationBudget() {
+    this.subscriptions.add(
+      this.scheduleForm.controls.duration.valueChanges.subscribe(() => {
+        this.scheduleForm.controls.budget_value.setValidators(this.getBudgetValidators())
+        this.scheduleForm.controls.budget_value.updateValueAndValidity()
+      })
+    )
   }
 
   compareResponsible(var1: Employee, var2: Employee) {
