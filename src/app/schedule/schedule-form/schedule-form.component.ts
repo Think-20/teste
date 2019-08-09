@@ -147,7 +147,8 @@ export class ScheduleFormComponent implements OnInit {
     })
 
     this.jobActivityService.jobActivities().subscribe(jobActivities => {
-      this.job_activities = jobActivities
+      this.job_activities = this.typeForm == 'new'
+        ? jobActivities.filter((jobActivity) => jobActivity.only_edit == 0) : jobActivities
     })
 
     this.jobTypeService.jobTypes().subscribe(job_types => this.job_types = job_types)
@@ -165,17 +166,11 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   loadTask() {
-    let date = new Date()
     let taskId = parseInt(this.route.snapshot.url[2].path)
-
     let snack = this.snackBar.open('Carregando informações...')
-    this.taskService.task(taskId).subscribe(task => {
-      this.taskService.getNextAvailableDate(this.datePipe.transform(date, 'yyyy-MM-dd'), 1, task.job_activity, 0).subscribe((data) => {
-        this.responsibles = data.responsibles
-        this.scheduleForm.controls.responsible.setValue(task.responsible)
-        snack.dismiss()
-      })
 
+    this.taskService.task(taskId).subscribe(task => {
+      snack.dismiss()
       this.scheduleForm.controls.id.setValue(task.id)
       this.scheduleForm.controls.job_activity.setValue(task.job_activity)
       this.scheduleForm.controls.job_activity.disable()
