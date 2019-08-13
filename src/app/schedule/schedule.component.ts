@@ -34,6 +34,7 @@ import { ScheduleBlockService } from './schedule-block/schedule-block.service';
 import { Department } from '../department/department.model';
 import { BlockDialogComponent } from './schedule-block/block-dialog/block-dialog.component';
 import { Task } from './task.model';
+import { JobService } from 'app/jobs/job.service';
 
 @Component({
   selector: 'cb-schedule',
@@ -103,6 +104,7 @@ export class ScheduleComponent implements OnInit {
     private clientService: ClientService,
     private employeeService: EmployeeService,
     private taskService: TaskService,
+    private jobService: JobService,
     private jobActivityService: JobActivityService,
     private jobTypeService: JobTypeService,
     private jobStatusService: JobStatusService,
@@ -722,6 +724,52 @@ export class ScheduleComponent implements OnInit {
     this.router.navigate(['/schedule/new'], {
       queryParams: {
         date: this.date.getUTCFullYear() + '-' + tempMonth + '-' + tempDay
+      }
+    })
+  }
+
+
+
+  signal(task: Task) {
+    let job = task.job
+    let oldStatus = job.status
+    let wanted = job.status.id == 5 ? 1 : 5
+    let wantedStatus = this.jobStatus.filter(s => { return s.id == wanted }).pop()
+    job.status = wantedStatus
+
+    this.jobService.edit(job).subscribe((data) => {
+      if(data.status) {
+        this.snackBar.open('Sinalização modificada com sucesso!', '', {
+          duration: 3000
+        })
+      } else {
+        job.status = oldStatus
+      }
+    })
+  }
+
+  deleteTask(item: TaskItem) {
+    let lastDate = new Date(item.date + "T00:00:00")
+    this.taskService.delete(item.task.id).subscribe((data) => {
+      this.snackBar.open(data.message, '', {
+        duration: 5000
+      })
+
+      if (data.status) {
+        this.changeMonthByLine({month: this.month, lastDate: lastDate})
+      }
+    })
+  }
+
+  deleteJob(item: TaskItem) {
+    let lastDate = new Date(item.date + "T00:00:00")
+    this.jobService.delete(item.task.job.id).subscribe((data) => {
+      this.snackBar.open(data.message, '', {
+        duration: 5000
+      })
+
+      if (data.status) {
+        this.changeMonthByLine({month: this.month, lastDate: lastDate})
       }
     })
   }

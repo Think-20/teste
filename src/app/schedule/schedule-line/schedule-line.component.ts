@@ -100,50 +100,6 @@ export class ScheduleLineComponent implements OnInit {
     }
   }
 
-  signal(task: Task) {
-    let job = task.job
-    let oldStatus = job.status
-    let wanted = job.status.id == 5 ? 1 : 5
-    let wantedStatus = this.jobStatus.filter(s => { return s.id == wanted }).pop()
-    job.status = wantedStatus
-
-    this.jobService.edit(job).subscribe((data) => {
-      if(data.status) {
-        this.snackBar.open('Sinalização modificada com sucesso!', '', {
-          duration: 3000
-        })
-      } else {
-        job.status = oldStatus
-      }
-    })
-  }
-
-  deleteTask(item: TaskItem) {
-    let lastDate = new Date(item.date + "T00:00:00")
-    this.taskService.delete(item.task.id).subscribe((data) => {
-      this.snackBar.open(data.message, '', {
-        duration: 5000
-      })
-
-      if (data.status) {
-        this.changeMonthEmitter.emit({month: this.month, lastDate: lastDate})
-      }
-    })
-  }
-
-  deleteJob(task: Task) {
-    let lastDate = new Date(task.available_date + "T00:00:00")
-    this.jobService.delete(task.job.id).subscribe((data) => {
-      this.snackBar.open(data.message, '', {
-        duration: 5000
-      })
-
-      if (data.status) {
-        this.changeMonthEmitter.emit({month: this.month, lastDate: lastDate})
-      }
-    })
-  }
-
   addTask(day: number) {
     let month = this.date.getMonth() + 1
     let tempMonth = month.toString()

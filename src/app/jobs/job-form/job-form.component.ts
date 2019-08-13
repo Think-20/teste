@@ -284,13 +284,16 @@ export class JobFormComponent implements OnInit {
     if( ! this.isAdmin)
     this.jobForm.controls.budget_value.disable()
 
+    let sortedItems = job.task.items.sort((a, b) => {
+      return a.date > b.date ? 1 : -1
+    })
+
     if(job.job_activity.description == 'Projeto externo') {
       this.jobForm.controls.creation_responsible.setValue('Externa')
-      this.jobForm.controls.available_date.setValue(job.task.available_date)
       return
     }
 
-    this.jobForm.controls.available_date.setValue(job.task.available_date)
+    this.jobForm.controls.available_date.setValue(sortedItems[0].date)
     this.jobForm.controls.creation_responsible.setValue(job.task.responsible.name)
   }
 
@@ -643,7 +646,6 @@ export class JobFormComponent implements OnInit {
         duration: data.status ? 1000 : 5000
       }).afterDismissed().subscribe(observer => {
         if (data.status) {
-          console.log(this.routerExtService.getPreviousUrl())
           if( this.routerExtService.getPreviousUrl().indexOf('schedule') >= 0 ) {
             this.router.navigate(['/schedule'], {
               queryParams: {
