@@ -172,6 +172,8 @@ export class ScheduleFormComponent implements OnInit {
 
       if (jobActivity.description == 'Modificação') {
         this.addModificationEvents()
+      } else if(jobActivity.description == 'Modificação de orçamento') {
+        this.addBudgetModifyEvents()
       }
       else if (jobActivity.description == 'Detalhamento') {
         this.addDetailingEvents()
@@ -282,6 +284,55 @@ export class ScheduleFormComponent implements OnInit {
 
     let controls = this.searchForm.controls
     let types = ['Projeto', 'Modificação', 'Outsider', 'Opção']
+
+    this.params = () => {
+      return {
+        paginate: false,
+        clientName: controls.client.value,
+        status: controls.status.value != undefined ? controls.status.value.id : null,
+        attendance: controls.attendance.value,
+        creation: controls.creation.value,
+        job_type: controls.job_type.value,
+        job_activities: this.job_activities.filter(jobActivity => {
+            return types.indexOf(jobActivity.description) > -1
+          }).map(jobActivity => {
+            return jobActivity.id
+          })
+      }
+    }
+
+    this.callback = (jobs: Job[]) => {
+      this.jobs = jobs
+    }
+
+    this.loadJobs()
+
+    this.subscriptions.push(this.scheduleForm.controls.job.valueChanges.subscribe(job => {
+      let responsible
+      this.nextDateMessage = ''
+      this.scheduleForm.controls.budget_value.setValue(job.budget_value)
+
+      if( ! this.dateSetManually) {
+        this.scheduleForm.controls.responsible.setValue('')
+        this.responsibles = [job.creation_responsible]
+        this.scheduleForm.controls.available_date.setValue('')
+        this.scheduleForm.controls.responsible.setValue(job.creation_responsible)
+        this.getAvailableDates(new Date(), this.responsibles[0])
+      }
+    }))
+  }
+
+  addBudgetModifyEvents() {
+    this.clearEvents()
+    if( ! this.dateSetManually) {
+      this.scheduleForm.controls.responsible.disable()
+    }
+
+    this.scheduleForm.controls.budget_value.disable()
+    this.nextDateMessage = 'Escolha primeiro o job, para verificarmos o responsável e a data disponível.'
+
+    let controls = this.searchForm.controls
+    let types = ['Projeto externo']
 
     this.params = () => {
       return {
