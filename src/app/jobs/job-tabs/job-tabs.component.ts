@@ -4,6 +4,7 @@ import { Job } from '../job.model';
 import { Observable } from 'rxjs/Observable';
 import { JobService } from '../job.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { JobFormComponent } from '../job-form/job-form.component';
 
 @Component({
   selector: 'cb-job-tabs',
@@ -13,6 +14,7 @@ import { MatTabChangeEvent } from '@angular/material/tabs';
 @Injectable()
 export class JobTabsComponent implements OnInit {
   @ViewChild('container', { static: false }) container: ElementRef
+  @ViewChild(JobFormComponent, { static: false }) jobForm: JobFormComponent
   containerWidth: number
   typeForm: string
   job: Job
@@ -85,4 +87,7 @@ export class JobTabsComponent implements OnInit {
     this.isAdmin = isAdmin
   }
 
+  reload() {
+    this.jobForm.loadJob()
+  }
 }

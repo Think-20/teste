@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Job } from '../jobs/job.model';
 import { TaskService } from '../schedule/task.service';
 import { Task } from '../schedule/task.model';
@@ -21,6 +21,7 @@ export class ProjectsComponent implements OnInit {
   actionText: string
   actionUrl: string
   sortedTasks: Task[]
+  @Output() requestJobReloadEmitter: EventEmitter<any> = new EventEmitter<any>();
   isAttendance: boolean = null
   expandedIndex: number = null
 
@@ -70,6 +71,10 @@ export class ProjectsComponent implements OnInit {
   }
 
   getRoute(task: Task) {
+    if(this.isAttendance) {
+      this.requestJobReloadEmitter.emit()
+    }
+
     return this.isAttendance ? `/jobs/edit/${this.job.id}?tab=specification`
       : '/schedule?date=' + this.datePipe.transform(task.available_date, 'yyyy-MM-dd')
   }
