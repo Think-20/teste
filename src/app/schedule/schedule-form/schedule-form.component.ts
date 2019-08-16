@@ -285,7 +285,7 @@ export class ScheduleFormComponent implements OnInit {
     this.nextDateMessage = 'Escolha primeiro o job, para verificarmos o responsável e a data disponível.'
 
     let controls = this.searchForm.controls
-    let types = ['Projeto', 'Modificação', 'Outsider', 'Opção']
+    let types = ['Projeto', 'Projeto externo', 'Modificação', 'Outsider', 'Opção']
 
     this.params = () => {
       return {
@@ -433,7 +433,7 @@ export class ScheduleFormComponent implements OnInit {
 
     let snackbar
     let controls = this.searchForm.controls
-    let types = ['Projeto', 'Outsider']
+    let types = ['Projeto', 'Projeto externo', 'Outsider']
 
     this.params = () => {
       return {
