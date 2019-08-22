@@ -123,19 +123,41 @@ export class ScheduleFormComponent implements OnInit {
   subscribeChangesOnActivity() {
     this.subscriptions.add(
       this.scheduleForm.controls.job_activity.valueChanges.subscribe((jobActivity: JobActivity) => {
+        this.showExtraParams = jobActivity.no_params === 0;
+
         let durationControl = this.scheduleForm.controls.duration
         durationControl.clearValidators()
 
-        if(jobActivity.min_duration == 0 && jobActivity.max_duration == 0) return;
+        if(jobActivity.min_duration == 0 
+          && jobActivity.max_duration == 0
+          && jobActivity.fixed_duration == 0) return;
 
         this.durationErrorMessage = 'Duração válida para a atividade selecionada:'
         this.durationErrorMessage += ' de ' + jobActivity.min_duration + ' a ' + jobActivity.max_duration
         this.durationErrorMessage += ' dia(s)'
 
-        durationControl.setValidators([
-          Validators.min(jobActivity.min_duration),
-          Validators.max(jobActivity.max_duration)
-        ])
+        if(jobActivity.min_duration != 0 || jobActivity.max_duration != 0) {
+          durationControl.setValidators([
+            Validators.min(jobActivity.min_duration),
+            Validators.max(jobActivity.max_duration)            
+          ])
+
+          this.durationErrorMessage = 'Duração válida para a atividade selecionada:'
+          this.durationErrorMessage += ' de ' + jobActivity.min_duration + ' a ' + jobActivity.max_duration
+          this.durationErrorMessage += ' dia(s)'
+        }
+
+        if(jobActivity.fixed_duration != 0) {
+          durationControl.setValidators([
+            Validators.min(jobActivity.fixed_duration),
+            Validators.max(jobActivity.fixed_duration)            
+          ])
+
+          this.durationErrorMessage = 'Duração válida para a atividade selecionada:'
+          this.durationErrorMessage += ' pré-definida em ' + jobActivity.fixed_duration
+          this.durationErrorMessage += ' dia(s)'
+        }
+
         durationControl.updateValueAndValidity()
       })
     );
@@ -148,7 +170,7 @@ export class ScheduleFormComponent implements OnInit {
 
     this.jobActivityService.jobActivities().subscribe(jobActivities => {
       this.job_activities = this.typeForm == 'new'
-        ? jobActivities.filter((jobActivity) => jobActivity.only_edit == 0) : jobActivities
+        ? jobActivities.filter((jobActivity) => jobActivity.initial == 1) : jobActivities
     })
 
     this.jobTypeService.jobTypes().subscribe(job_types => this.job_types = job_types)
@@ -313,6 +335,15 @@ export class ScheduleFormComponent implements OnInit {
 
     let availableDate = this.scheduleForm.controls.available_date.value
     let jobActivity = this.scheduleForm.controls.job_activity.value
+
+    if( isObject(jobActivity) && jobActivity.no_params == 1 ) {
+      let snackbar = this.snackBar.open('Carregando responsáveis...')
+      this.taskService.responsiblesByActivity(jobActivity.id).subscribe((responsibles) => {
+        this.responsibles = responsibles
+        snackbar.dismiss()
+      })
+      return
+    }
 
     if( !isObject(jobActivity) || availableDate == '' ) {
       this.snackBar.open('Escolha o tipo de atividade e uma data inicial para carregar as datas', '', { duration: 3000 })
