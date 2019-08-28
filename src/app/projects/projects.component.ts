@@ -106,7 +106,7 @@ export class ProjectsComponent implements OnInit {
 
   sortTasks() {
     this.sortedTasks = this.job.tasks.filter((task) => {
-      return ['Continuação', 'Detalhamento', 'Memorial descritivo', 'Orçamento', 'Modificação de orçamento'].indexOf(task.job_activity.description) == -1
+      return task.job_activity.initial == 1
     })
     this.sortedTasks = this.sortedTasks.sort((a, b) => {
       return a.available_date < b.available_date ? 1 : -1

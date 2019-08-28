@@ -24,6 +24,11 @@ h3 {
 .button-navigate {
   margin-bottom: 10px;
   margin-top: -10px;
+  margin-right: 10px;
   position: relative;
   top: -15px;
+}
+
+.button-navigate:last-child {
+  margin-right: 0;
 }

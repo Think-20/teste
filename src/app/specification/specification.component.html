@@ -5,27 +5,26 @@
         <p class="lead">
           <span>{{ taskService.jobDisplay(task.task) }} {{ description(task) }}</span>
           <br>
-          <span *ngIf="task?.specification_files?.length > 0" class="lead subtitle">{{ task?.specification_files[task.specification_files.length - 1]?.responsible?.name + ' | ' + (task.specification_files[task.specification_files.length - 1].updated_at | date: 'dd/MM/yyyy HH:mm') }}</span>
+          <span *ngIf="task?.specification_files?.length > 0"
+            class="lead subtitle">{{ task?.specification_files[task.specification_files.length - 1]?.responsible?.name + ' | ' + (task.specification_files[task.specification_files.length - 1].updated_at | date: 'dd/MM/yyyy HH:mm') }}</span>
         </p>
       </mat-panel-title>
     </mat-expansion-panel-header>
     <div class="row container-files">
-      <cb-file-upload class="col-md-8" [class.col-md-12]="task?.specification_files?.length == 0"
+      <cb-file-upload class="col-md-6" [class.col-md-12]="task?.specification_files?.length == 0"
         [properties]="{ task : task }" [files]="task.specification_files"
-        [fileServiceInterface]="specificationFileService" [typeForm]="typeForm"
-        (uploadEmitter)="uploadDone(task)"
+        [fileServiceInterface]="specificationFileService" [typeForm]="typeForm" (uploadEmitter)="uploadDone(task)"
         [readOnly]="task.budget != null"
-        [readOnlyMessage]="'Após orçamento preenchido, não é possível alterar os arquivos'"
-        [max]="1">
+        [readOnlyMessage]="'Após orçamento preenchido, não é possível alterar os arquivos'" [max]="1">
       </cb-file-upload>
-      <div *ngIf="task?.specification_files?.length > 0"  class="col-md-4 text-right">
-        <button mat-button class="cb-button button-navigate"
-          type="button" (click)="navigateToBudget(task)">
+      <div *ngIf="task?.specification_files?.length > 0" class="col-md-6 text-right">
+        <cb-job-activity-buttons></cb-job-activity-buttons>
+        <button mat-button class="cb-button button-navigate" type="button" (click)="navigateToBudget(task)">
           IR PARA AGENDA DO ORÇAMENTO
         </button>
       </div>
     </div>
-    <cb-budget-form class="inside-mat-card" *ngIf="task?.specification_files?.length > 0" [task]="task" [job]="job"></cb-budget-form>
+    <cb-budget-form class="inside-mat-card" *ngIf="task?.specification_files?.length > 0" [task]="task" [job]="job">
+    </cb-budget-form>
   </mat-expansion-panel>
 </mat-accordion>
-

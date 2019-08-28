@@ -20,6 +20,7 @@
     </button>
     <div class="row">
       <div class="col-md-12 text-right">
+        <cb-job-activity-buttons></cb-job-activity-buttons>
         <button *ngIf="showButtonSpecification(task) && isAttendance != null"
           mat-button matTooltip="Ir para próxima etapa" class="cb-button button-navigate"
           type="button" (click)="navigateTo(getRoute(task))">

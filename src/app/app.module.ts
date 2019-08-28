@@ -196,6 +196,7 @@ import { DataFieldComponent } from './shared/list-data/data-field/data-field.com
 import { UpdatedInfoComponent } from './shared/list-data/updated-info/updated-info.component';
 import { ScheduleDateComponent } from './schedule/schedule-date/schedule-date.component';
 import { AddHeaderInterceptor } from './shared/add-header-interceptor.config';
+import { JobActivityButtonsComponent } from './job-activities/job-activity-buttons/job-activity-buttons.component';
 
 registerLocaleData(localePt);
 
@@ -305,6 +306,7 @@ registerLocaleData(localePt);
     DataFieldComponent,
     UpdatedInfoComponent,
     ScheduleDateComponent,
+    JobActivityButtonsComponent,
   ],
   imports: [
     CurrencyMaskModule,
