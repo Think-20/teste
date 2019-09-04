@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, QueryList, NgZone, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, NgZone, ElementRef, Inject } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
@@ -35,6 +35,9 @@ import { Department } from '../department/department.model';
 import { BlockDialogComponent } from './schedule-block/block-dialog/block-dialog.component';
 import { Task } from './task.model';
 import { JobService } from 'app/jobs/job.service';
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
+import { Point, DragRef } from '@angular/cdk/drag-drop/typings/drag-ref';
+import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA, MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'cb-schedule',
@@ -114,7 +117,8 @@ export class ScheduleComponent implements OnInit {
     private dialog: MatDialog,
     private router: Router,
     private datePipe: DatePipe,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private bottomSheet: MatBottomSheet,
   ) { }
 
   changeMonthByLine(data: any) {
@@ -220,13 +224,13 @@ export class ScheduleComponent implements OnInit {
   }
 
   jobDisplay(item: TaskItem, chrono: Chrono) {
-    if(item.task.job.id == null) {
+    if (item.task.job.id == null) {
       return ''
     }
 
     let activity = this.taskService.jobDisplay(item.task)
 
-    if(item.id != item.task.items[0].id) {
+    if (item.id != item.task.items[0].id) {
       return 'Continuação de ' + activity.toLowerCase()
     }
 
@@ -234,7 +238,7 @@ export class ScheduleComponent implements OnInit {
   }
 
   getQueryParams(task: Task) {
-    switch(task.job_activity.description) {
+    switch (task.job_activity.description) {
       case 'Projeto': return { taskId: task.id, tab: 'project' }
       case 'Memorial descritivo': return { taskId: task.id, tab: 'specification' }
       default: return ''
@@ -280,27 +284,27 @@ export class ScheduleComponent implements OnInit {
     }
 
     this.searchForm.valueChanges
-    .pipe(distinctUntilChanged(), debounceTime(500))
-    .subscribe((searchValue) => {
-      this.params = this.getParams(searchValue)
-      this.taskService.searchValue = searchValue
-      this.updateFilterActive()
-      this.checkParamsHasFilter()
-      this.changeMonth()
-    })
+      .pipe(distinctUntilChanged(), debounceTime(500))
+      .subscribe((searchValue) => {
+        this.params = this.getParams(searchValue)
+        this.taskService.searchValue = searchValue
+        this.updateFilterActive()
+        this.checkParamsHasFilter()
+        this.changeMonth()
+      })
 
     this.searchForm.controls.client.valueChanges
-    .pipe(distinctUntilChanged(), debounceTime(500))
-    .subscribe(clientName => {
-      this.clientService.clients({ search: clientName, attendance: this.paramAttendance }).subscribe((dataInfo) => {
-        this.clients = dataInfo.pagination.data
+      .pipe(distinctUntilChanged(), debounceTime(500))
+      .subscribe(clientName => {
+        this.clientService.clients({ search: clientName, attendance: this.paramAttendance }).subscribe((dataInfo) => {
+          this.clients = dataInfo.pagination.data
+        })
       })
-    })
   }
 
   getParams(searchValue) {
     let clientName = searchValue.client != '' ? searchValue.client : searchValue.search
-    return  {
+    return {
       clientName: clientName,
       status_array: searchValue.status_array,
       attendance_array: searchValue.attendance_array,
@@ -362,7 +366,7 @@ export class ScheduleComponent implements OnInit {
 
     this.scheduleBlockService.valid().subscribe((scheduleBlocks) => { this.dateBlocks = scheduleBlocks })
 
-    if(this.authService.hasAccess('employees/filter'))
+    if (this.authService.hasAccess('employees/filter'))
       this.employeeService.employees().subscribe(dataInfo => {
         let list = ['Planejamento', 'Atendimento', 'Criação', 'Orçamento']
         let employees: Employee[] = dataInfo.pagination.data
@@ -592,7 +596,8 @@ export class ScheduleComponent implements OnInit {
         item.task = new Task
         item.task.job = new Job
         item.task.items = []
-        item.task.items.push(item)
+        //Circular reference aqui
+        //item.task.items.push(item)
         filteredTasks.push(item)
       }
 
@@ -612,7 +617,7 @@ export class ScheduleComponent implements OnInit {
       date.setDate(date.getDate() + 1)
     }
 
-    if(insertInBegin) {
+    if (insertInBegin) {
       this.chrono = dates.concat(this.chrono)
     } else {
       this.chrono = this.chrono.concat(dates)
@@ -623,7 +628,7 @@ export class ScheduleComponent implements OnInit {
     let query: string = ''
     let element: HTMLElement
 
-    if( !this.scrollToDateFlag ) return;
+    if (!this.scrollToDateFlag) return;
 
     query = this.scrollToElement != '' ? this.scrollToElement : '.day-' + this.date.getDate()
     element = document.querySelector(query);
@@ -638,12 +643,12 @@ export class ScheduleComponent implements OnInit {
   }
 
   scrolling($event) {
-    if( this.searching ) return;
+    if (this.searching) return;
 
     let scrollTop = $event.target.scrollTop
-    if((scrollTop + $event.target.offsetHeight) >= $event.target.scrollHeight) {
+    if ((scrollTop + $event.target.offsetHeight) >= $event.target.scrollHeight) {
       this.loadItemsAfter()
-    } else if(scrollTop == 0) {
+    } else if (scrollTop == 0) {
       this.loadItemsBefore()
     }
   }
@@ -738,7 +743,7 @@ export class ScheduleComponent implements OnInit {
     job.status = wantedStatus
 
     this.jobService.edit(job).subscribe((data) => {
-      if(data.status) {
+      if (data.status) {
         this.snackBar.open('Sinalização modificada com sucesso!', '', {
           duration: 3000
         })
@@ -756,7 +761,7 @@ export class ScheduleComponent implements OnInit {
       })
 
       if (data.status) {
-        this.changeMonthByLine({month: this.month, lastDate: lastDate})
+        this.changeMonthByLine({ month: this.month, lastDate: lastDate })
       }
     })
   }
@@ -769,9 +774,29 @@ export class ScheduleComponent implements OnInit {
       })
 
       if (data.status) {
-        this.changeMonthByLine({month: this.month, lastDate: lastDate})
+        this.changeMonthByLine({ month: this.month, lastDate: lastDate })
       }
     })
+  }
+
+  drop(event: CdkDragDrop<string[]>) {
+    let chrono = (event.container.data as unknown) as Chrono;
+    let from = (event.item.data as unknown) as TaskItem;
+    let to = chrono.items[event.currentIndex] as TaskItem;
+
+    if (to.date == from.date)
+      return;
+
+    this.bottomSheet.open(ScheduleBottomSheet, {
+      data: {from: from, to: to}
+    }).afterDismissed().subscribe(data => {
+      if(data.status)
+        this.changeMonthByLine({ month: this.month, lastDate: new Date(to.date + "T00:00:00") })
+    });
+  }
+
+  constrainPosition(point: Point, dragRef: DragRef) {
+    return point;
   }
 
   compareJobActivity(var1: JobActivity, var2: JobActivity) {
@@ -801,5 +826,63 @@ export class ScheduleComponent implements OnInit {
   template: ''
 })
 export class ReloadComponent { }
+
+@Component({
+  selector: 'cb-schedule-bottom-sheet',
+  template: `
+    <mat-nav-list>
+      <a href="#" mat-list-item (click)="onlyItem()">
+        <span mat-line>Apenas esse item</span>
+        <span mat-line>Realiza a apenas a troca das datas dos itens selecionados (mesmo responsável)</span>
+      </a>
+      <a href="#" mat-list-item (click)="completeTask()">
+        <span mat-line>Tarefa completa</span>
+        <span mat-line>Troca a data de início das tarefas,
+          realocando os itens conforme haja disponibilidade (não mantém necessariamente o mesmo
+            responsável)</span>
+      </a>
+    </mat-nav-list>
+  `
+})
+export class ScheduleBottomSheet {
+  taskItem1: TaskItem;
+  taskItem2: TaskItem;
+
+  constructor(
+    private _bottomSheetRef: MatBottomSheetRef<ScheduleBottomSheet>,
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
+    private taskService: TaskService,
+    private snackbar: MatSnackBar,
+  ) {
+    this.taskItem1 = this.data.from;
+    this.taskItem2 = this.data.to;
+  }
+
+  onlyItem(): void {
+    event.preventDefault();
+
+    this.taskService.editAvailableDate({
+      taskItem1: this.taskItem1,
+      taskItem2: this.taskItem2,
+      onlyItem: true
+    }).subscribe(data => {
+      this.snackbar.open(data.message, '', { duration: 4000 })
+      this._bottomSheetRef.dismiss(data)
+    });
+  }
+
+  completeTask(): void {
+    event.preventDefault();
+
+    this.taskService.editAvailableDate({
+      taskItem1: this.taskItem1,
+      taskItem2: this.taskItem2,
+      onlyItem: false
+    }).subscribe(data => {
+      this.snackbar.open(data.message, '', { duration: 4000 })
+      this._bottomSheetRef.dismiss(data)
+    });
+  }
+}
 
 

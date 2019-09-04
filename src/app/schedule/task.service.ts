@@ -201,7 +201,7 @@ export class TaskService {
           })
   }
 
-  editAvailableDate(task1: Task, task2: Task): Observable<any> {
+  editAvailableDate(params: {}): Observable<any> {
       let url = 'task/edit-available-date'
       let prefix = this.auth.hasAccess('task/edit-available-date') ? '' : 'my-'
 
@@ -209,7 +209,7 @@ export class TaskService {
 
       return this.http.put(
               `${API}/${url}`,
-              JSON.stringify({task1: task1, task2: task2}),
+              JSON.stringify(params),
               new RequestOptions()
           )
           .map(response => response.json())

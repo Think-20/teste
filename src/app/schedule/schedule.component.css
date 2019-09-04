@@ -187,6 +187,7 @@
 .line-job {
   display: flex;
   border-bottom: 1px solid #ccc;
+  background-color: white;
 }
 
 .line-job:last-child {
