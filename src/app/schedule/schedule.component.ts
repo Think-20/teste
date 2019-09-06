@@ -790,7 +790,7 @@ export class ScheduleComponent implements OnInit {
     this.bottomSheet.open(ScheduleBottomSheet, {
       data: {from: from, to: to}
     }).afterDismissed().subscribe(data => {
-      if(data.status)
+      if(data != undefined && data.status)
         this.changeMonthByLine({ month: this.month, lastDate: new Date(to.date + "T00:00:00") })
     });
   }
@@ -831,6 +831,7 @@ export class ReloadComponent { }
   selector: 'cb-schedule-bottom-sheet',
   template: `
     <mat-nav-list>
+      <p class="col-md-12 lead title">Deseja trocar {{ description1 }} para {{ description2 }}?</p>
       <a href="#" mat-list-item (click)="onlyItem()">
         <span mat-line>Apenas esse item</span>
         <span mat-line>Realiza a apenas a troca das datas dos itens selecionados (mesmo responsável)</span>
@@ -842,20 +843,39 @@ export class ReloadComponent { }
             responsável)</span>
       </a>
     </mat-nav-list>
-  `
+  `,
+  styles: ['.title { font-weight: 500; font-size: 100%; }']
 })
 export class ScheduleBottomSheet {
   taskItem1: TaskItem;
   taskItem2: TaskItem;
+  description1: string;
+  description2: string;
 
   constructor(
     private _bottomSheetRef: MatBottomSheetRef<ScheduleBottomSheet>,
     @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
     private taskService: TaskService,
+    private datePipe: DatePipe,
     private snackbar: MatSnackBar,
-  ) {
+  ) { }
+
+  ngOnInit() {
     this.taskItem1 = this.data.from;
     this.taskItem2 = this.data.to;
+    this.description1 = this.getDescription(this.taskItem1)
+    this.description2 = this.getDescription(this.taskItem2)
+  }
+
+  getDescription(ti: TaskItem) {
+    return ti.id == null 
+      ? '[' + this.datePipe.transform(ti.date, 'dd/MM/yy') + ']'
+      : '[' + this.datePipe.transform(ti.date, 'dd/MM/yy') + ']'
+        + ' ' + ti.task.responsible.name
+        + ' ' + this.taskService.jobDisplay(ti.task).toLowerCase()
+        + ' ' + ti.task.job.job_type.description.toLowerCase()
+        + ' ' + (ti.task.job.client_id == null ? ti.task.job.not_client : ti.task.job.client.fantasy_name)
+        + ' | ' + ti.task.job.event     
   }
 
   onlyItem(): void {

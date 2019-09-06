@@ -273,3 +273,7 @@
 .line-job:last-child {
   border-bottom: 0;
 }
+
+.cdk-drag-placeholder	{
+  border: 3px solid #848C8E !important;
+}
