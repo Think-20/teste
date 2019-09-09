@@ -45,6 +45,12 @@
 
 .actualMonth, .actualYear {
   cursor: pointer;
+  display: inline-flex;
+}
+
+.actualYear {
+  margin-left: 10px;
+  margin-right: 10px;
 }
 
 .mat-column-job {
