@@ -35,7 +35,6 @@ export class ScheduleFormComponent implements OnInit {
   items: ScheduleDate[]
   itemsByResponsible: ScheduleDate[] = []
   typeForm: string = 'new'
-  hasPreviousActivity: boolean = false
   filter: boolean = false
   scheduleForm: FormGroup
   searchForm: FormGroup
@@ -44,7 +43,7 @@ export class ScheduleFormComponent implements OnInit {
   jobs: Job[]
   dateSetManually: boolean = false
   params: () => {} = () => { return {} }
-  callback: (jobs: Job[]) => void = (jobs) => {}
+  callback: (jobs: Job[]) => void = (jobs) => { }
   isAdmin: boolean = false
   adminMode: boolean
   minDate: Date
@@ -90,7 +89,7 @@ export class ScheduleFormComponent implements OnInit {
     this.subscribeChangesOnAdminMode()
 
     this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
-    ? this.authService.currentUser().employee : null
+      ? this.authService.currentUser().employee : null
 
     if (this.typeForm == 'edit') {
       this.loadTask()
@@ -100,19 +99,23 @@ export class ScheduleFormComponent implements OnInit {
   subscribeChangesOnAdminMode() {
     this.subscriptions.add(
       this.scheduleForm.controls.admin.valueChanges.subscribe((value) => {
-        if(value == true) this.createValidations()
-        if(value == false) this.destroyValidations()
+        if (value == true) this.createValidations()
+        if (value == false) this.destroyValidations()
+
+        this.adminMode = value
       })
     );
   }
 
   createValidations() {
     this.addValidationBudget()
+    this.subscribeChangesOnAdminMode()
     this.subscribeChangesOnActivity()
   }
 
   destroyValidations() {
     this.subscriptions.unsubscribe()
+    this.subscriptions = new Subscription;
     this.subscribeChangesOnAdminMode()
   }
 
@@ -128,7 +131,7 @@ export class ScheduleFormComponent implements OnInit {
         let durationControl = this.scheduleForm.controls.duration
         durationControl.clearValidators()
 
-        if(jobActivity.min_duration == 0 
+        if (jobActivity.min_duration == 0
           && jobActivity.max_duration == 0
           && jobActivity.fixed_duration == 0) return;
 
@@ -136,10 +139,10 @@ export class ScheduleFormComponent implements OnInit {
         this.durationErrorMessage += ' de ' + jobActivity.min_duration + ' a ' + jobActivity.max_duration
         this.durationErrorMessage += ' dia(s)'
 
-        if(jobActivity.min_duration != 0 || jobActivity.max_duration != 0) {
+        if (jobActivity.min_duration != 0 || jobActivity.max_duration != 0) {
           durationControl.setValidators([
             Validators.min(jobActivity.min_duration),
-            Validators.max(jobActivity.max_duration)            
+            Validators.max(jobActivity.max_duration)
           ])
 
           this.durationErrorMessage = 'Duração válida para a atividade selecionada:'
@@ -147,10 +150,10 @@ export class ScheduleFormComponent implements OnInit {
           this.durationErrorMessage += ' dia(s)'
         }
 
-        if(jobActivity.fixed_duration != 0) {
+        if (jobActivity.fixed_duration != 0) {
           durationControl.setValidators([
             Validators.min(jobActivity.fixed_duration),
-            Validators.max(jobActivity.fixed_duration)            
+            Validators.max(jobActivity.fixed_duration)
           ])
 
           this.durationErrorMessage = 'Duração válida para a atividade selecionada:'
@@ -219,33 +222,33 @@ export class ScheduleFormComponent implements OnInit {
     })
 
     this.searchForm = this.formBuilder.group({
-      attendance: this.formBuilder.control({value: '', disabled: !this.isAdmin}),
+      attendance: this.formBuilder.control({ value: '', disabled: !this.isAdmin }),
       creation: this.formBuilder.control(''),
       job_type: this.formBuilder.control(''),
       client: this.formBuilder.control(''),
       status: this.formBuilder.control('')
     })
 
-    if(this.paramAttendance != null) {
+    if (this.paramAttendance != null) {
       this.searchForm.controls.attendance.setValue(this.paramAttendance)
       this.searchForm.controls.attendance.disable()
     }
   }
 
   toggleDate(item: ScheduleDate) {
-    if(item.status == 'false' && !this.adminMode) return;
+    if (item.status == 'false' && !this.adminMode) return;
 
     let i = -1
 
     this.selectedItems.forEach((selectedItem, index) => {
-      if(selectedItem.date == item.date) i = index
+      if (selectedItem.date == item.date) i = index
     })
 
-    if(i != -1) {
+    if (i != -1) {
       this.selectedItems[i].selected = false
       this.selectedItems.splice(i, 1)
     } else {
-      if( !this.checkValidDuration() || this.adminMode ) {
+      if (!this.checkValidDuration() || this.adminMode) {
         this.selectedItems.push(item)
         this.selectedItems[(this.selectedItems.length - 1)].selected = true
       }
@@ -260,7 +263,7 @@ export class ScheduleFormComponent implements OnInit {
     let snackbar = this.snackBar.open('Carregando jobs...')
     this.jobService.jobs(params).subscribe(dataInfo => {
       snackbar.dismiss()
-      let jobs = <Job[]> dataInfo.pagination.data
+      let jobs = <Job[]>dataInfo.pagination.data
       this.callback(jobs)
     })
   }
@@ -336,7 +339,7 @@ export class ScheduleFormComponent implements OnInit {
     let availableDate = this.scheduleForm.controls.available_date.value
     let jobActivity = this.scheduleForm.controls.job_activity.value
 
-    if( isObject(jobActivity) && jobActivity.no_params == 1 ) {
+    if (isObject(jobActivity) && jobActivity.no_params == 1) {
       let snackbar = this.snackBar.open('Carregando responsáveis...')
       this.taskService.responsiblesByActivity(jobActivity.id).subscribe((responsibles) => {
         this.responsibles = responsibles
@@ -345,7 +348,7 @@ export class ScheduleFormComponent implements OnInit {
       return
     }
 
-    if( !isObject(jobActivity) || availableDate == '' ) {
+    if (!isObject(jobActivity) || availableDate == '') {
       this.snackBar.open('Escolha o tipo de atividade e uma data inicial para carregar as datas', '', { duration: 3000 })
       return
     }
@@ -367,7 +370,7 @@ export class ScheduleFormComponent implements OnInit {
     this.itemsByResponsible = []
     this.selectedItems = []
 
-    let responsible = <Employee> this.scheduleForm.controls.responsible.value
+    let responsible = <Employee>this.scheduleForm.controls.responsible.value
     this.itemsByResponsible = this.items.filter((item) => {
       return responsible.id == item.responsible_id
     })
@@ -391,7 +394,7 @@ export class ScheduleFormComponent implements OnInit {
     }
 
     let task = this.scheduleForm.getRawValue() as Task
-    let jobActivity = <JobActivity> this.scheduleForm.controls.job_activity.value
+    let jobActivity = <JobActivity>this.scheduleForm.controls.job_activity.value
     let url = jobActivity.redirect_after_save != null ? jobActivity.redirect_after_save : '/jobs/new'
 
     this.jobService.data = new Job
@@ -421,10 +424,37 @@ export class ScheduleFormComponent implements OnInit {
       taskItem.duration = selectedItem.duration
       taskItem.budget_value = selectedItem.budget_value
       return taskItem;
-    })
+    }).sort((a, b) => {
+      return a.date > b.date ? 1 : -1;
+    });
   }
 
 
-  edit() {}
+  edit() {
+    if (ErrorHandler.formIsInvalid(this.scheduleForm)) {
+      this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
+        duration: 5000
+      })
+      return;
+    }
+
+    let task = this.scheduleForm.getRawValue() as Task
+    let url = '/jobs/edit'
+
+    this.jobService.data = new Job
+    this.jobService.data.task = task
+    this.jobService.data.task.items = this.transformInTaskItems()
+    this.jobService.data.budget_value = this.scheduleForm.controls.budget_value.value
+    this.jobService.data.deadline = this.scheduleForm.controls.deadline.value
+    this.jobService.data.job_activity = task.job_activity
+
+    this.taskService.edit(task).subscribe((data) => {
+      this.snackBar.open(data.message, '', {
+        duration: 5000
+      }).afterDismissed().subscribe(() => {
+        this.router.navigateByUrl('/schedule?date=' + task.items[0].date)
+      })
+    })
+  }
 
 }
