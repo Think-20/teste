@@ -276,4 +276,13 @@
 
 .cdk-drag-placeholder	{
   border: 3px solid #848C8E !important;
+  opacity: 0;
+}
+
+.cdk-drag-preview {
+  opacity: 0;
+}
+
+.cdk-drag-dragging {
+  opacity: 0;
 }

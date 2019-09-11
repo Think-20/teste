@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChildren, QueryList, NgZone, ElementRef, Inject } from '@angular/core';
+import { Component, OnInit, ViewChildren, QueryList, NgZone, ElementRef, Inject, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
@@ -14,7 +14,7 @@ import { TaskService } from './task.service';
 import { TaskItem } from './task-item.model';
 import { Chrono } from './chrono.model';
 
-import { Observable, timer, Subscription } from 'rxjs';
+import { Observable, timer, Subscription, Subject } from 'rxjs';
 import 'rxjs/add/operator/filter';
 import { JobStatusService } from '../job-status/job-status.service';
 import { JobStatus } from '../job-status/job-status.model';
@@ -62,6 +62,10 @@ import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA, MatBottomSheet } from '@angul
 export class ScheduleComponent implements OnInit {
 
   @ViewChildren('list') list: QueryList<any>
+  @ViewChild('rowScroll', { static: true }) rowScroll: ElementRef
+  scrollSubject = new Subject<number>();
+  timerScrollSubscription: Subscription = new Subscription();
+  dataFrom: TaskItem = null
   searchForm: FormGroup
   formCopy: any
   search: FormControl
@@ -256,10 +260,30 @@ export class ScheduleComponent implements OnInit {
     this.createTimerUpdater()
     this.loadFilterData()
     this.loadInitialData()
+    this.createScrollUpdater()
   }
 
   ngAfterViewInit() {
     this.list.changes.subscribe(() => this.scrollToDate())
+  }
+
+  createScrollUpdater() {
+    this.subscription = this.scrollSubject
+      .pipe(distinctUntilChanged())
+      .subscribe((inc) => {
+        if (!this.timerScrollSubscription.closed) {
+          this.timerScrollSubscription.unsubscribe();
+        }
+
+        if (inc == 0) return;
+
+        this.timerScrollSubscription = timer(0, 10).subscribe(() => {
+          this.rowScroll.nativeElement.scrollTop = this.rowScroll.nativeElement.scrollTop + (inc * 5);
+        });
+      });
+
+    this.subscriptions.push(this.subscription);
+    this.subscriptions.push(this.timerScrollSubscription);
   }
 
   createForm() {
@@ -534,6 +558,8 @@ export class ScheduleComponent implements OnInit {
   }
 
   changeMonth() {
+    if(this.searching) return;
+
     this.searching = true
     let snackBar = this.snackBar.open('Carregando tarefas...')
 
@@ -560,13 +586,13 @@ export class ScheduleComponent implements OnInit {
       paginate: false,
       ...this.params
     }).subscribe(dataInfo => {
-      this.searching = false
       this.items = dataInfo.pagination.data
       this.dataInfo = dataInfo
       this.setUpdatedMessage()
       this.mountDates(this.iniDate, this.finDate)
 
       this.scrollToDateFlag = true
+      this.searching = false
       snackBar.dismiss()
     })
   }
@@ -779,24 +805,48 @@ export class ScheduleComponent implements OnInit {
     })
   }
 
-  drop(event: CdkDragDrop<string[]>) {
-    let chrono = (event.container.data as unknown) as Chrono;
-    let from = (event.item.data as unknown) as TaskItem;
-    let to = chrono.items[event.currentIndex] as TaskItem;
+  mouseUp(itemSelected: TaskItem) {
+    if (this.dataFrom == null)
+      return;
+
+    let from = this.dataFrom as TaskItem;
+    let to = itemSelected as TaskItem;
 
     if (to.date == from.date)
       return;
 
     this.bottomSheet.open(ScheduleBottomSheet, {
-      data: {from: from, to: to}
+      data: { from: from, to: to }
     }).afterDismissed().subscribe(data => {
-      if(data != undefined && data.status)
+      if (data != undefined && data.status)
         this.changeMonthByLine({ month: this.month, lastDate: new Date(to.date + "T00:00:00") })
     });
+
+    this.dataFrom = null;
   }
 
-  constrainPosition(point: Point, dragRef: DragRef) {
-    return point;
+  dragMoved($event) {
+    const mouseY: number = $event.pointerPosition.y;
+    const rowScrollTop: number = this.rowScroll.nativeElement.getBoundingClientRect().top + 50;
+    const rowScrollBottom: number = this.rowScroll.nativeElement.getBoundingClientRect().bottom - 50;
+
+    if (mouseY < rowScrollTop) {
+      this.scrollSubject.next(-1);
+    } else if (mouseY > rowScrollBottom) {
+      this.scrollSubject.next(1);
+    } else {
+      this.scrollSubject.next(0);
+    }
+  }
+
+  dragEnded($event) {
+    this.dataFrom = $event.source.data;
+    this.scrollSubject.next(0);
+
+    /* Resetar posição do elemento */
+    $event.source.element.nativeElement.style.transform = 'none';
+    const source: any = $event.source;
+    source._passiveTransform = { x: 0, y: 0 };
   }
 
   compareJobActivity(var1: JobActivity, var2: JobActivity) {
@@ -868,14 +918,14 @@ export class ScheduleBottomSheet {
   }
 
   getDescription(ti: TaskItem) {
-    return ti.id == null 
+    return ti.id == null
       ? '[' + this.datePipe.transform(ti.date, 'dd/MM/yy') + ']'
       : '[' + this.datePipe.transform(ti.date, 'dd/MM/yy') + ']'
-        + ' ' + ti.task.responsible.name
-        + ' ' + this.taskService.jobDisplay(ti.task).toLowerCase()
-        + ' ' + ti.task.job.job_type.description.toLowerCase()
-        + ' ' + (ti.task.job.client_id == null ? ti.task.job.not_client : ti.task.job.client.fantasy_name)
-        + ' | ' + ti.task.job.event     
+      + ' ' + ti.task.responsible.name
+      + ' ' + this.taskService.jobDisplay(ti.task).toLowerCase()
+      + ' ' + ti.task.job.job_type.description.toLowerCase()
+      + ' ' + (ti.task.job.client_id == null ? ti.task.job.not_client : ti.task.job.client.fantasy_name)
+      + ' | ' + ti.task.job.event
   }
 
   onlyItem(): void {

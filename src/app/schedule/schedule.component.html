@@ -181,7 +181,7 @@
           <div class="mat-header-cell mat-column-attendance">Atend.</div>
           <div class="mat-header-cell mat-column-stat">Status</div>
         </div>
-        <div cdkDropListGroup class="mat-row-scroll" (scroll)="scrolling($event)">
+        <div #rowScroll class="mat-row-scroll" (scroll)="scrolling($event)">
           <div #list class="mat-row" *ngFor="let chr of chrono; let i = index" [@rowAppeared]="rowAppearedState">
             <h4 *ngIf="chrono[i - 1]?.month != chrono[i]?.month" class="month-line">
               {{ months[chrono[i]?.month - 1].name }}
@@ -201,10 +201,11 @@
                   </button>
                 </div>
               </div>
-              <div cdkDropList (cdkDropListDropped)="drop($event)" [cdkDropListData]="chr" class="line-jobs">
+              <div class="line-jobs">
                 <cb-schedule-line *ngFor="let item of chrono[i].items"
                   class="line-job" [menu]="menu" [cdkDragData]="item"
-                  cdkDrag cdkDragLockAxis="y" [cdkDragConstrainPosition]="constrainPosition"
+                  cdkDrag cdkDragLockAxis="y" (cdkDragMoved)="dragMoved($event)"
+                  (cdkDragEnded)="dragEnded($event)" (mouseup)="mouseUp(item)"
                   [chrono]="chrono[i]" [item]="item" [today]="today" [jobStatus]="jobStatus"
                   [month]="month" [paramsHasFilter]="paramsHasFilter" [date]="date"
                   (changeMonthEmitter)="changeMonthByLine($event)">
