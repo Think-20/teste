@@ -1,6 +1,6 @@
-<button *ngIf="jobActivity?.modification_id" mat-button class="cb-button button-navigate">
+<button (click)="insertModification()" *ngIf="jobActivity?.modification_id" mat-button class="cb-button button-navigate">
     NOVA MODIFICAÇÃO
 </button>
-<button *ngIf="jobActivity?.option_id" mat-button class="cb-button button-navigate">
+<button (click)="insertOption()" *ngIf="jobActivity?.option_id" mat-button class="cb-button button-navigate">
     NOVA OPÇÃO
 </button>

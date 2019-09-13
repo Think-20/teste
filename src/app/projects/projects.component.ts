@@ -116,11 +116,8 @@ export class ProjectsComponent implements OnInit {
       });
       adds = adds.concat(temp)
     }));
-    this.sortedTasks = this.sortedTasks.concat(adds);
+    this.sortedTasks = this.sortedTasks.concat(adds).reverse();
 
-    this.sortedTasks = this.sortedTasks.sort((a, b) => {
-      return a.items[0].date < b.items[0].date ? 1 : -1
-    })
     this.sortedTasks.forEach((task, index) => {
       if(task.project_files.length > 0 && this.expandedIndex == null) {
         this.expandedIndex = index

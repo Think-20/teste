@@ -55,10 +55,7 @@ export class ProposalsComponent implements OnInit {
   sortTasks() {
     this.sortedTasks = this.job.tasks.filter((task) => {
       return ['Memorial descritivo'].indexOf(task.job_activity.description) == 0
-    })
-    this.sortedTasks = this.sortedTasks.sort((a, b) => {
-      return a.items[0].date < b.items[0].date ? 1 : -1
-    })
+    }).reverse()
     this.sortedTasks.forEach((task, index) => {
       if(task.project_files.length > 0 && this.expandedIndex == null) {
         this.expandedIndex = index

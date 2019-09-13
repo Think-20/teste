@@ -181,6 +181,23 @@ export class TaskService {
           })
   }
 
+  insertDerived(params = {}): Observable<any> {
+      let url = 'task/insert-derived'
+
+      return this.http.post(
+              `${API}/${url}`,
+              JSON.stringify(params),
+              new RequestOptions()
+          )
+          .map(response => response.json())
+          .catch((err) => {
+              this.snackBar.open(ErrorHandler.message(err), '', {
+                  duration: 3000
+              })
+              return ErrorHandler.capture(err)
+          })
+  }
+
   edit(task: Task): Observable<any> {
       let url = 'task/edit'
       let prefix = this.auth.hasAccess('task/edit') ? '' : 'my-'
