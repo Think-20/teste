@@ -8,7 +8,6 @@ import { SpecificationFile } from "app/specification/specification-file.model";
 
 export class Task {
   id: number
-  available_date: string
   responsible_id: number
   responsible?: Employee
   duration: number

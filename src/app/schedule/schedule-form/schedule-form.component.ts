@@ -202,7 +202,7 @@ export class ScheduleFormComponent implements OnInit {
       this.scheduleForm.controls.budget_value.setValue(task.job.budget_value)
       this.scheduleForm.controls.budget_value.disable()
       this.scheduleForm.controls.duration.setValue(task.duration)
-      this.scheduleForm.controls.available_date.setValue(new Date(task.available_date + "T00:00:00"))
+      this.scheduleForm.controls.available_date.setValue(new Date(task.items[0].date + "T00:00:00"))
       this.scheduleForm.controls.deadline.setValue(new Date(task.job.deadline + "T00:00:00"))
       this.scheduleForm.controls.deadline.disable()
     })

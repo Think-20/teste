@@ -71,7 +71,7 @@ export class ProjectsComponent implements OnInit {
 
   getRoute(task: Task) {
     return this.isAttendance ? `/jobs/edit/${this.job.id}?tab=specification`
-      : '/schedule?date=' + this.datePipe.transform(task.available_date, 'yyyy-MM-dd')
+      : '/schedule?date=' + this.datePipe.transform(task.items[0].date, 'yyyy-MM-dd')
   }
 
   navigateTo(url) {
@@ -119,7 +119,7 @@ export class ProjectsComponent implements OnInit {
     this.sortedTasks = this.sortedTasks.concat(adds);
 
     this.sortedTasks = this.sortedTasks.sort((a, b) => {
-      return a.available_date < b.available_date ? 1 : -1
+      return a.items[0].date < b.items[0].date ? 1 : -1
     })
     this.sortedTasks.forEach((task, index) => {
       if(task.project_files.length > 0 && this.expandedIndex == null) {

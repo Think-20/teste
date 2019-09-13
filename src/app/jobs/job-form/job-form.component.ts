@@ -598,7 +598,7 @@ export class JobFormComponent implements OnInit {
                 //this.router.navigateByUrl('/jobs/edit/' + this.job.id + '?tab=' + this.getNextTab())
                 this.router.navigate(['/schedule'], {
                   queryParams: {
-                    date: this.datePipe.transform(task.available_date, 'yyyy-MM-dd')
+                    date: this.datePipe.transform(task.items[0].date, 'yyyy-MM-dd')
                   }
                 })
               })
