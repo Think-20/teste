@@ -152,7 +152,7 @@ export class ScheduleLineComponent implements OnInit {
     return access
   }
 
-  getLineClass(chrono: Chrono, item: TaskItem, day: number, month: number, nextIndex: number) {
+  getLineClass(item: TaskItem) {
     let className = ''
 
     if(item.task.job.id == null) {
@@ -184,6 +184,7 @@ export class ScheduleLineComponent implements OnInit {
           className += ' hidden'
     }
 
+    /*
     if(isObject(chrono.items[nextIndex + 1])
     &&['Projeto', 'Orçamento'].indexOf(chrono.items[nextIndex + 1].task.job_activity.description) >= 0
       && [5,3].indexOf(chrono.items[nextIndex + 1].task.job.status_id) >= 0
@@ -191,6 +192,7 @@ export class ScheduleLineComponent implements OnInit {
     {
       className += ' no-border'
     }
+    */
 
     let originalTask = item.task
     let departmentId = item.task.responsible.department_id

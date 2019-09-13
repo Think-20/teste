@@ -1,9 +1,9 @@
 <div class="line-job"
 #menuTrigger="matMenuTrigger"
-(menuOpened)="openMenu(item, chrono)"
+(menuOpened)="openMenu(item)"
 [matMenuTriggerFor]="menu"
 [matMenuTriggerData]="{item: item, chrono: chrono}"
-[ngClass]="getLineClass(chrono, item, chrono.day, chrono.month)"
+[ngClass]="getLineClass(item)"
 (dblclick)="goToJob(item.task.job)">
   <div class="mat-cell mat-column-creation">
     {{ item.task?.responsible?.name }}
@@ -59,6 +59,6 @@
     {{ item.task.job?.attendance?.name }}
   </div>
   <div class="mat-cell mat-column-stat">
-    {{ canShowDetails(item, chrono) ? item.task.job?.status?.description : '' }}
+    {{ canShowDetails(item) ? item.task.job?.status?.description : '' }}
   </div>
 </div>
