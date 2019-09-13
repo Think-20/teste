@@ -1,6 +1,6 @@
-<button mat-button class="cb-button button-navigate">
+<button *ngIf="jobActivity?.modification_id" mat-button class="cb-button button-navigate">
     NOVA MODIFICAÇÃO
 </button>
-<button mat-button class="cb-button button-navigate">
+<button *ngIf="jobActivity?.option_id" mat-button class="cb-button button-navigate">
     NOVA OPÇÃO
 </button>

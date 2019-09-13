@@ -107,7 +107,17 @@ export class ProjectsComponent implements OnInit {
   sortTasks() {
     this.sortedTasks = this.job.tasks.filter((task) => {
       return task.job_activity.initial == 1
-    })
+    });
+    let adds = [];
+    this.sortedTasks.filter((parentTask => {
+      let temp = this.job.tasks.filter((task) => {
+        return parentTask.job_activity.modification_id == task.job_activity_id
+          || parentTask.job_activity.option_id == task.job_activity_id
+      });
+      adds = adds.concat(temp)
+    }));
+    this.sortedTasks = this.sortedTasks.concat(adds);
+
     this.sortedTasks = this.sortedTasks.sort((a, b) => {
       return a.available_date < b.available_date ? 1 : -1
     })
