@@ -126,7 +126,9 @@ export class ScheduleComponent implements OnInit {
   ) { }
 
   changeMonthByLine(data: any) {
-    this.month = data.month
+    this.month = MONTHS.filter((month) => {
+      return (data.lastDate.getMonth() + 1) == month.id
+    }).pop();
     this.date = data.lastDate
     this.changeMonth()
   }
