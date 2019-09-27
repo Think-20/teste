@@ -196,7 +196,6 @@ import { DataFieldComponent } from './shared/list-data/data-field/data-field.com
 import { UpdatedInfoComponent } from './shared/list-data/updated-info/updated-info.component';
 import { ScheduleDateComponent } from './schedule/schedule-date/schedule-date.component';
 import { AddHeaderInterceptor } from './shared/add-header-interceptor.config';
-import { JobActivityButtonsComponent } from './job-activities/job-activity-buttons/job-activity-buttons.component';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
@@ -311,7 +310,6 @@ registerLocaleData(localePt);
     DataFieldComponent,
     UpdatedInfoComponent,
     ScheduleDateComponent,
-    JobActivityButtonsComponent,
   ],
   imports: [
     CurrencyMaskModule,

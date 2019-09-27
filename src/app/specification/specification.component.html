@@ -18,7 +18,6 @@
         [readOnlyMessage]="'Após orçamento preenchido, não é possível alterar os arquivos'" [max]="1">
       </cb-file-upload>
       <div *ngIf="task?.specification_files?.length > 0" class="col-md-6 text-right">
-        <cb-job-activity-buttons [task]="task" [jobActivity]="task.job_activity"></cb-job-activity-buttons>
         <button mat-button class="cb-button button-navigate" type="button" (click)="navigateToBudget(task)">
           IR PARA AGENDA DO ORÇAMENTO
         </button>
