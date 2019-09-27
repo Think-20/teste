@@ -83,7 +83,7 @@
           [matTooltip]="item.message"
           [disabled]="(item.status == 'false' || checkValidDuration() || hasSelectedItem(item)) && !adminMode"
           [value]="item.date" aria-label="Selecionar data"
-          (click)="toggleDate(item)">
+          (click)="toggleDate(item, i)">
           <cb-schedule-date [item]="item"></cb-schedule-date>
         </mat-button-toggle>
       </mat-button-toggle-group>

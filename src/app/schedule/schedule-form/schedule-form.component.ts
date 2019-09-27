@@ -235,7 +235,7 @@ export class ScheduleFormComponent implements OnInit {
     }
   }
 
-  toggleDate(item: ScheduleDate) {
+  toggleDate(item: ScheduleDate, pos: number): boolean {
     if (item.status == 'false' && !this.adminMode) return;
 
     let i = -1
@@ -245,12 +245,29 @@ export class ScheduleFormComponent implements OnInit {
     })
 
     if (i != -1) {
-      this.selectedItems[i].selected = false
-      this.selectedItems.splice(i, 1)
+      if (this.adminMode) {
+        this.selectedItems[i].selected = false
+        this.selectedItems.splice(i, 1)
+      } else if (this.checkValidDuration()) {
+        /*
+        * Desagrupar todos os itens quando clicar
+        */
+        while (this.selectedItems.length > 0) {
+          this.selectedItems[0].selected = false
+          this.selectedItems.splice(0, 1)
+        }
+      }
     } else {
       if (!this.checkValidDuration() || this.adminMode) {
         this.selectedItems.push(item)
         this.selectedItems[(this.selectedItems.length - 1)].selected = true
+      }
+      /*
+       * Agrupar todos os itens quando clicar
+       */
+      while (this.checkValidDuration() === false) {
+        pos++;
+        this.toggleDate(this.itemsByResponsible[pos], pos);
       }
     }
   }
