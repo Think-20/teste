@@ -897,13 +897,13 @@ export class ReloadComponent { }
     <mat-nav-list>
       <p class="col-md-12 lead title">Deseja trocar {{ description1 }} para {{ description2 }}?</p>
       <a href="#" mat-list-item (click)="onlyItem()">
-        <span mat-line>Apenas esse item</span>
+        <span mat-line>Apenas essa data</span>
         <span mat-line>Realiza a apenas a troca das datas dos itens selecionados (mesmo responsável)</span>
       </a>
       <a href="#" mat-list-item (click)="completeTask()">
-        <span mat-line>Tarefa completa</span>
-        <span mat-line>Troca a data de início das tarefas,
-          realocando os itens conforme haja disponibilidade (não mantém necessariamente o mesmo
+        <span mat-line>Atividade completa</span>
+        <span mat-line>Troca a data de início das atividade,
+          realocando as datas conforme haja disponibilidade (não mantém necessariamente o mesmo
             responsável)</span>
       </a>
     </mat-nav-list>
