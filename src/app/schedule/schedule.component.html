@@ -188,7 +188,7 @@
             </h4>
             <div class="line-chrono" [class.hidden]="paramsHasFilter && chr.length == 0"
              [ngClass]="lineChronoClass(chr, employees)">
-              <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }} month-{{ chr.month }}">
+              <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }} month-{{ chr.month }} year-{{ chr.year }}">
                 <div>
                   <span>{{ chr.day }}-{{ chr.dayOfWeek?.abbrev }}</span>
                   <button *ngIf="isAdmin" class="cb-button add-chrono" (click)="addTask(chr.day)">

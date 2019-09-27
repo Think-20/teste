@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChildren, QueryList, NgZone, ElementRef, Inject, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, NgModel } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -35,8 +35,6 @@ import { Department } from '../department/department.model';
 import { BlockDialogComponent } from './schedule-block/block-dialog/block-dialog.component';
 import { Task } from './task.model';
 import { JobService } from 'app/jobs/job.service';
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
-import { Point, DragRef } from '@angular/cdk/drag-drop/typings/drag-ref';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA, MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
@@ -672,6 +670,20 @@ export class ScheduleComponent implements OnInit {
 
   scrolling($event) {
     if (this.searching) return;
+
+    let point = $event.target.getBoundingClientRect();
+    let elements = document.elementsFromPoint(point.x + 20, point.y + 20);
+    let className = elements[0].className;
+
+    if(className.indexOf('mat-cell') > -1) {
+      let month = className.substring(className.indexOf('month-') + 6, className.indexOf('month-') + 8).trim();
+      let year = className.substring(className.indexOf('year-') + 5, className.indexOf('year-') + 9).trim();
+
+      this.month = MONTHS.filter((m) => {
+        return parseInt(month) === m.id;
+      }).pop();
+      this.year = parseInt(year);
+    }
 
     let scrollTop = $event.target.scrollTop
     if ((scrollTop + $event.target.offsetHeight) >= $event.target.scrollHeight) {
