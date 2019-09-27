@@ -80,7 +80,7 @@ export class ScheduleFormComponent implements OnInit {
 
   ngOnInit() {
     this.typeForm = this.route.snapshot.url[1].path
-    this.isAdmin = this.authService.hasAccess('task/edit')
+    this.isAdmin = this.authService.hasDisplay('schedule/new?adminmode')
 
     this.adminMode = false
     this.createForm()

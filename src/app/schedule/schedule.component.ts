@@ -896,7 +896,7 @@ export class ReloadComponent { }
   template: `
     <mat-nav-list>
       <p class="col-md-12 lead title">Deseja trocar {{ description1 }} para {{ description2 }}?</p>
-      <a href="#" mat-list-item (click)="onlyItem()">
+      <a [class.disabled]="!isAdmin" href="#" mat-list-item (click)="onlyItem()">
         <span mat-line>Apenas essa data</span>
         <span mat-line>Realiza a apenas a troca das datas dos itens selecionados (mesmo responsável)</span>
       </a>
@@ -908,13 +908,14 @@ export class ReloadComponent { }
       </a>
     </mat-nav-list>
   `,
-  styles: ['.title { font-weight: 500; font-size: 100%; }']
+  styles: ['.title { font-weight: 500; font-size: 100%; } .disabled { opacity: 0.5; }']
 })
 export class ScheduleBottomSheet {
   taskItem1: TaskItem;
   taskItem2: TaskItem;
   description1: string;
   description2: string;
+  isAdmin: boolean = false
 
   constructor(
     private _bottomSheetRef: MatBottomSheetRef<ScheduleBottomSheet>,
@@ -922,9 +923,11 @@ export class ScheduleBottomSheet {
     private taskService: TaskService,
     private datePipe: DatePipe,
     private snackbar: MatSnackBar,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
+    this.isAdmin = this.authService.hasDisplay('schedule/new?adminmode')
     this.taskItem1 = this.data.from;
     this.taskItem2 = this.data.to;
     this.description1 = this.getDescription(this.taskItem1)
@@ -944,6 +947,8 @@ export class ScheduleBottomSheet {
 
   onlyItem(): void {
     event.preventDefault();
+
+    if(!this.isAdmin) return;
 
     this.taskService.editAvailableDate({
       taskItem1: this.taskItem1,

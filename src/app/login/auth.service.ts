@@ -109,6 +109,17 @@ export class AuthService {
         return isMaster;
     }
 
+    hasDisplay(url: string): boolean {
+        let urlWithBar = '/' + url
+        let isMaster: boolean = false
+
+        this.currentUser().displays.forEach(display => {
+            if(display.url === urlWithBar && display.access === 'Y') isMaster = true
+        })
+
+        return isMaster;
+    }
+
     token() {
         return localStorage.getItem('token')
     }
