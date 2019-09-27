@@ -87,6 +87,9 @@
           <cb-schedule-date [item]="item"></cb-schedule-date>
         </mat-button-toggle>
       </mat-button-toggle-group>
+      <div *ngIf="scheduleForm.controls.job_activity?.value?.initial === 0">
+        <p>Selecionar a atividade anterior</p>
+      </div>
       <mat-card-actions class="col-md-12 text-right">
         <button type="button" [disabled]="!buttonEnable" *ngIf="typeForm != 'edit'" mat-button
           class="cb-button" (click)="go()">{{ buttonText }}</button>

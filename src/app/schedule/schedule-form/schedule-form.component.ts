@@ -174,7 +174,15 @@ export class ScheduleFormComponent implements OnInit {
     this.jobActivityService.jobActivities().subscribe(jobActivities => {
       this.job_activities = this.typeForm == 'new'
         ? jobActivities.filter((jobActivity) => jobActivity.initial == 1) : jobActivities
-    })
+      let derived = [];
+      this.job_activities.forEach((jobActivityParent) => {
+        derived = derived.concat(jobActivities.filter(jobActivity => {
+          return jobActivityParent.modification_id == jobActivity.id
+            || jobActivityParent.option_id == jobActivity.id
+        }));
+      });
+      this.job_activities = this.job_activities.concat(derived);
+    });
 
     this.jobTypeService.jobTypes().subscribe(job_types => this.job_types = job_types)
 
