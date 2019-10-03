@@ -7,4 +7,5 @@ export class TaskItem {
   date: string
   budget_value: number
   duration: number
+  responsible_id?: number
 }

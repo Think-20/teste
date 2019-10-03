@@ -39,8 +39,9 @@ export class ScheduleFormComponent implements OnInit {
   scheduleForm: FormGroup
   searchForm: FormGroup
   job_activities: JobActivity[]
+  all_job_activities: JobActivity[]
   job_status: JobStatus[]
-  jobs: Job[]
+  loadedItems: TaskItem[]
   dateSetManually: boolean = false
   params: () => {} = () => { return {} }
   callback: (jobs: Job[]) => void = (jobs) => { }
@@ -82,14 +83,14 @@ export class ScheduleFormComponent implements OnInit {
     this.typeForm = this.route.snapshot.url[1].path
     this.isAdmin = this.authService.hasDisplay('schedule/new?adminmode')
 
+    this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
+      ? this.authService.currentUser().employee : null
+
     this.adminMode = false
     this.createForm()
     this.createValidations()
     this.loadFilterData()
     this.subscribeChangesOnAdminMode()
-
-    this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
-      ? this.authService.currentUser().employee : null
 
     if (this.typeForm == 'edit') {
       this.loadTask()
@@ -126,7 +127,30 @@ export class ScheduleFormComponent implements OnInit {
   subscribeChangesOnActivity() {
     this.subscriptions.add(
       this.scheduleForm.controls.job_activity.valueChanges.subscribe((jobActivity: JobActivity) => {
-        this.showExtraParams = jobActivity.no_params === 0;
+        this.loadedItems = [];
+        this.setTask(null);
+        if (jobActivity.initial === 0) {
+          this.loadTasks();
+          this.buttonText = 'SALVAR';
+        } else {
+          this.buttonText = 'PRÓXIMO';
+        }
+
+        if (jobActivity.no_params === 1) {
+          this.showExtraParams = false;
+          this.scheduleForm.controls.duration.disable();
+          this.scheduleForm.controls.available_date.disable();
+        } else {
+          this.showExtraParams = true;
+          this.scheduleForm.controls.duration.enable();
+          this.scheduleForm.controls.available_date.enable();
+        }
+
+        if (jobActivity.keep_responsible === 1) {
+          this.scheduleForm.controls.responsible.disable();
+        } else {
+          this.scheduleForm.controls.responsible.enable();
+        }
 
         let durationControl = this.scheduleForm.controls.duration
         durationControl.clearValidators()
@@ -134,6 +158,14 @@ export class ScheduleFormComponent implements OnInit {
         if (jobActivity.min_duration == 0
           && jobActivity.max_duration == 0
           && jobActivity.fixed_duration == 0) return;
+
+        //Permitir cadastro de itens que serão arrumados no backend;
+        if(jobActivity.fixed_duration > 0 && jobActivity.fixed_duration < 1) {
+          jobActivity.fixed_duration = 1;
+          this.scheduleForm.controls.budget_value.disable();
+        } else {
+          this.scheduleForm.controls.budget_value.enable();
+        }
 
         this.durationErrorMessage = 'Duração válida para a atividade selecionada:'
         this.durationErrorMessage += ' de ' + jobActivity.min_duration + ' a ' + jobActivity.max_duration
@@ -161,9 +193,45 @@ export class ScheduleFormComponent implements OnInit {
           this.durationErrorMessage += ' dia(s)'
         }
 
-        durationControl.updateValueAndValidity()
+        durationControl.updateValueAndValidity();
       })
     );
+  }
+
+  setTask(task: Task) {
+    this.scheduleForm.controls.task.setValue(task);
+
+    if (task == null)
+      return;
+
+    this.scheduleForm.controls.budget_value.setValue(task.job.budget_value);
+    this.scheduleForm.controls.deadline.setValue(task.job.deadline);
+
+    if (this.scheduleForm.controls.job_activity.value.keep_responsible === 1) {
+      this.scheduleForm.controls.responsible.setValue(task.responsible);
+      this.filterItemsByResponsible()
+    }
+  }
+
+  loadTasks() {
+    let jobActivity = this.scheduleForm.controls.job_activity.value;
+    let parent = this.all_job_activities
+      .filter((ja) => ja.modification_id == jobActivity.id || ja.option_id == jobActivity.id)
+      .pop();
+    let controls = this.searchForm.controls;
+    this.taskService.tasks({
+      paginate: false,
+      job_activity_array: [
+        parent, parent.modification, parent.option
+      ],
+      status_array:
+        this.job_status.filter(jobStatus => jobStatus.description !== 'Reprovado' && jobStatus.description !== 'Declinado'),
+      clientName: controls.client.value,
+      status: controls.status.value != undefined ? controls.status.value.id : null,
+      attendance: controls.attendance.value,
+      creation: controls.creation.value,
+      job_type: controls.job_type.value
+    }).subscribe(dataInfo => this.loadedItems = (<Array<any>>dataInfo.pagination.data).reverse());
   }
 
   loadFilterData() {
@@ -173,15 +241,8 @@ export class ScheduleFormComponent implements OnInit {
 
     this.jobActivityService.jobActivities().subscribe(jobActivities => {
       this.job_activities = this.typeForm == 'new'
-        ? jobActivities.filter((jobActivity) => jobActivity.initial == 1) : jobActivities
-      let derived = [];
-      this.job_activities.forEach((jobActivityParent) => {
-        derived = derived.concat(jobActivities.filter(jobActivity => {
-          return jobActivityParent.modification_id == jobActivity.id
-            || jobActivityParent.option_id == jobActivity.id
-        }));
-      });
-      this.job_activities = this.job_activities.concat(derived);
+        ? jobActivities.filter((jobActivity) => jobActivity.visible == 1) : jobActivities
+      this.all_job_activities = jobActivities;
     });
 
     this.jobTypeService.jobTypes().subscribe(job_types => this.job_types = job_types)
@@ -226,7 +287,7 @@ export class ScheduleFormComponent implements OnInit {
       deadline: this.formBuilder.control('', [Validators.required]),
       budget_value: this.formBuilder.control('', [Validators.required]),
       responsible: this.formBuilder.control('', [Validators.required]),
-      job: this.formBuilder.control('')
+      task: this.formBuilder.control('')
     })
 
     this.searchForm = this.formBuilder.group({
@@ -282,15 +343,6 @@ export class ScheduleFormComponent implements OnInit {
 
   hasSelectedItem(item: ScheduleDate) {
     return this.selectedItems.some(i => i.date == item.date && i.responsible_id == item.responsible_id)
-  }
-
-  loadJobs(params) {
-    let snackbar = this.snackBar.open('Carregando jobs...')
-    this.jobService.jobs(params).subscribe(dataInfo => {
-      snackbar.dismiss()
-      let jobs = <Job[]>dataInfo.pagination.data
-      this.callback(jobs)
-    })
   }
 
   getBudgetValidators(): ValidatorFn[] {
@@ -411,7 +463,7 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   go() {
-    if (ErrorHandler.formIsInvalid(this.scheduleForm)) {
+    if (ErrorHandler.formIsInvalid(this.scheduleForm) || !this.checkValidation()) {
       this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
         duration: 5000
       })
@@ -420,16 +472,36 @@ export class ScheduleFormComponent implements OnInit {
 
     let task = this.scheduleForm.getRawValue() as Task
     let jobActivity = <JobActivity>this.scheduleForm.controls.job_activity.value
-    let url = jobActivity.redirect_after_save != null ? jobActivity.redirect_after_save : '/jobs/new'
 
-    this.jobService.data = new Job
-    this.jobService.data.task = task
-    this.jobService.data.task.items = this.transformInTaskItems()
-    this.jobService.data.budget_value = this.scheduleForm.controls.budget_value.value
-    this.jobService.data.deadline = this.scheduleForm.controls.deadline.value
-    this.jobService.data.job_activity = task.job_activity
+    if (jobActivity.initial === 1) {
+      let url = jobActivity.redirect_after_save != null && this.typeForm !== 'new'
+        ? jobActivity.redirect_after_save
+        : '/jobs/new'
 
-    this.router.navigateByUrl(url)
+      this.jobService.data = new Job
+      this.jobService.data.task = task
+      this.jobService.data.task.items = this.transformInTaskItems()
+      this.jobService.data.budget_value = this.scheduleForm.controls.budget_value.value
+      this.jobService.data.deadline = this.scheduleForm.controls.deadline.value
+      this.jobService.data.job_activity = task.job_activity
+
+      this.router.navigateByUrl(url)
+    } else {
+      task.items = this.transformInTaskItems()
+      task.job = task.task.job;
+      
+      this.taskService.save(task).subscribe((data) => {
+        if(data.status) {
+          this.snackBar
+          .open('Redirecionando para o cronograma...', '', { duration: 3000 })
+          .afterDismissed().subscribe(() => {
+            this.router.navigateByUrl('schedule?date=' + this.datePipe.transform(data.task.items[0].date, 'yyyy-MM-dd'));
+          });
+        } else {
+          this.snackBar.open(data.message, '', { duration: 5000 });
+        }
+      });
+    }
   }
 
   sumDuration() {
@@ -446,6 +518,7 @@ export class ScheduleFormComponent implements OnInit {
     return this.selectedItems.map(selectedItem => {
       let taskItem = new TaskItem;
       taskItem.date = selectedItem.date
+      taskItem.responsible_id = selectedItem.responsible_id
       taskItem.duration = selectedItem.duration
       taskItem.budget_value = selectedItem.budget_value
       return taskItem;

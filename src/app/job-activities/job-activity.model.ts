@@ -13,4 +13,6 @@ export class JobActivity {
     option_id: number
     modification: JobActivity
     option: JobActivity
+    keep_responsible: number
+    visible: number
 }

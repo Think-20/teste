@@ -87,6 +87,23 @@ export class TaskService {
         })
   }
 
+  taskItems(params?: {}, page: number = 0): Observable<any> {
+      let url = params === {} ? `task-items/all?page=${page}` : `task-items/filter?page=${page}`
+      let prefix = (this.auth.hasAccess('tasks/all') || this.auth.hasAccess('task-items/filter')) ? '' : 'my-'
+
+      url = prefix + url
+
+      return this.httpClient.post(`${API}/${url}`,
+            JSON.stringify(params)
+          )
+          .catch((err) => {
+              this.snackBar.open(ErrorHandler.message(err), '', {
+                  duration: 3000
+              })
+              return ErrorHandler.capture(err)
+          })
+  }
+
   tasks(params?: {}, page: number = 0): Observable<any> {
       let url = params === {} ? `tasks/all?page=${page}` : `tasks/filter?page=${page}`
       let prefix = (this.auth.hasAccess('tasks/all') ||  this.auth.hasAccess('tasks/filter')) ? '' : 'my-'

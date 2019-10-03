@@ -580,7 +580,7 @@ export class ScheduleComponent implements OnInit {
 
     this.router.navigateByUrl(urlTree)
 
-    this.taskService.tasks({
+    this.taskService.taskItems({
       iniDate: this.datePipe.transform(this.iniDate, 'yyyy-MM-dd'),
       finDate: this.datePipe.transform(this.finDate, 'yyyy-MM-dd'),
       paginate: false,
@@ -702,7 +702,7 @@ export class ScheduleComponent implements OnInit {
 
     this.searching = true
 
-    this.taskService.tasks({
+    this.taskService.taskItems({
       iniDate: this.datePipe.transform(iniDate, 'yyyy-MM-dd'),
       finDate: this.datePipe.transform(this.finDate, 'yyyy-MM-dd'),
       paginate: false,
@@ -732,7 +732,7 @@ export class ScheduleComponent implements OnInit {
 
     this.searching = true
 
-    this.taskService.tasks({
+    this.taskService.taskItems({
       iniDate: this.datePipe.transform(this.iniDate, 'yyyy-MM-dd'),
       finDate: this.datePipe.transform(finDate, 'yyyy-MM-dd'),
       paginate: false,

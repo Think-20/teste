@@ -59,11 +59,17 @@ p {
   flex-direction: row;
   flex-flow: wrap;
   border: 0;
-  justify-content: center;
+  justify-content: space-between;
+}
+
+.items-container::after {
+  content: "";
+  flex: auto;
 }
 
 .item-container {
-  padding: 5px;
+  padding: 0px 0px;
+  margin: 5px 0px;
   border: 0 !important;
 }
 

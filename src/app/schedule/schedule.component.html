@@ -49,9 +49,9 @@
           </button>
           &nbsp;Agenda -
           <span class="actualMonth" (click)="monthSelect.open()">
-            &nbsp;{{ month.name }}
+            &nbsp;{{ month?.name }}
             <mat-select class="select-hidden col-md-3" #monthSelect>
-              <mat-option *ngFor="let month of months" (click)="updateMonth(month)">{{month.name}}</mat-option>
+              <mat-option *ngFor="let month of months" (click)="updateMonth(month)">{{month?.name}}</mat-option>
             </mat-select>
           </span>
           <span class="actualYear" (click)="yearSelect.open()">
