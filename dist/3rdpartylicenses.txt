@@ -90,7 +90,11 @@ THE SOFTWARE.
 
 @angular/material/autocomplete
 
+@angular/material/bottom-sheet
+
 @angular/material/button
+
+@angular/material/button-toggle
 
 @angular/material/card
 
@@ -107,6 +111,8 @@ THE SOFTWARE.
 @angular/material/form-field
 
 @angular/material/icon
+
+@angular/material/list
 
 @angular/material/menu
 
@@ -718,8 +724,6 @@ Apache-2.0
  
 
 
-undefined
-
 tslib
 Apache-2.0
 Apache License
@@ -824,6 +828,8 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
+undefined
 
 zone.js
 MIT
