@@ -23,6 +23,7 @@ import { MatSlideToggleModule, MatSlideToggle } from '@angular/material/slide-to
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatBadgeModule, MatBadge } from '@angular/material/badge';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -113,7 +114,7 @@ import { TimecardApprovalsComponent } from './timecard/timecard-approvals/timeca
 import { TimecardPlaceService } from './timecard/timecard-place/timecard-place.service';
 import { JobLevelService } from './job-level/job-level.service';
 import { JobMainExpectationService } from './job-main-expectation/job-main-expectation.service';
-import { ScheduleComponent, ReloadComponent } from './schedule/schedule.component';
+import { ScheduleComponent, ReloadComponent, ScheduleBottomSheet } from './schedule/schedule.component';
 
 import { CurrencyMaskModule } from 'ng2-currency-mask';
 import { CURRENCY_MASK_CONFIG } from "ng2-currency-mask/src/currency-mask.config";
@@ -143,7 +144,7 @@ import { NotificationModule } from './notification-bar/notification.module';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectFileService } from './projects/project-file.service';
 import { ScheduleLineComponent } from './schedule/schedule-line/schedule-line.component';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { ImageViewerComponent } from './shared/image-viewer/image-viewer.component';
 import { ScheduleBlockService } from './schedule/schedule-block/schedule-block.service';
 import { ProposalsComponent } from './proposals/proposals.component';
@@ -193,6 +194,12 @@ import { ListDataComponent } from './shared/list-data/list-data.component';
 import { ListDataService } from './shared/list-data/list-data.service';
 import { DataFieldComponent } from './shared/list-data/data-field/data-field.component';
 import { UpdatedInfoComponent } from './shared/list-data/updated-info/updated-info.component';
+import { ScheduleDateComponent } from './schedule/schedule-date/schedule-date.component';
+import { AddHeaderInterceptor } from './shared/add-header-interceptor.config';
+
+import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
+import { MatListModule } from '@angular/material/list';
 
 registerLocaleData(localePt);
 
@@ -252,6 +259,7 @@ registerLocaleData(localePt);
     TimecardListComponent,
     TimecardApprovalsComponent,
     ScheduleComponent,
+    ScheduleBottomSheet,
     JobTabsComponent,
     JobsComponent,
     BriefingFormComponent,
@@ -301,6 +309,7 @@ registerLocaleData(localePt);
     ListDataComponent,
     DataFieldComponent,
     UpdatedInfoComponent,
+    ScheduleDateComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -315,7 +324,11 @@ registerLocaleData(localePt);
     NgxImageGalleryModule,
     RouterModule.forRoot(ROUTES),
 
+    MatListModule,
+    MatBottomSheetModule,
+    DragDropModule,
     MatTableModule,
+    MatButtonToggleModule,
     MatProgressBarModule,
     MatCardModule,
     MatInputModule,
@@ -399,10 +412,12 @@ registerLocaleData(localePt);
     {provide: LOCALE_ID, useValue: 'pt-BR'},
     {provide: MAT_DATE_LOCALE, useValue: 'pt-BR'},
     {provide: MatPaginatorIntl, useClass: PaginatorIntl},
-    {provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig }
+    {provide: CURRENCY_MASK_CONFIG, useValue: CustomCurrencyMaskConfig },
+    {provide: HTTP_INTERCEPTORS, useClass: AddHeaderInterceptor, multi: true}
   ],
   bootstrap: [AppComponent],
   entryComponents: [
+    ScheduleBottomSheet,
     StarsComponent,
     StandItemFormComponent,
     ReloadComponent,

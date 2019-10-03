@@ -8,6 +8,7 @@ import { FormControl } from '@angular/forms';
 })
 export class ProductionTimeComponent implements OnInit {
 
+  @Input('errorMessage') errorMessage: string
   @Input('label') label: string = ''
   @Input('readonly') readonly: boolean = false
   rates: number[] = []

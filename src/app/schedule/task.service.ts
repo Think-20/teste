@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, ResponseContentType } from '@angular/http';
+import { Http, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -26,6 +27,7 @@ export class TaskService {
 
   constructor(
     private http: Http,
+    private httpClient: HttpClient,
     private datePipe: DatePipe,
     private snackBar: MatSnackBar,
     private auth: AuthService
@@ -85,17 +87,32 @@ export class TaskService {
         })
   }
 
-  tasks(params?: {}, page: number = 0): Observable<DataInfo> {
+  taskItems(params?: {}, page: number = 0): Observable<any> {
+      let url = params === {} ? `task-items/all?page=${page}` : `task-items/filter?page=${page}`
+      let prefix = (this.auth.hasAccess('tasks/all') || this.auth.hasAccess('task-items/filter')) ? '' : 'my-'
+
+      url = prefix + url
+
+      return this.httpClient.post(`${API}/${url}`,
+            JSON.stringify(params)
+          )
+          .catch((err) => {
+              this.snackBar.open(ErrorHandler.message(err), '', {
+                  duration: 3000
+              })
+              return ErrorHandler.capture(err)
+          })
+  }
+
+  tasks(params?: {}, page: number = 0): Observable<any> {
       let url = params === {} ? `tasks/all?page=${page}` : `tasks/filter?page=${page}`
       let prefix = (this.auth.hasAccess('tasks/all') ||  this.auth.hasAccess('tasks/filter')) ? '' : 'my-'
 
       url = prefix + url
 
-      return this.http.post(`${API}/${url}`,
-            JSON.stringify(params),
-            new RequestOptions()
+      return this.httpClient.post(`${API}/${url}`,
+            JSON.stringify(params)
           )
-          .map(response => response.json())
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -181,6 +198,23 @@ export class TaskService {
           })
   }
 
+  insertDerived(params = {}): Observable<any> {
+      let url = 'task/insert-derived'
+
+      return this.http.post(
+              `${API}/${url}`,
+              JSON.stringify(params),
+              new RequestOptions()
+          )
+          .map(response => response.json())
+          .catch((err) => {
+              this.snackBar.open(ErrorHandler.message(err), '', {
+                  duration: 3000
+              })
+              return ErrorHandler.capture(err)
+          })
+  }
+
   edit(task: Task): Observable<any> {
       let url = 'task/edit'
       let prefix = this.auth.hasAccess('task/edit') ? '' : 'my-'
@@ -201,7 +235,7 @@ export class TaskService {
           })
   }
 
-  editAvailableDate(task1: Task, task2: Task): Observable<any> {
+  editAvailableDate(params: {}): Observable<any> {
       let url = 'task/edit-available-date'
       let prefix = this.auth.hasAccess('task/edit-available-date') ? '' : 'my-'
 
@@ -209,7 +243,7 @@ export class TaskService {
 
       return this.http.put(
               `${API}/${url}`,
-              JSON.stringify({task1: task1, task2: task2}),
+              JSON.stringify(params),
               new RequestOptions()
           )
           .map(response => response.json())

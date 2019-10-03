@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, ViewChild, ChangeDetectionStrategy } from '@angular/core';
 import { Chrono } from '../chrono.model';
-import { Task } from '../task.model';
 import { DatePipe } from '@angular/common';
 import { TaskService } from '../task.service';
 import { AuthService } from '../../login/auth.service';
@@ -11,7 +10,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Month } from '../../shared/date/months';
 import { Router } from '@angular/router';
 import { isObject } from 'util';
-import { MatMenuTrigger } from '@angular/material/menu';
+import { MatMenuTrigger, MatMenu } from '@angular/material/menu';
+import { TaskItem } from '../task-item.model';
+import { Task } from '../task.model';
 
 @Component({
   selector: 'cb-schedule-line',
@@ -21,16 +22,16 @@ import { MatMenuTrigger } from '@angular/material/menu';
 })
 export class ScheduleLineComponent implements OnInit {
 
+  @Input() menu: MatMenu
+  @ViewChild('menuTrigger', { static: false }) menuTrigger: MatMenuTrigger
   @Input() month: Month
   @Input() paramsHasFilter: boolean = false
   @Input() date: Date
   @Input() jobStatus: JobStatus[] = []
-  @Input() tasks: Task[]
+  @Input() item: TaskItem
   @Input() chrono: Chrono
   @Input() today: Date
-  @Output() scrollStatusEmitter: EventEmitter<boolean> = new EventEmitter()
   @Output() changeMonthEmitter: EventEmitter<any> = new EventEmitter()
-  @ViewChild(MatMenuTrigger, { static: false }) menu: MatMenuTrigger;
 
   constructor(
     private jobService: JobService,
@@ -44,9 +45,9 @@ export class ScheduleLineComponent implements OnInit {
   ngOnInit() {
   }
 
-  openMenu(task: Task, chrono: Chrono) {
-    if(this.jobDisplay(task, chrono).indexOf('Continuação de') >= 0) {
-      this.menu.closeMenu();
+  openMenu(item: TaskItem) {
+    if(this.jobDisplay(item).indexOf('Continuação de') >= 0) {
+      this.menuTrigger.closeMenu();
     }
   }
 
@@ -62,34 +63,34 @@ export class ScheduleLineComponent implements OnInit {
     }
   }
 
-  timeDisplay(task: Task, chrono: Chrono) {
-    if(task.job.id == null) {
+  timeDisplay(item: TaskItem, chrono: Chrono) {
+    if(item.task.job.id == null) {
       return ''
     }
 
-    let index = task.items.findIndex(arrayItem => {
+    let index = item.task.items.findIndex(arrayItem => {
       let date = new Date(arrayItem.date + "T00:00:00")
       return chrono.day == date.getDate()
     })
-    let taskFound = this.tasks.find(arrayTask => { return task.id == arrayTask.id })
+    let taskFound = this.item.task
 
     if(taskFound == null) {
       return
     }
 
-    return 'D+' + (taskFound.items.length - index - 1)
+    return 'D+' + (item.task.items.length - index - 1)
   }
 
-  timeIconDisplay(task: Task, chrono: Chrono) {
-    if(task.job.id == null) {
+  timeIconDisplay() {
+    if(this.item.task.job.id == null) {
       return ''
     }
 
-    if(task.done == 1) {
+    if(this.item.task.done == 1) {
       return 'done'
     } else {
-      let finalDate = new Date(task.available_date + 'T00:00:00')
-      finalDate.setDate(finalDate.getDate() + (parseInt(task.duration.toString()) - 1))
+      let lastItem = this.item.task.items[(this.item.task.items.length - 1)]
+      let finalDate = new Date(lastItem.date + 'T00:00:00')
 
       if(this.datePipe.transform(finalDate, 'yyyy-MM-dd') < this.datePipe.transform(new Date(), 'yyyy-MM-dd')) {
         return 'alarm'
@@ -97,60 +98,6 @@ export class ScheduleLineComponent implements OnInit {
         return 'access_alarm'
       }
     }
-  }
-
-  getQueryParams(task: Task) {
-    switch(task.job_activity.description) {
-      case 'Projeto': return { taskId: task.id, tab: 'project' }
-      case 'Memorial descritivo': return { taskId: task.id, tab: 'specification' }
-      default: return ''
-    }
-  }
-
-  signal(task: Task) {
-    this.scrollStatusEmitter.emit(false)
-    let job = task.job
-    let oldStatus = job.status
-    let wanted = job.status.id == 5 ? 1 : 5
-    let wantedStatus = this.jobStatus.filter(s => { return s.id == wanted }).pop()
-    job.status = wantedStatus
-
-    this.jobService.edit(job).subscribe((data) => {
-      this.scrollStatusEmitter.emit(true)
-      if(data.status) {
-        this.snackBar.open('Sinalização modificada com sucesso!', '', {
-          duration: 3000
-        })
-      } else {
-        job.status = oldStatus
-      }
-    })
-  }
-
-  deleteTask(task: Task) {
-    let lastDate = new Date(task.available_date + "T00:00:00")
-    this.taskService.delete(task.id).subscribe((data) => {
-      this.snackBar.open(data.message, '', {
-        duration: 5000
-      })
-
-      if (data.status) {
-        this.changeMonthEmitter.emit({month: this.month, lastDate: lastDate})
-      }
-    })
-  }
-
-  deleteJob(task: Task) {
-    let lastDate = new Date(task.available_date + "T00:00:00")
-    this.jobService.delete(task.job.id).subscribe((data) => {
-      this.snackBar.open(data.message, '', {
-        duration: 5000
-      })
-
-      if (data.status) {
-        this.changeMonthEmitter.emit({month: this.month, lastDate: lastDate})
-      }
-    })
   }
 
   addTask(day: number) {
@@ -205,48 +152,50 @@ export class ScheduleLineComponent implements OnInit {
     return access
   }
 
-  getLineClass(chrono: Chrono, task: Task, day: number, month: number, nextIndex: number) {
+  getLineClass(item: TaskItem) {
     let className = ''
 
-    if(task.job.id == null) {
+    if(item.task.job.id == null) {
       return className
     }
 
-    if(task.job.attendance_id != this.authService.currentUser().employee.id
-      && task.responsible_id != this.authService.currentUser().employee.id
-      && task.job.id != undefined && !this.permissionVerify('edit', task.job))
+    if(item.task.job.attendance_id != this.authService.currentUser().employee.id
+      && item.task.responsible_id != this.authService.currentUser().employee.id
+      && item.task.job.id != undefined && !this.permissionVerify('edit', item.task.job))
       className += ' other-attendance'
 
-    if(isObject(task.job_activity)
-      && ['Projeto', 'Orçamento', 'Outsider'].indexOf(task.job_activity.description) >= 0
-      && this.jobDisplay(task, chrono).indexOf('Continuação de') == -1) {
+    if(isObject(item.task.job_activity)
+      && ['Projeto', 'Orçamento', 'Outsider'].indexOf(item.task.job_activity.description) >= 0
+      && this.jobDisplay(item).indexOf('Continuação de') == -1) {
 
-        if(task.job.status.id == 3 && (['Projeto', 'Outsider'].indexOf(task.job_activity.description) >= 0))
+        if(item.task.job.status.id == 3 && (['Projeto', 'Outsider'].indexOf(item.task.job_activity.description) >= 0))
           className += ' approved-creation'
 
-        if(task.job.status.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0))
+        if(item.task.job.status.id == 3 && (['Orçamento'].indexOf(item.task.job_activity.description) >= 0))
           className += ' approved-budget'
 
-        if(task.job.status.id == 3 && (['Orçamento'].indexOf(task.job_activity.description) >= 0))
+        if(item.task.job.status.id == 3 && (['Orçamento'].indexOf(item.task.job_activity.description) >= 0))
           className += ' approved-budget'
 
-        if(task.job.status.id == 5)
+        if(item.task.job.status.id == 5)
           className += ' signal'
 
-        if(this.paramsHasFilter && task.job.id == null)
+        if(this.paramsHasFilter && item.task.job.id == null)
           className += ' hidden'
     }
 
-    if(isObject(chrono.tasks[nextIndex + 1])
-    &&['Projeto', 'Orçamento'].indexOf(chrono.tasks[nextIndex + 1].job_activity.description) >= 0
-      && [5,3].indexOf(chrono.tasks[nextIndex + 1].job.status_id) >= 0
-      && this.jobDisplay(task, chrono).indexOf('Continuação de') == -1)
+    /*
+    if(isObject(chrono.items[nextIndex + 1])
+    &&['Projeto', 'Orçamento'].indexOf(chrono.items[nextIndex + 1].task.job_activity.description) >= 0
+      && [5,3].indexOf(chrono.items[nextIndex + 1].task.job.status_id) >= 0
+      && this.jobDisplay(item).indexOf('Continuação de') == -1)
     {
       className += ' no-border'
     }
+    */
 
-    let originalTask = this.tasks.filter(taskF => { return taskF.id == task.id }).pop()
-    let departmentId = task.responsible.department_id
+    let originalTask = item.task
+    let departmentId = item.task.responsible.department_id
     let ocurrences = originalTask.items.filter(item => {
       return item.date == this.datePipe.transform(this.today, 'yyyy-MM-dd')
     }).length
@@ -260,21 +209,18 @@ export class ScheduleLineComponent implements OnInit {
     return className
   }
 
-  jobDisplay(task: Task, chrono: Chrono) {
-    if(task.job.id == null) {
+  jobDisplay(item: TaskItem) {
+    if(item.task.job.id == null) {
       return ''
     }
 
-    let date = new Date(task.available_date + 'T00:00:00')
+    let activity = this.taskService.jobDisplay(item.task)
 
-    if(task.job_activity.description == 'Continuação') {
-      return 'Continuação de ' + this.taskService.jobDisplay(task.task).toLowerCase()
-    }
-    if(date.getDate() != chrono.day) {
-      return 'Continuação de ' + this.taskService.jobDisplay(task).toLowerCase()
+    if(item.id != item.task.items[0].id) {
+      return 'Continuação de ' + activity.toLowerCase()
     }
 
-    return this.taskService.jobDisplay(task)
+    return activity
   }
 
   calcValue(job: Job) {
@@ -287,9 +233,10 @@ export class ScheduleLineComponent implements OnInit {
     return text
   }
 
-  canShowDetails(task: Task, chrono: Chrono) {
+  canShowDetails(item: TaskItem) {
     const available = ['Modificação', 'Opção', 'Continuação', 'Continuação de', 'Detalhamento', 'M. descritivo']
-    let text = this.jobDisplay(task, chrono)
+    let text = this.jobDisplay(item)
+
     if(text == '') {
       return false
     }
@@ -301,7 +248,7 @@ export class ScheduleLineComponent implements OnInit {
     })
 
     if(text.indexOf('Orçamento') >= 0
-    && task.job.job_activity.description != 'Projeto externo') {
+    && item.task.job.job_activity.description != 'Projeto externo') {
       found = true
     }
 

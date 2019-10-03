@@ -76,7 +76,7 @@ export class ProjectsComponent implements OnInit {
     }
 
     return this.isAttendance ? `/jobs/edit/${this.job.id}?tab=specification`
-      : '/schedule?date=' + this.datePipe.transform(task.available_date, 'yyyy-MM-dd')
+      : '/schedule?date=' + this.datePipe.transform(task.items[0].date, 'yyyy-MM-dd')
   }
 
   navigateTo(url) {
@@ -111,11 +111,18 @@ export class ProjectsComponent implements OnInit {
 
   sortTasks() {
     this.sortedTasks = this.job.tasks.filter((task) => {
-      return ['Continuação', 'Detalhamento', 'Memorial descritivo', 'Orçamento', 'Modificação de orçamento'].indexOf(task.job_activity.description) == -1
-    })
-    this.sortedTasks = this.sortedTasks.sort((a, b) => {
-      return a.available_date < b.available_date ? 1 : -1
-    })
+      return task.job_activity.initial == 1
+    });
+    let adds = [];
+    this.sortedTasks.filter((parentTask => {
+      let temp = this.job.tasks.filter((task) => {
+        return parentTask.job_activity.modification_id == task.job_activity_id
+          || parentTask.job_activity.option_id == task.job_activity_id
+      });
+      adds = adds.concat(temp)
+    }));
+    this.sortedTasks = this.sortedTasks.concat(adds).reverse();
+
     this.sortedTasks.forEach((task, index) => {
       if(task.project_files.length > 0 && this.expandedIndex == null) {
         this.expandedIndex = index

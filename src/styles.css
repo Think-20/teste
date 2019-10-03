@@ -668,7 +668,16 @@ mat-card-title > p {
 }
 
 .mat-slide-toggle-content {
+  font-size: 12px;
   color: rgba(117, 117, 117, 0.77) !important;
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: rgba(0, 175, 239, 0.5);
+}
+
+.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: #00afef;
 }
 
 .mat-form-field-wrapper.mat-form-field-wrapper {
@@ -875,4 +884,9 @@ cb-proposals .mat-expansion-panel-body {
 
 .mat-card-header-text {
   margin: 0px 7px !important;
+}
+
+.items-container .item-container .mat-button-toggle-label-content {
+  line-height: normal;
+  padding: 0;
 }

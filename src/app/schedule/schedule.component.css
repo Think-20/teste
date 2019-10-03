@@ -193,6 +193,7 @@
 .line-job {
   display: flex;
   border-bottom: 1px solid #ccc;
+  background-color: white;
 }
 
 .line-job:last-child {
@@ -266,4 +267,28 @@
   min-width: 10px !important;
   padding: 0px !important;
   color: rgba(0,0,0,0.5);
+}
+
+.line-job {
+  display: flex;
+  width: 100%;
+  border-bottom: 1px solid #ccc;
+  cursor: pointer;
+}
+
+.line-job:last-child {
+  border-bottom: 0;
+}
+
+.cdk-drag-placeholder	{
+  border: 3px solid #848C8E !important;
+  opacity: 0;
+}
+
+.cdk-drag-preview {
+  opacity: 0;
+}
+
+.cdk-drag-dragging {
+  opacity: 0;
 }

@@ -55,7 +55,7 @@ export class SpecificationComponent implements OnInit {
       snack.dismiss()
       let available_date = job.tasks.filter((t) => {
         return ['Orçamento', 'Modificação de orçamento'].indexOf(t.job_activity.description) >= 0 && t.task_id == task.id
-      }).pop().available_date
+      }).pop().items[0].date
       let url = '/schedule?date=' + this.datePipe.transform(available_date, 'yyyy-MM-dd')
       return this.router.navigateByUrl(url)
     })
@@ -90,9 +90,7 @@ export class SpecificationComponent implements OnInit {
     this.sortedTasks = this.job.tasks.filter((task) => {
       return ['Memorial descritivo'].indexOf(task.job_activity.description) >= 0
     })
-    this.sortedTasks = this.sortedTasks.sort((a, b) => {
-      return a.available_date < b.available_date ? 1 : -1
-    })
+    this.sortedTasks = this.sortedTasks.reverse()
     this.sortedTasks.forEach((task, index) => {
       if(task.project_files.length > 0 && this.expandedIndex == null) {
         this.expandedIndex = index

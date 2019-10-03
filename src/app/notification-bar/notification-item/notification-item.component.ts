@@ -104,7 +104,7 @@ export class NotificationItemComponent implements OnInit {
       snackbar.dismiss()
       if(task) {
         this.router.navigate([`/schedule`], {
-          queryParams: { date: this.datePipe.transform(task.available_date, 'yyyy-MM-dd') }
+          queryParams: { date: this.datePipe.transform(task.items[0].date, 'yyyy-MM-dd') }
         })
       } else {
         this.snackbar.open('A tarefa que você busca não existe.', '', {

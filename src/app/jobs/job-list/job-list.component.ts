@@ -135,13 +135,13 @@ export class JobListComponent implements OnInit {
     let attendanceFilter = this.isAdmin ? { attendance: searchValue.attendance } : {}
 
     return {
-      clientName: clientName,
-      status: status,
       creation: searchValue.creation,
       job_type: searchValue.job_type,
       final_date: searchValue.final_date,
       initial_date: searchValue.initial_date,
-      ...attendanceFilter,
+      clientName: clientName,
+      status: status,
+      ...attendanceFilter
     }
   }
 

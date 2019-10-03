@@ -1,11 +1,11 @@
-import { DayOfWeek } from "../shared/date/days-of-week";
-import { Task } from "./task.model";
+import { DayOfWeek } from '../shared/date/days-of-week';
+import { TaskItem } from "./task-item.model";
 
 export class Chrono {
   day: number
   month: number
   year: number
   dayOfWeek: DayOfWeek
-  tasks: Task[]
+  items: TaskItem[]
   length?: number
 }

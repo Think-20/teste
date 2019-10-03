@@ -1,22 +1,20 @@
-import { Component, OnInit, ViewChildren, QueryList, NgZone, ElementRef } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { Component, OnInit, ViewChildren, QueryList, NgZone, ElementRef, Inject, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, NgModel } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { Pagination } from 'app/shared/pagination.model';
 import { Employee } from '../employees/employee.model';
 import { EmployeeService } from '../employees/employee.service';
 import { Month, MONTHS } from '../shared/date/months';
-import { DAYSOFWEEK, DayOfWeek } from '../shared/date/days-of-week';
+import { DAYSOFWEEK } from '../shared/date/days-of-week';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../login/auth.service';
-import { Task } from './task.model';
 import { TaskService } from './task.service';
 import { TaskItem } from './task-item.model';
 import { Chrono } from './chrono.model';
 
-import { Observable, timer, Subscription } from 'rxjs';
+import { Observable, timer, Subscription, Subject } from 'rxjs';
 import 'rxjs/add/operator/filter';
 import { JobStatusService } from '../job-status/job-status.service';
 import { JobStatus } from '../job-status/job-status.model';
@@ -35,6 +33,9 @@ import { Job } from '../jobs/job.model';
 import { ScheduleBlockService } from './schedule-block/schedule-block.service';
 import { Department } from '../department/department.model';
 import { BlockDialogComponent } from './schedule-block/block-dialog/block-dialog.component';
+import { Task } from './task.model';
+import { JobService } from 'app/jobs/job.service';
+import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA, MatBottomSheet } from '@angular/material/bottom-sheet';
 
 @Component({
   selector: 'cb-schedule',
@@ -59,11 +60,15 @@ import { BlockDialogComponent } from './schedule-block/block-dialog/block-dialog
 export class ScheduleComponent implements OnInit {
 
   @ViewChildren('list') list: QueryList<any>
+  @ViewChild('rowScroll', { static: true }) rowScroll: ElementRef
+  scrollSubject = new Subject<number>();
+  timerScrollSubscription: Subscription = new Subscription();
+  dataFrom: TaskItem = null
   searchForm: FormGroup
   formCopy: any
   search: FormControl
   rowAppearedState: string = 'ready'
-  tasks: Task[] = []
+  items: TaskItem[] = []
   attendances: Employee[]
   employees: Employee[]
   departments: Department[] = []
@@ -73,7 +78,6 @@ export class ScheduleComponent implements OnInit {
   params: any = {}
   searching = false
   filter = false
-  scrollActive: boolean = true
   chrono: Chrono[] = []
   dateBlocks: ScheduleBlock[] = []
   month: Month
@@ -82,11 +86,15 @@ export class ScheduleComponent implements OnInit {
   year: number
   years: number[] = []
   date: Date
+  iniDate: Date
+  finDate: Date
+  stepDate: number = 10
+  scrollToElement: string = ''
+  scrollToDateFlag: boolean = false
+  scrollParams: ScrollIntoViewOptions = { behavior: 'smooth' }
   jobStatus: JobStatus[]
   timer: Observable<number>
   timer2: Observable<number>
-  today: Date
-  listenModification: boolean = true
   dataInfo: DataInfo
   subscription: Subscription
   subscriptions: Subscription[] = []
@@ -96,15 +104,12 @@ export class ScheduleComponent implements OnInit {
   counter: number = 0
   hasFilterActive = false
 
-  lineJob: HTMLElement
-  tempX: number
-  tempY: number
-
   constructor(
     private fb: FormBuilder,
     private clientService: ClientService,
     private employeeService: EmployeeService,
     private taskService: TaskService,
+    private jobService: JobService,
     private jobActivityService: JobActivityService,
     private jobTypeService: JobTypeService,
     private jobStatusService: JobStatusService,
@@ -112,19 +117,18 @@ export class ScheduleComponent implements OnInit {
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private dialog: MatDialog,
-    private ngZone: NgZone,
-    private el: ElementRef,
     private router: Router,
     private datePipe: DatePipe,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private bottomSheet: MatBottomSheet,
   ) { }
 
   changeMonthByLine(data: any) {
-    this.changeMonth(data.month, data.lastDate)
-  }
-
-  changeScrollStatus(status: boolean) {
-    this.scrollActive = status
+    this.month = MONTHS.filter((month) => {
+      return (data.lastDate.getMonth() + 1) == month.id
+    }).pop();
+    this.date = data.lastDate
+    this.changeMonth()
   }
 
   lineChronoClass(chrono: Chrono, employees: Employee[]) {
@@ -191,51 +195,6 @@ export class ScheduleComponent implements OnInit {
     });
   }
 
-  /*
-  toggleBlock(chrono: Chrono) {
-    let date = chrono.tasks[0].items[0].date
-    let index
-    let found = this.dateBlocks.filter((scheduleBlock, index) => {
-      if(scheduleBlock.date == date) {
-        index = index
-        return true
-      }
-    })
-
-    if(found.length > 0) {
-      this.scheduleBlockService.delete(found.pop().id).subscribe((data) => {
-        if(data.status) {
-          const urlTree = this.router.createUrlTree([], {
-            queryParams: { date: this.datePipe.transform(date, 'yyyy-MM-dd') },
-            queryParamsHandling: "merge",
-            preserveFragment: true });
-
-          this.router.navigateByUrl(urlTree);
-          this.dateBlocks.splice(index, 1)
-        }
-
-        this.snackBar.open(data.message, '', { duration: 5000 })
-      })
-    } else {
-      let scheduleBlock = new ScheduleBlock()
-      scheduleBlock.date = date
-      this.scheduleBlockService.save(scheduleBlock).subscribe((data) => {
-        if(data.status) {
-          const urlTree = this.router.createUrlTree([], {
-            queryParams: { date: this.datePipe.transform(date, 'yyyy-MM-dd') },
-            queryParamsHandling: "merge",
-            preserveFragment: true });
-
-          this.router.navigateByUrl(urlTree);
-          this.dateBlocks.push(scheduleBlock)
-        }
-
-        this.snackBar.open(data.message, '', { duration: 5000 })
-      })
-    }
-  }
-  */
-
   permissionVerify(module: string, job: Job): boolean {
     let access: boolean
     let employee = this.authService.currentUser().employee
@@ -268,95 +227,26 @@ export class ScheduleComponent implements OnInit {
     return access
   }
 
-  ngAfterViewInit() {
-    this.list.changes.subscribe(() => {
-      this.scrollToDate()
+  jobDisplay(item: TaskItem, chrono: Chrono) {
+    if (item.task.job.id == null) {
+      return ''
+    }
 
-      if (!this.listenModification) return
+    let activity = this.taskService.jobDisplay(item.task)
 
-      let list = document.querySelectorAll("[draggable='true']")
-      let info = { parentSenderPos: null, parentRecipientPos: null, senderPos: null, recipientPos: null }
-      let draggable
-      let angular = this
+    if (item.id != item.task.items[0].id) {
+      return 'Continuação de ' + activity.toLowerCase()
+    }
 
-      this.ngZone.runOutsideAngular(() => {
-        for (let i = 0; i < list.length; i++) {
-          let info = { parentSenderPos: null, senderPos: null }
-          draggable = list.item(i) as HTMLElement
-          draggable.addEventListener('dragstart', function (event: DragEvent) {
-            if (!angular.subscription.closed) {
-              angular.subscription.unsubscribe()
-            }
+    return activity
+  }
 
-            info.parentSenderPos = Array.prototype.indexOf.call(this.closest('.mat-row-scroll').children, this.closest('.mat-row'))
-            info.senderPos = Array.prototype.indexOf.call(this.closest('.line-jobs').querySelectorAll('.line-job'), this)
-            event.dataTransfer.setData('type', JSON.stringify(info))
-          })
-          draggable.addEventListener('dragover', function (event) {
-            event.preventDefault()
-          })
-          draggable.addEventListener('dragend', function (event) {
-            event.preventDefault()
-          })
-        }
-      })
-
-      this.ngZone.run(() => {
-        for (let i = 0; i < list.length; i++) {
-          draggable = list.item(i) as HTMLElement
-          draggable.addEventListener('drop', function (event: DragEvent) {
-            angular.createTimerUpdater()
-
-            if (this.parentNode == null) {
-              return
-            }
-
-            event.preventDefault()
-
-            info = JSON.parse(event.dataTransfer.getData('type'))
-            info.parentRecipientPos = Array.prototype.indexOf.call(this.closest('.mat-row-scroll').children, this.closest('.mat-row'))
-            info.recipientPos = Array.prototype.indexOf.call(this.closest('.line-jobs').querySelectorAll('.line-job'), this)
-
-            let senderParent = document.querySelectorAll('.line-jobs')[info.parentSenderPos] as HTMLElement
-            let recipientParent = document.querySelectorAll('.line-jobs')[info.parentRecipientPos] as HTMLElement
-            let parentRecipientPos: number = info.parentRecipientPos
-            let parentSenderPos: number = info.parentSenderPos
-
-            let task1 = angular.chrono[parentSenderPos].tasks[info.senderPos]
-            let task2 = angular.chrono[parentRecipientPos].tasks[info.recipientPos]
-            let job1 = task1.job
-            let job2 = task2.job
-
-            let jobStep1 = task1.job_activity != null ? task1.job_activity.description : ''
-            let jobStep2 = task2.job_activity != null ? task2.job_activity.description : ''
-
-            if (jobStep1 != jobStep2 && jobStep1 != '' && jobStep2 != '') {
-              angular.snackBar.open('Não é possível mudar data de tipos diferentes', '', {
-                duration: 3000
-              })
-              return
-            } else if (jobStep1 == '' && jobStep2 == '') {
-              return
-            }
-
-            let snackBar = angular.snackBar.open('Aguarde enquanto mudamos a data...')
-
-            angular.taskService.editAvailableDate(task1, task2).subscribe((data) => {
-              if (data.status == true) {
-                snackBar.dismiss()
-                angular.changeMonth(angular.month, new Date(task2.items[0].date + "T00:00:00"))
-              } else {
-                snackBar.dismiss()
-                angular.snackBar.open(data.message, '', {
-                  duration: 3000
-                })
-                return false
-              }
-            })
-          })
-        }
-      })
-    })
+  getQueryParams(task: Task) {
+    switch (task.job_activity.description) {
+      case 'Projeto': return { taskId: task.id, tab: 'project' }
+      case 'Memorial descritivo': return { taskId: task.id, tab: 'specification' }
+      default: return ''
+    }
   }
 
   ngOnInit() {
@@ -366,11 +256,34 @@ export class ScheduleComponent implements OnInit {
       ? this.authService.currentUser().employee : null
 
     this.createForm()
-    this.today = new Date()
     this.setYears()
     this.createTimerUpdater()
     this.loadFilterData()
     this.loadInitialData()
+    this.createScrollUpdater()
+  }
+
+  ngAfterViewInit() {
+    this.list.changes.subscribe(() => this.scrollToDate())
+  }
+
+  createScrollUpdater() {
+    this.subscription = this.scrollSubject
+      .pipe(distinctUntilChanged())
+      .subscribe((inc) => {
+        if (!this.timerScrollSubscription.closed) {
+          this.timerScrollSubscription.unsubscribe();
+        }
+
+        if (inc == 0) return;
+
+        this.timerScrollSubscription = timer(0, 10).subscribe(() => {
+          this.rowScroll.nativeElement.scrollTop = this.rowScroll.nativeElement.scrollTop + (inc * 5);
+        });
+      });
+
+    this.subscriptions.push(this.subscription);
+    this.subscriptions.push(this.timerScrollSubscription);
   }
 
   createForm() {
@@ -395,27 +308,27 @@ export class ScheduleComponent implements OnInit {
     }
 
     this.searchForm.valueChanges
-    .pipe(distinctUntilChanged(), debounceTime(500))
-    .subscribe((searchValue) => {
-      this.params = this.getParams(searchValue)
-      this.taskService.searchValue = searchValue
-      this.updateFilterActive()
-      this.checkParamsHasFilter()
-      this.changeMonth(this.month, this.date)
-    })
+      .pipe(distinctUntilChanged(), debounceTime(500))
+      .subscribe((searchValue) => {
+        this.params = this.getParams(searchValue)
+        this.taskService.searchValue = searchValue
+        this.updateFilterActive()
+        this.checkParamsHasFilter()
+        this.changeMonth()
+      })
 
     this.searchForm.controls.client.valueChanges
-    .pipe(distinctUntilChanged(), debounceTime(500))
-    .subscribe(clientName => {
-      this.clientService.clients({ search: clientName, attendance: this.paramAttendance }).subscribe((dataInfo) => {
-        this.clients = dataInfo.pagination.data
+      .pipe(distinctUntilChanged(), debounceTime(500))
+      .subscribe(clientName => {
+        this.clientService.clients({ search: clientName, attendance: this.paramAttendance }).subscribe((dataInfo) => {
+          this.clients = dataInfo.pagination.data
+        })
       })
-    })
   }
 
   getParams(searchValue) {
     let clientName = searchValue.client != '' ? searchValue.client : searchValue.search
-    return  {
+    return {
       clientName: clientName,
       status_array: searchValue.status_array,
       attendance_array: searchValue.attendance_array,
@@ -441,8 +354,6 @@ export class ScheduleComponent implements OnInit {
   }
 
   loadInitialData() {
-    this.setDate()
-
     if (JSON.stringify(this.taskService.searchValue) === JSON.stringify(this.formCopy)) {
       this.params = {}
     } else {
@@ -451,7 +362,7 @@ export class ScheduleComponent implements OnInit {
 
     this.updateFilterActive()
     this.checkParamsHasFilter()
-    this.changeMonth(this.month, this.date)
+    this.setDataByParams()
   }
 
   checkParamsHasFilter() {
@@ -479,7 +390,7 @@ export class ScheduleComponent implements OnInit {
 
     this.scheduleBlockService.valid().subscribe((scheduleBlocks) => { this.dateBlocks = scheduleBlocks })
 
-    if(this.authService.hasAccess('employees/filter'))
+    if (this.authService.hasAccess('employees/filter'))
       this.employeeService.employees().subscribe(dataInfo => {
         let list = ['Planejamento', 'Atendimento', 'Criação', 'Orçamento']
         let employees: Employee[] = dataInfo.pagination.data
@@ -543,7 +454,7 @@ export class ScheduleComponent implements OnInit {
 
   setYears() {
     let ini = 2018
-    let year = this.today.getFullYear()
+    let year = (new Date).getFullYear()
 
     while (ini <= (year + 1)) {
       this.years.push(ini)
@@ -551,7 +462,7 @@ export class ScheduleComponent implements OnInit {
     }
   }
 
-  setDate() {
+  setDataByParams() {
     this.date = new Date()
 
     this.route.queryParams.subscribe(params => {
@@ -560,10 +471,12 @@ export class ScheduleComponent implements OnInit {
         this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
         this.year = this.date.getFullYear()
       } else {
-        this.date = new Date(this.datePipe.transform(this.today, 'yyyy-MM-dd') + "T00:00:00")
+        this.date = new Date(this.datePipe.transform(new Date, 'yyyy-MM-dd') + "T00:00:00")
         this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
         this.year = this.date.getFullYear()
       }
+
+      this.changeMonth()
     })
   }
 
@@ -585,7 +498,7 @@ export class ScheduleComponent implements OnInit {
         }
         this.dataInfo.updatedInfo = data
         this.setUpdatedMessage()
-        this.changeMonth(this.month)
+        this.changeMonth()
       })
     })
 
@@ -598,7 +511,7 @@ export class ScheduleComponent implements OnInit {
         date = new Date()
         this.date = new Date(this.datePipe.transform(date, 'yyyy-MM-dd') + "T00:00:00")
         this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
-        this.changeMonth(this.month, this.date)
+        this.changeMonth()
         this.counter += 1
 
         if (this.counter > 2) {
@@ -625,23 +538,9 @@ export class ScheduleComponent implements OnInit {
     this.lastUpdateMessage = 'Última atualização ' + this.dataInfo.updatedInfo.date + ' por ' + this.dataInfo.updatedInfo.employee
   }
 
-  checkIfDeadlineIsMinor(job: Job, availableDate: string) {
-    if (job.id == null) {
-      return false
-    }
-
-    return new Date(job.deadline) <= new Date(availableDate)
-  }
-
   updateMonth(month: Month) {
-    let date = new Date(this.date.getUTCFullYear(), (month.id - 1), 1)
-    let now = new Date()
-
-    if (month.id == (now.getMonth() + 1)) {
-      date.setDate(now.getDate())
-    }
-
-    this.changeMonth(month, date)
+    this.month = month
+    this.changeMonth()
   }
 
   addMonth(inc: number) {
@@ -650,127 +549,208 @@ export class ScheduleComponent implements OnInit {
     this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
     this.year = this.date.getFullYear()
 
-    this.changeMonth(this.month, this.date)
+    this.changeMonth()
   }
 
   updateYear(year: number) {
-    this.date.setFullYear(year)
-    this.changeMonth(this.month, this.date)
+    this.year = year
+    this.changeMonth()
   }
 
-  changeMonth(month: Month, date?: Date) {
+  changeMonth() {
+    if(this.searching) return;
+
     this.searching = true
     let snackBar = this.snackBar.open('Carregando tarefas...')
-    this.month = month
-    let iniDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
-    let finDateWithoutLimits = new Date(this.date.getUTCFullYear() + '-' + (month.id) + '-31')
 
-    if (date != null) {
-      const urlTree = this.router.createUrlTree([], {
-        queryParams: { date: this.datePipe.transform(date, 'yyyy-MM-dd') },
-        queryParamsHandling: "merge",
-        preserveFragment: true
-      });
+    this.items = []
+    this.chrono = []
 
-      this.router.navigateByUrl(urlTree);
-    }
+    this.iniDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate())
+    this.finDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate())
 
-    iniDateWithoutLimits.setDate(iniDateWithoutLimits.getDate() - 15)
-    finDateWithoutLimits.setDate(finDateWithoutLimits.getDate() + 15)
-    let iniDate = iniDateWithoutLimits.getUTCFullYear() + '-' + (iniDateWithoutLimits.getMonth() + 1) + '-' + iniDateWithoutLimits.getDate()
-    let finDate = finDateWithoutLimits.getUTCFullYear() + '-' + (finDateWithoutLimits.getMonth() + 1) + '-' + finDateWithoutLimits.getDate()
+    const urlTree = this.router.createUrlTree([], {
+      queryParams: { date: this.datePipe.transform(this.iniDate, 'yyyy-MM-dd') },
+      queryParamsHandling: "merge",
+      preserveFragment: true
+    });
 
-    this.taskService.tasks({
-      iniDate: iniDate,
-      finDate: finDate,
+    this.iniDate.setDate(this.iniDate.getDate() - 5)
+    this.finDate.setDate(this.finDate.getDate() + 5)
+
+    this.router.navigateByUrl(urlTree)
+
+    this.taskService.taskItems({
+      iniDate: this.datePipe.transform(this.iniDate, 'yyyy-MM-dd'),
+      finDate: this.datePipe.transform(this.finDate, 'yyyy-MM-dd'),
       paginate: false,
       ...this.params
     }).subscribe(dataInfo => {
-      this.searching = false
-      this.tasks = dataInfo.pagination.data
+      this.items = dataInfo.pagination.data
       this.dataInfo = dataInfo
       this.setUpdatedMessage()
-      this.chronologicDisplay(this.date.getUTCFullYear() + '-' + (month.id) + '-01')
+      this.mountDates(this.iniDate, this.finDate)
+
+      this.scrollToDateFlag = true
+      this.searching = false
       snackBar.dismiss()
     })
   }
 
-  chronologicDisplay(iniDate) {
-    let i: number = 0
-    let fixedDateMax: Date = new Date(iniDate)
-    let date: Date = new Date(iniDate)
+  /*
+   * Mescla os itens da agenda com as datas do calendário
+   */
+  mountDates(iniDate: Date, finDate: Date, insertInBegin = false) {
+    let chrono: Chrono
+    let date: Date = new Date(iniDate.getTime())
+    let fixedDateMax: Date = new Date(finDate.getTime())
+    let dates: Chrono[] = []
 
-    this.listenModification = false
-
-    date.setDate(date.getDate() - 5)
-    fixedDateMax.setDate(fixedDateMax.getDate() + 35)
-    let days: number[]
-
-    while (date.getTime() < fixedDateMax.getTime()) {
-      let filteredTasks = this.tasks.filter(task => {
-        return task.items.filter((item, index) => {
-          //Ao filtrar, não selecionar continuações
-          if(!this.paramsHasFilter || index == 0) {
-              let itemDate = new Date(item.date + 'T00:00:00')
-              return date.getDate() == itemDate.getDate()
-                && date.getMonth() == itemDate.getMonth()
-            }
-          }
-        ).length > 0
+    while (date.getTime() <= fixedDateMax.getTime()) {
+      let filteredTasks = this.items.filter(item => {
+        let itemDate = new Date(item.date + 'T00:00:00')
+        return date.getDate() == itemDate.getDate()
+          && date.getMonth() == itemDate.getMonth()
       })
 
       let count = filteredTasks.length
       let length = (date.getDay() == 6 || date.getDay() == 0) ? 3 : filteredTasks.length
 
       for (let index = 0; index < (5 - length); index++) {
-        let task = new Task
         let item = new TaskItem
         item.date = this.datePipe.transform(date, 'yyyy-MM-dd')
-        task.job = new Job
-        task.items = []
-        task.items.push(item)
-        filteredTasks.push(task)
+        item.task = new Task
+        item.task.job = new Job
+        item.task.items = []
+        //Circular reference aqui
+        //item.task.items.push(item)
+        filteredTasks.push(item)
       }
 
-      this.chrono[i] = {
+      chrono = {
         day: date.getDate(),
         month: (date.getMonth() + 1),
         year: date.getFullYear(),
         dayOfWeek: DAYSOFWEEK.find(dayOfWeek => dayOfWeek.id == date.getDay()),
-        tasks: filteredTasks.sort((a, b) => {
-          if (a.responsible != null && b.responsible != null)
-            return a.responsible.department_id > b.responsible.department_id ? 1 : -1
+        items: filteredTasks.sort((a, b) => {
+          if (a.task.responsible != null && b.task.responsible != null)
+            return a.task.responsible.department_id > b.task.responsible.department_id ? 1 : -1
         }),
         length: count
       }
 
-      i++
-
+      dates.push(chrono)
       date.setDate(date.getDate() + 1)
     }
-    this.listenModification = true
+
+    if (insertInBegin) {
+      this.chrono = dates.concat(this.chrono)
+    } else {
+      this.chrono = this.chrono.concat(dates)
+    }
   }
 
   scrollToDate() {
-    if (!this.scrollActive) {
-      return
+    let query: string = ''
+    let element: HTMLElement
+
+    if (!this.scrollToDateFlag) return;
+
+    query = this.scrollToElement != '' ? this.scrollToElement : '.day-' + this.date.getDate()
+    element = document.querySelector(query);
+
+    if (element != null) {
+      element.scrollIntoView(this.scrollParams)
     }
 
-    let date = this.date
-    let query: string
-    const elementBodyTable = document.querySelectorAll('.mat-row-scroll')[0] as HTMLElement;
+    this.scrollToDateFlag = false
+    this.scrollToElement = ''
+    this.scrollParams = { behavior: 'smooth' }
+  }
 
-    if (this.month.id == date.getMonth() + 1) {
-      query = '.day-' + this.date.getDate() + '.month-' + (this.date.getMonth() + 1)
-      const elementList = document.querySelectorAll(query);
+  scrolling($event) {
+    if (this.searching) return;
 
-      if (elementList.length > 0) {
-        const element = elementList[0] as HTMLElement;
-        elementBodyTable.scrollTo(0, element.offsetTop - 45)
-      }
-    } else {
-      elementBodyTable.scrollTo(0, 0)
+    let point = $event.target.getBoundingClientRect();
+    let elements = document.elementsFromPoint(point.x + 20, point.y + 20);
+    let className = elements[0].className;
+
+    if(className.indexOf('mat-cell') > -1) {
+      let month = className.substring(className.indexOf('month-') + 6, className.indexOf('month-') + 8).trim();
+      let year = className.substring(className.indexOf('year-') + 5, className.indexOf('year-') + 9).trim();
+
+      this.month = MONTHS.filter((m) => {
+        return parseInt(month) === m.id;
+      }).pop();
+      this.year = parseInt(year);
     }
+
+    let scrollTop = $event.target.scrollTop
+    if ((scrollTop + $event.target.offsetHeight) >= $event.target.scrollHeight) {
+      this.loadItemsAfter()
+    } else if (scrollTop == 0) {
+      this.loadItemsBefore()
+    }
+  }
+
+  loadItemsAfter() {
+    let snackBar = this.snackBar.open('Carregando datas posteriores...')
+    let iniDate = new Date(this.finDate.getTime())
+
+    iniDate.setDate(this.finDate.getDate() + 1)
+    this.finDate.setDate(this.finDate.getDate() + this.stepDate)
+
+    this.searching = true
+
+    this.taskService.taskItems({
+      iniDate: this.datePipe.transform(iniDate, 'yyyy-MM-dd'),
+      finDate: this.datePipe.transform(this.finDate, 'yyyy-MM-dd'),
+      paginate: false,
+      ...this.params
+    }).subscribe((dataInfo) => {
+      this.items = this.items.concat(dataInfo.pagination.data)
+      this.dataInfo = dataInfo
+      this.setUpdatedMessage()
+      this.mountDates(iniDate, this.finDate)
+      snackBar.dismiss()
+
+      this.scrollToElement = '.day-' + this.datePipe.transform(iniDate, 'd')
+      this.scrollToElement += '.month-' + this.datePipe.transform(iniDate, 'M')
+      this.scrollToDateFlag = true
+      this.scrollParams = { behavior: 'smooth' }
+
+      this.searching = false
+    })
+  }
+
+  loadItemsBefore() {
+    let snackBar = this.snackBar.open('Carregando datas anteriores...')
+    let finDate = new Date(this.iniDate.getTime())
+
+    finDate.setDate(this.iniDate.getDate() - 1)
+    this.iniDate.setDate(this.iniDate.getDate() - this.stepDate)
+
+    this.searching = true
+
+    this.taskService.taskItems({
+      iniDate: this.datePipe.transform(this.iniDate, 'yyyy-MM-dd'),
+      finDate: this.datePipe.transform(finDate, 'yyyy-MM-dd'),
+      paginate: false,
+      ...this.params
+    }).subscribe((dataInfo) => {
+      this.items = dataInfo.pagination.data.concat(this.items)
+      this.dataInfo = dataInfo
+      this.setUpdatedMessage()
+      this.mountDates(this.iniDate, finDate, true)
+      snackBar.dismiss()
+
+      this.scrollToElement = '.day-' + this.datePipe.transform(finDate, 'd')
+      this.scrollToElement += '.month-' + this.datePipe.transform(finDate, 'M')
+      this.scrollToDateFlag = true
+      this.scrollParams = { behavior: 'auto' }
+
+      this.searching = false
+    })
   }
 
   addTask(day: number) {
@@ -791,6 +771,96 @@ export class ScheduleComponent implements OnInit {
         date: this.date.getUTCFullYear() + '-' + tempMonth + '-' + tempDay
       }
     })
+  }
+
+
+
+  signal(task: Task) {
+    let job = task.job
+    let oldStatus = job.status
+    let wanted = job.status.id == 5 ? 1 : 5
+    let wantedStatus = this.jobStatus.filter(s => { return s.id == wanted }).pop()
+    job.status = wantedStatus
+
+    this.jobService.edit(job).subscribe((data) => {
+      if (data.status) {
+        this.snackBar.open('Sinalização modificada com sucesso!', '', {
+          duration: 3000
+        })
+      } else {
+        job.status = oldStatus
+      }
+    })
+  }
+
+  deleteTask(item: TaskItem) {
+    let lastDate = new Date(item.date + "T00:00:00")
+    this.taskService.delete(item.task.id).subscribe((data) => {
+      this.snackBar.open(data.message, '', {
+        duration: 5000
+      })
+
+      if (data.status) {
+        this.changeMonthByLine({ month: this.month, lastDate: lastDate })
+      }
+    })
+  }
+
+  deleteJob(item: TaskItem) {
+    let lastDate = new Date(item.date + "T00:00:00")
+    this.jobService.delete(item.task.job.id).subscribe((data) => {
+      this.snackBar.open(data.message, '', {
+        duration: 5000
+      })
+
+      if (data.status) {
+        this.changeMonthByLine({ month: this.month, lastDate: lastDate })
+      }
+    })
+  }
+
+  mouseUp(itemSelected: TaskItem) {
+    if (this.dataFrom == null)
+      return;
+
+    let from = this.dataFrom as TaskItem;
+    let to = itemSelected as TaskItem;
+
+    if (to.date == from.date)
+      return;
+
+    this.bottomSheet.open(ScheduleBottomSheet, {
+      data: { from: from, to: to }
+    }).afterDismissed().subscribe(data => {
+      if (data != undefined && data.status)
+        this.changeMonthByLine({ month: this.month, lastDate: new Date(to.date + "T00:00:00") })
+    });
+
+    this.dataFrom = null;
+  }
+
+  dragMoved($event) {
+    const mouseY: number = $event.pointerPosition.y;
+    const rowScrollTop: number = this.rowScroll.nativeElement.getBoundingClientRect().top + 50;
+    const rowScrollBottom: number = this.rowScroll.nativeElement.getBoundingClientRect().bottom - 50;
+
+    if (mouseY < rowScrollTop) {
+      this.scrollSubject.next(-1);
+    } else if (mouseY > rowScrollBottom) {
+      this.scrollSubject.next(1);
+    } else {
+      this.scrollSubject.next(0);
+    }
+  }
+
+  dragEnded($event) {
+    this.dataFrom = $event.source.data;
+    this.scrollSubject.next(0);
+
+    /* Resetar posição do elemento */
+    $event.source.element.nativeElement.style.transform = 'none';
+    const source: any = $event.source;
+    source._passiveTransform = { x: 0, y: 0 };
   }
 
   compareJobActivity(var1: JobActivity, var2: JobActivity) {
@@ -820,5 +890,88 @@ export class ScheduleComponent implements OnInit {
   template: ''
 })
 export class ReloadComponent { }
+
+@Component({
+  selector: 'cb-schedule-bottom-sheet',
+  template: `
+    <mat-nav-list>
+      <p class="col-md-12 lead title">Deseja trocar {{ description1 }} para {{ description2 }}?</p>
+      <a [class.disabled]="!isAdmin" href="#" mat-list-item (click)="onlyItem()">
+        <span mat-line>Apenas essa data</span>
+        <span mat-line>Realiza a apenas a troca das datas dos itens selecionados (mesmo responsável)</span>
+      </a>
+      <a href="#" mat-list-item (click)="completeTask()">
+        <span mat-line>Atividade completa</span>
+        <span mat-line>Troca a data de início das atividade,
+          realocando as datas conforme haja disponibilidade (não mantém necessariamente o mesmo
+            responsável)</span>
+      </a>
+    </mat-nav-list>
+  `,
+  styles: ['.title { font-weight: 500; font-size: 100%; } .disabled { opacity: 0.5; }']
+})
+export class ScheduleBottomSheet {
+  taskItem1: TaskItem;
+  taskItem2: TaskItem;
+  description1: string;
+  description2: string;
+  isAdmin: boolean = false
+
+  constructor(
+    private _bottomSheetRef: MatBottomSheetRef<ScheduleBottomSheet>,
+    @Inject(MAT_BOTTOM_SHEET_DATA) public data: any,
+    private taskService: TaskService,
+    private datePipe: DatePipe,
+    private snackbar: MatSnackBar,
+    private authService: AuthService
+  ) { }
+
+  ngOnInit() {
+    this.isAdmin = this.authService.hasDisplay('schedule/new?adminmode')
+    this.taskItem1 = this.data.from;
+    this.taskItem2 = this.data.to;
+    this.description1 = this.getDescription(this.taskItem1)
+    this.description2 = this.getDescription(this.taskItem2)
+  }
+
+  getDescription(ti: TaskItem) {
+    return ti.id == null
+      ? '[' + this.datePipe.transform(ti.date, 'dd/MM/yy') + ']'
+      : '[' + this.datePipe.transform(ti.date, 'dd/MM/yy') + ']'
+      + ' ' + ti.task.responsible.name
+      + ' ' + this.taskService.jobDisplay(ti.task).toLowerCase()
+      + ' ' + ti.task.job.job_type.description.toLowerCase()
+      + ' ' + (ti.task.job.client_id == null ? ti.task.job.not_client : ti.task.job.client.fantasy_name)
+      + ' | ' + ti.task.job.event
+  }
+
+  onlyItem(): void {
+    event.preventDefault();
+
+    if(!this.isAdmin) return;
+
+    this.taskService.editAvailableDate({
+      taskItem1: this.taskItem1,
+      taskItem2: this.taskItem2,
+      onlyItem: true
+    }).subscribe(data => {
+      this.snackbar.open(data.message, '', { duration: 4000 })
+      this._bottomSheetRef.dismiss(data)
+    });
+  }
+
+  completeTask(): void {
+    event.preventDefault();
+
+    this.taskService.editAvailableDate({
+      taskItem1: this.taskItem1,
+      taskItem2: this.taskItem2,
+      onlyItem: false
+    }).subscribe(data => {
+      this.snackbar.open(data.message, '', { duration: 4000 })
+      this._bottomSheetRef.dismiss(data)
+    });
+  }
+}
 
 
