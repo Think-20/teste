@@ -347,8 +347,13 @@ export class ScheduleFormComponent implements OnInit {
 
   getBudgetValidators(): ValidatorFn[] {
     let days = this.scheduleForm.controls.duration.value
+    let jobActivity = this.scheduleForm.controls.job_activity.value
     let validators: ValidatorFn[] = []
     validators.push(Validators.required)
+
+    if(jobActivity.no_params === 1) {
+      return validators;
+    }
 
     if (days <= 1) {
       validators.push(Validators.min(0))
@@ -381,6 +386,12 @@ export class ScheduleFormComponent implements OnInit {
   addValidationBudget() {
     this.subscriptions.add(
       this.scheduleForm.controls.duration.valueChanges.subscribe(() => {
+        this.scheduleForm.controls.budget_value.setValidators(this.getBudgetValidators())
+        this.scheduleForm.controls.budget_value.updateValueAndValidity()
+      })
+    )
+    this.subscriptions.add(
+      this.scheduleForm.controls.job_activity.valueChanges.subscribe(() => {
         this.scheduleForm.controls.budget_value.setValidators(this.getBudgetValidators())
         this.scheduleForm.controls.budget_value.updateValueAndValidity()
       })
@@ -489,7 +500,7 @@ export class ScheduleFormComponent implements OnInit {
     } else {
       task.items = this.transformInTaskItems()
       task.job = task.task.job;
-      
+
       this.taskService.save(task).subscribe((data) => {
         if(data.status) {
           this.snackBar
