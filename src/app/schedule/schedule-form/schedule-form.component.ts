@@ -351,7 +351,7 @@ export class ScheduleFormComponent implements OnInit {
     let validators: ValidatorFn[] = []
     validators.push(Validators.required)
 
-    if(jobActivity.no_params === 1) {
+    if(jobActivity.min_duration === 0 && jobActivity.max_duration === 0) {
       return validators;
     }
 
