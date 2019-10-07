@@ -470,7 +470,7 @@ export class ScheduleFormComponent implements OnInit {
 
   checkValidDuration() {
     return this.selectedItems.length == parseInt(this.scheduleForm.controls.duration.value)
-      || this.adminMode
+      || this.adminMode || this.scheduleForm.controls.job_activity.value.no_params === 1;
   }
 
   go() {
