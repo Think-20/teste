@@ -205,7 +205,6 @@ export class ScheduleFormComponent implements OnInit {
       return;
 
     this.scheduleForm.controls.budget_value.setValue(task.job.budget_value);
-    this.scheduleForm.controls.deadline.setValue(task.job.deadline);
 
     if (this.scheduleForm.controls.job_activity.value.keep_responsible === 1) {
       this.scheduleForm.controls.responsible.setValue(task.responsible);
