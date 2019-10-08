@@ -285,7 +285,10 @@ export class ScheduleFormComponent implements OnInit {
       this.scheduleForm.controls.job_activity.disable()
       this.scheduleForm.controls.budget_value.setValue(task.job.budget_value)
       this.scheduleForm.controls.budget_value.disable()
-      this.scheduleForm.controls.duration.setValue(task.duration)
+
+      let duration = task.items.map(i => i.duration).reduce((p, n) => p + n);
+      this.scheduleForm.controls.duration.setValue(duration > 0 ? duration : 1);
+      
       this.responsibles = [task.responsible];
       this.scheduleForm.controls.responsible.setValue(task.responsible)
       this.scheduleForm.controls.available_date.setValue(new Date(task.items[0].date + "T00:00:00"))
@@ -492,7 +495,8 @@ export class ScheduleFormComponent implements OnInit {
 
   checkValidDuration() {
     return this.selectedItems.length == parseInt(this.scheduleForm.controls.duration.value)
-      || this.adminMode || this.scheduleForm.controls.job_activity.value.no_params === 1;
+      || (this.adminMode && this.selectedItems.length > 0) 
+      || this.scheduleForm.controls.job_activity.value.no_params === 1;
   }
 
   go() {
@@ -562,7 +566,7 @@ export class ScheduleFormComponent implements OnInit {
 
 
   edit() {
-    if (ErrorHandler.formIsInvalid(this.scheduleForm)) {
+    if (ErrorHandler.formIsInvalid(this.scheduleForm) || !this.checkValidation()) {
       this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
         duration: 5000
       })
