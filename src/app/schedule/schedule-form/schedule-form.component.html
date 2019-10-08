@@ -63,7 +63,9 @@
           <mat-datepicker #deadlineDatepicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <mat-select placeholder="Responsável*" formControlName="responsible" [compareWith]="compareResponsible"
+          <mat-select
+            [matTooltip]="scheduleForm.controls.responsible.disabled ? 'O responsável será selecionado automaticamente após seleção do job.' : ''"
+            placeholder="Responsável*" formControlName="responsible" [compareWith]="compareResponsible"
             (selectionChange)="filterItemsByResponsible()">
             <mat-option *ngFor="let responsible of responsibles" [value]="responsible"
               [disabled]="scheduleForm.controls.job_activity.value.description != 'Modificação' && ! isAdmin && responsible.name == 'Miguel Rodrigues'">
@@ -143,31 +145,33 @@
               <div class="mat-header-cell mat-column-date">Data</div>
               <div class="mat-header-cell mat-column-status">Status</div>
             </div>
-            <div class="mat-row" [class.selected]="task == scheduleForm.controls.task.value"
-              *ngFor="let task of loadedItems" (click)="setTask(task)">
-              <div class="mat-cell mat-column-id text-left">
-                {{ jobService.showId(task.job) }}
-              </div>
-              <div class="mat-cell mat-column-client">
-                {{ jobService.displayNameEvent(task.job) }}
-              </div>
-              <div class="mat-cell mat-column-event">
-                {{ taskService.jobDisplay(task) }}
-              </div>
-              <div class="mat-cell mat-column-type">
-                {{ task.job.job_type.description }}
-              </div>
-              <div class="mat-cell mat-column-attendance">
-                {{ task.job.attendance.name }}
-              </div>
-              <div class="mat-cell mat-column-creation">
-                {{ task.responsible?.name }}
-              </div>
-              <div class="mat-cell mat-column-date">
-                {{ task.job.created_at | date:'dd/MM/yy' }}
-              </div>
-              <div class="mat-cell mat-column-status">
-                {{ task.job.status.description }}
+            <div class="mat-row-scroll">
+              <div class="mat-row" [class.selected]="task == scheduleForm.controls.task.value"
+                *ngFor="let task of loadedItems" (click)="setTask(task)">
+                <div class="mat-cell mat-column-id text-left">
+                  {{ jobService.showId(task.job) }}
+                </div>
+                <div class="mat-cell mat-column-client">
+                  {{ jobService.displayNameEvent(task.job) }}
+                </div>
+                <div class="mat-cell mat-column-event">
+                  {{ taskService.jobDisplay(task) }}
+                </div>
+                <div class="mat-cell mat-column-type">
+                  {{ task.job.job_type.description }}
+                </div>
+                <div class="mat-cell mat-column-attendance">
+                  {{ task.job.attendance.name }}
+                </div>
+                <div class="mat-cell mat-column-creation">
+                  {{ task.responsible?.name }}
+                </div>
+                <div class="mat-cell mat-column-date">
+                  {{ task.job.created_at | date:'dd/MM/yy' }}
+                </div>
+                <div class="mat-cell mat-column-status">
+                  {{ task.job.status.description }}
+                </div>
               </div>
             </div>
           </table>
