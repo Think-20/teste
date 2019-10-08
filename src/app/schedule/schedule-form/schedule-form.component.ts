@@ -199,6 +199,11 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   setTask(task: Task) {
+    if(this.scheduleForm.controls.available_date.value == '' || this.itemsByResponsible.length == 0) {
+      this.snackBar.open('Selecione primeiro uma data para início e aguarde carregar os responsáveis.', '', { duration: 3000 });
+      return;
+    }
+
     this.scheduleForm.controls.task.setValue(task);
 
     if (task == null)
