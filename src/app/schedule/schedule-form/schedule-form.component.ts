@@ -87,7 +87,15 @@ export class ScheduleFormComponent implements OnInit {
       ? this.authService.currentUser().employee : null
 
     this.adminMode = false
+
     this.createForm()
+
+    //Para edições...
+    if(this.isAdmin && this.typeForm === 'edit') {
+      this.adminMode = true;
+      this.scheduleForm.controls.admin.setValue(true);
+    }
+
     this.createValidations()
     this.loadFilterData()
     this.subscribeChangesOnAdminMode()
@@ -130,7 +138,9 @@ export class ScheduleFormComponent implements OnInit {
         this.loadedItems = [];
         this.setTask(null);
         if (jobActivity.initial === 0) {
-          this.loadTasks();
+          if(this.typeForm !== 'edit')
+            this.loadTasks();
+
           this.buttonText = 'SALVAR';
         } else {
           this.buttonText = 'PRÓXIMO';
@@ -146,7 +156,7 @@ export class ScheduleFormComponent implements OnInit {
           this.scheduleForm.controls.available_date.enable();
         }
 
-        if (jobActivity.keep_responsible === 1) {
+        if (jobActivity.keep_responsible === 1 && this.adminMode) {
           this.scheduleForm.controls.responsible.disable();
         } else {
           this.scheduleForm.controls.responsible.enable();
@@ -270,11 +280,14 @@ export class ScheduleFormComponent implements OnInit {
     this.taskService.task(taskId).subscribe(task => {
       snack.dismiss()
       this.scheduleForm.controls.id.setValue(task.id)
+      this.scheduleForm.controls.task.setValue(task.task)
       this.scheduleForm.controls.job_activity.setValue(task.job_activity)
       this.scheduleForm.controls.job_activity.disable()
       this.scheduleForm.controls.budget_value.setValue(task.job.budget_value)
       this.scheduleForm.controls.budget_value.disable()
       this.scheduleForm.controls.duration.setValue(task.duration)
+      this.responsibles = [task.responsible];
+      this.scheduleForm.controls.responsible.setValue(task.responsible)
       this.scheduleForm.controls.available_date.setValue(new Date(task.items[0].date + "T00:00:00"))
       this.scheduleForm.controls.deadline.setValue(new Date(task.job.deadline + "T00:00:00"))
       this.scheduleForm.controls.deadline.disable()
@@ -426,7 +439,9 @@ export class ScheduleFormComponent implements OnInit {
     this.items = []
     this.itemsByResponsible = []
     this.selectedItems = []
-    this.scheduleForm.controls.responsible.setValue('')
+
+    if(this.typeForm !== 'edit')
+      this.scheduleForm.controls.responsible.setValue('')
 
     let availableDate = this.scheduleForm.controls.available_date.value
     let jobActivity = this.scheduleForm.controls.job_activity.value
@@ -455,10 +470,13 @@ export class ScheduleFormComponent implements OnInit {
 
       snack.dismiss()
       snack = this.snackBar.open('Selecione um responsável para abrir as opções', '', { duration: 3000 })
+      this.filterItemsByResponsible()
     })
   }
 
   filterItemsByResponsible() {
+    if(this.scheduleForm.controls.responsible.value === '') return;
+
     this.itemsByResponsible = []
     this.selectedItems = []
 
