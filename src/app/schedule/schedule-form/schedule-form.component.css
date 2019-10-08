@@ -76,3 +76,7 @@ p {
 .slider {
   margin-bottom: 15px;
 }
+
+.mat-row-scroll {
+  max-height: 200px;
+}
