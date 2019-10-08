@@ -89,7 +89,7 @@
           <cb-schedule-date [item]="item"></cb-schedule-date>
         </mat-button-toggle>
       </mat-button-toggle-group>
-      <div *ngIf="scheduleForm.controls.job_activity?.value?.initial === 0">
+      <div *ngIf="scheduleForm.controls.job_activity?.value?.initial === 0 && typeForm !== 'edit'">
         <div class="job-container">
           <p class="lead">Selecionar a atividade anterior</p>
           <div *ngIf="filter" [formGroup]="searchForm" class="row">
