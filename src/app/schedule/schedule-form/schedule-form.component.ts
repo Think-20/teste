@@ -322,6 +322,10 @@ export class ScheduleFormComponent implements OnInit {
       this.searchForm.controls.attendance.setValue(this.paramAttendance)
       this.searchForm.controls.attendance.disable()
     }
+
+    this.searchForm.valueChanges.subscribe(() => {
+      this.loadTasks();
+    });
   }
 
   toggleDate(item: ScheduleDate, pos: number): boolean {
