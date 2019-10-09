@@ -156,7 +156,7 @@ export class ScheduleFormComponent implements OnInit {
           this.scheduleForm.controls.available_date.enable();
         }
 
-        if (jobActivity.keep_responsible === 1 && this.adminMode) {
+        if (jobActivity.keep_responsible === 1 && !this.adminMode) {
           this.scheduleForm.controls.responsible.disable();
         } else {
           this.scheduleForm.controls.responsible.enable();
@@ -288,12 +288,14 @@ export class ScheduleFormComponent implements OnInit {
 
       let duration = task.items.map(i => i.duration).reduce((p, n) => p + n);
       this.scheduleForm.controls.duration.setValue(duration > 0 ? duration : 1);
-      
+
       this.responsibles = [task.responsible];
       this.scheduleForm.controls.responsible.setValue(task.responsible)
       this.scheduleForm.controls.available_date.setValue(new Date(task.items[0].date + "T00:00:00"))
       this.scheduleForm.controls.deadline.setValue(new Date(task.job.deadline + "T00:00:00"))
       this.scheduleForm.controls.deadline.disable()
+
+      this.getAvailableDates()
     })
   }
 
@@ -499,7 +501,7 @@ export class ScheduleFormComponent implements OnInit {
 
   checkValidDuration() {
     return this.selectedItems.length == parseInt(this.scheduleForm.controls.duration.value)
-      || (this.adminMode && this.selectedItems.length > 0) 
+      || (this.adminMode && this.selectedItems.length > 0)
       || this.scheduleForm.controls.job_activity.value.no_params === 1;
   }
 
