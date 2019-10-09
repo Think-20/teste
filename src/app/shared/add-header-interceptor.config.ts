@@ -10,7 +10,7 @@ export class AddHeaderInterceptor implements HttpInterceptor {
     const clonedRequest = req.clone({
       headers: req.headers.set('Authorization', `${token}`)
       .set('User', `${user.id}`)
-      .set('Content-Type', 'application/json')
+      //.set('Content-Type', 'application/json') Erro ao habilitar, upload de arquivos falha
     })
     return next.handle(clonedRequest)
   }
