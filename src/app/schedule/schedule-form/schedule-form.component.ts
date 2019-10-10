@@ -236,7 +236,7 @@ export class ScheduleFormComponent implements OnInit {
     this.taskService.tasks({
       paginate: false,
       job_activity_array: [
-        parent, parent.modification, parent.option
+        parent, parent.option
       ],
       status_array:
         this.job_status.filter(jobStatus => jobStatus.description !== 'Reprovado' && jobStatus.description !== 'Declinado'),
