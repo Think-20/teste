@@ -32,6 +32,16 @@
   align-items: baseline;
 }
 
+.icon-with-text {
+  display: inline;
+  font-size: 10px;
+  color: #777;
+}
+
+.content-icon {
+  margin-top: 5px;
+}
+
 .lead small {
   color: rgba(0,0,0,.5);
   font-weight: 300;
