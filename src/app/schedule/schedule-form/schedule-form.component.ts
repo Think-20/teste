@@ -228,6 +228,7 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   loadTasks() {
+    let snackbar = this.snackBar.open('Buscando atividade, por favor aguarde...');
     let jobActivity = this.scheduleForm.controls.job_activity.value;
     let parent = this.all_job_activities
       .filter((ja) => ja.modification_id == jobActivity.id || ja.option_id == jobActivity.id)
@@ -245,7 +246,10 @@ export class ScheduleFormComponent implements OnInit {
       attendance: controls.attendance.value,
       creation: controls.creation.value,
       job_type: controls.job_type.value
-    }).subscribe(dataInfo => this.loadedItems = (<Array<any>>dataInfo.pagination.data).reverse());
+    }).subscribe(dataInfo => {
+      this.loadedItems = (<Array<any>>dataInfo.pagination.data).reverse()
+      snackbar.dismiss();
+    });
   }
 
   loadFilterData() {
@@ -325,7 +329,9 @@ export class ScheduleFormComponent implements OnInit {
       this.searchForm.controls.attendance.disable()
     }
 
-    this.searchForm.valueChanges.subscribe(() => {
+    this.searchForm.valueChanges
+    .debounceTime(500)
+    .subscribe(() => {
       this.loadTasks();
     });
   }
