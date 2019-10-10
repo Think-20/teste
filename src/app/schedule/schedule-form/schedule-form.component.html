@@ -164,7 +164,7 @@
                   {{ task.job.attendance.name }}
                 </div>
                 <div class="mat-cell mat-column-creation">
-                  {{ task.responsible?.name }}
+                  {{ task.job_activity?.description === 'Projeto externo' ? 'Externa' : task.responsible?.name }}
                 </div>
                 <div class="mat-cell mat-column-date">
                   {{ task.job.created_at | date:'dd/MM/yy' }}

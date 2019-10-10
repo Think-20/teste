@@ -37,6 +37,9 @@
         {{ item.task.job.moments }} mom.
       </span>
     </span>
+    <div class="content-icon" *ngIf="item.budget_value > 0">
+      <mat-icon class="icon-with-text">beenhere</mat-icon> {{ item.budget_value | number: '1.2' }}
+    </div>
   </div>
   <div class="mat-cell mat-column-area">
     {{ canShowDetails(item)
