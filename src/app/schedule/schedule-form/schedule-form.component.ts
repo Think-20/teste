@@ -228,7 +228,7 @@ export class ScheduleFormComponent implements OnInit {
   }
 
   loadTasks() {
-    let snackbar = this.snackBar.open('Buscando atividade, por favor aguarde...');
+    let snackbar = this.snackBar.open('Buscando atividades, por favor aguarde...');
     let jobActivity = this.scheduleForm.controls.job_activity.value;
     let parent = this.all_job_activities
       .filter((ja) => ja.modification_id == jobActivity.id || ja.option_id == jobActivity.id)
