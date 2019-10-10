@@ -575,8 +575,8 @@ export class ScheduleComponent implements OnInit {
       preserveFragment: true
     });
 
-    this.iniDate.setDate(this.iniDate.getDate() - 5)
-    this.finDate.setDate(this.finDate.getDate() + 5)
+    this.iniDate.setDate(this.iniDate.getDate() - 10)
+    this.finDate.setDate(this.finDate.getDate() + 10)
 
     this.router.navigateByUrl(urlTree)
 
