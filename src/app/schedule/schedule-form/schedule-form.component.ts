@@ -499,6 +499,16 @@ export class ScheduleFormComponent implements OnInit {
     this.itemsByResponsible = this.items.filter((item) => {
       return responsible.id == item.responsible_id
     })
+
+    /* Pre-seleciona o item quando em modo administrador em edição */
+    if(this.typeForm === 'edit' && this.adminMode) {
+      this.itemsByResponsible.filter((item, i) => {
+        if(item.date !== this.datePipe.transform(this.scheduleForm.controls.available_date.value, 'yyyy-MM-dd'))
+          return;
+
+        this.toggleDate(item, i);
+      })
+    }
   }
 
   checkValidation() {
