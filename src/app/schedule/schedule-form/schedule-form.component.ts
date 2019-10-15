@@ -177,6 +177,11 @@ export class ScheduleFormComponent implements OnInit {
           this.scheduleForm.controls.budget_value.enable();
         }
 
+        //Cancelar validação de datas para modo admin
+        if(this.adminMode) {
+          return;
+        }
+
         this.durationErrorMessage = 'Duração válida para a atividade selecionada:'
         this.durationErrorMessage += ' de ' + jobActivity.min_duration + ' a ' + jobActivity.max_duration
         this.durationErrorMessage += ' dia(s)'
