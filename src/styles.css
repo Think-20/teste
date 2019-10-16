@@ -889,4 +889,5 @@ cb-proposals .mat-expansion-panel-body {
 .items-container .item-container .mat-button-toggle-label-content {
   line-height: normal;
   padding: 0;
+  width: 100%;
 }
