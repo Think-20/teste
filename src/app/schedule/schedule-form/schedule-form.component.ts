@@ -611,11 +611,17 @@ export class ScheduleFormComponent implements OnInit {
     this.jobService.data.job_activity = task.job_activity
 
     this.taskService.edit(task).subscribe((data) => {
-      this.snackBar.open(data.message, '', {
-        duration: 5000
-      }).afterDismissed().subscribe(() => {
-        this.router.navigateByUrl('/schedule?date=' + task.items[0].date)
-      })
+      if(data.status) {
+        this.snackBar.open(data.message, '', {
+          duration: 1500
+        }).afterDismissed().subscribe(() => {
+          this.router.navigateByUrl('/schedule?date=' + task.items[0].date)
+        });
+      } else {
+        this.snackBar.open(data.message, '', {
+          duration: 5000
+        });
+      }
     })
   }
 
