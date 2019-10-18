@@ -334,9 +334,15 @@ export class ScheduleFormComponent implements OnInit {
       this.searchForm.controls.attendance.disable()
     }
 
+    let snackbar;
+
     this.searchForm.valueChanges
-    .debounceTime(500)
+    .do(() => {
+      snackbar = this.snackBar.open('Aguardando sua busca terminar...')
+    })
+    .debounceTime(1000)
     .subscribe(() => {
+      snackbar.dismiss();
       this.loadTasks();
     });
   }
