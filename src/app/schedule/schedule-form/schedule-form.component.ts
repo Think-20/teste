@@ -108,8 +108,8 @@ export class ScheduleFormComponent implements OnInit {
   subscribeChangesOnAdminMode() {
     this.subscriptions.add(
       this.scheduleForm.controls.admin.valueChanges.subscribe((value) => {
-        if (value == true) this.createValidations()
-        if (value == false) this.destroyValidations()
+        if (value == false) this.createValidations()
+        if (value == true) this.destroyValidations()
 
         this.adminMode = value
       })
@@ -126,6 +126,7 @@ export class ScheduleFormComponent implements OnInit {
     this.subscriptions.unsubscribe()
     this.subscriptions = new Subscription;
     this.subscribeChangesOnAdminMode()
+    this.removeValidationBudget();
   }
 
   ngOnDestroy() {
@@ -439,6 +440,11 @@ export class ScheduleFormComponent implements OnInit {
         this.scheduleForm.controls.budget_value.updateValueAndValidity()
       })
     )
+  }
+
+  removeValidationBudget() {
+    this.scheduleForm.controls.budget_value.setValidators([]);
+    this.scheduleForm.controls.budget_value.updateValueAndValidity();
   }
 
   compareResponsible(var1: Employee, var2: Employee) {
