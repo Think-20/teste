@@ -247,10 +247,12 @@ export class ScheduleLineComponent implements OnInit {
       if(text.indexOf(value) >= 0) found = true
     })
 
+    /*
     if(text.indexOf('Orçamento') >= 0
     && item.task.job.job_activity.description != 'Projeto externo') {
       found = true
     }
+    */
 
     return found ? false : true
   }
