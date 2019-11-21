@@ -138,7 +138,8 @@
             <div class="mat-header-row">
               <div class="mat-header-cell mat-column-id text-left">ID</div>
               <div class="mat-header-cell mat-column-client">Job</div>
-              <div class="mat-header-cell mat-column-event">Atividade</div>
+              <div class="mat-header-cell mat-column-event">Evento</div>
+              <div class="mat-header-cell mat-column-activity">Atividade</div>
               <div class="mat-header-cell mat-column-type">Tipo</div>
               <div class="mat-header-cell mat-column-attendance">Atendimento</div>
               <div class="mat-header-cell mat-column-creation">Criação</div>
@@ -155,6 +156,9 @@
                   {{ jobService.displayNameEvent(task.job) }}
                 </div>
                 <div class="mat-cell mat-column-event">
+                  {{ task.job.event }}
+                </div>
+                <div class="mat-cell mat-column-activity">
                   {{ taskService.jobDisplay(task) }}
                 </div>
                 <div class="mat-cell mat-column-type">

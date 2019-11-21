@@ -3,23 +3,27 @@ p {
 }
 
 .mat-column-id {
-  width: 12%;
+  width: 10%;
 }
 
 .mat-column-client {
-    width: 13%;
+    width: 11%;
 }
 
 .mat-column-event {
-    width: 12%;
+    width: 10%;
+}
+
+.mat-column-activity {
+    width: 10%;
 }
 
 .mat-column-date {
-    width: 12%;
+    width: 10%;
 }
 
 .mat-column-type {
-    width: 13%;
+    width: 11%;
 }
 
 .mat-column-attendance {
