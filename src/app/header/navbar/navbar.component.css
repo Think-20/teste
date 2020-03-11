@@ -34,3 +34,9 @@ mat-toolbar {
   width: 120px;
   margin-left: 50px;
 }
+
+@media screen and (max-width: 500px) {
+  #logoNavBar {
+    display: none;
+  }
+}

@@ -54,10 +54,14 @@
   background-color: #e5e6e8 !important;
   padding: 12px;
   margin-bottom: 5px;
+  display: flex;
+  justify-content: space-between;
+  color: white !important;
 }
 
 #logo-container img {
   width: 124px;
+  margin-left: 5px;
 }
 
 
@@ -117,3 +121,11 @@
   text-decoration: none;
   padding-left: 0;
 }
+
+
+@media screen and (max-width: 500px) {
+  #sidenav-container {
+    position: static;
+  }
+}
+
