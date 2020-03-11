@@ -166,3 +166,10 @@
     max-width: unset;
   }
 }
+
+@media screen and (max-width: 500px) {
+  #justifyForm .inputs.row {
+    margin-right: 0;
+    margin-left: 0;
+  }
+}
