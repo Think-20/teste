@@ -364,11 +364,11 @@ mat-card-title > p {
   text-transform: uppercase;
 }
 
-#justifyCardTitle .mat-table {
+cb-timecard .mat-table {
   min-width: 500px;
 }
 
-#justifyCardTitle .mat-card {
+cb-timecard .mat-card {
   overflow-x: auto;
 }
 
