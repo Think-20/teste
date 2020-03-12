@@ -122,10 +122,18 @@
   padding-left: 0;
 }
 
+#menu-sidenav {
+  display: none;
+}
 
 @media screen and (max-width: 500px) {
   #sidenav-container {
     position: static;
+  }
+
+  #menu-sidenav {
+    display: block;
+    margin-right: -10px;
   }
 }
 
