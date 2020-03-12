@@ -364,6 +364,14 @@ mat-card-title > p {
   text-transform: uppercase;
 }
 
+#justifyCardTitle .mat-table {
+  min-width: 500px;
+}
+
+#justifyCardTitle .mat-card {
+  overflow-x: auto;
+}
+
 .mat-row::after, .mat-header-row::after {
     display: table;
     content: '';
