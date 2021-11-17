@@ -16,11 +16,9 @@
     <mat-tab label="Projeto">
       <cb-projects (requestJobReloadEmitter)="reload()" *ngIf="job?.id != undefined" [job]="job"></cb-projects>
     </mat-tab>
-    <!--
     <mat-tab label="Proposta">
       <cb-proposals *ngIf="job?.id != undefined" [job]="job" [containerWidth]="containerWidth"></cb-proposals>
     </mat-tab>
-    -->
     <mat-tab label="Memorial descritivo">
       <cb-specification *ngIf="job?.id != undefined" [job]="job"></cb-specification>
     </mat-tab>
