@@ -24,6 +24,7 @@ import { ScheduleDate } from '../schedule-date/schedule-date.model';
 import { ErrorHandler } from 'app/shared/error-handler.service';
 import { Task } from '../task.model';
 import { TaskItem } from '../task-item.model';
+import { currency } from 'app/shared/formatter';
 
 @Component({
   selector: 'cb-schedule-form',
@@ -401,27 +402,37 @@ export class ScheduleFormComponent implements OnInit {
 
     if (days <= 1) {
       validators.push(Validators.min(0))
-      validators.push(Validators.max(70000))
-      this.budgetErrorMessage = 'O valor deve estar entre 0,00 e 70.000,00 para até 1 dia'
+      validators.push(Validators.max(80000))
+      this.budgetErrorMessage = 'O valor deve estar entre 0,00 e 80.000,00 para até 1 dia'
     } else if (days <= 2) {
-      validators.push(Validators.min(70000.01))
-      validators.push(Validators.max(150000))
-      this.budgetErrorMessage = 'O valor deve estar entre 70.000,00 e 150.000,00 para até 2 dias'
+      validators.push(Validators.min(80000.01))
+      validators.push(Validators.max(160000))
+      this.budgetErrorMessage = 'O valor deve estar entre 80.000,00 e 160.000,00 para até 2 dias'
     } else if (days <= 3) {
-      validators.push(Validators.min(150000.01))
-      validators.push(Validators.max(240000))
-      this.budgetErrorMessage = 'O valor deve estar entre 150.000,00 e 240.000,00 para até 3 dias'
+      validators.push(Validators.min(160000.01))
+      validators.push(Validators.max(250000))
+      this.budgetErrorMessage = 'O valor deve estar entre 160.000,00 e 250.000,00 para até 3 dias'
     } else if (days <= 4) {
-      validators.push(Validators.min(240000.01))
-      validators.push(Validators.max(340000))
-      this.budgetErrorMessage = 'O valor deve estar entre 240.000,00 e 340.000,00 para até 4 dias'
+      validators.push(Validators.min(250000.01))
+      validators.push(Validators.max(350000))
+      this.budgetErrorMessage = 'O valor deve estar entre 250.000,00 e 350.000,00 para até 4 dias'
     } else if (days <= 5) {
-      validators.push(Validators.min(340000.01))
-      validators.push(Validators.max(450000))
-      this.budgetErrorMessage = 'O valor deve estar entre 340.000,00 e 450.000,00 para até 5 dias'
+      validators.push(Validators.min(350000.01))
+      validators.push(Validators.max(460000))
+      this.budgetErrorMessage = 'O valor deve estar entre 350.000,00 e 460.000,00 para até 5 dias'
     } else if (days > 5) {
-      validators.push(Validators.min(450000.01))
-      this.budgetErrorMessage = 'O valor deve ser maior que 450.000,00 para mais de 5 dias'
+      validators.push(Validators.min(460000.01))
+      this.budgetErrorMessage = 'O valor deve ser maior que 460.000,00 para mais de 5 dias'
+    }
+
+    if (jobActivity.min_budget_value) {
+      validators.push(Validators.min(jobActivity.min_budget_value))
+
+      if (this.budgetErrorMessage.length > 0) {
+        this.budgetErrorMessage += ' | '
+      }
+      this.budgetErrorMessage += 'O valor mínimo é ' + currency(jobActivity.min_budget_value) + ' para ' + jobActivity.description
+      return validators;
     }
 
     return validators
