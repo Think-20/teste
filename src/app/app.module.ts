@@ -198,6 +198,7 @@ import { UpdatedInfoComponent } from './shared/list-data/updated-info/updated-in
 import { ScheduleDateComponent } from './schedule/schedule-date/schedule-date.component';
 import { AddHeaderInterceptor } from './shared/add-header-interceptor.config';
 import { ServiceReportComponent } from './reports/service-report/report-list.component';
+import { ServiceListComponent } from './reports/service-report/service-list/job-list.component';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
@@ -244,6 +245,7 @@ registerLocaleData(localePt);
 
     JobsComponent,
     JobListComponent,
+    ServiceListComponent,
 
     StandFormComponent,
     StandItemFormComponent,

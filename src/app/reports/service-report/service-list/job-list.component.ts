@@ -39,7 +39,7 @@ import { ReportsInfo } from '../../../shared/reports-info.model';
   ]
 })
 @Injectable()
-export class JobListComponent implements OnInit {
+export class ServiceListComponent implements OnInit {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
