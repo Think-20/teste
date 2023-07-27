@@ -9,4 +9,6 @@ export class ReportsInfo {
   standby_count: any
   types: any
 
+  length: any
+
 }

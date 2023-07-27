@@ -46,6 +46,8 @@ export class ServiceListComponent implements OnInit {
   formCopy: any
   search: FormControl
   dataInfo: ReportsInfo
+  jobs: ReportsInfo
+  /* jobs: Job[] = [] */
   paramAttendance: Employee = null
   attendances: Employee[]
   creations: Employee[]
