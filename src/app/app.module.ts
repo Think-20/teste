@@ -125,6 +125,7 @@ import { JobTabsComponent } from './jobs/job-tabs/job-tabs.component';
 import { JobsComponent } from './jobs/jobs.component';
 import { JobListComponent } from './jobs/job-list/job-list.component';
 import { JobService } from './jobs/job.service';
+import { ReportService} from './reports/service-report/report-list.service';
 import { JobFormComponent } from './jobs/job-form/job-form.component';
 
 import { BriefingFormComponent } from './briefings/briefing-form/briefing-form.component';
@@ -196,6 +197,7 @@ import { DataFieldComponent } from './shared/list-data/data-field/data-field.com
 import { UpdatedInfoComponent } from './shared/list-data/updated-info/updated-info.component';
 import { ScheduleDateComponent } from './schedule/schedule-date/schedule-date.component';
 import { AddHeaderInterceptor } from './shared/add-header-interceptor.config';
+import { ServiceReportComponent } from './reports/service-report/report-list.component';
 
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
@@ -310,6 +312,8 @@ registerLocaleData(localePt);
     DataFieldComponent,
     UpdatedInfoComponent,
     ScheduleDateComponent,
+
+    ServiceReportComponent
   ],
   imports: [
     CurrencyMaskModule,
@@ -402,6 +406,7 @@ registerLocaleData(localePt);
     LoggerService,
     RouterExtService,
     ListDataService,
+    ReportService,
 
     MatDialog,
     MatSnackBar,
