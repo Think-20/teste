@@ -10,34 +10,19 @@
       <div class="row search-bar-group">
         <div class="title">Lista</div>
         <mat-form-field class="bar">
-          <input
-            #search
-            matInput
-            formControlName="search"
-            placeholder="Qual job você procura?"
-            autocomplete="off"
-          />
+          <input #search matInput formControlName="search" placeholder="Qual job você procura?" autocomplete="off" />
         </mat-form-field>
         <div class="buttons">
           <a mat-button (click)="search.focus()">
             <mat-icon>search</mat-icon>
           </a>
-          <a
-            mat-button
-            (click)="filter = filter ? false : true"
-            [class.filter-button-active]="hasFilterActive"
-          >
+          <a mat-button (click)="filter = filter ? false : true" [class.filter-button-active]="hasFilterActive">
             <mat-icon>keyboard_arrow_down</mat-icon>
           </a>
           <a [routerLink]="['/jobs/new']" mat-button>
             <mat-icon>add</mat-icon>
           </a>
-          <a
-            matTooltip="Limpar filtro"
-            *ngIf="hasFilterActive"
-            (click)="clearFilter()"
-            mat-button
-          >
+          <a matTooltip="Limpar filtro" *ngIf="hasFilterActive" (click)="clearFilter()" mat-button>
             <mat-icon>clear</mat-icon>
           </a>
         </div>
@@ -47,42 +32,23 @@
       <div class="row">
         <div class="col-md-12">
           <mat-form-field class="col-md-2-4">
-            <input
-              matInput
-              formControlName="client"
-              [matAutocomplete]="autocompleteclient"
-              placeholder="Cliente"
-            />
+            <input matInput formControlName="client" [matAutocomplete]="autocompleteclient" placeholder="Cliente" />
           </mat-form-field>
           <mat-autocomplete #autocompleteclient="matAutocomplete">
-            <mat-option
-              *ngFor="let client of clients"
-              [value]="client.fantasy_name"
-            >
+            <mat-option *ngFor="let client of clients" [value]="client.fantasy_name">
               {{ client.fantasy_name }}
             </mat-option>
           </mat-autocomplete>
           <mat-form-field *ngIf="isAdmin" class="col-md-2-4">
-            <mat-select
-              placeholder="Atendimento"
-              formControlName="attendance"
-              [compareWith]="compareAttendance"
-            >
+            <mat-select placeholder="Atendimento" formControlName="attendance">
               <mat-option></mat-option>
-              <mat-option
-                *ngFor="let attendance of attendances"
-                [value]="attendance"
-              >
+              <mat-option *ngFor="let attendance of attendances" [value]="attendance">
                 {{ attendance.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col-md-2-4">
-            <mat-select
-              placeholder="Projetista"
-              formControlName="creation"
-              [compareWith]="compareAttendance"
-            >
+            <mat-select placeholder="Projetista" formControlName="creation">
               <mat-option></mat-option>
               <mat-option *ngFor="let creation of creations" [value]="creation">
                 {{ creation.name }}
@@ -90,11 +56,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col-md-2-4">
-            <mat-select
-              placeholder="Tipo"
-              formControlName="job_type"
-              [compareWith]="compareJobType"
-            >
+            <mat-select placeholder="Tipo" formControlName="job_type">
               <mat-option></mat-option>
               <mat-option *ngFor="let job_type of job_types" [value]="job_type">
                 {{ job_type.description }}
@@ -102,11 +64,7 @@
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col-md-2-4">
-            <mat-select
-              placeholder="Status"
-              formControlName="status"
-              [compareWith]="compareStatus"
-            >
+            <mat-select placeholder="Status" formControlName="status">
               <mat-option></mat-option>
               <mat-option *ngFor="let s of status" [value]="s">
                 {{ s.description }}
@@ -121,42 +79,21 @@
             <br />
           </div>
           <mat-form-field class="col-md-3">
-            <input
-              [matDatepicker]="initialDatepicker"
-              formControlName="initial_date"
-              matInput
-              placeholder="Data inicial"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="initialDatepicker"
-            ></mat-datepicker-toggle>
+            <input [matDatepicker]="initialDatepicker" formControlName="initial_date" matInput
+              placeholder="Data inicial" />
+            <mat-datepicker-toggle matSuffix [for]="initialDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #initialDatepicker></mat-datepicker>
           </mat-form-field>
           <mat-form-field class="col-md-3">
-            <input
-              [matDatepicker]="finalDatepicker"
-              formControlName="final_date"
-              matInput
-              placeholder="Data final"
-            />
-            <mat-datepicker-toggle
-              matSuffix
-              [for]="finalDatepicker"
-            ></mat-datepicker-toggle>
+            <input [matDatepicker]="finalDatepicker" formControlName="final_date" matInput placeholder="Data final" />
+            <mat-datepicker-toggle matSuffix [for]="finalDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #finalDatepicker></mat-datepicker>
           </mat-form-field>
         </div>
       </div>
     </mat-card>
-    <mat-paginator
-      *ngIf="jobs"
-      [length]="pagination?.total"
-      [pageSize]="pagination?.per_page"
-      [pageIndex]="pageIndex"
-      [pageSizeOptions]="[pagination?.per_page]"
-      (page)="changePage($event)"
-    ></mat-paginator>
+    <mat-paginator *ngIf="jobs" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex"
+      [pageSizeOptions]="[pagination?.per_page]" (page)="changePage($event)"></mat-paginator>
     <mat-card>
       <div *ngIf="jobs?.length > 0">
         <table class="table mat-table">
@@ -173,11 +110,7 @@
             <div class="mat-header-cell mat-column-action">Valor</div>
             <div class="mat-header-cell mat-column-action">Status</div>
           </div>
-          <div
-            class="mat-row"
-            *ngFor="let job of jobs"
-            [@rowAppeared]="rowAppearedState"
-          >
+          <div class="mat-row" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState">
             <div class="mat-cell mat-column-id">
               {{ job.code }}
             </div>
@@ -188,7 +121,7 @@
               {{ job.budget_value }}
             </div>
             <div class="mat-cell mat-column-type">
-              {{ "victor" }}
+              {{ job.creation[0]?.responsible?.name }}
             </div>
             <div class="mat-cell mat-column-attendance">
               {{ "victor" }}
@@ -219,26 +152,20 @@
           <small> Aguarde... </small>
         </p>
       </div>
-      <div
-        *ngIf="
+      <div *ngIf="
           jobs.length == 0 &&
           searchForm.controls.search.value != '' &&
           !searching
-        "
-        class="col-md-12 records-not-found"
-      >
+        " class="col-md-12 records-not-found">
         <p>
           <small> Não encontramos resultados para sua busca. :( </small>
         </p>
       </div>
-      <div
-        *ngIf="
+      <div *ngIf="
           jobs.length == 0 &&
           searchForm.controls.search.value == '' &&
           !searching
-        "
-        class="col-md-12 records-not-found"
-      >
+        " class="col-md-12 records-not-found">
         <p>
           <small>
             Ainda não existe nenhum job cadastrado. Que tal
@@ -246,6 +173,68 @@
           </small>
         </p>
       </div>
+      <mat-divider></mat-divider>
+      <mat-grid-list cols="6" rowHeight="75px">
+        <mat-grid-tile class="mat-grid-item">
+          <div class="mat-header-cell m-0 p-0 mb-2">Total de Jobs:</div>
+          <div>{{reportData?.jobs?.total}}</div>
+        </mat-grid-tile>
+        <mat-grid-tile class="mat-grid-item">
+          <div class="mat-header-cell m-0 p-0 mb-2">Valor Total:</div>
+          <div>{{reportData?.total_value}}</div>
+        </mat-grid-tile>
+        <mat-grid-tile class="mat-grid-item">
+          <div class="mat-header-cell m-0 p-0 mb-2">Ticket Médio:</div>
+          <div>{{reportData?.average_ticket}}</div>
+        </mat-grid-tile>
+        <mat-grid-tile class="mat-grid-item">
+          <div class="mat-header-cell m-0 p-0 mb-2">Tempo Médio de Aprovação:</div>
+          <div>{{reportData?.averate_time_to_aproval}} dias</div>
+        </mat-grid-tile>
+        <mat-grid-tile class="mat-grid-item">
+          <div class="mat-header-cell m-0 p-0 mb-2">Taxa de Conversão:</div>
+          <div>{{reportData?.conversion_rate}}</div>
+        </mat-grid-tile>
+        <mat-grid-tile class="mat-grid-item" [rowspan]="2">
+          <div class="d-flex flex-column align-items-end align-self-end">
+            <div class="mat-header-cell m-0 p-0 mb-2">Tipo</div>
+            <div class="d-flex flex-row align-items-center justify-content-center mb-2">
+              <div class="mat-grid-type m-0 p-0">stand: </div>
+              <div class="mat-header-cell m-0 p-0  ml-2">{{reportData?.types.stand}}</div>
+            </div>
+            <div class="d-flex flex-row align-items-center justify-content-center mb-2">
+              <div class="mat-grid-type m-0 p-0">cenografia: </div>
+              <div class="mat-header-cell m-0 p-0 ml-2">{{reportData?.types.cenografia}}</div>
+            </div>
+            <div class="d-flex flex-row align-items-center justify-content-center mb-2">
+              <div class="mat-grid-type m-0 p-0">pdv: </div>
+              <div class="mat-header-cell m-0 p-0 ml-2">{{reportData?.types.pdv}}</div>
+            </div>
+            <div class="d-flex flex-row align-items-center justify-content-center mb-2">
+              <div class="mat-grid-type m-0 p-0">showroom: </div>
+              <div class="mat-header-cell m-0 p-0 ml-2">{{reportData?.types.showroom}}</div>
+            </div>
+            <div class="d-flex flex-row align-items-center justify-content-center mb-2">
+              <div class="mat-grid-type m-0 p-0">outsider: </div>
+              <div class="mat-header-cell m-0 p-0 ml-2">{{reportData?.types.outsider}}</div>
+            </div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile class="mat-grid-item">
+          <div class="mat-header-cell m-0 p-0 mb-2">Projetos em Stand-by:</div>
+          <div class="d-flex justify-content-between w-100">
+            <div>{{reportData?.standby_projects.amount}}</div>
+            <div>{{reportData?.standby_projects.value}}</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile class="mat-grid-item">
+          <div class="mat-header-cell m-0 p-0 mb-2">Média aprovação Mensal:</div>
+          <div class="d-flex justify-content-between w-100">
+            <div>{{reportData?.averageApprovedJobsPerMonth.amount}}</div>
+            <div>{{reportData?.averageApprovedJobsPerMonth.value}}</div>
+          </div>
+        </mat-grid-tile>
+      </mat-grid-list>
     </mat-card>
     <!-- <hr class="hr" />
     <div >
@@ -306,13 +295,7 @@
       </mat-card>
     </div> -->
 
-    <mat-paginator
-      *ngIf="jobs"
-      [length]="pagination?.total"
-      [pageSize]="pagination?.per_page"
-      [pageIndex]="pageIndex"
-      [pageSizeOptions]="[pagination?.per_page]"
-      (page)="changePage($event)"
-    ></mat-paginator>
+    <mat-paginator *ngIf="jobs" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex"
+      [pageSizeOptions]="[pagination?.per_page]" (page)="changePage($event)"></mat-paginator>
   </form>
 </div>

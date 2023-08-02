@@ -4,7 +4,7 @@ import { trigger, style, state, transition, animate, keyframes } from '@angular/
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ReportService } from '../service-report/report-list.service';
-import { Job } from '../service-report/report-list.model';
+import { Job, ReportData } from '../service-report/report-list.model';
 import { Pagination } from 'app/shared/pagination.model';
 import { Employee } from '../../employees/employee.model';
 import { EmployeeService } from '../../employees/employee.service';
@@ -60,6 +60,8 @@ export class ServiceReportComponent implements OnInit {
   params = {}
   hasFilterActive = false
   isAdmin: boolean = false
+  reportData: ReportData;
+
 
   constructor(
     private fb: FormBuilder,
@@ -178,6 +180,8 @@ export class ServiceReportComponent implements OnInit {
     let snackBar = this.snackBar.open('Carregando jobs...')
     this.jobService.jobs(params, page).subscribe(dataInfo => {
       this.jobs = dataInfo.jobs.data
+      this.reportData = (dataInfo as unknown as ReportData);
+      console.log(this.reportData);
       this.searching = false
       snackBar.dismiss()
     })

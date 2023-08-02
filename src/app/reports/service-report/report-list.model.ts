@@ -62,3 +62,30 @@ export class Job {
     budget_responsible?: Employee
     production_responsible?: Employee
 }
+
+export interface ReportData {
+    aprovals_value: string;
+    averageApprovedJobsPerMonth: {
+        amount: number;
+        value: string;
+    };
+    jobs: {
+        data: Job[],
+        total: number;
+    }
+    average_ticket: string;
+    averate_time_to_aproval: number;
+    conversion_rate: string;
+    total_value: string;
+    standby_projects: {
+        amount: number;
+        value: string;
+    }
+    types: {
+        cenografia: number;
+        outsider: number;
+        pdv: number;
+        showroom: number;
+        stand: number;
+    }
+}

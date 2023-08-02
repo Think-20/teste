@@ -203,6 +203,7 @@ import { ServiceListComponent } from './reports/service-report/service-list/job-
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
+import { MatGridListModule } from '@angular/material';
 
 registerLocaleData(localePt);
 
@@ -353,6 +354,7 @@ registerLocaleData(localePt);
     MatTooltipModule,
     MatRadioModule,
     MatBadgeModule,
+    MatGridListModule,
     NotificationModule,
     MatExpansionModule,
     MatProgressBarModule,

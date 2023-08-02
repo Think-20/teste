@@ -79,3 +79,18 @@
 .updated-info-employee {
   font-size: 12px;
 }
+
+
+::ng-deep .mat-grid-item > figure {
+  padding: 1rem !important;
+  justify-content: start !important;
+  flex-direction: column;
+  align-items: start !important;
+}
+
+.mat-grid-type {
+  font-size: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
