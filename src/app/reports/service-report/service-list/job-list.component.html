@@ -99,49 +99,49 @@
         <table class="table mat-table">
           <div class="mat-header-row">
             <div class="mat-header-cell mat-column-id">NUM</div>
-            <div class="mat-header-cell mat-column-client">Atendimento</div>
-            <div class="mat-header-cell mat-column-event">Orçamento</div>
-            <div class="mat-header-cell mat-column-type">Criação</div>
-            <div class="mat-header-cell mat-column-attendance">Produção</div>
+            <div class="mat-header-cell mat-column-service">Atendimento</div>
+            <div class="mat-header-cell mat-column-budget">Orçamento</div>
+            <div class="mat-header-cell mat-column-creation">Criação</div>
+            <div class="mat-header-cell mat-column-production">Produção</div>
             <div class="mat-header-cell mat-column-date">Data</div>
-            <div class="mat-header-cell mat-column-date-creation">Cliente</div>
-            <div class="mat-header-cell mat-column-status">Evento</div>
-            <div class="mat-header-cell mat-column-status_updated">Tipo</div>
-            <div class="mat-header-cell mat-column-action">Valor</div>
-            <div class="mat-header-cell mat-column-action">Status</div>
+            <div class="mat-header-cell mat-column-client">Cliente</div>
+            <div class="mat-header-cell mat-column-event">Evento</div>
+            <div class="mat-header-cell mat-column-type">Tipo</div>
+            <div class="mat-header-cell mat-column-value">Valor</div>
+            <div class="mat-header-cell mat-column-status">Status</div>
           </div>
-          <div class="mat-row" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState">
+          <div class="mat-row p-2" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState">
             <div class="mat-cell mat-column-id">
               {{ job.code }}
             </div>
-            <div class="mat-cell mat-column-client">
+            <div class="mat-cell mat-column-service">
               {{ job.attendance.name }}
             </div>
-            <div class="mat-cell mat-column-event">
+            <div class="mat-cell mat-column-budget">
               {{ job.budget_value }}
-            </div>
-            <div class="mat-cell mat-column-type">
-              {{ job.creation[0]?.responsible?.name }}
-            </div>
-            <div class="mat-cell mat-column-attendance">
-              {{ "victor" }}
             </div>
             <div class="mat-cell mat-column-creation">
-              {{ job.created_at | date : "dd/MM/yy" }}
+              {{ job.creation[0]?.responsible?.name }}
+            </div>
+            <div class="mat-cell mat-column-production">
+              {{ "victor" }}
             </div>
             <div class="mat-cell mat-column-date">
+              {{ job.created_at | date : "dd/MM/yy" }}
+            </div>
+            <div class="mat-cell mat-column-client">
               {{ job.client ? job.client.fantasy_name : job.not_client }}
             </div>
-            <div class="mat-cell mat-column-available-date">
+            <div class="mat-cell mat-column-event">
               {{ job.event }}
             </div>
-            <div class="mat-cell mat-column-status">
+            <div class="mat-cell mat-column-type">
               {{ job.job_type.description }}
             </div>
-            <div class="mat-cell mat-column-status_updated">
+            <div class="mat-cell mat-column-value">
               {{ job.budget_value }}
             </div>
-            <div class="mat-cell mat-column-action">
+            <div class="mat-cell mat-column-status">
               {{ job.status.description }}
             </div>
           </div>
@@ -200,23 +200,23 @@
             <div class="mat-header-cell m-0 p-0 mb-2">Tipo</div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">stand: </div>
-              <div class="mat-header-cell m-0 p-0  ml-2">{{reportData?.types.stand}}</div>
+              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types.stand}}</div>
             </div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">cenografia: </div>
-              <div class="mat-header-cell m-0 p-0 ml-2">{{reportData?.types.cenografia}}</div>
+              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types.cenografia}}</div>
             </div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">pdv: </div>
-              <div class="mat-header-cell m-0 p-0 ml-2">{{reportData?.types.pdv}}</div>
+              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types.pdv}}</div>
             </div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">showroom: </div>
-              <div class="mat-header-cell m-0 p-0 ml-2">{{reportData?.types.showroom}}</div>
+              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types.showroom}}</div>
             </div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">outsider: </div>
-              <div class="mat-header-cell m-0 p-0 ml-2">{{reportData?.types.outsider}}</div>
+              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types.outsider}}</div>
             </div>
           </div>
         </mat-grid-tile>

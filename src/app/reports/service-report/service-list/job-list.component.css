@@ -1,4 +1,24 @@
 .mat-column-id {
+  width: 5%;
+}
+
+.mat-column-service {
+  width: 10%;
+}
+
+.mat-column-budget {
+  width: 10%;
+}
+
+.mat-column-creation {
+  width: 10%;
+}
+
+.mat-column-production {
+  width: 10%;
+}
+
+.mat-column-date {
   width: 10%;
 }
 
@@ -10,36 +30,16 @@
   width: 10%;
 }
 
-.mat-column-date {
-  width: 8%;
-}
-
-.mat-column-available-date {
-  width: 8%;
-}
-
 .mat-column-type {
-  width: 8%;
+  width: 5%;
 }
 
-.mat-column-attendance {
-  width: 11%;
-}
-
-.mat-column-creation {
-  width: 8%;
-}
-
-.mat-column-status_updated {
-  width: 9%;
+.mat-column-value {
+  width: 10%;
 }
 
 .mat-column-status {
   width: 10%;
-}
-
-.mat-column-action {
-  width: 8%;
 }
 
 ::ng-deep .langSelect div.mat-select-arrow-wrapper {
@@ -93,4 +93,8 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.min-w-2 {
+  min-width: 2rem;
 }
