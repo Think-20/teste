@@ -181,7 +181,6 @@ export class ServiceReportComponent implements OnInit {
     this.jobService.jobs(params, page).subscribe(dataInfo => {
       this.jobs = dataInfo.jobs.data
       this.reportData = (dataInfo as unknown as ReportData);
-      console.log(this.reportData);
       this.searching = false
       snackBar.dismiss()
     })

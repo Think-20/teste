@@ -121,10 +121,10 @@
               {{ job.budget_value }}
             </div>
             <div class="mat-cell mat-column-creation">
-              {{ job.creation[0]?.responsible?.name }}
+              {{ job.creation[0]?.responsible?.name ? job.creation[0]?.responsible?.name : '-' }}
             </div>
             <div class="mat-cell mat-column-production">
-              {{ "victor" }}
+              {{ job?.production_responsible?.name ? job?.production_responsible?.name : '-' }}
             </div>
             <div class="mat-cell mat-column-date">
               {{ job.created_at | date : "dd/MM/yy" }}

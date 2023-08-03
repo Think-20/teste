@@ -17,6 +17,7 @@ import { ClientService } from '../../../clients/client.service';
 import { JobType } from '../../../job-types/job-type.model';
 import { JobTypeService } from '../../../job-types/job-type.service';
 import { ReportsInfo } from '../../../shared/reports-info.model';
+import { ReportData } from '../report-list.model';
 
 @Component({
   selector: 'cb-job-list',
@@ -60,6 +61,7 @@ export class ServiceListComponent implements OnInit {
   params = {}
   hasFilterActive = false
   isAdmin: boolean = false
+  reportData: ReportData;
 
   constructor(
     private fb: FormBuilder,
@@ -205,11 +207,4 @@ export class ServiceListComponent implements OnInit {
       })
     })
   } */
-
-
-
-
-
-
-
 }
