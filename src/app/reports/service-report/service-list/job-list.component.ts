@@ -185,6 +185,7 @@ export class ServiceListComponent implements OnInit {
       snackBar.dismiss()
     })
   }
+  
 
  /*  loadFilterData() {
     this.jobStatus.jobStatus().subscribe(status => this.status = status)

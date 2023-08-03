@@ -78,7 +78,9 @@ export class ReportService {
   }
 
   jobs(params?: {}, page: number = 0): Observable<ReportsInfo> {
-    let url = `/reports`
+    //let url = `/reports`
+    let url = params === {} ? `reports/all?page=${page}` : `reports?page=${page}`
+    
     let prefix = this.auth.hasAccess('jobs/all') ? '' : 'my-'
 
     url = prefix + url
