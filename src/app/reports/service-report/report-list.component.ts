@@ -94,8 +94,8 @@ export class ServiceReportComponent implements OnInit {
       job_type: this.fb.control(''),
       client: this.fb.control(''),
       status: this.fb.control(''),
-      initial_date: this.fb.control(''),
-      final_date: this.fb.control(''),
+      date_init: this.fb.control(''),
+      date_end: this.fb.control(''),
     })
 
     if(this.isAdmin)
@@ -136,12 +136,12 @@ export class ServiceReportComponent implements OnInit {
     let attendanceFilter = this.isAdmin ? { attendance: searchValue.attendance } : {}
 
     return {
-      creation: searchValue.creation,
-      job_type: searchValue.job_type,
-      final_date: searchValue.final_date,
-      initial_date: searchValue.initial_date,
-      clientName: clientName,
-      status: status,
+      //creation: searchValue.creation,
+      //job_type: searchValue.job_type,
+      date_end: searchValue.date_end,
+      date_init: searchValue.date_init,
+      name: clientName,
+      //status: status,
       ...attendanceFilter
     }
   }
@@ -175,7 +175,7 @@ export class ServiceReportComponent implements OnInit {
 
   loadJobs(params, page: number) {
     if(this.searching) return
-
+    
     this.searching = true
     let snackBar = this.snackBar.open('Carregando jobs...')
     this.jobService.jobs(params, page).subscribe(dataInfo => {

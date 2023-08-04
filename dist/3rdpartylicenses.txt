@@ -106,9 +106,13 @@ THE SOFTWARE.
 
 @angular/material/dialog
 
+@angular/material/divider
+
 @angular/material/expansion
 
 @angular/material/form-field
+
+@angular/material/grid-list
 
 @angular/material/icon
 

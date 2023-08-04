@@ -79,13 +79,13 @@
             <br />
           </div>
           <mat-form-field class="col-md-3">
-            <input [matDatepicker]="initialDatepicker" formControlName="initial_date" matInput
+            <input [matDatepicker]="initialDatepicker" formControlName="date_init" matInput
               placeholder="Data inicial" />
             <mat-datepicker-toggle matSuffix [for]="initialDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #initialDatepicker></mat-datepicker>
           </mat-form-field>
           <mat-form-field class="col-md-3">
-            <input [matDatepicker]="finalDatepicker" formControlName="final_date" matInput placeholder="Data final" />
+            <input [matDatepicker]="finalDatepicker" formControlName="date_end" matInput placeholder="Data final" />
             <mat-datepicker-toggle matSuffix [for]="finalDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #finalDatepicker></mat-datepicker>
           </mat-form-field>
@@ -104,11 +104,15 @@
             <div class="mat-header-cell mat-column-creation">Criação</div>
             <div class="mat-header-cell mat-column-production">Produção</div>
             <div class="mat-header-cell mat-column-date">Data</div>
+            <div class="mat-header-cell mat-column-id">ID</div>
             <div class="mat-header-cell mat-column-client">Cliente</div>
             <div class="mat-header-cell mat-column-event">Evento</div>
             <div class="mat-header-cell mat-column-type">Tipo</div>
             <div class="mat-header-cell mat-column-value">Valor</div>
+            <div class="mat-header-cell mat-column-extras">Extras</div>
             <div class="mat-header-cell mat-column-status">Status</div>
+            <div class="mat-header-cell mat-column-fatured">Faturado</div>
+            <div class="mat-header-cell mat-column-portin">Parc.</div>
           </div>
           <div class="mat-row p-2" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState">
             <div class="mat-cell mat-column-id">
@@ -129,6 +133,9 @@
             <div class="mat-cell mat-column-date">
               {{ job.created_at | date : "dd/MM/yy" }}
             </div>
+            <div class="mat-cell mat-column-id">
+              001
+            </div>
             <div class="mat-cell mat-column-client">
               {{ job.client ? job.client.fantasy_name : job.not_client }}
             </div>
@@ -141,8 +148,17 @@
             <div class="mat-cell mat-column-value">
               {{ job.budget_value }}
             </div>
+            <div class="mat-cell mat-column-extras">
+              -
+            </div>
             <div class="mat-cell mat-column-status">
               {{ job.status.description }}
+            </div>
+            <div class="mat-cell mat-column-fatured">
+              -
+            </div>
+            <div class="mat-cell mat-column-portin">
+              -
             </div>
           </div>
         </table>
@@ -174,7 +190,7 @@
         </p>
       </div>
       <mat-divider></mat-divider>
-      <mat-grid-list cols="6" rowHeight="75px">
+      <mat-grid-list cols="6" rowHeight="105px">
         <mat-grid-tile class="mat-grid-item">
           <div class="mat-header-cell m-0 p-0 mb-2">Total de Jobs:</div>
           <div>{{reportData?.jobs?.total}}</div>
@@ -192,8 +208,8 @@
           <div>{{reportData?.averate_time_to_aproval}} dias</div>
         </mat-grid-tile>
         <mat-grid-tile class="mat-grid-item">
-          <div class="mat-header-cell m-0 p-0 mb-2">Taxa de Conversão:</div>
-          <div>{{reportData?.conversion_rate}}</div>
+          <div class="mat-header-cell m-0 p-0 mb-2 text-left">Intervalo Médio entre Aprovações:</div>
+          <div>-</div>
         </mat-grid-tile>
         <mat-grid-tile class="mat-grid-item" [rowspan]="2">
           <div class="d-flex flex-column align-items-end align-self-end">
@@ -221,6 +237,10 @@
           </div>
         </mat-grid-tile>
         <mat-grid-tile class="mat-grid-item">
+          <div class="mat-header-cell m-0 p-0 mb-2">Taxa de Conversão:</div>
+          <div>{{reportData?.conversion_rate}}</div>
+        </mat-grid-tile>
+        <mat-grid-tile class="mat-grid-item">
           <div class="mat-header-cell m-0 p-0 mb-2">Projetos em Stand-by:</div>
           <div class="d-flex justify-content-between w-100">
             <div>{{reportData?.standby_projects.amount}}</div>
@@ -228,11 +248,22 @@
           </div>
         </mat-grid-tile>
         <mat-grid-tile class="mat-grid-item">
-          <div class="mat-header-cell m-0 p-0 mb-2">Média aprovação Mensal:</div>
+          <div class="mat-header-cell m-0 p-0 mb-2">Projetos Avançados:</div>
+          <div class="d-flex justify-content-between w-100">
+            <div>12</div>
+            <div>830.000</div>
+          </div>
+        </mat-grid-tile>
+        <mat-grid-tile class="mat-grid-item">
+          <div class="mat-header-cell m-0 p-0 mb-2 text-left">Média de Aprovação Mensal:</div>
           <div class="d-flex justify-content-between w-100">
             <div>{{reportData?.averageApprovedJobsPerMonth.amount}}</div>
             <div>{{reportData?.averageApprovedJobsPerMonth.value}}</div>
           </div>
+        </mat-grid-tile>
+        <mat-grid-tile class="mat-grid-item">
+          <div class="mat-header-cell m-0 p-0 mb-2 text-left">Tendencia Anual de Aprovação</div>
+          <div>27.600</div>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card>

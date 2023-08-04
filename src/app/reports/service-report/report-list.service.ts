@@ -79,14 +79,13 @@ export class ReportService {
 
   jobs(params?: {}, page: number = 0): Observable<ReportsInfo> {
     //let url = `/reports`
-    let url = params === {} ? `reports/all?page=${page}` : `reports?page=${page}`
+    let url = `reports?page=${page}`
     
-    let prefix = this.auth.hasAccess('jobs/all') ? '' : 'my-'
+   // let prefix = this.auth.hasAccess('jobs/all') ? '' : 'my-'
 
-    url = prefix + url
-
-    return this.http.get(`${API}/${url}`
-
+    return this.http.post(`${API}/${url}`,
+      JSON.stringify(params),
+      new RequestOptions()
     )
       .map(response => response.json())
       .catch((err) => {
