@@ -179,7 +179,7 @@ export class ServiceReportComponent implements OnInit {
     this.searching = true
     let snackBar = this.snackBar.open('Carregando jobs...')
     this.jobService.jobs(params, page).subscribe(dataInfo => {
-      this.jobs = dataInfo.jobs.data
+      dataInfo.jobs ? this.jobs = dataInfo.jobs.data : this.jobs = []
       this.pagination = dataInfo.jobs;
       this.reportData = (dataInfo as unknown as ReportData);
       this.searching = false

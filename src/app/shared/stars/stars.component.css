@@ -21,3 +21,7 @@
 .stars-container .label-invalid {
   color: #f44336;
 }
+
+.stars-container {
+  height: 24px;
+}

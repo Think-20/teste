@@ -39,7 +39,7 @@
               {{ client.fantasy_name }}
             </mat-option>
           </mat-autocomplete>
-          <mat-form-field *ngIf="isAdmin" class="col-md-2-4">
+          <!-- <mat-form-field *ngIf="isAdmin" class="col-md-2-4">
             <mat-select placeholder="Atendimento" formControlName="attendance">
               <mat-option></mat-option>
               <mat-option *ngFor="let attendance of attendances" [value]="attendance">
@@ -70,7 +70,7 @@
                 {{ s.description }}
               </mat-option>
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
           <hr />
           <div class="col-md-12">
             <p>
@@ -98,7 +98,7 @@
       <div *ngIf="jobs?.length > 0">
         <table class="table mat-table">
           <div class="mat-header-row">
-            <div class="mat-header-cell mat-column-id">NUM</div>
+            <div class="mat-header-cell mat-column-num">NUM</div>
             <div class="mat-header-cell mat-column-service">Atendimento</div>
             <div class="mat-header-cell mat-column-budget">Orçamento</div>
             <div class="mat-header-cell mat-column-creation">Criação</div>
@@ -113,9 +113,10 @@
             <div class="mat-header-cell mat-column-status">Status</div>
             <div class="mat-header-cell mat-column-fatured">Faturado</div>
             <div class="mat-header-cell mat-column-portin">Parc.</div>
+            <div class="mat-header-cell mat-column-rate">Satisfação</div>
           </div>
           <div class="mat-row p-2" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState">
-            <div class="mat-cell mat-column-id">
+            <div class="mat-cell mat-column-num">
               {{ job.code }}
             </div>
             <div class="mat-cell mat-column-service">
@@ -134,7 +135,7 @@
               {{ job.created_at | date : "dd/MM/yy" }}
             </div>
             <div class="mat-cell mat-column-id">
-              001
+              {{ jobService.showId(job) }}
             </div>
             <div class="mat-cell mat-column-client">
               {{ job.client ? job.client.fantasy_name : job.not_client }}
@@ -159,6 +160,13 @@
             </div>
             <div class="mat-cell mat-column-portin">
               -
+            </div>
+            <div class="mat-cell mat-column-rate">
+              <cb-stars class="star-input" label="Score"
+                [readonly]="true"
+                [rate]="1">
+                  <input matInput>
+              </cb-stars>
             </div>
           </div>
         </table>
@@ -190,7 +198,7 @@
         </p>
       </div>
       <mat-divider></mat-divider>
-      <mat-grid-list cols="6" rowHeight="105px">
+      <mat-grid-list *ngIf="jobs?.length > 0" cols="6" rowHeight="105px">
         <mat-grid-tile class="mat-grid-item">
           <div class="mat-header-cell m-0 p-0 mb-2">Total de Jobs:</div>
           <div>{{reportData?.jobs?.total}}</div>
@@ -216,23 +224,23 @@
             <div class="mat-header-cell m-0 p-0 mb-2">Tipo</div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">stand: </div>
-              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types.stand}}</div>
+              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types?.stand}}</div>
             </div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">cenografia: </div>
-              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types.cenografia}}</div>
+              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types?.cenografia}}</div>
             </div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">pdv: </div>
-              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types.pdv}}</div>
+              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types?.pdv}}</div>
             </div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">showroom: </div>
-              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types.showroom}}</div>
+              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types?.showroom}}</div>
             </div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">outsider: </div>
-              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types.outsider}}</div>
+              <div class="mat-header-cell m-0 p-0 ml-2 text-right min-w-2">{{reportData?.types?.outsider}}</div>
             </div>
           </div>
         </mat-grid-tile>
@@ -243,8 +251,8 @@
         <mat-grid-tile class="mat-grid-item">
           <div class="mat-header-cell m-0 p-0 mb-2">Projetos em Stand-by:</div>
           <div class="d-flex justify-content-between w-100">
-            <div>{{reportData?.standby_projects.amount}}</div>
-            <div>{{reportData?.standby_projects.value}}</div>
+            <div>{{reportData?.standby_projects?.amount}}</div>
+            <div>{{reportData?.standby_projects?.value}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile class="mat-grid-item">
@@ -257,8 +265,8 @@
         <mat-grid-tile class="mat-grid-item">
           <div class="mat-header-cell m-0 p-0 mb-2 text-left">Média de Aprovação Mensal:</div>
           <div class="d-flex justify-content-between w-100">
-            <div>{{reportData?.averageApprovedJobsPerMonth.amount}}</div>
-            <div>{{reportData?.averageApprovedJobsPerMonth.value}}</div>
+            <div>{{reportData?.averageApprovedJobsPerMonth?.amount}}</div>
+            <div>{{reportData?.averageApprovedJobsPerMonth?.value}}</div>
           </div>
         </mat-grid-tile>
         <mat-grid-tile class="mat-grid-item">

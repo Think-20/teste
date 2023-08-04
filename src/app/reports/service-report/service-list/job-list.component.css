@@ -1,61 +1,81 @@
-.mat-column-id {
-  width: 5%;
+.mat-column-num {
+  width: 2%;
+  font-size: 12px;
 }
 
 .mat-column-service {
   width: 10%;
+  font-size: 12px;
 }
 
 .mat-column-budget {
   width: 5%;
+  font-size: 12px;
 }
 
 .mat-column-creation {
   width: 10%;
+  font-size: 12px;
 }
 
 .mat-column-production {
   width: 5%;
+  font-size: 12px;
 }
 
 .mat-column-date {
   width: 5%;
+  font-size: 12px;
 }
 
 .mat-column-id {
-  width: 5%;
+  width: 6%;
+  font-size: 12px;
 }
 
 .mat-column-client {
-  width: 10%;
+  width: 7%;
+  font-size: 12px;
 }
 
 .mat-column-event {
-  width: 5%;
+  width: 8%;
+  font-size: 12px;
 }
 
 .mat-column-type {
-  width: 10%;
+  width: 5%;
+  font-size: 12px;
 }
 
 .mat-column-value {
   width: 5%;
+  font-size: 12px;
 }
 
 .mat-column-extras {
   width: 5%;
+  font-size: 12px;
 }
 
 .mat-column-status {
-  width: 10%;
+  width: 7%;
+  font-size: 12px;
 }
 
 .mat-column-fatured {
   width: 5%;
+  font-size: 12px;
 }
 
 .mat-column-portin {
   width: 5%;
+  font-size: 12px;
+}
+
+.mat-column-rate {
+  width: 8%;
+  font-size: 12px;
 }
 
 ::ng-deep .langSelect div.mat-select-arrow-wrapper {
