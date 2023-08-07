@@ -1,5 +1,5 @@
 <div class="stars-container">
-  <div class="label mat-input-placeholder"
+  <div *ngIf="hasLabel" class="label mat-input-placeholder"
   [class.label-invalid]="input.invalid && input.touched">{{label}}</div>
   <div class="stars-content">
     <mat-icon (mouseenter)="mouseEnter(i)"

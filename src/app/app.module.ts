@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
-import { registerLocaleData, DatePipe } from '@angular/common';
+import { registerLocaleData, DatePipe, CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -204,6 +204,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material';
+import { DecimalPipe } from './shared/decimal.pipe';
 
 registerLocaleData(localePt);
 
@@ -316,7 +317,8 @@ registerLocaleData(localePt);
     UpdatedInfoComponent,
     ScheduleDateComponent,
 
-    ServiceReportComponent
+    ServiceReportComponent,
+    DecimalPipe
   ],
   imports: [
     CurrencyMaskModule,
@@ -358,7 +360,8 @@ registerLocaleData(localePt);
     NotificationModule,
     MatExpansionModule,
     MatProgressBarModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    CommonModule,
   ],
   providers: [
     ClientService,

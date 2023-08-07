@@ -13,6 +13,7 @@ export class StarsComponent implements OnInit {
   rates: number[] = [1,2,3,4,5]
   @Input('rate') rate: number = 0
   @Input('input') input: FormControl = new FormControl()
+  @Input('hasLabel') hasLabel: boolean = true;
   temp: number = 0
 
   constructor() { }
