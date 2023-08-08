@@ -98,22 +98,22 @@
       <div *ngIf="jobs?.length > 0">
         <table class="table mat-table">
           <div class="mat-header-row">
-            <div class="mat-header-cell mat-column-num">NUM</div>
-            <div class="mat-header-cell mat-column-service">Atend</div>
-            <div class="mat-header-cell mat-column-budget">Or</div>
-            <div class="mat-header-cell mat-column-creation">Criação</div>
-            <div class="mat-header-cell mat-column-production">Prod</div>
-            <div class="mat-header-cell mat-column-date">Data</div>
-            <div class="mat-header-cell mat-column-id">ID</div>
-            <div class="mat-header-cell mat-column-client">Cliente</div>
-            <div class="mat-header-cell mat-column-event">Evento</div>
-            <div class="mat-header-cell mat-column-type">Tipo</div>
-            <div class="mat-header-cell mat-column-value">Valor</div>
-            <div class="mat-header-cell mat-column-extras">Extras</div>
-            <div class="mat-header-cell mat-column-status">Status</div>
-            <div class="mat-header-cell mat-column-fatured">Faturado</div>
-            <div class="mat-header-cell mat-column-portin">Parc</div>
-            <div class="mat-header-cell mat-column-rate">Satisfação</div>
+            <div class="mat-header-cell mat-column-num" title="Numero">NUM</div>
+            <div class="mat-header-cell mat-column-service" title="Atendimento">Atend</div>
+            <div class="mat-header-cell mat-column-budget" title="Orçamento">Or</div>
+            <div class="mat-header-cell mat-column-creation" title="Criação">Criação</div>
+            <div class="mat-header-cell mat-column-production" title="Produção">Prod</div>
+            <div class="mat-header-cell mat-column-date" title="Data">Data</div>
+            <div class="mat-header-cell mat-column-id" title="ID">ID</div>
+            <div class="mat-header-cell mat-column-client" title="Cliente">Cliente</div>
+            <div class="mat-header-cell mat-column-event" title="Evento">Evento</div>
+            <div class="mat-header-cell mat-column-type" title="Tipo">Tipo</div>
+            <div class="mat-header-cell mat-column-value" title="Valor">Valor</div>
+            <div class="mat-header-cell mat-column-extras" title="Extras">Extras</div>
+            <div class="mat-header-cell mat-column-status" title="status">Status</div>
+            <div class="mat-header-cell mat-column-fatured" title="Faturado">Faturado</div>
+            <div class="mat-header-cell mat-column-portin" title="Parcela">Parc</div>
+            <div class="mat-header-cell mat-column-rate" title="Satisfação">Satisfação</div>
           </div>
           <div class="mat-row p-2" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState">
             <div class="mat-cell mat-column-num">
