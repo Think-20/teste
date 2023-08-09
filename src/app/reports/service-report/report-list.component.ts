@@ -4,7 +4,7 @@ import { trigger, style, state, transition, animate, keyframes } from '@angular/
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ReportService } from '../service-report/report-list.service';
-import { Job, ReportData } from '../service-report/report-list.model';
+import { Job, JobsDateFilter, ReportData } from '../service-report/report-list.model';
 import { Pagination } from 'app/shared/pagination.model';
 import { Employee } from '../../employees/employee.model';
 import { EmployeeService } from '../../employees/employee.service';
@@ -17,6 +17,9 @@ import { ClientService } from '../../clients/client.service';
 import { JobType } from '../../job-types/job-type.model';
 import { JobTypeService } from '../../job-types/job-type.service';
 import { DataInfo } from '../../shared/data-info.model';
+import { Month, MONTHS } from 'app/shared/date/months';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'cb-job-list',
@@ -61,7 +64,14 @@ export class ServiceReportComponent implements OnInit {
   hasFilterActive = false
   isAdmin: boolean = false
   reportData: ReportData;
-
+  date: Date;
+  month: Month;
+  year: number;
+  years: number[] = []
+  jobsDateFilter: JobsDateFilter[];
+  iniDate: Date;
+  finDate: Date;
+  months: Month[] = MONTHS
 
   constructor(
     private fb: FormBuilder,
@@ -71,8 +81,11 @@ export class ServiceReportComponent implements OnInit {
     private jobService: ReportService,
     private jobTypeService: JobTypeService,
     private jobStatus: JobStatusService,
-    private snackBar: MatSnackBar
-  ) { }
+    private snackBar: MatSnackBar,
+    private datePipe: DatePipe,
+    private router: Router,
+    private route: ActivatedRoute,
+    ) { }
 
   ngOnInit() {
     this.isAdmin = this.authService.hasAccess('job/save')
@@ -83,6 +96,7 @@ export class ServiceReportComponent implements OnInit {
       ? this.authService.currentUser().employee : null
 
     this.createForm()
+    this.setYears()
     this.loadInitialData()
   }
 
@@ -127,6 +141,7 @@ export class ServiceReportComponent implements OnInit {
         this.jobService.pageIndex = 0
         this.jobService.searchValue = searchValue
         this.updateFilterActive()
+        this.changeMonth()
       })
   }
 
@@ -171,6 +186,7 @@ export class ServiceReportComponent implements OnInit {
     }
 
     this.updateFilterActive()
+    this.setDataByParams()
   }
 
   loadJobs(params, page: number) {
@@ -222,5 +238,88 @@ export class ServiceReportComponent implements OnInit {
     })
   } */
 
+  addMonth(inc: number) {
+    this.date.setDate(1)
+    this.date.setMonth(this.date.getMonth() + inc)
+    this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
+    this.year = this.date.getFullYear()
+
+    this.changeMonth()
+  }
+
+  changeMonth() {
+    if(this.searching) return;
+
+    this.searching = true
+    let snackBar = this.snackBar.open('Carregando tarefas...')
+
+    this.jobs = []
+    this.jobsDateFilter = []
+
+    this.iniDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate())
+    this.finDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate())
+
+    const urlTree = this.router.createUrlTree([], {
+      queryParams: { date: this.datePipe.transform(this.iniDate, 'yyyy-MM-dd') },
+      queryParamsHandling: "merge",
+      preserveFragment: true
+    });
+
+    this.iniDate.setDate(this.iniDate.getDate() - 10)
+    this.finDate.setDate(this.finDate.getDate() + 10)
+
+    this.router.navigateByUrl(urlTree)
+
+    this.jobService.jobs({
+      date_initi: this.datePipe.transform(this.iniDate, 'yyyy-MM-dd'),
+      date_end: this.datePipe.transform(this.finDate, 'yyyy-MM-dd'),
+      paginate: false,
+      ...this.params
+    }).subscribe(dataInfo => {
+      dataInfo.jobs ? this.jobs = dataInfo.jobs.data : this.jobs = []
+      this.pagination = dataInfo.jobs;
+      this.reportData = (dataInfo as unknown as ReportData);
+      this.searching = false
+      snackBar.dismiss()
+    })
+  }
+
+  updateMonth(month: Month) {
+    this.month = month
+    this.changeMonth()
+  }
+
+  updateYear(year: number) {
+    this.year = year
+    this.changeMonth()
+  }
+
+  setYears() {
+    let ini = 2018
+    let year = (new Date).getFullYear()
+
+    while (ini <= (year + 1)) {
+      this.years.push(ini)
+      ini += 1
+    }
+  }
+
+  setDataByParams() {
+    this.date = new Date()
+
+    this.route.queryParams.subscribe(params => {
+      if (params.date != undefined) {
+        this.date = new Date(params.date + "T00:00:00")
+        this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
+        this.year = this.date.getFullYear()
+      } else {
+        this.date = new Date(this.datePipe.transform(new Date, 'yyyy-MM-dd') + "T00:00:00")
+        this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
+        this.year = this.date.getFullYear()
+      }
+
+      this.changeMonth()
+    })
+  }
 
 }

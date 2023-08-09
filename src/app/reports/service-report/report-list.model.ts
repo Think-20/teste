@@ -10,6 +10,7 @@ import { JobActivity } from '../../job-activities/job-activity.model';
 import { Briefing } from '../../briefings/briefing.model';
 import { Budget } from '../../budgets/budget.model';
 import { Task } from '../../schedule/task.model';
+import { DayOfWeek } from 'app/shared/date/days-of-week';
 
 export class Job {
     id: number
@@ -88,4 +89,13 @@ export interface ReportData {
         showroom: number;
         stand: number;
     }
+}
+
+export class JobsDateFilter {
+    day: number
+    month: number
+    year: number
+    dayOfWeek: DayOfWeek
+    jobs: Job[]
+    length?: number
 }

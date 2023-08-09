@@ -17,7 +17,8 @@ import { ClientService } from '../../../clients/client.service';
 import { JobType } from '../../../job-types/job-type.model';
 import { JobTypeService } from '../../../job-types/job-type.service';
 import { ReportsInfo } from '../../../shared/reports-info.model';
-import { ReportData } from '../report-list.model';
+import { JobsDateFilter, ReportData } from '../report-list.model';
+import { Month, MONTHS } from 'app/shared/date/months';
 
 @Component({
   selector: 'cb-job-list',
@@ -62,6 +63,14 @@ export class ServiceListComponent implements OnInit {
   hasFilterActive = false
   isAdmin: boolean = false
   reportData: ReportData;
+  date: Date;
+  month: Month;
+  year: number;
+  years: number[] = []
+  jobsDateFilter: JobsDateFilter[];
+  iniDate: Date;
+  finDate: Date;
+  months: Month[] = MONTHS;
 
   constructor(
     private fb: FormBuilder,
