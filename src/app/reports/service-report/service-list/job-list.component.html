@@ -226,7 +226,7 @@
         </p>
       </div>
       <mat-divider></mat-divider>
-      <mat-grid-list *ngIf="jobs?.length > 0" cols="6" rowHeight="85px">
+      <mat-grid-list *ngIf="jobs?.length > 0" cols="6" rowHeight="95px">
         <mat-grid-tile class="mat-grid-item">
           <div class="title-report-dashboard m-0 p-0 mb-2 text-truncate" title="Total de jobs:">Total de jobs:</div>
           <div class="data-report-dashboard text-truncate" [title]="reportData?.jobs?.total">{{reportData?.jobs?.total}}</div>
@@ -300,6 +300,13 @@
         <mat-grid-tile class="mat-grid-item">
           <div class="title-report-dashboard m-0 p-0 mb-2 text-left text-truncate" title="Tendencia anual de aprovação:">Tendencia anual de aprovação:</div>
           <div class="data-report-dashboard text-truncate" [title]="'27600'">27600</div>
+        </mat-grid-tile>
+        <mat-grid-tile class="mat-grid-item">
+          <div class="title-report-dashboard m-0 p-0 mb-2 text-left text-truncate" title="Ultima atualização:">Ultima atualização:</div>
+          <div>
+            <p class="text-truncate data-report-dashboard" [title]="reportData?.updatedInfo?.date">{{reportData?.updatedInfo?.date}}</p>
+            <p class="text-truncate title-report-dashboard text-right" [title]="reportData?.updatedInfo?.employee">{{reportData?.updatedInfo?.employee}}</p>
+          </div>
         </mat-grid-tile>
       </mat-grid-list>
     </mat-card>

@@ -89,6 +89,10 @@ export interface ReportData {
         showroom: number;
         stand: number;
     }
+    updatedInfo: {
+        date: string;
+        employee: string;
+    }
 }
 
 export class JobsDateFilter {
