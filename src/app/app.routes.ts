@@ -64,6 +64,7 @@ import { EventListComponent } from './events/event-list/event-list.component';
 import { EventFormComponent } from './events/event-form/event-form.component';
 import { PerformanceReportLiteComponent } from './reports/performance-report-lite/performance-report-lite.component';
 import { ServiceReportComponent } from './reports/service-report/report-list.component';
+import { AlertsContainerComponent } from './alerts/components/alerts-container/alerts-container.component';
 
 export const ROUTES: Routes = [
   {
@@ -326,7 +327,10 @@ export const ROUTES: Routes = [
         path: 'schedule/new', component: ScheduleFormComponent, canActivate: [AuthGuard]
       }, {
         path: 'schedule/edit/:id', component: ScheduleFormComponent, canActivate: [AuthGuard]
-      }
+      },
+      {
+        path: 'alerts', component: AlertsContainerComponent, canActivate: [AuthGuard]
+      },
     ]
   }
 ]

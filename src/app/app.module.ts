@@ -205,6 +205,8 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material';
 import { DecimalPipe } from './shared/decimal.pipe';
+import { AlertsContainerComponent } from './alerts/components/alerts-container/alerts-container.component';
+import { AlertService } from './alerts/alerts.service';
 
 registerLocaleData(localePt);
 
@@ -318,7 +320,9 @@ registerLocaleData(localePt);
     ScheduleDateComponent,
 
     ServiceReportComponent,
-    DecimalPipe
+    DecimalPipe,
+
+    AlertsContainerComponent
   ],
   imports: [
     CurrencyMaskModule,
@@ -419,6 +423,7 @@ registerLocaleData(localePt);
     MatSnackBar,
     MatSlideToggle,
     MessageLoadingService,
+    AlertService,
     DatePipe,
     {provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
     {provide: LOCALE_ID, useValue: 'pt-BR'},
