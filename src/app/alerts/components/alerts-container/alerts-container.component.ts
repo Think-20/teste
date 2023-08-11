@@ -2,6 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AlertService } from 'app/alerts/alerts.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Projects } from 'app/alerts/alerts.model';
 
 @Component({
   selector: 'app-alerts-container',
@@ -10,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class AlertsContainerComponent implements OnInit {
 
+    projects: Projects;
     item: any;
 
   constructor(
@@ -26,8 +28,8 @@ export class AlertsContainerComponent implements OnInit {
     const snackBar = this.snackBar.open('Carregando tarefas...')
 
     this.alertService.getAlerts().subscribe(dataInfo => {
-      dataInfo ? this.item = dataInfo : this.item = []
-      console.log(dataInfo)
+      dataInfo ? this.projects = dataInfo : this.projects = { count: 0, data: []};
+      console.log(this.projects)
       snackBar.dismiss()
     })
   }

@@ -57,9 +57,11 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || this.getReturnPath();
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     
-    this.auth.logout()
+    this.setReturnUrlByWeekDay();
+
+    this.auth.logout();
 
     this.loginForm = this.fb.group({
       email: this.fb.control('', [Validators.required, Validators.minLength(5)]),
@@ -67,14 +69,12 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  getReturnPath(): string {
+  setReturnUrlByWeekDay(): void {
     const today = new Date();
 
     if (today.getDay() === this.FRIDAY_DAY) {
-      return '/alerts'
+      this.returnUrl = '/alerts';
     }
-
-    return '/'
   }
 
   login(data) {
