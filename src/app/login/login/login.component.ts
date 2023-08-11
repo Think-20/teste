@@ -41,10 +41,11 @@ import { API } from 'app/app.api';
 })
 export class LoginComponent implements OnInit {
 
-  state: string = 'standard'
-  message: string = 'VAMOS COMEÇAR'
-  loginForm: FormGroup
-  API = API
+  state: string = 'standard';
+  message: string = 'VAMOS COMEÇAR';
+  loginForm: FormGroup;
+  API = API;
+  readonly FRIDAY_DAY = 5;
 
   returnUrl: string
 
@@ -56,13 +57,24 @@ export class LoginComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/'
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || this.getReturnPath();
+    
     this.auth.logout()
 
     this.loginForm = this.fb.group({
       email: this.fb.control('', [Validators.required, Validators.minLength(5)]),
       password: this.fb.control('', [Validators.required])
     })
+  }
+
+  getReturnPath(): string {
+    const today = new Date();
+
+    if (today.getDay() === this.FRIDAY_DAY) {
+      return '/alerts'
+    }
+
+    return '/'
   }
 
   login(data) {

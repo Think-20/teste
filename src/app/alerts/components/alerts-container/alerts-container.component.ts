@@ -1,6 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AlertService } from 'app/alerts/alerts.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-alerts-container',
@@ -13,11 +14,22 @@ export class AlertsContainerComponent implements OnInit {
 
   constructor(
         private alertService: AlertService,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private snackBar: MatSnackBar,
     ) { }
 
   ngOnInit() {
-    
+    this.load();
+  }
+
+  load() {
+    const snackBar = this.snackBar.open('Carregando tarefas...')
+
+    this.alertService.getAlerts().subscribe(dataInfo => {
+      dataInfo ? this.item = dataInfo : this.item = []
+      console.log(dataInfo)
+      snackBar.dismiss()
+    })
   }
 
   timeIconDisplay(): string {

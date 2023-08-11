@@ -17,7 +17,7 @@ export class AlertService {
   ) { }
 
   getAlerts(): Observable<any> {
-    let url = `/reports`
+    let url = `/notifywindow`
 
     return this.http.get(`${API}/${url}`)
       .map(response => response.json())
