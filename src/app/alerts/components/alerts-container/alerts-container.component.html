@@ -3,71 +3,73 @@
 </div>
 
 <div class="col-md-12">
-    <mat-card style="min-height: 25rem;">
-        <div class="title">
-            Você possui -- projetos sem atualização de status
-        </div>
-        <div class="table-responsive">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>97 Dias</td>
-                  <td>Rodolfo Lopes</td>
-                  <td>Projeto</td>
-                  <td>Cenografia</td>
-                  <td>Banco Pine</td>
-                  <td>B.hub - corporate events</td>
-                  <td>Festa de final de ano</td>
-                  <td>100.000.00</td>
-                  <td>Icone</td>
-                  <td>14/07</td>
-                  <td>Ernesto Milanese</td>
-                  <td>
-                    <div class="btn-group">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                          Small button
-                        </button>
-                        <div class="dropdown-menu">
-                            <a class="dropdown-item" href="#">Action</a>
-                            <a class="dropdown-item" href="#">Another action</a>
-                            <a class="dropdown-item" href="#">Something else here</a>
-                        </div>
-                      </div>
-                  </td>
-                </tr>
-                <tr>
-                    <td>97 Dias</td>
-                    <td>Rodolfo Lopes</td>
-                    <td>Projeto</td>
-                    <td>Cenografia</td>
-                    <td>Banco Pine</td>
-                    <td>B.hub - corporate events</td>
-                    <td>Festa de final de ano</td>
-                    <td>100.000.00</td>
-                    <td>Icone</td>
-                    <td>14/07</td>
-                    <td>Ernesto Milanese</td>
-                    <td>Stand-by</td>
-                  </tr>
-              </tbody>
-            </table>
-          </div>
+  <mat-card style="min-height: 25rem;" class="container-fluid d-flex flex-column">
+    <div class="title">
+        Você possui {{ projects?.count }} projetos sem atualização de status
+    </div>
+    
+    <div class="table-responsive">
+      <table class="table">
+        <thead>
+          <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let project of projects?.data">
+            <td class="text-right">{{ ('00' + project.days_without_update).slice(-3) }} dias</td>
+            <td class="text-center">{{ project.creation_responsible ? project.creation_responsible : '-' }}</td>
+            <td class="text-center">{{ project.job_activity }}</td>
+            <td class="text-center">{{ project.job_type }}</td>
+            <td class="text-center">{{ project.client }}</td>
+            <td class="text-center">{{ project.event }}</td>
+            <td class="text-center">100.000.00 2 mom.</td>
+            <td class="text-center">400 m²</td>
+            <td class="text-center">
+              <p>D+1</p>
+              <mat-icon class="time-icon"
+                [class.time-icon-alarm]="'alarm' == 'alarm'">
+                alarm
+              </mat-icon>
+            </td>
+            <td class="text-center">{{ project.deadline | date : "dd/MM" }}</td>
+            <td class="text-center">Ernesto Milanese</td>
+            <!-- <td class="text-center">{{ project.status }}</td> -->
+            <td class="text-center">
+              <div class="btn-group">
+                  <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Small button
+                  </button>
+                  <div class="dropdown-menu">
+                      <a class="dropdown-item" href="#">Action</a>
+                      <a class="dropdown-item" href="#">Another action</a>
+                      <a class="dropdown-item" href="#">Something else here</a>
+                  </div>
+                </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-auto">
+      <hr>
+      <p class="fs-14">
+        Por favor, mantenha sempre o status atualizado para que possamos calcular com mais precisão os índices de performace de toda equipe.<br />
+        Em uma semana lembraremos novamente antes de lançar novos projetos. Obrigado!
+      </p>
+    </div>
         
-    </mat-card>
+  </mat-card>
 </div>

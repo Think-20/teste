@@ -1,9 +1,9 @@
 export interface Projects {
     count: number
-    data: Project[]
+    data: ProjectData[]
   }
   
-  export interface Project {
+  export interface ProjectData {
     id: number
     code: number
     days_without_update: number
