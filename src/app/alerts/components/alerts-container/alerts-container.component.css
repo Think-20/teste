@@ -35,12 +35,10 @@
 .dropdown-menu {
     position: absolute;
     will-change: transform;
-    top: 0px;
-    left: 0px;
-    transform: translate3d(-28px, 16px, 0px) !important;
-
-    top: 100%;
-    left: 0;
+    /* top: 0px;
+    left: 0px; */
+    /* transform: translate3d(-20px, -2px, 0px) !important; */
+   
     z-index: 1000;
     float: left;
     padding: 0;
@@ -51,9 +49,9 @@
     list-style: none;
     background-color: #fff;
     background-clip: padding-box;
-    border: 2px solid rgb(184, 184, 184);
+    border: 2px solid #eaeaeb;
     border-radius: 0.25rem;
-    min-width: 0;
+    min-width: 5.5rem;
 }
 
 .dropdown-menu a {
@@ -61,6 +59,11 @@
     font-size: 12px;
     text-align: center;
     padding: 0 5px;
+    margin-bottom: 3px;
+}
+
+.dropdown-menu a:hover {
+    background-color: #eaeaeb;
 }
 
 .time-icon {

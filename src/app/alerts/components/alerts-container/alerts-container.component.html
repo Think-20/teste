@@ -8,7 +8,7 @@
         Você possui {{ projects?.count }} projetos sem atualização de status
     </div>
     
-    <div class="table-responsive">
+    <div class="table-responsive" style="padding-bottom: 1rem;">
       <table class="table">
         <thead>
           <tr>
@@ -49,12 +49,10 @@
             <td class="text-center">
               <div class="btn-group">
                   <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Small button
+                    {{ project.status }}
                   </button>
-                  <div class="dropdown-menu">
-                      <a class="dropdown-item" href="#">Action</a>
-                      <a class="dropdown-item" href="#">Another action</a>
-                      <a class="dropdown-item" href="#">Something else here</a>
+                  <div class="dropdown-menu" data-container="body">
+                      <a *ngFor="let status of statusProjects" (click)="updateStatusProject(status, project)" class="dropdown-item">{{ status.name }}</a>
                   </div>
                 </div>
             </td>
