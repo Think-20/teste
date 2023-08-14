@@ -20,7 +20,7 @@
             <th></th>
             <th></th>
             <th></th>
-            <th></th>
+            <!-- <th></th> -->
             <th></th>
             <th></th>
             <th></th>
@@ -34,17 +34,17 @@
             <td class="text-center">{{ project.job_type }}</td>
             <td class="text-center">{{ project.client }}</td>
             <td class="text-center">{{ project.event }}</td>
-            <td class="text-center">100.000.00 2 mom.</td>
-            <td class="text-center">400 m²</td>
-            <td class="text-center">
+            <td class="text-center">{{ project.budget_value | decimal }}</td>
+            <td class="text-center">{{ project.area }} m²</td>
+            <!-- <td class="text-center">
               <p>D+1</p>
               <mat-icon class="time-icon"
                 [class.time-icon-alarm]="'alarm' == 'alarm'">
                 alarm
               </mat-icon>
-            </td>
+            </td> -->
             <td class="text-center">{{ project.deadline | date : "dd/MM" }}</td>
-            <td class="text-center">Ernesto Milanese</td>
+            <td class="text-center">{{ project.attendance }}</td>
             <!-- <td class="text-center">{{ project.status }}</td> -->
             <td class="text-center">
               <div class="btn-group">

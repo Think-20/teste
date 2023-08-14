@@ -18,6 +18,9 @@ export interface ProjectData {
   deadline: string
   creation_responsible?: string
   status: string
+  budget_value: number
+  attendance: string
+  area?: string
 }
 
 export interface ProjectStatus {
