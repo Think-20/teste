@@ -8,7 +8,7 @@
         Você possui {{ projects?.count }} projetos sem atualização de status
     </div>
     
-    <div class="table-responsive" style="padding-bottom: 1rem;">
+    <div *ngIf="projects?.data.length" class="table-responsive" style="padding-bottom: 1rem;">
       <table class="table">
         <thead>
           <tr>
@@ -59,6 +59,12 @@
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <div *ngIf="!projects?.data.length" class="col-md-12 d-flex justify-content-center mt-5 records-not-found">
+      <p>
+        <small>Todos seus projetos estão com o status atualizado!</small>
+      </p>
     </div>
 
     <div class="mt-auto">
