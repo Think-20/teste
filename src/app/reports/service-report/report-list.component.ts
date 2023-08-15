@@ -90,14 +90,14 @@ export class ServiceReportComponent implements OnInit {
   ngOnInit() {
     this.isAdmin = this.authService.hasAccess('job/save')
 
-    this.pageIndex = this.jobService.pageIndex
+    this.pageIndex = this.jobService.pageIndex;
 
     this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
-      ? this.authService.currentUser().employee : null
+      ? this.authService.currentUser().employee : null;
 
-    this.createForm()
-    this.setYears()
-    this.loadInitialData()
+    this.createForm();
+    this.setYears();
+    this.loadInitialData();
   }
 
   createForm() {
@@ -113,42 +113,42 @@ export class ServiceReportComponent implements OnInit {
     })
 
     if(this.isAdmin)
-      this.searchForm.addControl('attendance', this.fb.control({ value: '' }))
+      this.searchForm.addControl('attendance', this.fb.control({ value: '' }));
 
-    this.formCopy = this.searchForm.value
+    this.formCopy = this.searchForm.value;
 
     if(JSON.stringify(this.jobService.searchValue) == JSON.stringify({})) {
-      this.jobService.searchValue = this.searchForm.value
+      this.jobService.searchValue = this.searchForm.value;
     } else {
-      this.searchForm.setValue(this.jobService.searchValue)
+      this.searchForm.setValue(this.jobService.searchValue);
     }
 
     this.searchForm.controls.client.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe(clientName => {
         this.clientService.clients({ search: clientName, attendance: this.paramAttendance }).subscribe((dataInfo) => {
-          this.clients = dataInfo.pagination.data
+          this.clients = dataInfo.pagination.data;
         })
       })
 
     this.searchForm.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe((searchValue) => {
-        this.params = this.getParams(searchValue)
-        this.loadJobs(this.params, 1)
+        this.params = this.getParams(searchValue);
+        this.loadJobs(this.params, 1);
 
-        this.pageIndex = 0
-        this.jobService.pageIndex = 0
-        this.jobService.searchValue = searchValue
-        this.updateFilterActive()
-        this.changeMonth()
+        this.pageIndex = 0;
+        this.jobService.pageIndex = 0;
+        this.jobService.searchValue = searchValue;
+        this.updateFilterActive();
+        this.changeMonth();
       })
   }
 
   getParams(searchValue) {
-    let status = searchValue.status != undefined ? searchValue.status.id : null
-    let clientName = searchValue.client != '' ? searchValue.client : searchValue.search
-    let attendanceFilter = this.isAdmin ? { attendance: searchValue.attendance } : {}
+    let status = searchValue.status != undefined ? searchValue.status.id : null;
+    let clientName = searchValue.client != '' ? searchValue.client : searchValue.search;
+    let attendanceFilter = this.isAdmin ? { attendance: searchValue.attendance } : {};
 
     return {
       //creation: searchValue.creation,
@@ -163,56 +163,56 @@ export class ServiceReportComponent implements OnInit {
 
   updateFilterActive() {
     if (JSON.stringify(this.jobService.searchValue) === JSON.stringify(this.formCopy)) {
-      this.hasFilterActive = false
+      this.hasFilterActive = false;
     } else {
-      this.hasFilterActive = true
+      this.hasFilterActive = true;
     }
   }
 
   clearFilter() {
-    this.jobService.searchValue = {}
-    this.jobService.pageIndex = 0
-    this.pageIndex = 0
-    this.createForm()
-    this.loadInitialData()
+    this.jobService.searchValue = {};
+    this.jobService.pageIndex = 0;
+    this.pageIndex = 0;
+    this.createForm();
+    this.loadInitialData();
   }
 
   loadInitialData() {
     if (JSON.stringify(this.jobService.searchValue) === JSON.stringify(this.formCopy)) {
-      this.loadJobs({}, this.pageIndex + 1)
+      this.loadJobs({}, this.pageIndex + 1);
     } else {
-      this.params = this.getParams(this.jobService.searchValue)
-      this.loadJobs(this.params, this.pageIndex + 1)
+      this.params = this.getParams(this.jobService.searchValue);
+      this.loadJobs(this.params, this.pageIndex + 1);
     }
 
     this.updateFilterActive()
-    this.setDataByParams()
   }
 
   loadJobs(params, page: number) {
-    if(this.searching) return
+    if(this.searching) return;
     
-    this.searching = true
-    let snackBar = this.snackBar.open('Carregando jobs...')
+    this.searching = true;
+    let snackBar = this.snackBar.open('Carregando jobs...');
     this.jobService.jobs(params, page).subscribe(dataInfo => {
-      dataInfo.jobs ? this.jobs = dataInfo.jobs.data : this.jobs = []
+      dataInfo.jobs ? this.jobs = dataInfo.jobs.data : this.jobs = [];
+      this.setDataByParams();
       this.pagination = dataInfo.jobs;
       this.reportData = (dataInfo as unknown as ReportData);
-      this.searching = false
-      snackBar.dismiss()
+      this.searching = false;
+      snackBar.dismiss();
     })
   }
 
   changePage($event) {
-    this.searching = true
-    this.jobs = []
+    this.searching = true;
+    this.jobs = [];
     this.jobService.jobs(this.jobService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
-      this.dataInfo = dataInfo.jobs
-      this.pagination = dataInfo.jobs
-      this.jobs = dataInfo.jobs.data
-      this.searching = false
-      this.pageIndex = $event.pageIndex
-      this.jobService.pageIndex = this.pageIndex
+      this.dataInfo = dataInfo.jobs;
+      this.pagination = dataInfo.jobs;
+      this.jobs = dataInfo.jobs.data;
+      this.searching = false;
+      this.pageIndex = $event.pageIndex;
+      this.jobService.pageIndex = this.pageIndex;
     })
   }
 
@@ -239,86 +239,82 @@ export class ServiceReportComponent implements OnInit {
   } */
 
   addMonth(inc: number) {
-    this.date.setDate(1)
-    this.date.setMonth(this.date.getMonth() + inc)
-    this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
-    this.year = this.date.getFullYear()
+    this.date.setDate(1);
+    this.date.setMonth(this.date.getMonth() + inc);
+    this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1));
+    this.year = this.date.getFullYear();
 
-    this.changeMonth()
+    this.changeMonth();
   }
 
   changeMonth() {
     if(this.searching) return;
 
-    this.searching = true
-    let snackBar = this.snackBar.open('Carregando tarefas...')
+    this.searching = true;
+    let snackBar = this.snackBar.open('Carregando tarefas...');
 
-    this.jobs = []
-    this.jobsDateFilter = []
+    this.jobs = [];
+    this.jobsDateFilter = [];
 
-    this.iniDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate())
-    this.finDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate())
+    this.iniDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate());
+    this.finDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate());
+    
+    const daysInMonth = this.getDaysInMonth(this.year, this.month.id);
 
-    const urlTree = this.router.createUrlTree([], {
-      queryParams: { date: this.datePipe.transform(this.iniDate, 'yyyy-MM-dd') },
-      queryParamsHandling: "merge",
-      preserveFragment: true
-    });
-
-    this.iniDate.setDate(this.iniDate.getDate() - 10)
-    this.finDate.setDate(this.finDate.getDate() + 10)
-
-    this.router.navigateByUrl(urlTree)
+    this.iniDate.setDate(this.iniDate.getDate());
+    this.finDate.setDate(this.finDate.getDate() + daysInMonth);
 
     this.jobService.jobs({
-      date_initi: this.datePipe.transform(this.iniDate, 'yyyy-MM-dd'),
-      date_end: this.datePipe.transform(this.finDate, 'yyyy-MM-dd'),
-      paginate: false,
-      ...this.params
-    }).subscribe(dataInfo => {
-      dataInfo.jobs ? this.jobs = dataInfo.jobs.data : this.jobs = []
+      date_init: this.iniDate,
+      date_end: "",
+    }, this.pageIndex + 1).subscribe(dataInfo => {
+      dataInfo.jobs ? this.jobs = dataInfo.jobs.data : this.jobs = [];
       this.pagination = dataInfo.jobs;
       this.reportData = (dataInfo as unknown as ReportData);
-      this.searching = false
+      this.searching = false;
       snackBar.dismiss()
     })
   }
 
+  getDaysInMonth(year: number, month: number): number {
+    return new Date(year, month, 0).getDate();
+  }
+
   updateMonth(month: Month) {
-    this.month = month
-    this.changeMonth()
+    this.month = month;
+    this.changeMonth();
   }
 
   updateYear(year: number) {
-    this.year = year
-    this.changeMonth()
+    this.year = year;
+    this.changeMonth();
   }
 
   setYears() {
-    let ini = 2018
-    let year = (new Date).getFullYear()
+    let ini = 2018;
+    let year = (new Date).getFullYear();
 
     while (ini <= (year + 1)) {
-      this.years.push(ini)
-      ini += 1
+      this.years.push(ini);
+      ini += 1;
     }
   }
 
   setDataByParams() {
-    this.date = new Date()
+    this.date = new Date();
 
     this.route.queryParams.subscribe(params => {
       if (params.date != undefined) {
-        this.date = new Date(params.date + "T00:00:00")
-        this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
-        this.year = this.date.getFullYear()
+        this.date = new Date(params.date + "T00:00:00");
+        this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1));
+        this.year = this.date.getFullYear();
       } else {
-        this.date = new Date(this.datePipe.transform(new Date, 'yyyy-MM-dd') + "T00:00:00")
-        this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1))
-        this.year = this.date.getFullYear()
+        this.date = new Date(this.datePipe.transform(this.jobs[0].deadline, 'yyyy-MM-dd') + "T00:00:00");
+        this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1));
+        this.year = this.date.getFullYear();
       }
 
-      this.changeMonth()
+      this.changeMonth();
     })
   }
 

@@ -38,7 +38,7 @@ export class AlertsContainerComponent implements OnInit {
     this.statusProjects = this.alertService.getStatus();
   }
 
-  updateStatusProject(selectedStatus: ProjectStatus, selectedProject: ProjectData) {
+  updateStatusProject(selectedStatus: ProjectStatus, selectedProject: ProjectData): void {
     const payload: EditStatus = {
       id: selectedProject.id,
       status: {
