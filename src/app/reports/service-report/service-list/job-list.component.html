@@ -120,8 +120,8 @@
         </div>
       </div>
     </mat-card>
-    <mat-paginator *ngIf="jobs" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex"
-      [pageSizeOptions]="[pagination?.per_page]" (page)="changePage($event)"></mat-paginator>
+    <!-- <mat-paginator *ngIf="jobs" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex"
+      [pageSizeOptions]="[pagination?.per_page]" (page)="changePage($event)"></mat-paginator> -->
     <mat-card>
       <div *ngIf="jobs?.length > 0">
         <table class="table mat-table">
@@ -136,8 +136,7 @@
             <div class="mat-header-cell mat-column-client" title="Cliente">Cliente</div>
             <div class="mat-header-cell mat-column-event" title="Evento">Evento</div>
             <div class="mat-header-cell mat-column-type" title="Tipo">Tipo</div>
-            <div class="mat-header-cell mat-column-value" title="Valor">Valor</div>
-            <div class="mat-header-cell mat-column-extras" title="Extras">Extras</div>
+            <div class="mat-header-cell mat-column-value" title="Valor/Extra">Valor/Extra</div>
             <div class="mat-header-cell mat-column-status" title="status">Status</div>
             <div class="mat-header-cell mat-column-fatured" title="Faturado">Fat</div>
             <div class="mat-header-cell mat-column-portin" title="Parcela">Parc</div>
@@ -175,9 +174,7 @@
               {{ job.job_type.description === "Stand" ? job.job_type.description + '-by' : job.job_type.description }}
             </div>
             <div class="mat-cell mat-column-value">
-              {{ job.budget_value | decimal }}
-            </div>
-            <div class="mat-cell mat-column-extras">
+              {{ job.budget_value | number: '1.2' }} <br />
               -
             </div>
             <div class="mat-cell mat-column-status">
@@ -189,7 +186,7 @@
             <div class="mat-cell mat-column-portin">
               -
             </div>
-            <div style="padding-bottom: 20px;" class="mat-cell mat-column-rate">
+            <div class="mat-cell mat-column-rate">
               <cb-stars [hasLabel]="false" class="star-input" label="Score"
                 [readonly]="true"
                 [rate]="1">

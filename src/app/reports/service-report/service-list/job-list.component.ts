@@ -17,8 +17,11 @@ import { ClientService } from '../../../clients/client.service';
 import { JobType } from '../../../job-types/job-type.model';
 import { JobTypeService } from '../../../job-types/job-type.service';
 import { ReportsInfo } from '../../../shared/reports-info.model';
-import { JobsDateFilter, ReportData } from '../report-list.model';
+import { Job, JobsDateFilter, ReportData } from '../report-list.model';
 import { Month, MONTHS } from 'app/shared/date/months';
+import { DatePipe } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Pagination } from 'app/shared/pagination.model';
 
 @Component({
   selector: 'cb-job-list',
@@ -46,9 +49,10 @@ export class ServiceListComponent implements OnInit {
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
   formCopy: any
+  pagination: Pagination
   search: FormControl
   dataInfo: ReportsInfo
-  jobs: ReportsInfo
+  jobs: Job[] = []
   /* jobs: Job[] = [] */
   paramAttendance: Employee = null
   attendances: Employee[]
@@ -80,7 +84,10 @@ export class ServiceListComponent implements OnInit {
     private jobService: ReportService,
     private jobTypeService: JobTypeService,
     private jobStatus: JobStatusService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private datePipe: DatePipe,
+    private router: Router,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
@@ -217,4 +224,84 @@ export class ServiceListComponent implements OnInit {
       })
     })
   } */
+
+  addMonth(inc: number) {
+    this.date.setDate(1);
+    this.date.setMonth(this.date.getMonth() + inc);
+    this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1));
+    this.year = this.date.getFullYear();
+
+    this.changeMonth();
+  }
+
+  changeMonth() {
+    if(this.searching) return;
+
+    this.searching = true;
+    let snackBar = this.snackBar.open('Carregando tarefas...');
+
+    this.jobs = [];
+    this.jobsDateFilter = [];
+
+    this.iniDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate());
+    this.finDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate());
+    
+    const daysInMonth = this.getDaysInMonth(this.year, this.month.id);
+
+    this.iniDate.setDate(this.iniDate.getDate());
+    this.finDate.setDate(this.finDate.getDate() + daysInMonth);
+
+    this.jobService.jobs({
+      date_init: this.iniDate,
+      date_end: "",
+    }, this.pageIndex + 1).subscribe(dataInfo => {
+      dataInfo.jobs ? this.jobs = dataInfo.jobs.data : this.jobs = [];
+      this.pagination = dataInfo.jobs;
+      this.reportData = (dataInfo as unknown as ReportData);
+      this.searching = false;
+      snackBar.dismiss()
+    })
+  }
+
+  getDaysInMonth(year: number, month: number): number {
+    return new Date(year, month, 0).getDate();
+  }
+
+  updateMonth(month: Month) {
+    this.month = month;
+    this.changeMonth();
+  }
+
+  updateYear(year: number) {
+    this.year = year;
+    this.changeMonth();
+  }
+
+  setYears() {
+    let ini = 2018;
+    let year = (new Date).getFullYear();
+
+    while (ini <= (year + 1)) {
+      this.years.push(ini);
+      ini += 1;
+    }
+  }
+
+  setDataByParams() {
+    this.date = new Date();
+
+    this.route.queryParams.subscribe(params => {
+      if (params.date != undefined) {
+        this.date = new Date(params.date + "T00:00:00");
+        this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1));
+        this.year = this.date.getFullYear();
+      } else {
+        this.date = new Date(this.datePipe.transform(this.jobs[0].deadline, 'yyyy-MM-dd') + "T00:00:00");
+        this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1));
+        this.year = this.date.getFullYear();
+      }
+
+      this.changeMonth();
+    })
+  }
 }

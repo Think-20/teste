@@ -1,3 +1,11 @@
+.mat-header-row {
+  justify-content: center;
+}
+
+.mat-row {
+  justify-content: center;
+}
+
 .mat-column-num {
   width: 3%;
   font-size: 12px;
@@ -14,12 +22,12 @@
 }
 
 .mat-column-creation {
-  width: 10%;
+  width: 7%;
   font-size: 12px;
 }
 
 .mat-column-production {
-  width: 3%;
+  width: 6%;
   font-size: 12px;
 }
 
@@ -49,12 +57,7 @@
 }
 
 .mat-column-value {
-  width: 5%;
-  font-size: 12px;
-}
-
-.mat-column-extras {
-  width: 5%;
+  width: 8%;
   font-size: 12px;
 }
 
@@ -74,7 +77,7 @@
 }
 
 .mat-column-rate {
-  width: 8%;
+  width: 10%;
   font-size: 12px;
 }
 

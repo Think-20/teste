@@ -5,7 +5,7 @@
 <div class="col-md-12">
   <mat-card style="min-height: 25rem;" class="container-fluid d-flex flex-column">
     <div class="title">
-        Você possui {{ projects?.count }} projetos sem atualização de status
+        Você possui {{ ('0' + projects?.count).slice(-3) }} projetos sem atualização de status
     </div>
     
     <div *ngIf="projects?.data.length" class="table-responsive" style="padding-bottom: 1rem;">
@@ -34,7 +34,7 @@
             <td class="text-center">{{ project.job_type }}</td>
             <td class="text-center">{{ project.client }}</td>
             <td class="text-center">{{ project.event }}</td>
-            <td class="text-center">{{ project.budget_value | decimal }}</td>
+            <td class="text-center">{{ project.budget_value | number: '1.2' }}</td>
             <td class="text-center">{{ project.area }} m²</td>
             <!-- <td class="text-center">
               <p>D+1</p>
