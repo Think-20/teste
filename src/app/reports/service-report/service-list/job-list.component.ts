@@ -75,7 +75,9 @@ export class ServiceListComponent implements OnInit {
   iniDate: Date;
   finDate: Date;
   months: Month[] = MONTHS;
-
+  nextMonthName: string = '';
+  nextYear: number = 0;
+  
   constructor(
     private fb: FormBuilder,
     private employeeService: EmployeeService,

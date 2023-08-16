@@ -23,3 +23,7 @@
 .stars-container {
   height: 24px;
 }
+
+.stars-content {
+  text-align: center;
+}

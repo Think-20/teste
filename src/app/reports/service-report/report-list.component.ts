@@ -72,7 +72,9 @@ export class ServiceReportComponent implements OnInit {
   iniDate: Date;
   finDate: Date;
   months: Month[] = MONTHS
-
+  nextMonthName: string = '';
+  nextYear: number = 0;
+  
   constructor(
     private fb: FormBuilder,
     private employeeService: EmployeeService,
@@ -98,6 +100,7 @@ export class ServiceReportComponent implements OnInit {
     this.createForm();
     this.setYears();
     this.loadInitialData();
+    this.loadFilterData();
   }
 
   createForm() {
@@ -151,12 +154,13 @@ export class ServiceReportComponent implements OnInit {
     let attendanceFilter = this.isAdmin ? { attendance: searchValue.attendance } : {};
 
     return {
-      //creation: searchValue.creation,
-      //job_type: searchValue.job_type,
+      creation: searchValue.creation,
+      job_type: searchValue.job_type,
+      final_date: searchValue.final_date,
       date_end: searchValue.date_end,
       date_init: searchValue.date_init,
       name: clientName,
-      //status: status,
+      status: status,
       ...attendanceFilter
     }
   }
@@ -200,6 +204,28 @@ export class ServiceReportComponent implements OnInit {
       this.reportData = (dataInfo as unknown as ReportData);
       this.searching = false;
       snackBar.dismiss();
+    })
+  }
+
+  loadFilterData() {
+    this.jobStatus.jobStatus().subscribe(status => this.status = status)
+
+    this.jobTypeService.jobTypes().subscribe(job_types => this.job_types = job_types)
+
+    this.employeeService.canInsertClients({
+      deleted: true
+    }).subscribe((attendances) => {
+      this.attendances = attendances
+    })
+
+    this.employeeService.employees({
+      paginate: false,
+      deleted: true
+    }).subscribe(dataInfo => {
+      let employees = dataInfo.pagination.data
+      this.creations = employees.filter(employee => {
+        return employee.department.description === 'Criação'
+      })
     })
   }
 
@@ -248,6 +274,8 @@ export class ServiceReportComponent implements OnInit {
   }
 
   changeMonth() {
+    this.calculateNextMonth();
+
     if(this.searching) return;
 
     this.searching = true;
@@ -266,7 +294,7 @@ export class ServiceReportComponent implements OnInit {
 
     this.jobService.jobs({
       date_init: this.iniDate,
-      date_end: "",
+      date_end: this.finDate,
     }, this.pageIndex + 1).subscribe(dataInfo => {
       dataInfo.jobs ? this.jobs = dataInfo.jobs.data : this.jobs = [];
       this.pagination = dataInfo.jobs;
@@ -316,6 +344,14 @@ export class ServiceReportComponent implements OnInit {
 
       this.changeMonth();
     })
+  }
+
+  calculateNextMonth() {
+    const nextDate = new Date(this.date);
+    nextDate.setMonth(nextDate.getMonth() + 1);
+  
+    this.nextMonthName = MONTHS[nextDate.getMonth()].name; // Usando a mesma estrutura MONTHS que você já tem
+    this.nextYear = nextDate.getFullYear();
   }
 
 }

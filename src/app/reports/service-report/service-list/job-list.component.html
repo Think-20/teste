@@ -3,12 +3,12 @@
 <div class="my-container">
   <!-- <h3 class="lead">Relatórios</h3> -->
   <h3 class="lead row">
-    <div class="col-md-6">
+    <div class="col-md-8">
       <div class="flex center">
         <button mat-button type="button" class="month-arrow">
           <mat-icon (click)="addMonth(-1)">keyboard_arrow_left</mat-icon>
         </button>
-        &nbsp;Relatórios -
+        &nbsp;Relatórios de
         <span class="actualMonth" (click)="monthSelect.open()">
           &nbsp;{{ month?.name }}
           <mat-select class="select-hidden col-md-3" #monthSelect>
@@ -20,6 +20,13 @@
           <mat-select class="select-hidden col-md-3" #yearSelect>
             <mat-option *ngFor="let year of years" (click)="updateYear(year)">{{year}}</mat-option>
           </mat-select>
+        </span>
+        <span>até</span>
+        <span>
+          &nbsp;{{ nextMonthName }}
+        </span>
+        <span class="actualYearSecondary">
+          {{ nextYear }}
         </span>
         <button mat-button type="button" class="month-arrow">
           <mat-icon (click)="addMonth(1)">keyboard_arrow_right</mat-icon>
@@ -67,7 +74,7 @@
               {{ client.fantasy_name }}
             </mat-option>
           </mat-autocomplete>
-          <!-- <mat-form-field *ngIf="isAdmin" class="col-md-2-4">
+          <mat-form-field *ngIf="isAdmin" class="col-md-2-4">
             <mat-select placeholder="Atendimento" formControlName="attendance">
               <mat-option></mat-option>
               <mat-option *ngFor="let attendance of attendances" [value]="attendance">
@@ -98,7 +105,7 @@
                 {{ s.description }}
               </mat-option>
             </mat-select>
-          </mat-form-field> -->
+          </mat-form-field>
           <hr />
           <div class="col-md-12">
             <p>
@@ -127,12 +134,12 @@
         <table class="table mat-table">
           <div class="mat-header-row">
             <div class="mat-header-cell mat-column-num" title="Numero">NUM</div>
+            <div class="mat-header-cell mat-column-id" title="ID">ID</div>
             <div class="mat-header-cell mat-column-service" title="Atendimento">Atend</div>
-            <div class="mat-header-cell mat-column-budget" title="Orçamento">Or</div>
+            <div class="mat-header-cell mat-column-budget" title="Orçamento">Orçam</div>
             <div class="mat-header-cell mat-column-creation" title="Criação">Criação</div>
             <div class="mat-header-cell mat-column-production" title="Produção">Prod</div>
             <div class="mat-header-cell mat-column-date" title="Data">Data</div>
-            <div class="mat-header-cell mat-column-id" title="ID">ID</div>
             <div class="mat-header-cell mat-column-client" title="Cliente">Cliente</div>
             <div class="mat-header-cell mat-column-event" title="Evento">Evento</div>
             <div class="mat-header-cell mat-column-type" title="Tipo">Tipo</div>
@@ -142,9 +149,12 @@
             <div class="mat-header-cell mat-column-portin" title="Parcela">Parc</div>
             <div class="mat-header-cell mat-column-rate" title="Satisfação">Satisfação</div>
           </div>
-          <div class="mat-row p-2" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState">
+          <div class="mat-row" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState">
             <div class="mat-cell mat-column-num">
-              {{ job.code }}
+              {{ job.index }}
+            </div>
+            <div class="mat-cell mat-column-id">
+              {{ jobService.showId(job) }}
             </div>
             <div class="mat-cell mat-column-service">
               {{ job.attendance.name }}
@@ -161,9 +171,6 @@
             <div class="mat-cell mat-column-date">
               {{ job.created_at | date : "dd/MM/yy" }}
             </div>
-            <div class="mat-cell mat-column-id">
-              {{ jobService.showId(job) }}
-            </div>
             <div class="mat-cell mat-column-client">
               {{ job.client ? job.client.fantasy_name : job.not_client }}
             </div>
@@ -171,7 +178,7 @@
               {{ job.event }}
             </div>
             <div class="mat-cell mat-column-type">
-              {{ job.job_type.description === "Stand" ? job.job_type.description + '-by' : job.job_type.description }}
+              {{ job.job_type.description }}
             </div>
             <div class="mat-cell mat-column-value">
               {{ job.budget_value | number: '1.2' }} <br />
@@ -223,7 +230,7 @@
         </p>
       </div>
       <mat-divider></mat-divider>
-      <mat-grid-list *ngIf="jobs?.length > 0" cols="6" rowHeight="95px">
+      <mat-grid-list *ngIf="jobs?.length > 0" cols="6" rowHeight="88px">
         <mat-grid-tile class="mat-grid-item">
           <div class="title-report-dashboard m-0 p-0 mb-2 text-truncate" title="Total de jobs:">Total de jobs:</div>
           <div class="data-report-dashboard text-truncate" [title]="reportData?.jobs?.total">{{reportData?.jobs?.total}}</div>
