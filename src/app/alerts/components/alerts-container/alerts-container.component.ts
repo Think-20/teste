@@ -1,4 +1,3 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AlertService } from 'app/alerts/alerts.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -16,7 +15,6 @@ export class AlertsContainerComponent implements OnInit {
 
   constructor(
         private alertService: AlertService,
-        private datePipe: DatePipe,
         private snackBar: MatSnackBar,
     ) { }
 

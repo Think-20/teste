@@ -65,6 +65,7 @@ import { EventFormComponent } from './events/event-form/event-form.component';
 import { PerformanceReportLiteComponent } from './reports/performance-report-lite/performance-report-lite.component';
 import { ServiceReportComponent } from './reports/service-report/report-list.component';
 import { AlertsContainerComponent } from './alerts/components/alerts-container/alerts-container.component';
+import { MemoriesContainerComponent } from './memories/components/memories-container/memories-container.component';
 
 export const ROUTES: Routes = [
   {
@@ -330,6 +331,9 @@ export const ROUTES: Routes = [
       },
       {
         path: 'alerts', component: AlertsContainerComponent, canActivate: [AuthGuard]
+      },
+      {
+        path: 'memories', component: MemoriesContainerComponent, canActivate: [AuthGuard]
       },
     ]
   }

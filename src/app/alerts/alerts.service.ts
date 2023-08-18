@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, RequestOptions } from '@angular/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from 'app/login/auth.service';
 import { API } from '../../app/app.api';
 import { Observable } from 'rxjs';
 import { ErrorHandler } from 'app/shared/error-handler.service';
@@ -37,11 +36,10 @@ export class AlertService {
   constructor(
     private http: Http,
     private snackBar: MatSnackBar,
-    private auth: AuthService
   ) { }
 
   getAlerts(): Observable<ProjectsPendency> {
-    let url = `/notifywindow`
+    const url = `/notifywindow`
 
     return this.http.get(`${API}/${url}`)
       .map(response => response.json())
@@ -54,7 +52,7 @@ export class AlertService {
   }
 
   updateStatusProject(project: EditStatus): Observable<EditStatus> {
-    let url = 'job/edit'
+    const url = 'job/edit'
 
     return this.http.put(
       `${API}/${url}`,
