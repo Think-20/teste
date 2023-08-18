@@ -73,8 +73,8 @@ export class MemoriesContainerComponent implements OnInit {
     const words = str.split(' ');
 
     for (let i = 0; i < words.length; i++) {
-      if (/^\d$/.test(words[i])) { // Verifica se a palavra é um dígito único
-        words[i] = '0' + words[i]; // Incrementa 0 à frente do dígito
+      if (/^\d$/.test(words[i])) {
+        words[i] = '0' + words[i];
       }
     }
 
