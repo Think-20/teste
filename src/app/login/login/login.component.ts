@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     
-    this.setReturnUrlByWeekDay();
+    //this.setReturnUrlByWeekDay();
 
     this.auth.logout();
 
@@ -100,14 +100,14 @@ export class LoginComponent implements OnInit {
 
       Observable.timer(1500).subscribe(timer => {
         this.auth.setData(data)
-        
-        this.memoriesService.checkUnreadMemories().subscribe(hasUnreadMemories => {
+        this.router.navigate([this.returnUrl]);
+        /* this.memoriesService.checkUnreadMemories().subscribe(hasUnreadMemories => {
           if (hasUnreadMemories) {
-            this.router.navigate(['/memories']); // Redirecionar para a tela de memórias
+            this.router.navigate(['/memories']);
           } else {
-            this.router.navigate([this.returnUrl]); // Redirecionar conforme o fluxo normal
+            this.router.navigate([this.returnUrl]);
           }
-        });
+        }); */
       })
     })
   }
