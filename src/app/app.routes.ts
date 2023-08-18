@@ -329,10 +329,10 @@ export const ROUTES: Routes = [
       }, {
         path: 'schedule/edit/:id', component: ScheduleFormComponent, canActivate: [AuthGuard]
       },
-      /* {
+      {
         path: 'alerts', component: AlertsContainerComponent, canActivate: [AuthGuard]
       },
-      {
+      /* {
         path: 'memories', component: MemoriesContainerComponent, canActivate: [AuthGuard]
       }, */
     ]
