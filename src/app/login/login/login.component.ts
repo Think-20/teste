@@ -8,6 +8,7 @@ import { AuthService } from '../auth.service'
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/timer'
 import { API } from 'app/app.api';
+import { MemoriesService } from 'app/memories/memories.service';
 
 @Component({
   selector: 'cb-login',
@@ -53,7 +54,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private auth: AuthService
+    private auth: AuthService,
+    private memoriesService: MemoriesService
   ) { }
 
   ngOnInit() {
@@ -98,7 +100,14 @@ export class LoginComponent implements OnInit {
 
       Observable.timer(1500).subscribe(timer => {
         this.auth.setData(data)
-        this.router.navigate([this.returnUrl])
+        
+        this.memoriesService.checkUnreadMemories().subscribe(hasUnreadMemories => {
+          if (hasUnreadMemories) {
+            this.router.navigate(['/memories']); // Redirecionar para a tela de memórias
+          } else {
+            this.router.navigate([this.returnUrl]); // Redirecionar conforme o fluxo normal
+          }
+        });
       })
     })
   }

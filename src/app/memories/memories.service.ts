@@ -49,4 +49,20 @@ export class MemoriesService {
         return ErrorHandler.capture(err)
     })
   }
+
+  checkUnreadMemories(): Observable<boolean> {
+    return this.getMemories(true).map(memories => {
+
+      for (const groupName in memories) {
+        if (memories.hasOwnProperty(groupName)) {
+          const group = memories[groupName];
+          const unreadMemory = group.find(memory => memory.read === 0);
+          if (unreadMemory) {
+            return true;
+          }
+        }
+      }
+      return false;
+    });
+  }
 }
