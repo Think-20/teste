@@ -9,6 +9,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/timer'
 import { API } from 'app/app.api';
 import { MemoriesService } from 'app/memories/memories.service';
+import { AlertService } from 'app/alerts/alerts.service';
 
 @Component({
   selector: 'cb-login',
@@ -55,13 +56,14 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private auth: AuthService,
-    private memoriesService: MemoriesService
+    private memoriesService: MemoriesService,
+    private alertService: AlertService,
   ) { }
 
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     
-    this.setReturnUrlByWeekDay();
+    this.setReturnUrlByWeekDayAndHasAlerts();
 
     this.auth.logout();
 
@@ -71,12 +73,16 @@ export class LoginComponent implements OnInit {
     })
   }
 
-  setReturnUrlByWeekDay(): void {
+  setReturnUrlByWeekDayAndHasAlerts(): void {
     const today = new Date();
 
-    if (today.getDay() === this.FRIDAY_DAY) {
-      this.returnUrl = '/alerts';
-    }
+    this.alertService.hasAlerts().subscribe(hasAlerts => {
+      const isFriday = today.getDay() === this.FRIDAY_DAY;
+    
+      if (hasAlerts && isFriday) {
+        this.returnUrl = '/alerts';
+      }
+    });
   }
 
   login(data) {

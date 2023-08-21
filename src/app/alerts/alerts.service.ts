@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { Http, RequestOptions } from '@angular/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { API } from '../../app/app.api';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ErrorHandler } from 'app/shared/error-handler.service';
 import { EditStatus, ProjectStatus, ProjectsPendency } from './alerts.model';
+import { catchError, map } from 'rxjs/operators';
 
 
 @Injectable()
@@ -71,6 +72,16 @@ export class AlertService {
   getStatus(): ProjectStatus[] {
 
     return this.status;
+  }
+
+  hasAlerts(): Observable<boolean> {
+    return this.getAlerts().pipe(
+      map(alerts => alerts.update_pendency.count > 0),
+      catchError(err => {
+        console.error('Error checking for alerts:', err);
+        return of(false);
+      })
+    );
   }
 
 }

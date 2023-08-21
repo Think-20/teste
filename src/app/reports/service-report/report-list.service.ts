@@ -45,7 +45,7 @@ export class ReportService {
   showId(job: Job): string {
     let size = 4
     let date = new Date(job.created_at)
-    return (String('0').repeat(size) + job.code).substr((size * -1), size) + '/' + date.getFullYear()
+    return (String('0').repeat(size) + job.code).substr((size * -1), size) + ' ' + date.getFullYear()
   }
 
   loadFormData(): Observable<any> {
