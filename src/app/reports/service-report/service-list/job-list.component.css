@@ -1,5 +1,6 @@
 .mat-header-row {
   justify-content: center;
+  border-bottom: 1px solid #ddd !important;
 }
 
 .mat-row {
@@ -8,77 +9,77 @@
 
 .mat-column-num {
   width: 4%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .mat-column-service {
   width: 6%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .mat-column-budget {
   width: 6%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .mat-column-creation {
   width: 7%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .mat-column-production {
   width: 5%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .mat-column-date {
   width: 7%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .mat-column-id {
   width: 5%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .mat-column-client {
   width: 7%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .mat-column-event {
   width:10%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .mat-column-type {
   width: 7%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .mat-column-value {
   width: 8%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .mat-column-status {
   width: 7%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .mat-column-fatured {
   width: 5%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .mat-column-portin {
   width: 5%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 .mat-column-rate {
   width: 9%;
-  font-size: 12px;
+  font-size: 11px;
 }
 
 ::ng-deep .langSelect div.mat-select-arrow-wrapper {
@@ -98,9 +99,11 @@
   margin-top: 0;
 }
 
-.mat-cell,
 .mat-header-cell {
   text-align: center;
+  align-self: start;
+  padding-top: 2px;
+  font-size: 11px !important;
 }
 
 .mat-cell-report {
@@ -177,9 +180,16 @@
 
 .mat-cell {
   padding: 3px 10px;
+  text-align: center;
 }
 
 .see-last {
   width: 6.8rem;
   margin-left: 1rem;
+}
+
+.space-table-header {
+  height: 6px;
+  width: 100%;
+  background-color: #f8f8fa;
 }

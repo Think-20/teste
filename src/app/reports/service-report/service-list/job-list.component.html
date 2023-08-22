@@ -22,11 +22,17 @@
           </mat-select>
         </span>
         <span>até</span>
-        <span>
-          &nbsp;{{ nextMonthName }}
+        <span class="actualMonth" (click)="nextMonthSelect.open()">
+          &nbsp;{{ nextMonth?.name }}
+          <mat-select class="select-hidden col-md-3" #nextMonthSelect>
+            <mat-option *ngFor="let month of months" (click)="updateNextMonth(month)">{{month?.name}}</mat-option>
+          </mat-select>
         </span>
-        <span class="actualYearSecondary">
+        <span class="actualYear" (click)="nextYearSelect.open()">
           {{ nextYear }}
+          <mat-select class="select-hidden col-md-3" #nextYearSelect>
+            <mat-option *ngFor="let year of years" (click)="updateNextYear(year)">{{year}}</mat-option>
+          </mat-select>
         </span>
         <button mat-button type="button" class="month-arrow">
           <mat-icon (click)="addMonth(1)">keyboard_arrow_right</mat-icon>
@@ -106,7 +112,7 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
-          <hr />
+          <!-- <hr />
           <div class="col-md-12">
             <p>
               <small>Você também pode filtrar por período do cronograma</small>
@@ -123,7 +129,7 @@
             <input [matDatepicker]="finalDatepicker" formControlName="date_end" matInput placeholder="Data final" />
             <mat-datepicker-toggle matSuffix [for]="finalDatepicker"></mat-datepicker-toggle>
             <mat-datepicker #finalDatepicker></mat-datepicker>
-          </mat-form-field>
+          </mat-form-field> -->
         </div>
       </div>
     </mat-card>
@@ -149,6 +155,7 @@
             <div class="mat-header-cell mat-column-portin" title="Parcela">Parc</div>
             <div class="mat-header-cell mat-column-rate" title="Satisfação">Satisfação</div>
           </div>
+          <div class="space-table-header"></div>
           <div class="mat-row" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState">
             <div class="mat-cell mat-column-num">
               {{ job.index }}
@@ -256,23 +263,23 @@
             <div class="mat-header-cell m-0 p-0 mb-2">Tipo</div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">stand: </div>
-              <div class="m-0 p-0 ml-2 text-right min-w-2 data-report-dashboard">{{reportData?.types?.stand}}</div>
+              <div class="m-0 p-0 ml-2 text-right min-w-2 data-report-dashboard">{{reportData?.types?.stand.toString().padStart(4, '0')}}</div>
             </div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">cenografia: </div>
-              <div class="m-0 p-0 ml-2 text-right min-w-2 data-report-dashboard">{{reportData?.types?.cenografia}}</div>
+              <div class="m-0 p-0 ml-2 text-right min-w-2 data-report-dashboard">{{reportData?.types?.cenografia.toString().padStart(4, '0')}}</div>
             </div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">pdv: </div>
-              <div class="m-0 p-0 ml-2 text-right min-w-2 data-report-dashboard">{{reportData?.types?.pdv}}</div>
+              <div class="m-0 p-0 ml-2 text-right min-w-2 data-report-dashboard">{{reportData?.types?.pdv.toString().padStart(4, '0')}}</div>
             </div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">showroom: </div>
-              <div class="m-0 p-0 ml-2 text-right min-w-2 data-report-dashboard">{{reportData?.types?.showroom}}</div>
+              <div class="m-0 p-0 ml-2 text-right min-w-2 data-report-dashboard">{{reportData?.types?.showroom.toString().padStart(4, '0')}}</div>
             </div>
             <div class="d-flex flex-row align-items-center justify-content-center mb-2">
               <div class="mat-grid-type m-0 p-0">outsider: </div>
-              <div class="m-0 p-0 ml-2 text-right min-w-2 data-report-dashboard">{{reportData?.types?.outsider}}</div>
+              <div class="m-0 p-0 ml-2 text-right min-w-2 data-report-dashboard">{{reportData?.types?.outsider.toString().padStart(4, '0')}}</div>
             </div>
           </div>
         </mat-grid-tile>

@@ -66,6 +66,7 @@ export class ServiceReportComponent implements OnInit {
   reportData: ReportData;
   date: Date;
   month: Month;
+  nextMonth: Month;
   year: number;
   years: number[] = []
   jobsDateFilter: JobsDateFilter[];
@@ -267,14 +268,20 @@ export class ServiceReportComponent implements OnInit {
   addMonth(inc: number) {
     this.date.setDate(1);
     this.date.setMonth(this.date.getMonth() + inc);
+    
+    // Calculate next month and year
+    const nextMonthIndex = (this.date.getMonth() + 1) % 12; // Wrap around to 0 after December
+    this.nextMonth = MONTHS.find(month => month.id == (nextMonthIndex + 1));
+    this.nextYear = this.date.getFullYear() + (nextMonthIndex === 0 ? 1 : 0); // Increment year if wrapping around
+    
     this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1));
     this.year = this.date.getFullYear();
 
     this.changeMonth();
-  }
+}
 
   changeMonth() {
-    this.calculateNextMonth();
+    //this.calculateNextMonth();
 
     if(this.searching) return;
 
@@ -285,12 +292,12 @@ export class ServiceReportComponent implements OnInit {
     this.jobsDateFilter = [];
 
     this.iniDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate());
-    this.finDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate());
+    this.finDate = new Date(this.nextYear + '-' + this.nextMonth.id + '-' + this.date.getDate());
     
-    const daysInMonth = this.getDaysInMonth(this.year, this.month.id);
+    //const daysInMonth = this.getDaysInMonth(this.year, this.month.id);
 
     this.iniDate.setDate(this.iniDate.getDate());
-    this.finDate.setDate(this.finDate.getDate() + daysInMonth);
+    this.finDate.setDate(this.finDate.getDate()/*  + daysInMonth */);
 
     this.jobService.jobs({
       date_init: this.iniDate,
@@ -313,8 +320,18 @@ export class ServiceReportComponent implements OnInit {
     this.changeMonth();
   }
 
+  updateNextMonth(month: Month) {
+    this.nextMonth = month;
+    this.changeMonth();
+  }
+
   updateYear(year: number) {
     this.year = year;
+    this.changeMonth();
+  }
+
+  updateNextYear(year: number) {
+    this.nextYear = year;
     this.changeMonth();
   }
 
@@ -338,8 +355,15 @@ export class ServiceReportComponent implements OnInit {
         this.year = this.date.getFullYear();
       } else {
         this.date = new Date(this.datePipe.transform(this.jobs[0].deadline, 'yyyy-MM-dd') + "T00:00:00");
+
+        const nextDate = new Date(this.date);
+        nextDate.setMonth(nextDate.getMonth() + 1);
+        
         this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1));
+        this.nextMonth = MONTHS[nextDate.getMonth()];
+
         this.year = this.date.getFullYear();
+        this.nextYear = nextDate.getFullYear();
       }
 
       this.changeMonth();
