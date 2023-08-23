@@ -1,59 +1,25 @@
-<div class="my-container d-flex justify-content-between">
+<div class="my-container">
     <h3 class="title">Memórias</h3>
-    <div class="form-check">
-      <input class="form-check-input" type="checkbox" id="queryString" [(ngModel)]="showOnlyUnread" (click)="toggleShowOnlyUnread()">
-      <label class="title" for="queryString" style="font-size: 16px;">
-        Exibir apenas memórias não lidas
-      </label>
-    </div>
 </div>
 
 <div class="col-md-12">
   <mat-card style="min-height: 25rem;" class="container-fluid d-flex flex-column">
-    <div *ngIf="memories">
+    <div *ngIf="true">
       <div class="mt-4" *ngFor="let memoryGroup of getObjectKeys(memories); let i = index">
-        <div class="d-flex align-items-center">
-          <button 
-            class="btn btn-light mr-2"
-            [class.pressed]="isButtonPressed[i]"
-            (click)="toggleButtonPress(i)"
-            type="button" 
-            data-toggle="collapse"
-            [attr.data-target]="'#memory' + i"
-            aria-expanded="false">
-            <div class="arrow-icon" [class.pressed]="isButtonPressed[i]">></div>
-          </button>
-          <div class="title">
-            {{ applyMask(memoryGroup) }}
-          </div>
-        </div>
-        
-        <div class="mt-2" class="collapse" [id]="'memory' + i"  #collapse>
+        <div>
           <table class="table">
             <thead>
               <tr>
-                <th class="text-center mat-header-cell" style="width: 5%;">ID</th>
-                <th class="text-left mat-header-cell" style="width: 90%;">Mensagem</th>
-                <th class="text-left mat-header-cell" style="width: 5%;">Lido</th>
+                <th class="text-center mat-header-cell"></th>
+                <th class="text-left mat-header-cell"></th>
+                <th class="text-left mat-header-cell"></th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let memory of memories[memoryGroup]">
-                <td class="text-center" style="width: 5%;">{{ memory.id }}</td>
-                <td class="text-left" style="width: 90%;">{{ memory.message }}</td>
-                <td style="width: 5%;">
-                  <div class="custom-control custom-switch">
-                    <input 
-                      type="checkbox" 
-                      class="custom-control-input" 
-                      id="{{ 'customSwitch' + memory.id }}" 
-                      [(ngModel)]="memory.read" 
-                      (change)="onSwitchChange(memory, memoryGroup)"
-                      [disabled]="memory.read === 1"
-                    >
-                    <label class="custom-control-label" for="{{ 'customSwitch' + memory.id }}"></label>
-                  </div>
-                </td>
+              <tr>
+                <td class="text-center"></td>
+                <td class="text-left"></td>
+                <td></td>
               </tr>
             </tbody>
           </table>

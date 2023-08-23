@@ -3,14 +3,22 @@ import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { AuthService } from './auth.service';
+import { Location } from '@angular/common';
+import { AlertService } from 'app/alerts/alerts.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
 
+
+    readonly FRIDAY_DAY = 5;
+    hasAlertAndIsFriday: boolean;
+
     constructor(
         private router: Router,
         private auth: AuthService,
-        private snackBar: MatSnackBar
+        private snackBar: MatSnackBar,
+        private location: Location,
+        private alertService: AlertService,
     ) {}
 
     async canActivate(
@@ -45,6 +53,23 @@ export class AuthGuard implements CanActivate {
             this.snackBar.open('Desculpe, você não tem permissão de acesso para essa funcionalidade.', '', { duration: 3000 })
             return false;
         }
+
+        const today = new Date();
+
+        this.alertService.hasAlerts().subscribe(hasAlerts => {
+            const isFriday = today.getDay() === this.FRIDAY_DAY;
+          
+            if (hasAlerts && isFriday) {
+              this.hasAlertAndIsFriday = true;
+            }
+        });
+
+        this.alertService.listEmpty$.subscribe(isListEmpty => {
+            if (isListEmpty && iterativeRoute.routeConfig.path !== 'alerts') {
+              this.snackBar.open('Por favor, atualize os status de todos os projetos antes de navegar pelo sistema.', '', { duration: 3000 });
+              return false;
+            }
+          });
 
         return true;
     }

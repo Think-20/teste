@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, RequestOptions } from '@angular/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { API } from '../../app/app.api';
-import { Observable, of } from 'rxjs';
+import { BehaviorSubject, Observable, of } from 'rxjs';
 import { ErrorHandler } from 'app/shared/error-handler.service';
 import { EditStatus, ProjectStatus, ProjectsPendency } from './alerts.model';
 import { catchError, map } from 'rxjs/operators';
@@ -34,13 +34,19 @@ export class AlertService {
     },
   ]
 
+  private _listEmptySubject = new BehaviorSubject<boolean>(false);
+
+  get listEmpty$() {
+    return this._listEmptySubject.asObservable();
+  }
+
   constructor(
     private http: Http,
     private snackBar: MatSnackBar,
   ) { }
 
   getAlerts(): Observable<ProjectsPendency> {
-    const url = `/notifywindow`
+    const url = `notifywindow`
 
     return this.http.get(`${API}/${url}`)
       .map(response => response.json())
@@ -82,6 +88,10 @@ export class AlertService {
         return of(false);
       })
     );
+  }
+
+  setListEmpty(value: boolean) {
+    this._listEmptySubject.next(value);
   }
 
 }

@@ -332,9 +332,9 @@ export const ROUTES: Routes = [
       {
         path: 'alerts', component: AlertsContainerComponent, canActivate: [AuthGuard]
       },
-      /* {
+      {
         path: 'memories', component: MemoriesContainerComponent, canActivate: [AuthGuard]
-      }, */
+      },
     ]
   }
 ]

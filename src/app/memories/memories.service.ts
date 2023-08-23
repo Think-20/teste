@@ -16,12 +16,8 @@ export class MemoriesService {
     private snackBar: MatSnackBar,
   ) { }
 
-  getMemories(showOnlyUnread: boolean): Observable<MemoryGroup> {
+  getMemories(): Observable<any> {
     let url = `reminders`;
-
-    if (showOnlyUnread) { // Verifica se o checkbox está marcado
-      url += '?onlyNotRead=true'; // Adiciona a queryString para buscar apenas memórias não lidas
-    }
 
     return this.http.get(`${API}/${url}`)
       .map(response => response.json())
@@ -50,19 +46,4 @@ export class MemoriesService {
     })
   }
 
-  checkUnreadMemories(): Observable<boolean> {
-    return this.getMemories(true).map(memories => {
-
-      for (const groupName in memories) {
-        if (memories.hasOwnProperty(groupName)) {
-          const group = memories[groupName];
-          const unreadMemory = group.find(memory => memory.read === 0);
-          if (unreadMemory) {
-            return true;
-          }
-        }
-      }
-      return false;
-    });
-  }
 }

@@ -63,26 +63,12 @@ export class LoginComponent implements OnInit {
   ngOnInit() {
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
     
-    this.setReturnUrlByWeekDayAndHasAlerts();
-
     this.auth.logout();
 
     this.loginForm = this.fb.group({
       email: this.fb.control('', [Validators.required, Validators.minLength(5)]),
       password: this.fb.control('', [Validators.required])
     })
-  }
-
-  setReturnUrlByWeekDayAndHasAlerts(): void {
-    const today = new Date();
-
-    this.alertService.hasAlerts().subscribe(hasAlerts => {
-      const isFriday = today.getDay() === this.FRIDAY_DAY;
-    
-      if (hasAlerts && isFriday) {
-        this.returnUrl = '/alerts';
-      }
-    });
   }
 
   login(data) {
@@ -106,14 +92,18 @@ export class LoginComponent implements OnInit {
 
       Observable.timer(1500).subscribe(timer => {
         this.auth.setData(data)
-        this.router.navigate([this.returnUrl]);
-        /* this.memoriesService.checkUnreadMemories().subscribe(hasUnreadMemories => {
-          if (hasUnreadMemories) {
-            this.router.navigate(['/memories']);
+        //this.router.navigate([this.returnUrl]);
+
+        const today = new Date();
+        const isFriday = today.getDay() === this.FRIDAY_DAY;
+
+        this.alertService.hasAlerts().subscribe(hasAlerts => {
+          if (hasAlerts && isFriday) {
+            this.router.navigate(['/alerts']);
           } else {
             this.router.navigate([this.returnUrl]);
           }
-        }); */
+        });
       })
     })
   }
