@@ -61,4 +61,21 @@ export class Job {
     detailing_responsible?: Employee
     budget_responsible?: Employee
     production_responsible?: Employee
+    orders_value?: string
+    attendance_value?: string
+    creation_value?: string
+    pre_production_value?: string
+    production_value?: string
+    details_value?: string
+    budget_si_value?: string
+    bv_value?: string
+    over_rates_value?: string
+    discounts_value?: string
+    taxes_value?: string
+    logistics_value?: string
+    equipment_value?: string
+    total_cost_value?: string
+    gross_profit_value?: string
+    profit_value?: string
+    final_value?: string
 }

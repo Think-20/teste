@@ -46,15 +46,14 @@ export class BudgetFormComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
 
-    if (this.job.budget) {
+    if (this.job.orders_value) {
       this.fillForm();
     }
   }
 
   createForm() {
     this.budgetForm = this.formBuilder.group({
-      job_id: this.formBuilder.control(this.job.id, [Validators.required]),
-      id: this.formBuilder.control(null),
+      id: this.formBuilder.control(this.job.id, [Validators.required]),
       orders_value: this.formBuilder.control('', [Validators.required]),
       attendance_value: this.formBuilder.control('', [Validators.required]),
       creation_value: this.formBuilder.control('', [Validators.required]),
@@ -76,20 +75,29 @@ export class BudgetFormComponent implements OnInit {
   }
 
   fillForm(): void {
-    /* this.budgetForm.patchValue({
-      job_id: this.job.id,
-      task_id: this.job.tasks[0].id,
-      id: this.job.tasks[0].budget.id,
-      orders_value: this.job.tasks[0].budget.orders_value
-    }) */
+    this.budgetForm.patchValue({
+      id: this.job.id,
+      orders_value: this.job.orders_value,
+      attendance_value: this.job.attendance_value,
+      creation_value: this.job.creation_value,
+      pre_production_value: this.job.pre_production_value,
+      production_value: this.job.production_value,
+      details_value: this.job.details_value,
+      budget_si_value: this.job.budget_si_value,
+      bv_value: this.job.bv_value,
+      over_rates_value: this.job.over_rates_value,
+      discounts_value: this.job.discounts_value,
+      taxes_value: this.job.taxes_value,
+      logistics_value: this.job.logistics_value,
+      equipment_value: this.job.equipment_value,
+      total_cost_value: this.job.total_cost_value,
+      gross_profit_value: this.job.gross_profit_value,
+      profit_value: this.job.profit_value,
+      final_value: this.job.final_value,
+    })
   }
 
-  sendValues(): void {
-    
-    console.log(this.budgetForm.value)
-  }
-
-  edit() {
+  sendValues() {
     this.budgetForm.updateValueAndValidity()
     
     if (ErrorHandler.formIsInvalid(this.budgetForm)) {
