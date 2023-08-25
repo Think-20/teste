@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { Budget } from '../budget.model';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { BudgetService } from '../budget.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -10,6 +10,7 @@ import { distinctUntilChanged } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { AuthService } from '../../login/auth.service';
 import { Job } from 'app/jobs/job.model';
+import { JobService } from 'app/jobs/job.service';
 
 @Component({
   selector: 'cb-budget-form',
@@ -17,27 +18,104 @@ import { Job } from 'app/jobs/job.model';
   styleUrls: ['./budget-form.component.css']
 })
 export class BudgetFormComponent implements OnInit {
-  budget: Budget
+  /* budget: Budget
   budgetForm: FormGroup
   total: number = 0
   isAttendance: boolean = false
   isAdmin: boolean = false
-  subscription: Subscription
+  subscription: Subscription */
+
+  budgetForm = new FormGroup({});
 
   @Input('typeForm') typeForm: string
   @Input('task') task: Task
-  @Input('job') job: Job
+  @Input() job: Job
 
   constructor(
-    private budgetService: BudgetService,
+    /* private budgetService: BudgetService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private authService: AuthService,
     private router: Router,
+    private snackBar: MatSnackBar, */
     private snackBar: MatSnackBar,
+    private formBuilder: FormBuilder,
+    private jobService: JobService,
   ) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.createForm();
+
+    if (this.job.budget) {
+      this.fillForm();
+    }
+  }
+
+  createForm() {
+    this.budgetForm = this.formBuilder.group({
+      job_id: this.formBuilder.control(this.job.id, [Validators.required]),
+      id: this.formBuilder.control(null),
+      orders_value: this.formBuilder.control('', [Validators.required]),
+      attendance_value: this.formBuilder.control('', [Validators.required]),
+      creation_value: this.formBuilder.control('', [Validators.required]),
+      pre_production_value: this.formBuilder.control('', [Validators.required]),
+      production_value: this.formBuilder.control('', [Validators.required]),
+      details_value: this.formBuilder.control('', [Validators.required]),
+      budget_si_value: this.formBuilder.control('', [Validators.required]),
+      bv_value: this.formBuilder.control('', [Validators.required]),
+      over_rates_value: this.formBuilder.control('', [Validators.required]),
+      discounts_value: this.formBuilder.control('', [Validators.required]),
+      taxes_value: this.formBuilder.control('', [Validators.required]),
+      logistics_value: this.formBuilder.control('', [Validators.required]),
+      equipment_value: this.formBuilder.control('', [Validators.required]),
+      total_cost_value: this.formBuilder.control('', [Validators.required]),
+      gross_profit_value: this.formBuilder.control('', [Validators.required]),
+      profit_value: this.formBuilder.control('', [Validators.required]),
+      final_value: this.formBuilder.control('', [Validators.required]),
+    })
+  }
+
+  fillForm(): void {
+    /* this.budgetForm.patchValue({
+      job_id: this.job.id,
+      task_id: this.job.tasks[0].id,
+      id: this.job.tasks[0].budget.id,
+      orders_value: this.job.tasks[0].budget.orders_value
+    }) */
+  }
+
+  sendValues(): void {
+    
+    console.log(this.budgetForm.value)
+  }
+
+  edit() {
+    this.budgetForm.updateValueAndValidity()
+    
+    if (ErrorHandler.formIsInvalid(this.budgetForm)) {
+      this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
+        duration: 5000
+      })
+      return;
+    }
+
+    this.jobService.edit(this.budgetForm.value).subscribe(data => {
+      this.snackBar.open(data.message, '', {
+        duration: data.status ? 1000 : 5000
+      })
+    })
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const keyCode = event.which || event.keyCode;
+    const keyValue = String.fromCharCode(keyCode);
+
+    if (!/^[0-9.,]$/.test(keyValue) && !event.ctrlKey && !event.metaKey) {
+      event.preventDefault();
+    }
+  }
+
+  /* ngOnInit() {
     this.isAdmin = this.authService.hasAccess('budget/save')
     this.isAttendance = this.job.attendance_id == this.authService.currentUser().employee.id
 
@@ -181,5 +259,5 @@ export class BudgetFormComponent implements OnInit {
       this.budget = data.budget as Budget
       this.setFormConfig()
     })
-  }
+  } */
 }

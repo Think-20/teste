@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, AfterViewInit } from '@angular/core';
 import { GALLERY_IMAGE, GALLERY_CONF, NgxImageGalleryComponent } from 'ngx-image-gallery';
 
 @Component({
@@ -6,13 +6,17 @@ import { GALLERY_IMAGE, GALLERY_CONF, NgxImageGalleryComponent } from 'ngx-image
   templateUrl: './image-viewer.component.html',
   styleUrls: ['./image-viewer.component.css']
 })
-export class ImageViewerComponent implements OnInit {
+export class ImageViewerComponent implements OnInit, AfterViewInit {
 
   @Input() openWhenInit: boolean = false
 
   constructor() { }
 
   ngOnInit() {
+    
+  }
+
+  ngAfterViewInit() {
     this.ngxImageGallery.images = this.images
 
     if(this.openWhenInit)

@@ -2,6 +2,17 @@ import { Employee } from "../employees/employee.model";
 import { Task } from "../schedule/task.model";
 
 export class Budget {
+  id?: number;
+  task_id: number;
+  attendance_value: string;
+  production_value: string;
+  bv_value: string;
+  tax_value: string;
+  total_cost: string;
+  orders_value: string;
+}
+
+/* export class Budget {
   id: number
   responsible_id?: number
   responsible?: Employee
@@ -18,4 +29,4 @@ export class Budget {
   markup_aliquot: number
   created_at?: string
   updated_at?: string
-}
+} */

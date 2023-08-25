@@ -23,11 +23,8 @@
       <cb-specification *ngIf="job?.id != undefined" [job]="job"></cb-specification>
     </mat-tab>
     <mat-tab label="Orçamento">
-      <!--
-      <cb-budget-form *ngIf="job?.id != undefined && job?.job_activity?.description != 'Projeto'" [typeForm]="typeForm" [job]="job"
-        [isAdmin]="isAdmin">
+      <cb-budget-form *ngIf="job?.id != undefined && isAdmin" [typeForm]="typeForm" [job]="job">
       </cb-budget-form>
-      -->
     </mat-tab>
     <mat-tab label="Check-in">
       Check-in

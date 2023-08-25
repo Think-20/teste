@@ -209,6 +209,7 @@ import { AlertsContainerComponent } from './alerts/components/alerts-container/a
 import { AlertService } from './alerts/alerts.service';
 import { MemoriesContainerComponent } from './memories/components/memories-container/memories-container.component';
 import { MemoriesService } from './memories/memories.service';
+import { FormatMaskDirective } from './shared/directives/format-mask.directive';
 
 registerLocaleData(localePt);
 
@@ -325,7 +326,8 @@ registerLocaleData(localePt);
     DecimalPipe,
 
     AlertsContainerComponent,
-    MemoriesContainerComponent
+    MemoriesContainerComponent,
+    FormatMaskDirective
   ],
   imports: [
     CurrencyMaskModule,
