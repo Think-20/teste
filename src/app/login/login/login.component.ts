@@ -56,7 +56,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private auth: AuthService,
-    private memoriesService: MemoriesService,
+    private memoryService: MemoriesService,
     private alertService: AlertService,
   ) { }
 
@@ -97,12 +97,24 @@ export class LoginComponent implements OnInit {
         const today = new Date();
         const isFriday = today.getDay() === this.FRIDAY_DAY;
 
-        this.alertService.hasAlerts().subscribe(hasAlerts => {
+        /* this.alertService.hasAlerts().subscribe(hasAlerts => {
           if (hasAlerts && isFriday) {
             this.router.navigate(['/alerts']);
           } else {
             this.router.navigate([this.returnUrl]);
           }
+        }); */
+
+        this.alertService.hasAlerts().subscribe(hasAlerts => {
+          this.memoryService.getMemories().subscribe(memories => {
+            if (hasAlerts && isFriday) {
+              this.router.navigate(['/alerts']);
+            } else if (memories[0].jobs.length > 0 || (memories[1].clients.length > 0 ) || (memories[2].jobs_approveds.length > 0 )) {
+              this.router.navigate(['/memories']);
+            } else {
+              this.router.navigate([this.returnUrl]);
+            }
+          });
         });
       })
     })

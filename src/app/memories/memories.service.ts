@@ -4,7 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { API } from '../../app/app.api';
 import { Observable } from 'rxjs';
 import { ErrorHandler } from 'app/shared/error-handler.service';
-import { MemoryGroup } from './memories.model';
+import { Memory } from './memories.model';
 
 
 
@@ -16,7 +16,7 @@ export class MemoriesService {
     private snackBar: MatSnackBar,
   ) { }
 
-  getMemories(): Observable<any> {
+  getMemories(): Observable<Memory[]> {
     let url = `reminders`;
 
     return this.http.get(`${API}/${url}`)

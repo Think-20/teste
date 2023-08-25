@@ -69,7 +69,7 @@ export class AuthGuard implements CanActivate {
               this.snackBar.open('Por favor, atualize os status de todos os projetos antes de navegar pelo sistema.', '', { duration: 3000 });
               return false;
             }
-          });
+        });
 
         return true;
     }
