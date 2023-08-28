@@ -75,6 +75,11 @@ export class ServiceReportComponent implements OnInit {
   months: Month[] = MONTHS
   nextMonthName: string = '';
   nextYear: number = 0;
+  creationFilter: any;
+  jobTypeFilter: any;
+  nameFilter: any;
+  statusFilter: any;
+  attendanceFilterStatus: { attendance: any; } | { attendance?: undefined; };
   
   constructor(
     private fb: FormBuilder,
@@ -154,15 +159,21 @@ export class ServiceReportComponent implements OnInit {
     let clientName = searchValue.client != '' ? searchValue.client : searchValue.search;
     let attendanceFilter = this.isAdmin ? { attendance: searchValue.attendance } : {};
 
+    this.creationFilter = searchValue.creation;
+    this.jobTypeFilter = searchValue.job_type;
+    this.nameFilter = clientName;
+    this.statusFilter = status;
+    this.attendanceFilterStatus = attendanceFilter;
+
     return {
-      creation: searchValue.creation,
-      job_type: searchValue.job_type,
+      creation: this.creationFilter,
+      job_type: this.jobTypeFilter,
       final_date: searchValue.final_date,
-      date_end: searchValue.date_end,
-      date_init: searchValue.date_init,
-      name: clientName,
-      status: status,
-      ...attendanceFilter
+      date_end: this.finDate,
+      date_init: this.iniDate,
+      name: this.nameFilter,
+      status: this.statusFilter,
+      ...this.attendanceFilterStatus
     }
   }
 
@@ -184,23 +195,27 @@ export class ServiceReportComponent implements OnInit {
 
   loadInitialData() {
     if (JSON.stringify(this.jobService.searchValue) === JSON.stringify(this.formCopy)) {
-      this.loadJobs({}, this.pageIndex + 1);
+      this.loadJobs({}, this.pageIndex + 1, true);
     } else {
       this.params = this.getParams(this.jobService.searchValue);
-      this.loadJobs(this.params, this.pageIndex + 1);
+      this.loadJobs(this.params, this.pageIndex + 1, true);
     }
 
     this.updateFilterActive()
   }
 
-  loadJobs(params, page: number) {
+  loadJobs(params, page: number, configureDates = false) {
     if(this.searching) return;
     
     this.searching = true;
     let snackBar = this.snackBar.open('Carregando jobs...');
     this.jobService.jobs(params, page).subscribe(dataInfo => {
       dataInfo.jobs ? this.jobs = dataInfo.jobs.data : this.jobs = [];
-      this.setDataByParams();
+      
+      if (configureDates) {
+        this.setDataByParams();
+      }
+      
       this.pagination = dataInfo.jobs;
       this.reportData = (dataInfo as unknown as ReportData);
       this.searching = false;
@@ -269,10 +284,9 @@ export class ServiceReportComponent implements OnInit {
     this.date.setDate(1);
     this.date.setMonth(this.date.getMonth() + inc);
     
-    // Calculate next month and year
-    const nextMonthIndex = (this.date.getMonth() + 1) % 12; // Wrap around to 0 after December
+    const nextMonthIndex = (this.date.getMonth() + 1) % 12;
     this.nextMonth = MONTHS.find(month => month.id == (nextMonthIndex + 1));
-    this.nextYear = this.date.getFullYear() + (nextMonthIndex === 0 ? 1 : 0); // Increment year if wrapping around
+    this.nextYear = this.date.getFullYear() + (nextMonthIndex === 0 ? 1 : 0);
     
     this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1));
     this.year = this.date.getFullYear();
@@ -300,8 +314,13 @@ export class ServiceReportComponent implements OnInit {
     this.finDate.setDate(this.finDate.getDate()/*  + daysInMonth */);
 
     this.jobService.jobs({
-      date_init: this.iniDate,
+      creation: this.creationFilter,
+      job_type: this.jobTypeFilter,
       date_end: this.finDate,
+      date_init: this.iniDate,
+      name: this.nameFilter,
+      status: this.statusFilter,
+      ...this.attendanceFilterStatus
     }, this.pageIndex + 1).subscribe(dataInfo => {
       dataInfo.jobs ? this.jobs = dataInfo.jobs.data : this.jobs = [];
       this.pagination = dataInfo.jobs;
