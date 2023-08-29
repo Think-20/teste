@@ -380,7 +380,7 @@ export class JobFormComponent implements OnInit {
       this.jobForm.controls.not_client.setValue(job.not_client)
     } else {
       this.disableNotClient()
-      this.jobForm.controls.client.setValue(job.client)
+      this.jobForm.controls.client.setValue(job.client ? job.client : { fantasy_name: job.not_client } )
     }
 
     this.jobForm.controls.rate.setValue(job.rate)
@@ -532,7 +532,7 @@ export class JobFormComponent implements OnInit {
   }
 
   displayClient(client: Client) {
-    return client.fantasy_name
+    return client ? client.fantasy_name : '';
   }
 
   displayAgency(agency: Client) {
