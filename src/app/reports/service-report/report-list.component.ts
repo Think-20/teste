@@ -246,16 +246,9 @@ export class ServiceReportComponent implements OnInit {
   }
 
   changePage($event) {
-    this.searching = true;
     this.jobs = [];
-    this.jobService.jobs(this.jobService.searchValue, ($event.pageIndex + 1)).subscribe(dataInfo => {
-      this.dataInfo = dataInfo.jobs;
-      this.pagination = dataInfo.jobs;
-      this.jobs = dataInfo.jobs.data;
-      this.searching = false;
-      this.pageIndex = $event.pageIndex;
-      this.jobService.pageIndex = this.pageIndex;
-    })
+    this.params = this.getParams(this.jobService.searchValue);
+    this.loadJobs(this.params, ($event.pageIndex + 1));
   }
 
   /* loadFilterData() {
@@ -305,9 +298,8 @@ export class ServiceReportComponent implements OnInit {
     this.jobs = [];
     this.jobsDateFilter = [];
 
-    this.iniDate = new Date(this.year + '-' + this.month.id + '-' + this.date.getDate());
-    this.finDate = new Date(this.nextYear + '-' + this.nextMonth.id + '-' + this.date.getDate());
-    
+    this.iniDate = new Date(this.year + '-' + this.month.id + '-' + 1);
+    this.finDate = new Date(this.nextYear + '-' + this.nextMonth.id + '-' + 1);
     //const daysInMonth = this.getDaysInMonth(this.year, this.month.id);
 
     this.iniDate.setDate(this.iniDate.getDate());
