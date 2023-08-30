@@ -111,4 +111,20 @@ export class ReportService {
         return ErrorHandler.capture(err)
       })
   }
+
+  delete(id: number): Observable<any> {
+    let url = `job/remove/${id}`
+    let prefix = this.auth.hasAccess('job/remove/{id}') ? '' : 'my-'
+
+    url = prefix + url
+
+    return this.http.delete(`${API}/${url}`)
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 }

@@ -1,4 +1,16 @@
-<mat-menu #menu="matMenu"> </mat-menu>
+<mat-menu #menu="matMenu">
+  <ng-template matMenuContent let-job="job">
+      <a [disabled]="!permissionVerify('show', job)" [routerLink]="['/jobs/show', job.id]" mat-menu-item>
+        <mat-icon>subject</mat-icon> Visualização
+      </a>
+      <a [disabled]="!permissionVerify('edit', job)" [routerLink]="['/jobs/edit', job.id]" mat-menu-item>
+        <mat-icon>mode_edit</mat-icon> Editar
+      </a>
+      <button [disabled]="!permissionVerify('delete', job)" (click)="delete(job)" mat-menu-item>
+        <mat-icon>delete</mat-icon> Remover
+      </button>
+  </ng-template>
+</mat-menu>
 
 <div class="my-container">
   <!-- <h3 class="lead">Relatórios</h3> -->
@@ -156,7 +168,7 @@
             <div class="mat-header-cell mat-column-rate" title="Satisfação">Satisfação</div>
           </div>
           <div class="space-table-header"></div>
-          <div class="mat-row" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState">
+          <div class="mat-row" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState" [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }">
             <div class="mat-cell mat-column-num">
               {{ job.index }}
             </div>

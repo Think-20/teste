@@ -1,16 +1,17 @@
 <mat-menu #menu="matMenu">
   <ng-template matMenuContent let-job="job">
-      <a [routerLink]="['/jobs/show', job.id]" mat-menu-item>
+      <a [disabled]="!permissionVerify('show', job)" [routerLink]="['/jobs/show', job.id]" mat-menu-item>
         <mat-icon>subject</mat-icon> Visualização
       </a>
-      <a [routerLink]="['/jobs/edit', job.id]" mat-menu-item>
+      <a [disabled]="!permissionVerify('edit', job)" [routerLink]="['/jobs/edit', job.id]" mat-menu-item>
         <mat-icon>mode_edit</mat-icon> Editar
       </a>
-      <button (click)="delete(job)" mat-menu-item>
+      <button [disabled]="!permissionVerify('delete', job)" (click)="delete(job)" mat-menu-item>
         <mat-icon>delete</mat-icon> Remover
       </button>
   </ng-template>
 </mat-menu>
+
 
 <div class="my-container">
   <h3 class="lead">Jobs</h3>

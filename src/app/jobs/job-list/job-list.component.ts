@@ -251,6 +251,34 @@ export class JobListComponent implements OnInit {
     })
   }
 
+  permissionVerify(module: string, job: Job): boolean {
+    let access: boolean
+    let employee = this.authService.currentUser().employee
+    switch (module) {
+      case 'new': {
+        access = this.authService.hasAccess('job/save')
+        break
+      }
+      case 'show': {
+        access = job.attendance.id != employee.id ? this.authService.hasAccess('jobs/get/{id}') : true
+        break
+      }
+      case 'edit': {
+        access = job.attendance.id != employee.id ? this.authService.hasAccess('job/edit') : true
+        break
+      }
+      case 'delete': {
+        access = job.attendance.id != employee.id ? this.authService.hasAccess('job/remove/{id}') : true
+        break
+      }
+      default: {
+        access = false
+        break
+      }
+    }
+    return access
+  }
+
   delete(job: Job) {
     this.jobService.delete(job.id).subscribe((data) => {
       this.snackBar.open(data.message, '', {
