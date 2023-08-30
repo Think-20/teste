@@ -62,6 +62,7 @@ export class ServiceListComponent implements OnInit {
   job_types: JobType[]
   searching = false
   pageIndex: number
+  pageSize = 30;
   filter = false
   params = {}
   hasFilterActive = false
