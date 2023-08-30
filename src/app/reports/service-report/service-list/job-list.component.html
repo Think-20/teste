@@ -179,7 +179,8 @@
               {{ job.created_at | date : "dd/MM/yy" }}
             </div>
             <div class="mat-cell mat-column-client">
-              {{ job.client ? job.client.fantasy_name : job.not_client }}
+              
+              {{ job.client ? job.client.fantasy_name : job.not_client || '-' }}
             </div>
             <div class="mat-cell mat-column-event">
               {{ job.event }}
@@ -382,6 +383,6 @@
     </div> -->
 
     <mat-paginator *ngIf="jobs" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex"
-      [pageSizeOptions]="[pagination?.per_page]" (page)="changePage($event)"></mat-paginator>
+    [pageSizeOptions]="[30, 60, 90]" (page)="changePage($event)"></mat-paginator>
   </form>
 </div>

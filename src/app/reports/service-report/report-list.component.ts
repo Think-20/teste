@@ -59,6 +59,7 @@ export class ServiceReportComponent implements OnInit {
   job_types: JobType[]
   searching = false
   pageIndex: number
+  pageSize = 30;
   filter = false
   params = {}
   hasFilterActive = false
@@ -173,6 +174,7 @@ export class ServiceReportComponent implements OnInit {
       date_init: this.iniDate,
       name: this.nameFilter,
       status: this.statusFilter,
+      jobs_amount: this.pageSize,
       ...this.attendanceFilterStatus
     }
   }
@@ -195,6 +197,7 @@ export class ServiceReportComponent implements OnInit {
 
   loadInitialData() {
     if (JSON.stringify(this.jobService.searchValue) === JSON.stringify(this.formCopy)) {
+      this.params = this.getParams(this.jobService.searchValue);
       this.loadJobs({}, this.pageIndex + 1, true);
     } else {
       this.params = this.getParams(this.jobService.searchValue);
@@ -215,6 +218,9 @@ export class ServiceReportComponent implements OnInit {
       if (configureDates) {
         this.setDataByParams();
       }
+      
+      console.log(dataInfo)
+      console.log(this.jobs)
       
       this.pagination = dataInfo.jobs;
       this.reportData = (dataInfo as unknown as ReportData);
@@ -246,6 +252,7 @@ export class ServiceReportComponent implements OnInit {
   }
 
   changePage($event) {
+    this.pageSize = $event.pageSize;
     this.jobs = [];
     this.params = this.getParams(this.jobService.searchValue);
     this.loadJobs(this.params, ($event.pageIndex + 1));
@@ -291,8 +298,6 @@ export class ServiceReportComponent implements OnInit {
     //this.calculateNextMonth();
 
     if(this.searching) return;
-
-    this.searching = true;
     let snackBar = this.snackBar.open('Carregando tarefas...');
 
     this.jobs = [];
@@ -305,21 +310,8 @@ export class ServiceReportComponent implements OnInit {
     this.iniDate.setDate(this.iniDate.getDate());
     this.finDate.setDate(this.finDate.getDate()/*  + daysInMonth */);
 
-    this.jobService.jobs({
-      creation: this.creationFilter,
-      job_type: this.jobTypeFilter,
-      date_end: this.finDate,
-      date_init: this.iniDate,
-      name: this.nameFilter,
-      status: this.statusFilter,
-      ...this.attendanceFilterStatus
-    }, this.pageIndex + 1).subscribe(dataInfo => {
-      dataInfo.jobs ? this.jobs = dataInfo.jobs.data : this.jobs = [];
-      this.pagination = dataInfo.jobs;
-      this.reportData = (dataInfo as unknown as ReportData);
-      this.searching = false;
-      snackBar.dismiss()
-    })
+    this.params = this.getParams(this.jobService.searchValue);
+    this.loadJobs(this.params, 1);
   }
 
   getDaysInMonth(year: number, month: number): number {
@@ -365,7 +357,8 @@ export class ServiceReportComponent implements OnInit {
         this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1));
         this.year = this.date.getFullYear();
       } else {
-        this.date = new Date(this.datePipe.transform(this.jobs[0].deadline, 'yyyy-MM-dd') + "T00:00:00");
+
+        this.date = new Date(this.datePipe.transform(this.jobs[0].created_at, 'yyyy-MM-dd') + "T00:00:00");
 
         const nextDate = new Date(this.date);
         nextDate.setMonth(nextDate.getMonth() + 1);
