@@ -24,6 +24,7 @@ import { EventService } from 'app/events/event.service';
 import { Event } from 'app/events/event.model';
 import { JobEventsService } from 'app/job-events/job-events.service';
 import { JobEvents } from 'app/job-events/job-events-model';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'cb-job-list',
@@ -129,6 +130,26 @@ export class ServiceReportComponent implements OnInit {
       date_init: this.fb.control(''),
       date_end: this.fb.control(''),
     })
+
+
+    let snackBarStateCharging
+
+    this.searchForm.get('event').valueChanges
+      .do(clientName => {
+        snackBarStateCharging = this.snackBar.open('Aguarde...')
+      })
+      .debounceTime(500)
+      .subscribe(eventName => {
+        if (!eventName) {
+          snackBarStateCharging.dismiss()
+          return;
+        }
+
+        this.jobEventsService.jobeEventos(eventName).subscribe((dataInfo) => {
+          this.events = dataInfo;
+        })
+        Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
+      })
 
     if(this.isAdmin)
       this.searchForm.addControl('attendance', this.fb.control({ value: '' }));
@@ -358,6 +379,10 @@ export class ServiceReportComponent implements OnInit {
       this.years.push(ini);
       ini += 1;
     }
+  }
+
+  displayEvent(event: JobEvents) {
+    return event;
   }
 
   setDataByParams() {
