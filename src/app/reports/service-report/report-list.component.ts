@@ -195,6 +195,14 @@ export class ServiceReportComponent implements OnInit {
     this.statusFilter = status;
     this.eventFilter = searchValue.event;
     this.attendanceFilterStatus = attendanceFilter;
+    this.iniDate = searchValue.date_init;
+    this.finDate = searchValue.date_end;
+
+    this.jobService.searchValue = {
+      ...this.jobService.searchValue,
+      date_init:this.iniDate,
+      date_end: this.finDate,
+    }
 
     return {
       creation: this.creationFilter,
@@ -239,6 +247,18 @@ export class ServiceReportComponent implements OnInit {
   }
 
   loadJobs(params, page: number, configureDates = false) {
+    let hasDateFilter = false;
+    const filter: any = this.jobService.searchValue;
+
+    if (filter) {
+      hasDateFilter = !!(filter.date_init || filter.date_end);
+    }
+
+    if (hasDateFilter) {
+      this.setCurrentDateFilterByDate(filter.date_init, filter.date_end);
+    }
+
+
     if(this.searching) return;
     
     this.searching = true;
@@ -246,18 +266,24 @@ export class ServiceReportComponent implements OnInit {
     this.jobService.jobs(params, page).subscribe(dataInfo => {
       dataInfo.jobs ? this.jobs = dataInfo.jobs.data : this.jobs = [];
       
-      if (configureDates) {
+      if (configureDates && !hasDateFilter) {
         this.setDataByParams();
       }
-      
-      console.log(dataInfo)
-      console.log(this.jobs)
       
       this.pagination = dataInfo.jobs;
       this.reportData = (dataInfo as unknown as ReportData);
       this.searching = false;
       snackBar.dismiss();
     })
+  }
+
+
+  setCurrentDateFilterByDate(dateInit: Date, dateEnd: Date) {
+    this.month = MONTHS.find(month => month.id == (dateInit.getMonth() + 1));
+    this.year = dateInit.getFullYear();
+
+    this.nextMonth = MONTHS.find(month => month.id == (dateEnd.getMonth() + 1));
+    this.nextYear = dateEnd.getFullYear();
   }
 
   loadFilterData() {
@@ -342,6 +368,12 @@ export class ServiceReportComponent implements OnInit {
 
     this.iniDate.setDate(this.iniDate.getDate());
     this.finDate.setDate(this.finDate.getDate()/*  + daysInMonth */);
+
+    this.jobService.searchValue = {
+      ...this.jobService.searchValue,
+      date_init:this.iniDate,
+      date_end: this.finDate,
+    }
 
     this.params = this.getParams(this.jobService.searchValue);
     this.loadJobs(this.params, 1);
