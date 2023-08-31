@@ -22,6 +22,7 @@ import { Month, MONTHS } from 'app/shared/date/months';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Pagination } from 'app/shared/pagination.model';
+import { JobEvents } from 'app/job-events/job-events-model';
 
 @Component({
   selector: 'cb-job-list',
@@ -60,6 +61,7 @@ export class ServiceListComponent implements OnInit {
   clients: Client[]
   status: JobStatus[]
   job_types: JobType[]
+  events: JobEvents[]
   searching = false
   pageIndex: number
   pageSize = 30;
@@ -115,6 +117,7 @@ export class ServiceListComponent implements OnInit {
       job_type: this.fb.control(''),
       client: this.fb.control(''),
       status: this.fb.control(''),
+      event: this.fb.control(''),
       initial_date: this.fb.control(''),
       final_date: this.fb.control(''),
     })
@@ -163,6 +166,7 @@ export class ServiceListComponent implements OnInit {
       initial_date: searchValue.initial_date,
       clientName: clientName,
       status: status,
+      event: searchValue.event,
       ...attendanceFilter
     }
   }

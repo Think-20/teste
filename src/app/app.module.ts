@@ -210,6 +210,7 @@ import { AlertService } from './alerts/alerts.service';
 import { MemoriesContainerComponent } from './memories/components/memories-container/memories-container.component';
 import { MemoriesService } from './memories/memories.service';
 import { FormatMaskDirective } from './shared/directives/format-mask.directive';
+import { JobEventsService } from './job-events/job-events.service';
 
 registerLocaleData(localePt);
 
@@ -423,6 +424,7 @@ registerLocaleData(localePt);
     RouterExtService,
     ListDataService,
     ReportService,
+    JobEventsService,
 
     MatDialog,
     MatSnackBar,

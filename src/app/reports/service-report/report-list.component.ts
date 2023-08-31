@@ -20,6 +20,10 @@ import { DataInfo } from '../../shared/data-info.model';
 import { Month, MONTHS } from 'app/shared/date/months';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { EventService } from 'app/events/event.service';
+import { Event } from 'app/events/event.model';
+import { JobEventsService } from 'app/job-events/job-events.service';
+import { JobEvents } from 'app/job-events/job-events-model';
 
 @Component({
   selector: 'cb-job-list',
@@ -57,6 +61,7 @@ export class ServiceReportComponent implements OnInit {
   clients: Client[]
   status: JobStatus[]
   job_types: JobType[]
+  events: JobEvents[]
   searching = false
   pageIndex: number
   pageSize = 30;
@@ -80,6 +85,7 @@ export class ServiceReportComponent implements OnInit {
   jobTypeFilter: any;
   nameFilter: any;
   statusFilter: any;
+  eventFilter: any;
   attendanceFilterStatus: { attendance: any; } | { attendance?: undefined; };
   
   constructor(
@@ -90,6 +96,7 @@ export class ServiceReportComponent implements OnInit {
     private jobService: ReportService,
     private jobTypeService: JobTypeService,
     private jobStatus: JobStatusService,
+    private jobEventsService: JobEventsService,
     private snackBar: MatSnackBar,
     private datePipe: DatePipe,
     private router: Router,
@@ -118,6 +125,7 @@ export class ServiceReportComponent implements OnInit {
       job_type: this.fb.control(''),
       client: this.fb.control(''),
       status: this.fb.control(''),
+      event: this.fb.control(''),
       date_init: this.fb.control(''),
       date_end: this.fb.control(''),
     })
@@ -164,6 +172,7 @@ export class ServiceReportComponent implements OnInit {
     this.jobTypeFilter = searchValue.job_type;
     this.nameFilter = clientName;
     this.statusFilter = status;
+    this.eventFilter = searchValue.event;
     this.attendanceFilterStatus = attendanceFilter;
 
     return {
@@ -174,6 +183,7 @@ export class ServiceReportComponent implements OnInit {
       date_init: this.iniDate,
       name: this.nameFilter,
       status: this.statusFilter,
+      event: this.eventFilter,
       jobs_amount: this.pageSize,
       ...this.attendanceFilterStatus
     }
@@ -249,6 +259,8 @@ export class ServiceReportComponent implements OnInit {
         return employee.department.description === 'Criação'
       })
     })
+
+    this.jobEventsService.jobeEventos().subscribe(events => this.events = events)
   }
 
   changePage($event) {

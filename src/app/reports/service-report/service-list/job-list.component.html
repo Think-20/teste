@@ -124,6 +124,14 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+          <mat-form-field class="col-md-2-4">
+            <mat-select placeholder="Evento" formControlName="event">
+              <mat-option></mat-option>
+              <mat-option *ngFor="let e of events" [value]="e">
+                {{ e }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
           <!-- <hr />
           <div class="col-md-12">
             <p>

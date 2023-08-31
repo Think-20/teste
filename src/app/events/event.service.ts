@@ -111,4 +111,21 @@ export class EventService {
         return ErrorHandler.capture(err)
       })
   }
+
+  jobEvents(params?: {}): Observable<DataInfo> {
+    let url = params === '' ? `events/filter` : `events/filter`
+
+    return this.http.post(
+      `${API}/${url}`,
+      JSON.stringify(params),
+      new RequestOptions()
+    )
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
 }
