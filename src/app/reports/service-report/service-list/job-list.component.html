@@ -93,33 +93,29 @@
             </mat-option>
           </mat-autocomplete>
           <mat-form-field *ngIf="isAdmin" class="col-md-2-4">
-            <mat-select placeholder="Atendimento" formControlName="attendance">
-              <mat-option></mat-option>
-              <mat-option *ngFor="let attendance of attendances" [value]="attendance">
+            <mat-select placeholder="Atendimento" formControlName="attendance" multiple>
+              <mat-option *ngFor="let attendance of attendances" [value]="attendance.id">
                 {{ attendance.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col-md-2-4">
-            <mat-select placeholder="Projetista" formControlName="creation">
-              <mat-option></mat-option>
-              <mat-option *ngFor="let creation of creations" [value]="creation">
+            <mat-select placeholder="Projetista" formControlName="creation" multiple>
+              <mat-option *ngFor="let creation of creations" [value]="creation.id">
                 {{ creation.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col-md-2-4">
-            <mat-select placeholder="Tipo" formControlName="job_type">
-              <mat-option></mat-option>
-              <mat-option *ngFor="let job_type of job_types" [value]="job_type">
+            <mat-select placeholder="Tipo" formControlName="job_type" multiple>
+              <mat-option *ngFor="let job_type of job_types" [value]="job_type.id">
                 {{ job_type.description }}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col-md-2-4">
-            <mat-select placeholder="Status" formControlName="status">
-              <mat-option></mat-option>
-              <mat-option *ngFor="let s of status" [value]="s">
+            <mat-select placeholder="Status" formControlName="status" multiple>
+              <mat-option *ngFor="let s of status" [value]="s.id">
                 {{ s.description }}
               </mat-option>
             </mat-select>

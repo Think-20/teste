@@ -122,10 +122,10 @@ export class ServiceReportComponent implements OnInit {
     this.search = this.fb.control('')
     this.searchForm = this.fb.group({
       search: this.search,
-      creation: this.fb.control(''),
-      job_type: this.fb.control(''),
+      creation: this.fb.control([]),
+      job_type: this.fb.control([]),
       client: this.fb.control(''),
-      status: this.fb.control(''),
+      status: this.fb.control([]),
       event: this.fb.control(''),
       date_init: this.fb.control(''),
       date_end: this.fb.control(''),
@@ -152,10 +152,9 @@ export class ServiceReportComponent implements OnInit {
       })
 
     if(this.isAdmin)
-      this.searchForm.addControl('attendance', this.fb.control({ value: '' }));
-
+      this.searchForm.addControl('attendance', this.fb.control([]));
+      
     this.formCopy = this.searchForm.value;
-
     if(JSON.stringify(this.jobService.searchValue) == JSON.stringify({})) {
       this.jobService.searchValue = this.searchForm.value;
     } else {
@@ -178,28 +177,26 @@ export class ServiceReportComponent implements OnInit {
 
         this.pageIndex = 0;
         this.jobService.pageIndex = 0;
-        this.jobService.searchValue = searchValue;
         this.updateFilterActive();
         this.changeMonth();
       })
   }
 
   getParams(searchValue) {
-    let status = searchValue.status != undefined ? searchValue.status.id : null;
     let clientName = searchValue.client != '' ? searchValue.client : searchValue.search;
     let attendanceFilter = this.isAdmin ? { attendance: searchValue.attendance } : {};
 
     this.creationFilter = searchValue.creation;
     this.jobTypeFilter = searchValue.job_type;
     this.nameFilter = clientName;
-    this.statusFilter = status;
+    this.statusFilter = searchValue.status;
     this.eventFilter = searchValue.event;
     this.attendanceFilterStatus = attendanceFilter;
-    this.iniDate = searchValue.date_init;
-    this.finDate = searchValue.date_end;
+    this.iniDate = searchValue.date_init ? searchValue.date_init : this.jobService.searchValue.date_init;
+    this.finDate = searchValue.date_end ? searchValue.date_end : this.jobService.searchValue.date_end;
 
     this.jobService.searchValue = {
-      ...this.jobService.searchValue,
+      ...searchValue,
       date_init:this.iniDate,
       date_end: this.finDate,
     }

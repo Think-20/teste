@@ -20,7 +20,7 @@ import { PerformanceReportLite } from '../../reports/performance-report-lite/per
 @Injectable()
 export class ReportService {
   data: Job = new Job
-  searchValue = {}
+  searchValue: any = {}
   pageIndex = 0
 
   constructor(
