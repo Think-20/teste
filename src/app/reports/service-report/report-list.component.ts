@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Injectable, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -10,7 +10,7 @@ import { Employee } from '../../employees/employee.model';
 import { EmployeeService } from '../../employees/employee.service';
 import { JobStatus } from 'app/job-status/job-status.model';
 import { JobStatusService } from 'app/job-status/job-status.service';
-import { distinctUntilChanged, debounceTime, tap, isEmpty } from 'rxjs/operators';
+import { distinctUntilChanged, debounceTime, tap, isEmpty, takeUntil } from 'rxjs/operators';
 import { Client } from '../../clients/client.model';
 import { AuthService } from '../../login/auth.service';
 import { ClientService } from '../../clients/client.service';
@@ -24,7 +24,7 @@ import { EventService } from 'app/events/event.service';
 import { Event } from 'app/events/event.model';
 import { JobEventsService } from 'app/job-events/job-events.service';
 import { JobEvents } from 'app/job-events/job-events-model';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'cb-job-list',
@@ -47,7 +47,7 @@ import { Observable } from 'rxjs';
   ]
 })
 @Injectable()
-export class ServiceReportComponent implements OnInit {
+export class ServiceReportComponent implements OnInit, OnDestroy {
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
@@ -88,7 +88,7 @@ export class ServiceReportComponent implements OnInit {
   statusFilter: any;
   eventFilter: any;
   attendanceFilterStatus: { attendance: any; } | { attendance?: undefined; };
-  
+  destroy$ = new Subject<void>();
   constructor(
     private fb: FormBuilder,
     private employeeService: EmployeeService,
@@ -103,6 +103,12 @@ export class ServiceReportComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     ) { }
+
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
   ngOnInit() {
     this.isAdmin = this.authService.hasAccess('job/save')
@@ -172,6 +178,7 @@ export class ServiceReportComponent implements OnInit {
     this.searchForm.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe((searchValue) => {
+        this.destroy$.next();
         this.params = this.getParams(searchValue);
         this.loadJobs(this.params, 1);
 
@@ -256,11 +263,15 @@ export class ServiceReportComponent implements OnInit {
     }
 
 
-    if(this.searching) return;
+    // if(this.searching) return;
     
     this.searching = true;
     let snackBar = this.snackBar.open('Carregando jobs...');
-    this.jobService.jobs(params, page).subscribe(dataInfo => {
+    this.jobService.jobs(params, page)
+    .pipe(
+      takeUntil(this.destroy$) // Cancela a solicitação anterior quando uma nova é acionada
+    )
+    .subscribe(dataInfo => {
       dataInfo.jobs ? this.jobs = dataInfo.jobs.data : this.jobs = [];
       
       if (configureDates && !hasDateFilter) {

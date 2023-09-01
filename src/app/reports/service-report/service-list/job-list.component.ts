@@ -81,7 +81,7 @@ export class ServiceListComponent implements OnInit {
   nextMonthName: string = '';
   nextYear: number = 0;
   nextMonth: Month;
-  
+  destroy$ = new Subject<void>();
   constructor(
     private fb: FormBuilder,
     private employeeService: EmployeeService,
