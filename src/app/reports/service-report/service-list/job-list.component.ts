@@ -23,6 +23,7 @@ import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Pagination } from 'app/shared/pagination.model';
 import { JobEvents } from 'app/job-events/job-events-model';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'cb-job-list',
