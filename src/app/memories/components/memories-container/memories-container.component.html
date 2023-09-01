@@ -10,7 +10,7 @@
 
         <mat-card-title>
           <div class="title">
-            {{ table.name === 'jobs' ? 'Há 01 ano você agendou estes projetos:' : (table.name === 'jobsApproveds' ? 'A 01 ano você aprovou estes projetos:' : 'Clientes envolvidos') }}
+            {{ table.name === 'jobs' ? 'Há 01 ano você agendou estes projetos:' : (table.name === 'jobsApproveds' ? 'A 01 ano você aprovou estes projetos:' : 'Há um ano você cadastrou novos clientes') }}
           </div>
         </mat-card-title>
 
@@ -164,11 +164,11 @@
               <div class="mat-cell client-column-agency">
                 {{ client.status.description }}
               </div>
-              <div class="mat-cell client-column-event">
-                {{ client.lastJobEvent ? client.lastJobEvent : '-' }}
-              </div>
               <div class="mat-cell client-column-budget">
                 {{ client.lastJobId ? client.lastJobId : '-' }}
+              </div>
+              <div class="mat-cell client-column-event">
+                {{ client.lastJobEvent ? client.lastJobEvent : '-' }}
               </div>
               <div class="mat-cell client-column-rate">
                 <cb-stars [hasLabel]="false" class="star-input" label="Score"
