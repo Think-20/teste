@@ -186,7 +186,7 @@
               Pamela
             </div>
             <div class="mat-cell mat-column-creation">
-              {{ job.creation[0]?.responsible?.name ? job.creation[0]?.responsible?.name : '-' }}
+              {{ job.creation[0]?.responsible?.name ? job.creation[0]?.responsible?.name : (job.tasks[0]?.responsible?.name || '-') }}
             </div>
             <div class="mat-cell mat-column-production">
               {{ job?.production_responsible?.name ? job?.production_responsible?.name : '-' }}
