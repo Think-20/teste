@@ -211,6 +211,7 @@ import { MemoriesContainerComponent } from './memories/components/memories-conta
 import { MemoriesService } from './memories/memories.service';
 import { FormatMaskDirective } from './shared/directives/format-mask.directive';
 import { JobEventsService } from './job-events/job-events.service';
+import { SpecificationFormComponent } from './specification/specification-form/specification-form.component';
 
 registerLocaleData(localePt);
 
@@ -277,6 +278,7 @@ registerLocaleData(localePt);
     BriefingFormComponent,
     JobFormComponent,
     BudgetFormComponent,
+    SpecificationFormComponent,
     ScheduleFormComponent,
     ReloadComponent,
     ProjectsComponent,
