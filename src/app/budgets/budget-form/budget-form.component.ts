@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Budget } from '../budget.model';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { BudgetService } from '../budget.service';
@@ -25,7 +25,7 @@ export class BudgetFormComponent implements OnInit {
   isAttendance: boolean = false
   isAdmin: boolean = false
   subscription: Subscription */
-
+  @ViewChild('finalValue', { static : false }) finalValue: ElementRef;
   budgetForm = new FormGroup({});
 
   @Input('typeForm') typeForm: string
@@ -46,10 +46,13 @@ export class BudgetFormComponent implements OnInit {
     private formBuilder: FormBuilder,
     private jobService: JobService,
     public taskService: TaskService,
+    
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit(): void {
     this.sortTasks();
+    this.loadTaskFromRoute();
     this.createForm();
   }
 
@@ -82,12 +85,10 @@ export class BudgetFormComponent implements OnInit {
 
   fillForm(index: number): void {
     const formData = this.sortedTasks[index]; // Suponha que budgetFormData seja o array de objetos com os dados
-    console.log(formData.project_files[formData.project_files.length - 1])  
-    const taskId = formData.project_files[formData.project_files.length - 1].task_id;
     // Verifique se o índice é válido
     if (formData) {
       this.budgetForms[index].patchValue({
-        id: taskId,
+        id: formData.id,
         orders_value: formData.orders_value,
         attendance_value: formData.attendance_value,
         creation_value: formData.creation_value,
@@ -104,7 +105,7 @@ export class BudgetFormComponent implements OnInit {
         total_cost_value: formData.total_cost_value,
         gross_profit_value: formData.gross_profit_value,
         profit_value: formData.profit_value,
-        final_value: formData.final_value,
+        final_value: '1500.51',
       });
     }
   }
@@ -119,7 +120,6 @@ export class BudgetFormComponent implements OnInit {
   }
 
   sendValues(budgetForm: FormGroup) {
-    console.log(budgetForm.value);
     budgetForm.updateValueAndValidity()
     
     if (ErrorHandler.formIsInvalid(budgetForm)) {
@@ -129,11 +129,16 @@ export class BudgetFormComponent implements OnInit {
       return;
     }
 
-    this.jobService.edit(budgetForm.value).subscribe(data => {
+    this.taskService.changeValues(budgetForm.value).subscribe(data => {
       this.snackBar.open(data.message, '', {
         duration: data.status ? 1000 : 5000
       })
     })
+  }
+
+  formatFinalValue(budgetForm: FormGroup) {
+    const finalValue = this.finalValue.nativeElement.value;
+    budgetForm.get('final_value').setValue(finalValue.replace('R$ ', ''));
   }
 
   allowOnlyNumbers(event: KeyboardEvent) {
@@ -167,6 +172,19 @@ export class BudgetFormComponent implements OnInit {
 
     console.log(this.sortedTasks)
   }
+
+  loadTaskFromRoute() {
+    
+    this.route.queryParams.subscribe((params) => {
+      let taskId = params['taskId']
+      this.sortedTasks.forEach((task, index) => {
+        if(task.id == taskId) {
+          this.expandedIndex = index
+        }
+      })
+    })
+  }
+
   /* ngOnInit() {
     this.isAdmin = this.authService.hasAccess('budget/save')
     this.isAttendance = this.job.attendance_id == this.authService.currentUser().employee.id

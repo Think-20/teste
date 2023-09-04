@@ -270,4 +270,24 @@ export class TaskService {
               return ErrorHandler.capture(err)
           })
   }
+
+  changeValues(task: Task): Observable<any> {
+    let url = 'tasks/change-values'
+    // let prefix = this.auth.hasAccess('tasks/change-values') ? '' : 'my-'
+
+    // url = prefix + url
+
+    return this.http.post(
+            `${API}/${url}`,
+            JSON.stringify(task),
+            new RequestOptions()
+        )
+        .map(response => response.json())
+        .catch((err) => {
+            this.snackBar.open(ErrorHandler.message(err), '', {
+                duration: 3000
+            })
+            return ErrorHandler.capture(err)
+        })
+}
 }
