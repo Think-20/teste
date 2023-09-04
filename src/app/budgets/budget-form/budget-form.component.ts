@@ -11,6 +11,7 @@ import { Subscription } from 'rxjs';
 import { AuthService } from '../../login/auth.service';
 import { Job } from 'app/jobs/job.model';
 import { JobService } from 'app/jobs/job.service';
+import { TaskService } from 'app/schedule/task.service';
 
 @Component({
   selector: 'cb-budget-form',
@@ -30,6 +31,9 @@ export class BudgetFormComponent implements OnInit {
   @Input('typeForm') typeForm: string
   @Input('task') task: Task
   @Input() job: Job
+  sortedTasks: Task[]
+  expandedIndex: number = null
+  budgetForms: FormGroup[] = [];
 
   constructor(
     /* private budgetService: BudgetService,
@@ -41,73 +45,91 @@ export class BudgetFormComponent implements OnInit {
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
     private jobService: JobService,
+    public taskService: TaskService,
   ) { }
 
   ngOnInit(): void {
+    this.sortTasks();
     this.createForm();
-
-    if (this.job.orders_value) {
-      this.fillForm();
-    }
   }
 
   createForm() {
-    this.budgetForm = this.formBuilder.group({
-      id: this.formBuilder.control(this.job.id, [Validators.required]),
-      orders_value: this.formBuilder.control('', [Validators.required]),
-      attendance_value: this.formBuilder.control('', [Validators.required]),
-      creation_value: this.formBuilder.control('', [Validators.required]),
-      pre_production_value: this.formBuilder.control('', [Validators.required]),
-      production_value: this.formBuilder.control('', [Validators.required]),
-      details_value: this.formBuilder.control('', [Validators.required]),
-      budget_si_value: this.formBuilder.control('', [Validators.required]),
-      bv_value: this.formBuilder.control('', [Validators.required]),
-      over_rates_value: this.formBuilder.control('', [Validators.required]),
-      discounts_value: this.formBuilder.control('', [Validators.required]),
-      taxes_value: this.formBuilder.control('', [Validators.required]),
-      logistics_value: this.formBuilder.control('', [Validators.required]),
-      equipment_value: this.formBuilder.control('', [Validators.required]),
-      total_cost_value: this.formBuilder.control('', [Validators.required]),
-      gross_profit_value: this.formBuilder.control('', [Validators.required]),
-      profit_value: this.formBuilder.control('', [Validators.required]),
-      final_value: this.formBuilder.control('', [Validators.required]),
-    })
+    this.budgetForms = this.sortedTasks.map(() =>
+      this.formBuilder.group({
+        id: this.formBuilder.control('', [Validators.required]),
+        orders_value: this.formBuilder.control('', [Validators.required]),
+        attendance_value: this.formBuilder.control('', [Validators.required]),
+        creation_value: this.formBuilder.control('', [Validators.required]),
+        pre_production_value: this.formBuilder.control('', [Validators.required]),
+        production_value: this.formBuilder.control('', [Validators.required]),
+        details_value: this.formBuilder.control('', [Validators.required]),
+        budget_si_value: this.formBuilder.control('', [Validators.required]),
+        bv_value: this.formBuilder.control('', [Validators.required]),
+        over_rates_value: this.formBuilder.control('', [Validators.required]),
+        discounts_value: this.formBuilder.control('', [Validators.required]),
+        taxes_value: this.formBuilder.control('', [Validators.required]),
+        logistics_value: this.formBuilder.control('', [Validators.required]),
+        equipment_value: this.formBuilder.control('', [Validators.required]),
+        total_cost_value: this.formBuilder.control('', [Validators.required]),
+        gross_profit_value: this.formBuilder.control('', [Validators.required]),
+        profit_value: this.formBuilder.control('', [Validators.required]),
+        final_value: this.formBuilder.control('', [Validators.required]),
+      })
+    );
+
+    this.sortedTasks.forEach((x, index) => this.fillForm(index))
   }
 
-  fillForm(): void {
-    this.budgetForm.patchValue({
-      id: this.job.id,
-      orders_value: this.job.orders_value,
-      attendance_value: this.job.attendance_value,
-      creation_value: this.job.creation_value,
-      pre_production_value: this.job.pre_production_value,
-      production_value: this.job.production_value,
-      details_value: this.job.details_value,
-      budget_si_value: this.job.budget_si_value,
-      bv_value: this.job.bv_value,
-      over_rates_value: this.job.over_rates_value,
-      discounts_value: this.job.discounts_value,
-      taxes_value: this.job.taxes_value,
-      logistics_value: this.job.logistics_value,
-      equipment_value: this.job.equipment_value,
-      total_cost_value: this.job.total_cost_value,
-      gross_profit_value: this.job.gross_profit_value,
-      profit_value: this.job.profit_value,
-      final_value: this.job.final_value,
-    })
+  fillForm(index: number): void {
+    const formData = this.sortedTasks[index]; // Suponha que budgetFormData seja o array de objetos com os dados
+    console.log(formData.project_files[formData.project_files.length - 1])  
+    const taskId = formData.project_files[formData.project_files.length - 1].task_id;
+    // Verifique se o índice é válido
+    if (formData) {
+      this.budgetForms[index].patchValue({
+        id: taskId,
+        orders_value: formData.orders_value,
+        attendance_value: formData.attendance_value,
+        creation_value: formData.creation_value,
+        pre_production_value: formData.pre_production_value,
+        production_value: formData.production_value,
+        details_value: formData.details_value,
+        budget_si_value: formData.budget_si_value,
+        bv_value: formData.bv_value,
+        over_rates_value: formData.over_rates_value,
+        discounts_value: formData.discounts_value,
+        taxes_value: formData.taxes_value,
+        logistics_value: formData.logistics_value,
+        equipment_value: formData.equipment_value,
+        total_cost_value: formData.total_cost_value,
+        gross_profit_value: formData.gross_profit_value,
+        profit_value: formData.profit_value,
+        final_value: formData.final_value,
+      });
+    }
   }
 
-  sendValues() {
-    this.budgetForm.updateValueAndValidity()
+  getTaskByProjectFiles(index) {
+    if (!this.sortedTasks.length) {
+      return;
+    }
+
+    const task = this.sortedTasks[index];
+    return task.project_files[task.project_files.length - 1];
+  }
+
+  sendValues(budgetForm: FormGroup) {
+    console.log(budgetForm.value);
+    budgetForm.updateValueAndValidity()
     
-    if (ErrorHandler.formIsInvalid(this.budgetForm)) {
+    if (ErrorHandler.formIsInvalid(budgetForm)) {
       this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
         duration: 5000
       })
       return;
     }
 
-    this.jobService.edit(this.budgetForm.value).subscribe(data => {
+    this.jobService.edit(budgetForm.value).subscribe(data => {
       this.snackBar.open(data.message, '', {
         duration: data.status ? 1000 : 5000
       })
@@ -123,6 +145,28 @@ export class BudgetFormComponent implements OnInit {
     }
   }
 
+  sortTasks() {
+    this.sortedTasks = this.job.tasks.filter((task) => {
+      return task.job_activity.initial == 1
+    });
+    let adds = [];
+    this.sortedTasks.filter((parentTask => {
+      let temp = this.job.tasks.filter((task) => {
+        return parentTask.job_activity.modification_id == task.job_activity_id
+          || parentTask.job_activity.option_id == task.job_activity_id
+      });
+      adds = adds.concat(temp)
+    }));
+    this.sortedTasks = this.sortedTasks.concat(adds).reverse();
+
+    this.sortedTasks.forEach((task, index) => {
+      if(task.project_files.length > 0 && this.expandedIndex == null) {
+        this.expandedIndex = index
+      }
+    })
+
+    console.log(this.sortedTasks)
+  }
   /* ngOnInit() {
     this.isAdmin = this.authService.hasAccess('budget/save')
     this.isAttendance = this.job.attendance_id == this.authService.currentUser().employee.id
