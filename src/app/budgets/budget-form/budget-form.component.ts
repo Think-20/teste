@@ -105,7 +105,7 @@ export class BudgetFormComponent implements OnInit {
         total_cost_value: formData.total_cost_value,
         gross_profit_value: formData.gross_profit_value,
         profit_value: formData.profit_value,
-        final_value: '1500.51',
+        final_value: formData.final_value,
       });
     }
   }
