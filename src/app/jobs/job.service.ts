@@ -39,6 +39,16 @@ export class JobService {
     return name + ' - ' + job.event
   }
 
+  displayNameJob(job: Job, client: Client = null): string {
+    if (client != null) {
+      job.client = client
+    }
+    
+    const fantasyName = (job.client && job.client.fantasy_name) ? job.client.fantasy_name : job.not_client;
+    let name = (!fantasyName && job.not_client == '' || job.not_client == null) ? '' : fantasyName;
+    return name;
+  }
+
   displayCreation(job: Job): string {
     return job.creation_responsible != null ? job.creation_responsible.name : 'Externo'
   }
