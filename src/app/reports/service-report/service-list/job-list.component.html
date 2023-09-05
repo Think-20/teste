@@ -166,55 +166,59 @@
             <div class="mat-header-cell mat-column-event" title="Evento">Evento</div>
             <div class="mat-header-cell mat-column-type" title="Tipo">Tipo</div>
             <div class="mat-header-cell mat-column-value" title="Valor/Extra">Valor Extra</div>
+            <div class="mat-header-cell mat-column-value" title="Valor/Extra">Valor final</div>
             <div class="mat-header-cell mat-column-status" title="status">Status</div>
             <div class="mat-header-cell mat-column-fatured" title="Faturado">Fat</div>
             <div class="mat-header-cell mat-column-portin" title="Parcela">Parc</div>
             <div class="mat-header-cell mat-column-rate" title="Satisfação">Satisfação</div>
           </div>
           <div class="space-table-header"></div>
-          <div class="mat-row" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState" [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }">
-            <div class="mat-cell mat-column-num">
+          <div class="mat-row" *ngFor="let job of jobs" [@rowAppeared]="rowAppearedState">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-num">
               {{ job.index }}
             </div>
-            <div class="mat-cell mat-column-id">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-id">
               {{ jobService.showId(job) }}
             </div>
-            <div class="mat-cell mat-column-service">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-service">
               {{ job.attendance.name }}
             </div>
-            <div class="mat-cell mat-column-budget">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-budget">
               Pamela
             </div>
-            <div class="mat-cell mat-column-creation">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-creation">
               {{ job.creation[0]?.responsible?.name ? job.creation[0]?.responsible?.name : (job.tasks[0]?.responsible?.name || '-') }}
             </div>
-            <div class="mat-cell mat-column-production">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-production">
               {{ job?.production_responsible?.name ? job?.production_responsible?.name : '-' }}
             </div>
-            <div class="mat-cell mat-column-date">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-date">
               {{ job.created_at | date : "dd/MM/yy" }}
             </div>
-            <div class="mat-cell mat-column-client">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-client">
               
               {{ job.client ? job.client.fantasy_name : job.not_client || '-' }}
             </div>
-            <div class="mat-cell mat-column-event">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-event">
               {{ job.event }}
             </div>
-            <div class="mat-cell mat-column-type">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-type">
               {{ job.job_type.description }}
             </div>
-            <div class="mat-cell mat-column-value">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-value">
               {{ job.budget_value | number: '1.2' }} <br />
               -
             </div>
-            <div class="mat-cell mat-column-status">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-value">
+              {{ job.lastValue ? (job.lastValue | number: '1.2') : '-' }} <br />
+            </div>
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-status">
               {{ job.status.description }}
             </div>
-            <div class="mat-cell mat-column-fatured">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-fatured">
               -
             </div>
-            <div class="mat-cell mat-column-portin">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-portin">
               -
             </div>
             <div class="mat-cell mat-column-rate">

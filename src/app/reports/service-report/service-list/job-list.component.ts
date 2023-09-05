@@ -47,7 +47,6 @@ import { Subject } from 'rxjs';
 })
 @Injectable()
 export class ServiceListComponent implements OnInit {
-
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
   formCopy: any
