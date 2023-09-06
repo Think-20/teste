@@ -46,6 +46,20 @@ export class TaskService {
     return task.job_activity.description +  ' ' + StringHelper.padChar(task.reopened)
   }
 
+  proposalsDisplay(task: Task, noAbbreviation: boolean = false) {
+    if(task.job_activity.description == 'Memorial descritivo') {
+      let jobDescription = 'M. descritivo'
+
+      if(noAbbreviation)
+        jobDescription = 'Proposta da modificação'
+
+        console.log(task.task.job_activity.description)
+      return jobDescription + ' ' + StringHelper.padChar(task.task.reopened) + ' ' + task.task.job_activity.description.replace('Modificação', '').toLowerCase()
+    }
+
+    return task.job_activity.description +  ' ' + StringHelper.padChar(task.reopened)
+  }
+
   loadFormData(): Observable<any> {
     let url = `tasks/load-form`
 
