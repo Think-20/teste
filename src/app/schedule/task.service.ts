@@ -59,6 +59,20 @@ export class TaskService {
     return task.job_activity.description +  ' ' + StringHelper.padChar(task.reopened)
   }
 
+  especificationDisplay(task: Task, noAbbreviation: boolean = false) {
+    if(task.job_activity.description == 'Memorial descritivo') {
+      let jobDescription = 'M. descritivo'
+
+      if(noAbbreviation)
+        jobDescription = 'Memorial descritivo'
+
+      return jobDescription + ' de ' + task.task.job_activity.description.toLowerCase() + ' ' + StringHelper.padChar(task.task.reopened)
+    }
+
+    const dsc = 'Memorial descritivo da modificação';
+    return dsc + ' ' + StringHelper.padChar(task.reopened) + ' ' + task.job_activity.description.replace('Modificação', '').toLowerCase()
+  }
+
   loadFormData(): Observable<any> {
     let url = `tasks/load-form`
 
