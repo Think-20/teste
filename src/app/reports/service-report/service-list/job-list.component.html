@@ -93,29 +93,41 @@
             </mat-option>
           </mat-autocomplete>
           <mat-form-field *ngIf="isAdmin" class="col-md-2-4">
-            <mat-select placeholder="Atendimento" formControlName="attendance" multiple>
-              <mat-option *ngFor="let attendance of attendances" [value]="attendance.id">
+            <mat-select #selectAttendance placeholder="Atendimento" formControlName="attendance" multiple>
+              <div class="select-all">
+                <mat-checkbox [(ngModel)]="selectAllAttendance" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelectionAllAttendance()">Selecionar todos</mat-checkbox>
+              </div>
+              <mat-option (click)="optionClickAllAttendance()" *ngFor="let attendance of attendances" [value]="attendance.id">
                 {{ attendance.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col-md-2-4">
-            <mat-select placeholder="Projetista" formControlName="creation" multiple>
-              <mat-option *ngFor="let creation of creations" [value]="creation.id">
+            <mat-select #selectCreation placeholder="Projetista" formControlName="creation" multiple>
+              <div class="select-all">
+                <mat-checkbox [(ngModel)]="selectAllCreation" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelectionAllCreation()">Selecionar todos</mat-checkbox> 
+              </div>
+              <mat-option (click)="optionClickAllCreation()" *ngFor="let creation of creations" [value]="creation.id">
                 {{ creation.name }}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col-md-2-4">
-            <mat-select placeholder="Tipo" formControlName="job_type" multiple>
-              <mat-option *ngFor="let job_type of job_types" [value]="job_type.id">
+            <mat-select #selectJobType placeholder="Tipo" formControlName="job_type" multiple>
+              <div class="select-all">
+                <mat-checkbox [(ngModel)]="selectAllJobType" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelectionAllJobType()">Selecionar todos</mat-checkbox>
+              </div>
+              <mat-option (click)="optionClickAllJobType()" *ngFor="let job_type of job_types" [value]="job_type.id">
                 {{ job_type.description }}
               </mat-option>
             </mat-select>
           </mat-form-field>
           <mat-form-field class="col-md-2-4">
-            <mat-select placeholder="Status" formControlName="status" multiple>
-              <mat-option *ngFor="let s of status" [value]="s.id">
+            <mat-select #selectStatus placeholder="Status" formControlName="status" multiple>
+              <div class="select-all">
+                <mat-checkbox [(ngModel)]="selectAllStatus" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelectionAllStatus()">Selecionar todos</mat-checkbox>
+              </div>
+              <mat-option (click)="optionClickAllStatus()" *ngFor="let s of status" [value]="s.id">
                 {{ s.description }}
               </mat-option>
             </mat-select>

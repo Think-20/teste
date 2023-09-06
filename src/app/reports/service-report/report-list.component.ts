@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable, OnDestroy } from '@angular/core';
+import { Component, OnInit, Injectable, OnDestroy, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -25,6 +25,7 @@ import { Event } from 'app/events/event.model';
 import { JobEventsService } from 'app/job-events/job-events.service';
 import { JobEvents } from 'app/job-events/job-events-model';
 import { Observable, Subject } from 'rxjs';
+import { MatOption, MatSelect, MatSelectChange } from '@angular/material';
 
 @Component({
   selector: 'cb-job-list',
@@ -48,6 +49,10 @@ import { Observable, Subject } from 'rxjs';
 })
 @Injectable()
 export class ServiceReportComponent implements OnInit, OnDestroy {
+  @ViewChild('selectAttendance', { static: false}) selectAttendance: MatSelect;
+  @ViewChild('selectCreation', { static: false}) selectCreation: MatSelect;
+  @ViewChild('selectJobType', { static: false}) selectJobType: MatSelect;
+  @ViewChild('selectStatus', { static: false}) selectStatus: MatSelect;
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
@@ -89,6 +94,11 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   eventFilter: any;
   attendanceFilterStatus: { attendance: any; } | { attendance?: undefined; };
   destroy$ = new Subject<void>();
+  lastValueAttendance: any;
+  selectAllAttendance = false;
+  selectAllCreation = false;
+  selectAllJobType = false;
+  selectAllStatus = false;
   constructor(
     private fb: FormBuilder,
     private employeeService: EmployeeService,
@@ -178,6 +188,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     this.searchForm.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe((searchValue) => {
+        console.log(searchValue)
         this.destroy$.next();
         this.params = this.getParams(searchValue);
         this.loadJobs(this.params, 1);
@@ -188,6 +199,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
         this.changeMonth();
       })
   }
+
 
   getParams(searchValue) {
     let clientName = searchValue.client != '' ? searchValue.client : searchValue.search;
@@ -285,6 +297,73 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     })
   }
 
+  toggleAllSelectionAllAttendance() {
+    if (this.selectAllAttendance) {
+      this.selectAttendance.options.forEach((item: MatOption) => item.select());
+    } else {
+      this.selectAttendance.options.forEach((item: MatOption) => item.deselect());
+    }
+  }
+   optionClickAllAttendance() {
+    let newStatus = true;
+    this.selectAttendance.options.forEach((item: MatOption) => {
+      if (!item.selected) {
+        newStatus = false;
+      }
+    });
+    this.selectAllAttendance = newStatus;
+  }
+
+  toggleAllSelectionAllCreation() {
+    if (this.selectAllCreation) {
+      this.selectCreation.options.forEach((item: MatOption) => item.select());
+    } else {
+      this.selectCreation.options.forEach((item: MatOption) => item.deselect());
+    }
+  }
+   optionClickAllCreation() {
+    let newStatus = true;
+    this.selectCreation.options.forEach((item: MatOption) => {
+      if (!item.selected) {
+        newStatus = false;
+      }
+    });
+    this.selectAllCreation = newStatus;
+  }
+
+  toggleAllSelectionAllJobType() {
+    if (this.selectAllJobType) {
+      this.selectJobType.options.forEach((item: MatOption) => item.select());
+    } else {
+      this.selectJobType.options.forEach((item: MatOption) => item.deselect());
+    }
+  }
+   optionClickAllJobType() {
+    let newStatus = true;
+    this.selectJobType.options.forEach((item: MatOption) => {
+      if (!item.selected) {
+        newStatus = false;
+      }
+    });
+    this.selectAllJobType = newStatus;
+  }
+
+  toggleAllSelectionAllStatus() {
+    if (this.selectAllStatus) {
+      this.selectStatus.options.forEach((item: MatOption) => item.select());
+    } else {
+      this.selectStatus.options.forEach((item: MatOption) => item.deselect());
+    }
+  }
+   optionClickAllStatus() {
+    let newStatus = true;
+    this.selectStatus.options.forEach((item: MatOption) => {
+      if (!item.selected) {
+        newStatus = false;
+      }
+    });
+    this.selectAllAttendance = newStatus;
+  }
 
   setCurrentDateFilterByDate(dateInit: Date, dateEnd: Date) {
     this.month = MONTHS.find(month => month.id == (dateInit.getMonth() + 1));
