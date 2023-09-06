@@ -53,7 +53,6 @@ export class TaskService {
       if(noAbbreviation)
         jobDescription = 'Proposta da modificação'
 
-        console.log(task.task.job_activity.description)
       return jobDescription + ' ' + StringHelper.padChar(task.task.reopened) + ' ' + task.task.job_activity.description.replace('Modificação', '').toLowerCase()
     }
 
