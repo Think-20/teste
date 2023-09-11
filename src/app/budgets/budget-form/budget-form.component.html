@@ -23,6 +23,7 @@
                 <label class="comitions">Comissões:</label>
                 <mat-form-field>
                   <input
+                    currencyMask
                     matInput
                     type="text"
                     class="text-right"
@@ -34,6 +35,7 @@
               <div class="col-md-3 p-0 mr-4">
                 <mat-form-field>
                   <input
+                    currencyMask
                     matInput
                     type="text"
                     class="text-right"
@@ -43,6 +45,7 @@
                 </mat-form-field>
                 <mat-form-field>
                   <input
+                    currencyMask
                     matInput
                     type="text"
                     class="text-right"
@@ -52,6 +55,7 @@
                 </mat-form-field>
                 <mat-form-field>
                   <input
+                    currencyMask
                     matInput
                     type="text"
                     class="text-right"
@@ -63,6 +67,7 @@
               <div class="col-md-3 border-right p-0 mr-4">
                 <mat-form-field class="pr-2">
                   <input
+                    currencyMask
                     matInput
                     type="text"
                     class="text-right"
@@ -72,6 +77,7 @@
                 </mat-form-field>
                 <mat-form-field class="pr-2">
                   <input
+                    currencyMask
                     matInput
                     type="text"
                     class="text-right"
@@ -81,6 +87,7 @@
                 </mat-form-field>
                 <mat-form-field class="pr-2">
                   <input
+                    currencyMask
                     matInput
                     type="text"
                     class="text-right"
@@ -95,6 +102,7 @@
               <div class="col-md-3 border-right p-0 ml-4">
                 <mat-form-field class="pr-2">
                   <input
+                    currencyMask
                     matInput
                     type="text"
                     class="text-right"
@@ -104,6 +112,7 @@
                 </mat-form-field>
                 <mat-form-field class="pr-2">
                   <input
+                    currencyMask
                     matInput
                     type="text"
                     class="text-right"
@@ -113,35 +122,7 @@
                 </mat-form-field>
                 <mat-form-field class="pr-2">
                   <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Desconto:"
-                    formControlName="discounts_value"
-                    (keypress)="allowOnlyNumbers($event)">
-                </mat-form-field>
-              </div>
-              <div class="col-md-3 border-right p-0 ml-4">
-                <mat-form-field class="pr-2">
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Impostos (15,5%)"
-                    formControlName="taxes_value"
-                    (keypress)="allowOnlyNumbers($event)">
-                </mat-form-field>
-                <mat-form-field class="pr-2">
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Logística:"
-                    formControlName="logistics_value"
-                    (keypress)="allowOnlyNumbers($event)">
-                </mat-form-field>
-                <mat-form-field class="pr-2">
-                  <input
+                    currencyMask
                     matInput
                     type="text"
                     class="text-right"
@@ -153,6 +134,39 @@
               <div class="col-md-3 border-right p-0 ml-4">
                 <mat-form-field class="pr-2">
                   <input
+                    currencyMask
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Impostos (15,5%)"
+                    formControlName="taxes_value"
+                    (keypress)="allowOnlyNumbers($event)">
+                </mat-form-field>
+                <mat-form-field class="pr-2">
+                  <input
+                    currencyMask
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Logística:"
+                    formControlName="logistics_value"
+                    (keypress)="allowOnlyNumbers($event)">
+                </mat-form-field>
+                <mat-form-field class="pr-2">
+                  <input
+                    currencyMask
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Desconto:"
+                    formControlName="discounts_value"
+                    (keypress)="allowOnlyNumbers($event)">
+                </mat-form-field>
+              </div>
+              <div class="col-md-3 border-right p-0 ml-4">
+                <mat-form-field class="pr-2">
+                  <input
+                    currencyMask
                     matInput
                     type="text"
                     class="text-right"
@@ -162,6 +176,7 @@
                 </mat-form-field>
                 <mat-form-field class="pr-2">
                   <input
+                    currencyMask
                     matInput
                     type="text"
                     class="text-right"
@@ -171,6 +186,7 @@
                 </mat-form-field>
                 <mat-form-field class="pr-2">
                   <input
+                    currencyMask
                     matInput
                     type="text"
                     class="text-right"
@@ -186,14 +202,14 @@
         <hr class="hr mb-0">
         <div class="d-flex justify-content-between">
           <div>
-            <h3 class="title">Valor Estimado: R$ 00,00</h3>
+            <h3 class="title">Valor Estimado: {{ job.budget_value | currency: 'BRL' }}</h3>
           </div>
           <div>
             <mat-form-field>
               <input
                 currencyMask
                 matInput 
-                placeholder="Valor Final:"
+                placeholder="Valor Orçamento:"
                 formControlName="final_value">
             </mat-form-field>
           </div>
