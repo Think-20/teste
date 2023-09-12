@@ -529,7 +529,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
 
         this.date = new Date(this.datePipe.transform(this.jobs[0].created_at, 'yyyy-MM-dd') + "T00:00:00");
 
-        const nextDate = new Date(this.date);
+        const nextDate = new Date();
         nextDate.setMonth(nextDate.getMonth() + 1);
         
         this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1));
