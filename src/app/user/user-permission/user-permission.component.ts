@@ -108,7 +108,7 @@ export class UserPermissionComponent implements OnInit {
     let employee = this.userPermissionForm.controls.employee.value
 
     data.id = this.employee.user.id
-    data.userId = employee != '' ? employee.user_id : null
+    data.userId = employee != '' ? employee.user.id : null
 
     data.displays = this.userPermissionForm.value.displays.map((value, index) => {
       return value ? this.displays[index].id : null
