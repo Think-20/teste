@@ -99,6 +99,8 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   selectAllCreation = false;
   selectAllJobType = false;
   selectAllStatus = false;
+  selectAllExternalCreation = false;
+  
   constructor(
     private fb: FormBuilder,
     private employeeService: EmployeeService,
@@ -188,7 +190,6 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     this.searchForm.valueChanges
       .pipe(distinctUntilChanged(), debounceTime(500))
       .subscribe((searchValue) => {
-        console.log(searchValue)
         this.destroy$.next();
         this.params = this.getParams(searchValue);
         this.loadJobs(this.params, 1);
@@ -221,7 +222,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     }
 
     return {
-      creation: this.creationFilter,
+      creation: this.selectAllExternalCreation ? ['external'] : this.creationFilter,
       job_type: this.jobTypeFilter,
       final_date: searchValue.final_date,
       date_end: this.finDate,
@@ -316,12 +317,24 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
 
   toggleAllSelectionAllCreation() {
     if (this.selectAllCreation) {
+      this.selectAllExternalCreation = false;
       this.selectCreation.options.forEach((item: MatOption) => item.select());
     } else {
       this.selectCreation.options.forEach((item: MatOption) => item.deselect());
     }
   }
+
+  toggleAllExternalSelectionAllCreation() {
+    if (this.selectAllExternalCreation) {
+      this.selectAllCreation = false;
+      this.toggleAllSelectionAllCreation();
+    }
+
+    this.searchForm.setValue(this.searchForm.value);
+  }
+  
    optionClickAllCreation() {
+    this.selectAllExternalCreation = false;
     let newStatus = true;
     this.selectCreation.options.forEach((item: MatOption) => {
       if (!item.selected) {

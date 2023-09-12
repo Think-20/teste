@@ -107,7 +107,9 @@
               <div class="select-all">
                 <mat-checkbox class="custom-checkbox" [(ngModel)]="selectAllCreation" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelectionAllCreation()">Selecionar todos</mat-checkbox> 
               </div>
-              <mat-option value="" >Sem projetista (Externo)</mat-option>
+              <div class="select-all">
+                <mat-checkbox class="custom-checkbox" [(ngModel)]="selectAllExternalCreation" [ngModelOptions]="{standalone: true}" (change)="toggleAllExternalSelectionAllCreation()">Sem projetista (Externo)</mat-checkbox> 
+              </div>
               <mat-option (click)="optionClickAllCreation()" *ngFor="let creation of creations" [value]="creation.id">
                 {{ creation.name }}
               </mat-option>
