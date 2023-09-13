@@ -180,8 +180,8 @@
             <div class="mat-header-cell mat-column-client" title="Cliente">Cliente</div>
             <div class="mat-header-cell mat-column-event" title="Evento">Evento</div>
             <div class="mat-header-cell mat-column-type" title="Tipo">Tipo</div>
-            <div class="mat-header-cell mat-column-value" title="Valor/Extra">Valor Previsto</div>
-            <div class="mat-header-cell mat-column-value" title="Valor/Extra">Valor Orçado</div>
+            <div class="mat-header-cell mat-column-value" title="Valor previsto">Valor Previsto</div>
+            <div class="mat-header-cell mat-column-budgeted" title="Valor orçado">Valor Orçado</div>
             <div class="mat-header-cell mat-column-status" title="status">Status</div>
             <div class="mat-header-cell mat-column-fatured" title="Faturado">Fat</div>
             <div class="mat-header-cell mat-column-portin" title="Parcela">Parc</div>
@@ -223,7 +223,7 @@
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-value">
               {{ job.budget_value | number: '1.2' }} <br />
             </div>
-            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-value">
+            <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-budgeted">
               {{ job.lastValue ? (job.lastValue | number: '1.2') : '-' }} <br />
             </div>
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-status">
