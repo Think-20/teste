@@ -23,7 +23,7 @@
       <cb-proposals *ngIf="job?.id != undefined" [job]="job" [containerWidth]="containerWidth"></cb-proposals>
     </mat-tab>
     <mat-tab label="Orçamento">
-      <cb-budget-form *ngIf="job?.id != undefined && isAdmin" [typeForm]="typeForm" [job]="job">
+      <cb-budget-form *ngIf="job?.id != undefined" [typeForm]="typeForm" [job]="job">
       </cb-budget-form>
     </mat-tab>
     <mat-tab label="Check-in">

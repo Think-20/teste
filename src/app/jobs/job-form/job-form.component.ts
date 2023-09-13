@@ -236,6 +236,17 @@ export class JobFormComponent implements OnInit {
 
       snackBarStateCharging.dismiss()
     })
+
+   this.checkUserDepartment();
+  }
+  checkUserDepartment() {
+    const currentUser = this.authService.currentUser();
+
+    if (currentUser.employee.department.description === 'Planejamento') {
+      this.jobForm.disable()
+      this.jobForm.get('not_client').disable();
+      this.jobForm.get('client').disable();
+    }
   }
 
   enableArea() {
@@ -315,8 +326,9 @@ export class JobFormComponent implements OnInit {
     if (this.typeForm == 'show') {
       return
     }
-
+   
     this.jobForm.controls.not_client.enable()
+    this.checkUserDepartment();
     this.jobForm.controls.not_client.setValidators([
       Validators.required,
       Validators.minLength(3),
