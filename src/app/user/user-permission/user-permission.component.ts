@@ -14,6 +14,7 @@ import { Display } from '../../displays/display.model';
 import { Functionality } from '../../functionalities/functionality.model';
 import { EmployeeService } from '../../employees/employee.service';
 import { isNumber } from 'util';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'cb-user-permission',
@@ -38,6 +39,7 @@ export class UserPermissionComponent implements OnInit {
     private formBuilder: FormBuilder,
     private location: Location,
     private snackBar: MatSnackBar,
+    private route: ActivatedRoute,
   ) { }
 
   ngOnInit() {
@@ -130,7 +132,7 @@ export class UserPermissionComponent implements OnInit {
         this.snackBar.open('Salvo com sucesso', '', {
           duration: data.status ? 1000 : 5000
         })
-        this.load();
+        this.loadEmployee();
       } else {
         this.snackBar.open(data.message, '', {
           duration: data.status ? 1000 : 5000
@@ -139,4 +141,13 @@ export class UserPermissionComponent implements OnInit {
     })
   }
 
+  loadEmployee() {
+    let snackBarStateCharging = this.snackBar.open('Carregando...')
+    let employeeId = this.typeForm == 'edit' ? parseInt(this.route.snapshot.url[1].path) : this.authService.currentUser().employee_id
+    this.employeeService.employee(employeeId).subscribe(employee => {
+      snackBarStateCharging.dismiss()
+      this.employee = employee
+      this.ngOnInit();
+    })
+  }
 }
