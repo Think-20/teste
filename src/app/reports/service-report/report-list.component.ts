@@ -405,6 +405,11 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
       this.creations = employees.filter(employee => {
         return employee.department.description === 'Criação'
       })
+
+      // console.log(employees)
+      // this.attendances = employees.filter(employee => {
+      //   return employee.department.description === 'Atendimento'
+      // })
     })
 
     this.jobEventsService.jobeEventos().subscribe(events => this.events = events)
@@ -462,9 +467,9 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     this.jobs = [];
     this.jobsDateFilter = [];
 
+    const daysInMonth = this.getDaysInMonth(this.year, this.nextMonth.id);
     this.iniDate = new Date(this.year + '-' + this.month.id + '-' + 1);
-    this.finDate = new Date(this.nextYear + '-' + this.nextMonth.id + '-' + 1);
-    //const daysInMonth = this.getDaysInMonth(this.year, this.month.id);
+    this.finDate = new Date(this.nextYear + '-' + this.nextMonth.id + '-' + daysInMonth);
 
     this.iniDate.setDate(this.iniDate.getDate());
     this.finDate.setDate(this.finDate.getDate()/*  + daysInMonth */);
@@ -530,8 +535,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
         this.date = new Date(this.datePipe.transform(this.jobs[0].created_at, 'yyyy-MM-dd') + "T00:00:00");
 
         const nextDate = new Date();
-        nextDate.setMonth(nextDate.getMonth() + 1);
-        
+        nextDate.setMonth(nextDate.getMonth());
         this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1));
         this.nextMonth = MONTHS[nextDate.getMonth()];
 
