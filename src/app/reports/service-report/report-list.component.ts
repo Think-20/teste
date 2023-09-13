@@ -391,12 +391,6 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
 
     this.jobTypeService.jobTypes().subscribe(job_types => this.job_types = job_types)
 
-    this.employeeService.canInsertClients({
-      deleted: true
-    }).subscribe((attendances) => {
-      this.attendances = attendances
-    })
-
     this.employeeService.employees({
       paginate: false,
       deleted: true
@@ -406,10 +400,10 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
         return employee.department.description === 'Criação'
       })
 
-      // console.log(employees)
-      // this.attendances = employees.filter(employee => {
-      //   return employee.department.description === 'Atendimento'
-      // })
+      console.log(employees)
+      this.attendances = employees.filter(employee => {
+        return employee.department.description === 'Atendimento'
+      })
     })
 
     this.jobEventsService.jobeEventos().subscribe(events => this.events = events)
