@@ -46,7 +46,15 @@ export class UserPermissionComponent implements OnInit {
       functionalities: this.formBuilder.array([]),
       displays: this.formBuilder.array([]),
     })
+    this.load();
+    this.employeeService.employees({
+      paginate: false
+    }).subscribe((dataInfo) => {
+      this.employees = <Employee[]> dataInfo.pagination.data
+    })
+  }
 
+  load() {
     this.displayService.displays({
       paginate: false
     }).subscribe((dataInfo) => {
@@ -71,12 +79,6 @@ export class UserPermissionComponent implements OnInit {
       })
 
       this.functionalities = functionalities
-    })
-
-    this.employeeService.employees({
-      paginate: false
-    }).subscribe((dataInfo) => {
-      this.employees = <Employee[]> dataInfo.pagination.data
     })
   }
 
@@ -128,6 +130,7 @@ export class UserPermissionComponent implements OnInit {
         this.snackBar.open('Salvo com sucesso', '', {
           duration: data.status ? 1000 : 5000
         })
+        this.load();
       } else {
         this.snackBar.open(data.message, '', {
           duration: data.status ? 1000 : 5000
