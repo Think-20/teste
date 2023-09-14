@@ -202,7 +202,7 @@
               Pamela
             </div>
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-creation">
-              {{ job.creation[0]?.responsible?.name ? job.creation[0]?.responsible?.name : (job.tasks[0]?.responsible?.name || '-') }}
+              {{ jobService.displayCreation(job) }}
             </div>
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-production">
               {{ job?.production_responsible?.name ? job?.production_responsible?.name : '-' }}
