@@ -272,14 +272,18 @@ export class ScheduleFormComponent implements OnInit {
 
     this.jobTypeService.jobTypes().subscribe(job_types => this.job_types = job_types)
 
-    this.employeeService.canInsertClients().subscribe((attendances) => {
-      this.attendances = attendances
-    })
+    // this.employeeService.canInsertClients().subscribe((attendances) => {
+    //   this.attendances = attendances
+    // })
 
     this.employeeService.employees().subscribe(dataInfo => {
       let employees = dataInfo.pagination.data
       this.creations = employees.filter(employee => {
         return employee.department.description === 'Criação'
+      })
+
+      this.attendances = employees.filter(employee => {
+        return employee.department.description === 'Atendimento'
       })
     })
   }
