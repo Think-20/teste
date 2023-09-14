@@ -183,7 +183,7 @@ export class BudgetFormComponent implements OnInit {
         return parentTask.job_activity.modification_id == task.job_activity_id
           || parentTask.job_activity.option_id == task.job_activity_id
       });
-      adds = adds.concat(temp)
+      adds = adds.concat(temp.reverse())
     }));
     this.sortedTasks = this.sortedTasks.concat(adds).reverse();
 
