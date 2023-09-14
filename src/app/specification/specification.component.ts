@@ -90,7 +90,6 @@ export class SpecificationComponent implements OnInit {
     this.sortedTasks = this.job.tasks.filter((task) => {
       return ['Memorial descritivo'].indexOf(task.job_activity.description) >= 0
     })
-    this.sortedTasks = this.sortedTasks.reverse()
     this.sortedTasks.forEach((task, index) => {
       if(task.project_files.length > 0 && this.expandedIndex == null) {
         this.expandedIndex = index
