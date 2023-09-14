@@ -212,8 +212,9 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     this.statusFilter = searchValue.status;
     this.eventFilter = searchValue.event;
     this.attendanceFilterStatus = attendanceFilter;
-    this.iniDate = searchValue.date_init ? searchValue.date_init : this.jobService.searchValue.date_init;
-    this.finDate = searchValue.date_end ? searchValue.date_end : this.jobService.searchValue.date_end;
+
+    this.iniDate = this.jobService.searchValue.date_init ? this.jobService.searchValue.date_init : searchValue.date_init;
+    this.finDate = this.jobService.searchValue.date_end ? this.jobService.searchValue.date_end : searchValue.date_end;
 
     this.jobService.searchValue = {
       ...searchValue,
