@@ -382,10 +382,15 @@ export class ScheduleComponent implements OnInit {
 
     this.jobStatusService.jobStatus().subscribe(status => this.jobStatus = status)
 
-    this.employeeService.canInsertClients({
+    this.employeeService.employees({
+      paginate: false,
       deleted: true
-    }).subscribe((attendances) => {
-      this.attendances = attendances
+    }).subscribe(dataInfo => {
+      let employees = dataInfo.pagination.data
+
+      this.attendances = employees.filter(employee => {
+        return employee.department.description === 'Atendimento'
+      })
     })
 
     this.scheduleBlockService.valid().subscribe((scheduleBlocks) => { this.dateBlocks = scheduleBlocks })

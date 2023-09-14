@@ -401,7 +401,6 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
         return employee.department.description === 'Criação'
       })
 
-      console.log(employees)
       this.attendances = employees.filter(employee => {
         return employee.department.description === 'Atendimento'
       })
