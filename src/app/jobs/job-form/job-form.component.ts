@@ -222,8 +222,15 @@ export class JobFormComponent implements OnInit {
         this.loadJob()
         this.jobForm.disable()
       } else {
-        this.employeeService.canInsertClients().subscribe(employees => {
-          this.attendances = employees
+        this.employeeService.employees({
+          paginate: false,
+          deleted: true
+        }).subscribe(dataInfo => {
+          let employees = dataInfo.pagination.data
+          this.attendances = employees.filter(employee => {
+            return employee.department.description === 'Atendimento'
+          })
+
           this.jobForm.get('attendance').setValue(this.attendances.filter((employee) => {
             return employee.name == this.authService.currentUser().employee.name
           }).pop())
