@@ -402,7 +402,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
       })
 
       this.attendances = employees.filter(employee => {
-        return employee.department.description === 'Atendimento'
+        return (employee.department.description === 'Atendimento' || employee.department.description ==='Diretoria')
       })
     })
 
