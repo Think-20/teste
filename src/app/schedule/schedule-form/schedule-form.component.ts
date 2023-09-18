@@ -283,7 +283,7 @@ export class ScheduleFormComponent implements OnInit {
       })
 
       this.attendances = employees.filter(employee => {
-        return employee.department.description === 'Atendimento'
+        return employee.department.description === 'Atendimento' || employee.department.description === 'Diretoria'
       })
     })
   }

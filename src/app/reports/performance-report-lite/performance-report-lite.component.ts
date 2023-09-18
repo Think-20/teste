@@ -59,7 +59,7 @@ export class PerformanceReportLiteComponent implements OnInit {
   loadData() {
     this.employeeService.employees().subscribe((dataInfo) => {
       let employees = <Employee[]> dataInfo.pagination.data
-      this.attendances = employees.filter((employee) => employee.department.description == 'Atendimento')
+      this.attendances = employees.filter((employee) => employee.department.description === 'Atendimento' || employee.department.description === 'Diretoria')
     })
 
     this.date = new Date

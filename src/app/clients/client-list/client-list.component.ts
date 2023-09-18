@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UpdatedInfoComponent } from 'app/shared/list-data/updated-info/updated-info.component';
 import { ListData, mF } from 'app/shared/list-data/list-data.model';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'cb-client-list',
@@ -71,7 +72,7 @@ export class ClientListComponent implements OnInit {
         },
         filterFields: [
           mF({
-            arrayValues: this.employeeService.canInsertClients({deleted: true}).toPromise(),
+            arrayValues: this.employeeService.employees({paginate: false, deleted: true}).pipe(map(dataInfo => dataInfo.pagination.data.filter(employee => employee.department.description === 'Atendimento' || employee.department.description === 'Diretoria'))).toPromise(),
             class: 'col-md-3',
             formcontrolname: 'attendance_array',
             placeholder: 'Atendimento',

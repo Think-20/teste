@@ -228,7 +228,7 @@ export class JobFormComponent implements OnInit {
         }).subscribe(dataInfo => {
           let employees = dataInfo.pagination.data
           this.attendances = employees.filter(employee => {
-            return employee.department.description === 'Atendimento'
+            return employee.department.description === 'Atendimento' || employee.department.description === 'Diretoria'
           })
 
           this.jobForm.get('attendance').setValue(this.attendances.filter((employee) => {
