@@ -84,7 +84,7 @@
           <a [routerLink]="['/jobs/show/', job.id]">{{ jobService.showId(job) }}</a>
         </div>
         <div class="mat-cell mat-column-name">
-          {{ jobService.displayNameJob(job) }}
+          {{ jobService.displayNameJob(job) || '-' }}
         </div>
         <div class="mat-cell mat-column-name">
           {{ job.event }}
