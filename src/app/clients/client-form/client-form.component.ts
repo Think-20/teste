@@ -156,8 +156,18 @@ constructor(
       this.toggleExternal()
     })
 
-    this.employeeService.canInsertClients().subscribe(employees => {
-      this.employees = employees
+    // this.employeeService.canInsertClients().subscribe(employees => {
+    //   this.employees = employees
+    // })
+
+    this.employeeService.employees({
+      paginate: false,
+      deleted: true
+    }).subscribe(dataInfo => {
+      let employees = dataInfo.pagination.data
+      this.employees = employees.filter(employee => {
+        return (employee.department.description === 'Atendimento' || employee.department.description ==='Diretoria')
+      })
     })
 
     this.clientTypeService.types().subscribe((clientTypes) => {
