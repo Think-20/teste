@@ -34,7 +34,7 @@
 
 .mat-column-date {
   width:  14%;
-  min-width: 120px;
+  min-width: 120px !important;
   font-size: 11px;
 }
 
@@ -50,13 +50,13 @@
 
 .mat-column-event {
   width: 6.25%;
-  min-width: 70px;
+  min-width: 70px !important;
   font-size: 11px;
 }
 
 .mat-column-type {
   width: 5.25%;
-  min-width: 66px;
+  min-width: 66px !important;
   font-size: 11px;
 }
 
@@ -67,7 +67,7 @@
 
 .mat-column-budgeted {
   width: 8.25%;
-  min-width: 80px;
+  min-width: 80px !important;
   font-size: 11px;
 }
 
@@ -88,7 +88,7 @@
 
 .mat-column-rate {
   width: 10.50%;
-  min-width: 100px;
+  min-width: 100px !important;
   font-size: 11px;
 }
 
@@ -114,6 +114,7 @@
   align-self: start;
   padding-top: 2px;
   font-size: 11px !important;
+  min-width: 20px;
 }
 
 .mat-cell-report {
@@ -191,6 +192,7 @@
 .mat-cell {
   padding: 3px 10px;
   text-align: center;
+  min-width: 20px;
 }
 
 .see-last {
