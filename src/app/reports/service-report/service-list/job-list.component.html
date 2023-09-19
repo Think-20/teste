@@ -188,12 +188,18 @@
             <div class="mat-header-cell mat-column-budget" title="Orçamento">Orçam</div>
             <div class="mat-header-cell mat-column-creation" title="Criação">Criação</div>
             <div class="mat-header-cell mat-column-production" title="Produção">Prod</div>
-            <div class="mat-header-cell mat-column-date" title="Data">Data</div>
+            <div class="mat-header-cell mat-column-date" title="Data">
+                <span>Cadastro</span>
+                <span>Proposta</span>
+            </div>
             <div class="mat-header-cell mat-column-client" title="Cliente">Cliente</div>
             <div class="mat-header-cell mat-column-event" title="Evento">Evento</div>
             <div class="mat-header-cell mat-column-type" title="Tipo">Tipo</div>
             <div class="mat-header-cell mat-column-value" title="Valor previsto">Valor Previsto</div>
-            <div class="mat-header-cell mat-column-budgeted" title="Valor orçado">Valor Orçado</div>
+            <div class="mat-header-cell mat-column-budgeted" title="Valor orçado">
+              <span>Aprovado</span>
+              <span>Extra</span>
+            </div>
             <div class="mat-header-cell mat-column-status" title="status">Status</div>
             <div class="mat-header-cell mat-column-fatured" title="Faturado">Fat</div>
             <div class="mat-header-cell mat-column-portin" title="Parcela">Parc</div>
@@ -220,7 +226,8 @@
               {{ job?.production_responsible?.name ? job?.production_responsible?.name : '-' }}
             </div>
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-date">
-              {{ job.created_at | date : "dd/MM/yy" }} - {{ job.deadline | date : "dd/MM/yy" }}
+                <div>{{ job.created_at | date : "dd/MM/yy" }} </div>
+                <div>{{ '-' }}</div>
             </div>
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-client">
               
@@ -237,9 +244,15 @@
             </div>
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-budgeted">
               {{ job.lastValue ? (job.lastValue | number: '1.2') : '-' }} <br />
+              {{ '-' }}
             </div>
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-status">
-              {{ job.status.description }} {{ job.status_updated_at | date : "dd/MM/yy" }}
+              <div>
+                {{ job.status.description }}
+              </div>
+              <div>
+                {{ job.status_updated_at | date : "dd/MM/yy" }}
+              </div>
             </div>
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-fatured">
               -
