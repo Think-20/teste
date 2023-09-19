@@ -178,8 +178,8 @@
     </mat-card>
     <!-- <mat-paginator *ngIf="jobs" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex"
       [pageSizeOptions]="[pagination?.per_page]" (page)="changePage($event)"></mat-paginator> -->
-    <mat-card style="overflow-y: hidden; overflow-x: auto;">
-      <div *ngIf="jobs?.length > 0">
+    <mat-card>
+      <div *ngIf="jobs?.length > 0" style="overflow-y: hidden; overflow-x: auto;">
         <table class="table mat-table">
           <div class="mat-header-row">
             <div class="mat-header-cell mat-column-num" title="Numero">NUM</div>
