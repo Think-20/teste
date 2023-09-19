@@ -8,32 +8,33 @@
 }
 
 .mat-column-num {
-  width: 4%;
+  width: 3%;
   font-size: 11px;
 }
 
 .mat-column-service {
-  width: 6%;
+  width: 6.25%;
   font-size: 11px;
 }
 
 .mat-column-budget {
-  width: 6%;
+  width: 6.25%;
   font-size: 11px;
 }
 
 .mat-column-creation {
-  width: 7%;
+  width: 6.25%;
   font-size: 11px;
 }
 
 .mat-column-production {
-  width: 5%;
+  width: 3%;
   font-size: 11px;
 }
 
 .mat-column-date {
-  width: 7%;
+  width:  14%;
+  min-width: 120px;
   font-size: 11px;
 }
 
@@ -43,47 +44,51 @@
 }
 
 .mat-column-client {
-  width: 7%;
+  width: 6.25%;
   font-size: 11px;
 }
 
 .mat-column-event {
-  width:10%;
+  width: 6.25%;
+  min-width: 70px;
   font-size: 11px;
 }
 
 .mat-column-type {
-  width: 7%;
+  width: 5.25%;
+  min-width: 66px;
   font-size: 11px;
 }
 
 .mat-column-value {
-  width: 8%;
+  width: 8.50%;
   font-size: 11px;
 }
 
 .mat-column-budgeted {
-  width: 8%;
+  width: 8.25%;
+  min-width: 80px;
   font-size: 11px;
 }
 
 .mat-column-status {
-  width: 7%;
+  width: 6.25%;
   font-size: 11px;
 }
 
 .mat-column-fatured {
-  width: 4%;
+  width: 3%;
   font-size: 11px;
 }
 
 .mat-column-portin {
-  width: 4%;
+  width: 3%;
   font-size: 11px;
 }
 
 .mat-column-rate {
-  width: 12%;
+  width: 10.50%;
+  min-width: 100px;
   font-size: 11px;
 }
 

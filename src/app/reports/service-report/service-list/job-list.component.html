@@ -143,6 +143,18 @@
               {{ e }}
             </mat-option>
           </mat-autocomplete>
+
+          <mat-form-field class="col-md-2-4">
+            <mat-select #selectJobActivity placeholder="Atividade" formControlName="job_activity" multiple>
+              <div class="select-all">
+                <mat-checkbox class="custom-checkbox" [(ngModel)]="selectAllJobActivity" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelectionAllJobActivity()">Selecionar todos</mat-checkbox>
+              </div>
+              <mat-option (click)="optionClickAllJobActivity()" *ngFor="let job_activity of job_activities" [value]="job_activity.id">
+                {{ job_activity.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
           <!-- <hr />
           <div class="col-md-12">
             <p>
@@ -166,7 +178,7 @@
     </mat-card>
     <!-- <mat-paginator *ngIf="jobs" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex"
       [pageSizeOptions]="[pagination?.per_page]" (page)="changePage($event)"></mat-paginator> -->
-    <mat-card>
+    <mat-card style="overflow-y: hidden; overflow-x: auto;">
       <div *ngIf="jobs?.length > 0">
         <table class="table mat-table">
           <div class="mat-header-row">
@@ -208,7 +220,7 @@
               {{ job?.production_responsible?.name ? job?.production_responsible?.name : '-' }}
             </div>
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-date">
-              {{ job.created_at | date : "dd/MM/yy" }}
+              {{ job.created_at | date : "dd/MM/yy" }} - {{ job.deadline | date : "dd/MM/yy" }}
             </div>
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-client">
               
@@ -227,7 +239,7 @@
               {{ job.lastValue ? (job.lastValue | number: '1.2') : '-' }} <br />
             </div>
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-status">
-              {{ job.status.description }}
+              {{ job.status.description }} {{ job.status_updated_at | date : "dd/MM/yy" }}
             </div>
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-fatured">
               -

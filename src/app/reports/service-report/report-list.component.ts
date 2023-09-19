@@ -26,6 +26,8 @@ import { JobEventsService } from 'app/job-events/job-events.service';
 import { JobEvents } from 'app/job-events/job-events-model';
 import { Observable, Subject } from 'rxjs';
 import { MatOption, MatSelect, MatSelectChange } from '@angular/material';
+import { JobActivity } from 'app/job-activities/job-activity.model';
+import { JobActivityService } from 'app/job-activities/job-activity.service';
 
 @Component({
   selector: 'cb-job-list',
@@ -53,6 +55,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   @ViewChild('selectCreation', { static: false}) selectCreation: MatSelect;
   @ViewChild('selectJobType', { static: false}) selectJobType: MatSelect;
   @ViewChild('selectStatus', { static: false}) selectStatus: MatSelect;
+  @ViewChild('selectJobActivity', { static: false}) selectJobActivity: MatSelect;
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup
@@ -68,6 +71,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   status: JobStatus[]
   job_types: JobType[]
   events: JobEvents[]
+  job_activities: JobActivity[]
   searching = false
   pageIndex: number
   pageSize = 30;
@@ -91,6 +95,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   jobTypeFilter: any;
   nameFilter: any;
   statusFilter: any;
+  jobActivityFilter: any;
   eventFilter: any;
   attendanceFilterStatus: { attendance: any; } | { attendance?: undefined; };
   destroy$ = new Subject<void>();
@@ -100,6 +105,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   selectAllJobType = false;
   selectAllStatus = false;
   selectAllExternalCreation = false;
+  selectAllJobActivity = false;
   
   constructor(
     private fb: FormBuilder,
@@ -114,6 +120,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private router: Router,
     private route: ActivatedRoute,
+    private jobActivityService: JobActivityService
     ) { }
 
 
@@ -145,6 +152,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
       client: this.fb.control(''),
       status: this.fb.control([]),
       event: this.fb.control(''),
+      job_activity: this.fb.control([]),
       date_init: this.fb.control(''),
       date_end: this.fb.control(''),
     })
@@ -210,6 +218,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     this.jobTypeFilter = searchValue.job_type;
     this.nameFilter = clientName;
     this.statusFilter = searchValue.status;
+    this.jobActivityFilter = searchValue.job_activity;
     this.eventFilter = searchValue.event;
     this.attendanceFilterStatus = attendanceFilter;
 
@@ -230,6 +239,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
       date_init: this.iniDate,
       name: this.nameFilter,
       status: this.statusFilter,
+      job_activity: this.jobActivityFilter,
       event: this.eventFilter,
       jobs_amount: this.pageSize,
       ...this.attendanceFilterStatus
@@ -288,6 +298,8 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     .subscribe(dataInfo => {
       dataInfo.jobs ? this.jobs = dataInfo.jobs.data : this.jobs = [];
       
+      this.jobs.forEach(x => x.deadline = this.datePipe.transform(x.deadline, 'yyyy-MM-dd') + "T00:00:00")
+
       if (configureDates && !hasDateFilter) {
         this.setDataByParams();
       }
@@ -376,7 +388,24 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
         newStatus = false;
       }
     });
-    this.selectAllAttendance = newStatus;
+    this.selectAllStatus = newStatus;
+  }
+
+  toggleAllSelectionAllJobActivity() {
+    if (this.selectAllJobActivity) {
+      this.selectJobActivity.options.forEach((item: MatOption) => item.select());
+    } else {
+      this.selectJobActivity.options.forEach((item: MatOption) => item.deselect());
+    }
+  }
+   optionClickAllJobActivity() {
+    let newJobActivity = true;
+    this.selectJobActivity.options.forEach((item: MatOption) => {
+      if (!item.selected) {
+        newJobActivity = false;
+      }
+    });
+    this.selectAllJobActivity = newJobActivity;
   }
 
   setCurrentDateFilterByDate(dateInit: Date, dateEnd: Date) {
@@ -407,6 +436,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     })
 
     this.jobEventsService.jobeEventos().subscribe(events => this.events = events)
+    this.jobActivityService.jobActivities().subscribe(activities => this.job_activities = activities)
   }
 
   changePage($event) {
