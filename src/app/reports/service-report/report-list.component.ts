@@ -456,14 +456,15 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     this.jobEventsService.jobeEventos().subscribe(events => this.events = events)
     this.jobActivityService.jobActivities().subscribe(activities => {
       this.job_activities = activities;
+      const outsider = 'Outsider'.toLowerCase();
       this.job_activities_fixed = [
         {
           description: 'Outsider',
-          id: this.job_activities.filter(x => x.description === 'Outsider').map(x => x.id).join(',')
+          id: this.job_activities.filter(x => x.description.toLowerCase() === outsider).map(x => x.id).join(',')
         },
         {
           description: 'Regulares',
-          id: this.job_activities.filter(x => x.description !== 'Outsider').map(x => x.id).join(',')
+          id: this.job_activities.filter(x => x.description.toLowerCase() !== outsider).map(x => x.id).join(',')
         },
       ]
     })
