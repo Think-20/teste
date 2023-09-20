@@ -72,6 +72,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   job_types: JobType[]
   events: JobEvents[]
   job_activities: JobActivity[]
+  job_activities_fixed = []
   searching = false
   pageIndex: number
   pageSize = 30;
@@ -95,7 +96,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   jobTypeFilter: any;
   nameFilter: any;
   statusFilter: any;
-  jobActivityFilter: any;
+  jobActivityFilter: any = []
   eventFilter: any;
   attendanceFilterStatus: { attendance: any; } | { attendance?: undefined; };
   destroy$ = new Subject<void>();
@@ -239,11 +240,28 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
       date_init: this.iniDate,
       name: this.nameFilter,
       status: this.statusFilter,
-      job_activity: this.jobActivityFilter,
+      job_activity: this.getJobActivityValues(),
       event: this.eventFilter,
       jobs_amount: this.pageSize,
       ...this.attendanceFilterStatus
     }
+  }
+
+  getJobActivityValues() {
+    let arr1 = [];
+    let arr2 = [];
+
+    if (this.jobActivityFilter.length) {
+      arr1 = this.jobActivityFilter[0].split(',');
+    }
+
+    if (this.jobActivityFilter.length > 1) {
+      arr2 = this.jobActivityFilter[1].split(',');
+    }
+
+    return [
+      ...arr1.map(numStr => parseInt(numStr, 10)), 
+      ...arr2.map(numStr => parseInt(numStr, 10))]
   }
 
   updateFilterActive() {
@@ -436,7 +454,19 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     })
 
     this.jobEventsService.jobeEventos().subscribe(events => this.events = events)
-    this.jobActivityService.jobActivities().subscribe(activities => this.job_activities = activities)
+    this.jobActivityService.jobActivities().subscribe(activities => {
+      this.job_activities = activities;
+      this.job_activities_fixed = [
+        {
+          description: 'Outsider',
+          id: this.job_activities.filter(x => x.description === 'Outsider').map(x => x.id).join(',')
+        },
+        {
+          description: 'Regulares',
+          id: this.job_activities.filter(x => x.description !== 'Outsider').map(x => x.id).join(',')
+        },
+      ]
+    })
   }
 
   changePage($event) {

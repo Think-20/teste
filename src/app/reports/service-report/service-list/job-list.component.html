@@ -149,7 +149,7 @@
               <div class="select-all">
                 <mat-checkbox class="custom-checkbox" [(ngModel)]="selectAllJobActivity" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelectionAllJobActivity()">Selecionar todos</mat-checkbox>
               </div>
-              <mat-option (click)="optionClickAllJobActivity()" *ngFor="let job_activity of job_activities" [value]="job_activity.id">
+              <mat-option (click)="optionClickAllJobActivity()" *ngFor="let job_activity of job_activities_fixed" [value]="job_activity.id">
                 {{ job_activity.description }}
               </mat-option>
             </mat-select>
