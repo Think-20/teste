@@ -119,7 +119,9 @@ export class ProjectsComponent implements OnInit {
         return parentTask.job_activity.modification_id == task.job_activity_id
           || parentTask.job_activity.option_id == task.job_activity_id
       });
-      adds = adds.concat(temp.reverse())
+
+      adds = adds.concat(temp)
+      adds = adds.sort((a, b) => a.reopened - b.reopened)
     }));
     this.sortedTasks = this.sortedTasks.concat(adds).reverse();
 
