@@ -227,7 +227,7 @@
             </div>
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-date">
                 <div>{{ job.created_at | date : "dd/MM/yy" }} </div>
-                <div>{{ '-' }}</div>
+                <div>{{ job.project_conclusion ? (job.project_conclusion | date : "dd/MM/yy") : '-' }}</div>
             </div>
             <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-client">
               
