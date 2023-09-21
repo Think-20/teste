@@ -156,6 +156,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
       job_activity: this.fb.control([]),
       date_init: this.fb.control(''),
       date_end: this.fb.control(''),
+      jobs_amount: this.fb.control(30),
     })
 
 
@@ -185,6 +186,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     if(JSON.stringify(this.jobService.searchValue) == JSON.stringify({})) {
       this.jobService.searchValue = this.searchForm.value;
     } else {
+      this.pageSize = this.jobService.searchValue.jobs_amount;
       this.searchForm.setValue(this.jobService.searchValue);
     }
 
@@ -230,6 +232,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
       ...searchValue,
       date_init:this.iniDate,
       date_end: this.finDate,
+      jobs_amount: this.pageSize,
     }
 
     return {
@@ -242,7 +245,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
       status: this.statusFilter,
       job_activity: this.getJobActivityValues(),
       event: this.eventFilter,
-      jobs_amount: this.pageSize,
+      jobs_amount:  this.jobService.searchValue.jobs_amount,
       ...this.attendanceFilterStatus
     }
   }
