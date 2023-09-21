@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'cb-layout',
@@ -7,7 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LayoutComponent implements OnInit {
 
-  constructor() { }
+  currentRoute: string;
+
+  constructor(private router: Router) {
+    router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.currentRoute = location.pathname.replace('/', '');
+      }
+    });
+  }
 
   ngOnInit() {
   }

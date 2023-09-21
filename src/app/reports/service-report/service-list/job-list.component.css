@@ -227,3 +227,27 @@
 ::ng-deep .mat-checkbox-frame {
   border-color:rgba(0,0,0,.28);
 }
+
+#searchForm[_ngcontent-nkq-c29] {
+  height: calc(100% - 76px);
+}
+
+.container-job {
+  height: calc(100% - 22px);
+}
+
+.container-job .my-container .lead {
+  height: 24px;
+}
+
+.mat-row-scroll {
+  height: calc(100vh - 365px) !important;
+}
+
+.mat-row-scroll.has-filter {
+  height: calc(100vh - 520px) !important;
+}
+
+::ng-deep #all-container.service-report {
+  overflow: hidden !important;
+}
