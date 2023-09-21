@@ -180,7 +180,7 @@
       <!-- <mat-paginator *ngIf="jobs" [length]="pagination?.total" [pageSize]="pagination?.per_page" [pageIndex]="pageIndex"
         [pageSizeOptions]="[pagination?.per_page]" (page)="changePage($event)"></mat-paginator> -->
       <mat-card>
-        <div *ngIf="jobs?.length > 0" style="overflow-y: hidden; overflow-x: auto;">
+        <div style="overflow-y: hidden; overflow-x: auto;">
           <table class="table mat-table">
             <div class="mat-header-row">
               <div class="mat-header-cell mat-column-num" title="Numero">NUM</div>
@@ -297,7 +297,7 @@
                   </small>
                 </p>
               </div>
-              <mat-divider></mat-divider>
+              <mat-divider style="margin-top: 10px;position: initial;"></mat-divider>
               <mat-grid-list *ngIf="jobs?.length > 0" cols="6" rowHeight="88px">
                 <mat-grid-tile class="mat-grid-item">
                   <div class="title-report-dashboard m-0 p-0 mb-2 text-truncate" title="Total de jobs:">Total de jobs:</div>
