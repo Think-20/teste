@@ -143,6 +143,13 @@ export class JobFormComponent implements OnInit {
       })
       .debounceTime(500)
       .subscribe(clientName => {
+        
+        if (clientName.id && this.typeForm === 'edit') {
+          this.jobForm.controls.agency.clearValidators()
+          this.jobForm.controls.not_client.clearValidators()
+          this.jobForm.controls.not_client.setValue('');
+        }
+        
         if (clientName == '' || isObject(clientName)) {
           snackBarStateCharging.dismiss()
           return;
@@ -185,6 +192,11 @@ export class JobFormComponent implements OnInit {
         if (isObject(name)) {
           this.enableNotClient()
           snackBarStateCharging.dismiss()
+          return;
+        }
+
+        if (name == '' && this.typeForm === 'edit' && !this.job.agency && this.job.not_client) {
+          snackBarStateCharging.dismiss() 
           return;
         }
 
@@ -329,6 +341,34 @@ export class JobFormComponent implements OnInit {
     }
   }
 
+  enableNotClientWithAgency() {
+    if (this.typeForm == 'show') {
+      return
+    }
+   
+    this.jobForm.controls.not_client.enable()
+    this.checkUserDepartment();
+    this.jobForm.controls.not_client.setValidators([
+      Validators.required,
+      Validators.minLength(3),
+      Validators.maxLength(100)
+    ])
+    this.jobForm.controls.not_client.updateValueAndValidity()
+    this.jobForm.controls.client.setValue('')
+    this.jobForm.controls.client.clearValidators()
+
+    this.jobForm.controls.agency.setValidators([
+      Validators.required,
+      ObjectValidator
+    ])
+
+    this.jobForm.controls.client.setValue(this.job.client ? this.job.client : { fantasy_name: this.job.not_client } )
+    this.jobForm.controls.not_client.setValue(this.job.not_client)
+    this.jobForm.controls.client.clearValidators()
+    this.jobForm.controls.agency.updateValueAndValidity()
+    this.jobForm.controls.client.updateValueAndValidity()
+  }
+
   enableNotClient() {
     if (this.typeForm == 'show') {
       return
@@ -397,9 +437,11 @@ export class JobFormComponent implements OnInit {
       this.enableNotClient()
       this.jobForm.controls.agency.setValue(job.agency)
       this.jobForm.controls.not_client.setValue(job.not_client)
+    } else if (this.typeForm === 'edit' && !job.agency && job.not_client) {
+      this.enableNotClientWithAgency()
     } else {
       this.disableNotClient()
-      this.jobForm.controls.client.setValue(job.client ? job.client : { fantasy_name: job.not_client } )
+      this.jobForm.controls.client.setValue(job.client)
     }
 
     this.jobForm.controls.rate.setValue(job.rate)
@@ -654,10 +696,15 @@ export class JobFormComponent implements OnInit {
   edit() {
     if( ! this.buttonEnable) return
 
+
+    if (this.typeForm === 'edit') {
+      this.jobForm.controls.agency.updateValueAndValidity()
+      this.jobForm.controls.not_client.updateValueAndValidity()
+    }
+
     this.jobForm.updateValueAndValidity()
     let job = this.jobForm.getRawValue() as Job
     job.id = this.job.id
-
     if (ErrorHandler.formIsInvalid(this.jobForm)) {
       this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
         duration: 5000
