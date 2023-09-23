@@ -51,16 +51,17 @@ export class ScheduleLineComponent implements OnInit {
     }
   }
 
-  goToJob(job: Job) {
+  goToJob(job: Job, item) {
     if(job.id == null) {
       return ''
     }
 
     if(this.permissionVerify('edit', job)) {
-      this.router.navigateByUrl('/jobs/edit/' + job.id)
+      this.router.navigate([`/jobs/edit/${job.id}`], {queryParams: { taskId: item.task.id }})
     } else if(this.permissionVerify('show', job)) {
       this.router.navigateByUrl('/jobs/show/' + job.id)
     }
+
   }
 
   timeDisplay(item: TaskItem, chrono: Chrono) {

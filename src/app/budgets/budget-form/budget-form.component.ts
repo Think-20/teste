@@ -34,6 +34,7 @@ export class BudgetFormComponent implements OnInit {
   sortedTasks: Task[]
   expandedIndex: number = null
   budgetForms: FormGroup[] = [];
+  taskId;
 
   constructor(
     /* private budgetService: BudgetService,
@@ -51,6 +52,11 @@ export class BudgetFormComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const taskId = params['taskId'];
+      this.taskId = taskId
+    });
+
     this.sortTasks();
     this.loadTaskFromRoute();
     this.createForm();
@@ -152,7 +158,7 @@ export class BudgetFormComponent implements OnInit {
       return;
     }
 
-    this.taskService.changeValues(budgetForm.value).subscribe(data => {
+    this.taskService.changeValues({...budgetForm.value, task_id: this.taskId}).subscribe(data => {
       this.snackBar.open(data.message, '', {
         duration: data.status ? 1000 : 5000
       })

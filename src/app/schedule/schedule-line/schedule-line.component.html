@@ -4,7 +4,7 @@
 [matMenuTriggerFor]="menu"
 [matMenuTriggerData]="{item: item, chrono: chrono}"
 [ngClass]="getLineClass(item)"
-(dblclick)="goToJob(item.task.job)">
+(dblclick)="goToJob(item.task.job, item)">
   <div class="mat-cell mat-column-creation">
     {{ item.task?.responsible?.name }}
   </div>
