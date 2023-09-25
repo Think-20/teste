@@ -46,6 +46,11 @@ export class TaskService {
     return task.job_activity.description +  ' ' + StringHelper.padChar(task.reopened)
   }
 
+  budgetDisplay(task: Task, noAbbreviation: boolean = false) {
+    const dsc = `Orçamento ${task.reopened === 0 ? 'do ' : 'da '}`;
+    return dsc + task.job_activity.description.replace('de', 'do').replace('Modificação', `Modificação ${StringHelper.padChar(task.reopened)}`).toLowerCase();
+  }
+
   proposalsDisplay(task: Task, noAbbreviation: boolean = false) {
     if(task.job_activity.description == 'Memorial descritivo') {
       let jobDescription = 'M. descritivo'
