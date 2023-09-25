@@ -41,4 +41,5 @@ export class Task {
   profit_value?: number
   final_value?: number
   updated_by?: string
+  updated_at?: Date
 }

@@ -141,11 +141,25 @@ export class BudgetFormComponent implements OnInit {
 
     const task = this.sortedTasks[index];
 
-    if (!this.getTaskByProjectFiles(index) || !this.getTaskByProjectFiles(index).responsible) {
+    if (!task && (this.getTaskByProjectFiles(index) || this.getTaskByProjectFiles(index).responsible)) {
+      return this.getTaskByProjectFiles(index).responsible.name;
+    }
+
+    return task.updated_by ? task.updated_by : '';
+  }
+
+  getLastPersonWhoModifiedDate(index) {
+    if (!this.sortedTasks.length) {
       return;
     }
 
-    return task.updated_by ? task.updated_by : this.getTaskByProjectFiles(index).responsible.name;
+    const task = this.sortedTasks[index];
+
+    if (!task && this.getTaskByProjectFiles(index)) {
+        return this.getTaskByProjectFiles(index).updated_at;;
+    }
+
+    return task.updated_at ? task.updated_at : '';
   }
 
   sendValues(budgetForm: FormGroup) {
