@@ -141,11 +141,11 @@ export class BudgetFormComponent implements OnInit {
 
     const task = this.sortedTasks[index];
 
-    if (!task && (this.getTaskByProjectFiles(index) || this.getTaskByProjectFiles(index).responsible)) {
-      return this.getTaskByProjectFiles(index).responsible.name;
+    if (!this.getTaskByProjectFiles(index) || !this.getTaskByProjectFiles(index).responsible) {
+      return;
     }
 
-    return task.updated_by ? task.updated_by : '';
+    return task.updated_by ? task.updated_by : this.getTaskByProjectFiles(index).responsible.name;
   }
 
   getLastPersonWhoModifiedDate(index) {
