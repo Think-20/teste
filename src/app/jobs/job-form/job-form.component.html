@@ -81,13 +81,30 @@
       <mat-form-field class="col-md-3">
         <input formControlName="place" matInput placeholder="Local">
       </mat-form-field>
-      <mat-form-field class="col-md-3">
-        <mat-select placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
-          <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-            {{ attendance.name }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="col-md-3 p-0">
+        <mat-form-field class="col-md-8">
+          <mat-select  placeholder="Atendimento*" formControlName="attendance" [compareWith]="compareAttendance">
+            <mat-option *ngFor="let attendance of attendances" [value]="attendance">
+              {{ attendance.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            Obrigatório
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field class="col-md-4 pl-0">
+          <input (input)="validatePercentage($event, 'attendance_percentage')" formControlName="attendance_percentage" matInput>
+          <a *ngIf="typeForm === 'edit'" class="button-inner-mat-input" mat-button>
+             <span matSuffix>%</span>
+              <mat-icon (click)="addAttendance()" >add</mat-icon>
+          </a>
+          <span *ngIf="typeForm !== 'edit'" matSuffix>%</span>
+          <mat-error>
+            Obrigatório
+          </mat-error>
+        </mat-form-field>
+      </div>
       <mat-form-field class="col-md-3">
         <mat-select placeholder="Expectativa*" formControlName="main_expectation" [compareWith]="compareMainExpectation">
           <mat-option *ngFor="let mainExpectation of main_expectations" [value]="mainExpectation">
@@ -101,15 +118,37 @@
           Obrigatório, até 99.999.999,99
         </mat-error>
       </mat-form-field>
-      <cb-stars class="col-md-3 star-input" label="Score"
-      [readonly]="true"
-      [rate]="jobForm.controls.client.value?.rate"
-      [input]="jobForm.controls.rate">
-        <input formControlName="rate" matInput>
-      </cb-stars>
+  
       <mat-form-field class="col-md-3">
         <input formControlName="creation_responsible" matInput placeholder="Criação">
       </mat-form-field>
+
+      <div class="col-md-3 p-0" *ngIf="isAddAttendance">
+        <mat-form-field class="col-md-8">
+          <mat-select placeholder="Atendimento2*" formControlName="attendance2" [compareWith]="compareAttendance">
+            <mat-option *ngFor="let attendance of attendances" [value]="attendance">
+              {{ attendance.name }}
+            </mat-option>
+          </mat-select>
+          <mat-error>
+            Obrigatório
+          </mat-error>
+        </mat-form-field>
+        
+        <mat-form-field class="col-md-4 pl-0">
+          <input (input)="validatePercentage($event, 'attendance_percentage2')" formControlName="attendance_percentage2" matInput>
+         <a *ngIf="typeForm === 'edit'" class="button-inner-mat-input" mat-button>
+            <span matSuffix>%</span>
+            <mat-icon (click)="removeAttendance()" >clear</mat-icon>
+          </a>
+          <span *ngIf="typeForm !== 'edit'" matSuffix>%</span>
+         <mat-error>
+          Obrigatório
+        </mat-error>
+        </mat-form-field>
+      </div>
+     
+
       <mat-form-field class="col-md-3">
         <input formControlName="detailing_responsible" matInput placeholder="Detalhamento">
       </mat-form-field>
@@ -119,6 +158,12 @@
       <mat-form-field class="col-md-3">
         <input formControlName="production_responsible" matInput placeholder="Produção">
       </mat-form-field>
+      <cb-stars class="col-md-3 star-input ml-auto d-flex" label="Score"
+        [readonly]="true"
+        [rate]="jobForm.controls.client.value?.rate"
+        [input]="jobForm.controls.rate">
+          <input formControlName="rate" matInput>
+      </cb-stars>
     </div>
   </mat-card>
   <mat-card-title>
