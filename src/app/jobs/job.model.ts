@@ -78,4 +78,7 @@ export class Job {
     gross_profit_value?: string
     profit_value?: string
     final_value?: string
+    attendance2?: Employee
+    attendance_percentage?: string
+    attendance_percentage2?: string
 }
