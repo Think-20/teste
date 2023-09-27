@@ -79,7 +79,6 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   filter = false
   params = {}
   hasFilterActive = false
-  isAdmin: boolean = false
   reportData: ReportData;
   date: Date;
   month: Month;
@@ -131,8 +130,6 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.isAdmin = this.authService.hasAccess('job/save')
-
     this.pageIndex = this.jobService.pageIndex;
 
     this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
@@ -179,7 +176,6 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
       })
 
-    if(this.isAdmin)
       this.searchForm.addControl('attendance', this.fb.control([]));
       
     this.formCopy = this.searchForm.value;
@@ -215,7 +211,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
 
   getParams(searchValue) {
     let clientName = searchValue.client != '' ? searchValue.client : searchValue.search;
-    let attendanceFilter = this.isAdmin ? { attendance: searchValue.attendance } : {};
+    let attendanceFilter = { attendance: searchValue.attendance };
 
     this.creationFilter = searchValue.creation;
     this.jobTypeFilter = searchValue.job_type;
