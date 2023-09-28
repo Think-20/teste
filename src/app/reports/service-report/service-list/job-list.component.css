@@ -251,3 +251,14 @@
 ::ng-deep #all-container.service-report {
   overflow: hidden !important;
 }
+
+.keyboard_arrow_up {
+  color: #00a35d;
+}
+.keyboard_arrow_down {
+  color: #e5301a;
+}
+.circle {
+  color: #04afee;
+  font-size: 12px;
+}

@@ -204,6 +204,7 @@
               <div class="mat-header-cell mat-column-status" title="status">Status</div>
               <div class="mat-header-cell mat-column-fatured" title="Faturado">Fat</div>
               <div class="mat-header-cell mat-column-portin" title="Parcela">Parc</div>
+              <div class="mat-header-cell mat-column-margem" title="Parcela">Margem</div>
               <div class="mat-header-cell mat-column-rate" title="Satisfação">Satisfação</div>
             </div>
             <div class="space-table-header"></div>
@@ -261,6 +262,11 @@
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-portin">
                   -
+                </div>
+                <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-margem">
+                  <mat-icon *ngIf="toNumber(job.lastValue) > toNumber(job.budget_value)" class="keyboard_arrow_up">keyboard_arrow_up</mat-icon>
+                  <mat-icon *ngIf="toNumber(job.lastValue) < toNumber(job.budget_value)" class="keyboard_arrow_down">keyboard_arrow_down</mat-icon>
+                  <mat-icon *ngIf="toNumber(job.lastValue) == toNumber(job.budget_value)" class="circle">circle</mat-icon>
                 </div>
                 <div class="mat-cell mat-column-rate">
                   <cb-stars [hasLabel]="false" class="star-input" label="Score"

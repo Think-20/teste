@@ -649,4 +649,12 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
       }
     })
   }
+
+  toNumber(val: string): number {
+    if (!val) {
+      return 0
+    }
+
+    return Number(val);
+  }
 }
