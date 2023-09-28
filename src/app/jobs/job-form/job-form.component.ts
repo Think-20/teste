@@ -65,7 +65,6 @@ export class JobFormComponent implements OnInit {
   jobForm: FormGroup
   isAdmin: boolean = false
   buttonEnable: boolean = true
-  isAddAttendance = false;
 
   constructor(
     private clientService: ClientService,
@@ -116,7 +115,6 @@ export class JobFormComponent implements OnInit {
       job_type: this.formBuilder.control('', [Validators.required]),
       agency: this.formBuilder.control('', [ObjectValidator]),
       attendance: this.formBuilder.control('', [Validators.required]),
-      attendance_percentage: this.formBuilder.control(100, [Validators.required]),
       rate: this.formBuilder.control(''),
       stand: this.formBuilder.group({}),
       levels: this.formBuilder.control('', [Validators.required]),
@@ -253,8 +251,6 @@ export class JobFormComponent implements OnInit {
         this.jobForm.get('status').setValue(this.status.filter((status) => {
           return status.description == 'Stand-by'
         }).pop())
-
-        this.disableAttendancePercentage();
       }
 
       snackBarStateCharging.dismiss()
@@ -420,7 +416,7 @@ export class JobFormComponent implements OnInit {
   loadJobById(jobId) {
     let snackBar = this.snackBar.open('Carregando job...')
     this.jobService.job(jobId).subscribe(job => {
-      this.job = job;
+      this.job = job
       this.jobEmitter.emit(job)
       this.loadJobInForm(job)
       snackBar.dismiss()
@@ -448,18 +444,8 @@ export class JobFormComponent implements OnInit {
       this.jobForm.controls.client.setValue(job.client)
     }
 
-    if (job.attendance2) {
-      this.addAttendance()
-      this.jobForm.controls.attendance_percentage.setValue(job.attendance_percentage)
-      this.jobForm.controls.attendance_percentage2.setValue(job.attendance_percentage2)
-      this.jobForm.controls.attendance2.setValue(job.attendance2)
-    } else {
-      this.disableAttendancePercentage();
-    }
-
     this.jobForm.controls.rate.setValue(job.rate)
     this.jobForm.controls.attendance.setValue(job.attendance)
-  
     this.jobForm.controls.last_provider.setValue(job.last_provider)
     this.jobForm.controls.levels.setValue(job.levels)
     this.jobForm.controls.main_expectation.setValue(job.main_expectation)
@@ -747,61 +733,6 @@ export class JobFormComponent implements OnInit {
 
       this.buttonEnable = true
     })
-  }
-
-  addAttendance() {
-    this.isAddAttendance = true;
-    this.setAttendance2();
-  }
-
- setAttendance2() {
-    this.jobForm.addControl('attendance2', this.formBuilder.control('',  [Validators.required]));
-    this.jobForm.addControl('attendance_percentage2', this.formBuilder.control('',  [Validators.required]));
-    this.jobForm.controls.attendance2.updateValueAndValidity();
-    this.jobForm.controls.attendance_percentage2.updateValueAndValidity();
-    this.jobForm.controls.attendance_percentage.enable();
-
-    if (this.typeForm === 'show') {
-      this.jobForm.disable();
-    }
-  }
-
-  removeAttendance() {
-    this.isAddAttendance = false;
-    this.jobForm.removeControl('attendance2');
-    this.jobForm.removeControl('attendance_percentage2');
-
-    this.disableAttendancePercentage();
-
-    this.jobForm.controls.attendance2.updateValueAndValidity();
-    this.jobForm.controls.attendance_percentage2.updateValueAndValidity();
-    this.jobForm.controls.attendance_percentage.updateValueAndValidity();
-  }
-
-  disableAttendancePercentage() {
-    this.jobForm.controls.attendance_percentage.setValue(100);
-    this.jobForm.controls.attendance_percentage.disable();
-  }
-
-  validatePercentage(event: any, prop: string) {
-    const inputValue = event.target.value;
-    let numericValue = parseFloat(inputValue);
-
-    if (isNaN(numericValue)) {
-      numericValue = 0; // Define um valor padrão se a entrada não for um número válido.
-    }
-
-    if (numericValue < 0) {
-      numericValue = 0;
-    } else if (numericValue > 100) {
-      numericValue = 100;
-    }
-
-    this.jobForm.get(prop).setValue(numericValue);
-
-    const otherControlName = prop === 'attendance_percentage' ? 'attendance_percentage2' : 'attendance_percentage';
-    const otherNumericValue = 100 - numericValue;
-    this.jobForm.get(otherControlName).setValue(otherNumericValue);
   }
 }
 
