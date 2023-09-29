@@ -264,9 +264,9 @@
                   -
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-margem">
-                  <mat-icon *ngIf="toNumber(job.lastValue) > toNumber(job.budget_value)" class="keyboard_arrow_up">keyboard_arrow_up</mat-icon>
-                  <mat-icon *ngIf="toNumber(job.lastValue) < toNumber(job.budget_value)" class="keyboard_arrow_down">keyboard_arrow_down</mat-icon>
-                  <mat-icon *ngIf="toNumber(job.lastValue) == toNumber(job.budget_value)" class="circle">circle</mat-icon>
+                  <mat-icon *ngIf="job.status.description == 'Aprovado' && toNumber(job.lastValue) > toNumber(job.budget_value)" class="keyboard_arrow_up">keyboard_arrow_up</mat-icon>
+                  <mat-icon *ngIf="job.status.description == 'Aprovado' && toNumber(job.lastValue) < toNumber(job.budget_value)" class="keyboard_arrow_down">keyboard_arrow_down</mat-icon>
+                  <!-- <mat-icon *ngIf="toNumber(job.lastValue) == toNumber(job.budget_value)" class="icon-close">close</mat-icon> -->
                 </div>
                 <div class="mat-cell mat-column-rate">
                   <cb-stars [hasLabel]="false" class="star-input" label="Score"
