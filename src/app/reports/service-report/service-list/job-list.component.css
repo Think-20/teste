@@ -101,8 +101,14 @@
 }
 
 .mat-column-rate {
-  width: 10.50%;
-  min-width: 100px !important;
+  width: 7%;
+  min-width: 85px !important;
+  font-size: 11px;
+}
+
+.mat-column-margem {
+  width: 3.5%;
+  min-width: 58px !important;
   font-size: 11px;
 }
 
@@ -258,7 +264,8 @@
 .keyboard_arrow_down {
   color: #e5301a;
 }
-.circle {
-  color: #04afee;
-  font-size: 12px;
+.icon-close {
+  color: #e5301a;
+  font-size: 13px;
+  font-weight: 600;
 }
