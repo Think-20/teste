@@ -18,7 +18,7 @@
 
 .home-grid {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: 0.5fr 0.5fr 1fr 1fr 1fr;
     grid-gap: 1rem; 
     margin-bottom: 1rem;
   }
@@ -33,7 +33,7 @@
 
   .home-grid-2 {
     display: grid;
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr;
     grid-gap: 1rem; 
     grid-template-rows: repeat(3, auto);
   }
@@ -69,6 +69,12 @@
     content: "";
     height: 5px;
     background-color: #868585;
+}
+
+.home-card-grid-2fr {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 1fr 1fr;
 }
 
 .grid-row-2 {
