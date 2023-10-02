@@ -266,7 +266,7 @@
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-margem">
                   <mat-icon *ngIf="job.status.description == 'Aprovado' && toNumber(job.lastValue) > toNumber(job.budget_value)" class="keyboard_arrow_up">keyboard_arrow_up</mat-icon>
                   <mat-icon *ngIf="job.status.description == 'Aprovado' && toNumber(job.lastValue) < toNumber(job.budget_value)" class="keyboard_arrow_down">keyboard_arrow_down</mat-icon>
-                  <!-- <mat-icon *ngIf="toNumber(job.lastValue) == toNumber(job.budget_value)" class="icon-close">close</mat-icon> -->
+                  <!-- <mat-icon *ngIf="job.status.description == 'Aprovado' && getProfitValue(job)" class="icon-close">close</mat-icon> -->
                 </div>
                 <div class="mat-cell mat-column-rate">
                   <cb-stars [hasLabel]="false" class="star-input" label="Score"
@@ -305,7 +305,7 @@
               </div>
               <mat-divider style="margin-top: 10px;position: initial;"></mat-divider>
               <mat-grid-list *ngIf="jobs?.length > 0" cols="6" rowHeight="88px">
-                <mat-grid-tile class="mat-grid-item">
+                <mat-grid-tile class="mat-grid-item keep-padding-r">
                   <div class="title-report-dashboard m-0 p-0 mb-2 text-truncate" title="Total de jobs:">Total de jobs:</div>
                   <div class="data-report-dashboard text-truncate" [title]="reportData?.jobs?.total">{{reportData?.jobs?.total}}</div>
                 </mat-grid-tile>
@@ -325,7 +325,7 @@
                   <div class="title-report-dashboard m-0 p-0 mb-2 text-left text-truncate" title="Intervalo médio entre aprovações:">Intervalo médio entre aprovações:</div>
                   <div class="data-report-dashboard text-truncate">-</div>
                 </mat-grid-tile>
-                <mat-grid-tile class="mat-grid-item" [rowspan]="2">
+                <mat-grid-tile class="mat-grid-item keep-padding-l" [rowspan]="2">
                   <div class="d-flex flex-column align-items-end align-self-end">
                     <div class="mat-header-cell m-0 p-0 mb-2">Tipo</div>
                     <div class="d-flex flex-row align-items-center justify-content-center mb-2">
@@ -350,7 +350,7 @@
                     </div>
                   </div>
                 </mat-grid-tile>
-                <mat-grid-tile class="mat-grid-item">
+                <mat-grid-tile class="mat-grid-item keep-padding-r">
                   <div class="title-report-dashboard m-0 p-0 mb-2 text-truncate" title="Taxa de conversão:">Taxa de conversão:</div>
                   <div class="d-flex justify-content-between data-report-dashboard">
                     <p *ngFor="let rate of reportData?.conversion_rate"  class="text-truncate" [title]="rate">{{ rate }}</p>

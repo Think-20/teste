@@ -13,7 +13,7 @@
 }
 
 .mat-column-service {
-  width: 7.25%;
+  width: 6.25%;
   font-size: 11px;
 }
 
@@ -54,9 +54,11 @@
 }
 
 .mat-column-event {
-  width: 6.25%;
+  width: 8.25%;
   min-width: 70px !important;
   font-size: 11px;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .mat-column-type {
@@ -91,7 +93,7 @@
 }
 
 .mat-column-fatured {
-  width: 3.5%;
+  width: 2.5%;
   font-size: 11px;
 }
 
@@ -155,10 +157,20 @@
 
 
 ::ng-deep .mat-grid-item > figure {
-  padding: 1rem !important;
+  padding: 0.5rem !important;
   flex-direction: column;
   align-items: start !important;
 }
+
+::ng-deep .mat-grid-item:is(.keep-padding-r) > figure {
+  padding: 0.5rem 0.5rem 0.5rem 1rem !important;
+}
+
+::ng-deep .mat-grid-item:is(.keep-padding-l) > figure {
+  padding: 0.5rem 1rem 0.5rem 0.5rem !important;
+}
+
+
 
 .mat-grid-type {
   font-size: 12px;
@@ -178,7 +190,7 @@
 }
 
 .data-report-dashboard {
-  font-size: 18px !important;
+  font-size: 14px !important;
   color: rgb(158, 158, 158);
   width: 100% !important;
 }
