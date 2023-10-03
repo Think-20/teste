@@ -91,3 +91,35 @@
 .grid-span-4 {
     grid-column: span 4 !important;
 }
+
+.chart-container {
+    position: relative;
+    display: inline-block; /* Para que o elemento se ajuste ao tamanho do gráfico */
+  }
+  
+  .pie-chart-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .pie-chart-label-value {
+    font-size: 65px;
+    font-weight: 100;
+  }
+
+  .pie-chart-label-sub-value {
+    font-size: 16px;
+    font-weight: 100;
+  }
+
+  .home-card-grafico {
+    display: flex;
+    justify-content: center;
+  }

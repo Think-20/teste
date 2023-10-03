@@ -15,6 +15,128 @@ import { HomeInfo } from './models/home-info.model';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  multi = [
+    {
+      "name": "France",
+      "series": [
+        {
+          "name": "Janeiro",
+          "value": 1000
+        },
+        {
+          "name": "Fervereiro",
+          "value": 1500
+        },
+        {
+          "name": "Março",
+          "value": 900
+        },
+        {
+          "name": "Abril",
+          "value": 920
+        },
+        {
+          "name": "Maio",
+          "value": 913
+        },
+        {
+          "name": "Junho",
+          "value": 2000
+        },
+        {
+          "name": "Julho",
+          "value": 1500
+        },
+        {
+          "name": "Agosto",
+          "value": 1700
+        },
+      ]
+    },
+    {
+      "name": "UK",
+      "series": [
+        {
+          "name": "Janeiro",
+          "value": 500
+        },
+        {
+          "name": "Fervereiro",
+          "value": 600
+        },
+        {
+          "name": "Março",
+          "value": 700
+        },
+        {
+          "name": "Abril",
+          "value": 800
+        },
+        {
+          "name": "Maio",
+          "value": 500
+        },
+        {
+          "name": "Junho",
+          "value": 250
+        },
+        {
+          "name": "Julho",
+          "value": 1500
+        },
+        {
+          "name": "Agosto",
+          "value": 1000
+        },
+      ]
+    }
+  ];
+  
+  view: any[] = [700, 300];
+
+  // options
+  legend: boolean = false;
+  showLabels: boolean = true;
+  animations: boolean = true;
+  xAxis: boolean = true;
+  yAxis: boolean = true;
+  showYAxisLabel: boolean = true;
+  showXAxisLabel: boolean = true;
+  xAxisLabel: string = 'Year';
+  yAxisLabel: string = 'Population';
+  timeline: boolean = true;
+
+
+  single = [
+    {
+      name: 'Categoria A',
+      value: 25,
+      color: '#000', // Cor personalizada para esta fatia
+    },
+    {
+      name: 'Categoria B',
+      value: 10,
+      color: '#000', // Cor personalizada para esta fatia
+    },
+    {
+      name: 'Categoria C',
+      value: 25,
+      color: '#000', // Cor personalizada para esta fatia
+    },
+    {
+      name: 'Categoria D',
+      value: 35,
+      color: '#000', // Cor personalizada para esta fatia
+    },
+  ];
+
+
+  calculateTextPosition(d, radius): string {
+    const angle = (d.startAngle + d.endAngle) / 2;
+    const x = radius * Math.cos(angle);
+    const y = radius * Math.sin(angle);
+    return `${x},${y}`;
+  }
   searchForm: FormGroup;
   formCopy: any;
   dataInfo: HomeInfo;
@@ -33,7 +155,9 @@ export class HomeComponent implements OnInit {
   months: Month[] = MONTHS
   nextMonthName: string = '';
   nextYear: number = 0;
-  
+  colorScheme = {
+    domain: ['#a9ce49', '#e92086', '#ffcc3d', '#00aaed']
+  };
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,

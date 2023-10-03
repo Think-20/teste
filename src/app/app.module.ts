@@ -213,6 +213,7 @@ import { FormatMaskDirective } from './shared/directives/format-mask.directive';
 import { JobEventsService } from './job-events/job-events.service';
 import { SpecificationFormComponent } from './specification/specification-form/specification-form.component';
 import { HomeService } from './home/home.service';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 registerLocaleData(localePt);
 
@@ -375,6 +376,8 @@ registerLocaleData(localePt);
     MatProgressBarModule,
     MatCheckboxModule,
     CommonModule,
+
+    NgxChartsModule
   ],
   providers: [
     ClientService,

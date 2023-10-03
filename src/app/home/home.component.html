@@ -198,7 +198,20 @@
         </div>
         <div class="home-card-body">
             <div class="home-card-grafico">
-              Grafico
+              <div class="chart-container">
+                <ngx-charts-pie-chart
+                  [results]="single"
+                  [view]="[200, 200]"
+                  [legend]="false"
+                  [doughnut]="true"
+                  [scheme]="colorScheme"
+                  [arcWidth]="0.2">
+                </ngx-charts-pie-chart>
+                <div class="pie-chart-label">
+                    <span class="pie-chart-label-value">103</span>
+                    <span class="pie-chart-label-sub-value">1.200.000</span>
+                </div>
+              </div>
             </div>
         </div>
         <div class="home-card-footer d-flex justify-content-between">
@@ -409,7 +422,20 @@
     </div>
   </div>
   <div class="home-card">
-    Grafico
+    <div class="chart-container">
+      <ngx-charts-pie-chart
+        [results]="single"
+        [view]="[200, 200]"
+        [legend]="false"
+        [doughnut]="true"
+        [scheme]="colorScheme"
+        [arcWidth]="0.2">
+      </ngx-charts-pie-chart>
+      <div class="pie-chart-label">
+          <span class="pie-chart-label-value">103</span>
+          <span class="pie-chart-label-sub-value">1.200.000</span>
+      </div>
+    </div>
   </div>
   <div class="home-card grid-span-4">
       <div class="home-card-header d-flex justify-content-between">
@@ -423,7 +449,20 @@
       </div>
 
       <div class="home-card-body">
-        Grafico
+        <ngx-charts-line-chart
+          [view]="view"
+          [scheme]="colorScheme"
+          [legend]="legend"
+          [showXAxisLabel]="showXAxisLabel"
+          [showYAxisLabel]="showYAxisLabel"
+          [xAxis]="xAxis"
+          [yAxis]="yAxis"
+          [xAxisLabel]="xAxisLabel"
+          [yAxisLabel]="yAxisLabel"
+          [timeline]="timeline"
+          [results]="multi"
+          >
+        </ngx-charts-line-chart>
       </div>
   </div>
   <div class="home-card grid-span-1">
