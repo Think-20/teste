@@ -126,7 +126,7 @@
       <div class="col-md-3 p-0" *ngIf="isAddAttendance">
         <mat-form-field class="col-md-8">
           <mat-select placeholder="Atendimento2*" formControlName="attendance2" [compareWith]="compareAttendance">
-            <mat-option *ngFor="let attendance of attendances" [value]="attendance">
+            <mat-option *ngFor="let attendance of attendances" [value]="attendance.id">
               {{ attendance.name }}
             </mat-option>
           </mat-select>

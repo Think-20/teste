@@ -448,11 +448,19 @@ export class JobFormComponent implements OnInit {
       this.jobForm.controls.client.setValue(job.client)
     }
 
-    if (job.attendance2) {
+    if (job.comission) {
       this.addAttendance()
       this.jobForm.controls.attendance_percentage.setValue(job.attendance_percentage)
-      this.jobForm.controls.attendance_percentage2.setValue(job.attendance_percentage2)
-      this.jobForm.controls.attendance2.setValue(job.attendance2)
+      this.jobForm.controls.attendance_percentage2.setValue(job.comission.percentage)
+      this.jobForm.controls.attendance2.setValue(job.comission.attendance.id)
+
+      const event = {
+        target: {
+          value: job.comission.percentage,
+        }
+      }
+
+      this.validatePercentage(event, 'attendance_percentage2')
     } else {
       this.disableAttendancePercentage();
     }
@@ -725,7 +733,7 @@ export class JobFormComponent implements OnInit {
       })
       return;
     }
-
+    job = this.addComission(job);
     this.buttonEnable = false
 
     this.jobService.edit(job).subscribe(data => {
@@ -749,13 +757,34 @@ export class JobFormComponent implements OnInit {
     })
   }
 
+  addComission(job): Job {
+    if (!job.attendance2) {
+      return job;
+    }
+
+    const payload = {
+      ...job,
+        comission: {
+          attendance: {
+            id: job.attendance2
+          },
+          percentage: job.attendance_percentage2
+      }
+    }
+
+    delete payload.attendance2;
+    delete payload.attendance_percentage2;
+    delete payload.attendance_percentage;
+    return payload;
+  }
+
   addAttendance() {
     this.isAddAttendance = true;
     this.setAttendance2();
   }
 
  setAttendance2() {
-    this.jobForm.addControl('attendance2', this.formBuilder.control('',  [Validators.required]));
+    this.jobForm.addControl('attendance2', this.formBuilder.control(null,  [Validators.required]));
     this.jobForm.addControl('attendance_percentage2', this.formBuilder.control('',  [Validators.required]));
     this.jobForm.controls.attendance2.updateValueAndValidity();
     this.jobForm.controls.attendance_percentage2.updateValueAndValidity();
@@ -773,8 +802,14 @@ export class JobFormComponent implements OnInit {
 
     this.disableAttendancePercentage();
 
-    this.jobForm.controls.attendance2.updateValueAndValidity();
-    this.jobForm.controls.attendance_percentage2.updateValueAndValidity();
+    if (this.jobForm.controls.attendance2) {
+      this.jobForm.controls.attendance2.updateValueAndValidity();
+    }
+
+    if (this.jobForm.controls.attendance_percentage2) {
+      this.jobForm.controls.attendance_percentage2.updateValueAndValidity();
+    }
+   
     this.jobForm.controls.attendance_percentage.updateValueAndValidity();
   }
 
