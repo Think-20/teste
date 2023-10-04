@@ -1,7 +1,7 @@
 <div class="container-home">
   <div class="my-container">
     <h3 class="lead row">
-      <div class="col-md-8">
+      <div class="col-md-12">
         <div class="flex center">
           Home | Julio Cirelo 
           <button mat-button type="button" class="month-arrow">
@@ -48,7 +48,7 @@
                 Alertas:
             </div>
 
-            <div class="home-card-body">
+            <div class="home-card-body home-card-body-count">
                 <span class="home-card-count d-flex justify-content-end">01</span>
             </div>
         </div>
@@ -58,49 +58,49 @@
                 Memórias:
             </div>
 
-            <div class="home-card-body">
-                <span class="home-card-count d-flex justify-content-end">01</span>
+            <div class="home-card-body home-card-body-count">
+                <span class="home-card-count d-flex justify-content-end">07</span>
             </div>
         </div>
         <div class="home-card">
             <div class="home-card-body">
                 <div class="home-card-grid-2fr">
                     <div class="text-right d-flex flex-column">
-                      <span>45</span>
+                      <span class="home-card-size-18">45</span>
                       <span class="home-card-small-description">Tempo Médio de Aprovação (Dias): | Ref.: 38 Dias</span>
                     </div>
                     <div class="d-flex flex-column">
-                      <span>4.231.080</span>
+                      <span class="home-card-size-18">4.231.080</span>
                       <span class="home-card-small-description">Tendência Aprovação Anual: | Ref.: 4.200.000</span>
                     </div>
                 </div>
                 <div class="home-card-grid-2fr">
                     <div class="text-right d-flex flex-column">
-                      <span>07</span>
+                      <span class="home-card-size-18">07</span>
                       <span class="home-card-small-description">Intervalo Médio Aprovação (Dias): | Ref.: 13 Dias</span>
                     </div>
                     <div class="d-flex flex-column">
-                      <span>420.000</span>
+                      <span class="home-card-size-18">420.000</span>
                       <span class="home-card-small-description">Média aprovação Mês: | Ref.: 400.000</span>
                     </div>
                 </div>
                 <div class="home-card-grid-2fr">
                     <div class="text-right d-flex flex-column">
-                      <span>183.000</span>
+                      <span class="home-card-size-18">183.000</span>
                       <span class="home-card-small-description">Ticket Médio Aprovação | Ref.: 190.000</span>
                     </div>
                     <div class="d-flex flex-column">
-                      <span>183.000</span>
+                      <span class="home-card-size-18">183.000</span>
                       <span class="home-card-small-description">Ticket Médio Jobs: | Ref.: 170.000</span>
                     </div>
                 </div>
                 <div class="home-card-grid-2fr">
                     <div class="text-right d-flex flex-column">
-                      <span>453.000</span>
+                      <span class="home-card-size-18">453.000</span>
                       <span class="home-card-small-description">Maior Venda | Ref.: 5338.000</span>
                     </div>
                     <div class="d-flex flex-column">
-                      <span>Nestlé | Apas</span>
+                      <span class="home-card-size-18">Nestlé | Apas</span>
                       <span class="home-card-small-description">ùltimo Aprovado</span>
                     </div>
                 </div>
@@ -171,19 +171,19 @@
               <div class="home-card-grid-2fr">
                   <div class="text-right d-flex flex-column">
                       <div class="d-flex flex-column">
-                          <span>1 Quarter</span>
-                          <span>03</span>
-                          <span>2 Quarter</span>
-                          <span>01</span>
-                          <span>3 Quarter</span>
-                          <span>04</span>
-                          <span>4 Quarter</span>
-                          <span>02</span>
+                          <span class="home-card-small-1-description">1 Quarter</span>
+                          <span class="fw-500">03</span>
+                          <span class="home-card-small-1-description">2 Quarter</span>
+                          <span class="fw-500">01</span>
+                          <span class="home-card-small-1-description">3 Quarter</span>
+                          <span class="fw-500">04</span>
+                          <span class="home-card-small-1-description">4 Quarter</span>
+                          <span class="fw-500">02</span>
                       </div>
                   </div>
                   <div class="d-flex flex-column">
                     <div>
-                      <span class="d-flex">Últimos 12 meses</span>
+                      <span class="d-flex home-card-small-description">Últimos 12 meses</span>
                       <span class="home-card-count">01</span>
                     </div>
                   </div>
@@ -192,46 +192,48 @@
       </div>
   </div>
   <div class="home-grid-2">
-    <div class="home-card grid-row-2">
+    <div class="home-card grid-row-2 home-card-column-between">
         <div class="home-card-header d-flex justify-content-end">
             Jobs:
         </div>
         <div class="home-card-body">
             <div class="home-card-grafico">
-              <div class="chart-container">
-                <ngx-charts-pie-chart
-                  [results]="single"
-                  [view]="[200, 200]"
-                  [legend]="false"
-                  [doughnut]="true"
-                  [scheme]="colorScheme"
-                  [arcWidth]="0.2">
-                </ngx-charts-pie-chart>
-                <div class="pie-chart-label">
-                    <span class="pie-chart-label-value">103</span>
-                    <span class="pie-chart-label-sub-value">1.200.000</span>
-                </div>
+              <div id="chart">
+                <apx-chart
+                [series]="chartOptionsPieJobs.series"
+                [chart]="chartOptionsPieJobs.chart"
+                [labels]="chartOptionsPieJobs.labels"
+                [legend]="chartOptionsPieJobs.legend"
+                [dataLabels]="chartOptionsPieJobs.dataLabels"
+                [fill]="chartOptionsPieJobs.fill"
+                [states]="chartOptionsPieJobs.states"
+                [plotOptions]="chartOptionsPieJobs.plotOptions"
+                [stroke]="chartOptionsPieJobs.stroke"
+                [theme]="chartOptionsPieJobs.theme"
+                [responsive]="chartOptionsPieJobs.responsive"
+              ></apx-chart>
               </div>
+              
             </div>
         </div>
         <div class="home-card-footer d-flex justify-content-between">
             <div class="d-flex flex-column">
-                <span>1.200.000</span>
+                <span class="home-card-size-18">1.200.000</span>
                 <span>Meta Jobs</span>
             </div>
             <div class="d-flex flex-column">
-              <span>400.000</span>
+              <span class="home-card-size-18">400.000</span>
               <span>Meta Aprovação</span>
           </div>
         </div>
       </div>
-      <div class="home-card">
+      <div class="home-card home-card-column-between">
           <div class="home-card-header d-flex justify-content-end">
               <span>20% | Aprovados:</span>
           </div>
 
           <div class="home-card-body">
-              <span class="home-card-count d-flex justify-content-end">07</span>
+              <span class="c-aprovados home-card-count d-flex justify-content-end">07</span>
           </div>
 
           <div class="home-card-footer">
@@ -241,29 +243,28 @@
               </div>
           </div>
       </div>
-      <div class="home-card">
+      <div class="home-card home-card-column-between">
           <div class="home-card-header d-flex justify-content-end">
-              <span>10% | Avançados:</span>
+              <span >10% | Avançados:</span>
           </div>
 
           <div class="home-card-body">
-              <span class="home-card-count d-flex justify-content-end">12</span>
+              <span class="c-avancados home-card-count d-flex justify-content-end">12</span>
           </div>
 
           <div class="home-card-footer">
-            <div class="d-flex justify-content-between">
-                <mat-icon>keyboard_arrow_down</mat-icon>
+            <div class="d-flex justify-content-end">
                 <span>$ 2.000.000</span>
             </div>
         </div>
       </div>
-      <div class="home-card">
+      <div class="home-card home-card-column-between">
           <div class="home-card-header d-flex justify-content-end">
               <span>10% | Ajustes:</span>
           </div>
 
           <div class="home-card-body">
-              <span class="home-card-count d-flex justify-content-end">23</span>
+              <span class="c-ajustes home-card-count d-flex justify-content-end">23</span>
           </div>
 
           <div class="home-card-footer">
@@ -272,13 +273,13 @@
               </div>
           </div>
       </div>
-      <div class="home-card">
+      <div class="home-card home-card-column-between">
           <div class="home-card-header d-flex justify-content-end">
               <span>30% | Stand-by</span>
           </div>
 
           <div class="home-card-body">
-              <span class="home-card-count d-flex justify-content-end">54</span>
+              <span class="c-stand-by home-card-count d-flex justify-content-end">54</span>
           </div>
 
           <div class="home-card-footer">
@@ -288,13 +289,13 @@
               </div>
           </div>
       </div>
-      <div class="home-card">
+      <div class="home-card home-card-column-between">
         <div class="home-card-header d-flex justify-content-end">
             <span>40% | Reprovados</span>
         </div>
 
         <div class="home-card-body">
-            <span class="home-card-count d-flex justify-content-end">73</span>
+            <span class="c-reprovados home-card-count d-flex justify-content-end">73</span>
         </div>
 
         <div class="home-card-footer">
@@ -304,7 +305,7 @@
             </div>
         </div>
     </div>
-    <div class="home-card grid-span-2">
+    <div class="home-card grid-span-2 home-card-column-between">
       <div class="home-card-header d-flex justify-content-end">
           <span>Metas:</span>
       </div>
@@ -364,7 +365,7 @@
           </div>
       </div>
     </div>
-    <div class="home-card grid-span-2">
+    <div class="home-card grid-span-2 home-card-column-between">
       <div class="home-card-header d-flex justify-content-between">
           <span>04</span>
           <span>Em Produção:</span>
@@ -405,7 +406,7 @@
           </div>
       </div>
     </div>
-    <div class="home-card">
+    <div class="home-card home-card-column-between">
       <div class="home-card-header d-flex justify-content-between">
           <mat-icon>add</mat-icon>
           DeadLine:
@@ -422,24 +423,25 @@
     </div>
   </div>
   <div class="home-card">
-    <div class="chart-container">
-      <ngx-charts-pie-chart
-        [results]="single"
-        [view]="[200, 200]"
-        [legend]="false"
-        [doughnut]="true"
-        [scheme]="colorScheme"
-        [arcWidth]="0.2">
-      </ngx-charts-pie-chart>
-      <div class="pie-chart-label">
-          <span class="pie-chart-label-value">103</span>
-          <span class="pie-chart-label-sub-value">1.200.000</span>
-      </div>
+    <div id="chart">
+      <apx-chart
+            [series]="chartOptionsPie.series"
+            [chart]="chartOptionsPie.chart"
+            [labels]="chartOptionsPie.labels"
+            [dataLabels]="chartOptionsPie.dataLabels"
+            [fill]="chartOptionsPie.fill"
+            [legend]="chartOptionsPie.legend"
+            [states]="chartOptionsPie.states"
+            [plotOptions]="chartOptionsPie.plotOptions"
+            [stroke]="chartOptionsPie.stroke"
+            [theme]="chartOptionsPie.theme"
+            [responsive]="chartOptionsPie.responsive"
+          ></apx-chart>
     </div>
   </div>
   <div class="home-card grid-span-4">
       <div class="home-card-header d-flex justify-content-between">
-        <div>
+        <div class="d-flex">
             Tendência
             <mat-icon>keyboard_arrow_down</mat-icon>
         </div>
@@ -449,20 +451,20 @@
       </div>
 
       <div class="home-card-body">
-        <ngx-charts-line-chart
-          [view]="view"
-          [scheme]="colorScheme"
-          [legend]="legend"
-          [showXAxisLabel]="showXAxisLabel"
-          [showYAxisLabel]="showYAxisLabel"
-          [xAxis]="xAxis"
-          [yAxis]="yAxis"
-          [xAxisLabel]="xAxisLabel"
-          [yAxisLabel]="yAxisLabel"
-          [timeline]="timeline"
-          [results]="multi"
-          >
-        </ngx-charts-line-chart>
+        <div id="chart">
+          <apx-chart
+          [series]="chartOptions.series"
+          [chart]="chartOptions.chart"
+          [xaxis]="chartOptions.xaxis"
+          [yaxis]="chartOptions.yaxis"
+          [colors]="chartOptions.colors"
+          [dataLabels]="chartOptions.dataLabels"
+          [grid]="chartOptions.grid"
+          [stroke]="chartOptions.stroke"
+          [title]="chartOptions.title"
+        ></apx-chart>
+        </div>
+        
       </div>
   </div>
   <div class="home-card grid-span-1">

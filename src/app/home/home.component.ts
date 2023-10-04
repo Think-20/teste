@@ -1,142 +1,232 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MONTHS, Month } from 'app/shared/date/months';
 import { HomeService } from './home.service';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { HomeData } from './models/home-data.model';
 import { HomeInfo } from './models/home-info.model';
+import { ChartPreviewComponent } from './components/chart-preview.component';
 
+import {
+  ApexNonAxisChartSeries,
+  ApexResponsive,
+  ApexChart,
+  ApexDataLabels,
+  ApexLegend,
+  ApexStroke,
+  ApexPlotOptions,
+  ApexStates,
+  ApexTheme,
+  ApexTitleSubtitle
+} from "ng-apexcharts";
+
+export type ChartOptions = {
+  series: ApexNonAxisChartSeries;
+  chart: ApexChart;
+  responsive: ApexResponsive[];
+  labels: any;
+  fill: any;
+  stroke: ApexStroke;
+  states: ApexStates;
+  legend: ApexLegend;
+  title: ApexTitleSubtitle;
+  theme: ApexTheme;
+  plotOptions: ApexPlotOptions;
+  dataLabels: ApexDataLabels;
+  colors: any;
+};
 @Component({
   selector: 'cb-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  multi = [
-    {
-      "name": "France",
-      "series": [
-        {
-          "name": "Janeiro",
-          "value": 1000
-        },
-        {
-          "name": "Fervereiro",
-          "value": 1500
-        },
-        {
-          "name": "Março",
-          "value": 900
-        },
-        {
-          "name": "Abril",
-          "value": 920
-        },
-        {
-          "name": "Maio",
-          "value": 913
-        },
-        {
-          "name": "Junho",
-          "value": 2000
-        },
-        {
-          "name": "Julho",
-          "value": 1500
-        },
-        {
-          "name": "Agosto",
-          "value": 1700
-        },
-      ]
+  chartOptions = {
+    series: [
+      {
+        name: "High - 2013",
+        data: [28, 29, 33, 30, 45, 68, 68, 43, 42, 55, 33, 33],
+      },
+      {
+        name: "Low - 2013",
+        data: [12, 20, 25, 60, 32, 20, 10, 50, 25, 33, 33, 33]
+      }
+    ],
+    chart: {
+      height: 150,
+      type: "line",
+      toolbar: {
+        show: false
+      }
     },
-    {
-      "name": "UK",
-      "series": [
-        {
-          "name": "Janeiro",
-          "value": 500
+    grid: {
+      borderColor: "#fff", // Cor das bordas da grade
+      position: "back", // Coloca a grade atrás do gráfico
+      xaxis: {
+        lines: {
+          show: true,
         },
-        {
-          "name": "Fervereiro",
-          "value": 600
+      },
+      yaxis: {
+        lines: {
+          show: true,
         },
-        {
-          "name": "Março",
-          "value": 700
-        },
-        {
-          "name": "Abril",
-          "value": 800
-        },
-        {
-          "name": "Maio",
-          "value": 500
-        },
-        {
-          "name": "Junho",
-          "value": 250
-        },
-        {
-          "name": "Julho",
-          "value": 1500
-        },
-        {
-          "name": "Agosto",
-          "value": 1000
-        },
-      ]
+      },
+    },
+    colors: ["#77B6EA", "#545454"],
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: "straight",
+      width: [2, 4]
+    },
+    markers: {
+      size: 1
+    },
+    xaxis: {
+      categories: ["Jan 23", "Fev 23", "Mar 23", "Abr 23", "Mai 23", "Jun 23", "Jul 23", "Ago 23", "Set 23", "Out 23", "Nov 23", "Dez 23"],
+    },
+    yaxis: {
+      show: false,
+    },
+    legend: {
+      show: false
     }
-  ];
-  
-  view: any[] = [700, 300];
+  };
 
-  // options
-  legend: boolean = false;
-  showLabels: boolean = true;
-  animations: boolean = true;
-  xAxis: boolean = true;
-  yAxis: boolean = true;
-  showYAxisLabel: boolean = true;
-  showXAxisLabel: boolean = true;
-  xAxisLabel: string = 'Year';
-  yAxisLabel: string = 'Population';
-  timeline: boolean = true;
-
-
-  single = [
-    {
-      name: 'Categoria A',
-      value: 25,
-      color: '#000', // Cor personalizada para esta fatia
+  chartOptionsPieJobs: Partial<ChartOptions> = {
+    series: [20, 10, 10, 30, 40],
+    chart: {
+      width: 270,
+      type: "donut",
     },
-    {
-      name: 'Categoria B',
-      value: 10,
-      color: '#000', // Cor personalizada para esta fatia
+    stroke: {
+      width: 0, 
     },
-    {
-      name: 'Categoria C',
-      value: 25,
-      color: '#000', // Cor personalizada para esta fatia
+    legend: {
+      show: false
     },
-    {
-      name: 'Categoria D',
-      value: 35,
-      color: '#000', // Cor personalizada para esta fatia
+    plotOptions: {
+      pie: {
+        donut: {
+          size: "80%",
+          labels: {
+            show: true,
+            total: {
+              showAlways: true,
+              show: true,
+              fontSize: "80px",
+              fontFamily: "-apple-system,BlinkMacSystemFont, Segoe UI ,Roboto, Helvetica Neue,Arial,sans-serif",
+              color: "#57585a",
+              fontWeight: "300",
+              formatter: (a) => "1.200.000",
+              label: '103'
+            },
+            value: {
+              fontFamily: "-apple-system,BlinkMacSystemFont, Segoe UI ,Roboto, Helvetica Neue,Arial,sans-serif",
+              color: "#57585a",
+              fontWeight: "100",
+              fontSize: "20px",
+              offsetY: 25,
+            },
+            name : {
+              offsetY: 10
+            }
+          }
+        }
+      }
     },
-  ];
+    labels: ["Aprovados", "Avançados", "Ajustes", "Stand-By", 'Reprovados'],
+    dataLabels: {
+      enabled: false
+    },
+    colors: ["#adca5f", "#e82489", "#4fa2b1", "#00abeb", "#ffcd37"],
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200
+          },
+          legend: {
+            position: "bottom"
+          }
+        }
+      }
+    ]
+  };
 
+  chartOptionsPie: Partial<ChartOptions> = {
+    series: [44, 55, 41, 17],
+    chart: {
+      width: 270,
+      type: "donut",
+    },
+    stroke: {
+      width: 0
+    },
+    legend: {
+      position: "left",
+      markers: {
+        radius: 0,
+        height: 10,
 
-  calculateTextPosition(d, radius): string {
-    const angle = (d.startAngle + d.endAngle) / 2;
-    const x = radius * Math.cos(angle);
-    const y = radius * Math.sin(angle);
-    return `${x},${y}`;
-  }
+      }
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: "80%",
+          labels: {
+            show: true,
+            total: {
+              showAlways: true,
+              show: true,
+              fontSize: "50px",
+              fontFamily: "-apple-system,BlinkMacSystemFont, Segoe UI ,Roboto, Helvetica Neue,Arial,sans-serif",
+              color: "#57585a",
+              fontWeight: "300",
+              formatter: (a) => "1.200.000",
+              label: '103'
+            },
+            value: {
+              fontFamily: "-apple-system,BlinkMacSystemFont, Segoe UI ,Roboto, Helvetica Neue,Arial,sans-serif",
+              color: "#57585a",
+              fontWeight: "100",
+              fontSize: "15px",
+              offsetY: 15,
+            },
+            name : {
+              offsetY: 10
+            }
+          }
+        }
+      }
+    },
+    labels: ["Cenografia", "Stand", "PDV", "Showrooms", 'Outsiders'],
+    colors: ["#adca5f", "#e82489", "#4fa2b1", "#00abeb", "#ffcd37"],
+    dataLabels: {
+      enabled: false
+    },
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 200
+          },
+          legend: {
+            position: "bottom"
+          }
+        }
+      }
+    ]
+  };
+
   searchForm: FormGroup;
   formCopy: any;
   dataInfo: HomeInfo;
@@ -155,15 +245,14 @@ export class HomeComponent implements OnInit {
   months: Month[] = MONTHS
   nextMonthName: string = '';
   nextYear: number = 0;
-  colorScheme = {
-    domain: ['#a9ce49', '#e92086', '#ffcc3d', '#00aaed']
-  };
+ 
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private datePipe: DatePipe,
     private route: ActivatedRoute,
-    private homeService: HomeService
+    private homeService: HomeService,
+    public dialog: MatDialog
     ) { }
 
   ngOnInit() {
@@ -171,7 +260,7 @@ export class HomeComponent implements OnInit {
     this.setYears();
     this.loadInitialData();
   }
-
+  
   createForm() {
     this.searchForm = this.fb.group({
       date_init: this.fb.control(''),
@@ -364,5 +453,9 @@ export class HomeComponent implements OnInit {
 
     this.nextMonth = MONTHS.find(month => month.id == (dateEnd.getMonth() + 1));
     this.nextYear = dateEnd.getFullYear();
+  }
+
+  openChartDetails() {
+    const dialogRef = this.dialog.open(ChartPreviewComponent);
   }
 }
