@@ -823,7 +823,7 @@ export class JobFormComponent implements OnInit {
     let numericValue = parseFloat(inputValue);
 
     if (isNaN(numericValue)) {
-      numericValue = 0; // Define um valor padrão se a entrada não for um número válido.
+      numericValue = 0;
     }
 
     if (numericValue < 0) {
