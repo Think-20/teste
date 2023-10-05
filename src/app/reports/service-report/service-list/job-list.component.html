@@ -217,7 +217,7 @@
                   {{ jobService.showId(job) }}
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-service">
-                  {{ job.attendance.name }}
+                  <span class="d-block" *ngFor="let name of job.attendance.name.split('/')">{{ name }}</span>
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-budget">
                   Pamela
