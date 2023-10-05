@@ -448,15 +448,15 @@ export class JobFormComponent implements OnInit {
       this.jobForm.controls.client.setValue(job.client)
     }
 
-    if (job.comission) {
+    if (job.attendance_comission_id) {
       this.addAttendance()
       this.jobForm.controls.attendance_percentage.setValue(job.attendance_percentage)
-      this.jobForm.controls.attendance_percentage2.setValue(job.comission.percentage)
-      this.jobForm.controls.attendance2.setValue(job.comission.attendance.id)
+      this.jobForm.controls.attendance_percentage2.setValue(job.comission_percentage)
+      this.jobForm.controls.attendance2.setValue(job.attendance_comission_id)
 
       const event = {
         target: {
-          value: job.comission.percentage,
+          value: job.comission_percentage,
         }
       }
 
@@ -759,7 +759,15 @@ export class JobFormComponent implements OnInit {
 
   addComission(job): Job {
     if (!job.attendance2) {
-      return job;
+      return {
+        ...job,
+        comission: {
+            attendance: {
+              id: null
+            },
+            percentage: null
+        }
+      };
     }
 
     const payload = {
