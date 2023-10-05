@@ -17,6 +17,7 @@
 }
 
 .home-grid {
+    /* grid-template-columns: minmax(120px, 0.5fr) repeat(auto-fit, minmax(120px, 5fr)) minmax(120px, 0.5fr); */
     display: grid;
     grid-template-columns: 0.5fr 0.5fr 1fr 1fr 0.5fr;
     grid-gap: 1rem;
