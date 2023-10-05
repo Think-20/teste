@@ -15,6 +15,8 @@
 .mat-column-service {
   width: 6.25%;
   font-size: 11px;
+  word-wrap: break-word;
+  hyphens: auto;
 }
 
 .mat-column-budget {

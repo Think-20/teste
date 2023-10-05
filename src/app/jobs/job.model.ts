@@ -81,6 +81,8 @@ export class Job {
     attendance2?: number
     attendance_percentage?: string
     attendance_percentage2?: string
+    attendance_comission_id?: number;
+    comission_percentage?: number;
     comission?: {
         attendance: { id: number },
         percentage: number;

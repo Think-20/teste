@@ -223,7 +223,7 @@ export class JobFormComponent implements OnInit {
       this.job_types = data.job_types
       this.status = data.status
 
-      this.attendances = data.attendances
+      this.attendances = data.attendances;
       this.employees = data.employees
       this.competitions = data.competitions
       this.main_expectations = data.main_expectations
@@ -586,6 +586,10 @@ export class JobFormComponent implements OnInit {
     return var1.id === var2.id
   }
 
+  compareAttendance2(var1: Employee, var2: Employee) {
+    return var1 === var2
+  }
+
   compareCompetition(var1: JobCompetition, var2: JobCompetition) {
     return var1.id === var2.id
   }
@@ -845,6 +849,41 @@ export class JobFormComponent implements OnInit {
     const otherControlName = prop === 'attendance_percentage' ? 'attendance_percentage2' : 'attendance_percentage';
     const otherNumericValue = 100 - numericValue;
     this.jobForm.get(otherControlName).setValue(otherNumericValue);
+  }
+
+  
+  getAttendancesWihoutAttendance1() {
+    const attendance: Employee = this.jobForm.controls.attendance.value;
+
+    if (!attendance) {
+      return this.attendances;
+    }
+
+    const attendanceId = attendance.id;
+
+    if (!attendanceId) {
+      return this.attendances;
+    }
+
+    return this.attendances.filter(x => x.id !== attendanceId);
+  }
+
+  getAttendancesWihoutAttendance2() {
+    if (this.typeForm != 'edit'){ 
+      return this.attendances;
+    }
+
+    if (!this.jobForm.controls.attendance2) {
+      return this.attendances;
+    }
+
+    const attendanceId: number = this.jobForm.controls.attendance2.value;
+
+    if (!attendanceId) {
+      return this.attendances;
+    }
+
+    return this.attendances.filter(x => x.id !== attendanceId);
   }
 }
 
