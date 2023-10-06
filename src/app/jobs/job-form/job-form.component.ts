@@ -65,6 +65,7 @@ export class JobFormComponent implements OnInit {
   jobForm: FormGroup
   isAdmin: boolean = false
   buttonEnable: boolean = true
+  isAddAttendance = false;
 
   constructor(
     private clientService: ClientService,
@@ -115,6 +116,7 @@ export class JobFormComponent implements OnInit {
       job_type: this.formBuilder.control('', [Validators.required]),
       agency: this.formBuilder.control('', [ObjectValidator]),
       attendance: this.formBuilder.control('', [Validators.required]),
+      attendance_percentage: this.formBuilder.control(100, [Validators.required]),
       rate: this.formBuilder.control(''),
       stand: this.formBuilder.group({}),
       levels: this.formBuilder.control('', [Validators.required]),
@@ -221,7 +223,7 @@ export class JobFormComponent implements OnInit {
       this.job_types = data.job_types
       this.status = data.status
 
-      this.attendances = data.attendances
+      this.attendances = data.attendances;
       this.employees = data.employees
       this.competitions = data.competitions
       this.main_expectations = data.main_expectations
@@ -251,6 +253,8 @@ export class JobFormComponent implements OnInit {
         this.jobForm.get('status').setValue(this.status.filter((status) => {
           return status.description == 'Stand-by'
         }).pop())
+
+        this.disableAttendancePercentage();
       }
 
       snackBarStateCharging.dismiss()
@@ -416,7 +420,7 @@ export class JobFormComponent implements OnInit {
   loadJobById(jobId) {
     let snackBar = this.snackBar.open('Carregando job...')
     this.jobService.job(jobId).subscribe(job => {
-      this.job = job
+      this.job = job;
       this.jobEmitter.emit(job)
       this.loadJobInForm(job)
       snackBar.dismiss()
@@ -444,8 +448,26 @@ export class JobFormComponent implements OnInit {
       this.jobForm.controls.client.setValue(job.client)
     }
 
+    if (job.attendance_comission_id) {
+      this.addAttendance()
+      this.jobForm.controls.attendance_percentage.setValue(job.attendance_percentage)
+      this.jobForm.controls.attendance_percentage2.setValue(job.comission_percentage)
+      this.jobForm.controls.attendance2.setValue(job.attendance_comission_id)
+
+      const event = {
+        target: {
+          value: job.comission_percentage,
+        }
+      }
+
+      this.validatePercentage(event, 'attendance_percentage2')
+    } else {
+      this.disableAttendancePercentage();
+    }
+
     this.jobForm.controls.rate.setValue(job.rate)
     this.jobForm.controls.attendance.setValue(job.attendance)
+  
     this.jobForm.controls.last_provider.setValue(job.last_provider)
     this.jobForm.controls.levels.setValue(job.levels)
     this.jobForm.controls.main_expectation.setValue(job.main_expectation)
@@ -453,6 +475,7 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.competition.setValue(job.competition)
     this.jobForm.controls.budget_value.setValue(job.budget_value)
 
+    
     if( ! this.isAdmin)
     this.jobForm.controls.budget_value.disable()
 
@@ -562,6 +585,10 @@ export class JobFormComponent implements OnInit {
 
   compareAttendance(var1: Employee, var2: Employee) {
     return var1.id === var2.id
+  }
+
+  compareAttendance2(var1: Employee, var2: Employee) {
+    return var1 === var2
   }
 
   compareCompetition(var1: JobCompetition, var2: JobCompetition) {
@@ -711,7 +738,7 @@ export class JobFormComponent implements OnInit {
       })
       return;
     }
-
+    job = this.addComission(job);
     this.buttonEnable = false
 
     this.jobService.edit(job).subscribe(data => {
@@ -733,6 +760,131 @@ export class JobFormComponent implements OnInit {
 
       this.buttonEnable = true
     })
+  }
+
+  addComission(job): Job {
+    if (!job.attendance2) {
+      return {
+        ...job,
+        comission: {
+            attendance: {
+              id: null
+            },
+            percentage: null
+        }
+      };
+    }
+
+    const payload = {
+      ...job,
+        comission: {
+          attendance: {
+            id: job.attendance2
+          },
+          percentage: job.attendance_percentage2
+      }
+    }
+
+    delete payload.attendance2;
+    delete payload.attendance_percentage2;
+    delete payload.attendance_percentage;
+    return payload;
+  }
+
+  addAttendance() {
+    this.isAddAttendance = true;
+    this.setAttendance2();
+  }
+
+ setAttendance2() {
+    this.jobForm.addControl('attendance2', this.formBuilder.control(null,  [Validators.required]));
+    this.jobForm.addControl('attendance_percentage2', this.formBuilder.control('',  [Validators.required]));
+    this.jobForm.controls.attendance2.updateValueAndValidity();
+    this.jobForm.controls.attendance_percentage2.updateValueAndValidity();
+    this.jobForm.controls.attendance_percentage.enable();
+
+    if (this.typeForm === 'show') {
+      this.jobForm.disable();
+    }
+  }
+
+  removeAttendance() {
+    this.isAddAttendance = false;
+    this.jobForm.removeControl('attendance2');
+    this.jobForm.removeControl('attendance_percentage2');
+
+    this.disableAttendancePercentage();
+
+    if (this.jobForm.controls.attendance2) {
+      this.jobForm.controls.attendance2.updateValueAndValidity();
+    }
+
+    if (this.jobForm.controls.attendance_percentage2) {
+      this.jobForm.controls.attendance_percentage2.updateValueAndValidity();
+    }
+   
+    this.jobForm.controls.attendance_percentage.updateValueAndValidity();
+  }
+
+  disableAttendancePercentage() {
+    this.jobForm.controls.attendance_percentage.setValue(100);
+    this.jobForm.controls.attendance_percentage.disable();
+  }
+
+  validatePercentage(event: any, prop: string) {
+    const inputValue = event.target.value;
+    let numericValue = parseFloat(inputValue);
+
+    if (isNaN(numericValue)) {
+      numericValue = 0;
+    }
+
+    if (numericValue < 0) {
+      numericValue = 0;
+    } else if (numericValue > 100) {
+      numericValue = 100;
+    }
+
+    this.jobForm.get(prop).setValue(numericValue);
+
+    const otherControlName = prop === 'attendance_percentage' ? 'attendance_percentage2' : 'attendance_percentage';
+    const otherNumericValue = 100 - numericValue;
+    this.jobForm.get(otherControlName).setValue(otherNumericValue);
+  }
+
+  
+  getAttendancesWihoutAttendance1() {
+    const attendance: Employee = this.jobForm.controls.attendance.value;
+
+    if (!attendance) {
+      return this.attendances;
+    }
+
+    const attendanceId = attendance.id;
+
+    if (!attendanceId) {
+      return this.attendances;
+    }
+
+    return this.attendances.filter(x => x.id !== attendanceId);
+  }
+
+  getAttendancesWihoutAttendance2() {
+    if (this.typeForm != 'edit'){ 
+      return this.attendances;
+    }
+
+    if (!this.jobForm.controls.attendance2) {
+      return this.attendances;
+    }
+
+    const attendanceId: number = this.jobForm.controls.attendance2.value;
+
+    if (!attendanceId) {
+      return this.attendances;
+    }
+
+    return this.attendances.filter(x => x.id !== attendanceId);
   }
 }
 

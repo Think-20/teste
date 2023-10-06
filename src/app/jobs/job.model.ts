@@ -78,4 +78,13 @@ export class Job {
     gross_profit_value?: string
     profit_value?: string
     final_value?: string
+    attendance2?: number
+    attendance_percentage?: string
+    attendance_percentage2?: string
+    attendance_comission_id?: number;
+    comission_percentage?: number;
+    comission?: {
+        attendance: { id: number },
+        percentage: number;
+    }
 }
