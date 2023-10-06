@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -44,6 +44,9 @@ export type ChartOptions = {
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
+  layoutGrid = "grid-layout-1";
+  layoutGrid2 = "grid-2-layout-1";
+
   chartOptions = {
     series: [
       {
@@ -252,7 +255,8 @@ export class HomeComponent implements OnInit {
     private datePipe: DatePipe,
     private route: ActivatedRoute,
     private homeService: HomeService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private renderer: Renderer2, private el: ElementRef
     ) { }
 
   ngOnInit() {
@@ -458,4 +462,64 @@ export class HomeComponent implements OnInit {
   openChartDetails() {
     const dialogRef = this.dialog.open(ChartPreviewComponent);
   }
-}
+
+  selectGridLayout(l1: string, l2: string) {
+    this.layoutGrid = l1;
+    this.layoutGrid2 = l2;
+  }
+
+  private scaleFactor = 1;
+
+  increaseFontSize(): void {
+    const element = this.el.nativeElement;
+    const {fontSizeBase8, fontSizeBase10, fontSizeBase12, fontSizeBase14, fontSizeBase16, fontSizeBase18, fontSizeBase65, fontSizeBase90 } = this.getPropertyValue();
+
+    element.style.setProperty('--font-size-base-8', fontSizeBase8 + 0.1 + 'px');
+    element.style.setProperty('--font-size-base-10', fontSizeBase10 + 0.2 + 'px');
+    element.style.setProperty('--font-size-base-12', fontSizeBase12 + 0.5 + 'px');
+    element.style.setProperty('--font-size-base-14', fontSizeBase14 + 1 + 'px');
+    element.style.setProperty('--font-size-base-16', fontSizeBase16 + 1 + 'px');
+    element.style.setProperty('--font-size-base-18', fontSizeBase18 + 1 + 'px');
+    element.style.setProperty('--font-size-base-65', fontSizeBase65 + 1 + 'px');
+    element.style.setProperty('--font-size-base-90', fontSizeBase90 + 2 + 'px');
+  }
+  
+  decreaseFontSize(): void {
+    const element = this.el.nativeElement;
+    const {fontSizeBase8, fontSizeBase10, fontSizeBase12, fontSizeBase14, fontSizeBase16, fontSizeBase18, fontSizeBase65, fontSizeBase90 } = this.getPropertyValue();
+
+    element.style.setProperty('--font-size-base-8', fontSizeBase8 - 0.1 + 'px');
+    element.style.setProperty('--font-size-base-10', fontSizeBase10 - 0.2 + 'px');
+    element.style.setProperty('--font-size-base-12', fontSizeBase12 - 0.5 + 'px');
+    element.style.setProperty('--font-size-base-14', fontSizeBase14 - 1 + 'px');
+    element.style.setProperty('--font-size-base-16', fontSizeBase16 - 1 + 'px');
+    element.style.setProperty('--font-size-base-18', fontSizeBase18 - 1 + 'px');
+    element.style.setProperty('--font-size-base-65', fontSizeBase65 - 1.5 + 'px');
+    element.style.setProperty('--font-size-base-90', fontSizeBase90 - 2 + 'px');
+  }
+
+
+  getPropertyValue() {
+    const element = this.el.nativeElement;
+
+    const fontSizeBase8 = parseFloat(window.getComputedStyle(element).getPropertyValue('--fot-size-base-8'));
+    const fontSizeBase10 = parseFloat(window.getComputedStyle(element).getPropertyValue('--font-size-base-10'));
+    const fontSizeBase12 = parseFloat(window.getComputedStyle(element).getPropertyValue('--font-size-base-12'));
+    const fontSizeBase14 = parseFloat(window.getComputedStyle(element).getPropertyValue('--font-size-base-14'));
+    const fontSizeBase16 = parseFloat(window.getComputedStyle(element).getPropertyValue('--font-size-base-16'));
+    const fontSizeBase18 = parseFloat(window.getComputedStyle(element).getPropertyValue('--font-size-base-18'));
+    const fontSizeBase65 = parseFloat(window.getComputedStyle(element).getPropertyValue('--font-size-base-65'));
+    const fontSizeBase90 = parseFloat(window.getComputedStyle(element).getPropertyValue('--font-size-base-90'));
+
+    return {
+      fontSizeBase8,
+      fontSizeBase10,
+      fontSizeBase12,
+      fontSizeBase14,
+      fontSizeBase16,
+      fontSizeBase18,
+      fontSizeBase65,
+      fontSizeBase90,
+    }
+  }
+} 
