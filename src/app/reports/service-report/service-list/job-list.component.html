@@ -217,7 +217,10 @@
                   {{ jobService.showId(job) }}
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-service">
-                  <span class="d-block" *ngFor="let name of job.attendance.name.split('/')">{{ name }}</span>
+                  <div *ngIf="job.specialAttendance">
+                      <span class="d-block" *ngFor="let name of job.specialAttendance.split('/')">{{ name }}</span>
+                  </div>
+                  <div *ngIf="!job.specialAttendance">{{ job.attendance.name }}</div>
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-budget">
                   Pamela
@@ -243,10 +246,11 @@
                   {{ job.job_type.description }}
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-value">
-                  {{ job.budget_value | number: '1.2' }} <br />
+                  {{ job.specialBudget ? (job.specialBudget | number: '1.2') : (job.budget_value | number: '1.2') }} <br />
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-budgeted">
-                  {{ job.lastValue ? (job.lastValue | number: '1.2') : '-' }} <br />
+                    <span *ngIf="specialFinalValue">{{ specialFinalValue }}</span>
+                    <span *ngIf="!specialFinalValue">{{ job.lastValue ? (job.lastValue | number: '1.2') : '-' }}<br /></span>
                   {{ '-' }}
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-status">
