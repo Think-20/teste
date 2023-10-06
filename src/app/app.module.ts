@@ -212,6 +212,9 @@ import { MemoriesService } from './memories/memories.service';
 import { FormatMaskDirective } from './shared/directives/format-mask.directive';
 import { JobEventsService } from './job-events/job-events.service';
 import { SpecificationFormComponent } from './specification/specification-form/specification-form.component';
+import { HomeService } from './home/home.service';
+import { NgApexchartsModule } from "ng-apexcharts";
+import { ChartPreviewComponent } from './home/components/chart-preview.component';
 
 registerLocaleData(localePt);
 
@@ -324,13 +327,14 @@ registerLocaleData(localePt);
     DataFieldComponent,
     UpdatedInfoComponent,
     ScheduleDateComponent,
-
     ServiceReportComponent,
     DecimalPipe,
 
     AlertsContainerComponent,
     MemoriesContainerComponent,
-    FormatMaskDirective
+    FormatMaskDirective,
+    ChartPreviewComponent,
+
   ],
   imports: [
     CurrencyMaskModule,
@@ -374,6 +378,7 @@ registerLocaleData(localePt);
     MatProgressBarModule,
     MatCheckboxModule,
     CommonModule,
+    NgApexchartsModule
   ],
   providers: [
     ClientService,
@@ -427,6 +432,7 @@ registerLocaleData(localePt);
     ListDataService,
     ReportService,
     JobEventsService,
+    HomeService,
 
     MatDialog,
     MatSnackBar,
@@ -452,6 +458,7 @@ registerLocaleData(localePt);
     BlockDialogComponent,
     MessageLoadingComponent,
     UpdatedInfoComponent,
+    ChartPreviewComponent,
   ]
 })
 export class AppModule { }
