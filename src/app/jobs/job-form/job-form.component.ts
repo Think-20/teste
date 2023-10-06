@@ -475,6 +475,7 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.competition.setValue(job.competition)
     this.jobForm.controls.budget_value.setValue(job.budget_value)
 
+    
     if( ! this.isAdmin)
     this.jobForm.controls.budget_value.disable()
 
