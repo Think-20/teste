@@ -566,7 +566,7 @@ export class ScheduleComponent implements OnInit {
     if(this.searching) return;
 
     this.searching = true
-    let snackBar = this.snackBar.open('Carregando tarefas...')
+    let snackBar = this.snackBar.open('Carregando agenda...')
 
     this.items = []
     this.chrono = []

@@ -35,6 +35,7 @@ export class BudgetFormComponent implements OnInit {
   expandedIndex: number = null
   budgetForms: FormGroup[] = [];
   taskId;
+  backscreen: string;
 
   constructor(
     /* private budgetService: BudgetService,
@@ -49,12 +50,14 @@ export class BudgetFormComponent implements OnInit {
     public taskService: TaskService,
     
     private route: ActivatedRoute,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       const taskId = params['taskId'];
       this.taskId = taskId
+      this.backscreen = params['backscreen'];
     });
 
     this.sortTasks();
@@ -176,6 +179,10 @@ export class BudgetFormComponent implements OnInit {
       this.snackBar.open(data.message, '', {
         duration: data.status ? 1000 : 5000
       })
+
+      if (this.backscreen === 'agenda') {
+        this.router.navigate(['schedule'])
+      } 
     })
   }
 

@@ -16,7 +16,7 @@
         mat-menu-item>
         <mat-icon>mode_edit</mat-icon> Editar agendamento
       </a>
-      <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/edit', task.job.id]" [queryParams]="{ taskId: item.task.id }"
+      <a [disabled]="!permissionVerify('edit', task.job)" *ngIf="task.job.id != undefined" [routerLink]="['/jobs/edit', task.job.id]" [queryParams]="{ taskId: item.task.id, backscreen: 'agenda' }"
         mat-menu-item>
         <mat-icon>mode_edit</mat-icon> Editar job
       </a>

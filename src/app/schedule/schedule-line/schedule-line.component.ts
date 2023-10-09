@@ -57,7 +57,7 @@ export class ScheduleLineComponent implements OnInit {
     }
 
     if(this.permissionVerify('edit', job)) {
-      this.router.navigate([`/jobs/edit/${job.id}`], {queryParams: { taskId: item.task.id }})
+      this.router.navigate([`/jobs/edit/${job.id}`], {queryParams: { taskId: item.task.id, backscreen: 'agenda' }})
     } else if(this.permissionVerify('show', job)) {
       this.router.navigateByUrl('/jobs/show/' + job.id)
     }
