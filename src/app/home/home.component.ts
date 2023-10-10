@@ -416,7 +416,7 @@ export class HomeComponent implements OnInit {
     }
 
     this.searching = true;
-    let snackBar = this.snackBar.open('Carregando jobs...');
+    let snackBar = this.snackBar.open('Carregando...');
     this.homeService.home(params)
     .subscribe(dataInfo => {
       if (configureDates && !hasDateFilter) {
