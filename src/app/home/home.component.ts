@@ -8,7 +8,7 @@ import { HomeService } from './home.service';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 import { HomeData } from './models/home-data.model';
 import { HomeInfo } from './models/home-info.model';
-import { ChartPreviewComponent } from './components/chart-preview.component';
+import { ChartPreviewComponent, EChartType } from './components/chart-preview.component';
 
 import {
   ApexNonAxisChartSeries,
@@ -229,7 +229,7 @@ export class HomeComponent implements OnInit {
       }
     ]
   };
-
+  EChartType = EChartType;
   searchForm: FormGroup;
   formCopy: any;
   dataInfo: HomeInfo;
@@ -277,6 +277,8 @@ export class HomeComponent implements OnInit {
       this.homeService.searchValue = this.searchForm.value;
     } else {
       this.searchForm.setValue(this.homeService.searchValue);
+      this.layoutGrid = this.homeService.layoutGrid;
+      this.layoutGrid2 = this.homeService.layoutGrid2;
     }
 
     this.searchForm.valueChanges
@@ -459,13 +461,19 @@ export class HomeComponent implements OnInit {
     this.nextYear = dateEnd.getFullYear();
   }
 
-  openChartDetails() {
+  openChartDetails(chartOptions, chartType, title) {
     const dialogRef = this.dialog.open(ChartPreviewComponent);
+    dialogRef.componentInstance.chartOptions = chartOptions;
+    dialogRef.componentInstance.chartType = chartType;
+    dialogRef.componentInstance.title = title;
   }
 
   selectGridLayout(l1: string, l2: string) {
     this.layoutGrid = l1;
     this.layoutGrid2 = l2;
+
+    this.homeService.layoutGrid = this.layoutGrid;
+    this.homeService.layoutGrid2 = this.layoutGrid2;
   }
 
   private scaleFactor = 1;

@@ -11,6 +11,8 @@ import { HomeInfo } from './models/home-info.model';
 export class HomeService {
   searchValue: any = {}
   pageIndex = 0
+  layoutGrid: string;
+  layoutGrid2: string;
 
   constructor(
     private http: Http,

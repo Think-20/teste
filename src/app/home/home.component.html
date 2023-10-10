@@ -79,7 +79,7 @@
   </div>
 
 <ng-template #grid1>
-    <div class="home-card">
+    <div class="home-card animate__animated animate__fadeIn">
         <div class="home-card-header d-flex justify-content-between">
             <mat-icon>add</mat-icon>
             Alertas:
@@ -89,7 +89,7 @@
             <span class="home-card-count d-flex justify-content-end">01</span>
         </div>
     </div>
-    <div class="home-card">
+    <div class="home-card animate__animated animate__fadeIn">
         <div class="home-card-header d-flex justify-content-between">
             <mat-icon>add</mat-icon>
             Memórias:
@@ -99,7 +99,7 @@
             <span class="home-card-count d-flex justify-content-end">07</span>
         </div>
     </div>
-    <div class="home-card">
+    <div class="home-card animate__animated animate__fadeIn">
         <div class="home-card-body">
             <div class="home-card-grid-2fr">
                 <div class="text-right d-flex flex-column">
@@ -143,7 +143,7 @@
             </div>
         </div>
     </div>
-    <div class="home-card">
+    <div class="home-card animate__animated animate__fadeIn">
       <div class="home-card-header d-flex justify-content-end">
           News:
       </div>
@@ -199,7 +199,7 @@
         </div>
       </div>
   </div>
-  <div class="home-card">
+  <div class="home-card animate__animated animate__fadeInDown">
       <div class="home-card-header d-flex justify-content-end">
           Ranking:
       </div>
@@ -230,27 +230,27 @@
 </ng-template>
 
 <ng-template #grid2>
-    <div class="home-card grid-row-2 home-card-column-between">
+    <div class="home-card grid-row-2 home-card-column-between animate__animated animate__zoomIn">
       <div class="home-card-header d-flex justify-content-end">
           Jobs:
       </div>
       <div class="home-card-body">
           <div class="home-card-grafico">
-            <div id="chart">
+            <div id="chart" (click)="openChartDetails(chartOptionsPieJobs, EChartType.DONUT, 'Jobs:')">
               <apx-chart
-              [series]="chartOptionsPieJobs.series"
-              [chart]="chartOptionsPieJobs.chart"
-              [labels]="chartOptionsPieJobs.labels"
-              [legend]="chartOptionsPieJobs.legend"
-              [dataLabels]="chartOptionsPieJobs.dataLabels"
-              [fill]="chartOptionsPieJobs.fill"
-              [states]="chartOptionsPieJobs.states"
-              [plotOptions]="chartOptionsPieJobs.plotOptions"
-              [stroke]="chartOptionsPieJobs.stroke"
-              [theme]="chartOptionsPieJobs.theme"
-              [responsive]="chartOptionsPieJobs.responsive"
-              [colors]="chartOptionsPieJobs.colors"
-            ></apx-chart>
+                [series]="chartOptionsPieJobs.series"
+                [chart]="chartOptionsPieJobs.chart"
+                [labels]="chartOptionsPieJobs.labels"
+                [legend]="chartOptionsPieJobs.legend"
+                [dataLabels]="chartOptionsPieJobs.dataLabels"
+                [fill]="chartOptionsPieJobs.fill"
+                [states]="chartOptionsPieJobs.states"
+                [plotOptions]="chartOptionsPieJobs.plotOptions"
+                [stroke]="chartOptionsPieJobs.stroke"
+                [theme]="chartOptionsPieJobs.theme"
+                [responsive]="chartOptionsPieJobs.responsive"
+                [colors]="chartOptionsPieJobs.colors"
+              ></apx-chart>
             </div>
             
           </div>
@@ -266,7 +266,7 @@
         </div>
       </div>
     </div>
-    <div class="home-card home-card-column-between">
+    <div class="home-card home-card-column-between animate__animated animate__zoomIn">
         <div class="home-card-header d-flex justify-content-end">
             <span>20% | Aprovados:</span>
         </div>
@@ -282,7 +282,7 @@
             </div>
         </div>
     </div>
-    <div class="home-card home-card-column-between">
+    <div class="home-card home-card-column-between animate__animated animate__zoomIn">
         <div class="home-card-header d-flex justify-content-end">
             <span >10% | Avançados:</span>
         </div>
@@ -297,7 +297,7 @@
           </div>
       </div>
     </div>
-    <div class="home-card home-card-column-between">
+    <div class="home-card home-card-column-between animate__animated animate__zoomIn">
         <div class="home-card-header d-flex justify-content-end">
             <span>10% | Ajustes:</span>
         </div>
@@ -312,7 +312,7 @@
             </div>
         </div>
     </div>
-    <div class="home-card home-card-column-between">
+    <div class="home-card home-card-column-between animate__animated animate__zoomIn">
         <div class="home-card-header d-flex justify-content-end">
             <span>30% | Stand-by</span>
         </div>
@@ -328,7 +328,7 @@
             </div>
         </div>
     </div>
-    <div class="home-card home-card-column-between">
+    <div class="home-card home-card-column-between animate__animated animate__zoomIn">
       <div class="home-card-header d-flex justify-content-end">
           <span>40% | Reprovados</span>
       </div>
@@ -344,7 +344,7 @@
           </div>
       </div>
   </div>
-  <div class="home-card grid-span-2 home-card-column-between">
+  <div class="home-card grid-span-2 home-card-column-between animate__animated animate__fadeIn">
     <div class="home-card-header d-flex justify-content-end">
         <span>Metas:</span>
     </div>
@@ -404,7 +404,7 @@
         </div>
     </div>
   </div>
-  <div class="home-card grid-span-2 home-card-column-between">
+  <div class="home-card grid-span-2 home-card-column-between animate__animated animate__fadeIn">
     <div class="home-card-header d-flex justify-content-between">
         <span>04</span>
         <span>Em Produção:</span>
@@ -445,7 +445,7 @@
         </div>
     </div>
   </div>
-  <div class="home-card home-card-column-between">
+  <div class="home-card home-card-column-between animate__animated animate__fadeInDown">
     <div class="home-card-header d-flex justify-content-between">
         <mat-icon>add</mat-icon>
         DeadLine:
@@ -461,25 +461,25 @@
       </div>
   </div>
   </div>
-  <div class="home-card">
-  <div id="chart">
+  <div class="home-card animate__animated animate__zoomIn">
+  <div id="chart" (click)="openChartDetails(chartOptionsPie, EChartType.DONUT, '')">
     <apx-chart
-          [series]="chartOptionsPie.series"
-          [chart]="chartOptionsPie.chart"
-          [labels]="chartOptionsPie.labels"
-          [dataLabels]="chartOptionsPie.dataLabels"
-          [fill]="chartOptionsPie.fill"
-          [legend]="chartOptionsPie.legend"
-          [states]="chartOptionsPie.states"
-          [colors]="chartOptionsPie.colors"
-          [plotOptions]="chartOptionsPie.plotOptions"
-          [stroke]="chartOptionsPie.stroke"
-          [theme]="chartOptionsPie.theme"
-          [responsive]="chartOptionsPie.responsive"
-        ></apx-chart>
+        [series]="chartOptionsPie.series"
+        [chart]="chartOptionsPie.chart"
+        [labels]="chartOptionsPie.labels"
+        [dataLabels]="chartOptionsPie.dataLabels"
+        [fill]="chartOptionsPie.fill"
+        [legend]="chartOptionsPie.legend"
+        [states]="chartOptionsPie.states"
+        [colors]="chartOptionsPie.colors"
+        [plotOptions]="chartOptionsPie.plotOptions"
+        [stroke]="chartOptionsPie.stroke"
+        [theme]="chartOptionsPie.theme"
+        [responsive]="chartOptionsPie.responsive"
+      ></apx-chart>
   </div>
   </div>
-  <div class="home-card grid-span-4">
+  <div class="home-card grid-span-4 animate__animated animate__zoomIn">
     <div class="home-card-header d-flex justify-content-between">
       <div class="d-flex">
           Tendência
@@ -490,23 +490,23 @@
       </div>
     </div>
 
-    <div class="home-card-body">
-      <div id="chart">
+    <div class="home-card-body ">
+      <div id="chart" (click)="openChartDetails(chartOptions, EChartType.LINE, 'Tendência:')">
         <apx-chart
-        [series]="chartOptions.series"
-        [chart]="chartOptions.chart"
-        [xaxis]="chartOptions.xaxis"
-        [yaxis]="chartOptions.yaxis"
-        [colors]="chartOptions.colors"
-        [dataLabels]="chartOptions.dataLabels"
-        [grid]="chartOptions.grid"
-        [stroke]="chartOptions.stroke"
-      ></apx-chart>
+          [series]="chartOptions.series"
+          [chart]="chartOptions.chart"
+          [xaxis]="chartOptions.xaxis"
+          [yaxis]="chartOptions.yaxis"
+          [colors]="chartOptions.colors"
+          [dataLabels]="chartOptions.dataLabels"
+          [grid]="chartOptions.grid"
+          [stroke]="chartOptions.stroke"
+        ></apx-chart>
       </div>
       
     </div>
   </div>
-  <div class="home-card grid-span-1">
+  <div class="home-card grid-span-1 animate__animated animate__fadeIn">
     <div class="home-card-header d-flex justify-content-between">
         <mat-icon>add</mat-icon>
         Sold Out:

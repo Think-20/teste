@@ -1,12 +1,36 @@
+<h1 mat-dialog-title class="p-0">{{ title }}</h1>
 <mat-dialog-content class="mat-typography">
-  <div id="chart">
+  <div class="animate__animated animate__zoomIn" id="chart" [ngSwitch]="chartType">
     <apx-chart
-      [series]="chartOptionsPie.series"
-      [chart]="chartOptionsPie.chart"
-      [labels]="chartOptionsPie.labels"
+      *ngSwitchCase="EChartType.DONUT"
+      [series]="chartOptions.series"
+      [chart]="chartOptionsDonut.chart"
+      [labels]="chartOptions.labels"
+      [legend]="chartOptionsDonut.legend"
+      [dataLabels]="chartOptions.dataLabels"
+      [fill]="chartOptionsDonut.fill"
+      [states]="chartOptionsDonut.states"
+      [plotOptions]="chartOptionsDonut.plotOptions"
+      [stroke]="chartOptionsDonut.stroke"
+      [theme]="chartOptionsDonut.theme"
+      [responsive]="chartOptionsDonut.responsive"
+      [colors]="chartOptionsDonut.colors"
+    ></apx-chart>
+
+    <apx-chart
+      *ngSwitchCase="EChartType.LINE"
+      [series]="chartOptions.series"
+      [chart]="chartOptionsLine.chart"
+      [xaxis]="chartOptionsLine.xaxis"
+      [yaxis]="chartOptionsLine.yaxis"
+      [colors]="chartOptionsLine.colors"
+      [dataLabels]="chartOptions.dataLabels"
+      [grid]="chartOptionsLine.grid"
+      [stroke]="chartOptionsLine.stroke"
     ></apx-chart>
   </div>
 </mat-dialog-content>
+
 <mat-dialog-actions align="end">
   <button mat-button mat-dialog-close>Fechar</button>
 </mat-dialog-actions>
