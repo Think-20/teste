@@ -44,8 +44,8 @@ export type ChartOptions = {
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  layoutGrid = "grid-layout-1";
-  layoutGrid2 = "grid-2-layout-1";
+  layoutGrid = "grid-layout-2";
+  layoutGrid2 = "grid-2-layout-2";
 
   chartOptions = {
     series: [
