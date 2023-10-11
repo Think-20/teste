@@ -1,0 +1,60 @@
+<div class="cost-sheet-container">
+    <div class="cost-sheet-card">
+        <div class="cost-sheet-header cost-sheet-border-all">
+            <h6 class="cost-sheet-header-title">Mão de obra</h6>
+            <div class="cost-sheet-header-right">
+                <span>35% | 75.000,00</span>
+                <mat-icon>keyboard_arrow_down</mat-icon>
+            </div>
+        </div>
+        <div class="cost-sheet-body">
+            <div class="cost-sheet-grid-header cost-sheet-grid-template-fr cost-sheet-border-all">
+                <div>NUM</div>
+                <div>CATEGORIA</div>
+                <div>FAVORECIDO</div>
+                <div>DESCRIÇÃO</div>
+                <div>QTD</div>
+                <div>UNID</div>
+                <div>PREVISTO</div>
+                <div></div>
+                <div>REALIZADO</div>
+                <div>NEGOCIAÇÃO</div>
+                <div>SOLICITANTE</div>
+                <div>APROVAÇÃO</div>
+                <div>ACEITE</div>
+                <div>NF</div>
+                <div>COND</div>
+                <div>VENCIM</div>
+                <div>PGTO</div>
+            </div>
+            <div class="cost-sheet-grid-body cost-sheet-border-all">
+                <div *ngFor="let item of [1,2,3,4,5,6,7,8,9,10]" class="cost-sheet-grid-row cost-sheet-grid-template-fr">
+                    <div>NUM</div>
+                    <div>CATEGORIA</div>
+                    <div>FAVORECIDO</div>
+                    <div>DESCRIÇÃO</div>
+                    <div>QTD</div>
+                    <div class="cost-sheet-border-right">UNID</div>
+                    <div class="cost-sheet-border-right">PREVISTO</div>
+                    <div class="cost-sheet-border-right">75%</div>
+                    <div class="cost-sheet-border-right">REALIZADO</div>
+                    <div>NEGOCIAÇÃO</div>
+                    <div>SOLICITANTE</div>
+                    <div>APROVAÇÃO</div>
+                    <div class="cost-sheet-border-right">ACEITE</div>
+                    <div>NF</div>
+                    <div>COND</div>
+                    <div>VENCIM</div>
+                    <div>PGTO</div>
+                </div>
+            </div>
+            <div class="cost-sheet-grid-footer cost-sheet-grid-template-footer-fr cost-sheet-border-all">
+                <div class="cost-sheet-border-right">Lorem</div>
+                <div class="cost-sheet-border-right">Lorem</div>
+                <div class="cost-sheet-border-right">Lorem</div>
+                <div class="cost-sheet-border-right">Lorem</div>
+                <div>Lorem</div>
+            </div>
+        </div>
+    </div>
+</div>

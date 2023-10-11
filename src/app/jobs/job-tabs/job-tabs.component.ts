@@ -25,7 +25,8 @@ export class JobTabsComponent implements OnInit {
     {index: 1, description: 'briefing'},
     {index: 2, description: 'project'},
     {index: 3, description: 'specification'},
-    {index: 5, description: 'budget-form'}
+    {index: 5, description: 'budget-form'},
+    {index: 8, description: 'cost-sheet'},
   ]
 
   constructor(

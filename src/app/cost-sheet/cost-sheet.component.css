@@ -1,0 +1,76 @@
+.cost-sheet-body {
+    font-size: 10px !important;
+}
+
+.cost-sheet-header {
+    font-size: 18px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+}
+
+.cost-sheet-header-title {
+    font-weight: 400;
+    margin: 0;
+}
+
+.cost-sheet-header-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.cost-sheet-grid-header {
+    background-color: #eee;
+}
+
+.cost-sheet-grid-template-fr {
+    display: grid;
+    grid-template-columns: repeat(17, 1fr);
+}
+
+.cost-sheet-grid-template-footer-fr {
+    display: grid;
+    grid-template-columns: 6fr 1fr 1fr 1fr 4fr 4fr;
+}
+
+.cost-sheet-grid-body {
+    
+}
+
+.cost-sheet-grid-row {
+}
+
+.cost-sheet-grid-row > div,
+.cost-sheet-grid-footer > div,
+.cost-sheet-grid-header > div {
+    padding: 0.5rem;
+}
+
+.cost-sheet-grid-padding {
+    padding: 0.5rem;
+}
+
+.cost-sheet-grid-footer {
+}
+
+.cost-sheet-border-top {
+    border-top: 1px solid #ccc;
+}
+
+.cost-sheet-border-left {
+    border-left: 1px solid #ccc;
+}
+
+.cost-sheet-border-right {
+    border-right: 1px solid #ccc;
+}
+
+.cost-sheet-border-bottom {
+    border-bottom: 1px solid #ccc;
+}
+
+.cost-sheet-border-all {
+    border: 1px solid #ccc;
+}

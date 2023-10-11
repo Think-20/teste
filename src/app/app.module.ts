@@ -212,6 +212,7 @@ import { MemoriesService } from './memories/memories.service';
 import { FormatMaskDirective } from './shared/directives/format-mask.directive';
 import { JobEventsService } from './job-events/job-events.service';
 import { SpecificationFormComponent } from './specification/specification-form/specification-form.component';
+import { CostSheetComponent } from './cost-sheet/cost-sheet.component';
 
 registerLocaleData(localePt);
 
@@ -312,6 +313,7 @@ registerLocaleData(localePt);
     PlaceFormComponent,
     PlaceListComponent,
     PlacesComponent,
+    CostSheetComponent,
 
     EventFormComponent,
     EventListComponent,
