@@ -58,7 +58,7 @@
     </h3>
   </div>
 
-  <div class="col-md-12" id="searchForm">
+  <div class="col-md-12 pr-0" id="searchForm">
     <form [formGroup]="searchForm" autocomplete="off">
       <mat-card-title>
         <div class="row search-bar-group">
@@ -218,7 +218,7 @@
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-service">
                   <div *ngIf="job.specialAttendance">
-                      <span>{{ job.specialAttendance.split('/').join(" e ") }}</span>
+                      <span class="d-block" *ngFor="let attendance of job.specialAttendance.split('/'); first as f">{{ attendance }} <span *ngIf="f">e</span></span>
                   </div>
                   <div *ngIf="!job.specialAttendance">{{ job.attendance.name }}</div>
                 </div>
@@ -246,20 +246,16 @@
                   {{ job.job_type.description }}
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-value">
-                  {{ job.specialBudget ? (job.specialBudget) : (job.budget_value | number: '1.2') }} <br />
+                  {{ job.specialBudget ? (job.specialBudget | number: '1.2') : (job.budget_value | number: '1.2') }} <br />
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-budgeted">
-                    <span *ngIf="job.specialFinalValue">{{ job.specialFinalValue }}</span>
+                    <span *ngIf="job.specialFinalValue">{{ job.specialFinalValue | number: '1.2' }}</span>
                     <span *ngIf="!job.specialFinalValue">{{ job.lastValue ? (job.lastValue | number: '1.2') : '-' }}<br /></span>
                   {{ '-' }}
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-status">
-                  <div>
-                    {{ job.status.description }}
-                  </div>
-                  <div>
-                    {{ job.status_updated_at | date : "dd/MM/yy" }}
-                  </div>
+                  <span class="d-block">{{ job.status.description }}</span>
+                  <span class="d-block">{{ job.status_updated_at | date : "dd/MM/yy" }}</span>
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-fatured">
                   -
@@ -311,15 +307,15 @@
               <mat-grid-list *ngIf="jobs?.length > 0" cols="6" rowHeight="88px">
                 <mat-grid-tile class="mat-grid-item keep-padding-r">
                   <div class="title-report-dashboard m-0 p-0 mb-2 text-truncate" title="Total de jobs:">Total de jobs:</div>
-                  <div class="data-report-dashboard text-truncate" [title]="reportData?.jobs?.total">{{reportData?.jobs?.total}}</div>
+                  <div class="data-report-dashboard text-truncate" [title]="reportData?.jobs?.total">{{reportData?.jobs?.total }}</div>
                 </mat-grid-tile>
                 <mat-grid-tile class="mat-grid-item">
                   <div class="title-report-dashboard m-0 p-0 mb-2 text-truncate" title="Valor total:">Valor total:</div>
-                  <div class="data-report-dashboard text-truncate" [title]="reportData?.total_value">{{reportData?.total_value}}</div>
+                  <div class="data-report-dashboard text-truncate" [title]="reportData?.total_value">{{reportData?.total_value | number: '1.2'}}</div>
                 </mat-grid-tile>
                 <mat-grid-tile class="mat-grid-item">
                   <div class="title-report-dashboard m-0 p-0 mb-2 text-truncate" title="Ticket médio:">Ticket médio:</div>
-                  <div class="data-report-dashboard text-truncate" [title]="reportData?.average_ticket">{{reportData?.average_ticket}}</div>
+                  <div class="data-report-dashboard text-truncate" [title]="reportData?.average_ticket">{{reportData?.average_ticket | number: '1.2'}}</div>
                 </mat-grid-tile>
                 <mat-grid-tile class="mat-grid-item">
                   <div class="title-report-dashboard m-0 p-0 mb-2 text-truncate" title="Tempo médio de aprovação:">Tempo médio de aprovação:</div>
@@ -357,7 +353,8 @@
                 <mat-grid-tile class="mat-grid-item keep-padding-r">
                   <div class="title-report-dashboard m-0 p-0 mb-2 text-truncate" title="Taxa de conversão:">Taxa de conversão:</div>
                   <div class="d-flex justify-content-between data-report-dashboard">
-                    <p *ngFor="let rate of reportData?.conversion_rate"  class="text-truncate" [title]="rate">{{ rate }}</p>
+                    <p class="text-truncate" [title]="reportData?.conversion_rate[0]">{{ reportData?.conversion_rate[0] }}</p>
+                    <p class="text-truncate" [title]="reportData?.conversion_rate[1]">{{ reportData?.conversion_rate[1] | number: '1.2' }}</p>
                   </div>
                 </mat-grid-tile>
                 <mat-grid-tile class="mat-grid-item">
@@ -383,7 +380,7 @@
                 </mat-grid-tile>
                 <mat-grid-tile class="mat-grid-item">
                   <div class="title-report-dashboard m-0 p-0 mb-2 text-left text-truncate" title="Tendencia anual de aprovação:">Tendencia anual de aprovação:</div>
-                  <div class="data-report-dashboard text-truncate" [title]="reportData.anualTendenceAprovation">{{ reportData.anualTendenceAprovation }}</div>
+                  <div class="data-report-dashboard text-truncate" [title]="reportData.anualTendenceAprovation">{{ reportData.anualTendenceAprovation | number: '1.2' }}</div>
                 </mat-grid-tile>
               </mat-grid-list>
               <hr class="hr">
