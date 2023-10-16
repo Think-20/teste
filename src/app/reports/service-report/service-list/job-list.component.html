@@ -254,12 +254,8 @@
                   {{ '-' }}
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-status">
-                  <div>
-                    {{ job.status.description }}
-                  </div>
-                  <div>
-                    {{ job.status_updated_at | date : "dd/MM/yy" }}
-                  </div>
+                  <span class="d-block">{{ job.status.description }}</span>
+                  <span class="d-block">{{ job.status_updated_at | date : "dd/MM/yy" }}</span>
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-fatured">
                   -
