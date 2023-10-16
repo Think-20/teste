@@ -91,8 +91,8 @@
 }
 
 .mat-column-fatured {
-  width: 2.5%;
   font-size: 11px;
+  min-width: auto !important;
 }
 
 .mat-column-portin {
@@ -133,7 +133,7 @@
   text-align: center;
   align-self: start;
   padding-top: 2px;
-  font-size: 10px !important;
+  font-size: 9.5px !important;
   min-width: 20px;
 }
 
