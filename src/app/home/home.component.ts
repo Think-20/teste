@@ -264,7 +264,7 @@ export class HomeComponent implements OnInit {
     this.setYears();
     this.loadInitialData();
   }
-  
+
   createForm() {
     this.searchForm = this.fb.group({
       date_init: this.fb.control(''),
@@ -424,6 +424,8 @@ export class HomeComponent implements OnInit {
       }
       
       this.homeData = (dataInfo as unknown as HomeData);
+
+      console.log(this.homeData)
       this.searching = false;
       snackBar.dismiss();
     })

@@ -4,7 +4,7 @@
       <div class="col-md-12">
         <div class="flex center">
           Home | Julio Cirelo 
-          <button mat-button type="button" class="month-arrow">
+          <button mat-button type="button" class="month-arrow ml-2">
             <mat-icon (click)="addMonth(-1)">keyboard_arrow_left</mat-icon>
           </button>
           &nbsp;Relatórios de
@@ -54,13 +54,13 @@
           Fixos (scroll)
         </div>
       </button>
-      <button (click)="decreaseFontSize()" mat-button type="button" class="d-flex align-items-center">
+      <button *ngIf="false" (click)="decreaseFontSize()" mat-button type="button" class="d-flex align-items-center">
         <div class="d-flex align-items-center">
           <mat-icon>remove</mat-icon>
           Diminuir
         </div>
       </button>
-      <button (click)="increaseFontSize()" mat-button type="button" class="d-flex align-items-center">
+      <button *ngIf="false" (click)="increaseFontSize()" mat-button type="button" class="d-flex align-items-center">
         <div class="d-flex align-items-center">
           <mat-icon>add</mat-icon>
           Aumentar
@@ -86,7 +86,7 @@
         </div>
 
         <div class="home-card-body home-card-body-count">
-            <span class="home-card-count d-flex justify-content-end">01</span>
+            <span class="home-card-count d-flex justify-content-end">{{ homeData.alertas | number:'2.0' }}</span>
         </div>
     </div>
     <div class="home-card animate__animated animate__fadeIn">
@@ -96,48 +96,48 @@
         </div>
 
         <div class="home-card-body home-card-body-count">
-            <span class="home-card-count d-flex justify-content-end">07</span>
+            <span class="home-card-count d-flex justify-content-end">{{ homeData.memorias | number:'2.0' }}</span>
         </div>
     </div>
     <div class="home-card animate__animated animate__fadeIn">
         <div class="home-card-body">
             <div class="home-card-grid-2fr">
                 <div class="text-right d-flex flex-column">
-                  <span class="home-card-size-18">45</span>
-                  <span class="home-card-small-description">Tempo Médio de Aprovação (Dias): | Ref.: 38 Dias</span>
+                  <span class="home-card-size-18">{{ homeData.tempo_medio_aprovacao_dias.total }}</span>
+                  <span class="home-card-small-description">Tempo Médio de Aprovação (Dias): | Ref.: {{ homeData.tempo_medio_aprovacao_dias.ref }} Dias</span>
                 </div>
                 <div class="d-flex flex-column">
-                  <span class="home-card-size-18">4.231.080</span>
-                  <span class="home-card-small-description">Tendência Aprovação Anual: | Ref.: 4.200.000</span>
+                  <span class="home-card-size-18">{{ homeData.tendencia_aprovacao_anual.total | number: '1.0' }}</span>
+                  <span class="home-card-small-description">Tendência Aprovação Anual: | Ref.: {{ homeData.tendencia_aprovacao_anual.ref  | number: '1.0' }}</span>
                 </div>
             </div>
             <div class="home-card-grid-2fr">
                 <div class="text-right d-flex flex-column">
-                  <span class="home-card-size-18">07</span>
-                  <span class="home-card-small-description">Intervalo Médio Aprovação (Dias): | Ref.: 13 Dias</span>
+                  <span class="home-card-size-18">{{ homeData.intervalo_medio_aprovacao_dias.total | number:'2.0' }}</span>
+                  <span class="home-card-small-description">Intervalo Médio Aprovação (Dias): | Ref.: {{ homeData.intervalo_medio_aprovacao_dias.ref }} Dias</span>
                 </div>
                 <div class="d-flex flex-column">
-                  <span class="home-card-size-18">420.000</span>
-                  <span class="home-card-small-description">Média aprovação Mês: | Ref.: 400.000</span>
+                  <span class="home-card-size-18">{{ homeData.media_aprovacao_mes.total | number:'2.0' }}</span>
+                  <span class="home-card-small-description">Média aprovação Mês: | Ref.: {{ homeData.media_aprovacao_mes.ref | number:'2.0' }}</span>
                 </div>
             </div>
             <div class="home-card-grid-2fr">
                 <div class="text-right d-flex flex-column">
-                  <span class="home-card-size-18">183.000</span>
-                  <span class="home-card-small-description">Ticket Médio Aprovação | Ref.: 190.000</span>
+                  <span class="home-card-size-18">{{ homeData.ticket_medio_aprovacao.total | number:'2.0' }}</span>
+                  <span class="home-card-small-description">Ticket Médio Aprovação | Ref.: {{ homeData.ticket_medio_aprovacao.total | number:'2.0' }}</span>
                 </div>
                 <div class="d-flex flex-column">
-                  <span class="home-card-size-18">183.000</span>
-                  <span class="home-card-small-description">Ticket Médio Jobs: | Ref.: 170.000</span>
+                  <span class="home-card-size-18">{{ homeData.ticket_medio_jobs.total | number:'2.0' }}</span>
+                  <span class="home-card-small-description">Ticket Médio Jobs: | Ref.: {{ homeData.ticket_medio_jobs.total | number:'2.0' }}</span>
                 </div>
             </div>
             <div class="home-card-grid-2fr">
                 <div class="text-right d-flex flex-column">
-                  <span class="home-card-size-18">453.000</span>
-                  <span class="home-card-small-description">Maior Venda | Ref.: 5338.000</span>
+                  <span class="home-card-size-18">{{ homeData.maior_venda.total | number:'2.0' }}</span>
+                  <span class="home-card-small-description">Maior Venda | Ref.: {{ homeData.maior_venda.total | number:'2.0' }}</span>
                 </div>
                 <div class="d-flex flex-column">
-                  <span class="home-card-size-18">Nestlé | Apas</span>
+                  <span class="home-card-size-18">{{ homeData.ultimo_aprovado }}</span>
                   <span class="home-card-small-description">ùltimo Aprovado</span>
                 </div>
             </div>
@@ -154,7 +154,7 @@
               <span>Último Job Aprovado</span>
             </div>
             <div class="d-flex flex-column">
-              <span></span>
+              <span>{{ homeData.ultimo_job_aprovado }}</span>
             </div>
         </div>
         <div class="home-card-grid-2fr">
@@ -162,7 +162,7 @@
               <span>Eventos em Rolando</span>
             </div>
             <div class="d-flex flex-column">
-              <span></span>
+              <span>{{ homeData.eventos_rolando }}</span>
             </div>
         </div>
         <div class="home-card-grid-2fr">
@@ -170,7 +170,7 @@
               <span>Aniversariante</span>
             </div>
             <div class="d-flex flex-column">
-              <span></span>
+              <span>{{ homeData.aniversariante }}</span>
             </div>
         </div>
         <div class="home-card-grid-2fr">
@@ -178,7 +178,7 @@
               <span>Comunicados</span>
             </div>
             <div class="d-flex flex-column">
-              <span></span>
+              <span>{{ homeData.comunicados }}</span>
             </div>
         </div>
         <div class="home-card-grid-2fr">
@@ -186,7 +186,7 @@
               <span>Metas</span>
             </div>
             <div class="d-flex flex-column">
-              <span></span>
+              <span>{{ homeData.metas }}</span>
             </div>
         </div>
         <div class="home-card-grid-2fr">
@@ -194,7 +194,7 @@
               <span>Records</span>
             </div>
             <div class="d-flex flex-column">
-              <span></span>
+              <span>{{ homeData.recordes }}</span>
             </div>
         </div>
       </div>
@@ -221,7 +221,7 @@
               <div class="d-flex flex-column">
                 <div>
                   <span class="d-flex home-card-small-description">Últimos 12 meses</span>
-                  <span class="home-card-count">01</span>
+                  <span class="home-card-count">{{ homeData.ranking.total | number:'2.0' }}</span>
                 </div>
               </div>
           </div>
@@ -257,90 +257,90 @@
       </div>
       <div class="home-card-footer d-flex justify-content-between">
           <div class="d-flex flex-column">
-              <span class="home-card-size-18">1.200.000</span>
+              <span class="home-card-size-18">{{ homeData.jobs.meta_jobs | number:'2.0' }}</span>
               <span>Meta Jobs</span>
           </div>
           <div class="d-flex flex-column">
-            <span class="home-card-size-18">400.000</span>
+            <span class="home-card-size-18">{{ homeData.jobs.meta_aprovacao | number:'2.0' }}</span>
             <span>Meta Aprovação</span>
         </div>
       </div>
     </div>
     <div class="home-card home-card-column-between animate__animated animate__zoomIn">
         <div class="home-card-header d-flex justify-content-end">
-            <span>20% | Aprovados:</span>
+            <span>{{ homeData.jobs.aprovados.porcentagem }}% | Aprovados:</span>
         </div>
 
         <div class="home-card-body">
-            <span class="c-aprovados home-card-count d-flex justify-content-end">07</span>
+            <span class="c-aprovados home-card-count d-flex justify-content-end">{{ homeData.jobs.aprovados.total | number:'2.0' }}</span>
         </div>
 
         <div class="home-card-footer">
             <div class="d-flex justify-content-between">
                 <mat-icon>keyboard_arrow_down</mat-icon>
-                <span>$ 2.000.000</span>
+                <span>$ {{ homeData.jobs.aprovados.valor | number:'2.0' }}</span>
             </div>
         </div>
     </div>
     <div class="home-card home-card-column-between animate__animated animate__zoomIn">
         <div class="home-card-header d-flex justify-content-end">
-            <span >10% | Avançados:</span>
+            <span >{{ homeData.jobs.avancados.porcentagem }}% | Avançados:</span>
         </div>
 
         <div class="home-card-body">
-            <span class="c-avancados home-card-count d-flex justify-content-end">12</span>
+            <span class="c-avancados home-card-count d-flex justify-content-end">{{ homeData.jobs.avancados.total | number:'2.0' }}</span>
         </div>
 
         <div class="home-card-footer">
           <div class="d-flex justify-content-end">
-              <span>$ 2.000.000</span>
+              <span>{{ homeData.jobs.avancados.valor | number:'2.0' }}</span>
           </div>
       </div>
     </div>
     <div class="home-card home-card-column-between animate__animated animate__zoomIn">
         <div class="home-card-header d-flex justify-content-end">
-            <span>10% | Ajustes:</span>
+            <span>{{ homeData.jobs.ajustes.porcentagem }}% | Ajustes:</span>
         </div>
 
         <div class="home-card-body">
-            <span class="c-ajustes home-card-count d-flex justify-content-end">23</span>
+            <span class="c-ajustes home-card-count d-flex justify-content-end">{{ homeData.jobs.ajustes.total | number:'2.0' }}</span>
         </div>
 
         <div class="home-card-footer">
             <div class="d-flex justify-content-end">
-                <span>$ 2.000.000</span>
+                <span>{{ homeData.jobs.ajustes.valor | number:'2.0' }}</span>
             </div>
         </div>
     </div>
     <div class="home-card home-card-column-between animate__animated animate__zoomIn">
         <div class="home-card-header d-flex justify-content-end">
-            <span>30% | Stand-by</span>
+            <span>{{ homeData.jobs.stand_by.porcentagem }}% | Stand-by</span>
         </div>
 
         <div class="home-card-body">
-            <span class="c-stand-by home-card-count d-flex justify-content-end">54</span>
+            <span class="c-stand-by home-card-count d-flex justify-content-end">{{ homeData.jobs.stand_by.total | number:'2.0' }}</span>
         </div>
 
         <div class="home-card-footer">
             <div class="d-flex justify-content-between">
                 <mat-icon>keyboard_arrow_down</mat-icon>
-                <span>$ 2.000.000</span>
+                <span>{{ homeData.jobs.stand_by.valor | number:'2.0' }}</span>
             </div>
         </div>
     </div>
     <div class="home-card home-card-column-between animate__animated animate__zoomIn">
       <div class="home-card-header d-flex justify-content-end">
-          <span>40% | Reprovados</span>
+          <span>{{ homeData.jobs.reprovados.porcentagem }}% | Reprovados</span>
       </div>
 
       <div class="home-card-body">
-          <span class="c-reprovados home-card-count d-flex justify-content-end">73</span>
+          <span class="c-reprovados home-card-count d-flex justify-content-end">{{ homeData.jobs.reprovados.total | number:'2.0' }}</span>
       </div>
 
       <div class="home-card-footer">
           <div class="d-flex justify-content-between">
               <mat-icon>keyboard_arrow_down</mat-icon>
-              <span>$ 2.000.000</span>
+              <span>{{ homeData.jobs.reprovados.valor | number:'2.0' }}</span>
           </div>
       </div>
   </div>
@@ -354,9 +354,9 @@
             <div class="d-flex justify-content-between">
                 <span>Últimos 12 meses</span>
                 <div class="d-flex">
-                  <span>4.950.000</span>
+                  <span>{{ homeData.jobs.metas.ultimos_doze_meses.atual | number:'2.0' }}</span>
                   <mat-icon>keyboard_arrow_up</mat-icon>
-                  <span>4.800.000</span>
+                  <span>{{ homeData.jobs.metas.ultimos_doze_meses.meta | number:'2.0' }}</span>
                 </div>
             </div>
             <div class="home-card-bar">
@@ -367,9 +367,9 @@
             <div class="d-flex justify-content-between">
                 <span>Mês</span>
                 <div class="d-flex">
-                  <span>280.000</span>
+                  <span>{{ homeData.jobs.metas.mes.atual | number:'2.0' }}</span>
                   <mat-icon>keyboard_arrow_down</mat-icon>
-                  <span>4.800.000</span>
+                  <span>{{ homeData.jobs.metas.mes.meta | number:'2.0' }}</span>
                 </div>
             </div>
             <div class="home-card-bar">
@@ -380,9 +380,9 @@
             <div class="d-flex justify-content-between">
                 <span>Quarter</span>
                 <div class="d-flex">
-                  <span>1300.000</span>
+                  <span>{{ homeData.jobs.metas.quarter.atual | number:'2.0' }}</span>
                   <mat-icon>keyboard_arrow_up</mat-icon>
-                  <span>1.200.000</span>
+                  <span>{{ homeData.jobs.metas.quarter.meta | number:'2.0' }}</span>
                 </div>
             </div>
             <div class="home-card-bar">
@@ -393,9 +393,9 @@
             <div class="d-flex justify-content-between">
                 <span>Anual</span>
                 <div class="d-flex">
-                  <span>3.810.000</span>
+                  <span>{{ homeData.jobs.metas.anual.atual | number:'2.0' }}</span>
                   <mat-icon>keyboard_arrow_down</mat-icon>
-                  <span>4.800.000</span>
+                  <span>{{ homeData.jobs.metas.anual.meta | number:'2.0' }}</span>
                 </div>
             </div>
             <div class="home-card-bar">
@@ -406,41 +406,17 @@
   </div>
   <div class="home-card grid-span-2 home-card-column-between animate__animated animate__fadeIn">
     <div class="home-card-header d-flex justify-content-between">
-        <span>04</span>
+        <span>{{ homeData.jobs.em_producao.total | number:'2.0' }}</span>
         <span>Em Produção:</span>
     </div>
 
     <div class="home-card-body">
-        <div>
+        <div *ngFor="let job of homeData.jobs.em_producao.jobs">
             <div class="d-flex justify-content-between">
-                <span>Ford | Salão Automóvel</span>
+                <span>{{ job.nome }}</span>
             </div>
             <div class="home-card-bar">
                 <div style="width: 90%" class="home-card-progress-bar"></div>
-            </div>
-        </div>
-        <div>
-            <div class="d-flex justify-content-between">
-                <span>Microsoft | Futurecomm</span>
-            </div>
-            <div class="home-card-bar">
-                <div style="width: 80%" class="home-card-progress-bar"></div>
-            </div>
-        </div>
-        <div>
-            <div class="d-flex justify-content-between">
-                <span>Nestlé | Rock in Rio</span>
-            </div>
-            <div class="home-card-bar">
-                <div style="width: 40%" class="home-card-progress-bar"></div>
-            </div>
-        </div>
-        <div>
-            <div class="d-flex justify-content-between">
-                <span>Coca-Cola | Apas</span>
-            </div>
-            <div class="home-card-bar">
-                <div style="width: 35%" class="home-card-progress-bar"></div>
             </div>
         </div>
     </div>
@@ -452,12 +428,12 @@
     </div>
 
     <div class="home-card-body">
-        <span class="home-card-count d-flex justify-content-end">05</span>
+        <span class="home-card-count d-flex justify-content-end">{{ homeData.jobs.prazo_final.total | number:'2.0' }}</span>
     </div>
 
     <div class="home-card-footer">
       <div class="d-flex justify-content-end">
-          <span>$ 7.000.000</span>
+          <span>$ {{ homeData.jobs.prazo_final.valor }}</span>
       </div>
   </div>
   </div>
@@ -513,12 +489,12 @@
     </div>
 
     <div class="home-card-body">
-        <span class="home-card-count d-flex justify-content-end">01</span>
+        <span class="home-card-count d-flex justify-content-end">{{ homeData.sold_out.total | number:'2.0' }}</span>
     </div>
 
     <div class="home-card-footer">
       <div class="d-flex justify-content-end">
-          <span>$ 2.000.000</span>
+          <span>$ {{ homeData.sold_out.valor | number:'1.0' }}</span>
       </div>
   </div>
   </div>

@@ -241,3 +241,10 @@
   /* ::ng-deep #all-container.home {
     overflow: hidden !important;
   } */
+
+  .month-arrow {
+    z-index: 10;
+    min-width: 10px !important;
+    padding: 0px !important;
+    color: rgba(0,0,0,0.5);
+  }
