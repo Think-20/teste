@@ -22,8 +22,10 @@ export interface HomeData {
     jobs: {
         labels: string[];
         colors: string[];
+        series: number[];
         meta_jobs: number;
         meta_aprovacao: number;
+        total: number;
         aprovados: TotalPercentageAmount;
         avancados: TotalPercentageAmount;
         ajustes: TotalPercentageAmount; 
@@ -45,6 +47,8 @@ export interface HomeData {
     jobs2: {
         labels: string[];
         colors: string[];
+        series: number[];
+        total: number;
         meta_jobs: number;
         meta_aprovacao: number;
     },

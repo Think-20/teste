@@ -107,8 +107,8 @@
                   <span class="home-card-small-description">Tempo Médio de Aprovação (Dias): | Ref.: {{ homeData.tempo_medio_aprovacao_dias.ref }} Dias</span>
                 </div>
                 <div class="d-flex flex-column">
-                  <span class="home-card-size-18">{{ homeData.tendencia_aprovacao_anual.total | number: '1.0' }}</span>
-                  <span class="home-card-small-description">Tendência Aprovação Anual: | Ref.: {{ homeData.tendencia_aprovacao_anual.ref  | number: '1.0' }}</span>
+                  <span class="home-card-size-18">{{ homeData.tendencia_aprovacao_anual.total | number:'2.0' }}</span>
+                  <span class="home-card-small-description">Tendência Aprovação Anual: | Ref.: {{ homeData.tendencia_aprovacao_anual.ref  | number:'2.0' }}</span>
                 </div>
             </div>
             <div class="home-card-grid-2fr">
@@ -462,7 +462,7 @@
           <mat-icon>keyboard_arrow_down</mat-icon>
       </div>
       <div>
-        Meta Mensal: 400.000,00
+        Meta Mensal: {{ homeData.tendencia.meta_mensal | number:'2.0' }}
       </div>
     </div>
 

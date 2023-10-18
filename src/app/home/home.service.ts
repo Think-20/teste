@@ -79,8 +79,10 @@ export class HomeService {
       jobs: {
         labels: ["Aprovados", "Avançados", "Ajustes", "Stand-By", 'Reprovados'],
         colors: ["#adca5f", "#e82489", "#4fa2b1", "#00abeb", "#ffcd37"],
+        series: [20, 10, 10, 30, 40],
         meta_jobs: 1200000,
         meta_aprovacao: 400000,
+        total: 103,
         aprovados: {
           total: 7,
           porcentagem: 20,
@@ -158,8 +160,10 @@ export class HomeService {
       jobs2: {
         labels: ["Cenografia", "Stand", "PDV", "Showrooms", 'Outsiders'],
         colors: ["#adca5f", "#e82489", "#4fa2b1", "#00abeb", "#ffcd37"],
+        series: [44, 55, 41, 17],
         meta_jobs: 1200000,
-        meta_aprovacao: 103,
+        total: 103,
+        meta_aprovacao: 400000,
       },
       tendencia: {
         meses_ano: ["Jan 23", "Fev 23", "Mar 23", "Abr 23", "Mai 23", "Jun 23", "Jul 23", "Ago 23", "Set 23", "Out 23", "Nov 23", "Dez 23"],
