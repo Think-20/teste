@@ -68,7 +68,7 @@
       </button>
   </div>
 
-  <div class="home-overflow">
+  <div class="home-overflow" *ngIf="homeData">
     <div class="home-grid {{layoutGrid}}">
         <ng-container *ngTemplateOutlet="grid1"></ng-container>
     </div>
@@ -413,10 +413,10 @@
     <div class="home-card-body">
         <div *ngFor="let job of homeData.jobs.em_producao.jobs">
             <div class="d-flex justify-content-between">
-                <span>{{ job.nome }}</span>
+                <span>{{ job.nome || '-' }}</span>
             </div>
             <div class="home-card-bar">
-                <div style="width: 90%" class="home-card-progress-bar"></div>
+                <div [style.width.%]="job.valor" class="home-card-progress-bar"></div>
             </div>
         </div>
     </div>
