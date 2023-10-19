@@ -107,24 +107,28 @@ export class HomeService {
     //       porcentagem: 40,
     //       valor: 2000000
     //     },
-    //     metas: {
-    //       ultimos_doze_meses: {
-    //           atual: 4950000,
-    //           meta: 4800000
-    //       },
-    //       mes: {
-    //         atual: 280000,
-    //         meta: 4800000
-    //       },
-    //       quarter: {
-    //         atual: 1300000,
-    //         meta: 1200000
-    //       },
-    //       anual: {
-    //         atual: 3810000,
-    //         meta: 4800000
-    //       },
-    //     },
+      // metas: {
+      //   ultimos_doze_meses: {
+      //       atual: 4950000,
+      //       meta: 4800000,
+      //       porcentagem: 50,
+      //   },
+      //   mes: {
+      //     atual: 280000,
+      //     meta: 4800000,
+      //     porcentagem: 75,
+      //   },
+      //   quarter: {
+      //     atual: 1300000,
+      //     meta: 1200000,
+      //     porcentagem: 40
+      //   },
+      //   anual: {
+      //     atual: 3810000,
+      //     meta: 4800000,
+      //     porcentagem: 35
+      //   },
+      // },
     //     em_producao: {
     //       total: 4,
     //       total_em_producao: 500,

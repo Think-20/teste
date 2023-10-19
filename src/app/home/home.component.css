@@ -248,3 +248,7 @@
     padding: 0px !important;
     color: rgba(0,0,0,0.5);
   }
+
+  .espace-bottom-progress {
+    margin-bottom: 2px;
+  }

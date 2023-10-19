@@ -350,8 +350,8 @@
     </div>
 
     <div class="home-card-body">
-        <div>
-            <div class="d-flex justify-content-between">
+        <div class="espace-bottom-progress">
+            <div class="d-flex justify-content-between align-items-center">
                 <span>Últimos 12 meses</span>
                 <div class="d-flex">
                   <span>{{ homeData.jobs.metas.ultimos_doze_meses.atual | number:'2.0' }}</span>
@@ -360,11 +360,11 @@
                 </div>
             </div>
             <div class="home-card-bar">
-                <div style="width: 50%" class="home-card-progress-bar"></div>
+                <div [style.width.%]="homeData.jobs.metas.ultimos_doze_meses.porcentagem" style="width: 50%" class="home-card-progress-bar"></div>
             </div>
         </div>
-        <div>
-            <div class="d-flex justify-content-between">
+        <div class="espace-bottom-progress">
+            <div class="d-flex justify-content-between align-items-center">
                 <span>Mês</span>
                 <div class="d-flex">
                   <span>{{ homeData.jobs.metas.mes.atual | number:'2.0' }}</span>
@@ -373,11 +373,11 @@
                 </div>
             </div>
             <div class="home-card-bar">
-                <div style="width: 75%" class="home-card-progress-bar"></div>
+                <div [style.width.%]="homeData.jobs.metas.mes.porcentagem" style="width: 75%" class="home-card-progress-bar"></div>
             </div>
         </div>
-        <div>
-            <div class="d-flex justify-content-between">
+        <div class="espace-bottom-progress">
+            <div class="d-flex justify-content-between align-items-center">
                 <span>Quarter</span>
                 <div class="d-flex">
                   <span>{{ homeData.jobs.metas.quarter.atual | number:'2.0' }}</span>
@@ -386,11 +386,11 @@
                 </div>
             </div>
             <div class="home-card-bar">
-                <div style="width: 40%" class="home-card-progress-bar"></div>
+                <div [style.width.%]="homeData.jobs.metas.quarter.porcentagem" style="width: 40%" class="home-card-progress-bar"></div>
             </div>
         </div>
-        <div>
-            <div class="d-flex justify-content-between">
+        <div class="espace-bottom-progress">
+            <div class="d-flex justify-content-between align-items-center">
                 <span>Anual</span>
                 <div class="d-flex">
                   <span>{{ homeData.jobs.metas.anual.atual | number:'2.0' }}</span>
@@ -399,7 +399,7 @@
                 </div>
             </div>
             <div class="home-card-bar">
-                <div style="width: 35%" class="home-card-progress-bar"></div>
+                <div [style.width.%]="homeData.jobs.metas.anual.porcentagem" style="width: 35%" class="home-card-progress-bar"></div>
             </div>
         </div>
     </div>
@@ -411,9 +411,9 @@
     </div>
 
     <div class="home-card-body">
-        <div *ngFor="let job of homeData.jobs.em_producao.jobs">
+        <div class="espace-bottom-progress" *ngFor="let job of homeData.jobs.em_producao.jobs">
             <div class="d-flex justify-content-between">
-                <span>{{ job.nome || '-' }}</span>
+                <span class="espace-bottom-progress">{{ job.nome || '-' }}</span>
             </div>
             <div class="home-card-bar">
                 <div [style.width.%]="job.valor" class="home-card-progress-bar"></div>

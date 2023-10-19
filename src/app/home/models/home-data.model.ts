@@ -80,6 +80,7 @@ export interface TotalAmount {
 export interface Goals {
     atual: number;
     meta: number;
+    porcentagem: number;
 }
 
 export interface InProduction {
