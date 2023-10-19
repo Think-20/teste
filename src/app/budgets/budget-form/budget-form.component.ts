@@ -182,7 +182,10 @@ export class BudgetFormComponent implements OnInit {
 
       if (this.backscreen === 'agenda') {
         this.router.navigate(['schedule'])
+        return;
       } 
+
+      this.router.navigateByUrl(`/jobs/edit/${this.job.id}?tab=check-in`)
     })
   }
 
