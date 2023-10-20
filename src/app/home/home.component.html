@@ -355,7 +355,7 @@
                 <span>Últimos 12 meses</span>
                 <div class="d-flex align-items-center">
                   <span>{{ homeData.jobs.metas.ultimos_doze_meses.atual | number:'2.0' }}</span>
-                  <mat-icon>keyboard_arrow_up</mat-icon>
+                  <mat-icon>{{ homeData.jobs.metas.ultimos_doze_meses.atual >= homeData.jobs.metas.ultimos_doze_meses.meta ? 'keyboard_arrow_up ': 'keyboard_arrow_down'}}</mat-icon>
                   <span>{{ homeData.jobs.metas.ultimos_doze_meses.meta | number:'2.0' }}</span>
                 </div>
             </div>
@@ -368,7 +368,7 @@
                 <span>Mês</span>
                 <div class="d-flex align-items-center">
                   <span>{{ homeData.jobs.metas.mes.atual | number:'2.0' }}</span>
-                  <mat-icon>keyboard_arrow_down</mat-icon>
+                  <mat-icon>{{ homeData.jobs.metas.mes.atual >= homeData.jobs.metas.mes.meta ? 'keyboard_arrow_up ': 'keyboard_arrow_down'}}</mat-icon>
                   <span>{{ homeData.jobs.metas.mes.meta | number:'2.0' }}</span>
                 </div>
             </div>
@@ -381,7 +381,7 @@
                 <span>Quarter</span>
                 <div class="d-flex align-items-center">
                   <span>{{ homeData.jobs.metas.quarter.atual | number:'2.0' }}</span>
-                  <mat-icon>keyboard_arrow_up</mat-icon>
+                  <mat-icon>{{ homeData.jobs.metas.quarter.atual >= homeData.jobs.metas.quarter.meta ? 'keyboard_arrow_up ': 'keyboard_arrow_down'}}</mat-icon>
                   <span>{{ homeData.jobs.metas.quarter.meta | number:'2.0' }}</span>
                 </div>
             </div>
@@ -394,7 +394,7 @@
                 <span>Anual</span>
                 <div class="d-flex align-items-center">
                   <span>{{ homeData.jobs.metas.anual.atual | number:'2.0' }}</span>
-                  <mat-icon>keyboard_arrow_down</mat-icon>
+                  <mat-icon>{{ homeData.jobs.metas.anual.atual >= homeData.jobs.metas.anual.meta ? 'keyboard_arrow_up ': 'keyboard_arrow_down'}}</mat-icon>
                   <span>{{ homeData.jobs.metas.anual.meta | number:'2.0' }}</span>
                 </div>
             </div>
