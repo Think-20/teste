@@ -215,6 +215,8 @@ import { SpecificationFormComponent } from './specification/specification-form/s
 import { HomeService } from './home/home.service';
 import { NgApexchartsModule } from "ng-apexcharts";
 import { ChartPreviewComponent } from './home/components/chart-preview.component';
+import { CountAnimationPipe } from './shared/count-animation.pipe';
+import { CountUpDirective, Destroy } from './shared/count-animation.directive';
 
 registerLocaleData(localePt);
 
@@ -224,7 +226,9 @@ registerLocaleData(localePt);
     MaskDirective,
     UcWordsDirective,
     NumberAbbreviationPipe,
-
+    CountAnimationPipe,
+    CountUpDirective,
+    
     AppComponent,
     HomeComponent,
     NotificationBarComponent,
@@ -433,7 +437,7 @@ registerLocaleData(localePt);
     ReportService,
     JobEventsService,
     HomeService,
-
+    Destroy,
     MatDialog,
     MatSnackBar,
     MatSlideToggle,

@@ -257,11 +257,11 @@
       </div>
       <div class="home-card-footer d-flex justify-content-between">
           <div class="d-flex flex-column">
-              <span class="home-card-size-18">{{ homeData.jobs.meta_jobs | number:'2.0' }}</span>
+              <span [countUp]="homeData.jobs.meta_jobs" [duration]="3000" class="home-card-size-18">{{ homeData.jobs.meta_jobs | number:'2.0' }}</span>
               <span>Meta Jobs</span>
           </div>
           <div class="d-flex flex-column">
-            <span class="home-card-size-18">{{ homeData.jobs.meta_aprovacao | number:'2.0' }}</span>
+            <span  [countUp]="homeData.jobs.meta_aprovacao" [duration]="3000" class="home-card-size-18">{{ homeData.jobs.meta_aprovacao | number:'2.0' }}</span>
             <span>Meta Aprovação</span>
         </div>
       </div>
@@ -462,7 +462,7 @@
           <mat-icon>keyboard_arrow_down</mat-icon>
       </div>
       <div>
-        Meta Mensal: {{ homeData.tendencia.meta_mensal | number:'2.0' }}
+        Meta Mensal: <span [countUp]="homeData.tendencia.meta_mensal" [duration]="3000" >{{ homeData.tendencia.meta_mensal | number:'2.0' }}</span>
       </div>
     </div>
 
