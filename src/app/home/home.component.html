@@ -2,7 +2,7 @@
   <div class="my-container">
     <h3 class="lead row">
       <div class="col-md-12">
-        <div class="flex center">
+        <div *ngIf="false" class="flex center">
           Home | Julio Cirelo 
           <button mat-button type="button" class="month-arrow ml-2">
             <mat-icon (click)="addMonth(-1)">keyboard_arrow_left</mat-icon>
@@ -36,6 +36,9 @@
           <button mat-button type="button" class="month-arrow">
             <mat-icon (click)="addMonth(1)">keyboard_arrow_right</mat-icon>
           </button>
+        </div>
+        <div *ngIf="true" class="flex center">
+          Home
         </div>
       </div>
     </h3>
