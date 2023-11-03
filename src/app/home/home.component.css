@@ -5,6 +5,7 @@
     --font-size-base-14: 14px;
     --font-size-base-16: 16px;
     --font-size-base-18: 18px;
+    --font-size-base-28: 28px;
     --font-size-base-65: 65px;
     --font-size-base-90: 90px;
 }
@@ -39,7 +40,7 @@
 
 
 .grid-layout-1 {
-    grid-template-columns: 0.5fr 0.5fr 1fr 1fr 0.5fr;
+    grid-template-columns: 0.5fr 0.5fr 1fr 0.7fr;
 }
 
 .grid-2-layout-1 {
@@ -49,7 +50,7 @@
 /*  */
 
 .grid-layout-2 {
-    grid-template-columns: 158px 158px 470px 470px 228px;
+    grid-template-columns: 158px 158px 712px 470px;
 }
 
 .grid-2-layout-2 {
@@ -117,12 +118,14 @@
 }
 
 .home-card-count-quarters {
-    font-size: var(--font-size-base-16);
+    font-size: var(--font-size-base-28);
     font-weight: 300;
     color: #57585a;
     display: flex;
     height: 100%;
     align-items: center;
+    justify-content: end;
+    margin-top: -15px;
 }
 
 .home-card-body-count {
