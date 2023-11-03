@@ -148,7 +148,11 @@
           News:
       </div>
 
-      <div class="home-card-body">
+      <div *ngIf="true" class="empty-card">
+        Nenhum registro disponível
+      </div>
+
+      <div *ngIf="false" class="home-card-body">
         <div class="home-card-grid-2fr">
             <div class="text-right d-flex flex-column">
               <span>Último Job Aprovado</span>
@@ -299,14 +303,19 @@
     </div>
     <div class="home-card home-card-column-between animate__animated animate__zoomIn">
         <div class="home-card-header d-flex justify-content-end">
-            <span>{{ homeData.jobs.ajustes.porcentagem }}% | Ajustes:</span>
+            <!-- <span>{{ homeData.jobs.ajustes.porcentagem }}% | Ajustes:</span> -->
+            <span>Ajustes:</span>
         </div>
 
-        <div class="home-card-body">
+        <div *ngIf="true" class="empty-card">
+          Nenhum registro disponível
+        </div>
+
+        <div *ngIf="false" class="home-card-body">
             <span class="c-ajustes home-card-count d-flex justify-content-end">{{ homeData.jobs.ajustes.total | number:'2.0' }}</span>
         </div>
 
-        <div class="home-card-footer">
+        <div *ngIf="false" class="home-card-footer">
             <div class="d-flex justify-content-end">
                 <span>{{ homeData.jobs.ajustes.valor | number:'2.0' }}</span>
             </div>
@@ -349,10 +358,11 @@
         <span class="espace-bottom-progress">Metas:</span>
     </div>
 
-    <div class="home-card-body" *ngIf="false">
-      Em desenvolvimento...
+    <div *ngIf="true" class="empty-card">
+      Nenhum registro disponível
     </div>
-    <div class="home-card-body" *ngIf="true">
+
+    <div class="home-card-body" *ngIf="false">
         <div class="espace-bottom-progress">
             <div class="d-flex justify-content-between align-items-center">
                 <span>Últimos 12 meses</span>
@@ -409,11 +419,16 @@
   </div>
   <div class="home-card grid-span-2 home-card-column-between animate__animated animate__fadeIn">
     <div class="home-card-header d-flex justify-content-between">
-        <span>{{ homeData.jobs.em_producao.total | number:'2.0' }}</span>
+        <!-- <span>{{ homeData.jobs.em_producao.total | number:'2.0' }}</span> -->
+        <span></span>
         <span>Em Produção:</span>
     </div>
 
-    <div class="home-card-body">
+    <div *ngIf="true" class="empty-card">
+      Nenhum registro disponível
+    </div>
+
+    <div *ngIf="false" class="home-card-body">
         <div class="espace-bottom-progress" *ngFor="let job of homeData.jobs.em_producao.jobs">
             <div class="d-flex justify-content-between">
                 <span class="espace-bottom-progress">{{ job.nome || '-' }}</span>
@@ -424,17 +439,21 @@
         </div>
     </div>
   </div>
-  <div class="home-card home-card-column-between animate__animated animate__fadeInDown">
+  <div class="home-card home-card-column-between animate__animated animate__fadeInDown" style="height: 10rem;">
     <div class="home-card-header d-flex justify-content-between">
         <mat-icon>add</mat-icon>
         DeadLine:
     </div>
 
-    <div class="home-card-body">
+    <div *ngIf="true" class="empty-card">
+      Nenhum registro disponível
+    </div>
+
+    <div *ngIf="false" class="home-card-body">
         <span class="home-card-count d-flex justify-content-end">{{ homeData.jobs.prazo_final.total | number:'2.0' }}</span>
     </div>
 
-    <div class="home-card-footer">
+    <div *ngIf="false" class="home-card-footer">
       <div class="d-flex justify-content-end">
           <span>$ {{ homeData.jobs.prazo_final.valor }}</span>
       </div>
@@ -465,11 +484,16 @@
           <mat-icon>keyboard_arrow_down</mat-icon>
       </div>
       <div>
-        Meta Mensal: <span [countUp]="homeData.tendencia.meta_mensal" [duration]="3000" >{{ homeData.tendencia.meta_mensal | number:'2.0' }}</span>
+        <!-- Meta Mensal: <span [countUp]="homeData.tendencia.meta_mensal" [duration]="3000" >{{ homeData.tendencia.meta_mensal | number:'2.0' }}</span> -->
+        Meta Mensal
       </div>
     </div>
 
-    <div class="home-card-body ">
+    <div *ngIf="true" class="empty-card">
+      Nenhum registro disponível
+    </div>
+
+    <div *ngIf="false" class="home-card-body">
       <div id="chart" (click)="openChartDetails(chartOptions, EChartType.LINE, 'Tendência:')">
         <apx-chart
           [series]="chartOptions.series"
@@ -491,11 +515,15 @@
         Sold Out:
     </div>
 
-    <div class="home-card-body">
+    <div *ngIf="true" class="empty-card">
+      Nenhum registro disponível
+    </div>
+
+    <div *ngIf="false" class="home-card-body">
         <span class="home-card-count d-flex justify-content-end">{{ homeData.sold_out.total | number:'2.0' }}</span>
     </div>
 
-    <div class="home-card-footer">
+    <div *ngIf="false" class="home-card-footer">
       <div class="d-flex justify-content-end">
           <span>$ {{ homeData.sold_out.valor | number:'1.0' }}</span>
       </div>
