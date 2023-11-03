@@ -116,6 +116,15 @@
     color: #57585a;
 }
 
+.home-card-count-quarters {
+    font-size: var(--font-size-base-16);
+    font-weight: 300;
+    color: #57585a;
+    display: flex;
+    height: 100%;
+    align-items: center;
+}
+
 .home-card-body-count {
     height: 100%;
     display: flex;
@@ -251,4 +260,16 @@
 
   .espace-bottom-progress {
     margin-bottom: 2px;
+  }
+
+  .sapce-bottm-3px {
+    margin-bottom: 3px;
+  }
+
+  .flex-justify-content-end {
+    justify-content: end;
+  }
+
+  .height-100 {
+    height: 100%;
   }
