@@ -131,8 +131,8 @@ export class HomeComponent implements OnInit {
       this.homeService.searchValue = this.searchForm.value;
     } else {
       this.searchForm.setValue(this.homeService.searchValue);
-      this.layoutGrid = this.homeService.layoutGrid;
-      this.layoutGrid2 = this.homeService.layoutGrid2;
+      this.layoutGrid = this.homeService.layoutGrid || this.layoutGrid;
+      this.layoutGrid2 = this.homeService.layoutGrid2 || this.layoutGrid2;
     }
 
     this.searchForm.valueChanges
