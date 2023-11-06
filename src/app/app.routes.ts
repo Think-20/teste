@@ -66,6 +66,7 @@ import { PerformanceReportLiteComponent } from './reports/performance-report-lit
 import { ServiceReportComponent } from './reports/service-report/report-list.component';
 import { AlertsContainerComponent } from './alerts/components/alerts-container/alerts-container.component';
 import { MemoriesContainerComponent } from './memories/components/memories-container/memories-container.component';
+import { HomeEmptyComponent } from './home-empty/home-empty.component';
 
 export const ROUTES: Routes = [
   {
@@ -77,7 +78,10 @@ export const ROUTES: Routes = [
         path: '', redirectTo: 'home', pathMatch: 'full'
       },
       {
-        path: 'home', component: HomeComponent, canActivate: [AuthGuard]
+        path: 'dashboard', component: HomeComponent, canActivate: [AuthGuard]
+      },
+      {
+        path: 'home', component: HomeEmptyComponent, canActivate: [AuthGuard]
       },
       {
         path: 'performance-lite', component: PerformanceReportLiteComponent, canActivate: [AuthGuard]

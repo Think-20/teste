@@ -217,6 +217,7 @@ import { NgApexchartsModule } from "ng-apexcharts";
 import { ChartPreviewComponent } from './home/components/chart-preview.component';
 import { CountAnimationPipe } from './shared/count-animation.pipe';
 import { CountUpDirective, Destroy } from './shared/count-animation.directive';
+import { HomeEmptyComponent } from './home-empty/home-empty.component';
 
 registerLocaleData(localePt);
 
@@ -231,6 +232,7 @@ registerLocaleData(localePt);
     
     AppComponent,
     HomeComponent,
+    HomeEmptyComponent,
     NotificationBarComponent,
     MeasureComponent,
     FinalityComponent,
