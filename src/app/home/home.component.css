@@ -3,6 +3,7 @@
     --font-size-base-10: 10px;
     --font-size-base-12: 12px;
     --font-size-base-14: 14px;
+    --font-size-base-15: 15px;
     --font-size-base-16: 16px;
     --font-size-base-18: 18px;
     --font-size-base-28: 28px;
@@ -146,6 +147,10 @@
 
 .home-card-small-1-description {
     font-size: var(--font-size-base-12);
+}
+
+.home-card-size-15 {
+    font-size: var(--font-size-base-15);
 }
 
 .home-card-size-16 {

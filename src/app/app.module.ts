@@ -218,6 +218,7 @@ import { ChartPreviewComponent } from './home/components/chart-preview.component
 import { CountAnimationPipe } from './shared/count-animation.pipe';
 import { CountUpDirective, Destroy } from './shared/count-animation.directive';
 import { HomeEmptyComponent } from './home-empty/home-empty.component';
+import { RoundPipe } from './shared/round.pipe';
 
 registerLocaleData(localePt);
 
@@ -228,6 +229,7 @@ registerLocaleData(localePt);
     UcWordsDirective,
     NumberAbbreviationPipe,
     CountAnimationPipe,
+    RoundPipe,
     CountUpDirective,
     
     AppComponent,
