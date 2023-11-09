@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./goals.component.css']
 })
 export class GoalsComponent implements OnInit {
-  private yearsMonth: YearsMonth[] = [];
+  public yearsMonth: YearsMonth[] = [];
   public yearMonth: YearsMonth;
   public year = new Date().getFullYear();
   goalsForm: FormGroup;
