@@ -67,6 +67,7 @@ import { ServiceReportComponent } from './reports/service-report/report-list.com
 import { AlertsContainerComponent } from './alerts/components/alerts-container/alerts-container.component';
 import { MemoriesContainerComponent } from './memories/components/memories-container/memories-container.component';
 import { HomeEmptyComponent } from './home-empty/home-empty.component';
+import { GoalsComponent } from './goals/goals.component';
 
 export const ROUTES: Routes = [
   {
@@ -339,6 +340,9 @@ export const ROUTES: Routes = [
       {
         path: 'memories', component: MemoriesContainerComponent, canActivate: [AuthGuard]
       },
+      {
+        path: 'goals', component: GoalsComponent, canActivate: [AuthGuard]
+      }
     ]
   }
 ]

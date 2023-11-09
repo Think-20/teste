@@ -1,0 +1,54 @@
+<div class="container-goals" style="margin-right: 1rem;margin-left: 1rem;">
+    <div class="my-container">
+      <h3 class="lead row">
+        <div class="col-md-12">
+          <div  class="flex center"> 
+            <button (click)="addYear(-1)" mat-button type="button" class="month-arrow">
+              <mat-icon>keyboard_arrow_left</mat-icon>
+            </button>
+            &nbsp;Metas de
+            <span class="actualYear" (click)="yearSelect.open()">
+              {{ year }}
+              <mat-select class="select-hidden col-md-3" #yearSelect>
+                <mat-option *ngFor="let year of yearsMonth" (click)="updateYear(year)">{{ year.year }}</mat-option>
+              </mat-select>
+            </span>
+     
+            <button (click)="addYear(1)" mat-button type="button" class="month-arrow">
+              <mat-icon>keyboard_arrow_right</mat-icon>
+            </button>
+          </div>
+
+          <div class="goals-body">
+            <form [formGroup]="goalsForm" autocomplete="off">
+                <div class="goals-grid" *ngIf="yearMonth">
+                    <div class="goals-card" *ngFor="let month of yearMonth.months">
+                        <mat-card>
+                          <h4 class="goals-card-title">{{ month.name }}</h4>
+                            
+                            <mat-card-content>
+                                <mat-form-field class="pr-2">
+                                    <input
+                                      currencyMask
+                                      matInput
+                                      [name]="month.name"
+                                      type="text"
+                                      class="text-right"
+                                      placeholder="Meta"
+                                      [formControlName]="month.name"
+                                      (keypress)="allowOnlyNumbers($event)">
+                                  </mat-form-field>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </form>
+           
+            <div class="mt-4 d-flex justify-content-end">
+                <button (click)="salvar()" class="cb-button" color="primary" mat-raised-button>SALVAR</button>
+              </div>
+          </div>
+        </div>
+      </h3>
+    </div>
+</div>

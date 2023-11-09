@@ -219,6 +219,8 @@ import { CountAnimationPipe } from './shared/count-animation.pipe';
 import { CountUpDirective, Destroy } from './shared/count-animation.directive';
 import { HomeEmptyComponent } from './home-empty/home-empty.component';
 import { RoundPipe } from './shared/round.pipe';
+import { GoalsComponent } from './goals/goals.component';
+import { GoalsService } from './goals/goals.service';
 
 registerLocaleData(localePt);
 
@@ -342,6 +344,7 @@ registerLocaleData(localePt);
     MemoriesContainerComponent,
     FormatMaskDirective,
     ChartPreviewComponent,
+    GoalsComponent,
 
   ],
   imports: [
@@ -441,6 +444,7 @@ registerLocaleData(localePt);
     ReportService,
     JobEventsService,
     HomeService,
+    GoalsService,
     Destroy,
     MatDialog,
     MatSnackBar,
