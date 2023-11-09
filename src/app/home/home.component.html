@@ -144,34 +144,6 @@
             </div>
         </div>
     </div>
-  <div class="home-card animate__animated animate__fadeInDown">
-      <div class="home-card-header d-flex justify-content-end">
-          Ranking:
-      </div>
-
-      <div class="home-card-body">
-          <div class="home-card-grid-2fr">
-              <div class="text-right d-flex flex-column">
-                  <div class="d-flex flex-column">
-                      <span class="home-card-small-1-description">1 Quarter</span>
-                      <span class="fw-500 home-card-small-1-description sapce-bottm-3px">{{ homeData.ranking.firstQuarterTopSeller?.attendance.name || '-' }}</span>
-                      <span class="home-card-small-1-description">2 Quarter</span>
-                      <span class="fw-500 home-card-small-1-description sapce-bottm-3px">{{ homeData.ranking.secondQuarterTopSeller?.attendance.name || '-' }}</span>
-                      <span class="home-card-small-1-description">3 Quarter</span>
-                      <span class="fw-500 home-card-small-1-description sapce-bottm-3px">{{ homeData.ranking.thirdQuarterTopSeller?.attendance.name || '-' }}</span>
-                      <span class="home-card-small-1-description">4 Quarter</span>
-                      <span class="fw-500 home-card-small-1-description">{{ homeData.ranking.fourthQuarterTopSeller?.attendance.name || '-' }}</span>
-                  </div>
-              </div>
-              <div class="d-flex flex-column height-100">
-                <div class="height-100">
-                  <span class="d-flex home-card-small-description flex-justify-content-end">Últimos 12 meses</span>
-                  <span class="home-card-count-quarters">{{ homeData.ranking.last12MonthsTopSeller?.attendance.name || '-' }}</span>
-                </div>
-              </div>
-          </div>
-      </div>
-    </div>
     <div class="home-card animate__animated animate__fadeIn br-none">
       <div class="home-card-header d-flex justify-content-end">
           News:
@@ -231,6 +203,34 @@
             </div>
         </div>
       </div>
+  </div>
+  <div class="home-card animate__animated animate__fadeInDown">
+    <div class="home-card-header d-flex justify-content-end">
+        Ranking:
+    </div>
+
+    <div class="home-card-body">
+        <div class="home-card-grid-2fr">
+            <div class="text-right d-flex flex-column">
+                <div class="d-flex flex-column">
+                    <span class="home-card-small-1-description">1 Quarter</span>
+                    <span class="fw-500 home-card-small-1-description sapce-bottm-3px">{{ homeData.ranking.firstQuarterTopSeller?.attendance.name || '-' }}</span>
+                    <span class="home-card-small-1-description">2 Quarter</span>
+                    <span class="fw-500 home-card-small-1-description sapce-bottm-3px">{{ homeData.ranking.secondQuarterTopSeller?.attendance.name || '-' }}</span>
+                    <span class="home-card-small-1-description">3 Quarter</span>
+                    <span class="fw-500 home-card-small-1-description sapce-bottm-3px">{{ homeData.ranking.thirdQuarterTopSeller?.attendance.name || '-' }}</span>
+                    <span class="home-card-small-1-description">4 Quarter</span>
+                    <span class="fw-500 home-card-small-1-description">{{ homeData.ranking.fourthQuarterTopSeller?.attendance.name || '-' }}</span>
+                </div>
+            </div>
+            <div class="d-flex flex-column height-100">
+              <div class="height-100">
+                <span class="d-flex home-card-small-description flex-justify-content-end">Últimos 12 meses</span>
+                <span class="home-card-count-quarters">{{ homeData.ranking.last12MonthsTopSeller?.attendance.name || '-' }}</span>
+              </div>
+            </div>
+        </div>
+    </div>
   </div>
 </ng-template>
 
