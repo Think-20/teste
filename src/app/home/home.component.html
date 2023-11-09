@@ -304,19 +304,18 @@
     </div>
     <div class="home-card home-card-column-between animate__animated animate__zoomIn">
         <div class="home-card-header d-flex justify-content-end">
-            <!-- <span class="home-card-size-15">{{ homeData.jobs.ajustes.porcentagem }}% | Ajustes:</span> -->
-            <span>Ajustes:</span>
+            <span class="home-card-size-15">{{ homeData.jobs.ajustes.porcentagem }}% | Ajustes:</span>
         </div>
 
-        <div *ngIf="true" class="empty-card">
+        <div *ngIf="false" class="empty-card">
           Nenhum registro disponível
         </div>
 
-        <div *ngIf="false" class="home-card-body">
+        <div class="home-card-body">
             <span class="c-ajustes home-card-count d-flex justify-content-end">{{ homeData.jobs.ajustes.total | number:'2.0' }}</span>
         </div>
 
-        <div *ngIf="false" class="home-card-footer">
+        <div class="home-card-footer">
             <div class="d-flex justify-content-end">
                 <span>{{ homeData.jobs.ajustes.valor | number:'2.0' }}</span>
             </div>
@@ -359,11 +358,11 @@
         <span class="espace-bottom-progress">Metas:</span>
     </div>
 
-    <div *ngIf="true" class="empty-card">
+    <div *ngIf="false" class="empty-card">
       Nenhum registro disponível
     </div>
 
-    <div class="home-card-body" *ngIf="false">
+    <div class="home-card-body">
         <div class="espace-bottom-progress">
             <div class="d-flex justify-content-between align-items-center">
                 <span>Últimos 12 meses</span>
