@@ -1,4 +1,13 @@
 export interface YearsMonth {
     year: number, 
-    months: { month: number, name: string }[];
+    months: Goal[];
+}
+
+export interface Goal {
+    id?: number,
+    month_name: string 
+    month: number,
+    year: number,
+    value: number,
+    message?: string;
 }

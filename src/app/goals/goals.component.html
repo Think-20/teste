@@ -19,23 +19,23 @@
             </button>
           </div>
 
-          <div class="goals-body">
+          <div class="goals-body" *ngIf="goalsForm">
             <form [formGroup]="goalsForm" autocomplete="off">
                 <div class="goals-grid" *ngIf="yearMonth">
                     <div class="goals-card" *ngFor="let month of yearMonth.months">
                         <mat-card>
-                          <h4 class="goals-card-title">{{ month.name }}</h4>
+                          <h4 class="goals-card-title">{{ month.month_name }}</h4>
                             
                             <mat-card-content>
                                 <mat-form-field class="pr-2">
                                     <input
                                       currencyMask
                                       matInput
-                                      [name]="month.name"
+                                      [name]="month.month"
                                       type="text"
                                       class="text-right"
                                       placeholder="Meta"
-                                      [formControlName]="month.name"
+                                      [formControlName]="month.month"
                                       (keypress)="allowOnlyNumbers($event)">
                                   </mat-form-field>
                             </mat-card-content>
@@ -44,7 +44,7 @@
                 </div>
             </form>
            
-            <div class="mt-4 d-flex justify-content-end">
+            <div *ngIf="false" class="mt-4 d-flex justify-content-end">
                 <button (click)="salvar()" class="cb-button" color="primary" mat-raised-button>SALVAR</button>
               </div>
           </div>

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { YearsMonth } from './goals.model';
+import { Goal, Month, YearsMonth } from './goals.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { GoalsService } from './goals.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'cb-goals',
@@ -11,44 +13,114 @@ export class GoalsComponent implements OnInit {
   public yearsMonth: YearsMonth[] = [];
   public yearMonth: YearsMonth;
   public year = new Date().getFullYear();
-  goalsForm: FormGroup;
-  
-  constructor(private formBuilder: FormBuilder) { }
+  public goals: Goal[] = [];
+  public goalsForm: FormGroup;
+  public readonly maxYear = new Date().getFullYear();
+  public readonly minYear = 2018;
+
+  constructor(private formBuilder: FormBuilder, private goalService: GoalsService, private snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this.fillMonthYears();
+    this.loadGoals();
+  }
+
+
+  loadGoals() {
+    this.goalService.getGoals().subscribe(response => {
+      this.goals = response;
+      this.updateValuesFormYearsMonth();
+    })
+  }
+
+  updateGoal(goal: Goal) {
+    this.goalService.updateGoals(goal).subscribe(response => {
+      this.snackBar.open(response.message)
+    })
+  }
+
+  createGoal(goal: Goal) {
+    this.goalService.postGoals(goal).subscribe(response => {
+      this.snackBar.open(response.message)
+    })
+  }
+
+
+  updateValuesFormYearsMonth() {
+    this.yearMonth.months.forEach(month => {
+      const matchingGoal = this.getGoal(month.year, month.month);
+
+      if (matchingGoal) {
+        const { id, value } = matchingGoal;
+        Object.assign(month, { id, value });
+      }
+    });
+
+    this.createForm();
+  }
+
+  getGoal(year: number, month: number): Goal {
+    return this.goals.find(goal => goal.year === year && goal.month === month);
   }
 
   createForm() {
-      this.goalsForm = this.formBuilder.group({
-        id: this.formBuilder.control('', []),
-      })
+    this.goalsForm = this.formBuilder.group({})
 
-      this.yearMonth.months.forEach(month => {
-        this.goalsForm.addControl(month.name, this.formBuilder.control(null));
-        this.goalsForm.controls[month.name].updateValueAndValidity();
-      })
+    this.yearMonth.months.forEach(month => {
+      const monthId = month.month;
+      this.goalsForm.addControl(monthId.toString(), this.formBuilder.control(month.value));
+
+      const control = this.goalsForm.controls[monthId];
+      control.updateValueAndValidity();
+
+      control.valueChanges
+        .do(clientName => {
+          console.log('Aguarde...')
+        })
+        .debounceTime(1000)
+        .subscribe(value => {
+          this.createUpdateGoal(month, value);
+        })
+    })
   }
-  
+
+  createUpdateGoal(goal: Goal, value: number) {
+    goal.value = value;
+
+    if (goal.id)
+      this.updateGoal(goal);
+    else
+      this.createGoal(goal);
+  }
+
+  getValueByMonthAndYear(month: number): Goal {
+    const goal = this.goals.find(x => x.year === this.year && x.month == month);
+
+    if (!goal) {
+      return;
+    }
+
+    return goal;
+  }
+
   private fillMonthYears() {
-    for (let year = 2018; year <= new Date().getFullYear(); year++) {
+    for (let year = this.minYear; year <= this.maxYear; year++) {
       const monthsOfYear = [];
       for (let month = 1; month <= 12; month++) {
         const date = new Date(year, month - 1, 1);
         const monthName = date.toLocaleString('default', { month: 'long' });
-        monthsOfYear.push({ month: month, name: monthName });
+        monthsOfYear.push({ month: month, month_name: monthName, year: year, id: null, value: null });
       }
       this.yearsMonth.push({ year: year, months: monthsOfYear });
     }
 
-    this.yearMonth = this.yearsMonth[this.yearsMonth.length -1]
-    this.createForm();
+    this.yearMonth = this.yearsMonth[this.yearsMonth.length - 1]
   }
 
   updateYear(yearMonth: YearsMonth) {
-      this.yearMonth = yearMonth;
-      this.year = yearMonth.year;
-      this.resetForm();
+    this.yearMonth = yearMonth;
+    this.year = yearMonth.year;
+    this.updateDate();
   }
 
   allowOnlyNumbers(event: KeyboardEvent) {
@@ -61,8 +133,20 @@ export class GoalsComponent implements OnInit {
   }
 
   addYear(increment: number) {
+    var yearAux = this.year;
+    yearAux += increment;
+
+    if (yearAux > this.maxYear || yearAux < this.minYear) {
+      return;
+    }
+
     this.year += increment;
-    this.resetForm();
+    this.yearMonth = this.yearsMonth.find(x => x.year === this.year);
+    this.updateDate();
+  }
+
+  updateDate() {
+    this.updateValuesFormYearsMonth();
   }
 
   resetForm() {
