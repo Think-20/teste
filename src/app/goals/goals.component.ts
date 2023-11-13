@@ -3,6 +3,7 @@ import { Goal, Month, YearsMonth } from './goals.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GoalsService } from './goals.service';
 import { MatSnackBar } from '@angular/material';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'cb-goals',
@@ -36,15 +37,20 @@ export class GoalsComponent implements OnInit {
   updateGoal(goal: Goal) {
     this.goalService.updateGoals(goal).subscribe(response => {
       this.snackBar.open(response.message)
+      this.dismissSnackBar();
     })
   }
 
   createGoal(goal: Goal) {
     this.goalService.postGoals(goal).subscribe(response => {
       this.snackBar.open(response.message)
+      this.dismissSnackBar();
     })
   }
 
+  dismissSnackBar() {
+    Observable.timer(1000).subscribe(() => this.snackBar.dismiss())
+  }
 
   updateValuesFormYearsMonth() {
     this.yearMonth.months.forEach(month => {
@@ -79,6 +85,12 @@ export class GoalsComponent implements OnInit {
         })
         .debounceTime(1000)
         .subscribe(value => {
+          if (!value) {
+            this.snackBar.open("Por favor informe um valor")
+            control.setValue(month.value, { emitEvent: false });
+            this.dismissSnackBar();
+            return;
+          }
           this.createUpdateGoal(month, value);
         })
     })
@@ -156,4 +168,5 @@ export class GoalsComponent implements OnInit {
   salvar() {
     console.log(this.goalsForm.value)
   }
+
 }

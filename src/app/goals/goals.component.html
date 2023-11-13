@@ -22,7 +22,7 @@
           <div class="goals-body" *ngIf="goalsForm">
             <form [formGroup]="goalsForm" autocomplete="off">
                 <div class="goals-grid" *ngIf="yearMonth">
-                    <div class="goals-card" *ngFor="let month of yearMonth.months">
+                    <div *ngFor="let month of yearMonth.months; index as i;" class="goals-card animate__animated animate__fadeIn">
                         <mat-card>
                           <h4 class="goals-card-title">{{ month.month_name }}</h4>
                             
