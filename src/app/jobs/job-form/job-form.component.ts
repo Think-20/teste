@@ -643,6 +643,8 @@ export class JobFormComponent implements OnInit {
     let jobActivity = <JobActivity> this.jobForm.controls.job_activity.value
 
     let task = this.jobService.data.task
+
+    job = this.addComission(job);
     this.buttonEnable = false
 
     if ( ! isObject(task)) {
@@ -870,7 +872,7 @@ export class JobFormComponent implements OnInit {
   }
 
   getAttendancesWihoutAttendance2() {
-    if (this.typeForm != 'edit'){ 
+    if (this.typeForm == 'show'){ 
       return this.attendances;
     }
 
