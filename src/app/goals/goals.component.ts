@@ -28,10 +28,13 @@ export class GoalsComponent implements OnInit {
 
 
   loadGoals() {
+    let snackBar = this.snackBar.open('Carregando metas...')
     this.goalService.getGoals().subscribe(response => {
       this.goals = response;
       this.updateValuesFormYearsMonth();
-    })
+      snackBar.dismiss();
+    },
+    () =>  snackBar.dismiss())
   }
 
   updateGoal(goal: Goal) {
