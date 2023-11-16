@@ -94,6 +94,9 @@
                 </div>
               </div>
             </div>
+            <div class="sub-navbar">
+              <a mat-raised-button [routerLink]="['/goals']" [disabled]="hasNoPermission(user, '/goals')">Metas</a>
+            </div>
           </div>
         </div>
 
