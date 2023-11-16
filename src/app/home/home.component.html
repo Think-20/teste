@@ -219,13 +219,13 @@
                     <span class="fw-bold home-card-small-1-description">{{ homeData.ranking.fourthQuarterTopSeller?.attendance.name || '-' }}</span>
                 </div>
             </div>
-            <div class="d-flex flex-column height-100">
-              <div class="height-100">
+            <div class="d-flex flex-column">
+              <div>
                 <div class="home-card-header d-flex justify-content-end">
                   Ranking:
-              </div>
+                </div>
                 <span class="d-flex home-card-small-description flex-justify-content-end">Últimos 12 meses</span>
-                <span class="home-card-count-quarters">{{ homeData.ranking.last12MonthsTopSeller?.attendance.name || '-' }}</span>
+                <span class="home-card-count-quarters">1º {{ homeData.ranking.last12MonthsTopSeller?.attendance.name || '-' }}</span>
               </div>
             </div>
         </div>

@@ -133,11 +133,10 @@
 }
 
 .home-card-count-quarters {
-    font-size: var(--font-size-base-18);
+    font-size: var(--font-size-base-15);
     font-weight: 300;
     color: #57585a;
     display: flex;
-    height: 100%;
     justify-content: end;
     text-align: end;
     font-weight: 500;
