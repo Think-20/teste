@@ -138,9 +138,8 @@
     color: #57585a;
     display: flex;
     height: 100%;
-    align-items: center;
     justify-content: end;
-    margin-top: -15px;
+    text-align: end;
 }
 
 .home-card-body-count {
