@@ -294,14 +294,14 @@ export class HomeComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       if (params.date != undefined) {
         this.date = new Date(params.date + "T00:00:00");
-        this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1));
+        this.month = MONTHS[0];
         this.year = this.date.getFullYear();
       } else {
 
         this.date = new Date();
         const nextDate = new Date();
         nextDate.setMonth(nextDate.getMonth());
-        this.month = MONTHS.find(month => month.id == (this.date.getMonth() + 1));
+        this.month = MONTHS[0];
         this.nextMonth = MONTHS[nextDate.getMonth()];
 
         this.year = this.date.getFullYear();
