@@ -488,11 +488,11 @@
       </div>
     </div>
 
-    <div *ngIf="true" class="empty-card">
+    <div *ngIf="false" class="empty-card">
       Nenhum registro disponível
     </div>
 
-    <div *ngIf="false" class="home-card-body">
+    <div *ngIf="true" class="home-card-body">
       <div id="chart" (click)="openChartDetails(chartOptions, EChartType.LINE, 'Tendência:')">
         <apx-chart
           [series]="chartOptions.series"
