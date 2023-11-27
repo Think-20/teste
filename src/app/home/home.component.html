@@ -423,11 +423,11 @@
         <span>Em Produção:</span>
     </div>
 
-    <div *ngIf="true" class="empty-card">
+    <div *ngIf="false" class="empty-card">
       Nenhum registro disponível
     </div>
 
-    <div *ngIf="false" class="home-card-body">
+    <div *ngIf="true" class="home-card-body">
         <div class="espace-bottom-progress" *ngFor="let job of homeData.jobs.em_producao.jobs">
             <div class="d-flex justify-content-between">
                 <span class="espace-bottom-progress">{{ job.nome || '-' }}</span>
@@ -503,6 +503,7 @@
           [dataLabels]="chartOptions.dataLabels"
           [grid]="chartOptions.grid"
           [stroke]="chartOptions.stroke"
+          [tooltip]="chartOptions.tooltip"
         ></apx-chart>
       </div>
       
