@@ -6,7 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MONTHS, Month } from 'app/shared/date/months';
 import { HomeService } from './home.service';
 import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
-import { HomeData } from './models/home-data.model';
+import { HomeData, Series } from './models/home-data.model';
 import { HomeInfo } from './models/home-info.model';
 import { ChartPreviewComponent, EChartType } from './components/chart-preview.component';
 
@@ -20,7 +20,12 @@ import {
   ApexPlotOptions,
   ApexStates,
   ApexTheme,
-  ApexTitleSubtitle
+  ApexTitleSubtitle,
+  ApexTooltip,
+  ApexGrid,
+  ApexMarkers,
+  ApexXAxis,
+  ApexYAxis
 } from "ng-apexcharts";
 
 export type ChartOptions = {
@@ -38,6 +43,27 @@ export type ChartOptions = {
   dataLabels: ApexDataLabels;
   colors: any;
 };
+
+export type LineChartOptions = {
+  series: Series[],
+  grid: ApexGrid;
+  chart: ApexChart;
+  responsive: ApexResponsive[];
+  labels: any;
+  fill: any;
+  stroke: ApexStroke;
+  states: ApexStates;
+  legend: ApexLegend;
+  title: ApexTitleSubtitle;
+  theme: ApexTheme;
+  plotOptions: ApexPlotOptions;
+  dataLabels: ApexDataLabels;
+  colors: any;
+  tooltip: ApexTooltip;
+  markers: ApexMarkers;
+  xaxis: ApexXAxis
+  yaxis: ApexYAxis
+}
 @Component({
   selector: 'cb-home',
   templateUrl: './home.component.html',
@@ -47,7 +73,7 @@ export class HomeComponent implements OnInit {
   layoutGrid = "grid-layout-2";
   layoutGrid2 = "grid-2-layout-2";
 
-  chartOptions = {
+  chartOptions:Partial<LineChartOptions> = {
     series: [],
     chart: { height: 150, type: "line", toolbar: { show: false }},
     grid: { borderColor: "#fff", position: "back", xaxis: { lines: { show: true } }, yaxis: { lines: { show: true } } },
@@ -58,6 +84,7 @@ export class HomeComponent implements OnInit {
     xaxis: { categories: [] },
     yaxis: { show: false },
     legend: { show: false },
+
   };
 
   chartOptionsPieJobs: Partial<ChartOptions> = {
@@ -417,5 +444,11 @@ export class HomeComponent implements OnInit {
     this.chartOptions.series = this.homeData.tendencia.series;
     this.chartOptions.colors = this.homeData.tendencia.colors;
     this.chartOptions.xaxis.categories = this.homeData.tendencia.meses_ano;
+
+    this.chartOptions.tooltip = {
+      y: {
+          formatter: (val) => val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+      },
+    };
   }
 } 
