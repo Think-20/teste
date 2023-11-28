@@ -47,7 +47,7 @@ export interface HomeData {
     jobs2: {
         labels: string[];
         colors: string[];
-        series: number[];
+        series: string[];
         total: number;
         meta_jobs: number;
         meta_aprovacao: number;

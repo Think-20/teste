@@ -42,6 +42,7 @@ export type ChartOptions = {
   plotOptions: ApexPlotOptions;
   dataLabels: ApexDataLabels;
   colors: any;
+  tooltip: ApexTooltip,
 };
 
 export type LineChartOptions = {
@@ -84,7 +85,6 @@ export class HomeComponent implements OnInit {
     xaxis: { categories: [] },
     yaxis: { show: false },
     legend: { show: false },
-
   };
 
   chartOptionsPieJobs: Partial<ChartOptions> = {
@@ -96,19 +96,21 @@ export class HomeComponent implements OnInit {
     labels: [],
     dataLabels: { enabled: false },
     colors: [],
-    responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: "bottom" } } }]
+    responsive: [{ breakpoint: 480, options: { chart: { width: 200 }, legend: { position: "bottom" } } }],
+    tooltip: { y: {} }
   };
 
   chartOptionsPie: Partial<ChartOptions> = {
     series: [],
     chart: { width: 270, type: "donut" },
     stroke: { width: 0 },
-    legend: { position: "left", markers: { radius: 0, height: 10 } },
-    plotOptions: { pie: { donut: { size: "80%", labels: { show: true, total: { showAlways: true, show: true, fontSize: "50px", fontFamily: "-apple-system,BlinkMacSystemFont, Segoe UI ,Roboto, Helvetica Neue,Arial,sans-serif", color: "#57585a", fontWeight: "300" }, value: { fontFamily: "-apple-system,BlinkMacSystemFont, Segoe UI ,Roboto, Helvetica Neue,Arial,sans-serif", color: "#57585a", fontWeight: "100", fontSize: "15px", offsetY: 15 }, name : { offsetY: 10 } } } } },
+    legend: { position: "left", markers: { radius: 0, height: 10 }, offsetY: 0 },
+    plotOptions: { pie: { donut: { size: "80%", labels: { show: true, total: { showAlways: true, show: true, fontSize: "45px", fontFamily: "-apple-system,BlinkMacSystemFont, Segoe UI ,Roboto, Helvetica Neue,Arial,sans-serif", color: "#57585a", fontWeight: "300" }, value: { fontFamily: "-apple-system,BlinkMacSystemFont, Segoe UI ,Roboto, Helvetica Neue,Arial,sans-serif", color: "#57585a", fontWeight: "100", fontSize: "13px", offsetY: 15 }, name : { offsetY: 10 } } } } },
     labels: [],
     colors: [],
     dataLabels: { enabled: false },
-    responsive: [ { breakpoint: 480, options: { chart: { width: 200 }, legend: { position: "bottom" } } } ]
+    responsive: [ { breakpoint: 480, options: { chart: { width: 200 }, legend: { position: "bottom" } } } ],
+    tooltip: { y: {} }
   };
   EChartType = EChartType;
   searchForm: FormGroup;
@@ -349,9 +351,13 @@ export class HomeComponent implements OnInit {
 
   openChartDetails(chartOptions, chartType, title) {
     const dialogRef = this.dialog.open(ChartPreviewComponent);
-    dialogRef.componentInstance.chartOptions = chartOptions;
+    dialogRef.componentInstance.homeData = this.homeData;
     dialogRef.componentInstance.chartType = chartType;
     dialogRef.componentInstance.title = title;
+
+    dialogRef.componentInstance.configureChartOptionsPieJobs();
+    dialogRef.componentInstance.configureChartOptionsPie();
+    dialogRef.componentInstance.configureChartLine();
   }
 
   selectGridLayout(l1: string, l2: string) {
@@ -423,17 +429,33 @@ export class HomeComponent implements OnInit {
     this.chartOptionsPieJobs.plotOptions.pie.donut.labels.total.label = this.homeData.jobs.total.toLocaleString(undefined, { minimumFractionDigits: 0 });
     this.chartOptionsPieJobs.labels = this.homeData.jobs.labels;
     this.chartOptionsPieJobs.colors = this.homeData.jobs.colors;
+    this.chartOptionsPieJobs.tooltip = { y: { formatter: (val) => this.getValue(val) } }
+
     if (this.homeData.jobs.total > 99999) {
       this.chartOptionsPieJobs.plotOptions.pie.donut.labels.total.fontSize = "45px";
     }
   }
 
+  getValue(val: number) {
+    const jobTypes = ['aprovados', 'avancados', 'ajustes', 'stand_by', 'reprovados'];
+  
+    for (const type of jobTypes) {
+      if (this.homeData.jobs[type].total === val) {
+        return `${this.homeData.jobs[type].porcentagem}%`;
+      }
+    }
+  
+    return '0%';
+  }
+
   configureChartOptionsPie() {
-    this.chartOptionsPie.series = this.homeData.jobs2.series;
+    this.chartOptionsPie.series = this.homeData.jobs2.series.map(x => Number(x));
+    this.chartOptionsPie.tooltip = { y: { formatter: (val) => `${val}%` } }
     this.chartOptionsPie.plotOptions.pie.donut.labels.total.formatter = () => this.homeData.jobs2.meta_jobs.toLocaleString(undefined, { minimumFractionDigits: 0 }),
     this.chartOptionsPie.plotOptions.pie.donut.labels.total.label = this.homeData.jobs2.total.toLocaleString(undefined, { minimumFractionDigits: 0 });
     this.chartOptionsPie.labels = this.homeData.jobs2.labels;
     this.chartOptionsPie.colors = this.homeData.jobs2.colors;
+    
 
     if (this.homeData.jobs2.total > 99999) {
       this.chartOptionsPie.plotOptions.pie.donut.labels.total.fontSize = "30px";

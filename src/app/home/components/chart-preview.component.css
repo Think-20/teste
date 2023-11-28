@@ -171,3 +171,14 @@
   .c-ajustes { color: #4fa2b1; }
   .c-stand-by { color: #00abeb; }
   .c-reprovados { color: #ffcd37; }
+
+  .mat-typography {
+    height: auto;
+    width: 700px;
+  }
+
+  .center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
