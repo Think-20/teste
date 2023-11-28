@@ -1,32 +1,52 @@
 <h1 mat-dialog-title class="p-0">{{ title }}</h1>
-<mat-dialog-content class="mat-typography">
+<mat-dialog-content class="mat-typography" [class.center]="chartType != EChartType.TENDENCIA">
   <div class="animate__animated animate__zoomIn" id="chart" [ngSwitch]="chartType">
+
     <apx-chart
-      *ngSwitchCase="EChartType.DONUT"
-      [series]="chartOptions.series"
-      [chart]="chartOptionsDonut.chart"
-      [labels]="chartOptions.labels"
-      [legend]="chartOptionsDonut.legend"
-      [dataLabels]="chartOptions.dataLabels"
-      [fill]="chartOptionsDonut.fill"
-      [states]="chartOptionsDonut.states"
-      [plotOptions]="chartOptionsDonut.plotOptions"
-      [stroke]="chartOptionsDonut.stroke"
-      [theme]="chartOptionsDonut.theme"
-      [responsive]="chartOptionsDonut.responsive"
-      [colors]="chartOptionsDonut.colors"
+      *ngSwitchCase="EChartType.JOBS"
+      [series]="chartOptionsPieJobs.series"
+      [chart]="chartOptionsPieJobs.chart"
+      [labels]="chartOptionsPieJobs.labels"
+      [legend]="chartOptionsPieJobs.legend"
+      [dataLabels]="chartOptionsPieJobs.dataLabels"
+      [fill]="chartOptionsPieJobs.fill"
+      [states]="chartOptionsPieJobs.states"
+      [plotOptions]="chartOptionsPieJobs.plotOptions"
+      [stroke]="chartOptionsPieJobs.stroke"
+      [theme]="chartOptionsPieJobs.theme"
+      [responsive]="chartOptionsPieJobs.responsive"
+      [colors]="chartOptionsPieJobs.colors"
+      [tooltip]="chartOptionsPieJobs.tooltip"
     ></apx-chart>
 
     <apx-chart
-      *ngSwitchCase="EChartType.LINE"
+      *ngSwitchCase="EChartType.JOBS2"
+      [series]="chartOptionsPie.series"
+      [chart]="chartOptionsPie.chart"
+      [labels]="chartOptionsPie.labels"
+      [dataLabels]="chartOptionsPie.dataLabels"
+      [fill]="chartOptionsPie.fill"
+      [legend]="chartOptionsPie.legend"
+      [states]="chartOptionsPie.states"
+      [colors]="chartOptionsPie.colors"
+      [plotOptions]="chartOptionsPie.plotOptions"
+      [stroke]="chartOptionsPie.stroke"
+      [theme]="chartOptionsPie.theme"
+      [responsive]="chartOptionsPie.responsive"
+      [tooltip]="chartOptionsPie.tooltip"
+    ></apx-chart>
+
+    <apx-chart
+      *ngSwitchCase="EChartType.TENDENCIA"
       [series]="chartOptions.series"
-      [chart]="chartOptionsLine.chart"
-      [xaxis]="chartOptionsLine.xaxis"
-      [yaxis]="chartOptionsLine.yaxis"
-      [colors]="chartOptionsLine.colors"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [yaxis]="chartOptions.yaxis"
+      [colors]="chartOptions.colors"
       [dataLabels]="chartOptions.dataLabels"
-      [grid]="chartOptionsLine.grid"
-      [stroke]="chartOptionsLine.stroke"
+      [grid]="chartOptions.grid"
+      [stroke]="chartOptions.stroke"
+      [tooltip]="chartOptions.tooltip"
     ></apx-chart>
   </div>
 </mat-dialog-content>

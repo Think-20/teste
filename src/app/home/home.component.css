@@ -129,17 +129,15 @@
 .home-card-count {
     font-size: var(--font-size-base-90);
     font-weight: 300;
-    color: #57585a;
 }
 
 .home-card-count-quarters {
     font-size: var(--font-size-base-15);
     font-weight: 300;
-    color: #57585a;
     display: flex;
     justify-content: end;
     text-align: end;
-    font-weight: 500;
+    font-weight: 400;
 }
 
 .home-card-body-count {
@@ -204,6 +202,7 @@
     content: "";
     height: 5px;
     background-color: #a8aaab;
+    max-width: 100%;
 }
 
 .home-card-grid-2fr {
@@ -293,6 +292,10 @@
 
   .flex-justify-content-end {
     justify-content: end;
+  }
+
+  .text-align-end {
+    text-align: end;
   }
 
   .height-100 {
