@@ -60,8 +60,8 @@ export class GoalsComponent implements OnInit {
       const matchingGoal = this.getGoal(month.year, month.month);
 
       if (matchingGoal) {
-        const { id, value } = matchingGoal;
-        Object.assign(month, { id, value });
+        const { id, value, expected_value } = matchingGoal;
+        Object.assign(month, { id, value, expected_value });
       }
     });
 
@@ -77,6 +77,7 @@ export class GoalsComponent implements OnInit {
 
     this.yearMonth.months.forEach(month => {
       const monthId = month.month;
+      
       this.goalsForm.addControl(monthId.toString(), this.formBuilder.control(month.value));
       this.goalsForm.addControl(monthId.toString() + 'espected', this.formBuilder.control(month.expected_value));
 
