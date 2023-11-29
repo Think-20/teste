@@ -34,8 +34,20 @@
                                       [name]="month.month"
                                       type="text"
                                       class="text-right"
-                                      placeholder="Meta"
+                                      placeholder="Meta de aprovados"
                                       [formControlName]="month.month"
+                                      (keypress)="allowOnlyNumbers($event)">
+                                  </mat-form-field>
+
+                                  <mat-form-field class="pr-2">
+                                    <input
+                                      currencyMask
+                                      matInput
+                                      [name]="month.month + 'espected'"
+                                      type="text"
+                                      class="text-right"
+                                      placeholder="Meta de jobs"
+                                      [formControlName]="month.month + 'espected'"
                                       (keypress)="allowOnlyNumbers($event)">
                                   </mat-form-field>
                             </mat-card-content>
