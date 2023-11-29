@@ -94,7 +94,7 @@ export class GoalsComponent implements OnInit {
         .debounceTime(1000)
         .subscribe(value => {
           if (!value) {
-            this.snackBar.open("Por favor informe um valor")
+            this.snackBar.open("Por favor informe a meta de aprovados!")
             control.setValue(month.value, { emitEvent: false });
             this.dismissSnackBar();
             return;
@@ -110,7 +110,14 @@ export class GoalsComponent implements OnInit {
         .debounceTime(1000)
         .subscribe(value => {
           if (!value) {
+            this.snackBar.open("Por favor informe a meta de jobs!")
             control2.setValue(month.expected_value, { emitEvent: false });
+            this.dismissSnackBar();
+            return;
+          }
+
+          if (!control.value) {
+            this.snackBar.open("Por favor informe a meta de aprovados!")
             this.dismissSnackBar();
             return;
           }
