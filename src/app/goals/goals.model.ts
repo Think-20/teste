@@ -9,5 +9,6 @@ export interface Goal {
     month: number,
     year: number,
     value: number,
+    expected_value: number,
     message?: string;
 }

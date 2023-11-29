@@ -78,12 +78,16 @@ export class GoalsComponent implements OnInit {
     this.yearMonth.months.forEach(month => {
       const monthId = month.month;
       this.goalsForm.addControl(monthId.toString(), this.formBuilder.control(month.value));
+      this.goalsForm.addControl(monthId.toString() + 'espected', this.formBuilder.control(month.expected_value));
 
       const control = this.goalsForm.controls[monthId];
+      const control2 = this.goalsForm.controls[monthId.toString() + 'espected'];
+
       control.updateValueAndValidity();
+      control2.updateValueAndValidity();
 
       control.valueChanges
-        .do(clientName => {
+        .do(() => {
           console.log('Aguarde...')
         })
         .debounceTime(1000)
@@ -94,13 +98,30 @@ export class GoalsComponent implements OnInit {
             this.dismissSnackBar();
             return;
           }
-          this.createUpdateGoal(month, value);
+          this.createUpdateGoal(month, value, control2.value);
         })
+
+
+        control2.valueChanges
+        .do(() => {
+          console.log('Aguarde...')
+        })
+        .debounceTime(1000)
+        .subscribe(value => {
+          if (!value) {
+            control2.setValue(month.expected_value, { emitEvent: false });
+            this.dismissSnackBar();
+            return;
+          }
+          
+          this.createUpdateGoal(month, control.value, control2.value);
+      })
     })
   }
 
-  createUpdateGoal(goal: Goal, value: number) {
+  createUpdateGoal(goal: Goal, value: number, expectedValue: number) {
     goal.value = value;
+    goal.expected_value = expectedValue;
 
     if (goal.id)
       this.updateGoal(goal);
