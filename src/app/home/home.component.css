@@ -138,6 +138,7 @@
     justify-content: end;
     text-align: end;
     font-weight: 400;
+    margin-top: 0.5rem;
 }
 
 .home-card-body-count {
