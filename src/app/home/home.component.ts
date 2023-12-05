@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, ElementRef, OnInit, Renderer2 } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog, MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -70,7 +70,18 @@ export type LineChartOptions = {
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
+  @ViewChild('job', { static: false }) jobElement: ElementRef;
+  @ViewChild('metas', { static: false }) metasElement: ElementRef;
+  @ViewChild('emProducao', { static: false }) emProducaoElement: ElementRef;
+  @ViewChild('deadLine', { static: false }) deadLineElement: ElementRef;
+
+  
+  sizeGraphJobs: number;
+  sizeGoals: number;
+  sizeInProd: number;
+  sizeDeadLine: number; 
+
   layoutGrid = "grid-layout-2";
   layoutGrid2 = "grid-2-layout-2";
 
@@ -142,6 +153,25 @@ export class HomeComponent implements OnInit {
     private renderer: Renderer2, private el: ElementRef
     ) { }
 
+  @HostListener('window:resize', ['$event'])
+    onResize(event: Event) {
+      this.setSizes();
+    }
+    
+  setSizes() {
+    if (this.layoutGrid === "grid-layout-2") {
+      return;
+    }
+    this.setSizeGraphJobs();
+    this.setSizeGoals();
+    this.setSizeInProd();
+    this.setSizeDeadLine();
+  }
+
+  ngAfterViewInit() {
+    setTimeout(() => this.setSizes(), 100);
+  }
+  
   ngOnInit() {
     this.createForm();
     this.setYears();
@@ -366,6 +396,8 @@ export class HomeComponent implements OnInit {
 
     this.homeService.layoutGrid = this.layoutGrid;
     this.homeService.layoutGrid2 = this.layoutGrid2;
+
+    setTimeout(() => this.setSizes(), 100);
   }
 
   private scaleFactor = 1;
@@ -472,5 +504,40 @@ export class HomeComponent implements OnInit {
           formatter: (val) => val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
       },
     };
+  }
+
+  setSizeGraphJobs() {
+    if (this.jobElement) {
+      const tamanhoDoCard = this.jobElement.nativeElement.offsetWidth;
+      this.sizeGraphJobs = tamanhoDoCard / 2;
+    }
+  }
+
+  setSizeGoals() {
+    if (this.metasElement) {
+      const tamanhoDoCard = this.metasElement.nativeElement.offsetWidth;
+      this.sizeGoals = tamanhoDoCard;
+    }
+  }
+
+  setSizeInProd() {
+    if (this.emProducaoElement) {
+      const tamanhoDoCard = this.emProducaoElement.nativeElement.offsetWidth;
+      this.sizeInProd = tamanhoDoCard;
+    }
+  }
+
+  setSizeDeadLine() {
+    if (this.deadLineElement) {
+      const tamanhoDoCard = this.deadLineElement.nativeElement.offsetWidth;
+      this.sizeDeadLine = tamanhoDoCard;
+    }
+  } 
+
+  setSize(element: ElementRef, targetSize: any) {
+    if (element) {
+      const tamanhoDoCard = element.nativeElement.offsetWidth;
+      targetSize = tamanhoDoCard;
+    }
   }
 } 

@@ -80,7 +80,7 @@
   </div>
 
 <ng-template #grid1>
-    <div class="home-card animate__animated animate__fadeIn bl-none">
+    <div [style.min-width.px]="sizeGraphJobs" class="home-card animate__animated animate__fadeIn bl-none">
         <div class="home-card-header d-flex justify-content-between">
             <mat-icon>add</mat-icon>
             Alertas:
@@ -90,7 +90,7 @@
             <span class="home-card-count d-flex justify-content-end">{{ homeData.alertas | number:'2.0' }}</span>
         </div>
     </div>
-    <div class="home-card animate__animated animate__fadeIn">
+    <div  [style.min-width.px]="sizeGraphJobs" class="home-card animate__animated animate__fadeIn">
         <div class="home-card-header d-flex justify-content-between">
             <mat-icon>add</mat-icon>
             Memórias:
@@ -100,7 +100,7 @@
             <span class="home-card-count d-flex justify-content-end">{{ homeData.memorias | number:'2.0' }}</span>
         </div>
     </div>
-    <div class="home-card animate__animated animate__fadeIn">
+    <div [style.min-width.px]="sizeGoals" class="home-card animate__animated animate__fadeIn">
         <div class="home-card-body">
             <div class="home-card-grid-2fr">
                 <div class="text-right d-flex flex-column">
@@ -144,7 +144,7 @@
             </div>
         </div>
     </div>
-    <div class="home-card animate__animated animate__fadeIn">
+    <div [style.min-width.px]="sizeInProd" class="home-card animate__animated animate__fadeIn">
       <div class="home-card-header d-flex justify-content-end">
           News:
       </div>
@@ -204,19 +204,19 @@
         </div>
       </div>
   </div>
-  <div class="home-card animate__animated animate__fadeInDown br-none">
+  <div [style.min-width.px]="sizeDeadLine" class="home-card animate__animated animate__fadeInDown br-none">
     <div class="home-card-body">
         <div class="home-card-grid-2fr">
             <div class="text-right d-flex flex-column">
                 <div class="d-flex flex-column">
-                    <span class="fw-500 home-card-small-1-description">1 Quarter</span>
-                    <span class="home-card-small-1-description sapce-bottm-3px">{{ homeData.ranking.firstQuarterTopSeller?.attendance.name || '-' }}</span>
-                    <span class="fw-500 home-card-small-1-description">2 Quarter</span>
-                    <span class="home-card-small-1-description sapce-bottm-3px">{{ homeData.ranking.secondQuarterTopSeller?.attendance.name || '-' }}</span>
-                    <span class="fw-500 home-card-small-1-description">3 Quarter</span>
-                    <span class="home-card-small-1-description sapce-bottm-3px">{{ homeData.ranking.thirdQuarterTopSeller?.attendance.name || '-' }}</span>
-                    <span class="fw-500 home-card-small-1-description">4 Quarter</span>
-                    <span class="home-card-small-1-description">{{ homeData.ranking.fourthQuarterTopSeller?.attendance.name || '-' }}</span>
+                    <span class="fw-500 home-card-small-description">1 Quarter</span>
+                    <span class="home-card-small-description sapce-bottm-3px">{{ homeData.ranking.firstQuarterTopSeller?.attendance.name || '-' }}</span>
+                    <span class="fw-500 home-card-small-description">2 Quarter</span>
+                    <span class="home-card-small-description sapce-bottm-3px">{{ homeData.ranking.secondQuarterTopSeller?.attendance.name || '-' }}</span>
+                    <span class="fw-500 home-card-small-description">3 Quarter</span>
+                    <span class="home-card-small-description sapce-bottm-3px">{{ homeData.ranking.thirdQuarterTopSeller?.attendance.name || '-' }}</span>
+                    <span class="fw-500 home-card-small-description">4 Quarter</span>
+                    <span class="home-card-small-description">{{ homeData.ranking.fourthQuarterTopSeller?.attendance.name || '-' }}</span>
                 </div>
             </div>
             <div class="d-flex flex-column">
@@ -234,7 +234,7 @@
 </ng-template>
 
 <ng-template #grid2>
-    <div class="home-card grid-row-2 home-card-column-between animate__animated animate__zoomIn bl-none">
+    <div #job class="home-card grid-row-2 home-card-column-between animate__animated animate__zoomIn bl-none">
       <div class="home-card-header d-flex justify-content-end">
           Jobs:
       </div>
@@ -353,7 +353,7 @@
           </div>
       </div>
   </div>
-  <div class="home-card grid-span-2 home-card-column-between animate__animated animate__fadeIn">
+  <div #metas class="home-card grid-span-2 home-card-column-between animate__animated animate__fadeIn">
     <div class="home-card-header d-flex justify-content-end">
         <span class="espace-bottom-progress">Metas:</span>
     </div>
@@ -417,7 +417,7 @@
         </div>
     </div>
   </div>
-  <div class="home-card grid-span-2 home-card-column-between animate__animated animate__fadeIn">
+  <div #emProducao class="home-card grid-span-2 home-card-column-between animate__animated animate__fadeIn">
     <div class="home-card-header d-flex justify-content-between">
         <!-- <span>{{ homeData.jobs.em_producao.total | number:'2.0' }}</span> -->
         <span></span>
@@ -439,7 +439,7 @@
         </div>
     </div>
   </div>
-  <div class="home-card home-card-column-between animate__animated animate__fadeInDown br-none" style="min-height: 10rem;">
+  <div #deadLine class="home-card home-card-column-between animate__animated animate__fadeInDown br-none" style="min-height: 10rem;">
     <div class="home-card-header d-flex justify-content-between">
         <mat-icon>add</mat-icon>
         DeadLine:
