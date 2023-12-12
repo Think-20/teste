@@ -8,4 +8,20 @@ export class Chrono {
   dayOfWeek: DayOfWeek
   items: TaskItem[]
   length?: number
+  meta?: ScheduleGoal
+}
+
+export class ScheduleGoal {
+  date: string
+  anual: Goal
+  mes: Goal
+}
+
+class Goal {
+  porcentagemReais: number;
+  atualReais: number;
+  metaReais: number;
+  porcentagemJobs: number;
+  atualJobs: number;
+  metaJobs: number;
 }
