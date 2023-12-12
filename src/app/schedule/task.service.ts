@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, RequestOptions } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -18,6 +18,10 @@ import { DataInfo } from '../shared/data-info.model';
 import { DatePipe } from '@angular/common';
 import { StringHelper } from 'app/shared/string-helper.model';
 import { Employee } from 'app/employees/employee.model';
+import { off } from 'process';
+import { of } from 'rxjs';
+import { ScheduleGoal } from './chrono.model';
+import { delay } from 'rxjs/operators';
 
 
 @Injectable()
@@ -321,5 +325,22 @@ export class TaskService {
             })
             return ErrorHandler.capture(err)
         })
-}
+    }
+
+    getGoalByDate(dateInit: Date, dateEnd: Date): Observable<ScheduleGoal[]> {
+        const url = 'calendar-goals';
+
+        var dtInit = this.datePipe.transform(dateInit, 'yyyy-MM-dd');
+        var dtEnd = this.datePipe.transform(dateEnd, 'yyyy-MM-dd');
+    
+    
+        return this.http.get(`${API}/${url}/${dtInit}/${dtEnd}`)
+        .map(response => response.json())
+        .catch((err) => {
+            this.snackBar.open(ErrorHandler.message(err), '', {
+                duration: 3000
+            })
+            return ErrorHandler.capture(err)
+        })
+    }
 }

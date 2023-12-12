@@ -221,6 +221,7 @@ import { HomeEmptyComponent } from './home-empty/home-empty.component';
 import { RoundPipe } from './shared/round.pipe';
 import { GoalsComponent } from './goals/goals.component';
 import { GoalsService } from './goals/goals.service';
+import { ThousandsPipe } from './shared/thousands.pipe';
 
 registerLocaleData(localePt);
 
@@ -345,7 +346,7 @@ registerLocaleData(localePt);
     FormatMaskDirective,
     ChartPreviewComponent,
     GoalsComponent,
-
+    ThousandsPipe,
   ],
   imports: [
     CurrencyMaskModule,

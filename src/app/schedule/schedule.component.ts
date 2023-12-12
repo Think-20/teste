@@ -12,7 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../login/auth.service';
 import { TaskService } from './task.service';
 import { TaskItem } from './task-item.model';
-import { Chrono } from './chrono.model';
+import { Chrono, ScheduleGoal } from './chrono.model';
 
 import { Observable, timer, Subscription, Subject } from 'rxjs';
 import 'rxjs/add/operator/filter';
@@ -103,7 +103,7 @@ export class ScheduleComponent implements OnInit {
   isAdmin: boolean = false
   counter: number = 0
   hasFilterActive = false
-
+  scheduleGoals: ScheduleGoal[] = [];
   constructor(
     private fb: FormBuilder,
     private clientService: ClientService,
@@ -485,6 +485,22 @@ export class ScheduleComponent implements OnInit {
     })
   }
 
+  loadScheduleGoal(iniDate: Date, finDate: Date) {
+    return this.taskService.getGoalByDate(iniDate, finDate);
+  }
+
+  goalByDate(date: Date): ScheduleGoal {
+    if (!this.scheduleGoals) {
+      return;
+    }
+
+    const dateString = this.datePipe.transform(date, 'yyyy-MM-dd');
+    
+    const meta = this.scheduleGoals.find(x => x.date === dateString)
+
+    return meta;
+  }
+
   ngOnDestroy() {
     this.subscriptions.forEach(subscription => {
       subscription.unsubscribe()
@@ -605,7 +621,9 @@ export class ScheduleComponent implements OnInit {
   /*
    * Mescla os itens da agenda com as datas do calendário
    */
-  mountDates(iniDate: Date, finDate: Date, insertInBegin = false) {
+  async mountDates(iniDate: Date, finDate: Date, insertInBegin = false) {
+    this.scheduleGoals = await this.loadScheduleGoal(iniDate, finDate).toPromise(); 
+
     let chrono: Chrono
     let date: Date = new Date(iniDate.getTime())
     let fixedDateMax: Date = new Date(finDate.getTime())
@@ -621,26 +639,30 @@ export class ScheduleComponent implements OnInit {
       let count = filteredTasks.length
       let length = (date.getDay() == 6 || date.getDay() == 0) ? 3 : filteredTasks.length
 
-      for (let index = 0; index < (5 - length); index++) {
+      for (let index = 0; index < (7 - length); index++) {
         let item = new TaskItem
         item.date = this.datePipe.transform(date, 'yyyy-MM-dd')
         item.task = new Task
         item.task.job = new Job
         item.task.items = []
+        item.is_empty = true;
         //Circular reference aqui
         //item.task.items.push(item)
         filteredTasks.push(item)
       }
+
+      var filteredAux = filteredTasks.sort((a, b) => {
+        if (a.task.responsible != null && b.task.responsible != null)
+          return a.task.responsible.department_id > b.task.responsible.department_id ? 1 : -1
+      })
 
       chrono = {
         day: date.getDate(),
         month: (date.getMonth() + 1),
         year: date.getFullYear(),
         dayOfWeek: DAYSOFWEEK.find(dayOfWeek => dayOfWeek.id == date.getDay()),
-        items: filteredTasks.sort((a, b) => {
-          if (a.task.responsible != null && b.task.responsible != null)
-            return a.task.responsible.department_id > b.task.responsible.department_id ? 1 : -1
-        }),
+        items: filteredAux,
+        meta: filteredAux.every(x => x.is_empty) ? null: this.goalByDate(date) ,
         length: count
       }
 
@@ -654,6 +676,8 @@ export class ScheduleComponent implements OnInit {
       this.chrono = this.chrono.concat(dates)
     }
   }
+
+  round = (value: number) => Math.round(value ? value : 0)
 
   scrollToDate() {
     let query: string = ''
