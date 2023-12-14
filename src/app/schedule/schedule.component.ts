@@ -606,11 +606,11 @@ export class ScheduleComponent implements OnInit {
       finDate: this.datePipe.transform(this.finDate, 'yyyy-MM-dd'),
       paginate: false,
       ...this.params
-    }).subscribe(dataInfo => {
+    }).subscribe(async dataInfo => {
       this.items = dataInfo.pagination.data
       this.dataInfo = dataInfo
       this.setUpdatedMessage()
-      this.mountDates(this.iniDate, this.finDate)
+      await this.mountDates(this.iniDate, this.finDate)
 
       this.scrollToDateFlag = true
       this.searching = false
@@ -736,11 +736,11 @@ export class ScheduleComponent implements OnInit {
       finDate: this.datePipe.transform(this.finDate, 'yyyy-MM-dd'),
       paginate: false,
       ...this.params
-    }).subscribe((dataInfo) => {
+    }).subscribe(async (dataInfo) => {
       this.items = this.items.concat(dataInfo.pagination.data)
       this.dataInfo = dataInfo
       this.setUpdatedMessage()
-      this.mountDates(iniDate, this.finDate)
+      await this.mountDates(iniDate, this.finDate)
       snackBar.dismiss()
 
       this.scrollToElement = '.day-' + this.datePipe.transform(iniDate, 'd')
@@ -766,11 +766,11 @@ export class ScheduleComponent implements OnInit {
       finDate: this.datePipe.transform(finDate, 'yyyy-MM-dd'),
       paginate: false,
       ...this.params
-    }).subscribe((dataInfo) => {
+    }).subscribe(async (dataInfo) => {
       this.items = dataInfo.pagination.data.concat(this.items)
       this.dataInfo = dataInfo
       this.setUpdatedMessage()
-      this.mountDates(this.iniDate, finDate, true)
+      await this.mountDates(this.iniDate, finDate, true)
       snackBar.dismiss()
 
       this.scrollToElement = '.day-' + this.datePipe.transform(finDate, 'd')
