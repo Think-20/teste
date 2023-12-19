@@ -8,4 +8,5 @@ export class TaskItem {
   budget_value: number
   duration: number
   responsible_id?: number
+  is_empty?: boolean
 }

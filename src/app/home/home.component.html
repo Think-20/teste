@@ -1,3 +1,537 @@
-<div class="my-container">
-  <h3 class="lead">Home</h3>
-</div>
+<div class="container-home" style="margin-right: 1rem;margin-left: 1rem;">
+  <div class="my-container">
+    <h3 class="lead row">
+      <div class="col-md-12">
+        <div  class="flex center">
+          <!-- Home | Julio Cirelo  -->
+          Home 
+          <button mat-button type="button" class="month-arrow ml-2">
+            <mat-icon (click)="addMonth(-1)">keyboard_arrow_left</mat-icon>
+          </button>
+          &nbsp;Relatórios de
+          <span class="actualMonth" (click)="monthSelect.open()">
+            &nbsp;{{ month?.name }}
+            <mat-select class="select-hidden col-md-3" #monthSelect>
+              <mat-option *ngFor="let month of months" (click)="updateMonth(month)">{{month?.name}}</mat-option>
+            </mat-select>
+          </span>
+          <span class="actualYear" (click)="yearSelect.open()">
+            {{ year }}
+            <mat-select class="select-hidden col-md-3" #yearSelect>
+              <mat-option *ngFor="let year of years" (click)="updateYear(year)">{{year}}</mat-option>
+            </mat-select>
+          </span>
+          <span>até</span>
+          <span class="actualMonth" (click)="nextMonthSelect.open()">
+            &nbsp;{{ nextMonth?.name }}
+            <mat-select class="select-hidden col-md-3" #nextMonthSelect>
+              <mat-option *ngFor="let month of months" (click)="updateNextMonth(month)">{{month?.name}}</mat-option>
+            </mat-select>
+          </span>
+          <span class="actualYear" (click)="nextYearSelect.open()">
+            {{ nextYear }}
+            <mat-select class="select-hidden col-md-3" #nextYearSelect>
+              <mat-option *ngFor="let year of years" (click)="updateNextYear(year)">{{year}}</mat-option>
+            </mat-select>
+          </span>
+          <button mat-button type="button" class="month-arrow">
+            <mat-icon (click)="addMonth(1)">keyboard_arrow_right</mat-icon>
+          </button>
+        </div>
+      </div>
+    </h3>
+  </div>
+
+  <div class="d-flex justify-content-end mb-2">
+      <button (click)="selectGridLayout('grid-layout-1', 'grid-2-layout-1')" mat-button type="button" class="d-flex align-items-center">
+        <div class="d-flex align-items-center">
+          <mat-icon>dashboard</mat-icon>
+          Dinâmicos
+        </div>
+      </button>
+      <button (click)="selectGridLayout('grid-layout-2', 'grid-2-layout-2')" mat-button type="button" class="d-flex align-items-center">
+        <div class="d-flex align-items-center">
+          <mat-icon>grid_view</mat-icon>
+          Fixos (scroll)
+        </div>
+      </button>
+      <button *ngIf="false" (click)="decreaseFontSize()" mat-button type="button" class="d-flex align-items-center">
+        <div class="d-flex align-items-center">
+          <mat-icon>remove</mat-icon>
+          Diminuir
+        </div>
+      </button>
+      <button *ngIf="false" (click)="increaseFontSize()" mat-button type="button" class="d-flex align-items-center">
+        <div class="d-flex align-items-center">
+          <mat-icon>add</mat-icon>
+          Aumentar
+        </div>
+      </button>
+  </div>
+
+  <div class="home-overflow" *ngIf="homeData">
+    <div class="home-grid {{layoutGrid}}">
+        <ng-container *ngTemplateOutlet="grid1"></ng-container>
+    </div>
+    
+    <div class="home-grid-2 {{layoutGrid2}}">
+        <ng-container *ngTemplateOutlet="grid2"></ng-container>
+    </div>
+  </div>
+
+<ng-template #grid1>
+    <div [style.min-width.px]="sizeGraphJobs" class="home-card animate__animated animate__fadeIn bl-none">
+        <div class="home-card-header d-flex justify-content-between">
+            <mat-icon>add</mat-icon>
+            Alertas:
+        </div>
+
+        <div class="home-card-body home-card-body-count">
+            <span class="home-card-count d-flex justify-content-end">{{ homeData.alertas | number:'2.0' }}</span>
+        </div>
+    </div>
+    <div  [style.min-width.px]="sizeGraphJobs" class="home-card animate__animated animate__fadeIn">
+        <div class="home-card-header d-flex justify-content-between">
+            <mat-icon>add</mat-icon>
+            Memórias:
+        </div>
+
+        <div class="home-card-body home-card-body-count">
+            <span class="home-card-count d-flex justify-content-end">{{ homeData.memorias | number:'2.0' }}</span>
+        </div>
+    </div>
+    <div [style.min-width.px]="sizeGoals" class="home-card animate__animated animate__fadeIn">
+        <div class="home-card-body">
+            <div class="home-card-grid-2fr">
+                <div class="text-right d-flex flex-column">
+                  <span class="home-card-size-18">{{ homeData.tempo_medio_aprovacao_dias.total || '-' }}</span>
+                  <span class="home-card-small-description">Tempo Médio de Aprovação (Dias)</span>
+                </div>
+                <div class="d-flex flex-column">
+                  <span class="home-card-size-18">{{ (homeData.tendencia_aprovacao_anual.total | number:'2.0') || '-' }}</span>
+                  <span class="home-card-small-description">Tendência Aprovação Anual</span>
+                </div>
+            </div>
+            <div class="home-card-grid-2fr">
+                <div class="text-right d-flex flex-column">
+                  <span class="home-card-size-18">{{ (homeData.intervalo_medio_aprovacao_dias.total | number:'2.0') || '-' }}</span>
+                  <span class="home-card-small-description">Intervalo Médio Aprovação (Dias)</span>
+                </div>
+                <div class="d-flex flex-column">
+                  <span class="home-card-size-18">{{ (homeData.media_aprovacao_mes.total | number:'2.0') || '-' }}</span>
+                  <span class="home-card-small-description">Média aprovação Mês</span>
+                </div>
+            </div>
+            <div class="home-card-grid-2fr">
+                <div class="text-right d-flex flex-column">
+                  <span class="home-card-size-18">{{ (homeData.ticket_medio_aprovacao.total | number:'2.0') || '-' }}</span>
+                  <span class="home-card-small-description">Ticket Médio Aprovação</span>
+                </div>
+                <div class="d-flex flex-column">
+                  <span class="home-card-size-18">{{ (homeData.ticket_medio_jobs.total | number:'2.0') || '-' }}</span>
+                  <span class="home-card-small-description">Ticket Médio Jobs</span>
+                </div>
+            </div>
+            <div class="home-card-grid-2fr">
+                <div class="text-right d-flex flex-column">
+                  <span class="home-card-size-18">{{ (homeData.maior_venda.total | number:'2.0') || '-' }}</span>
+                  <span class="home-card-small-description">Maior Venda</span>
+                </div>
+                <div class="d-flex flex-column">
+                  <span class="home-card-size-16">{{ homeData.ultimo_aprovado || '-' }}</span>
+                  <span class="home-card-small-description">ùltimo Aprovado</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div [style.min-width.px]="sizeInProd" class="home-card animate__animated animate__fadeIn">
+      <div class="home-card-header d-flex justify-content-end">
+          News:
+      </div>
+
+      <div *ngIf="true" class="empty-card">
+        Nenhum registro disponível
+      </div>
+
+      <div *ngIf="false" class="home-card-body">
+        <div class="home-card-grid-2fr">
+            <div class="text-right d-flex flex-column">
+              <span>Último Job Aprovado</span>
+            </div>
+            <div class="d-flex flex-column">
+              <span>{{ homeData.ultimo_job_aprovado }}</span>
+            </div>
+        </div>
+        <div class="home-card-grid-2fr">
+            <div class="text-right d-flex flex-column">
+              <span>Eventos em Rolando</span>
+            </div>
+            <div class="d-flex flex-column">
+              <span>{{ homeData.eventos_rolando }}</span>
+            </div>
+        </div>
+        <div class="home-card-grid-2fr">
+            <div class="text-right d-flex flex-column">
+              <span>Aniversariante</span>
+            </div>
+            <div class="d-flex flex-column">
+              <span>{{ homeData.aniversariante }}</span>
+            </div>
+        </div>
+        <div class="home-card-grid-2fr">
+            <div class="text-right d-flex flex-column">
+              <span>Comunicados</span>
+            </div>
+            <div class="d-flex flex-column">
+              <span>{{ homeData.comunicados }}</span>
+            </div>
+        </div>
+        <div class="home-card-grid-2fr">
+            <div class="text-right d-flex flex-column">
+              <span>Metas</span>
+            </div>
+            <div class="d-flex flex-column">
+              <span>{{ homeData.metas }}</span>
+            </div>
+        </div>
+        <div class="home-card-grid-2fr">
+            <div class="text-right d-flex flex-column">
+              <span>Records</span>
+            </div>
+            <div class="d-flex flex-column">
+              <span>{{ homeData.recordes }}</span>
+            </div>
+        </div>
+      </div>
+  </div>
+  <div [style.min-width.px]="sizeDeadLine" class="home-card animate__animated animate__fadeInDown br-none">
+    <div class="home-card-body">
+        <div class="home-card-grid-2fr">
+            <div class="text-right d-flex flex-column">
+                <div class="d-flex flex-column">
+                    <span class="fw-500 home-card-small-description">1 Quarter</span>
+                    <span class="home-card-small-description sapce-bottm-3px">{{ homeData.ranking.firstQuarterTopSeller?.attendance.name || '-' }}</span>
+                    <span class="fw-500 home-card-small-description">2 Quarter</span>
+                    <span class="home-card-small-description sapce-bottm-3px">{{ homeData.ranking.secondQuarterTopSeller?.attendance.name || '-' }}</span>
+                    <span class="fw-500 home-card-small-description">3 Quarter</span>
+                    <span class="home-card-small-description sapce-bottm-3px">{{ homeData.ranking.thirdQuarterTopSeller?.attendance.name || '-' }}</span>
+                    <span class="fw-500 home-card-small-description">4 Quarter</span>
+                    <span class="home-card-small-description">{{ homeData.ranking.fourthQuarterTopSeller?.attendance.name || '-' }}</span>
+                </div>
+            </div>
+            <div class="d-flex flex-column">
+              <div>
+                <div class="home-card-header d-flex justify-content-end">
+                  Ranking:
+                </div>
+                <span class="d-flex home-card-small-description flex-justify-content-end text-align-end">Últimos 12 meses</span>
+                <span class="home-card-count-quarters">1º {{ homeData.ranking.last12MonthsTopSeller?.attendance.name || '-' }}</span>
+                <span class="home-card-count-quarters">2º {{ homeData.ranking.last12MonthsTop2Seller?.attendance.name || '-' }}</span>
+                <span class="home-card-count-quarters">3º {{ homeData.ranking.last12MonthsTop3Seller?.attendance.name || '-' }}</span>
+                <span class="home-card-count-quarters">4º {{ homeData.ranking.last12MonthsTop4Seller?.attendance.name || '-' }}</span>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #grid2>
+    <div #job class="home-card grid-row-2 home-card-column-between animate__animated animate__zoomIn bl-none">
+      <div class="home-card-header d-flex justify-content-end">
+          Jobs:
+      </div>
+      <div class="home-card-body">
+          <div class="home-card-grafico">
+            <div id="chart" (click)="openChartDetails(chartOptionsPieJobs, EChartType.JOBS, 'Jobs:')">
+              <apx-chart
+                [series]="chartOptionsPieJobs.series"
+                [chart]="chartOptionsPieJobs.chart"
+                [labels]="chartOptionsPieJobs.labels"
+                [legend]="chartOptionsPieJobs.legend"
+                [dataLabels]="chartOptionsPieJobs.dataLabels"
+                [fill]="chartOptionsPieJobs.fill"
+                [states]="chartOptionsPieJobs.states"
+                [plotOptions]="chartOptionsPieJobs.plotOptions"
+                [stroke]="chartOptionsPieJobs.stroke"
+                [theme]="chartOptionsPieJobs.theme"
+                [responsive]="chartOptionsPieJobs.responsive"
+                [colors]="chartOptionsPieJobs.colors"
+                [tooltip]="chartOptionsPieJobs.tooltip"
+              ></apx-chart>
+            </div>
+            
+          </div>
+      </div>
+      <div class="home-card-footer d-flex justify-content-between">
+          <div class="d-flex flex-column">
+              <span [countUp]="homeData.jobs.meta_jobs" [duration]="3000" class="home-card-size-18">{{ homeData.jobs.meta_jobs | number:'2.0' }}</span>
+              <span>Meta Jobs</span>
+          </div>
+          <div class="d-flex flex-column">
+            <span  [countUp]="homeData.jobs.meta_aprovacao" [duration]="3000" class="home-card-size-18">{{ homeData.jobs.meta_aprovacao | number:'2.0' }}</span>
+            <span>Meta Aprovação</span>
+        </div>
+      </div>
+    </div>
+    <div class="home-card home-card-column-between animate__animated animate__zoomIn">
+        <div class="home-card-header d-flex justify-content-end">
+            <span class="home-card-size-15">{{ homeData.jobs.aprovados.porcentagem }}% | Aprovados:</span>
+        </div>
+
+        <div class="home-card-body">
+            <span class="c-aprovados home-card-count d-flex justify-content-end">{{ homeData.jobs.aprovados.total | number:'2.0' }}</span>
+        </div>
+
+        <div class="home-card-footer">
+            <div class="d-flex justify-content-between">
+                <mat-icon>keyboard_arrow_down</mat-icon>
+                <span>$ {{ homeData.jobs.aprovados.valor | number:'2.0' }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="home-card home-card-column-between animate__animated animate__zoomIn">
+        <div class="home-card-header d-flex justify-content-end">
+            <span class="home-card-size-15">{{ homeData.jobs.avancados.porcentagem }}% | Avançados:</span>
+        </div>
+
+        <div class="home-card-body">
+            <span class="c-avancados home-card-count d-flex justify-content-end">{{ homeData.jobs.avancados.total | number:'2.0' }}</span>
+        </div>
+
+        <div class="home-card-footer">
+          <div class="d-flex justify-content-end">
+              <span>{{ homeData.jobs.avancados.valor | number:'2.0' }}</span>
+          </div>
+      </div>
+    </div>
+    <div class="home-card home-card-column-between animate__animated animate__zoomIn">
+        <div class="home-card-header d-flex justify-content-end">
+            <span class="home-card-size-15">{{ homeData.jobs.ajustes.porcentagem }}% | Ajustes:</span>
+        </div>
+
+        <div *ngIf="false" class="empty-card">
+          Nenhum registro disponível
+        </div>
+
+        <div class="home-card-body">
+            <span class="c-ajustes home-card-count d-flex justify-content-end">{{ homeData.jobs.ajustes.total | number:'2.0' }}</span>
+        </div>
+
+        <div class="home-card-footer">
+            <div class="d-flex justify-content-end">
+                <span>{{ homeData.jobs.ajustes.valor | number:'2.0' }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="home-card home-card-column-between animate__animated animate__zoomIn">
+        <div class="home-card-header d-flex justify-content-end">
+            <span class="home-card-size-15">{{ homeData.jobs.stand_by.porcentagem }}% | Stand-by</span>
+        </div>
+
+        <div class="home-card-body">
+            <span class="c-stand-by home-card-count d-flex justify-content-end">{{ homeData.jobs.stand_by.total | number:'2.0' }}</span>
+        </div>
+
+        <div class="home-card-footer">
+            <div class="d-flex justify-content-between">
+                <mat-icon>keyboard_arrow_down</mat-icon>
+                <span>{{ homeData.jobs.stand_by.valor | number:'2.0' }}</span>
+            </div>
+        </div>
+    </div>
+    <div class="home-card home-card-column-between animate__animated animate__zoomIn br-none">
+      <div class="home-card-header d-flex justify-content-end">
+          <span class="home-card-size-15">{{ homeData.jobs.reprovados.porcentagem }}% | Reprovados</span>
+      </div>
+
+      <div class="home-card-body">
+          <span class="c-reprovados home-card-count d-flex justify-content-end">{{ homeData.jobs.reprovados.total | number:'2.0' }}</span>
+      </div>
+
+      <div class="home-card-footer">
+          <div class="d-flex justify-content-between">
+              <mat-icon>keyboard_arrow_down</mat-icon>
+              <span>{{ homeData.jobs.reprovados.valor | number:'2.0' }}</span>
+          </div>
+      </div>
+  </div>
+  <div #metas class="home-card grid-span-2 home-card-column-between animate__animated animate__fadeIn">
+    <div class="home-card-header d-flex justify-content-end">
+        <span class="espace-bottom-progress">Metas:</span>
+    </div>
+
+    <div *ngIf="false" class="empty-card">
+      Nenhum registro disponível
+    </div>
+
+    <div class="home-card-body">
+        <div class="espace-bottom-progress">
+            <div class="d-flex justify-content-between align-items-center">
+                <span>Últimos 12 meses</span>
+                <div class="d-flex align-items-center">
+                  <span>{{ homeData.jobs.metas.ultimos_doze_meses.atual | number:'2.0' }}</span>
+                  <mat-icon>{{ homeData.jobs.metas.ultimos_doze_meses.atual >= homeData.jobs.metas.ultimos_doze_meses.meta ? 'keyboard_arrow_up ': 'keyboard_arrow_down'}}</mat-icon>
+                  <span>{{ homeData.jobs.metas.ultimos_doze_meses.meta | number:'2.0' }}</span>
+                </div>
+            </div>
+            <div class="home-card-bar">
+                <div [style.width.%]="homeData.jobs.metas.ultimos_doze_meses.porcentagem" style="width: 50%" class="home-card-progress-bar"></div>
+            </div>
+        </div>
+        <div class="espace-bottom-progress">
+            <div class="d-flex justify-content-between align-items-center">
+                <span>Mês</span>
+                <div class="d-flex align-items-center">
+                  <span>{{ homeData.jobs.metas.mes.atual | number:'2.0' }}</span>
+                  <mat-icon>{{ homeData.jobs.metas.mes.atual >= homeData.jobs.metas.mes.meta ? 'keyboard_arrow_up ': 'keyboard_arrow_down'}}</mat-icon>
+                  <span>{{ homeData.jobs.metas.mes.meta | number:'2.0' }}</span>
+                </div>
+            </div>
+            <div class="home-card-bar">
+                <div [style.width.%]="homeData.jobs.metas.mes.porcentagem" style="width: 75%" class="home-card-progress-bar"></div>
+            </div>
+        </div>
+        <div class="espace-bottom-progress">
+            <div class="d-flex justify-content-between align-items-center">
+                <span>Quarter</span>
+                <div class="d-flex align-items-center">
+                  <span>{{ homeData.jobs.metas.quarter.atual | number:'2.0' }}</span>
+                  <mat-icon>{{ homeData.jobs.metas.quarter.atual >= homeData.jobs.metas.quarter.meta ? 'keyboard_arrow_up ': 'keyboard_arrow_down'}}</mat-icon>
+                  <span>{{ homeData.jobs.metas.quarter.meta | number:'2.0' }}</span>
+                </div>
+            </div>
+            <div class="home-card-bar">
+                <div [style.width.%]="homeData.jobs.metas.quarter.porcentagem" style="width: 40%" class="home-card-progress-bar"></div>
+            </div>
+        </div>
+        <div class="espace-bottom-progress">
+            <div class="d-flex justify-content-between align-items-center">
+                <span>Anual</span>
+                <div class="d-flex align-items-center">
+                  <span>{{ homeData.jobs.metas.anual.atual | number:'2.0' }}</span>
+                  <mat-icon>{{ homeData.jobs.metas.anual.atual >= homeData.jobs.metas.anual.meta ? 'keyboard_arrow_up ': 'keyboard_arrow_down'}}</mat-icon>
+                  <span>{{ homeData.jobs.metas.anual.meta | number:'2.0' }}</span>
+                </div>
+            </div>
+            <div class="home-card-bar">
+                <div [style.width.%]="homeData.jobs.metas.anual.porcentagem" style="width: 35%" class="home-card-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div #emProducao class="home-card grid-span-2 home-card-column-between animate__animated animate__fadeIn">
+    <div class="home-card-header d-flex justify-content-between">
+        <!-- <span>{{ homeData.jobs.em_producao.total | number:'2.0' }}</span> -->
+        <span></span>
+        <span>Em Produção:</span>
+    </div>
+
+    <div *ngIf="false" class="empty-card">
+      Nenhum registro disponível
+    </div>
+
+    <div *ngIf="true" class="home-card-body">
+        <div class="espace-bottom-progress" *ngFor="let job of homeData.jobs.em_producao.jobs">
+            <div class="d-flex justify-content-between">
+                <span class="espace-bottom-progress">{{ job.nome || '-' }}</span>
+            </div>
+            <div class="home-card-bar">
+                <div [style.width.%]="job.valor" class="home-card-progress-bar"></div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <div #deadLine class="home-card home-card-column-between animate__animated animate__fadeInDown br-none" style="min-height: 10rem;">
+    <div class="home-card-header d-flex justify-content-between">
+        <mat-icon>add</mat-icon>
+        DeadLine:
+    </div>
+
+    <div *ngIf="true" class="empty-card">
+      Nenhum registro disponível
+    </div>
+
+    <div *ngIf="false" class="home-card-body">
+        <span class="home-card-count d-flex justify-content-end">{{ homeData.jobs.prazo_final.total | number:'2.0' }}</span>
+    </div>
+
+    <div *ngIf="false" class="home-card-footer">
+      <div class="d-flex justify-content-end">
+          <span>$ {{ homeData.jobs.prazo_final.valor }}</span>
+      </div>
+  </div>
+  </div>
+  <div class="home-card animate__animated animate__zoomIn bl-none" style="display: flex; justify-content: center; align-items: center;">
+  <div id="chart" (click)="openChartDetails(chartOptionsPie, EChartType.JOBS2, '')">
+    <apx-chart
+        [series]="chartOptionsPie.series"
+        [chart]="chartOptionsPie.chart"
+        [labels]="chartOptionsPie.labels"
+        [dataLabels]="chartOptionsPie.dataLabels"
+        [fill]="chartOptionsPie.fill"
+        [legend]="chartOptionsPie.legend"
+        [states]="chartOptionsPie.states"
+        [colors]="chartOptionsPie.colors"
+        [plotOptions]="chartOptionsPie.plotOptions"
+        [stroke]="chartOptionsPie.stroke"
+        [theme]="chartOptionsPie.theme"
+        [responsive]="chartOptionsPie.responsive"
+        [tooltip]="chartOptionsPie.tooltip"
+      ></apx-chart>
+  </div>
+  </div>
+  <div class="home-card grid-span-4 animate__animated animate__zoomIn">
+    <div class="home-card-header d-flex justify-content-between">
+      <div class="d-flex">
+          Tendência
+          <mat-icon>keyboard_arrow_down</mat-icon>
+      </div>
+      <div>
+        <!-- Meta Mensal: <span [countUp]="homeData.tendencia.meta_mensal" [duration]="3000" >{{ homeData.tendencia.meta_mensal | number:'2.0' }}</span> -->
+        Meta Mensal
+      </div>
+    </div>
+
+    <div *ngIf="false" class="empty-card">
+      Nenhum registro disponível
+    </div>
+
+    <div *ngIf="true" class="home-card-body">
+      <div id="chart" (click)="openChartDetails(chartOptions, EChartType.TENDENCIA, 'Tendência:')">
+        <apx-chart
+          [series]="chartOptions.series"
+          [chart]="chartOptions.chart"
+          [xaxis]="chartOptions.xaxis"
+          [yaxis]="chartOptions.yaxis"
+          [colors]="chartOptions.colors"
+          [dataLabels]="chartOptions.dataLabels"
+          [grid]="chartOptions.grid"
+          [stroke]="chartOptions.stroke"
+          [tooltip]="chartOptions.tooltip"
+        ></apx-chart>
+      </div>
+      
+    </div>
+  </div>
+  <div class="home-card grid-span-1 animate__animated animate__fadeIn br-none">
+    <div class="home-card-header d-flex justify-content-between">
+        <mat-icon>add</mat-icon>
+        Sold Out:
+    </div>
+
+    <div *ngIf="true" class="empty-card">
+      Nenhum registro disponível
+    </div>
+
+    <div *ngIf="false" class="home-card-body">
+        <span class="home-card-count d-flex justify-content-end">{{ homeData.sold_out.total | number:'2.0' }}</span>
+    </div>
+
+    <div *ngIf="false" class="home-card-footer">
+      <div class="d-flex justify-content-end">
+          <span>$ {{ homeData.sold_out.valor | number:'1.0' }}</span>
+      </div>
+  </div>
+  </div>
+</ng-template>

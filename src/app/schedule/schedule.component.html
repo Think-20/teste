@@ -70,7 +70,7 @@
       </div>
     </h3>
   </div>
-  <div class="col-md-12" id="searchForm">
+  <div class="col-md-12 pr-0" id="searchForm">
     <form [formGroup]="searchForm" autocomplete="off">
       <mat-card-title class="header-form">
         <div class="row search-bar-group">
@@ -188,7 +188,31 @@
             </h4>
             <div class="line-chrono" [class.hidden]="paramsHasFilter && chr.length == 0"
              [ngClass]="lineChronoClass(chr, employees)">
-              <div class="mat-cell mat-column-date day-chrono day-{{ chr.day }} month-{{ chr.month }} year-{{ chr.year }}">
+             <div class="schedule-goals mat-cell mat-column-date day-chrono day-{{ chr.day }} month-{{ chr.month }} year-{{ chr.year }}">
+              <div *ngIf="chr.meta" class="schedule-goals-item">
+                <!-- <span class="schedule-goals-title">Meta ano:</span> -->
+                <span class="schedule-goals-title">Total acum/ano:</span>
+
+                <div class="meta-counters">
+                    <!-- <span>{{ chr.meta.anual.atualJobs }} / {{ chr.meta.anual.metaJobs }}</span> -->
+
+                    <!-- <div class="schedule-goals-item-percentage">
+                      <mat-icon [class.arrow_drop_up]="chr.meta.anual.atualJobs >= chr.meta.anual.metaJobs" class="icon arrow_drop_down">{{ chr.meta.anual.atualJobs >= chr.meta.anual.metaJobs ? 'arrow_drop_up' : 'arrow_drop_down'}}</mat-icon>
+                      <span>{{ round(chr.meta.anual.porcentagemJobs) }}%</span>
+                    </div> -->
+                </div>
+                <div class="meta-values">
+                  <div style="display: flex; flex-direction: column;">
+                      <span>{{ chr.meta.anual.atualReais | thousands }}</span>
+                      <!-- <span>{{ chr.meta.anual.metaReais | thousands }}</span> -->
+                  </div>
+
+                  <div class="schedule-goals-item-percentage">
+                    <mat-icon [class.arrow_drop_up]="chr.meta.anual.atualReais >= chr.meta.anual.metaReais" class="icon arrow_drop_down">{{ chr.meta.anual.atualReais >= chr.meta.anual.metaReais ? 'arrow_drop_up' : 'arrow_drop_down'}}</mat-icon>
+                    <span>{{ round(chr.meta.anual.porcentagemReais) }}%</span>
+                  </div>
+                </div>
+              </div>
                 <div>
                   <span>{{ chr.day }}-{{ chr.dayOfWeek?.abbrev }}</span>
                   <button *ngIf="isAdmin" class="cb-button add-chrono" (click)="addTask(chr.day)">
@@ -199,6 +223,30 @@
                     <mat-icon class="icon" *ngIf="blockText(chr) == 'UNBLOCK'" matBadge="{{blockedNumber(chr)}}">
                       lock_open</mat-icon>
                   </button>
+                </div>
+                <div *ngIf="chr.meta" class="schedule-goals-item">
+                  <!-- <span class="schedule-goals-title">Meta mês:</span> -->
+                  <span class="schedule-goals-title">Total acum/mês:</span>
+
+                    <div class="meta-counters">
+                      <!-- <span>{{ chr.meta.mes.atualJobs }} / {{ chr.meta.mes.metaJobs }}</span> -->
+
+                      <!-- <div class="schedule-goals-item-percentage">
+                        <mat-icon [class.arrow_drop_up]="chr.meta.mes.atualJobs >= chr.meta.mes.metaJobs" class="icon arrow_drop_down">{{ chr.meta.mes.atualJobs >= chr.meta.mes.metaJobs ? 'arrow_drop_up' : 'arrow_drop_down'}}</mat-icon>
+                        <span>{{ round(chr.meta.mes.porcentagemJobs) }}%</span>
+                      </div> -->
+                    </div>
+                    <div class="meta-values">
+                      <div style="display: flex; flex-direction: column;">
+                        <span>{{ chr.meta.mes.atualReais | thousands }}</span>
+                          <!-- <span>{{ chr.meta.mes.metaReais | number:'2.0' }}</span> -->
+                      </div>
+    
+                      <div class="schedule-goals-item-percentage">
+                        <mat-icon [class.arrow_drop_up]="chr.meta.mes.atualReais >= chr.meta.mes.metaReais" class="icon arrow_drop_down">{{ chr.meta.mes.atualReais >= chr.meta.mes.metaReais ? 'arrow_drop_up' : 'arrow_drop_down'}}</mat-icon>
+                        <span>{{ round(chr.meta.mes.porcentagemReais) }}%</span>
+                      </div>
+                    </div>
                 </div>
               </div>
               <div class="line-jobs">

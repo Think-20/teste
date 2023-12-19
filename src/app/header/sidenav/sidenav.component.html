@@ -55,6 +55,7 @@
               </div>
               <a mat-raised-button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs/list')">Jobs</a>
               <a mat-raised-button [routerLink]="['/service-report']" [disabled]="hasNoPermission(user, '/reports/service-report')">Relatórios</a>
+              <a mat-raised-button [routerLink]="['/dashboard']">Dashboards</a>
             </div>
           </div>
         </div>
@@ -92,6 +93,9 @@
                   <a mat-raised-button [routerLink]="['/performance-lite']" [disabled]="hasNoPermission(user, '/performance-lite')">Performance (Lite)</a>
                 </div>
               </div>
+            </div>
+            <div class="sub-navbar">
+              <a mat-raised-button [routerLink]="['/goals']" [disabled]="hasNoPermission(user, '/goals')">Metas</a>
             </div>
           </div>
         </div>

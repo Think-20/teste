@@ -213,6 +213,16 @@ import { FormatMaskDirective } from './shared/directives/format-mask.directive';
 import { JobEventsService } from './job-events/job-events.service';
 import { SpecificationFormComponent } from './specification/specification-form/specification-form.component';
 import { CostSheetComponent } from './cost-sheet/cost-sheet.component';
+import { HomeService } from './home/home.service';
+import { NgApexchartsModule } from "ng-apexcharts";
+import { ChartPreviewComponent } from './home/components/chart-preview.component';
+import { CountAnimationPipe } from './shared/count-animation.pipe';
+import { CountUpDirective, Destroy } from './shared/count-animation.directive';
+import { HomeEmptyComponent } from './home-empty/home-empty.component';
+import { RoundPipe } from './shared/round.pipe';
+import { GoalsComponent } from './goals/goals.component';
+import { GoalsService } from './goals/goals.service';
+import { ThousandsPipe } from './shared/thousands.pipe';
 
 registerLocaleData(localePt);
 
@@ -222,9 +232,13 @@ registerLocaleData(localePt);
     MaskDirective,
     UcWordsDirective,
     NumberAbbreviationPipe,
-
+    CountAnimationPipe,
+    RoundPipe,
+    CountUpDirective,
+    
     AppComponent,
     HomeComponent,
+    HomeEmptyComponent,
     NotificationBarComponent,
     MeasureComponent,
     FinalityComponent,
@@ -326,13 +340,15 @@ registerLocaleData(localePt);
     DataFieldComponent,
     UpdatedInfoComponent,
     ScheduleDateComponent,
-
     ServiceReportComponent,
     DecimalPipe,
 
     AlertsContainerComponent,
     MemoriesContainerComponent,
-    FormatMaskDirective
+    FormatMaskDirective,
+    ChartPreviewComponent,
+    GoalsComponent,
+    ThousandsPipe,
   ],
   imports: [
     CurrencyMaskModule,
@@ -376,6 +392,7 @@ registerLocaleData(localePt);
     MatProgressBarModule,
     MatCheckboxModule,
     CommonModule,
+    NgApexchartsModule
   ],
   providers: [
     ClientService,
@@ -429,7 +446,9 @@ registerLocaleData(localePt);
     ListDataService,
     ReportService,
     JobEventsService,
-
+    HomeService,
+    GoalsService,
+    Destroy,
     MatDialog,
     MatSnackBar,
     MatSlideToggle,
@@ -454,6 +473,7 @@ registerLocaleData(localePt);
     BlockDialogComponent,
     MessageLoadingComponent,
     UpdatedInfoComponent,
+    ChartPreviewComponent,
   ]
 })
 export class AppModule { }

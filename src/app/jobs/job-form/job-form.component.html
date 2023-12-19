@@ -95,11 +95,11 @@
   
         <mat-form-field class="col-md-4 pl-0">
           <input (input)="validatePercentage($event, 'attendance_percentage')" formControlName="attendance_percentage" matInput>
-          <a *ngIf="typeForm === 'edit'" class="button-inner-mat-input" mat-button>
+          <a *ngIf="typeForm !== 'show'" class="button-inner-mat-input" mat-button>
              <span matSuffix>%</span>
               <mat-icon (click)="addAttendance()" >add</mat-icon>
           </a>
-          <span *ngIf="typeForm !== 'edit'" matSuffix>%</span>
+          <span *ngIf="typeForm === 'show'" matSuffix>%</span>
           <mat-error>
             Obrigatório
           </mat-error>
@@ -137,11 +137,11 @@
         
         <mat-form-field class="col-md-4 pl-0">
           <input (input)="validatePercentage($event, 'attendance_percentage2')" formControlName="attendance_percentage2" matInput>
-         <a *ngIf="typeForm === 'edit'" class="button-inner-mat-input" mat-button>
+         <a *ngIf="typeForm !== 'show'" class="button-inner-mat-input" mat-button>
             <span matSuffix>%</span>
             <mat-icon (click)="removeAttendance()" >clear</mat-icon>
           </a>
-          <span *ngIf="typeForm !== 'edit'" matSuffix>%</span>
+          <span *ngIf="typeForm === 'show'" matSuffix>%</span>
          <mat-error>
           Obrigatório
         </mat-error>
