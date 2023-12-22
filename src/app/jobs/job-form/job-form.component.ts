@@ -36,6 +36,8 @@ import { TaskService } from '../../schedule/task.service';
 import { DatePipe, Location } from '@angular/common';
 import { ObjectValidator } from '../../shared/custom-validators';
 import { RouterExtService } from 'app/shared/router-ext.service';
+import { Event } from 'app/events/event.model';
+import { EventService } from 'app/events/event.service';
 
 @Component({
   selector: 'cb-job-form',
@@ -54,6 +56,7 @@ export class JobFormComponent implements OnInit {
   job: Job
   main_expectations: JobMainExpectation[]
   agencies: Client[]
+  events: Event[]
   levels: JobLevel[]
   how_comes: JobHowCome[]
   competitions: JobCompetition[]
@@ -80,7 +83,8 @@ export class JobFormComponent implements OnInit {
     private location: Location,
     private router: Router,
     private datePipe: DatePipe,
-    private uploadFileService: UploadFileService
+    private uploadFileService: UploadFileService,
+    private eventService: EventService
   ) { }
 
   ngOnInit() {
@@ -100,7 +104,8 @@ export class JobFormComponent implements OnInit {
       event: this.formBuilder.control('', [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(150)
+        Validators.maxLength(150),
+        ObjectValidator
       ]),
       last_provider: this.formBuilder.control('', [
         Validators.minLength(2),
@@ -212,6 +217,24 @@ export class JobFormComponent implements OnInit {
           this.agencies = dataInfo.pagination.data.filter((client) => {
             return client.type.description === 'Agência'
           })
+        })
+        Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
+      })
+      
+
+      this.jobForm.get('event').valueChanges
+      .do(eventName => {
+        snackBarStateCharging = this.snackBar.open('Aguarde...')
+      })
+      .debounceTime(500)
+      .subscribe(eventName => {
+        if (eventName == '' || isObject(eventName)) {
+          snackBarStateCharging.dismiss()
+          return;
+        }
+
+        this.eventService.events({ search: eventName }).subscribe((dataInfo) => {
+          this.events = dataInfo.pagination.data;
         })
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
       })
@@ -431,7 +454,7 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.id.setValue(job.id)
     this.jobForm.controls.job_type.disable()
 
-    this.jobForm.controls.event.setValue(job.event)
+    this.jobForm.controls.event.setValue({name: job.event})
     this.jobForm.controls.deadline.setValue(new Date(job.deadline + "T00:00:00"))
     this.jobForm.controls.job_type.setValue(job.job_type)
     this.jobForm.controls.job_activity.setValue(job.job_activity)
@@ -463,6 +486,10 @@ export class JobFormComponent implements OnInit {
       this.validatePercentage(event, 'attendance_percentage2')
     } else {
       this.disableAttendancePercentage();
+    }
+
+    if (job.event && typeof(job.event) !== 'string') {
+      this.jobForm.controls.agency.setValue(job.event)
     }
 
     this.jobForm.controls.rate.setValue(job.rate)
@@ -625,6 +652,10 @@ export class JobFormComponent implements OnInit {
 
   displayAgency(agency: Client) {
     return agency.fantasy_name
+  }
+
+  displayEvent(event: Event) {
+    return event.name
   }
 
   save() {
