@@ -74,6 +74,7 @@
                 </div>
               </div>
               <a mat-raised-button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs/list')">Jobs</a>
+              <a mat-raised-button [routerLink]="['/service-report']" [disabled]="hasNoPermission(user, '/reports/service-report')">Relatório de jobs</a>
             </div>
           </div>
         </div>
@@ -111,7 +112,7 @@
               <div [@rowAppeared]="state" *ngIf="centroCusto" class="sub-navbar">
                 <a mat-raised-button [routerLink]="['/cost-categories']" [disabled]="hasNoPermission(user, '/cost-categories/list')">Categorias de custo</a>
                 <a mat-raised-button [routerLink]="['/item-categories']" [disabled]="hasNoPermission(user, '/item-categories/list')">Categorias de item</a>
-                <a mat-raised-button [routerLink]="['/items']" [disabled]="hasNoPermission(user, '/items/list')">Itens</a>
+                <a mat-raised-button [routerLink]="['/items']" [disabled]="hasNoPermission(user, '/items/list')">Itens</a>  
               </div>
             </div>
             <div class="sub-navbar">
@@ -131,6 +132,7 @@
                 <a disabled mat-raised-button [routerLink]="['/costs-sheet']" [disabled]="hasNoPermission(user, '/costs-sheet')">Planilha de custos</a>
                 <a disabled mat-raised-button [routerLink]="['/specification']" [disabled]="hasNoPermission(user, '/provispecificationders')">Memorial descritivo</a>
               </div>
+              <a mat-raised-button [routerLink]="['/service-report']" [disabled]="hasNoPermission(user, '/reports/service-report')">Relatório de jobs</a> 
             </div>
           </div>
         </div>
