@@ -454,7 +454,7 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.id.setValue(job.id)
     this.jobForm.controls.job_type.disable()
 
-    this.jobForm.controls.event.setValue({name: job.event})
+    this.jobForm.controls.event.setValue({ name: job.event, id: job.event_id })
     this.jobForm.controls.deadline.setValue(new Date(job.deadline + "T00:00:00"))
     this.jobForm.controls.job_type.setValue(job.job_type)
     this.jobForm.controls.job_activity.setValue(job.job_activity)
