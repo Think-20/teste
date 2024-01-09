@@ -81,7 +81,7 @@ export class UserFormComponent implements OnInit {
       email: this.formBuilder.control(this.user ? this.user.email : '', [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(30)
+        Validators.maxLength(50)
       ]),
       password: this.formBuilder.control(this.user ? this.user.password : '', [
         Validators.required,
