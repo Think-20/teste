@@ -73,11 +73,19 @@
         </mat-error>
       </mat-form-field>
       <mat-form-field class="col-md-3">
-        <input ucWords formControlName="event" matInput placeholder="Evento*">
+        <input formControlName="event" [matAutocomplete]="autocompleteEvent" matInput placeholder="Evento*">
         <mat-error>
-          Obrigatório, entre 3 e 150 caract.
+          Obrigatório
         </mat-error>
+        <a [routerLink]="['/events/new']" target="_blank" class="button-inner-mat-input" mat-button>
+          <mat-icon>add</mat-icon>
+        </a>
       </mat-form-field>
+      <mat-autocomplete #autocompleteEvent="matAutocomplete" [displayWith]="displayEvent">
+        <mat-option *ngFor="let event of events" [value]="event">
+          {{ event.name }}
+        </mat-option>
+      </mat-autocomplete>
       <mat-form-field class="col-md-3">
         <input formControlName="place" matInput placeholder="Local">
       </mat-form-field>
