@@ -69,6 +69,7 @@ export class JobFormComponent implements OnInit {
   isAdmin: boolean = false
   buttonEnable: boolean = true
   isAddAttendance = false;
+  readonly eventIdAux = "eventIdAux";
 
   constructor(
     private clientService: ClientService,
@@ -454,7 +455,8 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.id.setValue(job.id)
     this.jobForm.controls.job_type.disable()
 
-    this.jobForm.controls.event.setValue({ name: job.event, id: job.event_id })
+    this.jobForm.controls.event.setValue({ name: job.event, id: job.event_id ? job.event_id : this.eventIdAux })
+    console.log(this.jobForm.controls.event.value)
     this.jobForm.controls.deadline.setValue(new Date(job.deadline + "T00:00:00"))
     this.jobForm.controls.job_type.setValue(job.job_type)
     this.jobForm.controls.job_activity.setValue(job.job_activity)
@@ -676,6 +678,8 @@ export class JobFormComponent implements OnInit {
     let task = this.jobService.data.task
 
     job = this.addComission(job);
+    job = this.addEvent(job);
+    
     this.buttonEnable = false
 
     if ( ! isObject(task)) {
@@ -772,6 +776,8 @@ export class JobFormComponent implements OnInit {
       return;
     }
     job = this.addComission(job);
+    job = this.addEvent(job);
+
     this.buttonEnable = false
 
     this.jobService.edit(job).subscribe(data => {
@@ -822,6 +828,22 @@ export class JobFormComponent implements OnInit {
     delete payload.attendance_percentage2;
     delete payload.attendance_percentage;
     return payload;
+  }
+
+  addEvent(job) {
+    const event = this.jobForm.controls.event.value;
+
+    if (!event) {
+      return {
+        ...job,
+      }
+    }
+
+    return {
+      ...job,
+      event_id: event.id === this.eventIdAux ? null : event.id,
+      event: event.name
+    }
   }
 
   addAttendance() {
