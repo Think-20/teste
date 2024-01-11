@@ -93,7 +93,7 @@
                 {{ client.fantasy_name }}
               </mat-option>
             </mat-autocomplete>
-            <mat-form-field class="col-md-2-4">
+            <mat-form-field *ngIf="isDiretoria" class="col-md-2-4">
               <mat-select #selectAttendance placeholder="Atendimento" formControlName="attendance" multiple>
                 <div class="select-all">
                   <mat-checkbox class="custom-checkbox" [(ngModel)]="selectAllAttendance" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelectionAllAttendance()">Selecionar todos</mat-checkbox>
@@ -103,7 +103,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field class="col-md-2-4">
+            <mat-form-field *ngIf="isDiretoria" class="col-md-2-4">
               <mat-select #selectCreation placeholder="Projetista" formControlName="creation" multiple>
                 <div class="select-all">
                   <mat-checkbox class="custom-checkbox" [(ngModel)]="selectAllCreation" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelectionAllCreation()">Selecionar todos</mat-checkbox> 
