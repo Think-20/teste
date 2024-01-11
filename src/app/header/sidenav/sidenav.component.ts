@@ -59,6 +59,21 @@ export class SidenavComponent implements OnInit {
         && display.access === 'N'
     }).length > 0
   }
+
+  hasNoPermissionDepartament(user: User, url: string, department: string): boolean {
+   if (!user) {
+    return;
+   }
+
+   const userDepartament = user.employee.department.description;
+
+   if (userDepartament === "Diretoria") {
+    return this.hasNoPermission(user, url);
+   }
+
+    return this.hasNoPermission(user, url) || userDepartament !== department;
+  }
+
   ngOnInit() {
     this.user = this.auth.currentUser()
   }
