@@ -108,7 +108,6 @@ export class JobFormComponent implements OnInit {
         Validators.required,
         Validators.minLength(3),
         Validators.maxLength(150),
-        ObjectValidator
       ]),
       last_provider: this.formBuilder.control('', [
         Validators.minLength(2),
@@ -225,22 +224,23 @@ export class JobFormComponent implements OnInit {
       })
       
 
-      this.jobForm.get('event').valueChanges
-      .do(eventName => {
-        snackBarStateCharging = this.snackBar.open('Aguarde...')
-      })
-      .debounceTime(500)
-      .subscribe(eventName => {
-        if (eventName == '' || isObject(eventName)) {
-          snackBarStateCharging.dismiss()
-          return;
-        }
+      // REMOVER COMENTÁRIOS PARA JOB SER OBRIGATORIO COM EVENTO EXISTENTE
+      // this.jobForm.get('event').valueChanges
+      // .do(eventName => {
+      //   snackBarStateCharging = this.snackBar.open('Aguarde...')
+      // })
+      // .debounceTime(500)
+      // .subscribe(eventName => {
+      //   if (eventName == '' || isObject(eventName)) {
+      //     snackBarStateCharging.dismiss()
+      //     return;
+      //   }
 
-        this.eventService.events({ search: eventName }).subscribe((dataInfo) => {
-          this.events = dataInfo.pagination.data;
-        })
-        Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
-      })
+      //   this.eventService.events({ search: eventName }).subscribe((dataInfo) => {
+      //     this.events = dataInfo.pagination.data;
+      //   })
+      //   Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
+      // })
 
     snackBarStateCharging = this.snackBar.open('Aguarde...')
     this.jobService.loadFormData().subscribe(response => {
@@ -457,17 +457,20 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.id.setValue(job.id)
     this.jobForm.controls.job_type.disable()
 
-    this.currentEventName = job.event;
+    this.jobForm.controls.event.setValue(job.event)
 
-    this.jobForm.controls.event.setValue({ name: job.event, id: job.event_id ? job.event_id : this.eventIdAux })
+    // REMOVER COMENTÁRIOS PARA JOB SER OBRIGATORIO COM EVENTO EXISTENTE
+    // this.currentEventName = job.event;
 
-    this.jobForm.controls.event.valueChanges.subscribe(x => {
-      if (this.typeForm === 'edit' && typeof(x) === 'string' && this.currentEventName == x) {
-        this.jobForm.controls.event.setValue({ name: job.event, id: job.event_id ? job.event_id : this.eventIdAux })
-      }
-    })
+    // this.jobForm.controls.event.setValue({ name: job.event, id: job.event_id ? job.event_id : this.eventIdAux })
 
-    console.log(this.jobForm.controls.event.value)
+    // this.jobForm.controls.event.valueChanges.subscribe(x => {
+    //   if (this.typeForm === 'edit' && typeof(x) === 'string' && this.currentEventName == x) {
+    //     this.jobForm.controls.event.setValue({ name: job.event, id: job.event_id ? job.event_id : this.eventIdAux })
+    //   }
+    // })
+
+    // console.log(this.jobForm.controls.event.value)
     this.jobForm.controls.deadline.setValue(new Date(job.deadline + "T00:00:00"))
     this.jobForm.controls.job_type.setValue(job.job_type)
     this.jobForm.controls.job_activity.setValue(job.job_activity)
@@ -501,9 +504,10 @@ export class JobFormComponent implements OnInit {
       this.disableAttendancePercentage();
     }
 
-    if (job.event && typeof(job.event) !== 'string') {
-      this.jobForm.controls.agency.setValue(job.event)
-    }
+    // REMOVER COMENTÁRIOS PARA JOB SER OBRIGATORIO COM EVENTO EXISTENTE
+    // if (job.event && typeof(job.event) !== 'string') {
+    //   this.jobForm.controls.agency.setValue(job.event)
+    // }
 
     this.jobForm.controls.rate.setValue(job.rate)
     this.jobForm.controls.attendance.setValue(job.attendance)
@@ -667,9 +671,10 @@ export class JobFormComponent implements OnInit {
     return agency.fantasy_name
   }
 
-  displayEvent(event: Event) {
-    return event.name
-  }
+  // REMOVER COMENTÁRIOS PARA JOB SER OBRIGATORIO COM EVENTO EXISTENTE
+  // displayEvent(event: Event) {
+  //   return event.name
+  // }
 
   save() {
     if( ! this.buttonEnable) return
@@ -689,7 +694,9 @@ export class JobFormComponent implements OnInit {
     let task = this.jobService.data.task
 
     job = this.addComission(job);
-    job = this.addEvent(job);
+
+    // REMOVER COMENTÁRIOS PARA JOB SER OBRIGATORIO COM EVENTO EXISTENTE
+    // job = this.addEvent(job);
     
     this.buttonEnable = false
 
@@ -787,7 +794,9 @@ export class JobFormComponent implements OnInit {
       return;
     }
     job = this.addComission(job);
-    job = this.addEvent(job);
+
+    // REMOVER COMENTÁRIOS PARA JOB SER OBRIGATORIO COM EVENTO EXISTENTE
+    // job = this.addEvent(job);
 
     this.buttonEnable = false
 
