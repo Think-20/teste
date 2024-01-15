@@ -69,9 +69,7 @@ export class JobFormComponent implements OnInit {
   isAdmin: boolean = false
   buttonEnable: boolean = true
   isAddAttendance = false;
-  currentEventName: string;
   readonly eventIdAux = "eventIdAux";
-  
 
   constructor(
     private clientService: ClientService,
@@ -457,16 +455,7 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.id.setValue(job.id)
     this.jobForm.controls.job_type.disable()
 
-    this.currentEventName = job.event;
-
     this.jobForm.controls.event.setValue({ name: job.event, id: job.event_id ? job.event_id : this.eventIdAux })
-
-    this.jobForm.controls.event.valueChanges.subscribe(x => {
-      if (this.typeForm === 'edit' && typeof(x) === 'string' && this.currentEventName == x) {
-        this.jobForm.controls.event.setValue({ name: job.event, id: job.event_id ? job.event_id : this.eventIdAux })
-      }
-    })
-
     console.log(this.jobForm.controls.event.value)
     this.jobForm.controls.deadline.setValue(new Date(job.deadline + "T00:00:00"))
     this.jobForm.controls.job_type.setValue(job.job_type)
