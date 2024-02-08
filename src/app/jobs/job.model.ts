@@ -88,4 +88,5 @@ export class Job {
         attendance: { id: number },
         percentage: number;
     }
+    critical?: boolean;
 }

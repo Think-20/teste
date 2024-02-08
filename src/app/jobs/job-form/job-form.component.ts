@@ -142,7 +142,8 @@ export class JobFormComponent implements OnInit {
       production_responsible: this.formBuilder.control({value: '', disabled: true}),
       place: this.formBuilder.control(''),
       area: this.formBuilder.control(''),
-      moments: this.formBuilder.control('')
+      moments: this.formBuilder.control(''),
+      critical: this.formBuilder.control(false)
     })
 
     this.setPreviousData()
@@ -526,6 +527,7 @@ export class JobFormComponent implements OnInit {
     this.jobForm.controls.history.setValue(job.history)
     this.jobForm.controls.moments.setValue(job.moments)
     this.jobForm.controls.area.setValue(job.area > 0 ? job.area.toString().replace('.', ',') : '')
+    this.jobForm.controls.critical.setValue(job.critical ? job.critical : false)
 
     if(job.budget_responsible != null) {
       this.jobForm.controls.budget_responsible.setValue(job.budget_responsible.name)

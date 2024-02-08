@@ -287,3 +287,10 @@
   padding: 0px !important;
   color: rgba(0,0,0,0.5);
 }
+
+.asterisk-icon {
+  font-size: 9px;
+  width: 0px;
+  height: 0;
+  color: #e5301a;
+}
