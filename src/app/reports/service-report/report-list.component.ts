@@ -106,7 +106,7 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   selectAllStatus = false;
   selectAllExternalCreation = false;
   selectAllJobActivity = false;
-  
+  isDiretoria = false;
   constructor(
     private fb: FormBuilder,
     private employeeService: EmployeeService,
@@ -131,6 +131,8 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.pageIndex = this.jobService.pageIndex;
+
+    this.isDiretoria = this.authService.currentUser().employee.department.description === "Diretoria"
 
     this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
       ? this.authService.currentUser().employee : null;

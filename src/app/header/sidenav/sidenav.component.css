@@ -99,6 +99,7 @@
 .nav-item a[disabled] {
   background-color: white;
   color: #AAA !important;
+  pointer-events: none;
 }
 
 .nav-navbar .nav-item a {

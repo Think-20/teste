@@ -54,7 +54,7 @@
                 </div>
               </div>
               <a mat-raised-button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs/list')">Jobs</a>
-              <a mat-raised-button [routerLink]="['/service-report']" [disabled]="hasNoPermission(user, '/reports/service-report')">Relatórios</a>
+              <a mat-raised-button [routerLink]="['/service-report']" [disabled]="hasNoPermissionDepartament(user, '/reports/service-report', 'Atendimento')">Relatórios</a>
               <a mat-raised-button [routerLink]="['/dashboard']">Dashboards</a>
             </div>
           </div>
@@ -74,7 +74,7 @@
                 </div>
               </div>
               <a mat-raised-button [routerLink]="['/jobs']" [disabled]="hasNoPermission(user, '/jobs/list')">Jobs</a>
-              <!-- <a mat-raised-button [routerLink]="['/service-report']" [disabled]="hasNoPermission(user, '/reports/service-report')">Relatório de jobs</a> -->
+              <a mat-raised-button [routerLink]="['/service-report']" [disabled]="hasNoPermissionDepartament(user, '/reports/service-report', 'Criação')">Relatório de jobs</a>
             </div>
           </div>
         </div>
@@ -132,7 +132,7 @@
                 <a disabled mat-raised-button [routerLink]="['/costs-sheet']" [disabled]="hasNoPermission(user, '/costs-sheet')">Planilha de custos</a>
                 <a disabled mat-raised-button [routerLink]="['/specification']" [disabled]="hasNoPermission(user, '/provispecificationders')">Memorial descritivo</a>
               </div>
-              <!-- <a mat-raised-button [routerLink]="['/service-report']" [disabled]="hasNoPermission(user, '/reports/service-report')">Relatório de jobs</a>  -->
+              <a mat-raised-button [routerLink]="['/service-report']" [disabled]="hasNoPermissionDepartament(user, '/reports/service-report', 'Planejamento')">Relatório de jobs</a> 
             </div>
           </div>
         </div>
