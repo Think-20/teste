@@ -316,17 +316,16 @@
   padding-left: 5px;
 }
 
-.arrow_drop_down {
+.keyboard_arrow_down {
   color: #e5301a;
 }
 
-.arrow_drop_up {
+.keyboard_arrow_up {
   color: #00a35d !important;
 }
 
-.arrow_drop_up, .arrow_drop_down {
-  width: 19px;
-  height: 23px;
+.keyboard_arrow_up, .keyboard_arrow_down {
+  width: 22px;
 }
 
 .meta-counters {
