@@ -93,7 +93,7 @@
                 {{ client.fantasy_name }}
               </mat-option>
             </mat-autocomplete>
-            <mat-form-field class="col-md-2-4">
+            <mat-form-field *ngIf="isDiretoria" class="col-md-2-4">
               <mat-select #selectAttendance placeholder="Atendimento" formControlName="attendance" multiple>
                 <div class="select-all">
                   <mat-checkbox class="custom-checkbox" [(ngModel)]="selectAllAttendance" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelectionAllAttendance()">Selecionar todos</mat-checkbox>
@@ -103,7 +103,7 @@
                 </mat-option>
               </mat-select>
             </mat-form-field>
-            <mat-form-field class="col-md-2-4">
+            <mat-form-field *ngIf="isDiretoria" class="col-md-2-4">
               <mat-select #selectCreation placeholder="Projetista" formControlName="creation" multiple>
                 <div class="select-all">
                   <mat-checkbox class="custom-checkbox" [(ngModel)]="selectAllCreation" [ngModelOptions]="{standalone: true}" (change)="toggleAllSelectionAllCreation()">Selecionar todos</mat-checkbox> 
@@ -254,7 +254,7 @@
                   {{ '-' }}
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-status">
-                  <span class="d-block">{{ job.status.description }}</span>
+                  <span class="d-block">{{ job.status.description }}<mat-icon *ngIf="job.critical" class="asterisk-icon">emergency</mat-icon></span>
                   <span class="d-block">{{ job.status_updated_at | date : "dd/MM/yy" }}</span>
                 </div>
                 <div [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ job: job }" class="mat-cell mat-column-fatured">
@@ -377,14 +377,14 @@
                 <mat-grid-tile class="mat-grid-item">
                   <div class="title-report-dashboard m-0 p-0 mb-2 text-left text-truncate" title="Média de aprovação mensal:">Média de aprovação mensal:</div>
                   <div class="d-flex justify-content-between w-100 data-report-dashboard">
-                    <p class="text-truncate" [title]="reportData?.averageApprovedJobsPerMonth?.amount">{{reportData?.averageApprovedJobsPerMonth?.amount}}</p>
+                    <p class="text-truncate" [title]="reportData?.averageApprovedJobsPerMonth?.amount">{{reportData?.averageApprovedJobsPerMonth?.amount | number : '1.1-1'}}</p>
                     <p class="text-truncate" [title]="reportData?.averageApprovedJobsPerMonth?.value">{{reportData?.averageApprovedJobsPerMonth?.value}}</p>
                   </div>
                 </mat-grid-tile>
                 <mat-grid-tile class="mat-grid-item">
                   <div class="title-report-dashboard m-0 p-0 mb-2 text-left text-truncate" title="Tendencia anual de aprovação:">Tendencia anual de aprovação:</div>
                   <div class="d-flex justify-content-between w-100 data-report-dashboard">
-                    <p class="text-truncate" [title]="reportData?.anualTendenceAprovationCount">{{ reportData?.anualTendenceAprovationCount}}</p>
+                    <p class="text-truncate" [title]="reportData?.anualTendenceAprovationCount">{{ reportData?.anualTendenceAprovationCount | number : '1.1-1'}}</p>
                     <p class="text-truncate" [title]="reportData?.anualTendenceAprovation">{{reportData?.anualTendenceAprovation  | number: '1.2'}}</p>
                   </div>
                 </mat-grid-tile>

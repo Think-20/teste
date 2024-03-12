@@ -22,6 +22,7 @@ export class Job {
     not_client?: string
     briefing?: Briefing
     event: string
+    event_id?: string
     deadline: string
     job_type_id: number
     job_type: JobType
@@ -87,4 +88,5 @@ export class Job {
         attendance: { id: number },
         percentage: number;
     }
+    critical?: boolean;
 }
