@@ -1,0 +1,25 @@
+<mat-accordion class="cost-sheet-accordion">
+
+    <mat-expansion-panel hideToggle [expanded]="index == expandedIndex">
+        
+        <mat-expansion-panel-header>
+
+            <cb-cost-sheet-header class="cb-cost-sheet-header" [costSheetGroup]="costSheetGroup"></cb-cost-sheet-header>
+
+        </mat-expansion-panel-header>
+
+        <table aria-describedby="Tabela de ficha de custo" class="cost-sheet-table">
+
+            <th class="cost-sheet-table-identify"></th>
+
+            <cb-cost-sheet-columns  class="cb-cost-sheet-columns"></cb-cost-sheet-columns>
+
+            <cb-cost-sheet-item class="cb-cost-sheet-item" *ngFor="let item of costSheetGroup.cost_sheets" [item]="item"></cb-cost-sheet-item>
+
+            <cb-cost-sheet-footer (addCostShet)="openCostSheetModalForm()" class="cb-cost-sheet-footer" [costSheetGroup]="costSheetGroup"></cb-cost-sheet-footer>
+
+          </table>
+
+    </mat-expansion-panel>
+
+</mat-accordion>

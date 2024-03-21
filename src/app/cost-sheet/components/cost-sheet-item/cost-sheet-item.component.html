@@ -1,0 +1,263 @@
+<tr class="row-tr">
+
+  <td class="first-of-group"> {{ item.numero }}</td>
+
+  <td>{{ item.categoria }}</td>
+
+  <td>{{ item.favorecido.nome }}</td>
+
+  <td>{{ item.descricao }}</td>
+
+  <td>{{ item.quantidade }}</td>
+
+  <td> {{ item.unidade }}</td>
+
+
+  <td class="first-of-group">{{ item.valor_previsto | number: '1.2' }}</td>
+  
+
+  <td class="first-of-group">
+
+    <div class="cost-sheet-border-right arrows">
+
+        <mat-icon *ngIf="true" class="keyboard_arrow_up">keyboard_arrow_up</mat-icon>
+
+        <mat-icon *ngIf="false" class="keyboard_arrow_down">keyboard_arrow_down</mat-icon>
+
+        {{ item.valor_previsto_realizado_percentual }}%
+
+    </div>
+
+  </td>
+
+
+  <td class="first-of-group">{{ item.valor_realizado | number: '1.2' }}</td>
+
+
+  <td class="first-of-group">
+
+    <div class="cost-sheet-column">
+
+        {{ item.negociacao.nome_responsavel }}
+
+        <span>{{ item.negociacao.data | date: 'dd/MM/yyyy'}}</span>
+
+    </div>
+
+  </td>
+
+  <td>
+
+    <div class="cost-sheet-column">
+
+        {{ item.solicitante.nome }}
+
+        <span>{{ item.solicitante.data | date: 'dd/MM/yyyy'}}</span>
+
+    </div>
+
+  </td>
+
+  <td>
+
+    <div class="cost-sheet-column">
+
+        {{ item.aprovacao.nome_responsavel }}
+
+        <span>{{ item.aprovacao.data | date: 'dd/MM/yyyy'}}</span>
+
+    </div>
+
+  </td>
+
+  <td>
+
+    <div class="cost-sheet-column">
+
+        {{ item.aceite.nome_responsavel }}
+
+        <span>{{ item.aceite.data | date: 'dd/MM/yyyy'}}</span>
+
+    </div>
+
+  </td>
+  
+
+  <td  class="first-of-group">
+
+    {{ item.nf }}
+
+  </td>
+
+  <td>
+
+    {{ item.condicao }}
+
+  </td>
+
+  <td>
+
+    <div class="cost-sheet-column">
+
+        {{ item.vencimento.data  | date: 'dd/MM/yyyy' }}
+
+        <span>{{ item.vencimento.parcela_atual }}/{{ item.vencimento.total_parcelas }}</span>
+
+    </div>
+
+  </td>
+  
+  <td> {{ item.pagamento }}</td>
+</tr>
+
+
+<!-- <div class="cost-sheet-grid-row cost-sheet-grid-template-fr">
+    <div>{{ item.numero }}</div>
+    <div>
+        <mat-form-field class="mat-form-field-sm">
+            <input 
+                matInput 
+                placeholder="Categoria"
+            />
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-select 
+                placeholder="Favorecido" 
+                [compareWith]="compare"
+            >
+              <mat-option *ngFor="let item of items" [value]="item">
+                {{ item.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <input 
+                matInput 
+                placeholder="Descrição"
+            />
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <input 
+                matInput 
+                placeholder="Quantidade"
+            />
+        </mat-form-field>
+    </div>
+    <div class="cost-sheet-border-right">
+        <mat-form-field>
+            <input 
+                matInput 
+                placeholder="Unidade"
+            />
+        </mat-form-field>
+    </div>
+    <div class="cost-sheet-border-right">
+        <mat-form-field>
+            <input 
+                currencyMask 
+                matInput 
+                placeholder="Previsto"
+            />
+          </mat-form-field>
+    </div>
+    <div class="cost-sheet-border-right arrows">
+        <mat-icon *ngIf="true" class="keyboard_arrow_up">keyboard_arrow_up</mat-icon>
+        <mat-icon *ngIf="false" class="keyboard_arrow_down">keyboard_arrow_down</mat-icon>
+        75%
+    </div>
+    <div class="cost-sheet-border-right">
+        <mat-form-field>
+            <input 
+                currencyMask 
+                matInput 
+                placeholder="Realizado"
+            />
+          </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-select 
+                placeholder="Negociação" 
+                [compareWith]="compare"
+            >
+              <mat-option *ngFor="let item of items" [value]="item">
+                {{ item.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-select 
+                placeholder="Solicitante" 
+                [compareWith]="compare"
+            >
+              <mat-option *ngFor="let item of items" [value]="item">
+                {{ item.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <mat-select 
+                placeholder="Aprovação" 
+                [compareWith]="compare"
+            >
+              <mat-option *ngFor="let item of items" [value]="item">
+                {{ item.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+    <div class="cost-sheet-border-right">
+        <mat-form-field>
+            <mat-select 
+                placeholder="Aceite" 
+                [compareWith]="compare"
+            >
+              <mat-option *ngFor="let item of items" [value]="item">
+                {{ item.description }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <input 
+                matInput 
+                placeholder="NF"
+            />
+        </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <input 
+                matInput 
+                placeholder="Ex: 4x, 28 dia, á vista"
+            />
+        </mat-form-field>
+    </div>
+    <div>
+          <mat-form-field >
+            <input  [matDatepicker]="deadlineDatepicker"
+               matInput placeholder="Vencimento">
+            <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
+            <mat-datepicker #deadlineDatepicker></mat-datepicker>
+          </mat-form-field>
+    </div>
+    <div>
+        <mat-form-field>
+            <input 
+                matInput 
+                placeholder="ok, á vencer, vencido"
+            />
+        </mat-form-field>
+    </div>
+</div> -->

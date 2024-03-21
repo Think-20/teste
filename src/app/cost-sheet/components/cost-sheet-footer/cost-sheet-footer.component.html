@@ -1,0 +1,69 @@
+<tr class="footer-tr-add">
+
+    <th scope="rowgroup" class="first-of-group cost-sheet-add" colspan="6">
+
+        <a (click)="addCostShet.emit()" matTooltip="Adicionar novo registro" mat-button>
+
+            <mat-icon>add</mat-icon>
+            
+        </a>
+
+    </th>
+
+    <th scope="rowgroup" class="first-of-group cost-sheet-add" colspan="1"></th>
+
+    <th scope="rowgroup" class="first-of-group cost-sheet-add" colspan="1"></th>
+
+    <th scope="rowgroup" class="first-of-group cost-sheet-add" colspan="1"></th>
+
+    <th scope="rowgroup" class="first-of-group cost-sheet-add" colspan="4"></th>
+
+    <th scope="rowgroup" class="first-of-group cost-sheet-add" colspan="4"></th>
+
+</tr>
+
+<tr class="footer-tr">
+
+    <th scope="rowgroup" class="first-of-group" colspan="6">
+
+        <div class="cost-sheet-between">
+
+            <div>{{ costSheetGroup.aprovacao.nome_responsavel }} | {{ costSheetGroup.aprovacao.data | date: 'HH:mm' }} hs</div> 
+
+            <span>{{ costSheetGroup.aprovacao.percentual }}%</span>
+
+        </div>
+
+    </th>
+
+    <th scope="rowgroup" class="first-of-group" colspan="1">{{ costSheetGroup.total_previsto| number: '1.2' }}</th>
+    
+    <th scope="rowgroup" class="first-of-group" colspan="1">
+
+        <div class="cost-sheet-border-right arrows">
+
+            <mat-icon *ngIf="!costSheetGroup.valor_previsto_realizado_percentual_total_neagtive" class="keyboard_arrow_up">keyboard_arrow_up</mat-icon>
+
+            <mat-icon *ngIf="costSheetGroup.valor_previsto_realizado_percentual_total_neagtive" class="keyboard_arrow_down">keyboard_arrow_down</mat-icon>
+
+            {{ costSheetGroup.valor_previsto_realizado_percentual_total }}%
+
+        </div>
+
+    </th>
+
+    <th scope="rowgroup" class="first-of-group" colspan="1">{{ costSheetGroup.total_realizado  | number: '1.2'}}</th>
+
+    <th scope="rowgroup" class="first-of-group" colspan="8">
+
+        <div class="cost-sheet-between">
+
+            <span>{{ costSheetGroup.negociacao.percentual }}%</span>
+
+            <div>{{ costSheetGroup.negociacao.nome_responsavel }} | {{ costSheetGroup.negociacao.data | date: 'HH:mm' }} hs</div>
+
+        </div>
+
+    </th>
+
+</tr>

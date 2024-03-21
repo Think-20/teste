@@ -1,0 +1,6 @@
+@import url('../cost-sheet-list/cost-sheet-list.component.css');
+
+.cost-sheet-modal-form {
+    height: auto;
+    width: 800px;
+  }

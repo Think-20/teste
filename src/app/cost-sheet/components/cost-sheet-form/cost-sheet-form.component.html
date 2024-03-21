@@ -1,0 +1,106 @@
+<h1 mat-dialog-title>Cost Sheet</h1>
+<mat-dialog-content class="cost-sheet-modal-form" mat-dialog-content>
+
+  <div class="row">
+    <mat-form-field class="form-field col-md-3">
+      <input matInput  placeholder="Número">
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <input matInput  placeholder="Categoria">
+    </mat-form-field>
+    
+    <mat-form-field class="form-field col-md-3">
+      <mat-select  placeholder="Favorecido">
+        <mat-option *ngFor="let favorecido of favorecidos" [value]="favorecido">
+          {{ favorecido.nome }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <input matInput  placeholder="Descrição">
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <input matInput  placeholder="Quantidade">
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <input matInput  placeholder="Unidade">
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <input matInput  placeholder="Valor Previsto">
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <input matInput  placeholder="Valor Realizado">
+    </mat-form-field>
+<!-- 
+    <mat-form-field class="form-field col-md-3">
+      <input matInput  placeholder="Percentual Valor Previsto/Realizado">
+    </mat-form-field> -->
+
+    <mat-form-field class="form-field col-md-3">
+      <mat-select  placeholder="Negociação">
+        <mat-option *ngFor="let negociacao of negociacoes" [value]="negociacao">
+          {{ negociacao.nome_responsavel }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <mat-select  placeholder="Solicitante">
+        <mat-option *ngFor="let solicitante of solicitantes" [value]="solicitante">
+          {{ solicitante.nome }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <mat-select  placeholder="Aprovação">
+        <mat-option *ngFor="let aprovacao of aprovacoes" [value]="aprovacao">
+          {{ aprovacao.nome_responsavel }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <mat-select  placeholder="Aceite">
+        <mat-option *ngFor="let aceite of aceites" [value]="aceite">
+          {{ aceite.nome_responsavel }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <mat-form-field class="form-field col-md-3">
+      <input matInput  placeholder="NF">
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <input matInput  placeholder="Condição">
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <input matInput  placeholder="Pagamento">
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <input matInput  placeholder="Data de Vencimento">
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <input matInput placeholder="Parcela Atual">
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <input matInput placeholder="Total de Parcelas">
+    </mat-form-field> 
+
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancelClick()">Cancelar</button>
+  <button mat-button cdkFocusInitial>Salvar</button>
+</mat-dialog-actions>

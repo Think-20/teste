@@ -223,6 +223,13 @@ import { RoundPipe } from './shared/round.pipe';
 import { GoalsComponent } from './goals/goals.component';
 import { GoalsService } from './goals/goals.service';
 import { ThousandsPipe } from './shared/thousands.pipe';
+import { CostSheetListComponent } from './cost-sheet/components/cost-sheet-list/cost-sheet-list.component';
+import { CostSheetItemComponent } from './cost-sheet/components/cost-sheet-item/cost-sheet-item.component';
+import { CostSheetFooterComponent } from './cost-sheet/components/cost-sheet-footer/cost-sheet-footer.component';
+import { CostSheetService } from './cost-sheet/cost-sheet.service';
+import { CostSheetColumnsComponent } from './cost-sheet/components/cost-sheet-columns/cost-sheet-columns.component';
+import { CostSheetHeaderComponent } from './cost-sheet/components/cost-sheet-header/cost-sheet-header.component';
+import { CostSheeFormComponent } from './cost-sheet/components/cost-sheet-form/cost-sheet-form.component';
 
 registerLocaleData(localePt);
 
@@ -328,6 +335,12 @@ registerLocaleData(localePt);
     PlaceListComponent,
     PlacesComponent,
     CostSheetComponent,
+    CostSheetListComponent,
+    CostSheetItemComponent,
+    CostSheetFooterComponent,
+    CostSheetHeaderComponent,
+    CostSheetColumnsComponent,
+    CostSheeFormComponent,
 
     EventFormComponent,
     EventListComponent,
@@ -455,6 +468,7 @@ registerLocaleData(localePt);
     MessageLoadingService,
     AlertService,
     MemoriesService,
+    CostSheetService,
     DatePipe,
     {provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
     {provide: LOCALE_ID, useValue: 'pt-BR'},
@@ -474,6 +488,7 @@ registerLocaleData(localePt);
     MessageLoadingComponent,
     UpdatedInfoComponent,
     ChartPreviewComponent,
+    CostSheeFormComponent,
   ]
 })
 export class AppModule { }

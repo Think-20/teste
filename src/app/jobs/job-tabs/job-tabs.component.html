@@ -33,7 +33,7 @@
       Detalhamento
     </mat-tab>
     <mat-tab label="Ficha de custo">
-      <cb-cost-sheet *ngIf="job?.id != undefined" [job]="job"></cb-cost-sheet>
+      <cb-cost-sheet style="display: flex;" *ngIf="job?.id != undefined" [job]="job"></cb-cost-sheet>
     </mat-tab>
     <mat-tab label="Lista de compras">
       Lista de compras
