@@ -1,6 +1,6 @@
 <mat-accordion class="cost-sheet-accordion">
 
-    <mat-expansion-panel hideToggle [expanded]="index == expandedIndex">
+    <mat-expansion-panel hideToggle [expanded]="costSheetGroup.expanded">
         
         <mat-expansion-panel-header>
 
@@ -14,11 +14,11 @@
 
             <cb-cost-sheet-columns  class="cb-cost-sheet-columns"></cb-cost-sheet-columns>
 
-            <cb-cost-sheet-item class="cb-cost-sheet-item" *ngFor="let item of costSheetGroup.cost_sheets" [item]="item"></cb-cost-sheet-item>
+            <cb-cost-sheet-item class="cb-cost-sheet-item" *ngFor="let costSheet of costSheetGroup.cost_sheets" [costSheet]="costSheet"></cb-cost-sheet-item>
 
             <cb-cost-sheet-footer (addCostShet)="openCostSheetModalForm()" class="cb-cost-sheet-footer" [costSheetGroup]="costSheetGroup"></cb-cost-sheet-footer>
 
-          </table>
+        </table>
 
     </mat-expansion-panel>
 

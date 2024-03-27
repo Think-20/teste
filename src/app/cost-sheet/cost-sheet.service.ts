@@ -16,9 +16,10 @@ export class CostSheetService {
   ) { }
 
 
-  getCostSheets(): Observable<CostSheetGroup[]> {
-    const costSheets: CostSheet[] = [
+  getCostSheets(): Observable<Partial<CostSheetGroup>[]> {
+    const costSheets: Partial<CostSheet>[] = [
         {
+            id: 1,
             numero: "001",
             categoria: "Marcenaria",
             favorecido: {
@@ -58,8 +59,33 @@ export class CostSheetService {
         }
     ]
 
-    const costSheetGroups: CostSheetGroup[] = [
+    const costSheet = new CostSheet();
+    const costSheets2: Partial<CostSheet>[] = [
+        {  ...costSheet, numero: "001", categoria: "Mkt" },
+        {  ...costSheet, numero: "002", categoria: "Frete" },
+        {  ...costSheet, numero: "003", categoria: "Logistica" },
+        {  ...costSheet, numero: "004", categoria: "VP" },
+        {  ...costSheet, numero: "005", categoria: "Taxas" },
+    ]
+
+    const costSheets3: Partial<CostSheet>[] = [
+        {  ...costSheet, numero: "001", categoria: "impos" },
+        {  ...costSheet, numero: "002", categoria: "Bvs" },
+        {  ...costSheet, numero: "003", categoria: "Equipamentos" },
+    ]
+
+    const costSheets4: Partial<CostSheet>[] = [
+        {  ...costSheet, numero: "001", categoria: "Vidros" },
+        {  ...costSheet, numero: "002", categoria: "Balcões" },
+        {  ...costSheet, numero: "003", categoria: "Luninárias" },
+        {  ...costSheet, numero: "004", categoria: "Pisos" },
+    ]
+
+    const costSheetGroup = new CostSheetGroup();
+
+    const costSheetGroups: Partial<CostSheetGroup>[] = [
         {
+            ...costSheetGroup,
             id: 1,
             percentual: 35,
             titulo: "Mão de Obra",
@@ -79,8 +105,10 @@ export class CostSheetService {
             total_realizado: 100000.00,
             valor_previsto_realizado_percentual_total: 80,
             valor_previsto_realizado_percentual_total_neagtive: true,
+            expanded: true,
         },
         {
+            ...costSheetGroup,
             id: 2,
             percentual: 12,
             titulo: "Insumos",
@@ -98,6 +126,87 @@ export class CostSheetService {
             total_realizado: 100000.00,
             valor_previsto_realizado_percentual_total: 80,
             valor_previsto_realizado_percentual_total_neagtive: true,
+            expanded: true,
+        },
+        {
+            ...costSheetGroup,
+            id: 3,
+            titulo: "Operacional",
+            cost_sheets: [...costSheets2],
+            aprovacao: {
+                nome_responsavel: "Pamela Cristina",
+                data: new Date(),
+            },
+            negociacao: {
+                nome_responsavel: "Maurício Souza",
+                data: new Date(),
+            },
+            total_previsto: 120000.00,
+            total_realizado: 100000.00,
+            valor_previsto_realizado_percentual_total: 80,
+            valor_previsto_realizado_percentual_total_neagtive: true,
+            expanded: true,
+            showFooter: false
+        },
+        {
+            ...costSheetGroup,
+            id: 4,
+            titulo: "Impostos",
+            cost_sheets: [...costSheets3],
+            aprovacao: {
+                nome_responsavel: "Pamela Cristina",
+                data: new Date(),
+            },
+            negociacao: {
+                nome_responsavel: "Maurício Souza",
+                data: new Date(),
+            },
+            total_previsto: 120000.00,
+            total_realizado: 100000.00,
+            valor_previsto_realizado_percentual_total: 80,
+            valor_previsto_realizado_percentual_total_neagtive: true,
+            expanded: true,
+            showFooter: false
+        },
+        {
+            ...costSheetGroup,
+            id: 5,
+            titulo: "Estoque",
+            cost_sheets: [...costSheets4],
+            aprovacao: {
+                nome_responsavel: "Pamela Cristina",
+                data: new Date(),
+            },
+            negociacao: {
+                nome_responsavel: "Maurício Souza",
+                data: new Date(),
+            },
+            total_previsto: 120000.00,
+            total_realizado: 100000.00,
+            valor_previsto_realizado_percentual_total: 80,
+            valor_previsto_realizado_percentual_total_neagtive: true,
+            expanded: true,
+            showFooter: false
+        },
+        {
+            ...costSheetGroup,
+            id: 6,
+            titulo: "Resultado",
+            cost_sheets: [],
+            aprovacao: {
+                nome_responsavel: "Pamela Cristina",
+                data: new Date(),
+            },
+            negociacao: {
+                nome_responsavel: "Maurício Souza",
+                data: new Date(),
+            },
+            total_previsto: 120000.00,
+            total_realizado: 100000.00,
+            valor_previsto_realizado_percentual_total: 80,
+            valor_previsto_realizado_percentual_total_neagtive: true,
+            expanded: true,
+            showFooter: true
         }
     ]
 

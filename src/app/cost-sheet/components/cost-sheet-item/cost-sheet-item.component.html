@@ -1,58 +1,46 @@
 <tr class="row-tr">
 
-  <td class="first-of-group"> {{ item.numero }}</td>
+  <td class="first-of-group"> {{ costSheet.numero }}</td>
 
-  <td>{{ item.categoria }}</td>
+  <td>{{ costSheet.categoria }}</td>
 
-  <td>{{ item.favorecido.nome }}</td>
+  <td>{{ costSheet.favorecido.nome }}</td>
 
-  <td>{{ item.descricao }}</td>
+  <td>{{ costSheet.descricao }}</td>
 
-  <td>{{ item.quantidade }}</td>
+  <td>{{ costSheet.quantidade }}</td>
 
-  <td> {{ item.unidade }}</td>
+  <td> {{ costSheet.unidade }}</td>
 
 
-  <td class="first-of-group">{{ item.valor_previsto | number: '1.2' }}</td>
+  <td class="first-of-group">{{ costSheet.valor_previsto | number: '1.2' }}</td>
   
 
   <td class="first-of-group">
 
     <div class="cost-sheet-border-right arrows">
 
-        <mat-icon *ngIf="true" class="keyboard_arrow_up">keyboard_arrow_up</mat-icon>
+        <mat-icon *ngIf="valor_previsto_realizado_percentual && true" class="keyboard_arrow_up">keyboard_arrow_up</mat-icon>
 
-        <mat-icon *ngIf="false" class="keyboard_arrow_down">keyboard_arrow_down</mat-icon>
+        <mat-icon *ngIf="valor_previsto_realizado_percentual && false" class="keyboard_arrow_down">keyboard_arrow_down</mat-icon>
 
-        {{ item.valor_previsto_realizado_percentual }}%
+        <span *ngIf="valor_previsto_realizado_percentual">{{ costSheet.valor_previsto_realizado_percentual }}%</span>
 
     </div>
 
   </td>
 
 
-  <td class="first-of-group">{{ item.valor_realizado | number: '1.2' }}</td>
+  <td class="first-of-group">{{ costSheet.valor_realizado | number: '1.2' }}</td>
 
 
   <td class="first-of-group">
 
     <div class="cost-sheet-column">
 
-        {{ item.negociacao.nome_responsavel }}
+        {{ costSheet.negociacao.nome_responsavel }}
 
-        <span>{{ item.negociacao.data | date: 'dd/MM/yyyy'}}</span>
-
-    </div>
-
-  </td>
-
-  <td>
-
-    <div class="cost-sheet-column">
-
-        {{ item.solicitante.nome }}
-
-        <span>{{ item.solicitante.data | date: 'dd/MM/yyyy'}}</span>
+        <span>{{ costSheet.negociacao.data | date: 'dd/MM/yyyy'}}</span>
 
     </div>
 
@@ -62,9 +50,9 @@
 
     <div class="cost-sheet-column">
 
-        {{ item.aprovacao.nome_responsavel }}
+        {{ costSheet.solicitante.nome }}
 
-        <span>{{ item.aprovacao.data | date: 'dd/MM/yyyy'}}</span>
+        <span>{{ costSheet.solicitante.data | date: 'dd/MM/yyyy'}}</span>
 
     </div>
 
@@ -74,9 +62,21 @@
 
     <div class="cost-sheet-column">
 
-        {{ item.aceite.nome_responsavel }}
+        {{ costSheet.aprovacao.nome_responsavel }}
 
-        <span>{{ item.aceite.data | date: 'dd/MM/yyyy'}}</span>
+        <span>{{ costSheet.aprovacao.data | date: 'dd/MM/yyyy'}}</span>
+
+    </div>
+
+  </td>
+
+  <td>
+
+    <div class="cost-sheet-column">
+
+        {{ costSheet.aceite.nome_responsavel }}
+
+        <span>{{ costSheet.aceite.data | date: 'dd/MM/yyyy'}}</span>
 
     </div>
 
@@ -85,13 +85,13 @@
 
   <td  class="first-of-group">
 
-    {{ item.nf }}
+    {{ costSheet.nf }}
 
   </td>
 
   <td>
 
-    {{ item.condicao }}
+    {{ costSheet.condicao }}
 
   </td>
 
@@ -99,20 +99,20 @@
 
     <div class="cost-sheet-column">
 
-        {{ item.vencimento.data  | date: 'dd/MM/yyyy' }}
+        {{ costSheet.vencimento.data  | date: 'dd/MM/yyyy' }}
 
-        <span>{{ item.vencimento.parcela_atual }}/{{ item.vencimento.total_parcelas }}</span>
+        <span *ngIf="costSheet.vencimento.data">{{ costSheet.vencimento.parcela_atual }}/{{ costSheet.vencimento.total_parcelas }}</span>
 
     </div>
 
   </td>
   
-  <td> {{ item.pagamento }}</td>
+  <td> {{ costSheet.pagamento }}</td>
 </tr>
 
 
 <!-- <div class="cost-sheet-grid-row cost-sheet-grid-template-fr">
-    <div>{{ item.numero }}</div>
+    <div>{{ costSheet.numero }}</div>
     <div>
         <mat-form-field class="mat-form-field-sm">
             <input 
@@ -128,7 +128,7 @@
                 [compareWith]="compare"
             >
               <mat-option *ngFor="let item of items" [value]="item">
-                {{ item.description }}
+                {{ costSheet.description }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -187,7 +187,7 @@
                 [compareWith]="compare"
             >
               <mat-option *ngFor="let item of items" [value]="item">
-                {{ item.description }}
+                {{ costSheet.description }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -199,7 +199,7 @@
                 [compareWith]="compare"
             >
               <mat-option *ngFor="let item of items" [value]="item">
-                {{ item.description }}
+                {{ costSheet.description }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -211,7 +211,7 @@
                 [compareWith]="compare"
             >
               <mat-option *ngFor="let item of items" [value]="item">
-                {{ item.description }}
+                {{ costSheet.description }}
               </mat-option>
             </mat-select>
           </mat-form-field>
@@ -223,7 +223,7 @@
                 [compareWith]="compare"
             >
               <mat-option *ngFor="let item of items" [value]="item">
-                {{ item.description }}
+                {{ costSheet.description }}
               </mat-option>
             </mat-select>
           </mat-form-field>

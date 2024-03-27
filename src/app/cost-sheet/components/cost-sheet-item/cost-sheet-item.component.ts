@@ -1,4 +1,5 @@
 import { Component, Input } from "@angular/core";
+import { CostSheet } from "app/cost-sheet/cost-sheet.model";
 
 @Component({
     selector: 'cb-cost-sheet-item',
@@ -7,7 +8,7 @@ import { Component, Input } from "@angular/core";
   })
 export class CostSheetItemComponent {
 
-  @Input() item;
+  @Input() costSheet: Partial<CostSheet>;
 
   items = [ 
     { value: 'value', description: 'description' } ,

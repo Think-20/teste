@@ -7,7 +7,7 @@ th, td {
 }
 
 th {
-    background-color: #f2f2f2;
+    /* background-color: #f2f2f2; */
     vertical-align: middle;
 }
 
@@ -33,6 +33,7 @@ th {
 
 .cost-sheet-accordion ::ng-deep .mat-expansion-panel-body {
     overflow: auto !important;
+    padding-bottom: 0;
 }
 
 .cost-sheet-accordion ::ng-deep .mat-expanded .mat-expansion-panel-header,
@@ -88,6 +89,10 @@ th {
 
 .columns-tr, .footer-tr, .footer-tr-add {
     border: 1px solid #ccc;
+}
+
+.footer-tr {
+    border-bottom: none;
 }
 
 .footer-tr-add {

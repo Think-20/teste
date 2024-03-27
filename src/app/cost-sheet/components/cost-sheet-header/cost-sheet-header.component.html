@@ -4,9 +4,9 @@
 
     <div class="cost-sheet-header-right">
 
-        <span>{{ costSheetGroup.percentual  }}% | {{ costSheetGroup.valor }}</span>
+        <span *ngIf="costSheetGroup.percentual || costSheetGroup.valor">{{ costSheetGroup.percentual  }}% | {{ costSheetGroup.valor }}</span>
 
-        <mat-icon>keyboard_arrow_down</mat-icon>
+        <mat-icon *ngIf="costSheetGroup.percentual || costSheetGroup.valor">keyboard_arrow_down</mat-icon>
 
     </div>
 </div>
