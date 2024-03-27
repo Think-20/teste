@@ -126,7 +126,8 @@ th {
 .cb-cost-sheet-item, 
 .cb-cost-sheet-footer, 
 .cb-cost-sheet-columns, 
-.cb-cost-sheet-header {
+.cb-cost-sheet-header,
+.cb-cost-sheet-result {
     display: contents;
 }
 

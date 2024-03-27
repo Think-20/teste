@@ -1,0 +1,23 @@
+@import url('../cost-sheet-list/cost-sheet-list.component.css');
+
+.divider {
+    height: 22px;
+}
+
+.footer-tr {
+    border: 1px solid #ccc;
+}
+
+.result {
+    height: 70px;
+}
+
+.big-arrow {
+    width: 100%;
+    height: 34px;
+    font-size: 40px;
+}
+
+.cost-sheet-space-r {
+    margin-right: 1rem;
+}

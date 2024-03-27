@@ -230,6 +230,7 @@ import { CostSheetService } from './cost-sheet/cost-sheet.service';
 import { CostSheetColumnsComponent } from './cost-sheet/components/cost-sheet-columns/cost-sheet-columns.component';
 import { CostSheetHeaderComponent } from './cost-sheet/components/cost-sheet-header/cost-sheet-header.component';
 import { CostSheeFormComponent } from './cost-sheet/components/cost-sheet-form/cost-sheet-form.component';
+import { CostSheetResultComponent } from './cost-sheet/components/cost-sheet-result/cost-sheet-result.component';
 
 registerLocaleData(localePt);
 
@@ -341,6 +342,7 @@ registerLocaleData(localePt);
     CostSheetHeaderComponent,
     CostSheetColumnsComponent,
     CostSheeFormComponent,
+    CostSheetResultComponent,
 
     EventFormComponent,
     EventListComponent,

@@ -1,0 +1,107 @@
+<tr class="footer-tr divider">
+
+    <th scope="rowgroup" class="first-of-group"></th>
+
+</tr>
+
+<tr class="footer-tr result">
+
+  <th scope="rowgroup" class="first-of-group" colspan="7">
+
+      <div class="cost-sheet-between">
+
+        <h6 class="cost-sheet-header-title">Resultado</h6>
+        
+          <div class="cost-sheet-between">
+
+              <span class="cost-sheet-header-title cost-sheet-space-r">{{ costSheetResult.percentual_previsto }}%</span>
+
+              <span class="cost-sheet-header-title">{{ costSheetResult.total_previsto }}</span>
+              
+          </div>
+      </div>
+
+  </th>
+
+  
+  <th scope="rowgroup" class="first-of-group" colspan="1">
+
+      <div class="cost-sheet-border-right arrows">
+
+          <mat-icon *ngIf="!costSheetResult.valor_previsto_realizado_percentual_total_neagtive" class="keyboard_arrow_up big-arrow">keyboard_arrow_up</mat-icon>
+
+          <mat-icon *ngIf="costSheetResult.valor_previsto_realizado_percentual_total_neagtive" class="keyboard_arrow_down big-arrow">keyboard_arrow_down</mat-icon>
+
+      </div>
+
+  </th>
+
+  <th scope="rowgroup" class="first-of-group" colspan="5">
+
+    <div class="cost-sheet-between">
+      
+        <div class="cost-sheet-between">
+          
+            <span class="cost-sheet-header-title cost-sheet-space-r">{{ costSheetResult.total_realizado }}</span>
+
+            <span class="cost-sheet-header-title">{{ costSheetResult.percentual_realizado }}%</span>
+            
+        </div>
+
+        <span class="cost-sheet-header-title"></span>
+    </div>
+
+  </th>
+
+  <th scope="rowgroup" class="first-of-group" colspan="4">
+
+      <div class="cost-sheet-between">
+            
+        <span class="cost-sheet-header-title">{{ costSheetResult.percentual_salvo }}%</span>
+        
+        <span class="cost-sheet-header-title">{{ costSheetResult.total_salvo }}</span>
+        
+      </div>
+
+  </th>
+
+</tr>
+
+
+<tr class="footer-tr">
+
+  <th scope="rowgroup"colspan="7">
+
+      <div class="cost-sheet-between">
+
+          <div>{{ costSheetResult.aprovacao.nome_responsavel }} | {{ costSheetResult.aprovacao.data | date: 'HH:mm' }} hs</div> 
+
+          <span>PREVISTO</span>
+
+      </div>
+
+  </th>
+
+  <th scope="rowgroup"colspan="1"></th>
+
+  <th scope="rowgroup"colspan="5">
+
+      <div class="cost-sheet-between">
+          REALIZADO
+      </div>
+
+  </th>
+  
+  <th scope="rowgroup"colspan="4">
+
+      <div class="cost-sheet-between">
+
+          <span>SAVE</span>
+
+          <div>{{ costSheetResult.negociacao.nome_responsavel }} | {{ costSheetResult.negociacao.data | date: 'HH:mm' }} hs</div>
+
+      </div>
+
+  </th>
+
+</tr>

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material";
-import { CostSheetGroup } from "app/cost-sheet/cost-sheet.model";
+import { CostSheetGroup, CostSheetResult } from "app/cost-sheet/cost-sheet.model";
 import { CostSheetService } from "app/cost-sheet/cost-sheet.service";
 import { CostSheeFormComponent } from "../cost-sheet-form/cost-sheet-form.component";
 
@@ -12,7 +12,11 @@ import { CostSheeFormComponent } from "../cost-sheet-form/cost-sheet-form.compon
 export class CostSheetListComponent {
   @Input() costSheetGroup: CostSheetGroup;
 
+  @Input() costSheetResult: CostSheetResult;
+
   @Input() index: number;
+
+  @Input() last: boolean;
 
 
   constructor(public dialog: MatDialog) { }

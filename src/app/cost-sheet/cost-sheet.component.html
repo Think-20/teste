@@ -2,11 +2,13 @@
 
     <div class="row">
 
-        <div class="w-100" *ngFor="let costSheetGroup of costSheetGroups; let i = index">
+        <div class="w-100" *ngFor="let costSheetGroup of costSheetGroups; let i = index; let l = last">
 
             <cb-cost-sheet-list 
-                [costSheetGroup]="costSheetGroup" 
+                [costSheetGroup]="costSheetGroup"
+                [costSheetResult]="costSheetResult"
                 [index]="i"
+                [last]="l"
             ></cb-cost-sheet-list>
             
         </div>

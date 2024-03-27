@@ -1,3 +1,18 @@
+export class CostSheetResult {
+    valor_previsto_realizado_percentual_total_neagtive: boolean;
+
+    total_previsto: number;
+    total_realizado: number;
+    total_salvo: number;
+
+    percentual_previsto: number;
+    percentual_realizado: number;
+    percentual_salvo: number;
+
+    negociacao: Negociacao;
+    aprovacao: Aprovacao;
+}
+
 export class CostSheetGroup {
     id: number;
     titulo: string;

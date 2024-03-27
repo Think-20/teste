@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { Job } from "app/jobs/job.model";
-import { CostSheetGroup } from "./cost-sheet.model";
+import { CostSheetGroup, CostSheetResult } from "./cost-sheet.model";
 import { CostSheetService } from "./cost-sheet.service";
 
 @Component({
@@ -11,13 +11,17 @@ import { CostSheetService } from "./cost-sheet.service";
 export class CostSheetComponent implements OnInit {
   @Input() job: Job
 
-  costSheetGroups: CostSheetGroup[] = [];
+  costSheetGroups: Partial<CostSheetGroup>[] = [];
+
+  costSheetResult: CostSheetResult;
 
   constructor(private costSheetService: CostSheetService) {}
 
   ngOnInit(): void {
     this.costSheetService.getCostSheets().subscribe(response => {
-      this.costSheetGroups = response;
+      this.costSheetGroups = response.costSheetGroups;
+
+      this.costSheetResult = response.costSheetResult;
     })
   }
 }

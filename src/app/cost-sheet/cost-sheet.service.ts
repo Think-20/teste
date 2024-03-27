@@ -5,7 +5,7 @@ import { API } from 'app/app.api';
 import { AuthService } from 'app/login/auth.service';
 import { ErrorHandler } from 'app/shared/error-handler.service';
 import { Observable, of } from 'rxjs';
-import { CostSheet, CostSheetGroup } from './cost-sheet.model';
+import { CostSheet, CostSheetGroup, CostSheetResult } from './cost-sheet.model';
 
 @Injectable()
 export class CostSheetService {
@@ -16,7 +16,7 @@ export class CostSheetService {
   ) { }
 
 
-  getCostSheets(): Observable<Partial<CostSheetGroup>[]> {
+  getCostSheets(): Observable<{costSheetGroups: Partial<CostSheetGroup>[], costSheetResult: CostSheetResult}> {
     const costSheets: Partial<CostSheet>[] = [
         {
             id: 1,
@@ -188,28 +188,26 @@ export class CostSheetService {
             expanded: true,
             showFooter: false
         },
-        {
-            ...costSheetGroup,
-            id: 6,
-            titulo: "Resultado",
-            cost_sheets: [],
-            aprovacao: {
-                nome_responsavel: "Pamela Cristina",
-                data: new Date(),
-            },
-            negociacao: {
-                nome_responsavel: "Maurício Souza",
-                data: new Date(),
-            },
-            total_previsto: 120000.00,
-            total_realizado: 100000.00,
-            valor_previsto_realizado_percentual_total: 80,
-            valor_previsto_realizado_percentual_total_neagtive: true,
-            expanded: true,
-            showFooter: true
-        }
     ]
 
-    return of(costSheetGroups)
+    const costSheetResult: CostSheetResult = {
+        aprovacao: {
+            nome_responsavel: "Pamela Cristina",
+            data: new Date(),
+        },
+        negociacao: {
+            nome_responsavel: "Maurício Souza",
+            data: new Date(),
+        },
+        percentual_previsto: 20,
+        percentual_realizado: 25,
+        percentual_salvo: 25,
+        total_previsto: 20000.00,
+        total_realizado: 25000.00,
+        total_salvo: 5000.00,
+        valor_previsto_realizado_percentual_total_neagtive: false,
+    }
+
+    return of( { costSheetGroups: costSheetGroups, costSheetResult: costSheetResult } )
   }
 }
