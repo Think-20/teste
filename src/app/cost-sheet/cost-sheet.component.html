@@ -2,7 +2,7 @@
 
     <div class="row">
 
-        <div class="w-100" *ngFor="let costSheetGroup of costSheetGroups; let i = index; let l = last">
+        <div class="w-100" *ngFor="let costSheetGroup of costSheetGroups$ | async; let i = index; let l = last">
 
             <cb-cost-sheet-list 
                 [costSheetGroup]="costSheetGroup"

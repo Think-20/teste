@@ -231,6 +231,7 @@ import { CostSheetColumnsComponent } from './cost-sheet/components/cost-sheet-co
 import { CostSheetHeaderComponent } from './cost-sheet/components/cost-sheet-header/cost-sheet-header.component';
 import { CostSheeFormComponent } from './cost-sheet/components/cost-sheet-form/cost-sheet-form.component';
 import { CostSheetResultComponent } from './cost-sheet/components/cost-sheet-result/cost-sheet-result.component';
+import { CostSheetStore } from './cost-sheet/cost-sheet.store.service';
 
 registerLocaleData(localePt);
 
@@ -471,6 +472,7 @@ registerLocaleData(localePt);
     AlertService,
     MemoriesService,
     CostSheetService,
+    CostSheetStore,
     DatePipe,
     {provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
     {provide: LOCALE_ID, useValue: 'pt-BR'},

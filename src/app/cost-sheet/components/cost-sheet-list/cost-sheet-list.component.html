@@ -1,6 +1,6 @@
 <mat-accordion class="cost-sheet-accordion">
 
-    <mat-expansion-panel hideToggle [expanded]="costSheetGroup.expanded">
+    <mat-expansion-panel hideToggle [expanded]="costSheetGroup.expanded" [disabled]="!costSheetGroup.percentual && !costSheetGroup.valor">
         
         <mat-expansion-panel-header>
 

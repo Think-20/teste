@@ -46,7 +46,11 @@ th {
 }
 
 .cost-sheet-accordion ::ng-deep .mat-expansion-panel-header {
-    border: 1px solid transparent;
+    /* border: 1px solid transparent; */
+}
+
+.cost-sheet-accordion ::ng-deep .mat-expansion-panel-header[aria-disabled=true] {
+    color: inherit !important;
 }
 
 .cost-sheet-add {

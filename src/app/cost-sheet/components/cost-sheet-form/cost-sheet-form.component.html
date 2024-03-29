@@ -13,7 +13,7 @@
     <mat-form-field class="form-field col-md-3">
       <mat-select formControlName="favorecido" placeholder="Favorecido" [compareWith]="compareAttendance">
         <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-          {{ attendance.name }}
+          {{ attendance.nome }}
         </mat-option>
       </mat-select>
       <mat-error>
@@ -44,7 +44,7 @@
     <mat-form-field class="form-field col-md-3">
       <mat-select formControlName="negociacao" placeholder="Negociação"  [compareWith]="compareAttendance">
         <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-          {{ attendance.name }}
+          {{ attendance.nome }}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -52,7 +52,7 @@
     <mat-form-field class="form-field col-md-3">
       <mat-select formControlName="solicitante" placeholder="Solicitante"  [compareWith]="compareAttendance">
         <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-          {{ attendance.name }}
+          {{ attendance.nome }}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -60,7 +60,7 @@
     <mat-form-field class="form-field col-md-3">
       <mat-select formControlName="aprovacao" placeholder="Aprovação"  [compareWith]="compareAttendance">
         <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-          {{ attendance.name }}
+          {{ attendance.nome }}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -68,7 +68,7 @@
     <mat-form-field class="form-field col-md-3">
       <mat-select  formControlName="aceite" placeholder="Aceite"  [compareWith]="compareAttendance">
         <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-          {{ attendance.name }}
+          {{ attendance.nome }}
         </mat-option>
       </mat-select>
     </mat-form-field>

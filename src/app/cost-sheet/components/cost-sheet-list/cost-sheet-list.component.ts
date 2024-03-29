@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material";
-import { CostSheetGroup, CostSheetResult } from "app/cost-sheet/cost-sheet.model";
+import { CostSheet, CostSheetGroup, CostSheetResult } from "app/cost-sheet/cost-sheet.model";
 import { CostSheetService } from "app/cost-sheet/cost-sheet.service";
 import { CostSheeFormComponent } from "../cost-sheet-form/cost-sheet-form.component";
+import { CostSheetStore } from "app/cost-sheet/cost-sheet.store.service";
 
 @Component({
     selector: 'cb-cost-sheet-list',
@@ -19,16 +20,43 @@ export class CostSheetListComponent {
   @Input() last: boolean;
 
 
-  constructor(public dialog: MatDialog) { }
+  constructor(public dialog: MatDialog, private costSheetService: CostSheetService) { }
 
   openCostSheetModalForm(): void {
     const dialogRef = this.dialog.open(CostSheeFormComponent, { closeOnNavigation: false, disableClose: true });
 
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe((result: CostSheet) => {
       if (result) {
-        // Aqui você pode fazer algo com os dados do modal, como salvar em um serviço
-        console.log('Os dados do modal:', result);
+        
+        const costSheet =  this.createObjct(result);    
+
+        this.costSheetService.addCostSheet(this.costSheetGroup, costSheet);
       }
     });
+  }
+
+  private createObjct(result: CostSheet): CostSheet {
+    const costSheet = new CostSheet(
+      result.id,
+      result.numero,
+      result.categoria,
+      result.favorecido,
+      result.descricao,
+      result.quantidade,
+      result.unidade,
+      result.valor_previsto,
+      result.valor_realizado,
+      result.valor_previsto_realizado_percentual,
+      result.negociacao,
+      result.solicitante,
+      result.aprovacao,
+      result.aceite,
+      result.nf,
+      result.condicao,
+      result.vencimento,
+      result.pagamento
+    );
+
+    return costSheet;
   }
 }

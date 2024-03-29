@@ -1,7 +1,7 @@
 import { Component, Inject, Input, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { CostSheet } from "app/cost-sheet/cost-sheet.model";
+import { Atendente, CostSheet } from "app/cost-sheet/cost-sheet.model";
 import { Employee } from "app/employees/employee.model";
 import { EmployeeService } from "app/employees/employee.service";
 
@@ -11,7 +11,7 @@ import { EmployeeService } from "app/employees/employee.service";
     styleUrls: ['./cost-sheet-form.component.css']
   })
 export class CostSheeFormComponent implements OnInit {
-  attendances: Employee[]
+  attendances: Atendente[]
   @Input() formGroup: FormGroup;
   constructor(
     private employeeService: EmployeeService,
@@ -61,11 +61,11 @@ export class CostSheeFormComponent implements OnInit {
       deleted: true
     }).subscribe(dataInfo => {
       
-      let employees = dataInfo.pagination.data
+      let employees: Employee[] = dataInfo.pagination.data
 
       this.attendances = employees.filter(employee => {
         return employee.department.description === 'Atendimento' || employee.department.description === 'Diretoria'
-      })
+      }).map(x => ({ nome: x.name, id: x.id}))
       
     })
   }
@@ -76,5 +76,7 @@ export class CostSheeFormComponent implements OnInit {
 
   salvar() {
     console.log(this.formGroup.value)
+
+    this.dialogRef.close(this.formGroup.value);
   }
 }

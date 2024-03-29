@@ -9,8 +9,8 @@ export class CostSheetResult {
     percentual_realizado: number;
     percentual_salvo: number;
 
-    negociacao: Negociacao;
-    aprovacao: Aprovacao;
+    negociacao: Partial<Negociacao>;
+    aprovacao: Partial<Aprovacao>;
 }
 
 export class CostSheetGroup {
@@ -23,8 +23,8 @@ export class CostSheetGroup {
     valor_previsto_realizado_percentual_total: number;
     valor_previsto_realizado_percentual_total_neagtive: boolean;
     total_realizado: number;
-    negociacao: Negociacao;
-    aprovacao: Aprovacao;
+    negociacao: Partial<Negociacao>;
+    aprovacao: Partial<Aprovacao>;
     expanded: boolean;
     showFooter: boolean;
 
@@ -61,40 +61,40 @@ export class CostSheet {
     id: number;
     numero: string;
     categoria: string;
-    favorecido: Favorecido;
+    favorecido: Partial<Favorecido>;
     descricao: string;
     quantidade: number;
     unidade: string;
     valor_previsto: number;
     valor_realizado: number;
     valor_previsto_realizado_percentual: number;
-    negociacao: Negociacao;
-    solicitante: Solicitante;
-    aprovacao: Aprovacao;
-    aceite: Aceite;
+    negociacao: Partial<Negociacao>;
+    solicitante: Partial<Solicitante>;
+    aprovacao: Partial<Aprovacao>;
+    aceite: Partial<Aceite>;
     nf: string;
     condicao: string[];
-    vencimento: Vencimento;
+    vencimento: Partial<Vencimento>;
     pagamento: string[];
 
     constructor(
         id: number | null = null,
         numero: string | null = null,
         categoria: string | null = null,
-        favorecido: Favorecido | null = new Favorecido(),
+        favorecido: Partial<Favorecido> | null = new Favorecido(),
         descricao: string | null = null,
         quantidade: number | null = null,
         unidade: string | null = null,
         valor_previsto: number | null = null,
         valor_realizado: number | null = null,
         valor_previsto_realizado_percentual: number | null = null,
-        negociacao: Negociacao | null = new Negociacao(),
-        solicitante: Solicitante | null = new Solicitante(),
-        aprovacao: Aprovacao | null = new Aprovacao(),
-        aceite: Aceite | null = new Aceite(),
+        negociacao: Partial<Negociacao> | null = new Negociacao(),
+        solicitante: Partial<Solicitante> | null = new Solicitante(),
+        aprovacao: Partial<Aprovacao> | null = new Aprovacao(),
+        aceite: Partial<Aceite> | null = new Aceite(),
         nf: string | null = null,
         condicao: string[] | null = null,
-        vencimento: Vencimento | null = new Vencimento(),
+        vencimento: Partial<Vencimento> | null = new Vencimento(),
         pagamento: string[] | null = null
     ) {
         this.id = id;
@@ -129,18 +129,20 @@ export class Favorecido {
 }
 
 export class Negociacao {
-    nome_responsavel: string;
+    id: number;
+    nome: string;
     data: Date;
     percentual?: number;
 
-    constructor(nome_responsavel: string | null = null, data: Date | null = null, percentual: number | null = null) {
-        this.nome_responsavel = nome_responsavel;
+    constructor(nome: string | null = null, data: Date | null = null, percentual: number | null = null) {
+        this.nome = nome;
         this.data = data;
         this.percentual = percentual;
     }
 }
 
 export class Solicitante {
+    id: number;
     nome: string;
     data: Date;
 
@@ -151,23 +153,25 @@ export class Solicitante {
 }
 
 export class Aprovacao {
-    nome_responsavel: string;
+    id: number;
+    nome: string;
     data: Date;
     percentual?: number;
 
-    constructor(nome_responsavel: string | null = null, data: Date | null = null, percentual: number | null = null) {
-        this.nome_responsavel = nome_responsavel;
+    constructor(nome: string | null = null, data: Date | null = null, percentual: number | null = null) {
+        this.nome = nome;
         this.data = data;
         this.percentual = percentual;
     }
 }
 
 export class Aceite {
-    nome_responsavel: string;
+    id: number;
+    nome: string;
     data: Date;
 
-    constructor(nome_responsavel: string | null = null, data: Date | null = null, percentual: number | null = null) {
-        this.nome_responsavel = nome_responsavel;
+    constructor(nome: string | null = null, data: Date | null = null, percentual: number | null = null) {
+        this.nome = nome;
         this.data = data;
     }
 }
@@ -186,4 +190,9 @@ export class Vencimento {
         this.parcela_atual = parcela_atual || 0;
         this.total_parcelas = total_parcelas || 0;
     }
+}
+
+export class Atendente {
+    id: number;
+    nome: string;
 }
