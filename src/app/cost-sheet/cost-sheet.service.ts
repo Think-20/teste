@@ -128,10 +128,12 @@ export class CostSheetService {
         aprovacao: {
           nome: "Pamela Cristina",
           data: new Date(),
+          percentual: 30,
         },
         negociacao: {
           nome: "Maurício Souza",
           data: new Date(),
+          percentual: 25,
         },
         total_previsto: 120000.0,
         total_realizado: 100000.0,

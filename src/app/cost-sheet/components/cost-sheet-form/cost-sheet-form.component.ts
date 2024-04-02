@@ -46,6 +46,10 @@ export class CostSheeFormComponent implements OnInit {
       condicao: new FormControl(null),
       pagamento: new FormControl(null),
       data_vencimento: new FormControl(null),
+      data_negociacao: new FormControl(null),
+      data_solicitante: new FormControl(null),
+      data_aprovacao: new FormControl(null),
+      data_aceite: new FormControl(null),
       parcela_atual: new FormControl(null),
       total_parcelas: new FormControl(null),
     })
@@ -76,6 +80,8 @@ export class CostSheeFormComponent implements OnInit {
 
   salvar() {
     console.log(this.formGroup.value)
+
+    
 
     this.dialogRef.close(this.formGroup.value);
   }

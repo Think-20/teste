@@ -50,11 +50,25 @@
     </mat-form-field>
 
     <mat-form-field class="form-field col-md-3">
+      <input formControlName="data_negociacao" [matDatepicker]="dtNegociacao"
+         matInput placeholder="Data da Negociação">
+      <mat-datepicker-toggle matSuffix [for]="dtNegociacao"></mat-datepicker-toggle>
+      <mat-datepicker #dtNegociacao></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
       <mat-select formControlName="solicitante" placeholder="Solicitante"  [compareWith]="compareAttendance">
         <mat-option *ngFor="let attendance of attendances" [value]="attendance">
           {{ attendance.nome }}
         </mat-option>
       </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
+      <input formControlName="data_solicitante" [matDatepicker]="dtSolicitante"
+         matInput placeholder="Data da Solicitação">
+      <mat-datepicker-toggle matSuffix [for]="dtSolicitante"></mat-datepicker-toggle>
+      <mat-datepicker #dtSolicitante></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field class="form-field col-md-3">
@@ -66,12 +80,27 @@
     </mat-form-field>
 
     <mat-form-field class="form-field col-md-3">
+      <input formControlName="data_aprovacao" [matDatepicker]="dtAprovacao"
+         matInput placeholder="Data da Aprovação">
+      <mat-datepicker-toggle matSuffix [for]="dtAprovacao"></mat-datepicker-toggle>
+      <mat-datepicker #dtAprovacao></mat-datepicker>
+    </mat-form-field>
+
+    <mat-form-field class="form-field col-md-3">
       <mat-select  formControlName="aceite" placeholder="Aceite"  [compareWith]="compareAttendance">
         <mat-option *ngFor="let attendance of attendances" [value]="attendance">
           {{ attendance.nome }}
         </mat-option>
       </mat-select>
     </mat-form-field>
+    
+    <mat-form-field class="form-field col-md-3">
+      <input formControlName="data_aceite" [matDatepicker]="dtAceite"
+         matInput placeholder="Data do Aceite">
+      <mat-datepicker-toggle matSuffix [for]="dtAceite"></mat-datepicker-toggle>
+      <mat-datepicker #dtAceite></mat-datepicker>
+    </mat-form-field>
+
 
     <mat-form-field class="form-field col-md-3">
       <input matInput formControlName="nf" placeholder="NF">
@@ -86,10 +115,10 @@
     </mat-form-field>
 
     <mat-form-field class="form-field col-md-3">
-      <input formControlName="data_vencimento" [matDatepicker]="deadlineDatepicker"
+      <input formControlName="data_vencimento" [matDatepicker]="dtVencimento"
          matInput placeholder="Data de Vencimento">
-      <mat-datepicker-toggle matSuffix [for]="deadlineDatepicker"></mat-datepicker-toggle>
-      <mat-datepicker #deadlineDatepicker></mat-datepicker>
+      <mat-datepicker-toggle matSuffix [for]="dtVencimento"></mat-datepicker-toggle>
+      <mat-datepicker #dtVencimento></mat-datepicker>
     </mat-form-field>
 
     <mat-form-field class="form-field col-md-3">

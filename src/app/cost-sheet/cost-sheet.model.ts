@@ -77,6 +77,15 @@ export class CostSheet {
     vencimento: Partial<Vencimento>;
     pagamento: string[];
 
+    data_vencimento: Date;
+    data_negociacao: Date;
+    data_solicitante: Date;
+    data_aprovacao: Date;
+    data_aceite: Date;
+
+    parcela_atual: number;
+    total_parcelas: number;
+
     constructor(
         id?: number,
         numero?: string,
@@ -134,7 +143,8 @@ export class Negociacao {
     data: Date;
     percentual?: number;
 
-    constructor(nome: string | null = null, data: Date | null = null, percentual: number | null = null) {
+    constructor(id: number = null, nome: string = null, data: Date = null, percentual: number = null) {
+        this.id = id;
         this.nome = nome;
         this.data = data;
         this.percentual = percentual;
@@ -146,7 +156,8 @@ export class Solicitante {
     nome: string;
     data: Date;
 
-    constructor(nome: string | null = null, data: Date | null = null) {
+    constructor(id: number = null, nome: string = null, data: Date = null) {
+        this.id = id;
         this.nome = nome || "";
         this.data = data;
     }
@@ -158,7 +169,8 @@ export class Aprovacao {
     data: Date;
     percentual?: number;
 
-    constructor(nome: string | null = null, data: Date | null = null, percentual: number | null = null) {
+    constructor(id: number = null, nome: string  = null, data: Date  = null, percentual: number  = null) {
+        this.id = id;
         this.nome = nome;
         this.data = data;
         this.percentual = percentual;
@@ -170,7 +182,8 @@ export class Aceite {
     nome: string;
     data: Date;
 
-    constructor(nome: string | null = null, data: Date | null = null, percentual: number | null = null) {
+    constructor(id: number = null, nome: string = null, data: Date  = null, percentual: number = null) {
+        this.id = id;
         this.nome = nome;
         this.data = data;
     }
@@ -182,9 +195,9 @@ export class Vencimento {
     total_parcelas: number;
 
     constructor(
-        data: Date | null = null,
-        parcela_atual: number | null = null,
-        total_parcelas: number | null = null
+        data: Date  = null,
+        parcela_atual: number  = null,
+        total_parcelas: number  = null
     ) {
         this.data = data;
         this.parcela_atual = parcela_atual || 0;

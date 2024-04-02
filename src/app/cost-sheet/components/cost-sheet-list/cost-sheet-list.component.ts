@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material";
-import { CostSheet, CostSheetGroup, CostSheetResult } from "app/cost-sheet/cost-sheet.model";
+import { Aceite, Aprovacao, CostSheet, CostSheetGroup, CostSheetResult, Negociacao, Solicitante, Vencimento } from "app/cost-sheet/cost-sheet.model";
 import { CostSheetService } from "app/cost-sheet/cost-sheet.service";
 import { CostSheeFormComponent } from "../cost-sheet-form/cost-sheet-form.component";
 import { CostSheetStore } from "app/cost-sheet/cost-sheet.store.service";
@@ -36,6 +36,23 @@ export class CostSheetListComponent {
   }
 
   private createObjct(result: CostSheet): CostSheet {
+    let negociacao = new Negociacao();
+    let solicitante = new Solicitante();
+    let aprovacao = new Aprovacao();
+    let aceite = new Aceite();
+
+    if (result.negociacao)
+        negociacao = new Negociacao(result.negociacao.id, result.negociacao.nome, result.data_negociacao);
+    
+    if (result.solicitante)
+        solicitante = new Solicitante(result.solicitante.id, result.solicitante.nome, result.data_solicitante);
+    
+    if (result.aprovacao)
+        aprovacao = new Aprovacao(result.aprovacao.id, result.aprovacao.nome, result.data_aprovacao);
+    
+    if (result.aceite)
+        aceite = new Aceite(result.aceite.id, result.aceite.nome, result.data_aceite);
+
     const costSheet = new CostSheet(
       result.id,
       result.numero,
@@ -47,13 +64,13 @@ export class CostSheetListComponent {
       result.valor_previsto,
       result.valor_realizado,
       result.valor_previsto_realizado_percentual,
-      result.negociacao,
-      result.solicitante,
-      result.aprovacao,
-      result.aceite,
+      negociacao,
+      solicitante,
+      aprovacao,
+      aceite,
       result.nf,
       result.condicao,
-      result.vencimento,
+      new Vencimento(result.data_vencimento, result.parcela_atual, result.total_parcelas),
       result.pagamento
     );
 
