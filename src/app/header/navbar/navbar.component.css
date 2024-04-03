@@ -21,9 +21,10 @@ mat-toolbar {
 }
 
 .mat-toolbar {
-  background-color: #e5e6e8 !important;
+  background-color: #1c3f60 !important;
   color: white !important;
   padding-left: 0 !important;
+  height: 85px;
 }
 
 .my-button {
@@ -31,8 +32,16 @@ mat-toolbar {
 }
 
 #logoNavBar {
-  width: 120px;
-  margin-left: 50px;
+  width: 200px;
+  margin-top: -8px;
+}
+
+.navbar-icon {
+  font-size: 30px;
+}
+
+.navbar-img-icon {
+  height: 25px;
 }
 
 @media screen and (max-width: 500px) {

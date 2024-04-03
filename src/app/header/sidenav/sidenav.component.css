@@ -51,17 +51,19 @@
 }
 
 #logo-container {
-  background-color: #e5e6e8 !important;
+  background-color: #1c3f60 !important;
   padding: 12px;
   margin-bottom: 5px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   color: white !important;
+  height: 85px;
 }
 
 #logo-container img {
-  width: 124px;
+  width: 200px;
   margin-left: 5px;
+  margin-top: -8px;
 }
 
 

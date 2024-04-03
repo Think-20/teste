@@ -4,13 +4,15 @@
     justify-content: center;
     align-items: center;
     height: 100%;
+    background-color: #fff;
 }
 
 #logo-container {
-    margin-bottom: 80px;
+    margin-bottom: 1rem;
 }
 
 #logo-container img {
+    margin-left: -1rem;
     max-width: 100%;
 }
 
@@ -28,6 +30,7 @@
     font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     font-weight: normal;
     border-radius: 0;
+    padding: 3px 16px;
 }
 
 .cb-button:focus {
@@ -42,3 +45,17 @@
 .alert-message p {
     padding: 10px;
 }
+
+#login-content ::ng-deep .mat-form-field-infix {
+    font-size: 16px;
+}
+
+/* Cor de fundo do autocomplete */
+::ng-deep input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px #e5f3f2 inset;
+}
+
+/* Cor do texto do autocomplete */
+/* ::ng-deep  input:-webkit-autofill {
+    -webkit-text-fill-color: blue !important;
+} */
