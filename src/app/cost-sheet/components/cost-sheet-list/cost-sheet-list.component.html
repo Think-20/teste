@@ -14,7 +14,7 @@
 
             <cb-cost-sheet-columns  class="cb-cost-sheet-columns"></cb-cost-sheet-columns>
 
-            <cb-cost-sheet-item class="cb-cost-sheet-item" *ngFor="let costSheet of costSheetGroup.cost_sheets" [costSheet]="costSheet"></cb-cost-sheet-item>
+            <cb-cost-sheet-item class="cb-cost-sheet-item" *ngFor="let costSheet of costSheetGroup.cost_sheets" [costSheet]="costSheet" (editCostShet)="openCostSheetModalEditForm($event)"></cb-cost-sheet-item>
 
             <cb-cost-sheet-footer class="cb-cost-sheet-footer" (addCostShet)="openCostSheetModalForm()" [costSheetGroup]="costSheetGroup"></cb-cost-sheet-footer>
 

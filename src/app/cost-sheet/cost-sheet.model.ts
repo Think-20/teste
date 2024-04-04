@@ -41,7 +41,7 @@ export class CostSheetGroup {
         negociacao?: Negociacao,
         aprovacao?: Aprovacao
     ) {
-        this.id = id;
+        this.id = id || Math.random();
         this.titulo = titulo;
         this.percentual = percentual;
         this.valor = valor;
@@ -106,7 +106,7 @@ export class CostSheet {
         vencimento?: Partial<Vencimento>,
         pagamento?: string[]
     ) {
-        this.id = id;
+        this.id = id || Math.random();
         this.numero = numero;
         this.categoria = categoria;
         this.favorecido = favorecido || new Favorecido();

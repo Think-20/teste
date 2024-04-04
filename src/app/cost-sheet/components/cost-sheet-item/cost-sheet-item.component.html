@@ -20,11 +20,11 @@
 
     <div class="cost-sheet-border-right arrows">
 
-        <mat-icon *ngIf="valor_previsto_realizado_percentual && true" class="keyboard_arrow_up">keyboard_arrow_up</mat-icon>
+        <mat-icon *ngIf="costSheet.valor_previsto_realizado_percentual && true" class="keyboard_arrow_up">keyboard_arrow_up</mat-icon>
 
-        <mat-icon *ngIf="valor_previsto_realizado_percentual && false" class="keyboard_arrow_down">keyboard_arrow_down</mat-icon>
+        <mat-icon *ngIf="costSheet.valor_previsto_realizado_percentual && false" class="keyboard_arrow_down">keyboard_arrow_down</mat-icon>
 
-        <span *ngIf="valor_previsto_realizado_percentual">{{ costSheet.valor_previsto_realizado_percentual }}%</span>
+        <span *ngIf="costSheet.valor_previsto_realizado_percentual">{{ costSheet.valor_previsto_realizado_percentual }}%</span>
 
     </div>
 
@@ -108,6 +108,14 @@
   </td>
   
   <td> {{ costSheet.pagamento }}</td>
+
+  <td class="cost-sheet-add">
+
+    <a (click)="editCostShet.emit(costSheet)" matTooltip="Editar registro" mat-button>
+       <mat-icon>mode_edit</mat-icon>
+    </a>
+
+  </td>
 </tr>
 
 

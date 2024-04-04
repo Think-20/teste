@@ -40,18 +40,22 @@ export class CostSheetService {
         valor_previsto_realizado_percentual: 75,
         negociacao: {
           nome: "Maurício Souza",
+          id: 1,
           data: new Date(),
         },
         solicitante: {
           nome: "Ivanildo Alves",
+          id: 1,
           data: new Date(),
         },
         aprovacao: {
             nome: "Pamela Cristina",
+            id: 1,
           data: new Date(),
         },
         aceite: {
             nome: "Carolina Tansela",
+            id: 1,
           data: new Date(),
         },
         nf: "012",
@@ -239,11 +243,19 @@ export class CostSheetService {
 
     this.costSheetGroups[index] = costSheetGroup;
 
-    // const costSheetGroup = this.costSheetGroups.find(x => x.id === grouopId);
+    this.costSheetStore.setCostSheetGroups(this.costSheetGroups);
 
-    // costSheetGroup.cost_sheets = [...costSheetGroup.cost_sheets, costSheet];
+    return of();
+  }
 
-    // const costSheetGroups = [...this.costSheetGroups, costSheet]
+  updateCostSheet(costSheetGroup: CostSheetGroup, costSheet: CostSheet): Observable<void> {
+    const index = costSheetGroup.cost_sheets.findIndex(x => x.id == costSheet.id);
+
+    costSheetGroup.cost_sheets[index] = costSheet;
+
+    const indexGroup = this.costSheetGroups.findIndex(x => x.id === costSheetGroup.id);
+
+    this.costSheetGroups[indexGroup] = costSheetGroup;
 
     this.costSheetStore.setCostSheetGroups(this.costSheetGroups);
 

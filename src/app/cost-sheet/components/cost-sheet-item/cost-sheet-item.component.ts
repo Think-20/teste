@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { CostSheet } from "app/cost-sheet/cost-sheet.model";
 
 @Component({
@@ -9,6 +9,8 @@ import { CostSheet } from "app/cost-sheet/cost-sheet.model";
 export class CostSheetItemComponent {
 
   @Input() costSheet: Partial<CostSheet>;
+
+  @Output() editCostShet = new EventEmitter<Partial<CostSheet>>();
 
   items = [ 
     { value: 'value', description: 'description' } ,

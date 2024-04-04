@@ -30,7 +30,22 @@ export class CostSheetListComponent {
         
         const costSheet =  this.createObjct(result);    
 
+        console.log(costSheet)
         this.costSheetService.addCostSheet(this.costSheetGroup, costSheet);
+      }
+    });
+  }
+
+  openCostSheetModalEditForm(costSheet: Partial<CostSheet>) {
+    const dialogRef = this.dialog.open(CostSheeFormComponent, { closeOnNavigation: false, disableClose: true, data: costSheet });
+
+    dialogRef.afterClosed().subscribe((result: CostSheet) => {
+      if (result) {
+        
+        const costSheet =  this.createObjct(result);    
+
+        console.log(costSheet)
+        this.costSheetService.updateCostSheet(this.costSheetGroup, costSheet);
       }
     });
   }

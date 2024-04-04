@@ -18,18 +18,25 @@ export class CostSheeFormComponent implements OnInit {
     public dialogRef: MatDialogRef<CostSheeFormComponent>,
     @Inject(MAT_DIALOG_DATA) public costSheet: CostSheet,
     @Inject(MAT_DIALOG_DATA) public title: string,
-  ) { }
+  ) { 
+    console.log(this.costSheet)
+  }
 
   ngOnInit(): void {
     
     this.createForm();
 
     this.loadAttendances();
+
+    if (this.costSheet) {
+      this.fillForm();
+    }
   }
 
 
   createForm(): void {
     this.formGroup = new FormGroup({
+      id: new FormControl(null),
       numero: new FormControl(null),
       categoria: new FormControl(null),
       favorecido: new FormControl(null),
@@ -52,6 +59,24 @@ export class CostSheeFormComponent implements OnInit {
       data_aceite: new FormControl(null),
       parcela_atual: new FormControl(null),
       total_parcelas: new FormControl(null),
+    })
+  }
+
+  fillForm() {
+    this.formGroup.patchValue({
+      ...this.costSheet,
+      favorecido: this.costSheet.favorecido,
+      negociacao: this.costSheet.negociacao,
+      solicitante: this.costSheet.solicitante,
+      aprovacao: this.costSheet.aprovacao,
+      aceite: this.costSheet.aceite,
+      data_vencimento: this.costSheet.vencimento.data,
+      data_negociacao: this.costSheet.negociacao.data,
+      data_solicitante: this.costSheet.solicitante.data,
+      data_aprovacao: this.costSheet.aprovacao.data,
+      data_aceite: this.costSheet.aceite.data,
+      parcela_atual: this.costSheet.vencimento.parcela_atual,
+      total_parcelas:this.costSheet.vencimento.total_parcelas,
     })
   }
 
