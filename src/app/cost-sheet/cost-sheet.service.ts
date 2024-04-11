@@ -1,11 +1,13 @@
 import { Injectable } from "@angular/core";
-import { Http } from "@angular/http";
+import { Http, RequestOptions } from "@angular/http";
 import { MatSnackBar } from "@angular/material";
 import { AuthService } from "app/login/auth.service";
 import { Observable, of } from "rxjs";
 import { CostSheet, CostSheetGroup, CostSheetResult } from "./cost-sheet.model";
 import { CostSheetStore } from "./cost-sheet.store.service";
 import { tap } from "rxjs/operators";
+import { ErrorHandler } from "app/shared/error-handler.service";
+import { API } from "app/app.api";
 
 @Injectable()
 export class CostSheetService {
@@ -260,5 +262,64 @@ export class CostSheetService {
     this.costSheetStore.setCostSheetGroups(this.costSheetGroups);
 
     return of();
+  }
+
+  getCostSheetsFUTURE(id: number): Observable<any> {
+    const url = `cost-sheet/${id}`
+
+    return this.http.get(`${API}/${url}`)
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
+
+  postCostSheetFUTURE(id: number, costSheet: any): Observable<any> {
+    let url = `cost-sheet/${id}`
+
+    return this.http.post(`${API}/${url}`,
+      JSON.stringify(costSheet),
+      new RequestOptions()
+    )
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
+
+  updateCostSheetFUTURE(id: number, costSheet: any): Observable<any> {
+    const url = `cost-sheet/${id}`
+
+    return this.http.put(`${API}/${url}`,
+      JSON.stringify(costSheet),
+      new RequestOptions()
+    )
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
+
+
+  deleteCostSheetFUTURE(id: number): Observable<any> {
+    const url = `cost-sheet/remove/${id}`
+
+    return this.http.delete(`${API}/${url}`)
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
   }
 }

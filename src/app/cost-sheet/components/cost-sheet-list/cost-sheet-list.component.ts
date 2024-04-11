@@ -23,7 +23,7 @@ export class CostSheetListComponent {
   constructor(public dialog: MatDialog, private costSheetService: CostSheetService) { }
 
   openCostSheetModalForm(): void {
-    const dialogRef = this.dialog.open(CostSheeFormComponent, { closeOnNavigation: false, disableClose: true });
+    const dialogRef = this.dialog.open(CostSheeFormComponent, { closeOnNavigation: false, disableClose: true, data: { title: this.costSheetGroup.titulo } });
 
     dialogRef.afterClosed().subscribe((result: CostSheet) => {
       if (result) {
@@ -37,7 +37,7 @@ export class CostSheetListComponent {
   }
 
   openCostSheetModalEditForm(costSheet: Partial<CostSheet>) {
-    const dialogRef = this.dialog.open(CostSheeFormComponent, { closeOnNavigation: false, disableClose: true, data: costSheet });
+    const dialogRef = this.dialog.open(CostSheeFormComponent, { closeOnNavigation: false, disableClose: true, data: { costSheet, title: this.costSheetGroup.titulo } });
 
     dialogRef.afterClosed().subscribe((result: CostSheet) => {
       if (result) {

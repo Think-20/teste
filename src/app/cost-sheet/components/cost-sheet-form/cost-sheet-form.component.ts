@@ -1,38 +1,48 @@
 import { Component, Inject, Input, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { Atendente, CostSheet } from "app/cost-sheet/cost-sheet.model";
+import { Atendente, CostSheet, Favorecido } from "app/cost-sheet/cost-sheet.model";
 import { Employee } from "app/employees/employee.model";
 import { EmployeeService } from "app/employees/employee.service";
+import { Provider } from "app/providers/provider.model";
+import { ProviderService } from "app/providers/provider.service";
 
 @Component({
-    selector: 'cb-cost-sheet-form',
-    templateUrl: './cost-sheet-form.component.html',
-    styleUrls: ['./cost-sheet-form.component.css']
-  })
+  selector: "cb-cost-sheet-form",
+  templateUrl: "./cost-sheet-form.component.html",
+  styleUrls: ["./cost-sheet-form.component.css"],
+})
 export class CostSheeFormComponent implements OnInit {
-  attendances: Atendente[]
+  attendances: Atendente[];
+
   @Input() formGroup: FormGroup;
+
+  fornecedores: Favorecido[] = [];
+
+  costSheet: CostSheet;
+  title: string;
+
   constructor(
     private employeeService: EmployeeService,
+    private providerService: ProviderService,
     public dialogRef: MatDialogRef<CostSheeFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public costSheet: CostSheet,
-    @Inject(MAT_DIALOG_DATA) public title: string,
-  ) { 
-    console.log(this.costSheet)
+    @Inject(MAT_DIALOG_DATA) public data: { costSheet: CostSheet, title: string },
+  ) {
+    this.title = this.data.title;
+    this.costSheet = this.data.costSheet;
   }
 
   ngOnInit(): void {
-    
     this.createForm();
 
     this.loadAttendances();
+
+    this.carregarFornecedores();
 
     if (this.costSheet) {
       this.fillForm();
     }
   }
-
 
   createForm(): void {
     this.formGroup = new FormGroup({
@@ -59,7 +69,7 @@ export class CostSheeFormComponent implements OnInit {
       data_aceite: new FormControl(null),
       parcela_atual: new FormControl(null),
       total_parcelas: new FormControl(null),
-    })
+    });
   }
 
   fillForm() {
@@ -76,8 +86,8 @@ export class CostSheeFormComponent implements OnInit {
       data_aprovacao: this.costSheet.aprovacao.data,
       data_aceite: this.costSheet.aceite.data,
       parcela_atual: this.costSheet.vencimento.parcela_atual,
-      total_parcelas:this.costSheet.vencimento.total_parcelas,
-    })
+      total_parcelas: this.costSheet.vencimento.total_parcelas,
+    });
   }
 
   onCancelClick(): void {
@@ -85,28 +95,42 @@ export class CostSheeFormComponent implements OnInit {
   }
 
   loadAttendances(): void {
-    this.employeeService.employees({
-      paginate: false,
-      deleted: true
-    }).subscribe(dataInfo => {
-      
-      let employees: Employee[] = dataInfo.pagination.data
+    this.employeeService
+      .employees({
+        paginate: false,
+        deleted: true,
+      })
+      .subscribe((dataInfo) => {
+        let employees: Employee[] = dataInfo.pagination.data;
 
-      this.attendances = employees.filter(employee => {
-        return employee.department.description === 'Atendimento' || employee.department.description === 'Diretoria'
-      }).map(x => ({ nome: x.name, id: x.id}))
-      
-    })
+        this.attendances = employees
+          .filter((employee) => {
+            return (
+              employee.department.description === "Atendimento" ||
+              employee.department.description === "Diretoria"
+            );
+          })
+          .map((x) => ({ nome: x.name, id: x.id }));
+      });
   }
 
-  compareAttendance(var1: Employee, var2: Employee) {
-    return var1.id === var2.id
+  carregarFornecedores() {
+    this.providerService.allProviders().subscribe((response) => {
+      const data: Provider[] = response.pagination.data;
+      this.fornecedores = data.map((x) => ({ nome: x.name, id: x.id }));
+    });
+  }
+
+  compareAttendance(var1: Employee, var2: Employee): boolean {
+    return var1.id === var2.id;
+  }
+
+  compararFornecerdor(var1: Favorecido, var2: Favorecido): boolean {
+    return var1.id === var2.id;
   }
 
   salvar() {
-    console.log(this.formGroup.value)
-
-    
+    console.log(this.formGroup.value);
 
     this.dialogRef.close(this.formGroup.value);
   }

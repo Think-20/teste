@@ -25,11 +25,28 @@ export class ProviderService {
     private auth: AuthService
   ) { }
 
-  providers(params = {}, page: number = 0): Observable<DataInfo> {
+ 
+  providers(params?: {}, page: number = 0): Observable<DataInfo> {
     let url = params == {} ? `providers/all?page=${page}` : `providers/filter?page=${page}`
 
     return this.http.post(`${API}/${url}`,
         JSON.stringify(params),
+        new RequestOptions()
+      )
+      .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
+
+  allProviders(): Observable<DataInfo> {
+    let url = `providers/all`
+
+    return this.http.post(`${API}/${url}`,
+        JSON.stringify({}),
         new RequestOptions()
       )
       .map(response => response.json())
