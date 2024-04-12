@@ -209,3 +209,8 @@ export class Atendente {
     id: number;
     nome: string;
 }
+
+export class CostSheetEmployee {
+    id: number;
+    nome: string;
+}

@@ -1,7 +1,7 @@
 import { Component, Inject, Input, OnInit } from "@angular/core";
 import { FormControl, FormGroup } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
-import { Atendente, CostSheet, Favorecido } from "app/cost-sheet/cost-sheet.model";
+import { Aceite, Aprovacao, Atendente, CostSheet, CostSheetEmployee, Favorecido, Negociacao, Solicitante } from "app/cost-sheet/cost-sheet.model";
 import { Employee } from "app/employees/employee.model";
 import { EmployeeService } from "app/employees/employee.service";
 import { Provider } from "app/providers/provider.model";
@@ -13,11 +13,13 @@ import { ProviderService } from "app/providers/provider.service";
   styleUrls: ["./cost-sheet-form.component.css"],
 })
 export class CostSheeFormComponent implements OnInit {
-  attendances: Atendente[];
-
   @Input() formGroup: FormGroup;
 
-  fornecedores: Favorecido[] = [];
+  fornecedores: CostSheetEmployee[] = [];
+  negociadores: CostSheetEmployee[] = [];
+  solicitantes: CostSheetEmployee[] = [];
+  aprovadores: CostSheetEmployee[] = [];
+  aceitadores: CostSheetEmployee[] = [];
 
   costSheet: CostSheet;
   title: string;
@@ -101,32 +103,26 @@ export class CostSheeFormComponent implements OnInit {
         deleted: true,
       })
       .subscribe((dataInfo) => {
-        let employees: Employee[] = dataInfo.pagination.data;
-
-        this.attendances = employees
-          .filter((employee) => {
-            return (
-              employee.department.description === "Atendimento" ||
-              employee.department.description === "Diretoria"
-            );
-          })
-          .map((x) => ({ nome: x.name, id: x.id }));
+        const employees = dataInfo.pagination.data;
+        
+        const producao = employees.filter(employee => employee.department.description === "Produção" || employee.department.description === "Diretoria").map((x) => ({ nome: x.name, id: x.id }));
+        
+        this.aprovadores = employees.filter(employee => employee.department.description === "Planejamento" || employee.department.description === "Diretoria").map((x) => ({ nome: x.name, id: x.id }));
+        this.negociadores = producao;
+        this.solicitantes = producao;
+        this.aceitadores = producao;
       });
   }
 
   carregarFornecedores() {
     this.providerService.allProviders().subscribe((response) => {
       const data: Provider[] = response.pagination.data;
-      this.fornecedores = data.map((x) => ({ nome: x.name, id: x.id }));
+      this.fornecedores = data.map((x) => ({ nome: x.fantasy_name, id: x.id }));
     });
   }
 
-  compareAttendance(var1: Employee, var2: Employee): boolean {
-    return var1.id === var2.id;
-  }
-
-  compararFornecerdor(var1: Favorecido, var2: Favorecido): boolean {
-    return var1.id === var2.id;
+  compareEmployee(employee1: CostSheetEmployee, employee2: CostSheetEmployee): boolean {
+    return employee1.id === employee2.id;
   }
 
   salvar() {

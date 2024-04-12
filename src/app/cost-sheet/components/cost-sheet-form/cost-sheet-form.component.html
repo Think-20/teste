@@ -11,7 +11,7 @@
     </mat-form-field>
 
     <mat-form-field class="form-field col-md-3">
-      <mat-select formControlName="favorecido" placeholder="Favorecido" [compareWith]="compararFornecerdor">
+      <mat-select formControlName="favorecido" placeholder="Favorecido" [compareWith]="compareEmployee">
         <mat-option *ngFor="let fornecedor of fornecedores" [value]="fornecedor">
           {{ fornecedor.nome }}
         </mat-option>
@@ -19,6 +19,9 @@
       <mat-error>
         Obrigatório
       </mat-error>
+      <a [routerLink]="['/providers/new']" target="_blank" class="button-inner-mat-input" mat-button>
+        <mat-icon>add</mat-icon>
+      </a>
     </mat-form-field>
 
     <mat-form-field class="form-field col-md-3">
@@ -42,9 +45,9 @@
     </mat-form-field>
 
     <mat-form-field class="form-field col-md-3">
-      <mat-select formControlName="negociacao" placeholder="Negociação"  [compareWith]="compareAttendance">
-        <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-          {{ attendance.nome }}
+      <mat-select formControlName="negociacao" placeholder="Negociação"  [compareWith]="compareEmployee">
+        <mat-option *ngFor="let negociardor of negociadores" [value]="negociardor">
+          {{ negociardor.nome }}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -57,9 +60,9 @@
     </mat-form-field>
 
     <mat-form-field class="form-field col-md-3">
-      <mat-select formControlName="solicitante" placeholder="Solicitante"  [compareWith]="compareAttendance">
-        <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-          {{ attendance.nome }}
+      <mat-select formControlName="solicitante" placeholder="Solicitante"  [compareWith]="compareEmployee">
+        <mat-option *ngFor="let solicitante of solicitantes" [value]="solicitante">
+          {{ solicitante.nome }}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -72,9 +75,9 @@
     </mat-form-field>
 
     <mat-form-field class="form-field col-md-3">
-      <mat-select formControlName="aprovacao" placeholder="Aprovação"  [compareWith]="compareAttendance">
-        <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-          {{ attendance.nome }}
+      <mat-select formControlName="aprovacao" placeholder="Aprovação"  [compareWith]="compareEmployee">
+        <mat-option *ngFor="let aprovadore of aprovadores" [value]="aprovadore">
+          {{ aprovadore.nome }}
         </mat-option>
       </mat-select>
     </mat-form-field>
@@ -87,9 +90,9 @@
     </mat-form-field>
 
     <mat-form-field class="form-field col-md-3">
-      <mat-select  formControlName="aceite" placeholder="Aceite"  [compareWith]="compareAttendance">
-        <mat-option *ngFor="let attendance of attendances" [value]="attendance">
-          {{ attendance.nome }}
+      <mat-select  formControlName="aceite" placeholder="Aceite"  [compareWith]="compareEmployee">
+        <mat-option *ngFor="let aceitador of aceitadores" [value]="aceitador">
+          {{ aceitador.nome }}
         </mat-option>
       </mat-select>
     </mat-form-field>
