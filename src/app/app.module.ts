@@ -222,6 +222,8 @@ import { RoundPipe } from './shared/round.pipe';
 import { GoalsComponent } from './goals/goals.component';
 import { GoalsService } from './goals/goals.service';
 import { ThousandsPipe } from './shared/thousands.pipe';
+import { ConfirmDialogService } from './confirm-dialog/confirm-dialog.service';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 registerLocaleData(localePt);
 
@@ -339,6 +341,7 @@ registerLocaleData(localePt);
     UpdatedInfoComponent,
     ScheduleDateComponent,
     ServiceReportComponent,
+    ConfirmDialogComponent,
     DecimalPipe,
 
     AlertsContainerComponent,
@@ -453,6 +456,7 @@ registerLocaleData(localePt);
     MessageLoadingService,
     AlertService,
     MemoriesService,
+    ConfirmDialogService,
     DatePipe,
     {provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
     {provide: LOCALE_ID, useValue: 'pt-BR'},
@@ -472,6 +476,7 @@ registerLocaleData(localePt);
     MessageLoadingComponent,
     UpdatedInfoComponent,
     ChartPreviewComponent,
+    ConfirmDialogComponent,
   ]
 })
 export class AppModule { }

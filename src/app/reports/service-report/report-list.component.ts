@@ -28,6 +28,7 @@ import { Observable, Subject } from 'rxjs';
 import { MatOption, MatSelect, MatSelectChange } from '@angular/material';
 import { JobActivity } from 'app/job-activities/job-activity.model';
 import { JobActivityService } from 'app/job-activities/job-activity.service';
+import { ConfirmDialogService } from 'app/confirm-dialog/confirm-dialog.service';
 
 @Component({
   selector: 'cb-job-list',
@@ -120,7 +121,8 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     private router: Router,
     private route: ActivatedRoute,
-    private jobActivityService: JobActivityService
+    private jobActivityService: JobActivityService,
+    private confirmDialogService: ConfirmDialogService
     ) { }
 
 
@@ -640,16 +642,20 @@ export class ServiceReportComponent implements OnInit, OnDestroy {
   }
   
     delete(job: Job) {
-    this.jobService.delete(job.id).subscribe((data) => {
-      this.snackBar.open(data.message, '', {
-        duration: 5000
-      })
-
-      if (data.status) {
-        this.jobs.splice(this.jobs.indexOf(job), 1)
-        this.pagination.total = this.pagination.total - 1
-      }
-    })
+      this.confirmDialogService.openConfirmDialog().subscribe(result => {
+        if (result) {
+          this.jobService.delete(job.id).subscribe((data) => {
+            this.snackBar.open(data.message, '', {
+              duration: 5000
+            })
+      
+            if (data.status) {
+              this.jobs.splice(this.jobs.indexOf(job), 1)
+              this.pagination.total = this.pagination.total - 1
+            }
+          })
+        }
+      });
   }
 
   toNumber(val: string): number {
