@@ -232,6 +232,8 @@ import { CostSheetHeaderComponent } from './cost-sheet/components/cost-sheet-hea
 import { CostSheeFormComponent } from './cost-sheet/components/cost-sheet-form/cost-sheet-form.component';
 import { CostSheetResultComponent } from './cost-sheet/components/cost-sheet-result/cost-sheet-result.component';
 import { CostSheetStore } from './cost-sheet/cost-sheet.store.service';
+import { ConfirmDialogService } from './confirm-dialog/confirm-dialog.service';
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 
 registerLocaleData(localePt);
 
@@ -357,6 +359,7 @@ registerLocaleData(localePt);
     UpdatedInfoComponent,
     ScheduleDateComponent,
     ServiceReportComponent,
+    ConfirmDialogComponent,
     DecimalPipe,
 
     AlertsContainerComponent,
@@ -473,6 +476,7 @@ registerLocaleData(localePt);
     MemoriesService,
     CostSheetService,
     CostSheetStore,
+    ConfirmDialogService,
     DatePipe,
     {provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
     {provide: LOCALE_ID, useValue: 'pt-BR'},
@@ -493,6 +497,7 @@ registerLocaleData(localePt);
     UpdatedInfoComponent,
     ChartPreviewComponent,
     CostSheeFormComponent,
+    ConfirmDialogComponent,
   ]
 })
 export class AppModule { }

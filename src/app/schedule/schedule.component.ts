@@ -36,6 +36,8 @@ import { BlockDialogComponent } from './schedule-block/block-dialog/block-dialog
 import { Task } from './task.model';
 import { JobService } from 'app/jobs/job.service';
 import { MatBottomSheetRef, MAT_BOTTOM_SHEET_DATA, MatBottomSheet } from '@angular/material/bottom-sheet';
+import { ConfirmDialogService } from 'app/confirm-dialog/confirm-dialog.service';
+import { ConfirmDialogData } from 'app/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'cb-schedule',
@@ -121,6 +123,7 @@ export class ScheduleComponent implements OnInit {
     private datePipe: DatePipe,
     private route: ActivatedRoute,
     private bottomSheet: MatBottomSheet,
+    private confirmDialogService: ConfirmDialogService
   ) { }
 
   changeMonthByLine(data: any) {
@@ -823,29 +826,37 @@ export class ScheduleComponent implements OnInit {
   }
 
   deleteTask(item: TaskItem) {
-    let lastDate = new Date(item.date + "T00:00:00")
-    this.taskService.delete(item.task.id).subscribe((data) => {
-      this.snackBar.open(data.message, '', {
-        duration: 5000
-      })
+    this.confirmDialogService.openConfirmDialog().subscribe(result => {
+      if (result) {
+            let lastDate = new Date(item.date + "T00:00:00")
+            this.taskService.delete(item.task.id).subscribe((data) => {
+            this.snackBar.open(data.message, '', {
+              duration: 5000
+            })
 
-      if (data.status) {
-        this.changeMonthByLine({ month: this.month, lastDate: lastDate })
+            if (data.status) {
+              this.changeMonthByLine({ month: this.month, lastDate: lastDate })
+            }
+        })
       }
-    })
+    });
   }
 
   deleteJob(item: TaskItem) {
-    let lastDate = new Date(item.date + "T00:00:00")
-    this.jobService.delete(item.task.job.id).subscribe((data) => {
-      this.snackBar.open(data.message, '', {
-        duration: 5000
-      })
-
-      if (data.status) {
-        this.changeMonthByLine({ month: this.month, lastDate: lastDate })
+    this.confirmDialogService.openConfirmDialog().subscribe(result => {
+      if (result) {
+        let lastDate = new Date(item.date + "T00:00:00")
+        this.jobService.delete(item.task.job.id).subscribe((data) => {
+          this.snackBar.open(data.message, '', {
+            duration: 5000
+          })
+    
+          if (data.status) {
+            this.changeMonthByLine({ month: this.month, lastDate: lastDate })
+          }
+        })
       }
-    })
+    });
   }
 
   mouseUp(itemSelected: TaskItem) {
