@@ -189,7 +189,7 @@
 <div class="orcamento d-flex justify-content-center">
   <mat-card class="col-md-7">
     <div class="orcamento-header d-flex justify-content-between">
-        <h3>Orçado</h3>
+        <h3>Extrato</h3>
 
         <span>Últimos 7 dias</span>
     </div>
@@ -206,8 +206,8 @@
               matInput
               type="text"
               class="text-right"
-              placeholder="Atendimento"
-              value="Rodolfo">
+              placeholder="Material - Marcenaria"
+              value="R$ 0,00">
           </mat-form-field>
       </div>
       <div class="col-md-12">
@@ -216,8 +216,8 @@
               matInput
               type="text"
               class="text-right"
-              placeholder="Cliente"
-              value="IS">
+              placeholder="Material - Revestimento Especiais"
+              value="R$ 0,00">
           </mat-form-field>
       </div>
       <div class="col-md-12">
@@ -226,8 +226,8 @@
               matInput
               type="text"
               class="text-right"
-              placeholder="Evento"
-              value="Bett Brasil">
+              placeholder="Material - Estrutura Metálicas"
+              value="R$ 0,00">
           </mat-form-field>
       </div>
       <div class="col-md-12">
@@ -236,8 +236,8 @@
               matInput
               type="text"
               class="text-right"
-              placeholder="Local"
-              value="Center Norte">
+              placeholder="Material - Mezanino"
+              value="R$ 0,00">
           </mat-form-field>
       </div>
       <div class="col-md-12">
@@ -246,8 +246,8 @@
               matInput
               type="text"
               class="text-right"
-              placeholder="Orçamentista"
-              value="Nildo">
+              placeholder="Caixilharia - Fechamento Vidro"
+              value="R$ 0,00">
           </mat-form-field>
       </div>
       <div class="col-md-12">
@@ -256,8 +256,8 @@
               matInput
               type="text"
               class="text-right"
-              placeholder="Gerente"
-              value="Jefferson Duarte">
+              placeholder="Vidraçaria - Vitrines"
+              value="R$ 0,00">
           </mat-form-field>
       </div>
       <div class="col-md-12">
@@ -266,8 +266,8 @@
               matInput
               type="text"
               class="text-right"
-              placeholder="Detalhamento"
-              value="Jefferson Duarte">
+              placeholder="Acrílico"
+              value="R$ 0,00">
           </mat-form-field>
       </div>
       <div class="col-md-12">
@@ -276,9 +276,79 @@
               matInput
               type="text"
               class="text-right"
-              placeholder="Produtor"
-              value="Jefesson Duarte">
+              placeholder="Mobiliário"
+              value="R$ 0,00">
           </mat-form-field>
+      </div>
+      <div class="col-md-12">
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            class="text-right"
+            placeholder="Refrigeração e Climatização"
+            value="R$ 0,00">
+        </mat-form-field>
+    </div>
+    <div class="col-md-12">
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            class="text-right"
+            placeholder="Paisagismo"
+            value="R$ 0,00">
+        </mat-form-field>
+    </div>
+    <div class="col-md-12">
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            class="text-right"
+            placeholder="Comunicação Visual"
+            value="R$ 0,00">
+        </mat-form-field>
+    </div>
+    <div class="col-md-12">
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            class="text-right"
+            placeholder="Equipamento Audio Visual"
+            value="R$ 0,00">
+        </mat-form-field>
+      </div>
+      <div class="col-md-12">
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            class="text-right"
+            placeholder="Acessórios - itens especiais"
+            value="R$ 0,00">
+        </mat-form-field>
+      </div>
+      <div class="col-md-12">
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            class="text-right"
+            placeholder="Execução (Mão de Obra, Taxas, Limpeza, Segurança)"
+            value="R$ 0,00">
+        </mat-form-field>
+      </div>
+      <div class="col-md-12">
+        <mat-form-field>
+          <input
+            matInput
+            type="text"
+            class="text-right"
+            placeholder="Logistica"
+            value="R$ 0,00">
+        </mat-form-field>
       </div>
     </div>
 
@@ -289,43 +359,43 @@
 
   <div class="col-md-5 orcamento-orcado">
     <div class="orcamento-valores">
-        <div>
+        <div class="orcamento-valor">
             <div class="orcamento-valores-header d-flex justify-content-between">
                 <h3>Orçado</h3>
                 <h3>Hoje</h3>
             </div>
             <div>
-                <h2>R$ 669.600</h2>
+                <h2 class="lucro">R$ 669.600</h2>
             </div>
             <span>Ver extrato ></span>
         </div>
-        <div>
+        <div class="orcamento-valor">
           <div class="orcamento-valores-header d-flex justify-content-between">
               <h3>Despesas</h3>
               <h3>Hoje</h3>
           </div>
           <div>
-              <h2>R$ 351.064</h2>
+              <h2 class="perda">R$ 351.064</h2>
           </div>
           <span>Ver extrato ></span>
       </div>
-      <div>
+      <div class="orcamento-valor">
           <div class="orcamento-valores-header d-flex justify-content-between">
               <h3>Total Geral Stand</h3>
               <h3>Hoje</h3>
           </div>
           <div>
-              <h2>R$ 705.068</h2>
+              <h2 class="perda">R$ 705.068</h2>
           </div>
           <span>Ver extrato ></span>
       </div>
-      <div>
+      <div class="orcamento-valor">
           <div class="orcamento-valores-header d-flex justify-content-between">
               <h3>Liquído Think</h3>
               <h3>Hoje</h3>
           </div>
           <div>
-              <h2>R$ 167.401</h2>
+              <h2 class="neutro">R$ 167.401</h2>
           </div>
           <span>Ver extrato ></span>
       </div>
@@ -443,10 +513,6 @@
                 value="R$ 652.980,00">
             </mat-form-field>
         </div>
-      </div>
-  
-      <div class="orcamento-footer d-flex justify-content-end">
-        Saldo total: R$ 5.588
       </div>
     </mat-card>
   </div>

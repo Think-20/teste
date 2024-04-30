@@ -86,8 +86,8 @@
 
 
  .orcamento {
-    margin: 0 4rem;
-    gap: 2.5rem;
+    margin: 0 2rem;
+    gap: 2rem;
     margin-top: 2rem !important;
  }
 
@@ -108,4 +108,20 @@
 
  .orcamento-orcado {
     padding-left: 0;
+ }
+
+ .orcamento-valor {
+  margin-bottom: 1.5rem;
+ }
+
+ .lucro {
+    color: #218f67;
+ }
+
+ .perda {
+    color: #cf4949;
+ } 
+
+ .neutro {
+    color: #24b8df;
  }
