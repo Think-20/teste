@@ -1,4 +1,458 @@
-<mat-accordion>
+<div class="orcamento d-flex justify-content-center">
+    <mat-card class="col-md-6">
+        <div class="orcamento-header d-flex justify-content-center">
+            <h3>Pré Orçamento</h3>
+        </div>
+
+        <div class="orcamento-campos">
+          <div class="col-md-12">
+              <mat-form-field>
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Atendimento"
+                  value="Rodolfo">
+              </mat-form-field>
+          </div>
+          <div class="col-md-12">
+              <mat-form-field>
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Cliente"
+                  value="IS">
+              </mat-form-field>
+          </div>
+          <div class="col-md-12">
+              <mat-form-field>
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Evento"
+                  value="Bett Brasil">
+              </mat-form-field>
+          </div>
+          <div class="col-md-12">
+              <mat-form-field>
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Local"
+                  value="Center Norte">
+              </mat-form-field>
+          </div>
+          <div class="col-md-12">
+              <mat-form-field>
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Orçamentista"
+                  value="Nildo">
+              </mat-form-field>
+          </div>
+          <div class="col-md-12">
+              <mat-form-field>
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Gerente"
+                  value="Jefferson Duarte">
+              </mat-form-field>
+          </div>
+          <div class="col-md-12">
+              <mat-form-field>
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Detalhamento"
+                  value="Jefferson Duarte">
+              </mat-form-field>
+          </div>
+          <div class="col-md-12">
+              <mat-form-field>
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Produtor"
+                  value="Jefesson Duarte">
+              </mat-form-field>
+          </div>
+        </div>
+
+        <div class="orcamento-footer d-flex justify-content-center">
+          Ver relatório completo
+        </div>
+    </mat-card>
+
+    <mat-card class="col-md-6">
+      <div class="orcamento-header d-flex justify-content-center">
+          <h3>Informações do evento</h3>
+      </div>
+     
+      <div class="orcamento-campos">
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Data do evento"
+                value="29/01/2024">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Verba"
+                value="R$ 669.6000,00">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Área Térreo (m2)"
+                value="372">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Mezanino (m2)"
+                value="0">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Data de montagem"
+                value="13/01/2024">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Data do inicio do evento"
+                value="28/01/2024">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Data do fim do evento"
+                value="26/04/2024">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Data de desmontagem"
+                value="27/04/2024">
+            </mat-form-field>
+        </div>
+      </div>
+
+      <div class="orcamento-footer d-flex justify-content-center">
+        Ver relatório completo
+      </div>
+    </mat-card>
+</div>
+
+<div class="orcamento d-flex justify-content-center">
+  <mat-card class="col-md-7">
+    <div class="orcamento-header d-flex justify-content-between">
+        <h3>Orçado</h3>
+
+        <span>Últimos 7 dias</span>
+    </div>
+
+    <div class="orcamento-header d-flex justify-content-between">
+        <h3>Serviços</h3>
+        <h3>% Total</h3>
+    </div>
+
+    <div class="orcamento-campos">
+      <div class="col-md-12">
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              class="text-right"
+              placeholder="Atendimento"
+              value="Rodolfo">
+          </mat-form-field>
+      </div>
+      <div class="col-md-12">
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              class="text-right"
+              placeholder="Cliente"
+              value="IS">
+          </mat-form-field>
+      </div>
+      <div class="col-md-12">
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              class="text-right"
+              placeholder="Evento"
+              value="Bett Brasil">
+          </mat-form-field>
+      </div>
+      <div class="col-md-12">
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              class="text-right"
+              placeholder="Local"
+              value="Center Norte">
+          </mat-form-field>
+      </div>
+      <div class="col-md-12">
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              class="text-right"
+              placeholder="Orçamentista"
+              value="Nildo">
+          </mat-form-field>
+      </div>
+      <div class="col-md-12">
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              class="text-right"
+              placeholder="Gerente"
+              value="Jefferson Duarte">
+          </mat-form-field>
+      </div>
+      <div class="col-md-12">
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              class="text-right"
+              placeholder="Detalhamento"
+              value="Jefferson Duarte">
+          </mat-form-field>
+      </div>
+      <div class="col-md-12">
+          <mat-form-field>
+            <input
+              matInput
+              type="text"
+              class="text-right"
+              placeholder="Produtor"
+              value="Jefesson Duarte">
+          </mat-form-field>
+      </div>
+    </div>
+
+    <div class="orcamento-footer d-flex justify-content-end">
+      Saldo total: R$ 5.588
+    </div>
+  </mat-card>
+
+  <div class="col-md-5 orcamento-orcado">
+    <div class="orcamento-valores">
+        <div>
+            <div class="orcamento-valores-header d-flex justify-content-between">
+                <h3>Orçado</h3>
+                <h3>Hoje</h3>
+            </div>
+            <div>
+                <h2>R$ 669.600</h2>
+            </div>
+            <span>Ver extrato ></span>
+        </div>
+        <div>
+          <div class="orcamento-valores-header d-flex justify-content-between">
+              <h3>Despesas</h3>
+              <h3>Hoje</h3>
+          </div>
+          <div>
+              <h2>R$ 351.064</h2>
+          </div>
+          <span>Ver extrato ></span>
+      </div>
+      <div>
+          <div class="orcamento-valores-header d-flex justify-content-between">
+              <h3>Total Geral Stand</h3>
+              <h3>Hoje</h3>
+          </div>
+          <div>
+              <h2>R$ 705.068</h2>
+          </div>
+          <span>Ver extrato ></span>
+      </div>
+      <div>
+          <div class="orcamento-valores-header d-flex justify-content-between">
+              <h3>Liquído Think</h3>
+              <h3>Hoje</h3>
+          </div>
+          <div>
+              <h2>R$ 167.401</h2>
+          </div>
+          <span>Ver extrato ></span>
+      </div>
+    </div>
+    <mat-card class="col-md-12 mt-2">
+      <div class="orcamento-header d-flex justify-content-between">
+          <h3>Racional Custos</h3>
+  
+          <span>Últimos 7 dias</span>
+      </div>
+  
+      <div class="orcamento-header d-flex justify-content-between">
+          <h3>Descrição</h3>
+          <h3>% Total</h3>
+      </div>
+  
+      <div class="orcamento-campos">
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Custo Total"
+                value="R$ 0,00">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Imposto"
+                value="R$ 0,00">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Comissão de Vendas"
+                value="R$ 0,00">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Bonificação de Vendas"
+                value="R$ 0,00">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Bonificação Projetista Interno"
+                value="R$ 0,00">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Bonificação Orçamento"
+                value="R$ 0,00">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Bonificação Gerente de Produção"
+                value="R$ 0,00">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Bonificação Produção"
+                value="R$ 0,00">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Bonificação Detalhamento"
+                value="R$ 0,00">
+            </mat-form-field>
+        </div>
+        <div class="col-md-12">
+            <mat-form-field>
+              <input
+                matInput
+                type="text"
+                class="text-right"
+                placeholder="Total Estande"
+                value="R$ 652.980,00">
+            </mat-form-field>
+        </div>
+      </div>
+  
+      <div class="orcamento-footer d-flex justify-content-end">
+        Saldo total: R$ 5.588
+      </div>
+    </mat-card>
+  </div>
+</div>
+
+<!-- <mat-accordion>
   <mat-expansion-panel *ngFor="let budgetForm  of budgetForms; let i = index" [expanded]="i == expandedIndex">
     <mat-expansion-panel-header>
 
@@ -222,7 +676,7 @@
       </mat-card>
     </form>
   </mat-expansion-panel>
-</mat-accordion>
+</mat-accordion> -->
 
 
 
