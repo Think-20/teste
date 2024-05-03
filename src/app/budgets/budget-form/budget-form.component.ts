@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { Budget } from '../budget.model';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl, AbstractControl } from '@angular/forms';
 import { BudgetService } from '../budget.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -12,6 +12,8 @@ import { AuthService } from '../../login/auth.service';
 import { Job } from 'app/jobs/job.model';
 import { JobService } from 'app/jobs/job.service';
 import { TaskService } from 'app/schedule/task.service';
+import { Employee } from 'app/employees/employee.model';
+import { EmployeeService } from 'app/employees/employee.service';
 
 @Component({
   selector: 'cb-budget-form',
@@ -36,7 +38,7 @@ export class BudgetFormComponent implements OnInit {
   budgetForms: FormGroup[] = [];
   taskId;
   backscreen: string;
-
+  attendances: Employee[]
   constructor(
     /* private budgetService: BudgetService,
     private formBuilder: FormBuilder,
@@ -51,6 +53,7 @@ export class BudgetFormComponent implements OnInit {
     
     private route: ActivatedRoute,
     private router: Router,
+    private employeeService: EmployeeService,
   ) { }
 
   ngOnInit(): void {
@@ -60,6 +63,7 @@ export class BudgetFormComponent implements OnInit {
       this.backscreen = params['backscreen'];
     });
 
+    this.carregarFuncionarios();
     this.sortTasks();
     this.loadTaskFromRoute();
     this.createForm();
@@ -86,10 +90,89 @@ export class BudgetFormComponent implements OnInit {
         gross_profit_value: this.formBuilder.control('', []),
         profit_value: this.formBuilder.control('', []),
         final_value: this.formBuilder.control('', [Validators.required]),
+
+        //job details
+        attendance: this.formBuilder.control({ value: '', disabled: true }, [Validators.required]),
+        client: this.formBuilder.control({ value: '', disabled: true }, [Validators.required]),
+        event: this.formBuilder.control({ value: '', disabled: true }, [Validators.required]),
+        place: this.formBuilder.control({ value: '', disabled: false }, [Validators.required]),
+        creation_responsible: this.formBuilder.control({ value: '', disabled: true }, [Validators.required]),
+        producer: this.formBuilder.control({ value: '', disabled: false }, [Validators.required]),
+
+        //event details
+        dt_event: this.formBuilder.control({ value: '', disabled: false }, []),
+        budget_value: this.formBuilder.control({ value: '', disabled: true }, [Validators.required, Validators.maxLength(13)]),
+        area: this.formBuilder.control({ value: '', disabled: true }, []),
+        dt_inicio_event: this.formBuilder.control({ value: '', disabled: false }, []),
+        mezanino: this.formBuilder.control({ value: '', disabled: false }, []),
+        dt_montagem: this.formBuilder.control({ value: '', disabled: false }, []),
+        dt_fim_event: this.formBuilder.control({ value: '', disabled: false }, []),
+        dt_desmontagem: this.formBuilder.control({ value: '', disabled: false }, []),
+
+        // material etc...
+        marcenaria: this.formBuilder.control({ value: 0, disabled: false }, []),
+        marcenaria_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        
+        revestimentos_epeciais: this.formBuilder.control({ value: 0, disabled: false }, []),
+        revestimentos_epeciais_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+
+        estrutura_metalicas: this.formBuilder.control({ value: 0, disabled: false }, []),
+        estrutura_metalicas_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+
+        material_mezanino: this.formBuilder.control({ value: 0, disabled: false }, []),
+        material_mezanino_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+
+        fechamento_vidro: this.formBuilder.control({ value: 0, disabled: false }, []),
+        fechamento_vidro_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+
+        vitrines: this.formBuilder.control({ value: 0, disabled: false }, []),
+        vitrines_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        
+        acrilico: this.formBuilder.control({ value: 0, disabled: false }, []),
+        acrilico_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        
+        mobiliario: this.formBuilder.control({ value: 0, disabled: false }, []),
+        mobiliario_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+
+        refrigeracao_climatizacao: this.formBuilder.control({ value: 0, disabled: false }, []),
+        refrigeracao_climatizacao_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+
+        paisagismo: this.formBuilder.control({ value: 0, disabled: false }, []),
+        paisagismo_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+
+        comunicacao_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
+        comunicacao_visual_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+
+        equipamento_audio_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
+        equipamento_audio_visual_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+
+        itens_especiais: this.formBuilder.control({ value: 0, disabled: false }, []),
+        itens_especiais_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+
+        execucao: this.formBuilder.control({ value: 0, disabled: false }, []),
+        execucao_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+
+        logistica: this.formBuilder.control({ value: 0, disabled: false }, []),
+        logistica_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+
+        custo_total: this.formBuilder.control({ value: 0, disabled: false }, []),
+
+
+        // Racional Custos
+        imposto: this.formBuilder.control({ value: 0, disabled: false }, []),
+        comissao_vendas: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_vendas: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_projeto_interno: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_orcamento: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_gerente_producao: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_producao: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_detalhamento: this.formBuilder.control({ value: 0, disabled: false }, []),
+        total_estande: this.formBuilder.control({ value: 0, disabled: false }, []),
       })
     );
 
     this.sortedTasks.forEach((x, index) => this.fillForm(index))
+    console.log(this.job)
   }
 
   fillForm(index: number): void {
@@ -115,8 +198,80 @@ export class BudgetFormComponent implements OnInit {
         gross_profit_value: formData.gross_profit_value,
         profit_value: formData.profit_value,
         final_value: formData.final_value,
+
+        //job details
+        attendance: this.job.attendance,
+        client: this.job.client ? this.job.client.fantasy_name : { fantasy_name: this.job.not_client },
+        event: this.job.event,
+        place: this.job.place,
+        creation_responsible: this.job.creation_responsible != null ? this.job.creation_responsible.name : 'Externo',
+
+        //event details
+        budget_value: this.job.budget_value,
+        area: this.job.area > 0 ? this.job.area.toString().replace('.', ',') : '',
       });
+
+      this.budgetForms[index].valueChanges.subscribe(form => {
+        const soma_total = 
+          form.marcenaria + 
+          form.revestimentos_epeciais + 
+          form.estrutura_metalicas + 
+          form.material_mezanino + 
+          form.fechamento_vidro + 
+          form.vitrines + 
+          form.acrilico + 
+          form.mobiliario + 
+          form.refrigeracao_climatizacao + 
+          form.paisagismo + 
+          form.comunicacao_visual + 
+          form.equipamento_audio_visual + 
+          form.itens_especiais + 
+          form.execucao + 
+          form.logistica;
+
+          this.budgetForms[index].controls.custo_total.setValue(soma_total, { emitEvent: false });
+
+          this.setPorcentgaem("marcenaria", index);
+          this.setPorcentgaem("revestimentos_epeciais", index);
+          this.setPorcentgaem("estrutura_metalicas", index);
+          this.setPorcentgaem("material_mezanino", index);
+          this.setPorcentgaem("fechamento_vidro", index);
+          this.setPorcentgaem("vitrines", index);
+          this.setPorcentgaem("acrilico", index);
+          this.setPorcentgaem("mobiliario", index);
+          this.setPorcentgaem("refrigeracao_climatizacao", index);
+          this.setPorcentgaem("paisagismo", index);
+          this.setPorcentgaem("comunicacao_visual", index);
+          this.setPorcentgaem("equipamento_audio_visual", index);
+          this.setPorcentgaem("itens_especiais", index);
+          this.setPorcentgaem("execucao", index);
+          this.setPorcentgaem("logistica", index);
+      })
     }
+  }
+
+  setPorcentgaem(field: string, index: number) {
+    const control: AbstractControl = this.budgetForms[index].get(field);
+
+    const controlTotal: AbstractControl = this.budgetForms[index].get("custo_total");
+
+    const controlPorcentagem: AbstractControl = this.budgetForms[index].get(field+"_porcentagem");
+    
+    const value = control.value;
+
+    const valueTotal = controlTotal.value;
+
+    if (valueTotal <= 0) {
+      controlPorcentagem.setValue(0, { emitEvent: false });
+
+      return;
+    }
+
+    const total = value / valueTotal;
+
+    const porcentagem = total * 100;
+
+    controlPorcentagem.setValue(parseFloat(porcentagem.toFixed(2)), { emitEvent: false });
   }
 
   getTaskByProjectFiles(index) {
@@ -166,6 +321,7 @@ export class BudgetFormComponent implements OnInit {
   }
 
   sendValues(budgetForm: FormGroup) {
+    console.log(budgetForm)
     budgetForm.updateValueAndValidity()
     
     if (ErrorHandler.formIsInvalid(budgetForm)) {
@@ -175,18 +331,18 @@ export class BudgetFormComponent implements OnInit {
       return;
     }
 
-    this.taskService.changeValues({...budgetForm.value, task_id: this.taskId}).subscribe(data => {
-      this.snackBar.open(data.message, '', {
-        duration: data.status ? 1000 : 5000
-      })
+    // this.taskService.changeValues({...budgetForm.value, task_id: this.taskId}).subscribe(data => {
+    //   this.snackBar.open(data.message, '', {
+    //     duration: data.status ? 1000 : 5000
+    //   })
 
-      if (this.backscreen === 'agenda') {
-        this.router.navigate(['schedule'])
-        return;
-      } 
+    //   if (this.backscreen === 'agenda') {
+    //     this.router.navigate(['schedule'])
+    //     return;
+    //   } 
 
-      this.router.navigateByUrl(`/jobs/edit/${this.job.id}?tab=check-in`)
-    })
+    //   this.router.navigateByUrl(`/jobs/edit/${this.job.id}?tab=check-in`)
+    // })
   }
 
   formatFinalValue(budgetForm: FormGroup) {
@@ -238,6 +394,22 @@ export class BudgetFormComponent implements OnInit {
     })
   }
 
+  carregarFuncionarios() {
+    this.employeeService.employees({
+      paginate: false,
+      deleted: true
+    }).subscribe(dataInfo => {
+      let employees = dataInfo.pagination.data
+      this.attendances = employees.filter(employee => {
+        return employee.department.description === 'Atendimento' || employee.department.description === 'Diretoria'
+      })
+    })
+  }
+
+  compareAttendance(var1: Employee, var2: Employee) {
+    return var1.id === var2.id
+  }
+  
   /* ngOnInit() {
     this.isAdmin = this.authService.hasAccess('budget/save')
     this.isAttendance = this.job.attendance_id == this.authService.currentUser().employee.id
