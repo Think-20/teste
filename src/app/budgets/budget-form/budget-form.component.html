@@ -601,18 +601,6 @@
                     matInput
                     type="text"
                     class="text-right"
-                    placeholder="Bonificação de Vendas"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="bonificacao_vendas">
-                </mat-form-field>
-            </div>
-            <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
                     placeholder="Bonificação Projetista Interno"
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
@@ -673,6 +661,18 @@
                     matInput
                     type="text"
                     class="text-right"
+                    placeholder="Coeficiente de Margem"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="coeficiente_margem">
+                </mat-form-field>
+            </div>
+            <div class="col-md-12">
+                <mat-form-field>
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
                     placeholder="Total Estande"
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
@@ -688,7 +688,7 @@
                     placeholder="Diversos | Operacionais"
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
-                    formControlName="total_estande">
+                    formControlName="diversos_operacional">
                 </mat-form-field>
             </div>
             <div class="col-md-12">
@@ -700,7 +700,7 @@
                     placeholder="Frete | Logistica"
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
-                    formControlName="total_estande">
+                    formControlName="frete_logistica">
                 </mat-form-field>
             </div>
             <div class="col-md-12">
@@ -712,7 +712,7 @@
                     placeholder="Opcional - Equipamento Audio Visual"
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
-                    formControlName="total_estande">
+                    formControlName="opcional_equipamento_audio_visual">
                 </mat-form-field>
             </div>
             <div class="col-md-12">
@@ -724,7 +724,31 @@
                     placeholder="Total geral estande"
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
-                    formControlName="total_estande">
+                    formControlName="total_geral_estande">
+                </mat-form-field>
+            </div>
+            <div class="col-md-12">
+                <mat-form-field>
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Líquido Think"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="liquido_think">
+                </mat-form-field>
+            </div>
+            <div class="col-md-12">
+                <mat-form-field>
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Margem de lucro"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="margem_lucro">
                 </mat-form-field>
             </div>
           </div>
