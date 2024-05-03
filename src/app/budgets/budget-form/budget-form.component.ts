@@ -144,6 +144,12 @@ export class BudgetFormComponent implements OnInit {
 
         custo_total: this.formBuilder.control({ value: 0, disabled: false }, []),
 
+        // visibilidade dos valores
+        budget_value_visibily: this.formBuilder.control({ value: true, disabled: false }, []),
+        custo_total_visibily: this.formBuilder.control({ value: true, disabled: false }, []),
+        total_geral_estande_visibily: this.formBuilder.control({ value: true, disabled: false }, []),
+        liquido_think_visibily: this.formBuilder.control({ value: true, disabled: false }, []),
+
         // Racional Custos
         imposto: this.formBuilder.control({ value: 0, disabled: false }, []),
         comissao_vendas: this.formBuilder.control({ value: 0, disabled: false }, []),
@@ -216,10 +222,16 @@ export class BudgetFormComponent implements OnInit {
         this.setTodasPorcentagens(index);
 
         this.setTotalEstande(index);
-        
+
         this.setTotalImposto(index);
 
         this.setTodasComissoesBonificacoes(index);
+        
+        this.setTotalGeralEstande(index);
+
+        this.setTotalLiquidoThink(index);
+
+        this.setMargemLucro(index);
       });
     }
   }
@@ -334,12 +346,90 @@ export class BudgetFormComponent implements OnInit {
     controlComissao.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
   }
 
+  setTotalGeralEstande(index: number) {
+    const controlGeralTotal: AbstractControl = this.budgetForms[index].get("total_geral_estande");
+
+    const totalEstande = this.geTotalEstande(index);
+
+    const totalDiversosOperacional = this.geTotalDiversosOperacional(index);
+
+    const totalFreteLogistica = this.geTotalFreteLogistica(index);
+
+    const total = totalEstande + totalDiversosOperacional + totalFreteLogistica;
+
+    controlGeralTotal.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
+  }
+  
+  setTotalLiquidoThink(index: number) {
+    const controlLiquidoThink: AbstractControl = this.budgetForms[index].get("liquido_think");
+
+    const totalEstande = this.geTotalEstande(index);
+
+    const custoTotal = this.getCustoTotal(index);
+
+    const imposto = this.getTotalImposto(index);
+
+    const comissaoVendas = this.getTotalComissaoVendas(index);
+
+    const bonificacaoProjetistaInterno = this.getTotalBonificacaoProjetistaInterno(index);
+
+    const total = totalEstande - (custoTotal + imposto + comissaoVendas + bonificacaoProjetistaInterno);
+
+    controlLiquidoThink.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
+  }
+
+  setMargemLucro(index: number) {
+    const controlMargemLiquido: AbstractControl = this.budgetForms[index].get("margem_lucro");
+
+    const liquidoThink = this.getTotalLiquidoThink(index);
+
+    const totalEstande = this.geTotalEstande(index);
+
+    const total = liquidoThink / totalEstande;
+
+    const porcentagem = total * 100;
+
+    controlMargemLiquido.setValue(parseFloat(porcentagem.toFixed(2)), { emitEvent: false });
+  }
+
   getControlTotalEstande(index: number): AbstractControl {
     return this.budgetForms[index].get("total_estande");
   }
 
   geTotalEstande(index: number): number {
     return this.getControlTotalEstande(index).value;
+  }
+
+  geTotalDiversosOperacional(index: number): number {
+    return this.budgetForms[index].get("diversos_operacional").value;
+  }
+
+  geTotalFreteLogistica(index: number): number {
+    return this.budgetForms[index].get("frete_logistica").value;
+  }
+
+  getCustoTotal(index: number): number {
+    return this.budgetForms[index].get("custo_total").value;
+  }
+
+  getTotalImposto(index: number): number {
+    return this.budgetForms[index].get("imposto").value;
+  }
+
+  getTotalComissaoVendas(index: number): number {
+    return this.budgetForms[index].get("comissao_vendas").value;
+  }
+
+  getTotalBonificacaoProjetistaInterno(index: number): number {
+    return this.budgetForms[index].get("bonificacao_projeto_interno").value;
+  }
+
+  getTotalLiquidoThink(index: number): number {
+    return this.budgetForms[index].get("liquido_think").value;
+  }
+
+  toogleVisibilty(control: AbstractControl) {
+    control.setValue(!control.value);
   }
 
   getTaskByProjectFiles(index) {

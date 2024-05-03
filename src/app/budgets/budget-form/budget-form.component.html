@@ -105,8 +105,10 @@
               </div>
             </div>
       
-            <div class="orcamento-footer d-flex justify-content-center">
-              Ver relatório completo
+            <div class="orcamento-footer cursor-pointer d-flex justify-content-center">
+                <span class="titulo-relatorio">Ver relatório completo</span>
+
+                <mat-icon class="icon-relatorio">north_east</mat-icon>
             </div>
         </mat-card>
       
@@ -176,8 +178,9 @@
             </div>
           </div>
       
-          <div class="orcamento-footer d-flex justify-content-center">
-            Ver relatório completo
+          <div class="orcamento-footer cursor-pointer d-flex justify-content-center">
+            <span class="titulo-relatorio">Ver relatório completo</span>
+            <mat-icon class="icon-relatorio">north_east</mat-icon>
           </div>
         </mat-card>
       </div>
@@ -511,9 +514,18 @@
                     <h3 class="orcamento-valor-data">Hoje</h3>
                 </div>
                 <div>
-                    <h2 class="lucro">R$ 669.600</h2>
+                    <h2 class="lucro">{{ budgetForm.controls.budget_value_visibily.value ? (budgetForm.controls.budget_value.value | currency: 'BRL' ) : 'R$ __________'}}
+                      <mat-icon 
+                        (click)="toogleVisibilty(budgetForm.controls.budget_value_visibily)" 
+                        class="extrato-icon cursor-pointer">
+                        {{ budgetForm.controls.budget_value_visibily.value ? 'visibility_off' : 'visibility' }}
+                      </mat-icon>
+                    </h2>
                 </div>
-                <span>Ver extrato ></span>
+                <div class="d-flex align-items-center cursor-pointer">
+                  <span>Ver extrato</span>
+                  <mat-icon class="extrato-icon">chevron_right</mat-icon>
+                </div>
             </div>
             <div class="orcamento-valor">
               <div class="orcamento-valores-header d-flex justify-content-between">
@@ -521,9 +533,18 @@
                   <h3 class="orcamento-valor-data">Hoje</h3>
               </div>
               <div>
-                  <h2 class="perda">R$ 351.064</h2>
+                  <h2 class="perda">{{ budgetForm.controls.custo_total_visibily.value ? (budgetForm.controls.custo_total.value | currency: 'BRL' ) : 'R$ __________'}}
+                    <mat-icon 
+                      (click)="toogleVisibilty(budgetForm.controls.custo_total_visibily)" 
+                      class="extrato-icon cursor-pointer">
+                      {{ budgetForm.controls.custo_total_visibily.value ? 'visibility_off' : 'visibility' }}
+                    </mat-icon>
+                  </h2>
               </div>
-              <span>Ver extrato ></span>
+              <div class="d-flex align-items-center cursor-pointer">
+                <span>Ver extrato</span>
+                <mat-icon class="extrato-icon">chevron_right</mat-icon>
+              </div>
           </div>
           <div class="orcamento-valor">
               <div class="orcamento-valores-header d-flex justify-content-between">
@@ -531,9 +552,18 @@
                   <h3 class="orcamento-valor-data">Hoje</h3>
               </div>
               <div>
-                  <h2 class="perda">R$ 705.068</h2>
+                  <h2 class="perda">{{ budgetForm.controls.total_geral_estande_visibily.value ? (budgetForm.controls.total_geral_estande.value | currency: 'BRL' ) : 'R$ __________'}}
+                    <mat-icon 
+                      (click)="toogleVisibilty(budgetForm.controls.total_geral_estande_visibily)" 
+                      class="extrato-icon cursor-pointer">
+                      {{ budgetForm.controls.total_geral_estande_visibily.value ? 'visibility_off' : 'visibility' }}
+                    </mat-icon>
+                  </h2>
               </div>
-              <span>Ver extrato ></span>
+              <div class="d-flex align-items-center cursor-pointer">
+                <span>Ver extrato</span>
+                <mat-icon class="extrato-icon">chevron_right</mat-icon>
+              </div>
           </div>
           <div class="orcamento-valor">
               <div class="orcamento-valores-header d-flex justify-content-between">
@@ -541,9 +571,18 @@
                   <h3 class="orcamento-valor-data">Hoje</h3>
               </div>
               <div>
-                  <h2 class="neutro">R$ 167.401</h2>
+                  <h2 class="neutro">{{ budgetForm.controls.liquido_think_visibily.value ? (budgetForm.controls.liquido_think.value | currency: 'BRL' ) : 'R$ __________'}}
+                    <mat-icon 
+                      (click)="toogleVisibilty(budgetForm.controls.liquido_think_visibily)" 
+                      class="extrato-icon cursor-pointer">
+                      {{ budgetForm.controls.liquido_think_visibily.value ? 'visibility_off' : 'visibility' }}
+                    </mat-icon>
+                  </h2>
               </div>
-              <span>Ver extrato ></span>
+              <div class="d-flex align-items-center cursor-pointer">
+                <span>Ver extrato</span>
+                <mat-icon class="extrato-icon">chevron_right</mat-icon>
+              </div>
           </div>
         </div>
         <mat-card class="col-md-12 mt-2">
@@ -746,9 +785,8 @@
                     type="text"
                     class="text-right"
                     placeholder="Margem de lucro"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
                     formControlName="margem_lucro">
+                    <span matSuffix>%</span>
                 </mat-form-field>
             </div>
           </div>

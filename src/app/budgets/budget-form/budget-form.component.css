@@ -148,3 +148,27 @@ mat-expansion-panel {
 mat-expansion-panel-header {
   background-color: #fff !important;
 }
+
+.extrato-icon {
+  font-size: 1.4rem;
+  line-height: 1.1;
+  color: #778;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.icon-relatorio {
+  font-size: 16px;
+  color: #778;
+  line-height: 1.2;
+  font-weight: 700;
+  margin-left: 0.3rem;
+}
+
+.titulo-relatorio {
+  color: #1f4150;
+  font-size: 16px;
+  font-weight: 500;
+}
