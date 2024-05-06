@@ -178,6 +178,24 @@ export class BudgetFormComponent implements OnInit {
     const formData = this.sortedTasks[index]; // Suponha que budgetFormData seja o array de objetos com os dados
     // Verifique se o índice é válido
     if (formData) {
+      this.budgetForms[index].valueChanges.subscribe((form) => {
+        this.setCustoTotal(form, index);
+
+        this.setTodasPorcentagens(index);
+
+        this.setTotalEstande(index);
+
+        this.setTotalImposto(index);
+
+        this.setTodasComissoesBonificacoes(index);
+        
+        this.setTotalGeralEstande(index);
+
+        this.setTotalLiquidoThink(index);
+
+        this.setMargemLucro(index);
+      });
+
       this.budgetForms[index].patchValue({
         id: formData.id,
         orders_value: formData.orders_value,
@@ -200,38 +218,33 @@ export class BudgetFormComponent implements OnInit {
 
         //job details
         attendance: this.job.attendance,
-        client: this.job.client
-          ? this.job.client.fantasy_name
-          : { fantasy_name: this.job.not_client },
+        client: this.job.client ? this.job.client.fantasy_name : { fantasy_name: this.job.not_client },
         event: this.job.event,
         place: this.job.place,
         creation_responsible:
-          this.job.creation_responsible != null
-            ? this.job.creation_responsible.name
-            : "Externo",
+        this.job.creation_responsible != null ? this.job.creation_responsible.name: "Externo",
 
         //event details
         budget_value: this.job.budget_value,
-        area:
-          this.job.area > 0 ? this.job.area.toString().replace(".", ",") : "",
-      });
+        area: this.job.area > 0 ? this.job.area.toString().replace(".", ",") : "",
 
-      this.budgetForms[index].valueChanges.subscribe((form) => {
-        this.setCustoTotal(form, index);
-
-        this.setTodasPorcentagens(index);
-
-        this.setTotalEstande(index);
-
-        this.setTotalImposto(index);
-
-        this.setTodasComissoesBonificacoes(index);
-        
-        this.setTotalGeralEstande(index);
-
-        this.setTotalLiquidoThink(index);
-
-        this.setMargemLucro(index);
+        // valores orçamento
+        marcenaria: formData.marcenaria || 0,
+        revestimentos_epeciais: formData.revestimentos_epeciais || 0,
+        estrutura_metalicas: formData.estrutura_metalicas || 0,
+        material_mezanino: formData.material_mezanino || 0,
+        fechamento_vidro: formData.fechamento_vidro || 0,
+        vitrines: formData.vitrines || 0,
+        acrilico: formData.acrilico || 0,
+        mobiliario: formData.mobiliario || 0,
+        refrigeracao_climatizacao: formData.refrigeracao_climatizacao || 0,
+        paisagismo: formData.paisagismo || 0,
+        comunicacao_visual: formData.comunicacao_visual || 0,
+        equipamento_audio_visual: formData.equipamento_audio_visual || 0,
+        itens_especiais: formData.itens_especiais || 0,
+        execucao: formData.execucao || 0,
+        logistica: formData.logistica || 0, 
+        coeficiente_margem: formData.coeficiente_margem || 0,
       });
     }
   }
@@ -361,6 +374,7 @@ export class BudgetFormComponent implements OnInit {
   }
   
   setTotalLiquidoThink(index: number) {
+    debugger
     const controlLiquidoThink: AbstractControl = this.budgetForms[index].get("liquido_think");
 
     const totalEstande = this.geTotalEstande(index);
