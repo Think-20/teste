@@ -399,6 +399,10 @@ export class BudgetFormComponent implements OnInit {
 
     const totalEstande = this.geTotalEstande(index);
 
+    if (!totalEstande) {
+      return;
+    }
+
     const total = liquidoThink / totalEstande;
 
     const porcentagem = total * 100;
