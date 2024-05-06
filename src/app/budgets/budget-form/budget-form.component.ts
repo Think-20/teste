@@ -374,7 +374,6 @@ export class BudgetFormComponent implements OnInit {
   }
   
   setTotalLiquidoThink(index: number) {
-    debugger
     const controlLiquidoThink: AbstractControl = this.budgetForms[index].get("liquido_think");
 
     const totalEstande = this.geTotalEstande(index);
@@ -502,7 +501,10 @@ export class BudgetFormComponent implements OnInit {
   }
 
   sendValues(budgetForm: FormGroup) {
+    budgetForm.controls.final_value.setValue(budgetForm.controls.total_geral_estande.value);
+
     console.log(budgetForm);
+    
     budgetForm.updateValueAndValidity();
 
     if (ErrorHandler.formIsInvalid(budgetForm)) {
