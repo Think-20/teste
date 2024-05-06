@@ -172,3 +172,8 @@ mat-expansion-panel-header {
   font-size: 16px;
   font-weight: 500;
 }
+
+
+.mat-suffix {
+  color: #aaa;
+}

@@ -98,51 +98,51 @@ export class BudgetFormComponent implements OnInit {
 
         // material etc...
         marcenaria: this.formBuilder.control({ value: 0, disabled: false }, []),
-        marcenaria_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        marcenaria_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         revestimentos_epeciais: this.formBuilder.control({ value: 0, disabled: false }, []),
-        revestimentos_epeciais_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        revestimentos_epeciais_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         estrutura_metalicas: this.formBuilder.control({ value: 0, disabled: false }, []),
-        estrutura_metalicas_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        estrutura_metalicas_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         material_mezanino: this.formBuilder.control({ value: 0, disabled: false }, []),
-        material_mezanino_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        material_mezanino_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         fechamento_vidro: this.formBuilder.control({ value: 0, disabled: false }, []),
-        fechamento_vidro_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        fechamento_vidro_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         vitrines: this.formBuilder.control({ value: 0, disabled: false }, []),
-        vitrines_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        vitrines_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         acrilico: this.formBuilder.control({ value: 0, disabled: false }, []),
-        acrilico_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        acrilico_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         mobiliario: this.formBuilder.control({ value: 0, disabled: false }, []),
-        mobiliario_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        mobiliario_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         refrigeracao_climatizacao: this.formBuilder.control({ value: 0, disabled: false }, []),
-        refrigeracao_climatizacao_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        refrigeracao_climatizacao_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         paisagismo: this.formBuilder.control({ value: 0, disabled: false }, []),
-        paisagismo_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        paisagismo_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         comunicacao_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
-        comunicacao_visual_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        comunicacao_visual_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         equipamento_audio_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
-        equipamento_audio_visual_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        equipamento_audio_visual_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         itens_especiais: this.formBuilder.control({ value: 0, disabled: false }, []),
-        itens_especiais_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        itens_especiais_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         execucao: this.formBuilder.control({ value: 0, disabled: false }, []),
-        execucao_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        execucao_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         logistica: this.formBuilder.control({ value: 0, disabled: false }, []),
-        logistica_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        logistica_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
-        custo_total: this.formBuilder.control({ value: 0, disabled: false }, []),
+        custo_total: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         // visibilidade dos valores
         budget_value_visibily: this.formBuilder.control({ value: true, disabled: false }, []),
@@ -151,22 +151,22 @@ export class BudgetFormComponent implements OnInit {
         liquido_think_visibily: this.formBuilder.control({ value: true, disabled: false }, []),
 
         // Racional Custos
-        imposto: this.formBuilder.control({ value: 0, disabled: false }, []),
-        comissao_vendas: this.formBuilder.control({ value: 0, disabled: false }, []),
-        bonificacao_projeto_interno: this.formBuilder.control({ value: 0, disabled: false }, []),
-        bonificacao_orcamento: this.formBuilder.control({ value: 0, disabled: false }, []),
-        bonificacao_gerente_producao: this.formBuilder.control({ value: 0, disabled: false }, []),
-        bonificacao_producao: this.formBuilder.control({ value: 0, disabled: false }, []),
-        bonificacao_detalhamento: this.formBuilder.control({ value: 0, disabled: false }, []),
+        imposto: this.formBuilder.control({ value: 0, disabled: true }, []),
+        comissao_vendas: this.formBuilder.control({ value: 0, disabled: true }, []),
+        bonificacao_projeto_interno: this.formBuilder.control({ value: 0, disabled: true }, []),
+        bonificacao_orcamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        bonificacao_gerente_producao: this.formBuilder.control({ value: 0, disabled: true }, []),
+        bonificacao_producao: this.formBuilder.control({ value: 0, disabled: true }, []),
+        bonificacao_detalhamento: this.formBuilder.control({ value: 0, disabled: true }, []),
         coeficiente_margem: this.formBuilder.control({ value: 0, disabled: false }, []),
-        total_estande: this.formBuilder.control({ value: 0, disabled: false }, []),
+        total_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         diversos_operacional: this.formBuilder.control({ value: 0, disabled: false }, []),
         frete_logistica: this.formBuilder.control({ value: 0, disabled: false }, []),
         opcional_equipamento_audio_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
-        total_geral_estande: this.formBuilder.control({ value: 0, disabled: false }, []),
-        liquido_think: this.formBuilder.control({ value: 0, disabled: false }, []),
-        margem_lucro: this.formBuilder.control({ value: 0, disabled: false }, []),
+        total_geral_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
+        liquido_think: this.formBuilder.control({ value: 0, disabled: true }, []),
+        margem_lucro: this.formBuilder.control({ value: 0, disabled: true }, []),
       })
     );
 
