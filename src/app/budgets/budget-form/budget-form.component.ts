@@ -1,101 +1,211 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
-import { Budget } from '../budget.model';
-import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
-import { BudgetService } from '../budget.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ErrorHandler } from '../../shared/error-handler.service';
-import { Task } from '../../schedule/task.model';
-import { distinctUntilChanged } from 'rxjs/operators';
-import { Subscription } from 'rxjs';
-import { AuthService } from '../../login/auth.service';
-import { Job } from 'app/jobs/job.model';
-import { JobService } from 'app/jobs/job.service';
-import { TaskService } from 'app/schedule/task.service';
+import { Component, OnInit, Input, ViewChild, ElementRef } from "@angular/core";
+import {
+  FormGroup,
+  FormBuilder,
+  Validators,
+  AbstractControl,
+} from "@angular/forms";
+import { BudgetService } from "../budget.service";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ErrorHandler } from "../../shared/error-handler.service";
+import { Task } from "../../schedule/task.model";
+import { Job } from "app/jobs/job.model";
+import { TaskService } from "app/schedule/task.service";
+import { Employee } from "app/employees/employee.model";
+import { EmployeeService } from "app/employees/employee.service";
+import { AuthService } from "app/login/auth.service";
 
 @Component({
-  selector: 'cb-budget-form',
-  templateUrl: './budget-form.component.html',
-  styleUrls: ['./budget-form.component.css']
+  selector: "cb-budget-form",
+  templateUrl: "./budget-form.component.html",
+  styleUrls: ["./budget-form.component.css"],
 })
 export class BudgetFormComponent implements OnInit {
-  /* budget: Budget
-  budgetForm: FormGroup
-  total: number = 0
-  isAttendance: boolean = false
-  isAdmin: boolean = false
-  subscription: Subscription */
-  @ViewChild('finalValue', { static : false }) finalValue: ElementRef;
+  @ViewChild("finalValue", { static: false }) finalValue: ElementRef;
   budgetForm = new FormGroup({});
 
-  @Input('typeForm') typeForm: string
-  @Input('task') task: Task
-  @Input() job: Job
-  sortedTasks: Task[]
-  expandedIndex: number = null
+  @Input("typeForm") typeForm: string;
+  @Input("task") task: Task;
+  @Input() job: Job;
+  sortedTasks: Task[];
+  expandedIndex: number = null;
   budgetForms: FormGroup[] = [];
   taskId;
   backscreen: string;
-
+  attendances: Employee[];
+  isDiretoria = false;
   constructor(
-    /* private budgetService: BudgetService,
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private authService: AuthService,
-    private router: Router,
-    private snackBar: MatSnackBar, */
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
-    private jobService: JobService,
     public taskService: TaskService,
-    
+
     private route: ActivatedRoute,
     private router: Router,
-  ) { }
+    private employeeService: EmployeeService,
+    private authService: AuthService,
+  ) {}
 
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      const taskId = params['taskId'];
-      this.taskId = taskId
-      this.backscreen = params['backscreen'];
+    this.checkUserDepartment();
+
+    this.route.queryParams.subscribe((params) => {
+      const taskId = params["taskId"];
+      this.taskId = taskId;
+      this.backscreen = params["backscreen"];
     });
 
+    this.carregarFuncionarios();
     this.sortTasks();
     this.loadTaskFromRoute();
     this.createForm();
   }
 
+  checkUserDepartment() {
+    const currentUser = this.authService.currentUser();
+    this.isDiretoria = currentUser.employee.department_id === 1;
+  }
+
   createForm() {
     this.budgetForms = this.sortedTasks.map(() =>
       this.formBuilder.group({
-        id: this.formBuilder.control('', [Validators.required]),
-        orders_value: this.formBuilder.control('', []),
-        attendance_value: this.formBuilder.control('', []),
-        creation_value: this.formBuilder.control('', []),
-        pre_production_value: this.formBuilder.control('', []),
-        production_value: this.formBuilder.control('', []),
-        details_value: this.formBuilder.control('', []),
-        budget_si_value: this.formBuilder.control('', []),
-        bv_value: this.formBuilder.control('', []),
-        over_rates_value: this.formBuilder.control('', []),
-        discounts_value: this.formBuilder.control('', []),
-        taxes_value: this.formBuilder.control('', []),
-        logistics_value: this.formBuilder.control('', []),
-        equipment_value: this.formBuilder.control('', []),
-        total_cost_value: this.formBuilder.control('', []),
-        gross_profit_value: this.formBuilder.control('', []),
-        profit_value: this.formBuilder.control('', []),
-        final_value: this.formBuilder.control('', [Validators.required]),
+        id: this.formBuilder.control("", [Validators.required]),
+        orders_value: this.formBuilder.control("", []),
+        attendance_value: this.formBuilder.control("", []),
+        creation_value: this.formBuilder.control("", []),
+        pre_production_value: this.formBuilder.control("", []),
+        production_value: this.formBuilder.control("", []),
+        details_value: this.formBuilder.control("", []),
+        budget_si_value: this.formBuilder.control("", []),
+        bv_value: this.formBuilder.control("", []),
+        over_rates_value: this.formBuilder.control("", []),
+        discounts_value: this.formBuilder.control("", []),
+        taxes_value: this.formBuilder.control("", []),
+        logistics_value: this.formBuilder.control("", []),
+        equipment_value: this.formBuilder.control("", []),
+        total_cost_value: this.formBuilder.control("", []),
+        gross_profit_value: this.formBuilder.control("", []),
+        profit_value: this.formBuilder.control("", []),
+        final_value: this.formBuilder.control("", [Validators.required]),
+
+        //job details
+        attendance: this.formBuilder.control({ value: "", disabled: true }, [Validators.required]),
+        client: this.formBuilder.control({ value: "", disabled: true }, [Validators.required]),
+        event: this.formBuilder.control({ value: "", disabled: true }, [Validators.required]),
+        place: this.formBuilder.control({ value: "", disabled: false }, [Validators.required]),
+        creation_responsible: this.formBuilder.control({ value: "", disabled: true }, [Validators.required]),
+        producer: this.formBuilder.control({ value: "", disabled: false }, [Validators.required]),
+
+        //event details
+        dt_event: this.formBuilder.control({ value: "", disabled: false }, []),
+        budget_value: this.formBuilder.control({ value: "", disabled: true }, [Validators.required, Validators.maxLength(13)]),
+        area: this.formBuilder.control({ value: "", disabled: true }, []),
+        dt_inicio_event: this.formBuilder.control({ value: "", disabled: false }, []),
+        mezanino: this.formBuilder.control({ value: "", disabled: false }, []),
+        dt_montagem: this.formBuilder.control({ value: "", disabled: false }, []),
+        dt_fim_event: this.formBuilder.control({ value: "", disabled: false }, []),
+        dt_desmontagem: this.formBuilder.control({ value: "", disabled: false }, []),
+
+        // material etc...
+        marcenaria: this.formBuilder.control({ value: 0, disabled: false }, []),
+        marcenaria_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        revestimentos_epeciais: this.formBuilder.control({ value: 0, disabled: false }, []),
+        revestimentos_epeciais_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        estrutura_metalicas: this.formBuilder.control({ value: 0, disabled: false }, []),
+        estrutura_metalicas_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        material_mezanino: this.formBuilder.control({ value: 0, disabled: false }, []),
+        material_mezanino_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        fechamento_vidro: this.formBuilder.control({ value: 0, disabled: false }, []),
+        fechamento_vidro_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        vitrines: this.formBuilder.control({ value: 0, disabled: false }, []),
+        vitrines_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        acrilico: this.formBuilder.control({ value: 0, disabled: false }, []),
+        acrilico_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        mobiliario: this.formBuilder.control({ value: 0, disabled: false }, []),
+        mobiliario_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        refrigeracao_climatizacao: this.formBuilder.control({ value: 0, disabled: false }, []),
+        refrigeracao_climatizacao_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        paisagismo: this.formBuilder.control({ value: 0, disabled: false }, []),
+        paisagismo_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        comunicacao_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
+        comunicacao_visual_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        equipamento_audio_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
+        equipamento_audio_visual_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        itens_especiais: this.formBuilder.control({ value: 0, disabled: false }, []),
+        itens_especiais_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        execucao: this.formBuilder.control({ value: 0, disabled: false }, []),
+        execucao_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        logistica: this.formBuilder.control({ value: 0, disabled: false }, []),
+        logistica_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        custo_total: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        // visibilidade dos valores
+        budget_value_visibily: this.formBuilder.control({ value: true, disabled: false }, []),
+        custo_total_visibily: this.formBuilder.control({ value: true, disabled: false }, []),
+        total_geral_estande_visibily: this.formBuilder.control({ value: true, disabled: false }, []),
+        liquido_think_visibily: this.formBuilder.control({ value: true, disabled: false }, []),
+
+        // Racional Custos
+        imposto: this.formBuilder.control({ value: 0, disabled: true }, []),
+        comissao_vendas: this.formBuilder.control({ value: 0, disabled: true }, []),
+        bonificacao_projeto_interno: this.formBuilder.control({ value: 0, disabled: true }, []),
+        bonificacao_orcamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        bonificacao_gerente_producao: this.formBuilder.control({ value: 0, disabled: true }, []),
+        bonificacao_producao: this.formBuilder.control({ value: 0, disabled: true }, []),
+        bonificacao_detalhamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        coeficiente_margem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        total_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        diversos_operacional: this.formBuilder.control({ value: 0, disabled: false }, []),
+        frete_logistica: this.formBuilder.control({ value: 0, disabled: false }, []),
+        opcional_equipamento_audio_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
+        total_geral_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
+        liquido_think: this.formBuilder.control({ value: 0, disabled: true }, []),
+        margem_lucro: this.formBuilder.control({ value: 0, disabled: true }, []),
       })
     );
 
-    this.sortedTasks.forEach((x, index) => this.fillForm(index))
+    this.sortedTasks.forEach((x, index) => this.fillForm(index));
+    console.log(this.job);
   }
 
   fillForm(index: number): void {
     const formData = this.sortedTasks[index]; // Suponha que budgetFormData seja o array de objetos com os dados
     // Verifique se o índice é válido
     if (formData) {
+      this.budgetForms[index].valueChanges.subscribe((form) => {
+        this.setCustoTotal(form, index);
+
+        this.setTodasPorcentagens(index);
+
+        this.setTotalEstande(index);
+
+        this.setTotalImposto(index);
+
+        this.setTodasComissoesBonificacoes(index);
+        
+        this.setTotalGeralEstande(index);
+
+        this.setTotalLiquidoThink(index);
+
+        this.setMargemLucro(index);
+      });
+
       this.budgetForms[index].patchValue({
         id: formData.id,
         orders_value: formData.orders_value,
@@ -115,8 +225,238 @@ export class BudgetFormComponent implements OnInit {
         gross_profit_value: formData.gross_profit_value,
         profit_value: formData.profit_value,
         final_value: formData.final_value,
+
+        //job details
+        attendance: this.job.attendance,
+        client: this.job.client ? this.job.client.fantasy_name : { fantasy_name: this.job.not_client },
+        event: this.job.event,
+        place: this.job.place,
+        creation_responsible:
+        this.job.creation_responsible != null ? this.job.creation_responsible.name: "Externo",
+
+        //event details
+        budget_value: this.job.budget_value,
+        area: this.job.area > 0 ? this.job.area.toString().replace(".", ",") : "",
+
+        // valores orçamento
+        marcenaria: formData.marcenaria || 0,
+        revestimentos_epeciais: formData.revestimentos_epeciais || 0,
+        estrutura_metalicas: formData.estrutura_metalicas || 0,
+        material_mezanino: formData.material_mezanino || 0,
+        fechamento_vidro: formData.fechamento_vidro || 0,
+        vitrines: formData.vitrines || 0,
+        acrilico: formData.acrilico || 0,
+        mobiliario: formData.mobiliario || 0,
+        refrigeracao_climatizacao: formData.refrigeracao_climatizacao || 0,
+        paisagismo: formData.paisagismo || 0,
+        comunicacao_visual: formData.comunicacao_visual || 0,
+        equipamento_audio_visual: formData.equipamento_audio_visual || 0,
+        itens_especiais: formData.itens_especiais || 0,
+        execucao: formData.execucao || 0,
+        logistica: formData.logistica || 0, 
+        coeficiente_margem: formData.coeficiente_margem || 0,
       });
     }
+  }
+
+  setCustoTotal(form, index: number) {
+    const soma_total =
+      form.marcenaria +
+      form.revestimentos_epeciais +
+      form.estrutura_metalicas +
+      form.material_mezanino +
+      form.fechamento_vidro +
+      form.vitrines +
+      form.acrilico +
+      form.mobiliario +
+      form.refrigeracao_climatizacao +
+      form.paisagismo +
+      form.comunicacao_visual +
+      form.equipamento_audio_visual +
+      form.itens_especiais +
+      form.execucao +
+      form.logistica;
+
+    this.budgetForms[index].controls.custo_total.setValue(soma_total, { emitEvent: false });
+  }
+
+  setTodasPorcentagens(index: number) {
+    this.setPorcentgaem("marcenaria", index);
+    this.setPorcentgaem("revestimentos_epeciais", index);
+    this.setPorcentgaem("estrutura_metalicas", index);
+    this.setPorcentgaem("material_mezanino", index);
+    this.setPorcentgaem("fechamento_vidro", index);
+    this.setPorcentgaem("vitrines", index);
+    this.setPorcentgaem("acrilico", index);
+    this.setPorcentgaem("mobiliario", index);
+    this.setPorcentgaem("refrigeracao_climatizacao", index);
+    this.setPorcentgaem("paisagismo", index);
+    this.setPorcentgaem("comunicacao_visual", index);
+    this.setPorcentgaem("equipamento_audio_visual", index);
+    this.setPorcentgaem("itens_especiais", index);
+    this.setPorcentgaem("execucao", index);
+    this.setPorcentgaem("logistica", index);
+  }
+
+  setTodasComissoesBonificacoes(index: number) {
+    this.setComissoesBonificacoes("comissao_vendas", index, 0.05);
+    this.setComissoesBonificacoes("bonificacao_projeto_interno", index, 0.03);
+    this.setComissoesBonificacoes("bonificacao_orcamento", index, 0.01);
+    this.setComissoesBonificacoes("bonificacao_gerente_producao", index, 0.01);
+    this.setComissoesBonificacoes("bonificacao_producao", index, 0.01);
+    this.setComissoesBonificacoes("bonificacao_detalhamento", index, 0.005);
+  }
+
+  setPorcentgaem(field: string, index: number) {
+    const control: AbstractControl = this.budgetForms[index].get(field);
+
+    const controlTotal: AbstractControl = this.budgetForms[index].get("custo_total");
+
+    const controlPorcentagem: AbstractControl = this.budgetForms[index].get(field + "_porcentagem");
+
+    const value = control.value;
+
+    const valueTotal = controlTotal.value;
+
+    if (valueTotal <= 0) {
+      controlPorcentagem.setValue(0, { emitEvent: false });
+
+      return;
+    }
+
+    const total = value / valueTotal;
+
+    const porcentagem = total * 100;
+
+    controlPorcentagem.setValue(parseFloat(porcentagem.toFixed(2)), { emitEvent: false });
+  }
+
+  setTotalEstande(index: number) {
+    const controlTotal: AbstractControl = this.budgetForms[index].get("custo_total");
+
+    const controlCoeficienteMargem: AbstractControl = this.budgetForms[index].get("coeficiente_margem");
+
+    const controlTotalEstande: AbstractControl = this.getControlTotalEstande(index);
+
+    const valueTotal = controlTotal.value;
+
+    const coeficienteMargem = controlCoeficienteMargem.value;
+
+    const total = valueTotal * coeficienteMargem;
+
+    controlTotalEstande.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
+  }
+
+  setTotalImposto(index: number) {
+    const coeficienteMargem = 0.15;
+
+    const controlImposto: AbstractControl = this.budgetForms[index].get("imposto");
+
+    const totalEstande = this.geTotalEstande(index);
+
+    const total = totalEstande * coeficienteMargem;
+
+    controlImposto.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
+  }
+  
+  setComissoesBonificacoes(field: string, index: number, coeficienteMargem: number) {
+    const controlComissao: AbstractControl = this.budgetForms[index].get(field);
+
+    const totalEstande = this.geTotalEstande(index);
+
+    const total = totalEstande * 0.7 * coeficienteMargem;
+
+    controlComissao.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
+  }
+
+  setTotalGeralEstande(index: number) {
+    const controlGeralTotal: AbstractControl = this.budgetForms[index].get("total_geral_estande");
+
+    const totalEstande = this.geTotalEstande(index);
+
+    const totalDiversosOperacional = this.geTotalDiversosOperacional(index);
+
+    const totalFreteLogistica = this.geTotalFreteLogistica(index);
+
+    const total = totalEstande + totalDiversosOperacional + totalFreteLogistica;
+
+    controlGeralTotal.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
+  }
+  
+  setTotalLiquidoThink(index: number) {
+    const controlLiquidoThink: AbstractControl = this.budgetForms[index].get("liquido_think");
+
+    const totalEstande = this.geTotalEstande(index);
+
+    const custoTotal = this.getCustoTotal(index);
+
+    const imposto = this.getTotalImposto(index);
+
+    const comissaoVendas = this.getTotalComissaoVendas(index);
+
+    const bonificacaoProjetistaInterno = this.getTotalBonificacaoProjetistaInterno(index);
+
+    const total = totalEstande - (custoTotal + imposto + comissaoVendas + bonificacaoProjetistaInterno);
+
+    controlLiquidoThink.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
+  }
+
+  setMargemLucro(index: number) {
+    const controlMargemLiquido: AbstractControl = this.budgetForms[index].get("margem_lucro");
+
+    const liquidoThink = this.getTotalLiquidoThink(index);
+
+    const totalEstande = this.geTotalEstande(index);
+
+    if (!totalEstande) {
+      return;
+    }
+
+    const total = liquidoThink / totalEstande;
+
+    const porcentagem = total * 100;
+
+    controlMargemLiquido.setValue(parseFloat(porcentagem.toFixed(2)), { emitEvent: false });
+  }
+
+  getControlTotalEstande(index: number): AbstractControl {
+    return this.budgetForms[index].get("total_estande");
+  }
+
+  geTotalEstande(index: number): number {
+    return this.getControlTotalEstande(index).value;
+  }
+
+  geTotalDiversosOperacional(index: number): number {
+    return this.budgetForms[index].get("diversos_operacional").value;
+  }
+
+  geTotalFreteLogistica(index: number): number {
+    return this.budgetForms[index].get("frete_logistica").value;
+  }
+
+  getCustoTotal(index: number): number {
+    return this.budgetForms[index].get("custo_total").value;
+  }
+
+  getTotalImposto(index: number): number {
+    return this.budgetForms[index].get("imposto").value;
+  }
+
+  getTotalComissaoVendas(index: number): number {
+    return this.budgetForms[index].get("comissao_vendas").value;
+  }
+
+  getTotalBonificacaoProjetistaInterno(index: number): number {
+    return this.budgetForms[index].get("bonificacao_projeto_interno").value;
+  }
+
+  getTotalLiquidoThink(index: number): number {
+    return this.budgetForms[index].get("liquido_think").value;
+  }
+
+  toogleVisibilty(control: AbstractControl) {
+    control.setValue(!control.value);
   }
 
   getTaskByProjectFiles(index) {
@@ -144,11 +484,16 @@ export class BudgetFormComponent implements OnInit {
 
     const task = this.sortedTasks[index];
 
-    if (!this.getTaskByProjectFiles(index) || !this.getTaskByProjectFiles(index).responsible) {
+    if (
+      !this.getTaskByProjectFiles(index) ||
+      !this.getTaskByProjectFiles(index).responsible
+    ) {
       return;
     }
 
-    return task.updated_by ? task.updated_by : this.getTaskByProjectFiles(index).responsible.name;
+    return task.updated_by
+      ? task.updated_by
+      : this.getTaskByProjectFiles(index).responsible.name;
   }
 
   getLastPersonWhoModifiedDate(index) {
@@ -159,19 +504,23 @@ export class BudgetFormComponent implements OnInit {
     const task = this.sortedTasks[index];
 
     if (!task && this.getTaskByProjectFiles(index)) {
-        return this.getTaskByProjectFiles(index).updated_at;;
+      return this.getTaskByProjectFiles(index).updated_at;
     }
 
-    return task.updated_at ? task.updated_at : '';
+    return task.updated_at ? task.updated_at : "";
   }
 
   sendValues(budgetForm: FormGroup) {
-    budgetForm.updateValueAndValidity()
+    budgetForm.controls.final_value.setValue(budgetForm.controls.total_geral_estande.value);
+
+    console.log(budgetForm);
     
+    budgetForm.updateValueAndValidity();
+
     if (ErrorHandler.formIsInvalid(budgetForm)) {
-      this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
-        duration: 5000
-      })
+      this.snackBar.open("Por favor, preencha corretamente os campos.", "", {
+        duration: 5000,
+      });
       return;
     }
 
@@ -183,7 +532,7 @@ export class BudgetFormComponent implements OnInit {
       if (this.backscreen === 'agenda') {
         this.router.navigate(['schedule'])
         return;
-      } 
+      }
 
       this.router.navigateByUrl(`/jobs/edit/${this.job.id}?tab=check-in`)
     })
@@ -191,7 +540,7 @@ export class BudgetFormComponent implements OnInit {
 
   formatFinalValue(budgetForm: FormGroup) {
     const finalValue = this.finalValue.nativeElement.value;
-    budgetForm.get('final_value').setValue(finalValue.replace('R$ ', ''));
+    budgetForm.get("final_value").setValue(finalValue.replace("R$ ", ""));
   }
 
   allowOnlyNumbers(event: KeyboardEvent) {
@@ -205,182 +554,58 @@ export class BudgetFormComponent implements OnInit {
 
   sortTasks() {
     this.sortedTasks = this.job.tasks.filter((task) => {
-      return task.job_activity.initial == 1
+      return task.job_activity.initial == 1;
     });
     let adds = [];
-    this.sortedTasks.filter((parentTask => {
+    this.sortedTasks.filter((parentTask) => {
       let temp = this.job.tasks.filter((task) => {
-        return parentTask.job_activity.modification_id == task.job_activity_id
-          || parentTask.job_activity.option_id == task.job_activity_id
+        return (
+          parentTask.job_activity.modification_id == task.job_activity_id ||
+          parentTask.job_activity.option_id == task.job_activity_id
+        );
       });
-      adds = adds.concat(temp.reverse())
-    }));
+      adds = adds.concat(temp.reverse());
+    });
     this.sortedTasks = this.sortedTasks.concat(adds).reverse();
 
     this.sortedTasks.forEach((task, index) => {
-      if(task.project_files.length > 0 && this.expandedIndex == null) {
-        this.expandedIndex = index
+      if (task.project_files.length > 0 && this.expandedIndex == null) {
+        this.expandedIndex = index;
       }
-    })
+    });
 
-    console.log(this.sortedTasks)
+    console.log(this.sortedTasks);
   }
 
   loadTaskFromRoute() {
-    
     this.route.queryParams.subscribe((params) => {
-      let taskId = params['taskId']
+      let taskId = params["taskId"];
       this.sortedTasks.forEach((task, index) => {
-        if(task.id == taskId) {
-          this.expandedIndex = index
+        if (task.id == taskId) {
+          this.expandedIndex = index;
         }
+      });
+    });
+  }
+
+  carregarFuncionarios() {
+    this.employeeService
+      .employees({
+        paginate: false,
+        deleted: true,
       })
-    })
+      .subscribe((dataInfo) => {
+        let employees = dataInfo.pagination.data;
+        this.attendances = employees.filter((employee) => {
+          return (
+            employee.department.description === "Atendimento" ||
+            employee.department.description === "Diretoria"
+          );
+        });
+      });
   }
 
-  /* ngOnInit() {
-    this.isAdmin = this.authService.hasAccess('budget/save')
-    this.isAttendance = this.job.attendance_id == this.authService.currentUser().employee.id
-
-    this.budget = this.task.budget
-
-    this.budgetForm = this.formBuilder.group({
-      id: this.formBuilder.control({ value: (this.budget ? this.budget.id : ''), disabled: true }),
-      task_id: this.formBuilder.control({ value: (this.budget ? this.budget.task_id : ''), disabled: true }),
-      gross_value: this.formBuilder.control((this.budget ? this.budget.gross_value : ''), [Validators.required]),
-      bv_value: this.formBuilder.control((this.budget ? this.budget.bv_value : ''), [Validators.required]),
-      equipments_value: this.formBuilder.control((this.budget ? this.budget.equipments_value : ''), [Validators.required]),
-      optional_value: this.formBuilder.control((this.budget ? this.budget.optional_value : '')),
-      logistics_value: this.formBuilder.control((this.budget ? this.budget.logistics_value : ''), [Validators.required]),
-      sales_commission_value: this.formBuilder.control((this.budget ? this.budget.sales_commission_value : '')),
-      tax_aliquot: this.formBuilder.control({ value: (this.budget ? this.budget.tax_aliquot : '16.33'), disabled: true }),
-      tax_value: this.formBuilder.control({ value: '', disabled: true }),
-      others_value: this.formBuilder.control((this.budget ? this.budget.others_value : '')),
-      markup_aliquot: this.formBuilder.control((this.budget ? this.budget.markup_aliquot : '35'), [
-        Validators.max(100)
-      ]),
-      markup_value: this.formBuilder.control({ value: '', disabled: true }),
-      discount_value: this.formBuilder.control({value: '', disabled: true })
-    })
-
-    if(this.isAttendance) {
-      this.budgetForm.disable()
-    }
-
-    this.setFormConfig()
-    this.addEvent()
-    this.calculate()
+  compareAttendance(var1: Employee, var2: Employee) {
+    return var1.id === var2.id;
   }
-
-  addEvent() {
-    this.subscription = this.budgetForm.valueChanges
-    .pipe(distinctUntilChanged())
-    .subscribe(() => {
-      this.calculate()
-    })
-  }
-
-  calculate() {
-    let controls = this.budgetForm.controls
-    let discount_aliquot: number = 0
-    let cost = (
-      this.getNumber('gross_value')
-      + this.getNumber('optional_value')
-      + this.getNumber('bv_value')
-      + this.getNumber('equipments_value')
-      + this.getNumber('logistics_value')
-      + this.getNumber('sales_commission_value')
-      + this.getNumber('others_value')
-    )
-
-    this.total = parseFloat((cost * ((100 + this.getNumber('markup_aliquot')) / 100)).toFixed(2))
-    this.subscription.unsubscribe()
-
-    if(this.total > 0) {
-      discount_aliquot = this.getNumber('markup_aliquot') >= 35 ? 0.00 : 35.00 - this.getNumber('markup_aliquot')
-
-      controls.discount_value.setValue((this.total * (discount_aliquot) / 100).toFixed(2))
-      controls.tax_value.setValue((this.total / parseFloat(controls.tax_aliquot.value)).toFixed(2))
-      controls.markup_value.setValue((cost * this.getNumber('markup_aliquot') / 100).toFixed(2))
-    } else {
-      controls.tax_value.setValue('')
-      controls.discount_value.setValue('')
-      controls.markup_value.setValue('')
-    }
-
-    this.addEvent()
-  }
-
-  getNumber(field: string): number {
-    let val = this.budgetForm.controls[field].value
-    val = val != null && val != '' && val != '0' ? val : 0
-    return parseFloat(val)
-  }
-
-  setFormConfig() {
-    if(this.typeForm == 'show') {
-      this.budgetForm.disable()
-    } else if(this.budget != null) {
-      this.typeForm = 'edit'
-    } else {
-      this.typeForm = 'new'
-    }
-  }
-
-  save() {
-    this.budgetForm.updateValueAndValidity()
-    let budget = this.budgetForm.getRawValue()
-    budget.task = this.task
-
-    if (ErrorHandler.formIsInvalid(this.budgetForm)) {
-      this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
-        duration: 5000
-      })
-      return;
-    }
-
-    this.budgetService.save(budget).subscribe(data => {
-      if (!data.status) {
-        this.snackBar.open(data.message, '', {
-          duration: 3000
-        })
-        return
-      }
-
-      this.snackBar.open('Orçamento salvo com sucesso!', '', {
-        duration: 3000
-      })
-      this.budget = data.budget as Budget
-      this.setFormConfig()
-    })
-  }
-
-  edit() {
-    this.budgetForm.updateValueAndValidity()
-    let budget = this.budgetForm.getRawValue()
-    budget.task = this.task
-    budget.id = this.budget.id
-
-    if (ErrorHandler.formIsInvalid(this.budgetForm)) {
-      this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
-        duration: 5000
-      })
-      return;
-    }
-
-    this.budgetService.edit(budget).subscribe(data => {
-      if (!data.status) {
-        let snack = this.snackBar.open(data.message, '', {
-          duration: 3000
-        })
-        return
-      }
-
-      let snack = this.snackBar.open('Orçamento editado com sucesso!', '', {
-        duration: 3000
-      })
-      this.budget = data.budget as Budget
-      this.setFormConfig()
-    })
-  } */
 }

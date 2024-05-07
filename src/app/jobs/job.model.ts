@@ -89,4 +89,5 @@ export class Job {
         percentage: number;
     }
     critical?: boolean;
+    project_conclusion?: Date;
 }
