@@ -168,7 +168,7 @@ export class BudgetFormComponent implements OnInit {
         bonificacao_gerente_producao: this.formBuilder.control({ value: 0, disabled: true }, []),
         bonificacao_producao: this.formBuilder.control({ value: 0, disabled: true }, []),
         bonificacao_detalhamento: this.formBuilder.control({ value: 0, disabled: true }, []),
-        coeficiente_margem: this.formBuilder.control({ value: null, disabled: false }, [Validators.required]),
+        coeficiente_margem: this.formBuilder.control({ value: 0, disabled: false }, []),
         total_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         diversos_operacional: this.formBuilder.control({ value: 0, disabled: false }, []),
@@ -254,7 +254,7 @@ export class BudgetFormComponent implements OnInit {
         itens_especiais: formData.itens_especiais || 0,
         execucao: formData.execucao || 0,
         logistica: formData.logistica || 0, 
-        coeficiente_margem: formData.coeficiente_margem || null,
+        coeficiente_margem: formData.coeficiente_margem || 0,
       });
     }
   }
@@ -524,18 +524,18 @@ export class BudgetFormComponent implements OnInit {
       return;
     }
 
-    // this.taskService.changeValues({...budgetForm.value, task_id: this.taskId}).subscribe(data => {
-    //   this.snackBar.open(data.message, '', {
-    //     duration: data.status ? 1000 : 5000
-    //   })
+    this.taskService.changeValues({...budgetForm.value, task_id: this.taskId}).subscribe(data => {
+      this.snackBar.open(data.message, '', {
+        duration: data.status ? 1000 : 5000
+      })
 
-    //   if (this.backscreen === 'agenda') {
-    //     this.router.navigate(['schedule'])
-    //     return;
-    //   }
+      if (this.backscreen === 'agenda') {
+        this.router.navigate(['schedule'])
+        return;
+      }
 
-    //   this.router.navigateByUrl(`/jobs/edit/${this.job.id}?tab=check-in`)
-    // })
+      this.router.navigateByUrl(`/jobs/edit/${this.job.id}?tab=check-in`)
+    })
   }
 
   formatFinalValue(budgetForm: FormGroup) {
