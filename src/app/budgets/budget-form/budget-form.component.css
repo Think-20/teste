@@ -137,6 +137,10 @@
   color: #cf4949;
 }
 
+.perda-important {
+  color: #cf4949 !important;
+}
+
 .neutro {
   color: #24b8df;
 }
@@ -173,7 +177,16 @@ mat-expansion-panel-header {
   font-weight: 500;
 }
 
-
 .mat-suffix {
   color: #aaa;
+}
+
+.saldo-total {
+  font-size: 16px;
+  color: #727272;
+}
+
+.orcamento-campos.extrato input,
+.orcamento-campos.racional-custos input {
+  color: #218f67;
 }

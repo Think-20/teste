@@ -158,7 +158,7 @@ export class BudgetFormComponent implements OnInit {
         bonificacao_gerente_producao: this.formBuilder.control({ value: 0, disabled: true }, []),
         bonificacao_producao: this.formBuilder.control({ value: 0, disabled: true }, []),
         bonificacao_detalhamento: this.formBuilder.control({ value: 0, disabled: true }, []),
-        coeficiente_margem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        coeficiente_margem: this.formBuilder.control({ value: null, disabled: false }, [Validators.required]),
         total_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         diversos_operacional: this.formBuilder.control({ value: 0, disabled: false }, []),
@@ -244,7 +244,7 @@ export class BudgetFormComponent implements OnInit {
         itens_especiais: formData.itens_especiais || 0,
         execucao: formData.execucao || 0,
         logistica: formData.logistica || 0, 
-        coeficiente_margem: formData.coeficiente_margem || 0,
+        coeficiente_margem: formData.coeficiente_margem || null,
       });
     }
   }

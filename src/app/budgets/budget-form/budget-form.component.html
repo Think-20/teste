@@ -19,7 +19,7 @@
       <div class="orcamento d-flex justify-content-center mt-4rem">
         <mat-card class="col-md-6">
             <div class="orcamento-header d-flex justify-content-center">
-                <h3>Pré Orçamento</h3>
+                <h3>Pré orçamento</h3>
             </div>
       
             <div class="orcamento-campos">
@@ -198,7 +198,7 @@
             <h3>% Total</h3>
         </div>
       
-        <div class="orcamento-campos">
+        <div class="orcamento-campos extrato">
           <div class="col-md-12 p-0">
               <mat-form-field class="col-md-10">
                 <input
@@ -501,8 +501,8 @@
             </div>
         </div>
       
-        <div class="orcamento-footer d-flex justify-content-end">
-          Saldo total: R$ {{ budgetForm.controls.custo_total.value | currency: 'BRL' }}
+        <div class="orcamento-footer d-flex justify-content-end saldo-total">
+          Saldo total: <span class="lucro" style="font-weight: 500;">{{ budgetForm.controls.custo_total.value | currency: 'BRL' }}</span>
         </div>
       </mat-card>
       
@@ -597,7 +597,7 @@
               <h3>% Total</h3>
           </div>
       
-          <div class="orcamento-campos">
+          <div class="orcamento-campos racional-custos">
             <div class="col-md-12">
                 <mat-form-field>
                   <input
@@ -704,6 +704,10 @@
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
                     formControlName="coeficiente_margem">
+
+                    <mat-error>
+                      Obrigatório
+                    </mat-error>
                 </mat-form-field>
             </div>
             <div class="col-md-12">
@@ -711,7 +715,7 @@
                   <input
                     matInput
                     type="text"
-                    class="text-right"
+                    class="text-right perda-important"
                     placeholder="Total Estande"
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
