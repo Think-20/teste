@@ -185,8 +185,8 @@
         </mat-card>
       </div>
       
-      <div class="orcamento d-flex justify-content-center">
-      <mat-card class="col-md-7">
+      <div class="orcamento d-flex justify-content-center" [class.ajuste-margin]="!isDiretoria">
+      <mat-card class="col-md-7" [class.col-md-12]="!isDiretoria">
         <div class="orcamento-header d-flex justify-content-between">
             <h3>Extrato</h3>
       
@@ -502,11 +502,11 @@
         </div>
       
         <div class="orcamento-footer d-flex justify-content-end saldo-total">
-          Saldo total: <span class="lucro" style="font-weight: 500;">{{ budgetForm.controls.custo_total.value | currency: 'BRL' }}</span>
+          Saldo total: <span class="lucro" style="font-weight: 500; display: contents;">{{ budgetForm.controls.custo_total.value | currency: 'BRL' }}</span>
         </div>
       </mat-card>
       
-      <div class="col-md-5 orcamento-orcado">
+      <div class="col-md-5 orcamento-orcado" *ngIf="isDiretoria">
         <div class="orcamento-valores">
             <div class="orcamento-valor">
                 <div class="orcamento-valores-header d-flex justify-content-between">
@@ -699,7 +699,7 @@
                   <input
                     matInput
                     type="text"
-                    class="text-right"
+                    class="text-right lucro"
                     placeholder="Coeficiente de Margem"
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"

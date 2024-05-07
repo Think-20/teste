@@ -14,6 +14,7 @@ import { Job } from "app/jobs/job.model";
 import { TaskService } from "app/schedule/task.service";
 import { Employee } from "app/employees/employee.model";
 import { EmployeeService } from "app/employees/employee.service";
+import { AuthService } from "app/login/auth.service";
 
 @Component({
   selector: "cb-budget-form",
@@ -33,6 +34,7 @@ export class BudgetFormComponent implements OnInit {
   taskId;
   backscreen: string;
   attendances: Employee[];
+  isDiretoria = false;
   constructor(
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
@@ -40,10 +42,13 @@ export class BudgetFormComponent implements OnInit {
 
     private route: ActivatedRoute,
     private router: Router,
-    private employeeService: EmployeeService
+    private employeeService: EmployeeService,
+    private authService: AuthService,
   ) {}
 
   ngOnInit(): void {
+    this.checkUserDepartment();
+
     this.route.queryParams.subscribe((params) => {
       const taskId = params["taskId"];
       this.taskId = taskId;
@@ -54,6 +59,11 @@ export class BudgetFormComponent implements OnInit {
     this.sortTasks();
     this.loadTaskFromRoute();
     this.createForm();
+  }
+
+  checkUserDepartment() {
+    const currentUser = this.authService.currentUser();
+    this.isDiretoria = currentUser.employee.department_id === 1;
   }
 
   createForm() {

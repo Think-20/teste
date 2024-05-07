@@ -186,7 +186,11 @@ mat-expansion-panel-header {
   color: #727272;
 }
 
-.orcamento-campos.extrato input,
-.orcamento-campos.racional-custos input {
+.orcamento-campos.extrato input {
   color: #218f67;
+}
+
+.ajuste-margin {
+  margin-left: 3rem;
+  margin-right: 3rem;
 }
