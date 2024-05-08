@@ -94,7 +94,7 @@ export class BudgetFormComponent implements OnInit {
         event: this.formBuilder.control({ value: "", disabled: true }, [Validators.required]),
         place: this.formBuilder.control({ value: "", disabled: false }, [Validators.required]),
         creation_responsible: this.formBuilder.control({ value: "", disabled: true }, [Validators.required]),
-        producer: this.formBuilder.control({ value: "", disabled: false }, [Validators.required]),
+        producer: this.formBuilder.control({ value: "", disabled: false }, []),
 
         //event details
         dt_event: this.formBuilder.control({ value: "", disabled: false }, []),
