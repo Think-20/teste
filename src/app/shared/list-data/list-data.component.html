@@ -54,6 +54,11 @@
             <mat-form-field *ngIf="filterField.type == 'input'">
               <input matInput [placeholder]="filterField.placeholder" [formControlName]="filterField.formcontrolname">
             </mat-form-field>
+            <mat-form-field *ngIf="filterField.type == 'date'">
+              <input [matDatepicker]="dt" [formControlName]="filterField.formcontrolname" matInput [placeholder]="filterField.placeholder">
+              <mat-datepicker-toggle matSuffix [for]="dt"></mat-datepicker-toggle>
+              <mat-datepicker #dt></mat-datepicker>
+            </mat-form-field>
             <cb-stars *ngIf="filterField.type == 'stars'" [label]="filterField.placeholder"
               [rate]="filterField.starsRate" [input]="searchForm.controls[filterField.formcontrolname]">
               <input [formControlName]="filterField.formcontrolname" matInput>
