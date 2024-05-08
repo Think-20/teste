@@ -90,4 +90,6 @@ export class Job {
     }
     critical?: boolean;
     project_conclusion?: Date;
+
+    producer?: string;
 }
