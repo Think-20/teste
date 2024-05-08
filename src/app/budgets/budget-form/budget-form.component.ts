@@ -100,8 +100,8 @@ export class BudgetFormComponent implements OnInit {
         dt_event: this.formBuilder.control({ value: "", disabled: false }, []),
         budget_value: this.formBuilder.control({ value: "", disabled: true }, [Validators.required, Validators.maxLength(13)]),
         area: this.formBuilder.control({ value: "", disabled: true }, []),
-        dt_inicio_event: this.formBuilder.control({ value: "", disabled: false }, []),
         mezanino: this.formBuilder.control({ value: "", disabled: false }, []),
+        dt_inicio_event: this.formBuilder.control({ value: "", disabled: false }, []),
         dt_montagem: this.formBuilder.control({ value: "", disabled: false }, []),
         dt_fim_event: this.formBuilder.control({ value: "", disabled: false }, []),
         dt_desmontagem: this.formBuilder.control({ value: "", disabled: false }, []),
@@ -232,12 +232,17 @@ export class BudgetFormComponent implements OnInit {
         client: this.job.client ? this.job.client.fantasy_name : { fantasy_name: this.job.not_client },
         event: this.job.event,
         place: this.job.place,
-        creation_responsible:
-        this.job.creation_responsible != null ? this.job.creation_responsible.name: "Externo",
+        creation_responsible: this.job.creation_responsible != null ? this.job.creation_responsible.name: "Externo",
+        producer: this.job.producer,
 
         //event details
         budget_value: this.job.budget_value,
         area: this.job.area > 0 ? this.job.area.toString().replace(".", ",") : "",
+        mezanino: formData.mezanino,
+        dt_inicio_event: formData.dt_inicio_event,
+        dt_montagem: formData.dt_montagem,
+        dt_fim_event: formData.dt_fim_event,
+        dt_desmontagem: formData.dt_desmontagem,
 
         // valores orçamento
         marcenaria: formData.marcenaria || 0,
@@ -391,7 +396,7 @@ export class BudgetFormComponent implements OnInit {
     if (total == valorFixo) {
       return;
     }
-    
+
     controlGeralTotal.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
   }
   

@@ -61,4 +61,10 @@ export class Task {
   frete_logistica?: number
   diversos_operacional?: number
   coeficiente_margem?: number
+
+  mezanino: number
+  dt_inicio_event: Date
+  dt_montagem: Date
+  dt_fim_event: Date
+  dt_desmontagem: Date
 }

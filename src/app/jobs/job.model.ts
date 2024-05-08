@@ -89,4 +89,6 @@ export class Job {
         percentage: number;
     }
     project_conclusion?: Date;
+
+    producer?: string;
 }
