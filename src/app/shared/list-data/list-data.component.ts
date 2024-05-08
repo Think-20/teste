@@ -69,6 +69,7 @@ export class ListDataComponent implements OnInit {
     this.footerData = this.listData.footer
 
     this.filterFields = this.headerData.filterFields
+    console.log(this.filterFields)
     this.pageIndex = this.listDataService.getIndex(this.page)
     this.createForm()
     this.loadInitialData()

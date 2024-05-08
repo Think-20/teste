@@ -68,6 +68,7 @@ export class ClientListComponent implements OnInit {
             client_status: formValue.client_status,
             client_type: formValue.client_type,
             rate: formValue.rate,
+            dt_cadastro: formValue.dt_cadastro,
           }
         },
         filterFields: [
@@ -94,6 +95,14 @@ export class ClientListComponent implements OnInit {
             formcontrolname: 'client_status',
             placeholder: 'Status',
             type: 'select',
+            optionDescription: 'description',
+          }),
+          mF({
+            arrayValues: this.clientStatusService.status().toPromise(),
+            class: 'col-md-3',
+            formcontrolname: 'dt_cadastro',
+            placeholder: 'Data de cadastro',
+            type: 'date',
             optionDescription: 'description',
           }),
           mF({
@@ -125,6 +134,11 @@ export class ClientListComponent implements OnInit {
           {
             style: { width: '25%' },
             label: 'Atendimento',
+            showData: (client: Client) => { return client.employee.name }
+          },
+          {
+            style: { width: '25%' },
+            label: 'Data de cadastro',
             showData: (client: Client) => { return client.employee.name }
           },
           {
