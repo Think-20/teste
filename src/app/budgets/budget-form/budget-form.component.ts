@@ -388,6 +388,10 @@ export class BudgetFormComponent implements OnInit {
 
     const total = totalEstande + totalBonificacaoOrcamento + totalBonificacaoGerenteProducao + totalBonificacaoProducao + valorFixo;
 
+    if (total == valorFixo) {
+      return;
+    }
+    
     controlGeralTotal.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
   }
   
