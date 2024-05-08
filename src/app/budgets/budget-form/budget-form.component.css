@@ -190,6 +190,10 @@ mat-expansion-panel-header {
   color: #218f67;
 }
 
+.orcamento-campos.extrato input.porcentagem {
+  color: rgba(0, 0, 0, .38) !important;
+}
+
 .ajuste-margin {
   margin-left: 3rem;
   margin-right: 3rem;

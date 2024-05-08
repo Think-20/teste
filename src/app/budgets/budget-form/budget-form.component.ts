@@ -149,8 +149,11 @@ export class BudgetFormComponent implements OnInit {
         execucao: this.formBuilder.control({ value: 0, disabled: false }, []),
         execucao_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
-        logistica: this.formBuilder.control({ value: 0, disabled: false }, []),
-        logistica_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        diversos_operacional: this.formBuilder.control({ value: 0, disabled: false }, []),
+        diversos_operacional_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        frete_logistica: this.formBuilder.control({ value: 0, disabled: false }, []),
+        frete_logistica_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         custo_total: this.formBuilder.control({ value: 0, disabled: true }, []),
 
@@ -171,8 +174,6 @@ export class BudgetFormComponent implements OnInit {
         coeficiente_margem: this.formBuilder.control({ value: 0, disabled: false }, []),
         total_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
 
-        diversos_operacional: this.formBuilder.control({ value: 0, disabled: false }, []),
-        frete_logistica: this.formBuilder.control({ value: 0, disabled: false }, []),
         opcional_equipamento_audio_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
         total_geral_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
         liquido_think: this.formBuilder.control({ value: 0, disabled: true }, []),
@@ -253,7 +254,8 @@ export class BudgetFormComponent implements OnInit {
         equipamento_audio_visual: formData.equipamento_audio_visual || 0,
         itens_especiais: formData.itens_especiais || 0,
         execucao: formData.execucao || 0,
-        logistica: formData.logistica || 0, 
+        frete_logistica: formData.frete_logistica || 0,
+        diversos_operacional: formData.diversos_operacional || 0,
         coeficiente_margem: formData.coeficiente_margem || 0,
       });
     }
@@ -275,7 +277,8 @@ export class BudgetFormComponent implements OnInit {
       form.equipamento_audio_visual +
       form.itens_especiais +
       form.execucao +
-      form.logistica;
+      form.frete_logistica +
+      form.diversos_operacional;
 
     this.budgetForms[index].controls.custo_total.setValue(soma_total, { emitEvent: false });
   }
@@ -295,7 +298,8 @@ export class BudgetFormComponent implements OnInit {
     this.setPorcentgaem("equipamento_audio_visual", index);
     this.setPorcentgaem("itens_especiais", index);
     this.setPorcentgaem("execucao", index);
-    this.setPorcentgaem("logistica", index);
+    this.setPorcentgaem("frete_logistica", index);
+    this.setPorcentgaem("diversos_operacional", index);
   }
 
   setTodasComissoesBonificacoes(index: number) {
@@ -374,11 +378,15 @@ export class BudgetFormComponent implements OnInit {
 
     const totalEstande = this.geTotalEstande(index);
 
-    const totalDiversosOperacional = this.geTotalDiversosOperacional(index);
+    const totalBonificacaoOrcamento = this.geTotalBonificacaoOrcamento(index);
 
-    const totalFreteLogistica = this.geTotalFreteLogistica(index);
+    const totalBonificacaoGerenteProducao = this.geTotalBonificacaoGerenteProducao(index);
 
-    const total = totalEstande + totalDiversosOperacional + totalFreteLogistica;
+    const totalBonificacaoProducao = this.geTotalBonificacaoProducao(index);
+    
+    const valorFixo = 3865.55;
+
+    const total = totalEstande + totalBonificacaoOrcamento + totalBonificacaoGerenteProducao + totalBonificacaoProducao + valorFixo;
 
     controlGeralTotal.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
   }
@@ -427,12 +435,16 @@ export class BudgetFormComponent implements OnInit {
     return this.getControlTotalEstande(index).value;
   }
 
-  geTotalDiversosOperacional(index: number): number {
-    return this.budgetForms[index].get("diversos_operacional").value;
+  geTotalBonificacaoOrcamento(index: number): number {
+    return this.budgetForms[index].get("bonificacao_orcamento").value;
   }
 
-  geTotalFreteLogistica(index: number): number {
-    return this.budgetForms[index].get("frete_logistica").value;
+  geTotalBonificacaoGerenteProducao(index: number): number {
+    return this.budgetForms[index].get("bonificacao_gerente_producao").value;
+  }
+
+  geTotalBonificacaoProducao(index: number): number {
+    return this.budgetForms[index].get("bonificacao_producao").value;
   }
 
   getCustoTotal(index: number): number {
@@ -511,8 +523,6 @@ export class BudgetFormComponent implements OnInit {
   }
 
   sendValues(budgetForm: FormGroup) {
-    budgetForm.controls.final_value.setValue(budgetForm.controls.total_geral_estande.value);
-
     console.log(budgetForm);
     
     budgetForm.updateValueAndValidity();
