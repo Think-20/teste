@@ -62,9 +62,10 @@ export class Task {
   diversos_operacional?: number
   coeficiente_margem?: number
 
-  mezanino: number
-  dt_inicio_event: Date
-  dt_montagem: Date
-  dt_fim_event: Date
-  dt_desmontagem: Date
+  mezanino?: number
+  dt_inicio_event?: Date
+  dt_montagem?: Date
+  dt_fim_event?: Date
+  dt_desmontagem?: Date
+  dt_event?: Date
 }
