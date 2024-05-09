@@ -70,22 +70,22 @@ export class BudgetFormComponent implements OnInit {
     this.budgetForms = this.sortedTasks.map(() =>
       this.formBuilder.group({
         id: this.formBuilder.control("", [Validators.required]),
-        orders_value: this.formBuilder.control("", []),
-        attendance_value: this.formBuilder.control("", []),
-        creation_value: this.formBuilder.control("", []),
-        pre_production_value: this.formBuilder.control("", []),
-        production_value: this.formBuilder.control("", []),
-        details_value: this.formBuilder.control("", []),
-        budget_si_value: this.formBuilder.control("", []),
-        bv_value: this.formBuilder.control("", []),
-        over_rates_value: this.formBuilder.control("", []),
-        discounts_value: this.formBuilder.control("", []),
-        taxes_value: this.formBuilder.control("", []),
-        logistics_value: this.formBuilder.control("", []),
-        equipment_value: this.formBuilder.control("", []),
-        total_cost_value: this.formBuilder.control("", []),
-        gross_profit_value: this.formBuilder.control("", []),
-        profit_value: this.formBuilder.control("", []),
+        // orders_value: this.formBuilder.control("", []),
+        // attendance_value: this.formBuilder.control("", []),
+        // creation_value: this.formBuilder.control("", []),
+        // pre_production_value: this.formBuilder.control("", []),
+        // production_value: this.formBuilder.control("", []),
+        // details_value: this.formBuilder.control("", []),
+        // budget_si_value: this.formBuilder.control("", []),
+        // bv_value: this.formBuilder.control("", []),
+        // over_rates_value: this.formBuilder.control("", []),
+        // discounts_value: this.formBuilder.control("", []),
+        // taxes_value: this.formBuilder.control("", []),
+        // logistics_value: this.formBuilder.control("", []),
+        // equipment_value: this.formBuilder.control("", []),
+        // total_cost_value: this.formBuilder.control("", []),
+        // gross_profit_value: this.formBuilder.control("", []),
+        // profit_value: this.formBuilder.control("", []),
         final_value: this.formBuilder.control("", [Validators.required]),
 
         //job details
@@ -243,6 +243,7 @@ export class BudgetFormComponent implements OnInit {
         dt_montagem: formData.dt_montagem,
         dt_fim_event: formData.dt_fim_event,
         dt_desmontagem: formData.dt_desmontagem,
+        dt_event: formData.dt_event,
 
         // valores orçamento
         marcenaria: formData.marcenaria || 0,
@@ -283,7 +284,7 @@ export class BudgetFormComponent implements OnInit {
       form.itens_especiais +
       form.execucao +
       form.frete_logistica +
-      form.diversos_operacional;
+      form.diversos_operaciona;
 
     this.budgetForms[index].controls.custo_total.setValue(soma_total, { emitEvent: false });
   }
