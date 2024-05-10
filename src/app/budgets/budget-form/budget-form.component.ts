@@ -285,7 +285,7 @@ export class BudgetFormComponent implements OnInit {
       form.itens_especiais +
       form.execucao +
       form.frete_logistica +
-      form.diversos_operaciona;
+      form.diversos_operacional;
 
     this.budgetForms[index].controls.custo_total.setValue(soma_total, { emitEvent: false });
   }
