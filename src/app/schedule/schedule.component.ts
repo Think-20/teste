@@ -718,7 +718,11 @@ export class ScheduleComponent implements OnInit {
     }
 
     let scrollTop = $event.target.scrollTop
-    if ((scrollTop + $event.target.offsetHeight) >= $event.target.scrollHeight) {
+
+    const margemPerda = 50;
+    const totalScrollTopOffsetHeight = Math.ceil(scrollTop + $event.target.offsetHeight);
+
+    if ((totalScrollTopOffsetHeight + margemPerda) >= $event.target.scrollHeight) {
       this.loadItemsAfter()
     } else if (scrollTop == 0) {
       this.loadItemsBefore()
