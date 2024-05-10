@@ -12,16 +12,17 @@
 .sub-title {
   font-size: 12px;
   height: 16px;
-  color: #AAA;
+  color: #aaa;
 }
 .subtitle {
   display: block;
-  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", "Noto Color Emoji";
   font-weight: lighter;
   font-size: 12px;
-  color: #AAA;
+  color: #aaa;
 }
-
 
 .comitions {
   color: #959595;
@@ -41,7 +42,7 @@
   border-radius: 4px;
   color: #727272;
   cursor: pointer;
-  font-family: arial,sans-serif;
+  font-family: arial, sans-serif;
   font-size: 13px;
   height: 30px;
   line-height: 27px;
@@ -56,7 +57,7 @@
 
 .btn-send:hover {
   border-color: #dadce0;
-  box-shadow: rgba(0, 0, 0, .1) 0 1px 1px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 1px 1px;
   color: #3c4043;
 }
 
@@ -83,3 +84,117 @@
   padding-top: 7px;
 }
  */
+
+.orcamento {
+  margin-left: 4rem;
+  margin-right: 4rem;
+  margin-bottom: 2rem !important;
+  gap: 2rem;
+}
+
+.mt-4rem {
+  margin-top: 2rem;
+}
+
+.orcamento-header,
+.orcamento-footer {
+  margin: 1rem !important;
+}
+
+.orcamento-header {
+  margin-bottom: 1.5rem !important;
+}
+
+.orcamento-header h3,
+.orcamento-valores-header h3 {
+  font-size: 16px;
+  color: #727272;
+  margin: 0;
+  padding: 0;
+}
+
+.orcamento-valores-header .orcamento-valor-titulo {
+  color: #112730;
+}
+
+.orcamento-valores-header .orcamento-valor-data {
+  color: #a1a4ad;
+  font-size: 14px;
+}
+.orcamento-orcado {
+  padding-left: 0;
+}
+
+.orcamento-valor {
+  margin-bottom: 1.5rem;
+}
+
+.lucro {
+  color: #218f67;
+}
+
+.perda {
+  color: #cf4949;
+}
+
+.perda-important {
+  color: #cf4949 !important;
+}
+
+.neutro {
+  color: #24b8df;
+}
+
+mat-expansion-panel {
+  background-color: rgba(231, 230, 239, 0.25) !important;
+}
+
+mat-expansion-panel-header {
+  background-color: #fff !important;
+}
+
+.extrato-icon {
+  font-size: 1.4rem;
+  line-height: 1.1;
+  color: #778;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.icon-relatorio {
+  font-size: 16px;
+  color: #778;
+  line-height: 1.2;
+  font-weight: 700;
+  margin-left: 0.3rem;
+}
+
+.titulo-relatorio {
+  color: #1f4150;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.mat-suffix {
+  color: #aaa;
+}
+
+.saldo-total {
+  font-size: 16px;
+  color: #727272;
+}
+
+.orcamento-campos.extrato input {
+  color: #218f67;
+}
+
+.orcamento-campos.extrato input.porcentagem {
+  color: rgba(0, 0, 0, .38) !important;
+}
+
+.ajuste-margin {
+  margin-left: 3rem;
+  margin-right: 3rem;
+}

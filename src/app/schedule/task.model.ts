@@ -42,4 +42,30 @@ export class Task {
   final_value?: number
   updated_by?: string
   updated_at?: Date
+
+
+  marcenaria?: number
+  revestimentos_epeciais?: number
+  estrutura_metalicas?: number
+  material_mezanino?: number
+  fechamento_vidro?: number
+  vitrines?: number
+  acrilico?: number
+  mobiliario?: number
+  refrigeracao_climatizacao?: number
+  paisagismo?: number
+  comunicacao_visual?: number
+  equipamento_audio_visual?: number
+  itens_especiais?: number
+  execucao?: number
+  frete_logistica?: number
+  diversos_operacional?: number
+  coeficiente_margem?: number
+
+  mezanino?: number
+  dt_inicio_event?: Date
+  dt_montagem?: Date
+  dt_fim_event?: Date
+  dt_desmontagem?: Date
+  dt_event?: Date
 }

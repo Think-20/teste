@@ -68,13 +68,14 @@ export class ClientListComponent implements OnInit {
             client_status: formValue.client_status,
             client_type: formValue.client_type,
             rate: formValue.rate,
-            dt_cadastro: formValue.dt_cadastro,
+            dt_ini: formValue.dt_ini,
+            dt_fim: formValue.dt_fim,
           }
         },
         filterFields: [
           mF({
             arrayValues: this.employeeService.employees({paginate: false, deleted: true}).pipe(map(dataInfo => dataInfo.pagination.data.filter(employee => employee.department.description === 'Atendimento' || employee.department.description === 'Diretoria'))).toPromise(),
-            class: 'col-md-3',
+            class: 'col-md-2',
             formcontrolname: 'attendance_array',
             placeholder: 'Atendimento',
             type: 'select',
@@ -83,7 +84,7 @@ export class ClientListComponent implements OnInit {
           }),
           mF({
             arrayValues: this.clientTypeService.types().toPromise(),
-            class: 'col-md-3',
+            class: 'col-md-2',
             formcontrolname: 'client_type',
             placeholder: 'Tipo',
             type: 'select',
@@ -91,7 +92,7 @@ export class ClientListComponent implements OnInit {
           }),
           mF({
             arrayValues: this.clientStatusService.status().toPromise(),
-            class: 'col-md-3',
+            class: 'col-md-2',
             formcontrolname: 'client_status',
             placeholder: 'Status',
             type: 'select',
@@ -99,14 +100,22 @@ export class ClientListComponent implements OnInit {
           }),
           mF({
             arrayValues: this.clientStatusService.status().toPromise(),
-            class: 'col-md-3',
-            formcontrolname: 'dt_cadastro',
-            placeholder: 'Data de cadastro',
+            class: 'col-md-2',
+            formcontrolname: 'dt_ini',
+            placeholder: 'Cadastrado desde',
             type: 'date',
             optionDescription: 'description',
           }),
           mF({
-            class: 'col-md-3 star-input',
+            arrayValues: this.clientStatusService.status().toPromise(),
+            class: 'col-md-2',
+            formcontrolname: 'dt_fim',
+            placeholder: 'até',
+            type: 'date',
+            optionDescription: 'description',
+          }),
+          mF({
+            class: 'col-md-2 star-input',
             formcontrolname: 'rate',
             placeholder: 'Score',
             type: 'stars',
