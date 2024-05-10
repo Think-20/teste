@@ -245,7 +245,6 @@ export class BudgetFormComponent implements OnInit {
         dt_montagem: formData.dt_montagem,
         dt_fim_event: formData.dt_fim_event,
         dt_desmontagem: formData.dt_desmontagem,
-        dt_event: formData.dt_event,
 
         // valores orçamento
         marcenaria: formData.marcenaria || 0,
