@@ -95,7 +95,7 @@ export class BudgetFormComponent implements OnInit {
         place: this.formBuilder.control({ value: "", disabled: false }, [Validators.required]),
         creation_responsible: this.formBuilder.control({ value: "", disabled: true }, [Validators.required]),
         producer: this.formBuilder.control({ value: "", disabled: false }, []),
-
+        budget_responsible: this.formBuilder.control({ value: "", disabled: true }, []),
         //event details
         dt_event: this.formBuilder.control({ value: "", disabled: false }, []),
         budget_value: this.formBuilder.control({ value: "", disabled: true }, [Validators.required, Validators.maxLength(13)]),
@@ -229,21 +229,22 @@ export class BudgetFormComponent implements OnInit {
 
         //job details
         attendance: this.job.attendance,
-        client: this.job.client ? this.job.client.fantasy_name : { fantasy_name: this.job.not_client },
+        client: this.job.client ? this.job.client.fantasy_name : this.job.not_client,
         event: this.job.event,
         place: this.job.place,
         creation_responsible: this.job.creation_responsible != null ? this.job.creation_responsible.name: "Externo",
         producer: this.job.producer,
+        budget_responsible: this.job.budget_responsible ? this.job.budget_responsible.name: '-',
 
         //event details
         budget_value: this.job.budget_value,
-        area: this.job.area > 0 ? this.job.area.toString().replace(".", ",") : "",
+        area: this.job.area && this.job.area > 0 ? this.job.area.toString().replace(".", ",") : "-",
         mezanino: formData.mezanino,
+        dt_event: formData.dt_event,
         dt_inicio_event: formData.dt_inicio_event,
         dt_montagem: formData.dt_montagem,
         dt_fim_event: formData.dt_fim_event,
         dt_desmontagem: formData.dt_desmontagem,
-        dt_event: formData.dt_event,
 
         // valores orçamento
         marcenaria: formData.marcenaria || 0,
@@ -284,7 +285,7 @@ export class BudgetFormComponent implements OnInit {
       form.itens_especiais +
       form.execucao +
       form.frete_logistica +
-      form.diversos_operaciona;
+      form.diversos_operacional;
 
     this.budgetForms[index].controls.custo_total.setValue(soma_total, { emitEvent: false });
   }
