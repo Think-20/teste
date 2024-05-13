@@ -86,15 +86,15 @@
  */
 
 .orcamento {
-  margin-left: 4rem;
-  margin-right: 4rem;
-  margin-bottom: 2rem !important;
-  gap: 2rem;
+  /* margin-left: 4rem;
+  margin-right: 4rem; */
+  margin-bottom: 1rem !important;
+  gap: 1rem;
 }
 
 .mt-4rem {
-  margin-top: 2rem;
-}
+  /* margin-top: 2rem; */
+} 
 
 .orcamento-header,
 .orcamento-footer {
@@ -195,6 +195,6 @@ mat-expansion-panel-header {
 }
 
 .ajuste-margin {
-  margin-left: 3rem;
-  margin-right: 3rem;
+  margin-left: -0.5rem;
+  margin-right: -0.5rem;
 }
