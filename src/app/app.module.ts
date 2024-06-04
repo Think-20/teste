@@ -224,6 +224,8 @@ import { GoalsService } from './goals/goals.service';
 import { ThousandsPipe } from './shared/thousands.pipe';
 import { ConfirmDialogService } from './confirm-dialog/confirm-dialog.service';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { CustomeNotificationInactivationComponente } from './customer-notification-inactivation/customer-notification-inactivation.component';
+import { CustomeNotificationInactivationService } from './customer-notification-inactivation/customer-notification-inactivation.service';
 
 registerLocaleData(localePt);
 
@@ -349,6 +351,7 @@ registerLocaleData(localePt);
     FormatMaskDirective,
     ChartPreviewComponent,
     GoalsComponent,
+    CustomeNotificationInactivationComponente,
     ThousandsPipe,
   ],
   imports: [
@@ -457,6 +460,7 @@ registerLocaleData(localePt);
     AlertService,
     MemoriesService,
     ConfirmDialogService,
+    CustomeNotificationInactivationService,
     DatePipe,
     {provide: MAT_LABEL_GLOBAL_OPTIONS, useValue: { float: 'auto' }},
     {provide: LOCALE_ID, useValue: 'pt-BR'},

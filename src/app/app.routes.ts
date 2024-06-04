@@ -68,6 +68,7 @@ import { AlertsContainerComponent } from './alerts/components/alerts-container/a
 import { MemoriesContainerComponent } from './memories/components/memories-container/memories-container.component';
 import { HomeEmptyComponent } from './home-empty/home-empty.component';
 import { GoalsComponent } from './goals/goals.component';
+import { CustomeNotificationInactivationComponente } from './customer-notification-inactivation/customer-notification-inactivation.component';
 
 export const ROUTES: Routes = [
   {
@@ -342,6 +343,9 @@ export const ROUTES: Routes = [
       },
       {
         path: 'goals', component: GoalsComponent, canActivate: [AuthGuard]
+      },
+      {
+        path: 'manage-client-types', component: CustomeNotificationInactivationComponente, canActivate: [AuthGuard]
       }
     ]
   }

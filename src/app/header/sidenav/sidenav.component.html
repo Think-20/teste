@@ -97,6 +97,7 @@
             </div>
             <div class="sub-navbar">
               <a mat-raised-button [routerLink]="['/goals']" [disabled]="hasNoPermission(user, '/goals')">Metas</a>
+              <a mat-raised-button [routerLink]="['/manage-client-types']" [disabled]="hasNoPermission(user, '/manage-client-types')">Notificação/inativação cliente</a>
             </div>
           </div>
         </div>
