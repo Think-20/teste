@@ -1,0 +1,53 @@
+<div class="container-goals" style="margin-right: 1rem;margin-left: 1rem;">
+    <div class="my-container">
+      <h3 class="lead row">
+        <div class="col-md-12">
+          <div  class="flex center"> 
+            &nbsp;Gerênciar notifcação/inativação cliente
+          </div>
+
+          <div class="goals-body" *ngIf="inactiveTimeForm">
+            <form [formGroup]="inactiveTimeForm" autocomplete="off">
+                <div class="goals-grid">
+                    <div *ngFor="let inactiveTime of inactiveTimes" class="goals-card animate__animated animate__fadeIn">
+                        <mat-card>
+                          <h5 class="goals-card-title">{{ inactiveTime.type }}</h5>
+                            
+                            <mat-card-content>
+                                <mat-form-field class="pr-2">
+                                    <input
+                                      matInput
+                                      name="notification_time--{{inactiveTime.id}}"
+                                      type="text"
+                                      class="text-right"
+                                      placeholder="Tempo para notificação (meses)"
+                                      formControlName="notification_time--{{inactiveTime.id}}"
+                                      (keypress)="allowOnlyNumbers($event)">
+
+                                  </mat-form-field>
+
+                                  <mat-form-field class="pr-2">
+                                    <input
+                                      matInput
+                                      name="inactive_time--{{inactiveTime.id}}"
+                                      type="text"
+                                      class="text-right"
+                                      placeholder="Tempo para inativação (meses)"
+                                      formControlName="inactive_time--{{inactiveTime.id}}"
+                                      (keypress)="allowOnlyNumbers($event)">
+
+                                  </mat-form-field>
+                            </mat-card-content>
+                        </mat-card>
+                    </div>
+                </div>
+            </form>
+           
+            <div *ngIf="false" class="mt-4 d-flex justify-content-end">
+                <button (click)="salvar()" class="cb-button" color="primary" mat-raised-button>SALVAR</button>
+              </div>
+          </div>
+        </div>
+      </h3>
+    </div>
+</div>
