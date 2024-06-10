@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MatSnackBar } from "@angular/material";
 import { Observable } from "rxjs";
 import { ClientTypeService } from "app/clients/client-types/client-type.service";
-import { ClientType } from "app/clients/client-types/client-type.model";
 import {
   InactiveTime,
   EClientType,
@@ -16,7 +15,6 @@ import { CustomeNotificationInactivationService } from "./customer-notification-
   styleUrls: ["./customer-notification-inactivation.component.css"],
 })
 export class CustomeNotificationInactivationComponente implements OnInit {
-  clientTypes: ClientType[];
   public inactiveTimeForm: FormGroup;
 
   inactiveTimes: InactiveTime[] = [];
@@ -29,7 +27,6 @@ export class CustomeNotificationInactivationComponente implements OnInit {
   ) {}
 
   ngOnInit() {
-    this.loadClientTypes();
     this.loadInactiveTimes();
   }
 
@@ -37,25 +34,15 @@ export class CustomeNotificationInactivationComponente implements OnInit {
     this.customeNotificationInactivationService.get().subscribe((response) => {
       this.inactiveTimes = response;
 
+      this.inactiveTimes.forEach(x => {
+        x.description = x.type == EClientType.Agencia 
+                        ? 'Agência' 
+                        : x.type == EClientType.Expositor 
+                        ? 'Expositor' : '';
+      })
+
       this.createForm();
     });
-  }
-
-  loadClientTypes() {
-    let snackBar = this.snackBar.open("Carregando metas...");
-
-    this.clientTypeService.types().subscribe(
-      (response) => {
-        this.clientTypes = response.filter(
-          (x) => x.id !== EClientType.Autonomo
-        );
-
-        this.createForm();
-
-        snackBar.dismiss();
-      },
-      () => snackBar.dismiss()
-    );
   }
 
   createForm() {
@@ -117,6 +104,7 @@ export class CustomeNotificationInactivationComponente implements OnInit {
         });
     });
   }
+
 
   createUpdate(
     inactiveTime: InactiveTime,

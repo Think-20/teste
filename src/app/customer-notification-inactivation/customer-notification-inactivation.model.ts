@@ -4,10 +4,11 @@ export interface InactiveTime {
     notification_time: number,
     inactive_time: number,  
     message?: string;
+
+    description?: string;
 }
 
 export enum EClientType {
-    Agencia = 1,
-    Expositor = 2,
-    Autonomo = 3,
+    Expositor = "expositor",
+    Agencia = "agency",
   }
