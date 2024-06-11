@@ -37,17 +37,20 @@ export class ClientListComponent implements OnInit {
   permissionVerify(module: string, client: Client): boolean {
     let access: boolean
     let employee = this.authService.currentUser().employee
+
+    const isDiretoria = this.authService.currentUser().employee.department_id === 1;
+
     switch(module) {
       case 'show': {
-        access = client.employee.id != employee.id ? this.authService.hasAccess('clients/get/{id}') : true
+        access = client.employee.id == employee.id ? this.authService.hasAccess('clients/get/{id}') : false
         break
       }
       case 'edit': {
-        access = client.employee.id != employee.id ? this.authService.hasAccess('client/edit') : true
+        access = client.employee.id == employee.id ? this.authService.hasAccess('client/edit') : false
         break
       }
       case 'delete': {
-        access = client.employee.id != employee.id ? this.authService.hasAccess('client/remove/{id}') : true
+        access = client.employee.id == employee.id ? this.authService.hasAccess('client/remove/{id}') : false
         break
       }
       default: {
@@ -55,7 +58,7 @@ export class ClientListComponent implements OnInit {
         break
       }
     }
-    return access
+    return isDiretoria || access
   }
 
   ngOnInit() {
