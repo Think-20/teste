@@ -166,9 +166,15 @@ export class JobFormComponent implements OnInit {
           return;
         }
 
+        
+
         this.clientService.clients({ search: clientName, attendance: this.paramAttendance }).subscribe((dataInfo) => {
           this.clients = dataInfo.pagination.data.filter((client) => {
-            return client.type.description !== 'Agência'
+            let employee = this.authService.currentUser().employee
+      
+            const isDiretoria = this.authService.currentUser().employee.department_id === 1;
+
+            return client.type.description !== 'Agência' && (isDiretoria || client.employee.id == employee.id)
           })
         })
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
