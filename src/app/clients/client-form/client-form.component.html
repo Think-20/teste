@@ -45,7 +45,7 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <mat-select placeholder="Atendimento*" formControlName="employee" [compareWith]="compareEmployee">
+          <mat-select [disabled]="!isDiretoria" placeholder="Atendimento*" formControlName="employee" [compareWith]="compareEmployee">
             <mat-option *ngFor="let employee of employees" [value]="employee">
               {{ employee.name }}
             </mat-option>

@@ -66,6 +66,7 @@ export class ClientFormComponent implements OnInit {
   employees: Employee[]
   clientForm: FormGroup
   contactsArray: FormArray
+  isDiretoria = false;
 
 constructor(
     private stateService: StateService,
@@ -86,6 +87,8 @@ constructor(
   ngOnInit() {
     let snackBarStateCharging
     this.typeForm = this.route.snapshot.url[0].path
+
+    this.isDiretoria = this.authService.currentUser().employee.department_id === 1;
 
     let stateControl: FormControl = this.formBuilder.control('', [Validators.required, ObjectValidator])
     let cityControl: FormControl = this.formBuilder.control('', [Validators.required, ObjectValidator])
