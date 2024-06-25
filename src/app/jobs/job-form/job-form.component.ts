@@ -326,7 +326,7 @@ export class JobFormComponent implements OnInit {
   }
 
   disableMoments() {
-    this.jobForm.controls.area.clearValidators()
+    this.jobForm.controls.moments.clearValidators()
     this.jobForm.controls.moments.updateValueAndValidity()
   }
 
@@ -689,6 +689,7 @@ export class JobFormComponent implements OnInit {
     this.jobForm.updateValueAndValidity()
     let job = this.jobForm.getRawValue()
 
+    console.log(this.jobForm)
     if (ErrorHandler.formIsInvalid(this.jobForm)) {
       this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
         duration: 5000
