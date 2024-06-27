@@ -174,6 +174,17 @@ export class BudgetFormComponent implements OnInit {
         coeficiente_margem: this.formBuilder.control({ value: 0, disabled: false }, []),
         total_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
 
+        // Racional Custos metas
+        custo_total_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        imposto_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        comissao_vendas_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_projeto_interno_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_orcamento_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_gerente_producao_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_producao_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_detalhamento_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        total_estande_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+
         opcional_equipamento_audio_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
         total_geral_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
         liquido_think: this.formBuilder.control({ value: 0, disabled: true }, []),
@@ -264,6 +275,17 @@ export class BudgetFormComponent implements OnInit {
         frete_logistica: formData.frete_logistica || 0,
         diversos_operacional: formData.diversos_operacional || 0,
         coeficiente_margem: formData.coeficiente_margem || 0,
+
+        // Racional Custos metas
+        custo_total_meta_porcentagem: formData.custo_total_meta_porcentagem,
+        imposto_meta_porcentagem: formData.imposto_meta_porcentagem,
+        comissao_vendas_meta_porcentagem: formData.comissao_vendas_meta_porcentagem,
+        bonificacao_projeto_interno_meta_porcentagem: formData.bonificacao_projeto_interno_meta_porcentagem,
+        bonificacao_orcamento_meta_porcentagem: formData.bonificacao_orcamento_meta_porcentagem,
+        bonificacao_gerente_producao_meta_porcentagem: formData.bonificacao_gerente_producao_meta_porcentagem,
+        bonificacao_producao_meta_porcentagem: formData.bonificacao_producao_meta_porcentagem,
+        bonificacao_detalhamento_meta_porcentagem: formData.bonificacao_detalhamento_meta_porcentagem,
+        total_estande_meta_porcentagem: formData.total_estande_meta_porcentagem,
       });
     }
   }

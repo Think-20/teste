@@ -68,4 +68,14 @@ export class Task {
   dt_fim_event?: Date
   dt_desmontagem?: Date
   dt_event?: Date
+
+  custo_total_meta_porcentagem?: number
+  imposto_meta_porcentagem?: number
+  comissao_vendas_meta_porcentagem?: number
+  bonificacao_projeto_interno_meta_porcentagem?: number
+  bonificacao_orcamento_meta_porcentagem?: number
+  bonificacao_gerente_producao_meta_porcentagem?: number
+  bonificacao_producao_meta_porcentagem?: number
+  bonificacao_detalhamento_meta_porcentagem?: number
+  total_estande_meta_porcentagem?: number
 }

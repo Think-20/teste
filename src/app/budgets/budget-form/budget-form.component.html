@@ -571,13 +571,16 @@
           </div>
       
           <div class="orcamento-header d-flex justify-content-between">
-              <h3>Descrição</h3>
-              <h3>% Total</h3>
+              <div class="col-md-10 d-flex p-0 justify-content-between w-100">
+                <h3 class="col-md-3 p-0">Descrição</h3>
+                <h3 class="col-md-9 p-0 d-flex justify-content-end">% Total</h3>
+              </div>
+              <h3 class="col-md-2 p-0 d-flex justify-content-end">% Meta</h3>
           </div>
       
           <div class="orcamento-campos racional-custos">
-            <div class="col-md-12">
-                <mat-form-field>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-10">
                   <input
                     matInput
                     type="text"
@@ -587,9 +590,19 @@
                     (keypress)="allowOnlyNumbers($event)"
                     formControlName="custo_total">
                 </mat-form-field>
+
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="custo_total_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
             </div>
-            <div class="col-md-12">
-                <mat-form-field>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-10">
                   <input
                     matInput
                     type="text"
@@ -599,9 +612,18 @@
                     (keypress)="allowOnlyNumbers($event)"
                     formControlName="imposto">
                 </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="imposto_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
             </div>
-            <div class="col-md-12">
-                <mat-form-field>
+            <div class="col-md-12  p-0">
+                <mat-form-field class="col-md-10">
                   <input
                     matInput
                     type="text"
@@ -611,9 +633,18 @@
                     (keypress)="allowOnlyNumbers($event)"
                     formControlName="comissao_vendas">
                 </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="comissao_vendas_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
             </div>
-            <div class="col-md-12">
-                <mat-form-field>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-10">
                   <input
                     matInput
                     type="text"
@@ -623,9 +654,18 @@
                     (keypress)="allowOnlyNumbers($event)"
                     formControlName="bonificacao_projeto_interno">
                 </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_projeto_interno_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
             </div>
-            <div class="col-md-12">
-                <mat-form-field>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-10">
                   <input
                     matInput
                     type="text"
@@ -635,9 +675,18 @@
                     (keypress)="allowOnlyNumbers($event)"
                     formControlName="bonificacao_orcamento">
                 </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_orcamento_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
             </div>
-            <div class="col-md-12">
-                <mat-form-field>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-10">
                   <input
                     matInput
                     type="text"
@@ -647,9 +696,18 @@
                     (keypress)="allowOnlyNumbers($event)"
                     formControlName="bonificacao_gerente_producao">
                 </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_gerente_producao_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
             </div>
-            <div class="col-md-12">
-                <mat-form-field>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-10">
                   <input
                     matInput
                     type="text"
@@ -659,9 +717,18 @@
                     (keypress)="allowOnlyNumbers($event)"
                     formControlName="bonificacao_producao">
                 </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_producao_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
             </div>
-            <div class="col-md-12">
-                <mat-form-field>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-10">
                   <input
                     matInput
                     type="text"
@@ -671,9 +738,18 @@
                     (keypress)="allowOnlyNumbers($event)"
                     formControlName="bonificacao_detalhamento">
                 </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_detalhamento_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
             </div>
-            <div class="col-md-12">
-                <mat-form-field>
+            <div class="col-md-12 p-0">
+                <mat-form-field  class="col-md-10">
                   <input
                     matInput
                     type="text"
@@ -687,8 +763,8 @@
                     </mat-error>
                 </mat-form-field>
             </div>
-            <div class="col-md-12">
-                <mat-form-field>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-10">
                   <input
                     matInput
                     type="text"
@@ -698,9 +774,18 @@
                     (keypress)="allowOnlyNumbers($event)"
                     formControlName="total_estande">
                 </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="total_estande_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
             </div>
-            <!-- <div class="col-md-12">
-                <mat-form-field>
+            <!-- <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-10">
                   <input
                     matInput
                     type="text"
@@ -711,8 +796,8 @@
                     formControlName="opcional_equipamento_audio_visual">
                 </mat-form-field>
             </div> -->
-            <!-- <div class="col-md-12">
-                <mat-form-field>
+            <!-- <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-10">
                   <input
                     matInput
                     type="text"
@@ -723,8 +808,8 @@
                     formControlName="total_geral_estande">
                 </mat-form-field>
             </div> -->
-            <!-- <div class="col-md-12">
-                <mat-form-field>
+            <!-- <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-10">
                   <input
                     matInput
                     type="text"
@@ -735,8 +820,8 @@
                     formControlName="liquido_think">
                 </mat-form-field>
             </div> -->
-            <div class="col-md-12">
-                <mat-form-field>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-10">
                   <input
                     matInput
                     type="text"
