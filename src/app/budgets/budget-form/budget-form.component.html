@@ -210,13 +210,21 @@
         </div>
       
         <div class="orcamento-header d-flex justify-content-between">
-            <h3>Serviços</h3>
-            <h3>% Total</h3>
+
+          <div class="col-md-10 d-flex p-0 justify-content-between w-100">
+            <h3 class="col-md-3 p-0">Serviços</h3>
+            <h3 class="col-md-9 p-0 d-flex justify-content-end">Reaproveitamento</h3>
+          </div>
+          <h3 class="col-md-2 p-0 d-flex justify-content-end">% Total</h3>
+
+            <!-- <h3>Serviços</h3>
+            <h3>Reproveitamento</h3>
+            <h3>% Total</h3> -->
         </div>
       
         <div class="orcamento-campos extrato">
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -225,6 +233,15 @@
                   formControlName="marcenaria"
                   currencyMask
                   (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="marcenaria_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right">
               </mat-form-field>
               <mat-form-field class="col-md-2">
                 <input
@@ -236,7 +253,7 @@
               </mat-form-field>
           </div>
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -245,6 +262,15 @@
                   formControlName="revestimentos_epeciais"
                   currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="revestimentos_epeciais_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right">
               </mat-form-field>
                 <mat-form-field class="col-md-2">
                 <input
@@ -256,7 +282,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -265,6 +291,15 @@
                   formControlName="estrutura_metalicas"
                   currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="estrutura_metalicas_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right">
               </mat-form-field>
                 <mat-form-field class="col-md-2">
                 <input
@@ -276,7 +311,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -285,6 +320,15 @@
                   formControlName="material_mezanino"
                   currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="material_mezanino_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right">
               </mat-form-field>
                 <mat-form-field class="col-md-2">
                 <input
@@ -296,7 +340,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -305,6 +349,15 @@
                   formControlName="fechamento_vidro"
                   currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="fechamento_vidro_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right">
               </mat-form-field>
                 <mat-form-field class="col-md-2">
                 <input
@@ -316,7 +369,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -325,6 +378,15 @@
                   formControlName="vitrines"
                   currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="vitrines_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right">
               </mat-form-field>
                 <mat-form-field class="col-md-2">
                 <input
@@ -336,7 +398,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -345,6 +407,15 @@
                   formControlName="acrilico"
                   currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="acrilico_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right">
               </mat-form-field>
                 <mat-form-field class="col-md-2">
                 <input
@@ -356,7 +427,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -365,6 +436,15 @@
                   formControlName="mobiliario"
                   currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="mobiliario_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right">
               </mat-form-field>
                 <mat-form-field class="col-md-2">
                 <input
@@ -376,7 +456,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-            <mat-form-field class="col-md-10">
+            <mat-form-field class="col-md-7">
               <input
                 matInput
                 type="text"
@@ -385,6 +465,15 @@
                 formControlName="refrigeracao_climatizacao"
                 currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+              <input
+                matInput
+                formControlName="refrigeracao_climatizacao_reaproveitamento"
+                currencyMask
+                (keypress)="allowOnlyNumbers($event)"
+                type="text"
+                class="text-right">
             </mat-form-field>
               <mat-form-field class="col-md-2">
                 <input
@@ -396,7 +485,7 @@
               </mat-form-field>
           </div>
         <div class="col-md-12 p-0">
-            <mat-form-field class="col-md-10">
+            <mat-form-field class="col-md-7">
               <input
                 matInput
                 type="text"
@@ -405,6 +494,15 @@
                 formControlName="paisagismo"
                 currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+              <input
+                matInput
+                formControlName="paisagismo_reaproveitamento"
+                currencyMask
+                (keypress)="allowOnlyNumbers($event)"
+                type="text"
+                class="text-right">
             </mat-form-field>
               <mat-form-field class="col-md-2">
                 <input
@@ -416,7 +514,7 @@
               </mat-form-field>
           </div>
         <div class="col-md-12 p-0">
-            <mat-form-field class="col-md-10">
+            <mat-form-field class="col-md-7">
               <input
                 matInput
                 type="text"
@@ -425,6 +523,15 @@
                 formControlName="comunicacao_visual"
                 currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+              <input
+                matInput
+                formControlName="comunicacao_visual_reaproveitamento"
+                currencyMask
+                (keypress)="allowOnlyNumbers($event)"
+                type="text"
+                class="text-right">
             </mat-form-field>
               <mat-form-field class="col-md-2">
                 <input
@@ -436,7 +543,7 @@
               </mat-form-field>
           </div>
         <div class="col-md-12 p-0">
-            <mat-form-field class="col-md-10">
+            <mat-form-field class="col-md-7">
               <input
                 matInput
                 type="text"
@@ -445,6 +552,15 @@
                 formControlName="equipamento_audio_visual"
                 currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+              <input
+                matInput
+                formControlName="equipamento_audio_visual_reaproveitamento"
+                currencyMask
+                (keypress)="allowOnlyNumbers($event)"
+                type="text"
+                class="text-right">
             </mat-form-field>
               <mat-form-field class="col-md-2">
                 <input
@@ -456,7 +572,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-            <mat-form-field class="col-md-10">
+            <mat-form-field class="col-md-7">
               <input
                 matInput
                 type="text"
@@ -465,6 +581,15 @@
                 formControlName="itens_especiais"
                 currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+              <input
+                matInput
+                formControlName="itens_especiais_reaproveitamento"
+                currencyMask
+                (keypress)="allowOnlyNumbers($event)"
+                type="text"
+                class="text-right">
             </mat-form-field>
               <mat-form-field class="col-md-2">
                 <input
@@ -476,7 +601,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-            <mat-form-field class="col-md-10">
+            <mat-form-field class="col-md-7">
               <input
                 matInput
                 type="text"
@@ -485,6 +610,15 @@
                 formControlName="execucao"
                 currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+              <input
+                matInput
+                formControlName="execucao_reaproveitamento"
+                currencyMask
+                (keypress)="allowOnlyNumbers($event)"
+                type="text"
+                class="text-right">
             </mat-form-field>
               <mat-form-field class="col-md-2">
                 <input
@@ -496,7 +630,7 @@
               </mat-form-field>
             </div>
             <!-- <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -516,7 +650,7 @@
                 </mat-form-field>
               </div> -->
               <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-7">
                   <input
                     matInput
                     type="text"
@@ -525,6 +659,15 @@
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
                     formControlName="diversos_operacional">
+                </mat-form-field>
+                <mat-form-field class="col-md-3">
+                  <input
+                    matInput
+                    formControlName="diversos_operacional_reaproveitamento"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
                 </mat-form-field>
                 <mat-form-field class="col-md-2">
                   <input
@@ -536,7 +679,7 @@
                 </mat-form-field>
             </div>
             <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-7">
                   <input
                     matInput
                     type="text"
@@ -545,6 +688,15 @@
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
                     formControlName="frete_logistica">
+                </mat-form-field>
+                <mat-form-field class="col-md-3">
+                  <input
+                    matInput
+                    formControlName="frete_logistica_reaproveitamento"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
                 </mat-form-field>
                 <mat-form-field class="col-md-2">
                   <input

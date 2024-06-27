@@ -78,4 +78,22 @@ export class Task {
   bonificacao_producao_meta_porcentagem?: number
   bonificacao_detalhamento_meta_porcentagem?: number
   total_estande_meta_porcentagem?: number
+
+
+  marcenaria_reaproveitamento?: number
+  revestimentos_epeciais_reaproveitamento?: number
+  estrutura_metalicas_reaproveitamento?: number
+  material_mezanino_reaproveitamento?: number
+  fechamento_vidro_reaproveitamento?: number
+  vitrines_reaproveitamento?: number
+  acrilico_reaproveitamento?: number
+  mobiliario_reaproveitamento?: number
+  refrigeracao_climatizacao_reaproveitamento?: number
+  paisagismo_reaproveitamento?: number
+  comunicacao_visual_reaproveitamento?: number
+  equipamento_audio_visual_reaproveitamento?: number
+  itens_especiais_reaproveitamento?: number
+  execucao_reaproveitamento?: number
+  frete_logistica_reaproveitamento?: number
+  diversos_operacional_reaproveitamento?: number
 }

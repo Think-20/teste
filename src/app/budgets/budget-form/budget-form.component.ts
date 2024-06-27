@@ -109,51 +109,67 @@ export class BudgetFormComponent implements OnInit {
         // material etc...
         marcenaria: this.formBuilder.control({ value: 0, disabled: false }, []),
         marcenaria_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        marcenaria_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         revestimentos_epeciais: this.formBuilder.control({ value: 0, disabled: false }, []),
         revestimentos_epeciais_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        revestimentos_epeciais_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         estrutura_metalicas: this.formBuilder.control({ value: 0, disabled: false }, []),
         estrutura_metalicas_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        estrutura_metalicas_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         material_mezanino: this.formBuilder.control({ value: 0, disabled: false }, []),
         material_mezanino_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        material_mezanino_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         fechamento_vidro: this.formBuilder.control({ value: 0, disabled: false }, []),
         fechamento_vidro_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        fechamento_vidro_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         vitrines: this.formBuilder.control({ value: 0, disabled: false }, []),
         vitrines_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        vitrines_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         acrilico: this.formBuilder.control({ value: 0, disabled: false }, []),
         acrilico_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        acrilico_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         mobiliario: this.formBuilder.control({ value: 0, disabled: false }, []),
         mobiliario_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        mobiliario_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         refrigeracao_climatizacao: this.formBuilder.control({ value: 0, disabled: false }, []),
         refrigeracao_climatizacao_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        refrigeracao_climatizacao_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         paisagismo: this.formBuilder.control({ value: 0, disabled: false }, []),
         paisagismo_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        paisagismo_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         comunicacao_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
         comunicacao_visual_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        comunicacao_visual_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         equipamento_audio_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
         equipamento_audio_visual_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        equipamento_audio_visual_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         itens_especiais: this.formBuilder.control({ value: 0, disabled: false }, []),
         itens_especiais_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        itens_especiais_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         execucao: this.formBuilder.control({ value: 0, disabled: false }, []),
         execucao_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        execucao_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         diversos_operacional: this.formBuilder.control({ value: 0, disabled: false }, []),
         diversos_operacional_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        diversos_operacional_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         frete_logistica: this.formBuilder.control({ value: 0, disabled: false }, []),
         frete_logistica_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        frete_logistica_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         custo_total: this.formBuilder.control({ value: 0, disabled: true }, []),
 
@@ -275,6 +291,24 @@ export class BudgetFormComponent implements OnInit {
         frete_logistica: formData.frete_logistica || 0,
         diversos_operacional: formData.diversos_operacional || 0,
         coeficiente_margem: formData.coeficiente_margem || 0,
+
+        // valores orçamento reaproveitamento
+        marcenaria_reaproveitamento: formData.marcenaria_reaproveitamento || 0,
+        revestimentos_epeciais_reaproveitamento: formData.revestimentos_epeciais_reaproveitamento || 0,
+        estrutura_metalicas_reaproveitamento: formData.estrutura_metalicas_reaproveitamento || 0,
+        material_mezanino_reaproveitamento: formData.material_mezanino_reaproveitamento || 0,
+        fechamento_vidro_reaproveitamento: formData.fechamento_vidro_reaproveitamento || 0,
+        vitrines_reaproveitamento: formData.vitrines_reaproveitamento || 0,
+        acrilico_reaproveitamento: formData.acrilico_reaproveitamento || 0,
+        mobiliario_reaproveitamento: formData.mobiliario_reaproveitamento || 0,
+        refrigeracao_climatizacao_reaproveitamento: formData.refrigeracao_climatizacao_reaproveitamento || 0,
+        paisagismo_reaproveitamento: formData.paisagismo_reaproveitamento || 0,
+        comunicacao_visual_reaproveitamento: formData.comunicacao_visual_reaproveitamento || 0,
+        equipamento_audio_visual_reaproveitamento: formData.equipamento_audio_visual_reaproveitamento || 0,
+        itens_especiais_reaproveitamento: formData.itens_especiais_reaproveitamento || 0,
+        execucao_reaproveitamento: formData.execucao_reaproveitamento || 0,
+        frete_logistica_reaproveitamento: formData.frete_logistica_reaproveitamento || 0,
+        diversos_operacional_reaproveitamento: formData.diversos_operacional_reaproveitamento || 0,
 
         // Racional Custos metas
         custo_total_meta_porcentagem: formData.custo_total_meta_porcentagem,
