@@ -78,7 +78,8 @@ export class Task {
   bonificacao_producao_meta_porcentagem?: number
   bonificacao_detalhamento_meta_porcentagem?: number
   total_estande_meta_porcentagem?: number
-
+  m2_venda_stand_meta_porcentagem?:number
+  m2_venda_stand_logistica_equipamentos_meta_porcentagem?: number
 
   marcenaria_reaproveitamento?: number
   revestimentos_epeciais_reaproveitamento?: number

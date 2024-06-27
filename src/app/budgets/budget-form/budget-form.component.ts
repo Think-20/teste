@@ -189,6 +189,8 @@ export class BudgetFormComponent implements OnInit {
         bonificacao_detalhamento: this.formBuilder.control({ value: 0, disabled: true }, []),
         coeficiente_margem: this.formBuilder.control({ value: 0, disabled: false }, []),
         total_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
+        m2_venda_stand: this.formBuilder.control({ value: 0, disabled: true }, []),
+        m2_venda_stand_logistica_equipamentos: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         // Racional Custos metas
         custo_total_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
@@ -200,6 +202,8 @@ export class BudgetFormComponent implements OnInit {
         bonificacao_producao_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         bonificacao_detalhamento_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         total_estande_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        m2_venda_stand_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        m2_venda_stand_logistica_equipamentos_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         opcional_equipamento_audio_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
         total_geral_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
@@ -234,6 +238,7 @@ export class BudgetFormComponent implements OnInit {
         this.setMargemLucro(index);
       });
 
+      console.log(formData)
       this.budgetForms[index].patchValue({
         id: formData.id,
         orders_value: formData.orders_value,
@@ -310,6 +315,9 @@ export class BudgetFormComponent implements OnInit {
         frete_logistica_reaproveitamento: formData.frete_logistica_reaproveitamento || 0,
         diversos_operacional_reaproveitamento: formData.diversos_operacional_reaproveitamento || 0,
 
+        // Racional Custos valores
+        
+
         // Racional Custos metas
         custo_total_meta_porcentagem: formData.custo_total_meta_porcentagem,
         imposto_meta_porcentagem: formData.imposto_meta_porcentagem,
@@ -320,6 +328,8 @@ export class BudgetFormComponent implements OnInit {
         bonificacao_producao_meta_porcentagem: formData.bonificacao_producao_meta_porcentagem,
         bonificacao_detalhamento_meta_porcentagem: formData.bonificacao_detalhamento_meta_porcentagem,
         total_estande_meta_porcentagem: formData.total_estande_meta_porcentagem,
+        m2_venda_stand_meta_porcentagem: formData.m2_venda_stand_meta_porcentagem,
+        m2_venda_stand_logistica_equipamentos_meta_porcentagem: formData.m2_venda_stand_logistica_equipamentos_meta_porcentagem,
       });
     }
   }

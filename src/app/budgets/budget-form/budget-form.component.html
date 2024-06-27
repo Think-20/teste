@@ -983,6 +983,48 @@
                     <span class="mat-suffix" matSuffix>%</span>
                 </mat-form-field>
             </div>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-10">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="M² para Venda Stand"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="m2_venda_stand">
+                </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="m2_venda_stand_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
+            </div>
+            <div class="col-md-12 p-0">
+              <mat-form-field class="col-md-10">
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="M² para Venda Stand com Logística e Equipamentos"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  formControlName="m2_venda_stand_logistica_equipamentos">
+              </mat-form-field>
+              <mat-form-field class="col-md-2">
+                <input
+                  matInput
+                  formControlName="m2_venda_stand_logistica_equipamentos_meta_porcentagem"
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right">
+                <span matSuffix>%</span>
+              </mat-form-field>
+          </div>
           </div>
         </mat-card>
         <div class="orcamento-valores">
