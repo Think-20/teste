@@ -163,13 +163,13 @@ export class BudgetFormComponent implements OnInit {
         execucao_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
         execucao_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
-        diversos_operacional: this.formBuilder.control({ value: 0, disabled: false }, []),
-        diversos_operacional_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        diversos_operacional_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        servico_diversos_operacional: this.formBuilder.control({ value: 0, disabled: false }, []),
+        servico_diversos_operacional_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        servico_diversos_operacional_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
-        frete_logistica: this.formBuilder.control({ value: 0, disabled: false }, []),
-        frete_logistica_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        frete_logistica_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        operacional_logistica: this.formBuilder.control({ value: 0, disabled: false }, []),
+        operacional_logistica_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        operacional_logistica_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
 
         custo_total: this.formBuilder.control({ value: 0, disabled: true }, []),
 
@@ -189,6 +189,8 @@ export class BudgetFormComponent implements OnInit {
         bonificacao_detalhamento: this.formBuilder.control({ value: 0, disabled: true }, []),
         coeficiente_margem: this.formBuilder.control({ value: 0, disabled: false }, []),
         total_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
+        diversos_operacional: this.formBuilder.control({ value: 0, disabled: true }, []),
+        frete_logistica: this.formBuilder.control({ value: 0, disabled: true }, []),
         m2_venda_stand: this.formBuilder.control({ value: 0, disabled: true }, []),
         m2_venda_stand_logistica_equipamentos: this.formBuilder.control({ value: 0, disabled: true }, []),
 
@@ -202,6 +204,8 @@ export class BudgetFormComponent implements OnInit {
         bonificacao_producao_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         bonificacao_detalhamento_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         total_estande_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        diversos_operacional_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        frete_logistica_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
         m2_venda_stand_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         m2_venda_stand_logistica_equipamentos_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
 
@@ -227,11 +231,19 @@ export class BudgetFormComponent implements OnInit {
 
         this.setTotalEstande(index);
 
+        this.setTotalDiversosOperacional(index);
+
+        this.setTotalFreteLogística(index);
+
+        this.setTotalM2VendaStand(index);
+
         this.setTotalImposto(index);
 
         this.setTodasComissoesBonificacoes(index);
         
         this.setTotalGeralEstande(index);
+        
+        this.setTotalM2VendaStandLogisticaEquipamento(index);
 
         this.setTotalLiquidoThink(index);
 
@@ -279,22 +291,39 @@ export class BudgetFormComponent implements OnInit {
         dt_desmontagem: formData.dt_desmontagem,
 
         // valores orçamento
-        marcenaria: formData.marcenaria || 0,
+        // marcenaria: formData.marcenaria || 0,
+        // revestimentos_epeciais: formData.revestimentos_epeciais || 0,
+        // estrutura_metalicas: formData.estrutura_metalicas || 0,
+        // material_mezanino: formData.material_mezanino || 0,
+        // fechamento_vidro: formData.fechamento_vidro || 0,
+        // vitrines: formData.vitrines || 0,
+        // acrilico: formData.acrilico || 0,
+        // mobiliario: formData.mobiliario || 0,
+        // refrigeracao_climatizacao: formData.refrigeracao_climatizacao || 0,
+        // paisagismo: formData.paisagismo || 0,
+        // comunicacao_visual: formData.comunicacao_visual || 0,
+        // equipamento_audio_visual: formData.equipamento_audio_visual || 0,
+        // itens_especiais: formData.itens_especiais || 0,
+        // execucao: formData.execucao || 0,
+        // frete_logistica: formData.frete_logistica || 0,
+        // diversos_operacional: formData.diversos_operacional || 0,
+        // coeficiente_margem: formData.coeficiente_margem || 0,
+        marcenaria: formData.marcenaria || 119809.56,
         revestimentos_epeciais: formData.revestimentos_epeciais || 0,
-        estrutura_metalicas: formData.estrutura_metalicas || 0,
+        estrutura_metalicas: formData.estrutura_metalicas || 1440.00,
         material_mezanino: formData.material_mezanino || 0,
         fechamento_vidro: formData.fechamento_vidro || 0,
-        vitrines: formData.vitrines || 0,
+        vitrines: formData.vitrines || 1160.00,
         acrilico: formData.acrilico || 0,
-        mobiliario: formData.mobiliario || 0,
-        refrigeracao_climatizacao: formData.refrigeracao_climatizacao || 0,
+        mobiliario: formData.mobiliario || 23736.00,
+        refrigeracao_climatizacao: formData.refrigeracao_climatizacao || 350.00,
         paisagismo: formData.paisagismo || 0,
-        comunicacao_visual: formData.comunicacao_visual || 0,
+        comunicacao_visual: formData.comunicacao_visual || 22655.16,
         equipamento_audio_visual: formData.equipamento_audio_visual || 0,
         itens_especiais: formData.itens_especiais || 0,
-        execucao: formData.execucao || 0,
-        frete_logistica: formData.frete_logistica || 0,
-        diversos_operacional: formData.diversos_operacional || 0,
+        execucao: formData.execucao || 181914.00,
+        operacional_logistica: formData.operacional_logistica || 0,
+        servico_diversos_operacional: formData.servico_diversos_operacional || 0,
         coeficiente_margem: formData.coeficiente_margem || 0,
 
         // valores orçamento reaproveitamento
@@ -314,9 +343,6 @@ export class BudgetFormComponent implements OnInit {
         execucao_reaproveitamento: formData.execucao_reaproveitamento || 0,
         frete_logistica_reaproveitamento: formData.frete_logistica_reaproveitamento || 0,
         diversos_operacional_reaproveitamento: formData.diversos_operacional_reaproveitamento || 0,
-
-        // Racional Custos valores
-        
 
         // Racional Custos metas
         custo_total_meta_porcentagem: formData.custo_total_meta_porcentagem,
@@ -349,9 +375,7 @@ export class BudgetFormComponent implements OnInit {
       form.comunicacao_visual +
       form.equipamento_audio_visual +
       form.itens_especiais +
-      form.execucao +
-      form.frete_logistica +
-      form.diversos_operacional;
+      form.execucao;
 
     this.budgetForms[index].controls.custo_total.setValue(soma_total, { emitEvent: false });
   }
@@ -371,8 +395,8 @@ export class BudgetFormComponent implements OnInit {
     this.setPorcentgaem("equipamento_audio_visual", index);
     this.setPorcentgaem("itens_especiais", index);
     this.setPorcentgaem("execucao", index);
-    this.setPorcentgaem("frete_logistica", index);
-    this.setPorcentgaem("diversos_operacional", index);
+    // this.setPorcentgaem("frete_logistica", index);
+    // this.setPorcentgaem("diversos_operacional", index);
   }
 
   setTodasComissoesBonificacoes(index: number) {
@@ -383,6 +407,7 @@ export class BudgetFormComponent implements OnInit {
     this.setComissoesBonificacoes("bonificacao_producao", index, 0.01);
     this.setComissoesBonificacoes("bonificacao_detalhamento", index, 0.005);
   }
+
 
   setPorcentgaem(field: string, index: number) {
     const control: AbstractControl = this.budgetForms[index].get(field);
@@ -424,6 +449,60 @@ export class BudgetFormComponent implements OnInit {
     controlTotalEstande.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
   }
 
+  
+  setTotalDiversosOperacional(index: number) {
+    const controlTotalDiversosOperacional: AbstractControl = this.budgetForms[index].get("diversos_operacional");
+
+    const totalEstande = this.getTotalServicoDiversosOperacional(index);
+
+    const total = totalEstande * 1.30;
+
+    controlTotalDiversosOperacional.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
+  }
+
+  setTotalFreteLogística(index: number) {
+    const controTotalFreteLogistica: AbstractControl = this.budgetForms[index].get("frete_logistica");
+
+    const totalEstande = this.getTotalOperacionalLogistica(index);
+
+    const total = totalEstande * 1.30;
+
+    controTotalFreteLogistica.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
+  }
+
+
+  setTotalM2VendaStand(index: number) {
+    const m2VendaStandControl: AbstractControl = this.budgetForms[index].get("m2_venda_stand");
+
+    const totalEstande = this.geTotalEstande(index);
+
+    const totalDiversosOperacional = this.getTotalDiversosOperacional(index);
+
+    const totalFreteLogistica = this.getTotalFreteLogistica(index);
+
+    const mezanino = this.getTotalMezanino(index);
+
+    const area = this.getTotalArea(index);
+   
+    const total = (totalEstande + totalDiversosOperacional + totalFreteLogistica)/(area + mezanino)
+
+    m2VendaStandControl.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
+  }
+
+  setTotalM2VendaStandLogisticaEquipamento(index: number) {
+    const m2VendaStandLogisticaEquipamentosControl: AbstractControl = this.budgetForms[index].get("m2_venda_stand_logistica_equipamentos");
+
+    const totalGeralEstande = this.getTotalGeralStand(index);
+
+    const mezanino = this.getTotalMezanino(index);
+
+    const area = this.getTotalArea(index);
+
+    const total = totalGeralEstande / (area + mezanino);
+
+    m2VendaStandLogisticaEquipamentosControl.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
+  }
+
   setTotalImposto(index: number) {
     const coeficienteMargem = 0.15;
 
@@ -451,6 +530,10 @@ export class BudgetFormComponent implements OnInit {
 
     const totalEstande = this.geTotalEstande(index);
 
+    const totalDiversosOperacional = this.getTotalDiversosOperacional(index);
+
+    const totalFreteLogistica = this.getTotalFreteLogistica(index);
+
     const totalBonificacaoOrcamento = this.geTotalBonificacaoOrcamento(index);
 
     const totalBonificacaoGerenteProducao = this.geTotalBonificacaoGerenteProducao(index);
@@ -459,7 +542,13 @@ export class BudgetFormComponent implements OnInit {
     
     const valorFixo = 3865.55;
 
-    const total = totalEstande + totalBonificacaoOrcamento + totalBonificacaoGerenteProducao + totalBonificacaoProducao + valorFixo;
+    const total = totalEstande + 
+                  totalDiversosOperacional + 
+                  totalFreteLogistica + 
+                  totalBonificacaoOrcamento + 
+                  totalBonificacaoGerenteProducao + 
+                  totalBonificacaoProducao + 
+                  valorFixo;
 
     if (total == valorFixo) {
       return;
@@ -542,6 +631,47 @@ export class BudgetFormComponent implements OnInit {
 
   getTotalLiquidoThink(index: number): number {
     return this.budgetForms[index].get("liquido_think").value;
+  }
+
+  getTotalServicoDiversosOperacional(index: number): number {
+    return this.budgetForms[index].get("servico_diversos_operacional").value;
+  }
+
+  getTotalOperacionalLogistica(index: number): number {
+    return this.budgetForms[index].get("operacional_logistica").value;
+  }
+
+  getTotalDiversosOperacional(index: number) {
+    return this.budgetForms[index].get("diversos_operacional").value;
+
+  }
+  getTotalFreteLogistica(index: number) {
+    return this.budgetForms[index].get("frete_logistica").value;
+  }
+
+  getTotalMezanino(index: number) {
+    const mezanino = this.budgetForms[index].get("mezanino").value;
+
+    return mezanino || 0
+  }
+
+  getTotalGeralStand(index: number) {
+    return this.budgetForms[index].get("total_geral_estande").value;
+  }
+
+  getTotalArea(index: number) {
+    const areaS = this.budgetForms[index].get("area").value;
+
+    if (!areaS)
+      return 0;
+
+    const area = Number(areaS.replace(',', '.'));
+
+    if (isNaN(area)) {
+      return 0;
+    }
+
+    return area
   }
 
   toogleVisibilty(control: AbstractControl) {

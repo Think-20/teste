@@ -629,41 +629,27 @@
                 <span class="mat-suffix" matSuffix>%</span>
               </mat-form-field>
             </div>
-            <!-- <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-7">
-                <input
-                  matInput
-                  type="text"
-                  class="text-right"
-                  placeholder="Logistica"
-                  formControlName="logistica"
-                  currencyMask
-                  (keypress)="allowOnlyNumbers($event)">
-              </mat-form-field>
-                <mat-form-field class="col-md-2">
-                  <input
-                    matInput
-                    formControlName="logistica_porcentagem"
-                    type="text"
-                    class="text-right">
-                  <span class="mat-suffix" matSuffix>%</span>
-                </mat-form-field>
-              </div> -->
+            <div class="orcamento-footer d-flex justify-content-end saldo-total">
+              Saldo total: <span class="lucro" style="font-weight: 500; display: contents;">{{ budgetForm.controls.custo_total.value | currency: 'BRL' }}</span>
+            </div>
+              <div class="orcamento-header d-flex justify-content-between">
+                <h3>Diversos | Operacional</h3>
+              </div>
               <div class="col-md-12 p-0">
                 <mat-form-field class="col-md-7">
                   <input
                     matInput
                     type="text"
                     class="text-right"
-                    placeholder="Diversos | Operacionais"
+                    placeholder="Serviços - Diversos | Operacional"
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
-                    formControlName="diversos_operacional">
+                    formControlName="servico_diversos_operacional">
                 </mat-form-field>
                 <mat-form-field class="col-md-3">
                   <input
                     matInput
-                    formControlName="diversos_operacional_reaproveitamento"
+                    formControlName="servico_diversos_operacional_reaproveitamento"
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
                     type="text"
@@ -672,11 +658,14 @@
                 <mat-form-field class="col-md-2">
                   <input
                     matInput
-                    formControlName="diversos_operacional_porcentagem"
+                    formControlName="servico_diversos_operacional_porcentagem"
                     type="text"
                     class="text-right porcentagem">
                   <span class="mat-suffix" matSuffix>%</span>
                 </mat-form-field>
+            </div>
+            <div class="orcamento-header d-flex justify-content-between">
+              <h3 class="p-0">Logística</h3>
             </div>
             <div class="col-md-12 p-0">
                 <mat-form-field class="col-md-7">
@@ -684,15 +673,15 @@
                     matInput
                     type="text"
                     class="text-right"
-                    placeholder="Frete | Logistica"
+                    placeholder="Operacional - Logística"
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
-                    formControlName="frete_logistica">
+                    formControlName="operacional_logistica">
                 </mat-form-field>
                 <mat-form-field class="col-md-3">
                   <input
                     matInput
-                    formControlName="frete_logistica_reaproveitamento"
+                    formControlName="operacional_logistica_reaproveitamento"
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
                     type="text"
@@ -701,17 +690,14 @@
                 <mat-form-field class="col-md-2">
                   <input
                     matInput
-                    formControlName="frete_logistica_porcentagem"
+                    formControlName="operacional_logistica_porcentagem"
                     type="text"
                     class="text-right porcentagem">
                   <span class="mat-suffix" matSuffix>%</span>
                 </mat-form-field>
             </div>
         </div>
-      
-        <div class="orcamento-footer d-flex justify-content-end saldo-total">
-          Saldo total: <span class="lucro" style="font-weight: 500; display: contents;">{{ budgetForm.controls.custo_total.value | currency: 'BRL' }}</span>
-        </div>
+
       </mat-card>
       
       <div class="col-md-6 orcamento-orcado" *ngIf="isDiretoria">
@@ -935,6 +921,48 @@
                     class="text-right">
                   <span matSuffix>%</span>
                 </mat-form-field>
+            </div>
+            <div class="col-md-12 p-0">
+              <mat-form-field class="col-md-10">
+                <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Diversos | Operacional"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="diversos_operacional">
+                </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="diversos_operacional_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
+            </div>
+            <div class="col-md-12 p-0">
+              <mat-form-field class="col-md-10">
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Frete | Logística"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  formControlName="frete_logistica">
+              </mat-form-field>
+              <mat-form-field class="col-md-2">
+                <input
+                  matInput
+                  formControlName="frete_logistica_meta_porcentagem"
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right">
+                <span matSuffix>%</span>
+              </mat-form-field>
             </div>
             <!-- <div class="col-md-12 p-0">
                 <mat-form-field class="col-md-10">

@@ -58,8 +58,8 @@ export class Task {
   equipamento_audio_visual?: number
   itens_especiais?: number
   execucao?: number
-  frete_logistica?: number
-  diversos_operacional?: number
+  operacional_logistica?: number
+  servico_diversos_operacional?: number
   coeficiente_margem?: number
 
   mezanino?: number
