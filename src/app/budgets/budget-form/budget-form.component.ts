@@ -109,67 +109,67 @@ export class BudgetFormComponent implements OnInit {
         // material etc...
         marcenaria: this.formBuilder.control({ value: 0, disabled: false }, []),
         marcenaria_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        marcenaria_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        marcenaria_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         revestimentos_epeciais: this.formBuilder.control({ value: 0, disabled: false }, []),
         revestimentos_epeciais_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        revestimentos_epeciais_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        revestimentos_epeciais_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         estrutura_metalicas: this.formBuilder.control({ value: 0, disabled: false }, []),
         estrutura_metalicas_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        estrutura_metalicas_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        estrutura_metalicas_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         material_mezanino: this.formBuilder.control({ value: 0, disabled: false }, []),
         material_mezanino_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        material_mezanino_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        material_mezanino_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         fechamento_vidro: this.formBuilder.control({ value: 0, disabled: false }, []),
         fechamento_vidro_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        fechamento_vidro_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        fechamento_vidro_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         vitrines: this.formBuilder.control({ value: 0, disabled: false }, []),
         vitrines_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        vitrines_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        vitrines_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         acrilico: this.formBuilder.control({ value: 0, disabled: false }, []),
         acrilico_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        acrilico_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        acrilico_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         mobiliario: this.formBuilder.control({ value: 0, disabled: false }, []),
         mobiliario_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        mobiliario_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        mobiliario_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         refrigeracao_climatizacao: this.formBuilder.control({ value: 0, disabled: false }, []),
         refrigeracao_climatizacao_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        refrigeracao_climatizacao_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        refrigeracao_climatizacao_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         paisagismo: this.formBuilder.control({ value: 0, disabled: false }, []),
         paisagismo_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        paisagismo_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        paisagismo_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         comunicacao_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
         comunicacao_visual_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        comunicacao_visual_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        comunicacao_visual_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         equipamento_audio_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
         equipamento_audio_visual_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        equipamento_audio_visual_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        equipamento_audio_visual_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         itens_especiais: this.formBuilder.control({ value: 0, disabled: false }, []),
         itens_especiais_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        itens_especiais_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        itens_especiais_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         execucao: this.formBuilder.control({ value: 0, disabled: false }, []),
         execucao_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        execucao_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        execucao_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         servico_diversos_operacional: this.formBuilder.control({ value: 0, disabled: false }, []),
         servico_diversos_operacional_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        servico_diversos_operacional_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        servico_diversos_operacional_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         operacional_logistica: this.formBuilder.control({ value: 0, disabled: false }, []),
         operacional_logistica_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        operacional_logistica_reaproveitamento: this.formBuilder.control({ value: 0, disabled: true }, []),
+        operacional_logistica_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
 
         custo_total: this.formBuilder.control({ value: 0, disabled: true }, []),
 
@@ -290,40 +290,23 @@ export class BudgetFormComponent implements OnInit {
         dt_fim_event: formData.dt_fim_event,
         dt_desmontagem: formData.dt_desmontagem,
 
-        // valores orçamento
-        // marcenaria: formData.marcenaria || 0,
-        // revestimentos_epeciais: formData.revestimentos_epeciais || 0,
-        // estrutura_metalicas: formData.estrutura_metalicas || 0,
-        // material_mezanino: formData.material_mezanino || 0,
-        // fechamento_vidro: formData.fechamento_vidro || 0,
-        // vitrines: formData.vitrines || 0,
-        // acrilico: formData.acrilico || 0,
-        // mobiliario: formData.mobiliario || 0,
-        // refrigeracao_climatizacao: formData.refrigeracao_climatizacao || 0,
-        // paisagismo: formData.paisagismo || 0,
-        // comunicacao_visual: formData.comunicacao_visual || 0,
-        // equipamento_audio_visual: formData.equipamento_audio_visual || 0,
-        // itens_especiais: formData.itens_especiais || 0,
-        // execucao: formData.execucao || 0,
-        // frete_logistica: formData.frete_logistica || 0,
-        // diversos_operacional: formData.diversos_operacional || 0,
-        // coeficiente_margem: formData.coeficiente_margem || 0,
-        marcenaria: formData.marcenaria || 119809.56,
+        valores orçamento
+        marcenaria: formData.marcenaria || 0,
         revestimentos_epeciais: formData.revestimentos_epeciais || 0,
-        estrutura_metalicas: formData.estrutura_metalicas || 1440.00,
+        estrutura_metalicas: formData.estrutura_metalicas || 0,
         material_mezanino: formData.material_mezanino || 0,
         fechamento_vidro: formData.fechamento_vidro || 0,
-        vitrines: formData.vitrines || 1160.00,
+        vitrines: formData.vitrines || 0,
         acrilico: formData.acrilico || 0,
-        mobiliario: formData.mobiliario || 23736.00,
-        refrigeracao_climatizacao: formData.refrigeracao_climatizacao || 350.00,
+        mobiliario: formData.mobiliario || 0,
+        refrigeracao_climatizacao: formData.refrigeracao_climatizacao || 0,
         paisagismo: formData.paisagismo || 0,
-        comunicacao_visual: formData.comunicacao_visual || 22655.16,
+        comunicacao_visual: formData.comunicacao_visual || 0,
         equipamento_audio_visual: formData.equipamento_audio_visual || 0,
         itens_especiais: formData.itens_especiais || 0,
-        execucao: formData.execucao || 181914.00,
-        operacional_logistica: formData.operacional_logistica || 0,
-        servico_diversos_operacional: formData.servico_diversos_operacional || 0,
+        execucao: formData.execucao || 0,
+        frete_logistica: formData.frete_logistica || 0,
+        diversos_operacional: formData.diversos_operacional || 0,
         coeficiente_margem: formData.coeficiente_margem || 0,
 
         // valores orçamento reaproveitamento
@@ -395,8 +378,6 @@ export class BudgetFormComponent implements OnInit {
     this.setPorcentgaem("equipamento_audio_visual", index);
     this.setPorcentgaem("itens_especiais", index);
     this.setPorcentgaem("execucao", index);
-    // this.setPorcentgaem("frete_logistica", index);
-    // this.setPorcentgaem("diversos_operacional", index);
   }
 
   setTodasComissoesBonificacoes(index: number) {
@@ -453,9 +434,13 @@ export class BudgetFormComponent implements OnInit {
   setTotalDiversosOperacional(index: number) {
     const controlTotalDiversosOperacional: AbstractControl = this.budgetForms[index].get("diversos_operacional");
 
+    const controlTotalDiversosOperacionalPer: AbstractControl = this.budgetForms[index].get("servico_diversos_operacional_porcentagem");
+
     const totalEstande = this.getTotalServicoDiversosOperacional(index);
 
     const total = totalEstande * 1.30;
+
+    controlTotalDiversosOperacionalPer.setValue(total > 0 ? 100: 0, { emitEvent: false });
 
     controlTotalDiversosOperacional.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
   }
@@ -463,9 +448,13 @@ export class BudgetFormComponent implements OnInit {
   setTotalFreteLogística(index: number) {
     const controTotalFreteLogistica: AbstractControl = this.budgetForms[index].get("frete_logistica");
 
+    const controTotalFreteLogisticaPer: AbstractControl = this.budgetForms[index].get("operacional_logistica_porcentagem");
+
     const totalEstande = this.getTotalOperacionalLogistica(index);
 
     const total = totalEstande * 1.30;
+
+    controTotalFreteLogisticaPer.setValue(total > 0 ? 100: 0, { emitEvent: false });
 
     controTotalFreteLogistica.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
   }
