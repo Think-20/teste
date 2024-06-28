@@ -290,7 +290,7 @@ export class BudgetFormComponent implements OnInit {
         dt_fim_event: formData.dt_fim_event,
         dt_desmontagem: formData.dt_desmontagem,
 
-        valores orçamento
+        // valores orçamento
         marcenaria: formData.marcenaria || 0,
         revestimentos_epeciais: formData.revestimentos_epeciais || 0,
         estrutura_metalicas: formData.estrutura_metalicas || 0,
@@ -305,8 +305,8 @@ export class BudgetFormComponent implements OnInit {
         equipamento_audio_visual: formData.equipamento_audio_visual || 0,
         itens_especiais: formData.itens_especiais || 0,
         execucao: formData.execucao || 0,
-        frete_logistica: formData.frete_logistica || 0,
-        diversos_operacional: formData.diversos_operacional || 0,
+        operacional_logistica: formData.operacional_logistica || 0,
+        servico_diversos_operacional: formData.servico_diversos_operacional || 0,
         coeficiente_margem: formData.coeficiente_margem || 0,
 
         // valores orçamento reaproveitamento
