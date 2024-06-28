@@ -201,8 +201,8 @@
         </mat-card>
       </div>
       
-      <div class="orcamento d-flex justify-content-center" [class.ajuste-margin]="!isDiretoria">
-      <mat-card class="col-md-6" [class.col-md-12]="!isDiretoria">
+      <div class="orcamento d-flex justify-content-center" [class.ajuste-margin]="!isDiretoria && !isOrcamentista">
+      <mat-card class="col-md-6" [class.col-md-12]="!isDiretoria && !isOrcamentista">
         <div class="orcamento-header d-flex justify-content-between">
             <h3>Extrato</h3>
       
@@ -700,7 +700,7 @@
 
       </mat-card>
       
-      <div class="col-md-6 orcamento-orcado" *ngIf="isDiretoria">
+      <div class="col-md-6 orcamento-orcado" *ngIf="isDiretoria || isOrcamentista">
         <mat-card class="col-md-12">
           <div class="orcamento-header d-flex justify-content-between">
               <h3>Racional Custos</h3>

@@ -35,6 +35,7 @@ export class BudgetFormComponent implements OnInit {
   backscreen: string;
   attendances: Employee[];
   isDiretoria = false;
+  isOrcamentista = false;
   constructor(
     private snackBar: MatSnackBar,
     private formBuilder: FormBuilder,
@@ -64,6 +65,7 @@ export class BudgetFormComponent implements OnInit {
   checkUserDepartment() {
     const currentUser = this.authService.currentUser();
     this.isDiretoria = currentUser.employee.department_id === 1;
+    this.isOrcamentista = currentUser.employee.department_id === 6;
   }
 
   createForm() {
