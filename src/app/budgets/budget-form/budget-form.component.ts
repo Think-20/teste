@@ -206,8 +206,8 @@ export class BudgetFormComponent implements OnInit {
         bonificacao_producao_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         bonificacao_detalhamento_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         total_estande_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
-        diversos_operacional_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
-        frete_logistica_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+        diversos_operacional_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        frete_logistica_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         m2_venda_stand_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         m2_venda_stand_logistica_equipamentos_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
 
