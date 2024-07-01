@@ -640,9 +640,9 @@ export class ScheduleComponent implements OnInit {
       })
 
       let count = filteredTasks.length
-      let length = (date.getDay() == 6 || date.getDay() == 0) ? 3 : filteredTasks.length
+      let length = (date.getDay() == 6 || date.getDay() == 0) ? 4 : filteredTasks.length
 
-      for (let index = 0; index < (7 - length); index++) {
+      for (let index = 0; index < (8 - length); index++) {
         let item = new TaskItem
         item.date = this.datePipe.transform(date, 'yyyy-MM-dd')
         item.task = new Task

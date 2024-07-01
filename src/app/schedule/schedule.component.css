@@ -331,3 +331,16 @@
 .meta-counters {
   margin-bottom: 5px;
 }
+
+.meta-values-pt {
+  padding-top: 8px;
+}
+
+.schedule-goals-title {
+  font-weight: 500;
+  color: #6e6e6e;
+}
+
+.line-height1-3 {
+  line-height: 1.3;
+}
