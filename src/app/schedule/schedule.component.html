@@ -190,26 +190,27 @@
              [ngClass]="lineChronoClass(chr, employees)">
              <div class="schedule-goals mat-cell mat-column-date day-chrono day-{{ chr.day }} month-{{ chr.month }} year-{{ chr.year }}">
               <div *ngIf="chr.meta" class="schedule-goals-item">
-                <!-- <span class="schedule-goals-title">Meta ano:</span> -->
                 <span class="schedule-goals-title">Total acum/ano:</span>
-
-                <div class="meta-counters">
-                    <!-- <span>{{ chr.meta.anual.atualJobs }} / {{ chr.meta.anual.metaJobs }}</span> -->
-
-                    <!-- <div class="schedule-goals-item-percentage">
-                      <mat-icon [class.keyboard_arrow_up]="chr.meta.anual.atualJobs >= chr.meta.anual.metaJobs" class="icon keyboard_arrow_down">{{ chr.meta.anual.atualJobs >= chr.meta.anual.metaJobs ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
-                      <span>{{ round(chr.meta.anual.porcentagemJobs) }}%</span>
-                    </div> -->
-                </div>
                 <div class="meta-values">
                   <div style="display: flex; flex-direction: column;">
-                      <span>{{ chr.meta.anual.atualReais | thousands }}</span>
-                      <!-- <span>{{ chr.meta.anual.metaReais | thousands }}</span> -->
+                      <span class="line-height1-3">Autorais</span>
+                      <span>{{ chr.meta.anual.atualInternoReais | thousands }}</span>
                   </div>
 
                   <div class="schedule-goals-item-percentage">
-                    <mat-icon [class.keyboard_arrow_up]="chr.meta.anual.atualReais >= chr.meta.anual.metaReais" class="icon keyboard_arrow_down">{{ chr.meta.anual.atualReais >= chr.meta.anual.metaReais ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
-                    <span>{{ round(chr.meta.anual.porcentagemReais) }}%</span>
+                    <mat-icon [class.keyboard_arrow_up]="chr.meta.anual.atualInternoReais >= chr.meta.anual.metaReais" class="icon keyboard_arrow_down">{{ chr.meta.anual.atualInternoReais >= chr.meta.anual.metaReais ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+                    <span>{{ round(chr.meta.anual.porcentagemInternoReais) }}%</span>
+                  </div>
+                </div>
+                <div class="meta-values meta-values-pt">
+                  <div style="display: flex; flex-direction: column;">
+                      <span class="line-height1-3">Externos</span>
+                      <span>{{ chr.meta.anual.atualExternoReais | thousands }}</span>
+                  </div>
+
+                  <div class="schedule-goals-item-percentage">
+                    <mat-icon [class.keyboard_arrow_up]="chr.meta.anual.atualExternoReais >= chr.meta.anual.metaReais" class="icon keyboard_arrow_down">{{ chr.meta.anual.atualExternoReais >= chr.meta.anual.metaReais ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+                    <span>{{ round(chr.meta.anual.porcentagemExternoReais) }}%</span>
                   </div>
                 </div>
               </div>
@@ -225,26 +226,27 @@
                   </button>
                 </div>
                 <div *ngIf="chr.meta" class="schedule-goals-item">
-                  <!-- <span class="schedule-goals-title">Meta mês:</span> -->
                   <span class="schedule-goals-title">Total acum/mês:</span>
-
-                    <div class="meta-counters">
-                      <!-- <span>{{ chr.meta.mes.atualJobs }} / {{ chr.meta.mes.metaJobs }}</span> -->
-
-                      <!-- <div class="schedule-goals-item-percentage">
-                        <mat-icon [class.keyboard_arrow_up]="chr.meta.mes.atualJobs >= chr.meta.mes.metaJobs" class="icon keyboard_arrow_down">{{ chr.meta.mes.atualJobs >= chr.meta.mes.metaJobs ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
-                        <span>{{ round(chr.meta.mes.porcentagemJobs) }}%</span>
-                      </div> -->
-                    </div>
                     <div class="meta-values">
                       <div style="display: flex; flex-direction: column;">
-                        <span>{{ chr.meta.mes.atualReais | thousands }}</span>
-                          <!-- <span>{{ chr.meta.mes.metaReais | number:'2.0' }}</span> -->
+                        <span class="line-height1-3">Autorais</span>
+                        <span>{{ chr.meta.mes.atualInternoReais | thousands }}</span>
                       </div>
     
                       <div class="schedule-goals-item-percentage">
-                        <mat-icon [class.keyboard_arrow_up]="chr.meta.mes.atualReais >= chr.meta.mes.metaReais" class="icon keyboard_arrow_down">{{ chr.meta.mes.atualReais >= chr.meta.mes.metaReais ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
-                        <span>{{ round(chr.meta.mes.porcentagemReais) }}%</span>
+                        <mat-icon [class.keyboard_arrow_up]="chr.meta.mes.atualInternoReais >= chr.meta.mes.metaReais" class="icon keyboard_arrow_down">{{ chr.meta.mes.atualInternoReais >= chr.meta.mes.metaReais ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+                        <span>{{ round(chr.meta.mes.porcentagemInternoReais) }}%</span>
+                      </div>
+                    </div>
+                    <div class="meta-values meta-values-pt">
+                      <div style="display: flex; flex-direction: column;">
+                          <span class="line-height1-3">Externos</span>
+                          <span>{{ chr.meta.mes.atualExternoReais | thousands }}</span>
+                      </div>
+    
+                      <div class="schedule-goals-item-percentage">
+                        <mat-icon [class.keyboard_arrow_up]="chr.meta.mes.atualExternoReais >= chr.meta.mes.metaReais" class="icon keyboard_arrow_down">{{ chr.meta.mes.atualExternoReais >= chr.meta.mes.metaReais ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+                        <span>{{ round(chr.meta.mes.porcentagemExternoReais) }}%</span>
                       </div>
                     </div>
                 </div>
