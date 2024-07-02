@@ -709,16 +709,17 @@
           </div>
       
           <div class="orcamento-header d-flex justify-content-between">
-              <div class="col-md-10 d-flex p-0 justify-content-between w-100">
+              <div class="col-md-8 d-flex p-0 justify-content-between w-100">
                 <h3 class="col-md-3 p-0">Descrição</h3>
                 <h3 class="col-md-9 p-0 d-flex justify-content-end">% Total</h3>
               </div>
               <h3 class="col-md-2 p-0 d-flex justify-content-end">% Meta</h3>
+              <h3 title="Coeficiente" class="col-md-2 p-0 d-flex justify-content-end">Coeficiente</h3>
           </div>
       
           <div class="orcamento-campos racional-custos">
             <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -738,9 +739,18 @@
                     class="text-right">
                   <span matSuffix>%</span>
                 </mat-form-field>
+
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="custo_total_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
             </div>
             <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -759,9 +769,17 @@
                     class="text-right">
                   <span matSuffix>%</span>
                 </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="imposto_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
             </div>
             <div class="col-md-12  p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -780,9 +798,17 @@
                     class="text-right">
                   <span matSuffix>%</span>
                 </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="comissao_vendas_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
             </div>
             <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -801,9 +827,17 @@
                     class="text-right">
                   <span matSuffix>%</span>
                 </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_projeto_interno_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
             </div>
             <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -822,9 +856,17 @@
                     class="text-right">
                   <span matSuffix>%</span>
                 </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_orcamento_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
             </div>
             <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -843,9 +885,17 @@
                     class="text-right">
                   <span matSuffix>%</span>
                 </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_gerente_producao_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
             </div>
             <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -864,9 +914,17 @@
                     class="text-right">
                   <span matSuffix>%</span>
                 </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_producao_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
             </div>
             <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -885,9 +943,17 @@
                     class="text-right">
                   <span matSuffix>%</span>
                 </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_detalhamento_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
             </div>
             <div class="col-md-12 p-0">
-                <mat-form-field  class="col-md-10">
+                <mat-form-field  class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -902,7 +968,7 @@
                 </mat-form-field>
             </div>
             <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -921,9 +987,17 @@
                     class="text-right">
                   <span matSuffix>%</span>
                 </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="total_estande_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
             </div>
             <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-8">
                 <input
                     matInput
                     type="text"
@@ -942,9 +1016,17 @@
                     class="text-right">
                   <span matSuffix>%</span>
                 </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="diversos_operacional_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
             </div>
             <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-8">
                 <input
                   matInput
                   type="text"
@@ -963,9 +1045,17 @@
                   class="text-right">
                 <span matSuffix>%</span>
               </mat-form-field>
+               <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="frete_logistica_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
             </div>
             <!-- <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -977,7 +1067,7 @@
                 </mat-form-field>
             </div> -->
             <!-- <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -989,7 +1079,7 @@
                 </mat-form-field>
             </div> -->
             <!-- <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -1001,7 +1091,7 @@
                 </mat-form-field>
             </div> -->
             <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -1012,7 +1102,7 @@
                 </mat-form-field>
             </div>
             <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
@@ -1031,9 +1121,17 @@
                     class="text-right">
                   <span matSuffix>%</span>
                 </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="m2_venda_stand_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
             </div>
             <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-8">
                 <input
                   matInput
                   type="text"
@@ -1052,6 +1150,14 @@
                   class="text-right">
                 <span matSuffix>%</span>
               </mat-form-field>
+               <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="m2_venda_stand_logistica_equipamentos_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
           </div>
           </div>
         </mat-card>

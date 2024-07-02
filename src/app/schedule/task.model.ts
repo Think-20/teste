@@ -81,6 +81,20 @@ export class Task {
   m2_venda_stand_meta_porcentagem?:number
   m2_venda_stand_logistica_equipamentos_meta_porcentagem?: number
 
+  custo_total_coeficiente?: number
+  imposto_coeficiente?: number
+  comissao_vendas_coeficiente?: number
+  bonificacao_projeto_interno_coeficiente?: number
+  bonificacao_orcamento_coeficiente?: number
+  bonificacao_gerente_producao_coeficiente?: number
+  bonificacao_producao_coeficiente?: number
+  bonificacao_detalhamento_coeficiente?: number
+  total_estande_coeficiente?: number
+  frete_logistica_coeficiente?: number
+  diversos_operacional_coeficiente?: number
+  m2_venda_stand_coeficiente?: number
+  m2_venda_stand_logistica_equipamentos_coeficiente?: number
+
   marcenaria_reaproveitamento?: number
   revestimentos_epeciais_reaproveitamento?: number
   estrutura_metalicas_reaproveitamento?: number

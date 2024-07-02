@@ -211,6 +211,21 @@ export class BudgetFormComponent implements OnInit {
         m2_venda_stand_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         m2_venda_stand_logistica_equipamentos_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
 
+        // Racional Custos coeficiente
+        custo_total_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
+        imposto_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
+        comissao_vendas_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_projeto_interno_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_orcamento_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_gerente_producao_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_producao_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_detalhamento_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
+        total_estande_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
+        diversos_operacional_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
+        frete_logistica_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
+        m2_venda_stand_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
+        m2_venda_stand_logistica_equipamentos_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
+
         opcional_equipamento_audio_visual: this.formBuilder.control({ value: 0, disabled: false }, []),
         total_geral_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
         liquido_think: this.formBuilder.control({ value: 0, disabled: true }, []),
@@ -341,6 +356,21 @@ export class BudgetFormComponent implements OnInit {
         total_estande_meta_porcentagem: formData.total_estande_meta_porcentagem,
         m2_venda_stand_meta_porcentagem: formData.m2_venda_stand_meta_porcentagem,
         m2_venda_stand_logistica_equipamentos_meta_porcentagem: formData.m2_venda_stand_logistica_equipamentos_meta_porcentagem,
+
+        // Racional Custos coeficiente
+        custo_total_coeficiente: formData.custo_total_coeficiente || 0,
+        imposto_coeficiente: formData.imposto_coeficiente || 0.15,
+        comissao_vendas_coeficiente: formData.comissao_vendas_coeficiente || 0.05,
+        bonificacao_projeto_interno_coeficiente: formData.bonificacao_projeto_interno_coeficiente || 0.03,
+        bonificacao_orcamento_coeficiente: formData.bonificacao_orcamento_coeficiente || 0.01,
+        bonificacao_gerente_producao_coeficiente: formData.bonificacao_gerente_producao_coeficiente || 0.01,
+        bonificacao_producao_coeficiente: formData.bonificacao_producao_coeficiente || 0.01,
+        bonificacao_detalhamento_coeficiente: formData.bonificacao_detalhamento_coeficiente || 0.005,
+        total_estande_coeficiente: formData.total_estande_coeficiente || 1.86,
+        diversos_operacional_coeficiente: formData.diversos_operacional_coeficiente || 1.30,
+        frete_logistica_coeficiente: formData.frete_logistica_coeficiente || 1.30,
+        m2_venda_stand_coeficiente: formData.m2_venda_stand_coeficiente || 0,
+        m2_venda_stand_logistica_equipamentos_coeficiente: formData.m2_venda_stand_logistica_equipamentos_coeficiente || 0,
       });
     }
   }
@@ -383,12 +413,12 @@ export class BudgetFormComponent implements OnInit {
   }
 
   setTodasComissoesBonificacoes(index: number) {
-    this.setComissoesBonificacoes("comissao_vendas", index, 0.05);
-    this.setComissoesBonificacoes("bonificacao_projeto_interno", index, 0.03);
-    this.setComissoesBonificacoes("bonificacao_orcamento", index, 0.01);
-    this.setComissoesBonificacoes("bonificacao_gerente_producao", index, 0.01);
-    this.setComissoesBonificacoes("bonificacao_producao", index, 0.01);
-    this.setComissoesBonificacoes("bonificacao_detalhamento", index, 0.005);
+    this.setComissoesBonificacoes("comissao_vendas", index, this.getCoeficiente(index, "comissao_vendas_coeficiente"));
+    this.setComissoesBonificacoes("bonificacao_projeto_interno", index, this.getCoeficiente(index, "bonificacao_projeto_interno_coeficiente"));
+    this.setComissoesBonificacoes("bonificacao_orcamento", index, this.getCoeficiente(index, "bonificacao_orcamento_coeficiente"));
+    this.setComissoesBonificacoes("bonificacao_gerente_producao", index, this.getCoeficiente(index, "bonificacao_gerente_producao_coeficiente"));
+    this.setComissoesBonificacoes("bonificacao_producao", index, this.getCoeficiente(index, "bonificacao_producao_coeficiente"));
+    this.setComissoesBonificacoes("bonificacao_detalhamento", index,this.getCoeficiente(index, "bonificacao_detalhamento_coeficiente"));
   }
 
 
@@ -440,7 +470,9 @@ export class BudgetFormComponent implements OnInit {
 
     const totalEstande = this.getTotalServicoDiversosOperacional(index);
 
-    const total = totalEstande * 1.30;
+    const coeficiente = this.getCoeficiente(index, "diversos_operacional_coeficiente");
+    
+    const total = totalEstande * coeficiente;
 
     controlTotalDiversosOperacionalPer.setValue(total > 0 ? 100: 0, { emitEvent: false });
 
@@ -454,7 +486,9 @@ export class BudgetFormComponent implements OnInit {
 
     const totalEstande = this.getTotalOperacionalLogistica(index);
 
-    const total = totalEstande * 1.30;
+    const coeficiente = this.getCoeficiente(index, "frete_logistica_coeficiente");
+
+    const total = totalEstande * coeficiente;
 
     controTotalFreteLogisticaPer.setValue(total > 0 ? 100: 0, { emitEvent: false });
 
@@ -495,7 +529,7 @@ export class BudgetFormComponent implements OnInit {
   }
 
   setTotalImposto(index: number) {
-    const coeficienteMargem = 0.15;
+    const coeficienteMargem = this.getCoeficiente(index, "imposto_coeficiente");
 
     const controlImposto: AbstractControl = this.budgetForms[index].get("imposto");
 
@@ -648,6 +682,27 @@ export class BudgetFormComponent implements OnInit {
 
   getTotalGeralStand(index: number) {
     return this.budgetForms[index].get("total_geral_estande").value;
+  }
+
+  getCoeficiente(index: number, field: string) {
+    return this.budgetForms[index].get(field).value;
+
+  }
+
+  aumentarCoeficiente(index: number, field: string, step: number) {
+    const currentValue: number = this.budgetForms[index].get(field).value;
+
+    const newValue = currentValue + 0.1;
+
+    this.budgetForms[index].get(field).setValue(newValue);
+  }
+  
+  decrementarCoeficiente(index: number, field: string, step: number) {
+    const currentValue = this.budgetForms[index].get(field).value;
+
+    const newValue = currentValue - step;
+
+    this.budgetForms[index].get(field).setValue(newValue);
   }
 
   getTotalArea(index: number) {
