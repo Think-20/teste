@@ -40,12 +40,14 @@ export class AlertService {
     return this._listEmptySubject.asObservable();
   }
 
+
   constructor(
     private http: Http,
     private snackBar: MatSnackBar,
   ) { }
 
   getAlerts(): Observable<ProjectsPendency> {
+
     const url = `notifywindow`
 
     return this.http.get(`${API}/${url}`)

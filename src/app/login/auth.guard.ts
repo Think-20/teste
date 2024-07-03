@@ -56,20 +56,16 @@ export class AuthGuard implements CanActivate {
 
         const today = new Date();
 
-        this.alertService.hasAlerts().subscribe(hasAlerts => {
-            const isFriday = today.getDay() === this.FRIDAY_DAY;
-          
-            if (hasAlerts && isFriday) {
-              this.hasAlertAndIsFriday = true;
-            }
-        });
+        const hasAlerts = (await this.alertService.hasAlerts().toPromise());
 
-        this.alertService.listEmpty$.subscribe(isListEmpty => {
-            if (isListEmpty && iterativeRoute.routeConfig.path !== 'alerts') {
-              this.snackBar.open('Por favor, atualize os status de todos os projetos antes de navegar pelo sistema.', '', { duration: 3000 });
-              return false;
-            }
-        });
+        const isFriday = today.getDay() === this.FRIDAY_DAY;
+
+        const notAlertsPath = iterativeRoute.routeConfig.path !== 'alerts';
+
+        if (hasAlerts && isFriday && notAlertsPath) {
+            this.snackBar.open('Por favor, atualize os status de todos os projetos antes de navegar pelo sistema.', '', { duration: 3000 });
+            this.router.navigate(['/alerts']);
+        }
 
         return true;
     }
