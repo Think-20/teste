@@ -34,8 +34,32 @@
                                       [name]="month.month"
                                       type="text"
                                       class="text-right"
-                                      placeholder="Meta interna"
+                                      placeholder="Meta de aprovados - Interno"
                                       [formControlName]="month.month"
+                                      (keypress)="allowOnlyNumbers($event)">
+                                  </mat-form-field>
+
+                                  <mat-form-field class="pr-2">
+                                    <input
+                                      currencyMask
+                                      matInput
+                                      [name]="month.month + 'espected' + 'internal'"
+                                      type="text"
+                                      class="text-right"
+                                      placeholder="Meta de jobs - Interno"
+                                      [formControlName]="month.month + 'espected' + 'internal'"
+                                      (keypress)="allowOnlyNumbers($event)">
+                                  </mat-form-field>
+
+                                  <mat-form-field class="pr-2">
+                                    <input
+                                      currencyMask
+                                      matInput
+                                      [name]="month.month + 'external'"
+                                      type="text"
+                                      class="text-right"
+                                      placeholder="Meta de aprovados - Externo"
+                                      [formControlName]="month.month + 'external'"
                                       (keypress)="allowOnlyNumbers($event)">
                                   </mat-form-field>
 
@@ -46,10 +70,11 @@
                                       [name]="month.month + 'espected'"
                                       type="text"
                                       class="text-right"
-                                      placeholder="Meta externa"
+                                      placeholder="Meta de jobs - Externo"
                                       [formControlName]="month.month + 'espected'"
                                       (keypress)="allowOnlyNumbers($event)">
                                   </mat-form-field>
+
                             </mat-card-content>
                         </mat-card>
                     </div>
