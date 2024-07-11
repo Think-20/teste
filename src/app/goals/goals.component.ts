@@ -60,8 +60,8 @@ export class GoalsComponent implements OnInit {
       const matchingGoal = this.getGoal(month.year, month.month);
 
       if (matchingGoal) {
-        const { id, value_internal, expected_value_external } = matchingGoal;
-        Object.assign(month, { id, value_internal, expected_value_external });
+        const { id, value, expected_value } = matchingGoal;
+        Object.assign(month, { id, value, expected_value });
       }
     });
 
@@ -78,94 +78,59 @@ export class GoalsComponent implements OnInit {
     this.yearMonth.months.forEach(month => {
       const monthId = month.month;
       
-      this.goalsForm.addControl(monthId.toString(), this.formBuilder.control(month.value_internal));
-      this.goalsForm.addControl(monthId.toString() + "external", this.formBuilder.control(month.value_external));
+      this.goalsForm.addControl(monthId.toString(), this.formBuilder.control(month.value));
+      this.goalsForm.addControl(monthId.toString() + 'espected', this.formBuilder.control(month.expected_value));
 
-      this.goalsForm.addControl(monthId.toString() + 'espected', this.formBuilder.control(month.expected_value_external));
-      this.goalsForm.addControl(monthId.toString() + 'espected' + 'internal', this.formBuilder.control(month.expected_value_internal));
+      const control = this.goalsForm.controls[monthId];
+      const control2 = this.goalsForm.controls[monthId.toString() + 'espected'];
 
-      const valueInternalControl = this.goalsForm.controls[monthId];
-      const valueExternalControl = this.goalsForm.controls[monthId.toString() + 'external'];
-        
-      const expectedValueExternal = this.goalsForm.controls[monthId.toString() + 'espected'];
-      const expectedValueInternal = this.goalsForm.controls[monthId.toString() + 'espected' + 'internal'];
+      control.updateValueAndValidity();
+      control2.updateValueAndValidity();
 
-      valueInternalControl.updateValueAndValidity();
-      expectedValueExternal.updateValueAndValidity();
-
-      valueExternalControl.updateValueAndValidity();
-      expectedValueInternal.updateValueAndValidity();
-
-      valueInternalControl.valueChanges
+      control.valueChanges
         .do(() => {
           console.log('Aguarde...')
         })
         .debounceTime(1000)
         .subscribe(value => {
           if (!value) {
-            this.snackBar.open("Por favor informe a meta de aprovados - interno!")
-            value.setValue(month.value_internal, { emitEvent: false });
+            this.snackBar.open("Por favor informe a meta de aprovados!")
+            control.setValue(month.value, { emitEvent: false });
             this.dismissSnackBar();
             return;
           }
-          this.createUpdateGoal(month, valueInternalControl.value, expectedValueExternal.value, valueExternalControl.value, expectedValueInternal.value);
+          this.createUpdateGoal(month, value, control2.value);
         })
 
-        expectedValueExternal.valueChanges
-          .do(() => {
-            console.log('Aguarde...')
-          })
-          .debounceTime(1000)
-          .subscribe(value => {
-            if (!value) {
-              this.snackBar.open("Por favor informe a meta de jobs externo!")
-              expectedValueExternal.setValue(month.expected_value_external, { emitEvent: false });
-              this.dismissSnackBar();
-              return;
-            }
-            
-            this.createUpdateGoal(month, valueInternalControl.value, expectedValueExternal.value, valueExternalControl.value, expectedValueInternal.value);
-        })
 
-        valueExternalControl.valueChanges.do(() => {
-            console.log('Aguarde...')
-          })
-          .debounceTime(1000)
-          .subscribe(value => {
-            if (!value) {
-              this.snackBar.open("Por favor informe a meta de aprovados - externo!")
-              expectedValueExternal.setValue(month.value_external, { emitEvent: false });
-              this.dismissSnackBar();
-              return;
-            }
-            
-            this.createUpdateGoal(month, valueInternalControl.value, expectedValueExternal.value, valueExternalControl.value, expectedValueInternal.value);
-        })
-        expectedValueInternal.valueChanges.do(() => {
+        control2.valueChanges
+        .do(() => {
           console.log('Aguarde...')
-          })
-          .debounceTime(1000)
-          .subscribe(value => {
-            if (!value) {
-              this.snackBar.open("Por favor informe a meta de jobs interno!")
-              expectedValueExternal.setValue(month.expected_value_internal, { emitEvent: false });
-              this.dismissSnackBar();
-              return;
-            }
-            
-          this.createUpdateGoal(month, valueInternalControl.value, expectedValueExternal.value, valueExternalControl.value, expectedValueInternal.value);
+        })
+        .debounceTime(1000)
+        .subscribe(value => {
+          if (!value) {
+            this.snackBar.open("Por favor informe a meta de jobs!")
+            control2.setValue(month.expected_value, { emitEvent: false });
+            this.dismissSnackBar();
+            return;
+          }
+
+          if (!control.value) {
+            this.snackBar.open("Por favor informe a meta de aprovados!")
+            this.dismissSnackBar();
+            return;
+          }
+          
+          this.createUpdateGoal(month, control.value, control2.value);
       })
     })
   }
 
-  createUpdateGoal(goal: Goal, valueInternal: number, expectedValueExternal: number, valueExternal: number, expectedValueInternal: number) {
-    goal.value_internal = valueInternal;
-    goal.expected_value_external = expectedValueExternal;
+  createUpdateGoal(goal: Goal, value: number, expectedValue: number) {
+    goal.value = value;
+    goal.expected_value = expectedValue;
 
-    goal.value_external = valueExternal;
-    goal.expected_value_internal = expectedValueInternal;
-
-    console.log(goal)
     if (goal.id)
       this.updateGoal(goal);
     else
