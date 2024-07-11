@@ -201,8 +201,8 @@
         </mat-card>
       </div>
       
-      <div class="orcamento d-flex justify-content-center" [class.ajuste-margin]="!isDiretoria">
-      <mat-card class="col-md-7" [class.col-md-12]="!isDiretoria">
+      <div class="orcamento d-flex justify-content-center" [class.ajuste-margin]="!isDiretoria && !isOrcamentista">
+      <mat-card class="col-md-6" [class.col-md-12]="!isDiretoria && !isOrcamentista">
         <div class="orcamento-header d-flex justify-content-between">
             <h3>Extrato</h3>
       
@@ -210,13 +210,21 @@
         </div>
       
         <div class="orcamento-header d-flex justify-content-between">
-            <h3>Serviços</h3>
-            <h3>% Total</h3>
+
+          <div class="col-md-10 d-flex p-0 justify-content-between w-100">
+            <h3 class="col-md-3 p-0">Serviços</h3>
+            <h3 class="col-md-9 p-0 d-flex justify-content-end">Reaproveitamento</h3>
+          </div>
+          <h3 class="col-md-2 p-0 d-flex justify-content-end">% Total</h3>
+
+            <!-- <h3>Serviços</h3>
+            <h3>Reproveitamento</h3>
+            <h3>% Total</h3> -->
         </div>
       
         <div class="orcamento-campos extrato">
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -225,6 +233,15 @@
                   formControlName="marcenaria"
                   currencyMask
                   (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="marcenaria_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right reaproveitamento">
               </mat-form-field>
               <mat-form-field class="col-md-2">
                 <input
@@ -236,7 +253,7 @@
               </mat-form-field>
           </div>
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -245,6 +262,15 @@
                   formControlName="revestimentos_epeciais"
                   currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="revestimentos_epeciais_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right reaproveitamento">
               </mat-form-field>
                 <mat-form-field class="col-md-2">
                 <input
@@ -256,7 +282,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -265,6 +291,15 @@
                   formControlName="estrutura_metalicas"
                   currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="estrutura_metalicas_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right reaproveitamento">
               </mat-form-field>
                 <mat-form-field class="col-md-2">
                 <input
@@ -276,7 +311,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -285,6 +320,15 @@
                   formControlName="material_mezanino"
                   currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="material_mezanino_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right reaproveitamento">
               </mat-form-field>
                 <mat-form-field class="col-md-2">
                 <input
@@ -296,7 +340,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -305,6 +349,15 @@
                   formControlName="fechamento_vidro"
                   currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="fechamento_vidro_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right reaproveitamento">
               </mat-form-field>
                 <mat-form-field class="col-md-2">
                 <input
@@ -316,7 +369,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -325,6 +378,15 @@
                   formControlName="vitrines"
                   currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="vitrines_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right reaproveitamento">
               </mat-form-field>
                 <mat-form-field class="col-md-2">
                 <input
@@ -336,7 +398,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -345,6 +407,15 @@
                   formControlName="acrilico"
                   currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="acrilico_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right reaproveitamento">
               </mat-form-field>
                 <mat-form-field class="col-md-2">
                 <input
@@ -356,7 +427,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-7">
                 <input
                   matInput
                   type="text"
@@ -365,6 +436,15 @@
                   formControlName="mobiliario"
                   currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="mobiliario_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right reaproveitamento">
               </mat-form-field>
                 <mat-form-field class="col-md-2">
                 <input
@@ -376,7 +456,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-            <mat-form-field class="col-md-10">
+            <mat-form-field class="col-md-7">
               <input
                 matInput
                 type="text"
@@ -385,6 +465,15 @@
                 formControlName="refrigeracao_climatizacao"
                 currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+              <input
+                matInput
+                formControlName="refrigeracao_climatizacao_reaproveitamento"
+                currencyMask
+                (keypress)="allowOnlyNumbers($event)"
+                type="text"
+                class="text-right reaproveitamento">
             </mat-form-field>
               <mat-form-field class="col-md-2">
                 <input
@@ -396,7 +485,7 @@
               </mat-form-field>
           </div>
         <div class="col-md-12 p-0">
-            <mat-form-field class="col-md-10">
+            <mat-form-field class="col-md-7">
               <input
                 matInput
                 type="text"
@@ -405,6 +494,15 @@
                 formControlName="paisagismo"
                 currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+              <input
+                matInput
+                formControlName="paisagismo_reaproveitamento"
+                currencyMask
+                (keypress)="allowOnlyNumbers($event)"
+                type="text"
+                class="text-right reaproveitamento">
             </mat-form-field>
               <mat-form-field class="col-md-2">
                 <input
@@ -416,7 +514,7 @@
               </mat-form-field>
           </div>
         <div class="col-md-12 p-0">
-            <mat-form-field class="col-md-10">
+            <mat-form-field class="col-md-7">
               <input
                 matInput
                 type="text"
@@ -425,6 +523,15 @@
                 formControlName="comunicacao_visual"
                 currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+              <input
+                matInput
+                formControlName="comunicacao_visual_reaproveitamento"
+                currencyMask
+                (keypress)="allowOnlyNumbers($event)"
+                type="text"
+                class="text-right reaproveitamento">
             </mat-form-field>
               <mat-form-field class="col-md-2">
                 <input
@@ -436,7 +543,7 @@
               </mat-form-field>
           </div>
         <div class="col-md-12 p-0">
-            <mat-form-field class="col-md-10">
+            <mat-form-field class="col-md-7">
               <input
                 matInput
                 type="text"
@@ -445,6 +552,15 @@
                 formControlName="equipamento_audio_visual"
                 currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+              <input
+                matInput
+                formControlName="equipamento_audio_visual_reaproveitamento"
+                currencyMask
+                (keypress)="allowOnlyNumbers($event)"
+                type="text"
+                class="text-right reaproveitamento">
             </mat-form-field>
               <mat-form-field class="col-md-2">
                 <input
@@ -456,7 +572,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-            <mat-form-field class="col-md-10">
+            <mat-form-field class="col-md-7">
               <input
                 matInput
                 type="text"
@@ -465,6 +581,15 @@
                 formControlName="itens_especiais"
                 currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+              <input
+                matInput
+                formControlName="itens_especiais_reaproveitamento"
+                currencyMask
+                (keypress)="allowOnlyNumbers($event)"
+                type="text"
+                class="text-right reaproveitamento">
             </mat-form-field>
               <mat-form-field class="col-md-2">
                 <input
@@ -476,7 +601,7 @@
               </mat-form-field>
             </div>
           <div class="col-md-12 p-0">
-            <mat-form-field class="col-md-10">
+            <mat-form-field class="col-md-7">
               <input
                 matInput
                 type="text"
@@ -485,6 +610,15 @@
                 formControlName="execucao"
                 currencyMask
                 (keypress)="allowOnlyNumbers($event)">
+            </mat-form-field>
+            <mat-form-field class="col-md-3">
+              <input
+                matInput
+                formControlName="execucao_reaproveitamento"
+                currencyMask
+                (keypress)="allowOnlyNumbers($event)"
+                type="text"
+                class="text-right reaproveitamento">
             </mat-form-field>
               <mat-form-field class="col-md-2">
                 <input
@@ -495,33 +629,380 @@
                 <span class="mat-suffix" matSuffix>%</span>
               </mat-form-field>
             </div>
-            <!-- <div class="col-md-12 p-0">
-              <mat-form-field class="col-md-10">
-                <input
-                  matInput
-                  type="text"
-                  class="text-right"
-                  placeholder="Logistica"
-                  formControlName="logistica"
-                  currencyMask
-                  (keypress)="allowOnlyNumbers($event)">
-              </mat-form-field>
-                <mat-form-field class="col-md-2">
-                  <input
-                    matInput
-                    formControlName="logistica_porcentagem"
-                    type="text"
-                    class="text-right">
-                  <span class="mat-suffix" matSuffix>%</span>
-                </mat-form-field>
-              </div> -->
+            <div class="orcamento-footer d-flex justify-content-end saldo-total">
+              Saldo total: <span class="lucro" style="font-weight: 500; display: contents;">{{ budgetForm.controls.custo_total.value | currency: 'BRL' }}</span>
+            </div>
+              <div class="orcamento-header d-flex justify-content-between">
+                <h3>Diversos | Operacional</h3>
+              </div>
               <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+                <mat-form-field class="col-md-7">
                   <input
                     matInput
                     type="text"
                     class="text-right"
-                    placeholder="Diversos | Operacionais"
+                    placeholder="Serviços - Diversos | Operacional"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="servico_diversos_operacional">
+                </mat-form-field>
+                <mat-form-field class="col-md-3">
+                  <input
+                    matInput
+                    formControlName="servico_diversos_operacional_reaproveitamento"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right reaproveitamento">
+                </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="servico_diversos_operacional_porcentagem"
+                    type="text"
+                    class="text-right porcentagem">
+                  <span class="mat-suffix" matSuffix>%</span>
+                </mat-form-field>
+            </div>
+            <div class="orcamento-header d-flex justify-content-between">
+              <h3 class="p-0">Logística</h3>
+            </div>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-7">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Operacional - Logística"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="operacional_logistica">
+                </mat-form-field>
+                <mat-form-field class="col-md-3">
+                  <input
+                    matInput
+                    formControlName="operacional_logistica_reaproveitamento"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right reaproveitamento">
+                </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="operacional_logistica_porcentagem"
+                    type="text"
+                    class="text-right porcentagem">
+                  <span class="mat-suffix" matSuffix>%</span>
+                </mat-form-field>
+            </div>
+        </div>
+
+      </mat-card>
+      
+      <div class="col-md-6 orcamento-orcado" *ngIf="isDiretoria || isOrcamentista">
+        <mat-card class="col-md-12">
+          <div class="orcamento-header d-flex justify-content-between">
+              <h3>Racional Custos</h3>
+      
+              <!-- <span>Últimos 7 dias</span> -->
+          </div>
+      
+          <div class="orcamento-header d-flex justify-content-between">
+              <div class="col-md-8 d-flex p-0 justify-content-between w-100">
+                <h3 class="col-md-3 p-0">Descrição</h3>
+                <h3 class="col-md-9 p-0 d-flex justify-content-end">% Total</h3>
+              </div>
+              <h3 style="margin-right: 0.5rem;" class="col-md-2 p-0 d-flex justify-content-end">% Meta</h3>
+              <h3 style="word-break: break-word;" title="Coeficiente" class="col-md-2 p-0 d-flex justify-content-end">Coeficiente</h3>
+          </div>
+      
+          <div class="orcamento-campos racional-custos">
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-8">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Custo Total"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="custo_total">
+                </mat-form-field>
+
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="custo_total_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
+
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="custo_total_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
+            </div>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-8">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Imposto"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="imposto">
+                </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="imposto_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="imposto_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
+            </div>
+            <div class="col-md-12  p-0">
+                <mat-form-field class="col-md-8">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Comissão de Vendas"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="comissao_vendas">
+                </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="comissao_vendas_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="comissao_vendas_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
+            </div>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-8">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Bonificação Projetista Interno"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="bonificacao_projeto_interno">
+                </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_projeto_interno_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_projeto_interno_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
+            </div>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-8">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Bonificação Orçamento"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="bonificacao_orcamento">
+                </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_orcamento_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_orcamento_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
+            </div>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-8">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Bonificação Gerente de Produção"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="bonificacao_gerente_producao">
+                </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_gerente_producao_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_gerente_producao_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
+            </div>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-8">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Bonificação Produção"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="bonificacao_producao">
+                </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_producao_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_producao_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
+            </div>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-8">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Bonificação Detalhamento"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="bonificacao_detalhamento">
+                </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_detalhamento_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="bonificacao_detalhamento_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
+            </div>
+            <div class="col-md-12 p-0">
+                <mat-form-field  class="col-md-8">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right lucro"
+                    placeholder="Coeficiente de Margem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="coeficiente_margem">
+
+                    <mat-error>
+                      Obrigatório
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-8">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right perda-important"
+                    placeholder="Total Estande"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="total_estande">
+                </mat-form-field>
+                <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="total_estande_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="total_estande_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
+            </div>
+            <div class="col-md-12 p-0">
+              <mat-form-field class="col-md-8">
+                <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Diversos | Operacional"
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
                     formControlName="diversos_operacional">
@@ -529,42 +1010,159 @@
                 <mat-form-field class="col-md-2">
                   <input
                     matInput
-                    formControlName="diversos_operacional_porcentagem"
+                    formControlName="diversos_operacional_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
                     type="text"
-                    class="text-right porcentagem">
-                  <span class="mat-suffix" matSuffix>%</span>
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="diversos_operacional_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
                 </mat-form-field>
             </div>
             <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-10">
+              <mat-form-field class="col-md-8">
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Frete | Logística"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  formControlName="frete_logistica">
+              </mat-form-field>
+              <mat-form-field class="col-md-2">
+                <input
+                  matInput
+                  formControlName="frete_logistica_meta_porcentagem"
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right">
+                <span matSuffix>%</span>
+              </mat-form-field>
+               <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="frete_logistica_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
+            </div>
+            <!-- <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-8">
                   <input
                     matInput
                     type="text"
                     class="text-right"
-                    placeholder="Frete | Logistica"
+                    placeholder="Opcional - Equipamento Audio Visual"
                     currencyMask
                     (keypress)="allowOnlyNumbers($event)"
-                    formControlName="frete_logistica">
+                    formControlName="opcional_equipamento_audio_visual">
+                </mat-form-field>
+            </div> -->
+            <!-- <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-8">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Total geral estande"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="total_geral_estande">
+                </mat-form-field>
+            </div> -->
+            <!-- <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-8">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Líquido Think"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="liquido_think">
+                </mat-form-field>
+            </div> -->
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-8">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="Margem de lucro"
+                    formControlName="margem_lucro">
+                    <span class="mat-suffix" matSuffix>%</span>
+                </mat-form-field>
+            </div>
+            <div class="col-md-12 p-0">
+                <mat-form-field class="col-md-8">
+                  <input
+                    matInput
+                    type="text"
+                    class="text-right"
+                    placeholder="M² para Venda Stand"
+                    currencyMask
+                    (keypress)="allowOnlyNumbers($event)"
+                    formControlName="m2_venda_stand">
                 </mat-form-field>
                 <mat-form-field class="col-md-2">
                   <input
                     matInput
-                    formControlName="frete_logistica_porcentagem"
+                    formControlName="m2_venda_stand_meta_porcentagem"
+                    (keypress)="allowOnlyNumbers($event)"
                     type="text"
-                    class="text-right porcentagem">
-                  <span class="mat-suffix" matSuffix>%</span>
+                    class="text-right">
+                  <span matSuffix>%</span>
+                </mat-form-field>
+                 <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="m2_venda_stand_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
                 </mat-form-field>
             </div>
-        </div>
-      
-        <div class="orcamento-footer d-flex justify-content-end saldo-total">
-          Saldo total: <span class="lucro" style="font-weight: 500; display: contents;">{{ budgetForm.controls.custo_total.value | currency: 'BRL' }}</span>
-        </div>
-      </mat-card>
-      
-      <div class="col-md-5 orcamento-orcado" *ngIf="isDiretoria">
+            <div class="col-md-12 p-0">
+              <mat-form-field class="col-md-8">
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="M² para Venda Stand com Logística e Equipamentos"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  formControlName="m2_venda_stand_logistica_equipamentos">
+              </mat-form-field>
+              <mat-form-field class="col-md-2">
+                <input
+                  matInput
+                  formControlName="m2_venda_stand_logistica_equipamentos_meta_porcentagem"
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right">
+                <span matSuffix>%</span>
+              </mat-form-field>
+               <mat-form-field class="col-md-2">
+                  <input
+                    matInput
+                    formControlName="m2_venda_stand_logistica_equipamentos_coeficiente"
+                    (keypress)="allowOnlyNumbers($event)"
+                    type="text"
+                    class="text-right">
+                </mat-form-field>
+          </div>
+          </div>
+        </mat-card>
         <div class="orcamento-valores">
-            <div class="orcamento-valor">
+            <div class="orcamento-valor mt-4">
                 <div class="orcamento-valores-header d-flex justify-content-between">
                     <h3 class="orcamento-valor-titulo">Orçado</h3>
                     <!-- <h3 class="orcamento-valor-data">Hoje</h3> -->
@@ -641,191 +1239,6 @@
               </div>
           </div>
         </div>
-        <mat-card class="col-md-12 mt-2">
-          <div class="orcamento-header d-flex justify-content-between">
-              <h3>Racional Custos</h3>
-      
-              <!-- <span>Últimos 7 dias</span> -->
-          </div>
-      
-          <div class="orcamento-header d-flex justify-content-between">
-              <h3>Descrição</h3>
-              <h3>% Total</h3>
-          </div>
-      
-          <div class="orcamento-campos racional-custos">
-            <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Custo Total"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="custo_total">
-                </mat-form-field>
-            </div>
-            <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Imposto"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="imposto">
-                </mat-form-field>
-            </div>
-            <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Comissão de Vendas"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="comissao_vendas">
-                </mat-form-field>
-            </div>
-            <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Bonificação Projetista Interno"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="bonificacao_projeto_interno">
-                </mat-form-field>
-            </div>
-            <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Bonificação Orçamento"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="bonificacao_orcamento">
-                </mat-form-field>
-            </div>
-            <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Bonificação Gerente de Produção"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="bonificacao_gerente_producao">
-                </mat-form-field>
-            </div>
-            <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Bonificação Produção"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="bonificacao_producao">
-                </mat-form-field>
-            </div>
-            <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Bonificação Detalhamento"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="bonificacao_detalhamento">
-                </mat-form-field>
-            </div>
-            <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right lucro"
-                    placeholder="Coeficiente de Margem"
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="coeficiente_margem">
-
-                    <mat-error>
-                      Obrigatório
-                    </mat-error>
-                </mat-form-field>
-            </div>
-            <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right perda-important"
-                    placeholder="Total Estande"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="total_estande">
-                </mat-form-field>
-            </div>
-            <!-- <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Opcional - Equipamento Audio Visual"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="opcional_equipamento_audio_visual">
-                </mat-form-field>
-            </div> -->
-            <!-- <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Total geral estande"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="total_geral_estande">
-                </mat-form-field>
-            </div> -->
-            <!-- <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Líquido Think"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="liquido_think">
-                </mat-form-field>
-            </div> -->
-            <div class="col-md-12">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Margem de lucro"
-                    formControlName="margem_lucro">
-                    <span class="mat-suffix" matSuffix>%</span>
-                </mat-form-field>
-            </div>
-          </div>
-        </mat-card>
       </div>
       </div>
       <div class="mt-2 d-flex justify-content-end">

@@ -198,7 +198,7 @@
                   </div>
 
                   <div class="schedule-goals-item-percentage">
-                    <mat-icon [class.keyboard_arrow_up]="chr.meta.anual.atualInternoReais >= chr.meta.anual.metaReais" class="icon keyboard_arrow_down">{{ chr.meta.anual.atualInternoReais >= chr.meta.anual.metaReais ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+                    <mat-icon [class.keyboard_arrow_up]="chr.meta.anual.atualInternoReais >= chr.meta.anual.metaReaisInterna" class="icon keyboard_arrow_down">{{ chr.meta.anual.atualInternoReais >= chr.meta.anual.metaReaisInterna ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
                     <span>{{ round(chr.meta.anual.porcentagemInternoReais) }}%</span>
                   </div>
                 </div>
@@ -209,7 +209,7 @@
                   </div>
 
                   <div class="schedule-goals-item-percentage">
-                    <mat-icon [class.keyboard_arrow_up]="chr.meta.anual.atualExternoReais >= chr.meta.anual.metaReais" class="icon keyboard_arrow_down">{{ chr.meta.anual.atualExternoReais >= chr.meta.anual.metaReais ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+                    <mat-icon [class.keyboard_arrow_up]="chr.meta.anual.atualExternoReais >= chr.meta.anual.metaReaisExterna" class="icon keyboard_arrow_down">{{ chr.meta.anual.atualExternoReais >= chr.meta.anual.metaReaisExterna ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
                     <span>{{ round(chr.meta.anual.porcentagemExternoReais) }}%</span>
                   </div>
                 </div>
@@ -234,7 +234,7 @@
                       </div>
     
                       <div class="schedule-goals-item-percentage">
-                        <mat-icon [class.keyboard_arrow_up]="chr.meta.mes.atualInternoReais >= chr.meta.mes.metaReais" class="icon keyboard_arrow_down">{{ chr.meta.mes.atualInternoReais >= chr.meta.mes.metaReais ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+                        <mat-icon [class.keyboard_arrow_up]="chr.meta.mes.atualInternoReais >= chr.meta.mes.metaReaisInterna" class="icon keyboard_arrow_down">{{ chr.meta.mes.atualInternoReais >= chr.meta.mes.metaReaisInterna ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
                         <span>{{ round(chr.meta.mes.porcentagemInternoReais) }}%</span>
                       </div>
                     </div>
@@ -245,7 +245,7 @@
                       </div>
     
                       <div class="schedule-goals-item-percentage">
-                        <mat-icon [class.keyboard_arrow_up]="chr.meta.mes.atualExternoReais >= chr.meta.mes.metaReais" class="icon keyboard_arrow_down">{{ chr.meta.mes.atualExternoReais >= chr.meta.mes.metaReais ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
+                        <mat-icon [class.keyboard_arrow_up]="chr.meta.mes.atualExternoReais >= chr.meta.mes.metaReaisExterna" class="icon keyboard_arrow_down">{{ chr.meta.mes.atualExternoReais >= chr.meta.mes.metaReaisExterna ? 'keyboard_arrow_up' : 'keyboard_arrow_down'}}</mat-icon>
                         <span>{{ round(chr.meta.mes.porcentagemExternoReais) }}%</span>
                       </div>
                     </div>

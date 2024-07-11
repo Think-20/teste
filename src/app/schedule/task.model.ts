@@ -58,8 +58,8 @@ export class Task {
   equipamento_audio_visual?: number
   itens_especiais?: number
   execucao?: number
-  frete_logistica?: number
-  diversos_operacional?: number
+  operacional_logistica?: number
+  servico_diversos_operacional?: number
   coeficiente_margem?: number
 
   mezanino?: number
@@ -68,4 +68,51 @@ export class Task {
   dt_fim_event?: Date
   dt_desmontagem?: Date
   dt_event?: Date
+
+  custo_total_meta_porcentagem?: number
+  imposto_meta_porcentagem?: number
+  comissao_vendas_meta_porcentagem?: number
+  bonificacao_projeto_interno_meta_porcentagem?: number
+  bonificacao_orcamento_meta_porcentagem?: number
+  bonificacao_gerente_producao_meta_porcentagem?: number
+  bonificacao_producao_meta_porcentagem?: number
+  bonificacao_detalhamento_meta_porcentagem?: number
+  total_estande_meta_porcentagem?: number
+  m2_venda_stand_meta_porcentagem?:number
+  m2_venda_stand_logistica_equipamentos_meta_porcentagem?: number
+  diversos_operacional_meta_porcentagem?: number
+  frete_logistica_meta_porcentagem?: number
+  
+  custo_total_coeficiente?: number
+  imposto_coeficiente?: number
+  comissao_vendas_coeficiente?: number
+  bonificacao_projeto_interno_coeficiente?: number
+  bonificacao_orcamento_coeficiente?: number
+  bonificacao_gerente_producao_coeficiente?: number
+  bonificacao_producao_coeficiente?: number
+  bonificacao_detalhamento_coeficiente?: number
+  total_estande_coeficiente?: number
+  frete_logistica_coeficiente?: number
+  diversos_operacional_coeficiente?: number
+  m2_venda_stand_coeficiente?: number
+  m2_venda_stand_logistica_equipamentos_coeficiente?: number
+
+  marcenaria_reaproveitamento?: number
+  revestimentos_epeciais_reaproveitamento?: number
+  estrutura_metalicas_reaproveitamento?: number
+  material_mezanino_reaproveitamento?: number
+  fechamento_vidro_reaproveitamento?: number
+  vitrines_reaproveitamento?: number
+  acrilico_reaproveitamento?: number
+  mobiliario_reaproveitamento?: number
+  refrigeracao_climatizacao_reaproveitamento?: number
+  paisagismo_reaproveitamento?: number
+  comunicacao_visual_reaproveitamento?: number
+  equipamento_audio_visual_reaproveitamento?: number
+  itens_especiais_reaproveitamento?: number
+  execucao_reaproveitamento?: number
+  frete_logistica_reaproveitamento?: number
+  diversos_operacional_reaproveitamento?: number
+  operacional_logistica_reaproveitamento?: number
+  servico_diversos_operacional_reaproveitamento?: number
 }

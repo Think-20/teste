@@ -194,6 +194,11 @@ mat-expansion-panel-header {
   color: rgba(0, 0, 0, .38) !important;
 }
 
+.orcamento-campos.extrato input.reaproveitamento {
+  color: inherit !important;
+}
+
+
 .ajuste-margin {
   margin-left: -0.5rem;
   margin-right: -0.5rem;
