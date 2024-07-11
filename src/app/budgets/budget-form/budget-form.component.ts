@@ -343,7 +343,8 @@ export class BudgetFormComponent implements OnInit {
         execucao_reaproveitamento: formData.execucao_reaproveitamento || 0,
         frete_logistica_reaproveitamento: formData.frete_logistica_reaproveitamento || 0,
         diversos_operacional_reaproveitamento: formData.diversos_operacional_reaproveitamento || 0,
-
+        operacional_logistica_reaproveitamento: formData.operacional_logistica_reaproveitamento,
+        servico_diversos_operacional_reaproveitamento: formData.servico_diversos_operacional_reaproveitamento,
         // Racional Custos metas
         custo_total_meta_porcentagem: formData.custo_total_meta_porcentagem,
         imposto_meta_porcentagem: formData.imposto_meta_porcentagem,
@@ -356,7 +357,8 @@ export class BudgetFormComponent implements OnInit {
         total_estande_meta_porcentagem: formData.total_estande_meta_porcentagem,
         m2_venda_stand_meta_porcentagem: formData.m2_venda_stand_meta_porcentagem,
         m2_venda_stand_logistica_equipamentos_meta_porcentagem: formData.m2_venda_stand_logistica_equipamentos_meta_porcentagem,
-
+        diversos_operacional_meta_porcentagem: formData.diversos_operacional_meta_porcentagem,
+        frete_logistica_meta_porcentagem: formData.frete_logistica_meta_porcentagem,
         // Racional Custos coeficiente
         custo_total_coeficiente: formData.custo_total_coeficiente || 0,
         imposto_coeficiente: formData.imposto_coeficiente || 0.15,

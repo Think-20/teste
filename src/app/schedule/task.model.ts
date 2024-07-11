@@ -80,7 +80,9 @@ export class Task {
   total_estande_meta_porcentagem?: number
   m2_venda_stand_meta_porcentagem?:number
   m2_venda_stand_logistica_equipamentos_meta_porcentagem?: number
-
+  diversos_operacional_meta_porcentagem?: number
+  frete_logistica_meta_porcentagem?: number
+  
   custo_total_coeficiente?: number
   imposto_coeficiente?: number
   comissao_vendas_coeficiente?: number
@@ -111,4 +113,6 @@ export class Task {
   execucao_reaproveitamento?: number
   frete_logistica_reaproveitamento?: number
   diversos_operacional_reaproveitamento?: number
+  operacional_logistica_reaproveitamento?: number
+  servico_diversos_operacional_reaproveitamento?: number
 }
