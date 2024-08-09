@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, LOCALE_ID } from '@angular/core';
+import { NgModule, LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { registerLocaleData, DatePipe, CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
@@ -226,6 +226,13 @@ import { ConfirmDialogService } from './confirm-dialog/confirm-dialog.service';
 import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
 import { CustomeNotificationInactivationComponente } from './customer-notification-inactivation/customer-notification-inactivation.component';
 import { CustomeNotificationInactivationService } from './customer-notification-inactivation/customer-notification-inactivation.service';
+import { CheckInComponent } from './check-in/check-in.component';
+import { CheckInApprovalComponent } from './check-in/components/check-in-approval/check-in-approval.component';
+import { CheckInContactInfoComponent } from './check-in/components/check-in-contact-info/check-in-contact-info.component';
+import { CheckInBillingComponent } from './check-in/components/check-in-billing/check-in-billing.component';
+import { CheckInBillingAmountComponent } from './check-in/components/check-in-billing-amount/check-in-billing-amount.component';
+import { CheckInExtrasComponent } from './check-in/components/check-in-extras/check-in-extras.component';
+import { CheckInObsComponent } from './check-in/components/check-in-obs/check-in-obs.component';
 
 registerLocaleData(localePt);
 
@@ -353,6 +360,17 @@ registerLocaleData(localePt);
     GoalsComponent,
     CustomeNotificationInactivationComponente,
     ThousandsPipe,
+
+    CheckInComponent,
+    CheckInApprovalComponent,
+    CheckInContactInfoComponent,
+    CheckInBillingComponent,
+    CheckInBillingAmountComponent,
+    CheckInExtrasComponent,
+    CheckInObsComponent,
+  ],
+  schemas: [
+    CUSTOM_ELEMENTS_SCHEMA,
   ],
   imports: [
     CurrencyMaskModule,
