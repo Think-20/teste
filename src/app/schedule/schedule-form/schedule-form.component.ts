@@ -424,9 +424,13 @@ export class ScheduleFormComponent implements OnInit {
       validators.push(Validators.min(320000.01))
       validators.push(Validators.max(500000))
       this.budgetErrorMessage = 'O valor deve estar entre 320.000,00 e 500.000,00 para até 5 dias'
-    } else if (days > 5) {
+    } else if (days == 6  || days == 7) {
       validators.push(Validators.min(500000.01))
-      this.budgetErrorMessage = 'O valor deve ser maior que 500.000,00 para mais de 6 dias'
+      validators.push(Validators.max(700000))
+      this.budgetErrorMessage = `O valor deve estar entre 500.000,00 e 700.000,00 para até ${days} dias`
+    } else if (days > 7) {
+      validators.push(Validators.min(700000))
+      this.budgetErrorMessage = 'O valor deve ser maior que 700.000,00 para mais de 7 dias'
     }
 
     if (jobActivity.min_budget_value) {
