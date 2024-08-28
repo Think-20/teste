@@ -1,0 +1,163 @@
+@import url('../../check-in.component.css');
+
+.check-in-accordion ::ng-deep .mat-checkbox-layout {
+    margin: 0 !important;
+}
+
+.check-in-accordion ::ng-deep .mat-checkbox-inner-container {
+    width: 14px;
+    height: 14px;
+}
+
+.check-in-accordion ::ng-deep .mat-checkbox-frame {
+    border-width: 1px;
+}
+
+.check-in-accordion ::ng-deep .mat-checkbox-checked .mat-checkbox-background {
+    background-color: transparent !important;
+}
+
+.check-in-accordion ::ng-deep .mat-checkbox-checked .mat-checkbox-checkmark-path {
+    stroke: #008000 !important;
+}
+
+.icon-button {
+    margin-right: 5px;
+}
+
+.aprovacao {
+    display: grid;
+
+    grid-template-rows: repeat(4, 30px);
+}
+
+.organizadora-promotora {
+    display: grid;
+
+    grid-template-rows: repeat(2, 60px);
+}
+
+.organizadora,
+.promotora {
+    display: grid;
+
+    grid-template-rows: repeat(2, 30px);
+}
+
+.aprovacao .check-in-row {
+    display: grid;
+
+    grid-template-columns: 0.65fr .35fr 1fr;
+}
+
+.aprovacao .check-in-row:nth-child(1),
+.organizadora .header,
+.promotora .header,
+.area .header,
+.evento .header {
+    border-bottom: 1px solid #ccc;
+}
+
+.promotora .header {
+    border-top: 1px solid #ccc;
+}
+
+.aprovacao .check-in-cell:nth-child(2),
+.organizadora .header .check-in-cell:nth-child(1),
+.promotora .header .check-in-cell:nth-child(1),
+.evento .header .check-in-cell:nth-child(1) {
+    border-right: 1px solid #ccc;
+
+    justify-content: flex-end;
+}
+
+.organizadora .header,
+.promotora .header {
+    display: grid;
+
+    grid-template-columns: 80px auto 1.2fr 80px 80px;
+}
+
+.organizadora .header .check-in-cell:nth-child(3),
+.organizadora .data .check-in-cell:nth-child(1),
+.promotora .header .check-in-cell:nth-child(3),
+.promotora .data .check-in-cell:nth-child(1) {
+    justify-content: flex-end;
+}
+
+.organizadora .header .check-in-cell:nth-child(4),
+.organizadora .header .check-in-cell:nth-child(5),
+.organizadora .data .check-in-cell:nth-child(2),
+.organizadora .data .check-in-cell:nth-child(3),
+.promotora .header .check-in-cell:nth-child(4),
+.promotora .header .check-in-cell:nth-child(5),
+.promotora .data .check-in-cell:nth-child(2),
+.promotora .data .check-in-cell:nth-child(3) {
+    border-left: 1px solid #ccc;
+    
+    justify-content: center;
+}
+
+.organizadora .data,
+.promotora .data {
+    display: grid;
+
+    grid-template-columns: 1fr 80px 80px;
+}
+
+.promotora .data .check-in-cell:nth-child(1) input {
+    text-align: right;
+}
+
+.area,
+.evento {
+    border-top: 0;
+}
+
+.area,
+.evento {
+    display: grid;
+
+    grid-template-rows: repeat(2, 30px);
+}
+
+.area .check-in-row {
+    display: grid;
+
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.area .check-in-row .check-in-cell:nth-child(1),
+.area .check-in-row .check-in-cell:nth-child(2),
+.area .check-in-row .check-in-cell:nth-child(3) {
+    border-right: 1px solid #ccc;
+}
+
+.evento .header {
+    display: grid;
+
+    grid-template-columns: 80px auto 1fr 80px 65px 94px;
+}
+
+.evento .data {
+    display: grid;
+
+    grid-template-columns: auto 80px 65px 94px;
+}
+
+.evento .header .check-in-cell:nth-child(3) {
+    justify-content: flex-end;
+}
+
+.evento .data .check-in-cell:nth-child(1) {
+    justify-content: flex-end;
+}
+
+.evento .header .check-in-cell:nth-child(3),
+.evento .header .check-in-cell:nth-child(4),
+.evento .header .check-in-cell:nth-child(5),
+.evento .data .check-in-cell:nth-child(1),
+.evento .data .check-in-cell:nth-child(2),
+.evento .data .check-in-cell:nth-child(3) {
+    border-right: 1px solid #ccc;
+}

@@ -1,0 +1,194 @@
+<mat-accordion class="check-in-accordion">
+
+    <mat-expansion-panel hideToggle [expanded]="true" [disabled]="true">
+        
+        <mat-expansion-panel-header>
+
+            <div class="check-in-header">
+                <h6 class="check-in-header-title">Extras:</h6>
+            
+                <div class="check-in-header-right">
+                    R$ 10.000,00
+                </div>
+            </div>
+
+        </mat-expansion-panel-header>
+
+        <!-- <table aria-describedby="Tabela aprovação" class="check-in-table table-1">
+            <tr class="columns-tr">
+                <th scope="col">ITEM</th>
+                <th scope="col">VALOR</th>
+                <th scope="col">SOLICITANTE</th>
+                <th scope="col">ORÇAMENTO</th>
+                <th scope="col">APROVAÇÃO</th>
+                <th scope="col">COMISSÃO EXTRA</th>
+                <th scope="col">FATURAMENTO</th>
+                <th scope="col">DATA</th>
+                <th scope="col">VENCIMENTO</th>
+                <th scope="col">QUITAÇÃO</th>
+            </tr>
+        </table> -->
+
+        <div class="check-in-grid">
+
+            <div class="check-in-grid-left">
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        ITEM
+                    </div>
+
+                    <div class="check-in-cell">
+                        VALOR
+                    </div>
+
+                    <div class="check-in-cell">
+                        SOLICITANTE
+                    </div>
+
+                    <div class="check-in-cell">
+                        ORÇAMENTO
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        LOGOTIPO EM ADESIVO
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 7.200,00
+                    </div>
+
+                    <div class="check-in-cell">
+                        Ana Luzia da Silva
+                    </div>
+
+                    <div class="check-in-cell">
+                        Pamela Cristina
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        MESA BISTRÔ
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 0,00
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        BALCÃO BAR
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 0,00
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        DESCONTO
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 0,00
+                    </div>
+                </div>
+
+                <a class="icon-button" style="margin: 3px 8px; margin-right: auto;" mat-button>
+                    <mat-icon>add</mat-icon>
+                </a>
+        
+            </div>
+
+            <div class="check-in-grid-right">
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        APROVAÇÃO
+                    </div>
+
+                    <div class="check-in-cell">
+                        COMISSÃO EXTRA
+                    </div>
+
+                    <div class="check-in-cell">
+                        FATURAMENTO
+                    </div>
+
+                    <div class="check-in-cell">
+                        DATA
+                    </div>
+
+                    <div class="check-in-cell">
+                        VENCIMENTO
+                    </div>
+
+                    <div class="check-in-cell">
+                        QUITAÇÃO
+                    </div>
+                </div>
+
+                <div class="content-list">
+                    <div class="list">
+                        <div class="check-in-row">
+                            <div class="check-in-cell">
+                                05 Janeiro 2024
+                            </div>
+
+                            <div class="check-in-cell">
+                                ORÇ/ATEN/PROD
+                            </div>
+
+                            <div class="check-in-cell">
+                                Caroline Tansella
+                            </div>
+
+                            <div class="check-in-cell">
+                                01 Janeiro 2024
+                            </div>
+
+                            <div class="check-in-cell">
+                                05 Janeiro 2024
+                            </div>
+
+                            <div class="check-in-cell">
+                                05 Janeiro 2024
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="content-bottom">
+                        Aprovado Rodolfo Morales 15 jun 2024 | Desconto/Juros R$ 1.000,00
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="check-in-grid-left total-value">
+                <div class="check-in-row">
+                    <div class="check-in-cell">VALOR TOTAL EXTRAS</div>
+                    
+                    <div class="check-in-cell">R$ 100.000,00</div>
+                </div>
+            </div>
+        
+            <div class="check-in-grid-right extra-value">
+                <div class="check-in-row">
+                    <div class="check-in-cell">VALOR TOTAL EXTRAS RECEBIDO</div>
+                    
+                    <div class="check-in-cell">R$ 100.000,00</div>
+                </div>
+            </div>
+
+        </div>
+
+        <cb-check-in-obs [borderBottom]="true"></cb-check-in-obs>
+        
+    </mat-expansion-panel>
+
+</mat-accordion>

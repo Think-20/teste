@@ -1,0 +1,111 @@
+@import url('../../check-in.component.css');
+
+.check-in-grid-left,
+.check-in-grid-right {
+    display: grid;
+
+    grid-template-rows: 30px auto;
+}
+
+.check-in-grid-left .check-in-row {
+    display: grid;
+
+    grid-template-columns: 150px 100px auto;
+}
+
+.check-in-grid-left .check-in-row:nth-child(1) {
+    display: grid;
+
+    grid-template-columns: auto 110px;
+
+    border-bottom: 1px solid #ccc;
+}
+
+.check-in-grid-left .check-in-row .check-in-cell:nth-child(2),
+.check-in-grid-left .check-in-row .check-in-cell:nth-child(3) {
+    border-left: 1px solid #ccc;
+}
+
+.check-in-grid-left .check-in-row:nth-child(1) .check-in-cell:nth-child(2) {
+    justify-content: end;
+
+    border-left: 1px solid #ccc;
+}
+
+
+.check-in-grid-right .check-in-row:nth-child(1) {
+    display: grid;
+
+    grid-template-columns: 100px 65px 100px auto 150px;
+
+    border-bottom: 1px solid #ccc;
+}
+
+.check-in-grid-right .check-in-row .check-in-cell:nth-child(2),
+.check-in-grid-right .check-in-row .check-in-cell:nth-child(3) {
+    justify-content: center;
+}
+
+.check-in-grid-right .check-in-row:nth-child(1) .check-in-cell:nth-child(5) {
+    justify-content: flex-end;
+}
+
+.content-payments {
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+}
+
+.payments .check-in-row {
+    display: grid;
+
+    grid-template-columns: 100px 65px 100px auto 150px;
+}
+
+.payments .check-in-row:nth-child(1) {
+    border-bottom: 0;
+}
+
+.payments .check-in-row .check-in-cell:nth-child(2),
+.payments .check-in-row .check-in-cell:nth-child(3),
+.payments .check-in-row .check-in-cell:nth-child(4) {
+    border-left: 1px solid #ccc;
+}
+
+.payments .check-in-cell:nth-child(5) {
+    justify-content: flex-end;
+}
+
+.payment-bottom {
+    padding: 3px 8px;
+
+    font-size: 10.5px;
+    
+    text-align: end;
+}
+
+.check-in-grid-left.total,
+.check-in-grid-right.total {
+    border-top: 0;
+}
+
+.check-in-grid-left.total .check-in-row,
+.check-in-grid-right.total .check-in-row {
+    display: grid;
+    
+    grid-template-columns: 150px auto;
+    
+    border-bottom: 0;
+}
+
+.check-in-grid-left.total .check-in-cell:nth-child(2) {
+    justify-content: flex-start !important;
+    
+    border-left: 1px solid #ccc;
+}
+
+.check-in-grid-right.total .check-in-cell:nth-child(2) {
+    justify-content: flex-end !important;
+}

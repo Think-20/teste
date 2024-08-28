@@ -1,0 +1,266 @@
+<mat-accordion class="check-in-accordion">
+
+    <mat-expansion-panel hideToggle [expanded]="true" [disabled]="true">
+        
+        <mat-expansion-panel-header>
+
+            <div class="check-in-header">
+                <h6 class="check-in-header-title">Valor faturamento:</h6>
+            
+                <div class="check-in-header-right">
+                    R$ 100.000,00
+                </div>
+            </div>
+
+        </mat-expansion-panel-header>
+
+        <!-- <table aria-describedby="Tabela aprovação" class="check-in-table table-1">
+            <tr class="columns-tr">
+                <th scope="col">VALOR LÍQUIDO BASE CÁLCULO</th>
+                <th scope="col">R$ 72.975,00</th>
+                <th scope="col">PAGAMENTO</th>
+                <th scope="col">%</th>
+                <th scope="col">VALOR</th>
+                <th scope="col">DATA</th>
+                <th scope="col">QUITAÇÃO:</th>
+            </tr>
+        </table> -->
+
+        <div class="check-in-grid">
+
+            <div class="check-in-grid-left">
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        VALOR LÍQUIDO BASE CÁLCULO
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 72.975,00
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        BV 01
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 7.200,00
+                    </div>
+
+                    <div class="check-in-cell">
+                        Ana Luzia da Silva
+
+                        <a class="icon-button" style="margin-left: 10px;" mat-button>
+                            <mat-icon>add</mat-icon>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        IMPOSTOS
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 0,00
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        EQUIPAMENTOS
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 0,00
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        LOGÍSTICA
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 0,00
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        CREDENCIAIS/TAXAS
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 0,00
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        SEGURO
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 0,00
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        OUTROS
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 0,00
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        DESCONTO
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 0,00
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="check-in-grid-right">
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        PAGAMENTO
+                    </div>
+
+                    <div class="check-in-cell">
+                        %
+                    </div>
+
+                    <div class="check-in-cell">
+                        VALOR
+                    </div>
+
+                    <div class="check-in-cell">
+                        DATA
+                    </div>
+
+                    <div class="check-in-cell">
+                        QUITAÇÃO
+                    </div>
+                </div>
+
+                <div class="content-payments">
+                    <div class="payments">
+                        <div class="check-in-row">
+                            <div class="check-in-cell">
+                                SINAL
+                            </div>
+        
+                            <div class="check-in-cell">
+                                50%
+                            </div>
+        
+                            <div class="check-in-cell">
+                                R$ 50.000,00
+                            </div>
+        
+                            <div class="check-in-cell">
+                                05 Janeiro 2024
+                            </div>
+        
+                            <div class="check-in-cell">
+                                05 Janeiro 2024
+                            </div>
+                        </div>
+
+                        <div class="check-in-row">
+                            <div class="check-in-cell">
+                                PARCELA 01
+                            </div>
+        
+                            <div class="check-in-cell">
+                                25%
+                            </div>
+        
+                            <div class="check-in-cell">
+                                R$ 25.000,00
+                            </div>
+        
+                            <div class="check-in-cell">
+                                05 Janeiro 2024
+                            </div>
+        
+                            <div class="check-in-cell">
+                                Pendente (Valor c/ Juros)
+                            </div>
+                        </div>
+
+                        <div class="check-in-row">
+                            <div class="check-in-cell">
+                                PARCELA 02
+                            </div>
+        
+                            <div class="check-in-cell">
+                                25%
+                            </div>
+        
+                            <div class="check-in-cell">
+                                R$ 25.000,00
+                            </div>
+        
+                            <div class="check-in-cell">
+                                05 Janeiro 2024
+                            </div>
+        
+                            <div class="check-in-cell">
+                                Pendente (Valor c/ Juros)
+                            </div>
+                        </div>
+
+                        <a class="icon-button" style="margin: 3px 8px;" mat-button>
+                            <mat-icon>add</mat-icon>
+                        </a>
+                    </div>
+    
+                    <div class="payment-bottom">
+                        Aprovado Rodolfo Morales 15 jun 2024 | Desconto/Juros R$ 1.000,00
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="check-in-grid-left total">
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        VALOR FINAL CONTRATO
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 100.000,00
+                    </div>
+                </div>
+            </div>
+
+            <div class="check-in-grid-right total">
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        VALOR TOTAL RECEBIDO
+                    </div>
+
+                    <div class="check-in-cell">
+                        R$ 100.000,00
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <cb-check-in-obs></cb-check-in-obs>
+        
+    </mat-expansion-panel>
+
+</mat-accordion>

@@ -1,0 +1,291 @@
+<mat-accordion class="check-in-accordion">
+
+    <mat-expansion-panel hideToggle [expanded]="true" [disabled]="true">
+        
+        <mat-expansion-panel-header>
+
+            <div class="check-in-header">
+                <h6 class="check-in-header-title">Aprovação:</h6>
+            
+                <div class="check-in-header-right">
+                    <select>
+                        <option value="" disabled>Versão de Projeto</option>
+
+                        <option *ngFor="let project of projects" [value]="project">
+                            {{taskService.jobDisplay(project)}}
+                        </option>
+                    </select>
+                    <!-- <mat-form-field>
+                        <mat-label>Versão de Projeto</mat-label>
+
+                        <mat-select placeholder="Versão de Projeto" [compareWith]="compareProject">
+                            <mat-option *ngFor="let project of projects" [value]="project">
+                                {{ taskService.jobDisplay(project) }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field> -->
+                    
+                    <select>
+                        <option value="" disabled>Memorial</option>
+
+                        <option *ngFor="let memorial of memorials" [value]="memorial">
+                            {{taskService.especificationDisplay(memorial.task)}}
+                        </option>
+                    </select>
+                    
+                    <select>
+                        <option value="" disabled>Orçamento</option>
+
+                        <option *ngFor="let budget of budgets" [value]="budget">
+                            {{taskService.budgetDisplay(budget)}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+        </mat-expansion-panel-header>
+
+        <div class="check-in-grid">
+            <div class="check-in-grid-left aprovacao">
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        <mat-checkbox>APROVAÇÃO</mat-checkbox>
+                    </div>
+
+                    <div class="check-in-cell">
+                        Ana Julia
+                    </div>
+
+                    <div class="check-in-cell">
+                        24 maio de 2024 - 10:05hs
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        <mat-checkbox>ACEITE PROPOSTA</mat-checkbox>
+                    </div>
+
+                    <div class="check-in-cell">
+                        Pamela
+                    </div>
+
+                    <div class="check-in-cell">
+                        24 maio de 2024 - 10:05hs
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        <mat-checkbox>ACEITE PRODUÇÃO</mat-checkbox>
+                    </div>
+
+                    <div class="check-in-cell">
+                        Ivanildo
+                    </div>
+
+                    <div class="check-in-cell">
+                        24 maio de 2024 - 10:05hs
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        <mat-checkbox>ACEITE DIRETORIA</mat-checkbox>
+                    </div>
+
+                    <div class="check-in-cell">
+                        Ivanildo
+                    </div>
+
+                    <div class="check-in-cell">
+                        24 maio de 2024 - 10:05hs
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="check-in-grid-right organizadora-promotora">
+
+                <div class="organizadora">
+                    <div class="check-in-row header">
+                        <div class="check-in-cell">
+                            Ana Julia
+                        </div>
+
+                        <div class="check-in-cell">
+                            24 maio de 2024 - 10:05hs
+                        </div>
+
+                        <div class="check-in-cell">
+                            ORGANIZADORA
+                        </div>
+
+                        <div class="check-in-cell">
+                            LOGIN
+                        </div>
+
+                        <div class="check-in-cell">
+                            SENHA
+                        </div>
+                    </div>
+
+                    <div class="check-in-row data">
+                        <div class="check-in-cell">
+                            <a class="icon-button" mat-button (click)="openModalOrganizationForm()">
+                                <mat-icon>add</mat-icon>
+                            </a>
+                            
+                            APAS - Associação Paulista de Supermercados
+                        </div>
+
+                        <div class="check-in-cell">
+                            <input type="text" />
+                        </div>
+
+                        <div class="check-in-cell">
+                            <input type="text" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="promotora">
+                    <div class="check-in-row header">
+                        <div class="check-in-cell">
+                            Ana Julia
+                        </div>
+
+                        <div class="check-in-cell">
+                            24 maio de 2024 - 10:05hs
+                        </div>
+
+                        <div class="check-in-cell">
+                            PROMOTORA
+                        </div>
+
+                        <div class="check-in-cell">
+                            LOGIN
+                        </div>
+
+                        <div class="check-in-cell">
+                            SENHA
+                        </div>
+                    </div>
+
+                    <div class="check-in-row data">
+                        <div class="check-in-cell">
+                            <input type="text" />
+                        </div>
+
+                        <div class="check-in-cell">
+                            <input type="text" />
+                        </div>
+
+                        <div class="check-in-cell">
+                            <input type="text" />
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="check-in-grid-left area">
+
+                <div class="check-in-row header">
+                    <div class="check-in-cell">
+                        ÁREA (M2)
+                    </div>
+
+                    <div class="check-in-cell">
+                        CONFIGURAÇÃO
+                    </div>
+
+                    <div class="check-in-cell">
+                        LOCALIZAÇÃO
+                    </div>
+                    
+                    <div class="check-in-cell">
+                        PAVILHÃO
+                    </div>
+                </div>
+
+                <div class="check-in-row data">
+                    <div class="check-in-cell">
+                        <input type="text" />
+                    </div>
+
+                    <div class="check-in-cell">
+                        <input type="text" />
+                    </div>
+
+                    <div class="check-in-cell">
+                        <input type="text" />
+                    </div>
+                    
+                    <div class="check-in-cell">
+                        <input type="text" />
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="check-in-grid-right evento">
+
+                <div class="check-in-row header">
+                    <div class="check-in-cell">
+                        Ana Julia
+                    </div>
+
+                    <div class="check-in-cell">
+                        24 maio de 2024 - 10:05hs
+                    </div>
+
+                    <div class="check-in-cell">
+                        LOCAL
+                    </div>
+
+                    <div class="check-in-cell">
+                        MONTAGEM
+                    </div>
+
+                    <div class="check-in-cell">
+                        EVENTO
+                    </div>
+
+                    <div class="check-in-cell">
+                        DESMONTAGEM 
+                    </div>
+                </div>
+
+                <div class="check-in-row data">
+                    <div class="check-in-cell">
+                        <a class="icon-button" mat-button>
+                            <mat-icon>add</mat-icon>
+                        </a>
+
+                        Expo Center Norte
+                    </div>
+
+                    <div class="check-in-cell">
+                        <input type="text">
+                    </div>
+
+                    <div class="check-in-cell">
+                        <input type="text">
+                    </div>
+
+                    <div class="check-in-cell">
+                        <input type="text"> 
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+        
+        <cb-check-in-obs></cb-check-in-obs>
+
+    </mat-expansion-panel>
+
+</mat-accordion>
