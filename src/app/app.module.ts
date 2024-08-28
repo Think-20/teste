@@ -233,6 +233,7 @@ import { CheckInBillingComponent } from './check-in/components/check-in-billing/
 import { CheckInBillingAmountComponent } from './check-in/components/check-in-billing-amount/check-in-billing-amount.component';
 import { CheckInExtrasComponent } from './check-in/components/check-in-extras/check-in-extras.component';
 import { CheckInObsComponent } from './check-in/components/check-in-obs/check-in-obs.component';
+import { CheckInOrganizationFormComponent } from './check-in/components/check-in-organization-form/check-in-organization-form.component';
 
 registerLocaleData(localePt);
 
@@ -368,6 +369,7 @@ registerLocaleData(localePt);
     CheckInBillingAmountComponent,
     CheckInExtrasComponent,
     CheckInObsComponent,
+    CheckInOrganizationFormComponent,
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA,
@@ -499,6 +501,7 @@ registerLocaleData(localePt);
     UpdatedInfoComponent,
     ChartPreviewComponent,
     ConfirmDialogComponent,
+    CheckInOrganizationFormComponent,
   ]
 })
 export class AppModule { }

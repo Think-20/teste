@@ -725,6 +725,18 @@ cb-timecard .mat-card {
   color: #AAA !important;
 }
 
+.icon-button {
+  height: 27px;
+
+  min-width: 20px !important;
+  
+  padding: 2px 0px !important;
+  
+  color: #AAA !important;
+  
+  line-height: 0 !important;
+}
+
 cb-schedule {
   height: 100%;
 }

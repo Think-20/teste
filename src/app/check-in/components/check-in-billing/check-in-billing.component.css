@@ -1,0 +1,61 @@
+@import url('../../check-in.component.css');
+
+.check-in-grid-left .check-in-row {
+    display: grid;
+
+    grid-template-columns: 120px auto;
+}
+
+.check-in-grid-left .check-in-row:nth-child(1) {
+    border-bottom: 1px solid #ccc;
+}
+
+.check-in-grid-left .check-in-row:nth-child(4) {
+    border-top: 1px solid #ccc;
+}
+
+.check-in-grid-left .check-in-row:nth-child(4),
+.check-in-grid-left .check-in-row:nth-child(5) {
+    display: grid;
+
+    grid-template-columns: 120px 120px auto auto auto;
+}
+
+.check-in-grid-left .check-in-row:nth-child(4) .check-in-cell,
+.check-in-grid-left .check-in-row:nth-child(5) .check-in-cell {
+    border-right: 1px solid #ccc;
+}
+
+.check-in-grid-left .check-in-row:nth-child(4) .check-in-cell:last-child,
+.check-in-grid-left .check-in-row:nth-child(5) .check-in-cell:last-child {
+    border-right: 0;
+}
+
+.check-in-grid-left .check-in-row .check-in-cell:nth-child(1) {
+    border-right: 1px solid #ccc;
+}
+
+
+.check-in-grid-right .check-in-row {
+    display: grid;
+
+    grid-template-columns: 100px 1fr 68px 50px 120px 1fr 68px;
+}
+
+.check-in-grid-right .check-in-row:nth-child(1) {
+    border-bottom: 1px solid #ccc;
+}
+
+.check-in-grid-right .check-in-row .check-in-cell:nth-child(1),
+.check-in-grid-right .check-in-row .check-in-cell:nth-child(2),
+.check-in-grid-right .check-in-row .check-in-cell:nth-child(5),
+.check-in-grid-right .check-in-row .check-in-cell:nth-child(6) {
+    border-right: 1px solid #ccc;
+}
+
+.check-in-grid-right .check-in-row:nth-child(1) .check-in-cell:nth-child(1),
+.check-in-grid-right .check-in-row:nth-child(1) .check-in-cell:nth-child(2),
+.check-in-grid-right .check-in-row:nth-child(1) .check-in-cell:nth-child(5),
+.check-in-grid-right .check-in-row:nth-child(1) .check-in-cell:nth-child(6) {
+    border-right: 0;
+}

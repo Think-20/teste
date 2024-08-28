@@ -1,0 +1,279 @@
+<mat-accordion class="check-in-accordion">
+
+    <mat-expansion-panel hideToggle [expanded]="true">
+        
+        <mat-expansion-panel-header>
+
+            <div class="check-in-header">
+                <h6 class="check-in-header-title">Faturamento:</h6>
+            
+                <div class="check-in-header-right">
+                    <select>
+                        <option value="" disabled>Agência</option>
+
+                        <!-- <option *ngFor="let project of projects" [value]="project">
+                            {{taskService.jobDisplay(project)}}
+                        </option> -->
+                    </select>
+
+                    <mat-icon>keyboard_arrow_down</mat-icon>
+                </div>
+            </div>
+
+        </mat-expansion-panel-header>
+
+        <!-- <table aria-describedby="Tabela aprovação" class="check-in-table table-1">
+            <tr class="columns-tr">
+                <th scope="col">RAZÃO SOCIAL</th>
+                <th scope="col">Razão social Ltda</th>
+                <th scope="col">RESPONSÁVEIS</th>
+                <th scope="col">COMISSÃO</th>
+                <th scope="col">RESPONSÁVEIS 2</th>
+                <th scope="col">COMISSÃO</th>
+            </tr>
+        </table> -->
+
+        <div class="check-in-grid">
+
+            <div class="check-in-grid-left">
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        RAZÃO SOCIAL
+                    </div>
+
+                    <div class="check-in-cell">
+                        Razão Social Ltda
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        CNPJ
+                    </div>
+
+                    <div class="check-in-cell">
+                        00.000.000/0001-01
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell" title="Inscrição estado">
+                        INSCRIÇÃO EST.
+                    </div>
+
+                    <div class="check-in-cell">
+                        00.000.000/0001-01
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        ENDEREÇO
+                    </div>
+
+                    <div class="check-in-cell">
+                        Rua São João da Silva
+                    </div>
+
+                    <div class="check-in-cell" title="Número">
+                        <input type="text" class="input-margin" placeholder="NÚM." />
+                    </div>
+
+                    <div class="check-in-cell" title="ANDAR">
+                        <input type="text" class="input-margin" placeholder="ANDAR" />
+                    </div>
+
+                    <div class="check-in-cell" title="Complemento">
+                        <input type="text" class="input-margin" placeholder="COMP." />
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        CEP
+                    </div>
+
+                    <div class="check-in-cell">
+                        00000-000
+                    </div>
+
+                    <div class="check-in-cell" title="BAIRRO">
+                        <input type="text" placeholder="BAIRRO" />
+                    </div>
+
+                    <div class="check-in-cell" title="CIDADE">
+                        <input type="text" placeholder="CIDADE" />
+                    </div>
+
+                    <div class="check-in-cell" title="ESTADO">
+                        <input type="text" placeholder="ESTADO" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="check-in-grid-right">
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        RESPONSÁVEIS
+                    </div>
+
+                    <div class="check-in-cell"></div>
+
+                    <div class="check-in-cell">
+                        COMISSÃO
+                    </div>
+
+                    <div class="check-in-cell"></div>
+
+                    <div class="check-in-cell">
+                        RESPONSÁVEIS 02
+                    </div>
+
+                    <div class="check-in-cell"></div>
+
+                    <div class="check-in-cell">
+                        COMISSÃO
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        ATENDIMENTO
+                    </div>
+
+                    <div class="check-in-cell">
+                        Ana Julia
+                    </div>
+
+                    <div class="check-in-cell">
+                        50%
+                    </div>
+
+                    <div class="check-in-cell">
+                        <a class="icon-button" mat-button>
+                            <mat-icon>add</mat-icon>
+                        </a>
+                    </div>
+
+                    <div class="check-in-cell">
+                        ATENDIMENTO 02
+                    </div>
+
+                    <div class="check-in-cell">
+                        Julio Cirello
+                    </div>
+
+                    <div class="check-in-cell">
+                        50%
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        CRIAÇÃO
+                    </div>
+
+                    <div class="check-in-cell">
+                        Jeferson Duarte
+                    </div>
+
+                    <div class="check-in-cell">
+                        100%
+                    </div>
+
+                    <div class="check-in-cell">
+                        <a class="icon-button" mat-button>
+                            <mat-icon>add</mat-icon>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        GERENTE PROD.
+                    </div>
+
+                    <div class="check-in-cell">
+                        Ivanildo Alves
+                    </div>
+
+                    <div class="check-in-cell">
+                        100%
+                    </div>
+
+                    <div class="check-in-cell">
+                        <a class="icon-button" mat-button>
+                            <mat-icon>add</mat-icon>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        ORÇAMENTO
+                    </div>
+
+                    <div class="check-in-cell">
+                        Pamela Cristina
+                    </div>
+
+                    <div class="check-in-cell">
+                        100%
+                    </div>
+
+                    <div class="check-in-cell">
+                        <a class="icon-button" mat-button>
+                            <mat-icon>add</mat-icon>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        DETALHAMENTO
+                    </div>
+
+                    <div class="check-in-cell">
+                        Pamela Cristina
+                    </div>
+
+                    <div class="check-in-cell">
+                        100%
+                    </div>
+
+                    <div class="check-in-cell">
+                        <a class="icon-button" mat-button>
+                            <mat-icon>add</mat-icon>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        PRODUÇÃO
+                    </div>
+
+                    <div class="check-in-cell">
+                        Pamela Cristina
+                    </div>
+
+                    <div class="check-in-cell">
+                        100%
+                    </div>
+
+                    <div class="check-in-cell">
+                        <a class="icon-button" mat-button>
+                            <mat-icon>add</mat-icon>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <cb-check-in-obs></cb-check-in-obs>
+        
+    </mat-expansion-panel>
+
+</mat-accordion>

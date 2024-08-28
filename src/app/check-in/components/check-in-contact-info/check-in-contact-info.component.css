@@ -1,0 +1,50 @@
+@import url('../../check-in.component.css');
+
+.clients .check-in-row {
+    display: grid;
+
+    grid-template-columns: 120px auto;
+}
+
+.client,
+.clients .check-in-row:nth-child(1) {
+    border-bottom: 1px solid #ccc;
+}
+
+.client .check-in-row:nth-child(1) {
+    display: grid;
+
+    grid-template-columns: 120px auto 65px;
+
+    border-bottom: 0;
+}
+
+.clients .check-in-cell:nth-child(1) {
+    border-right: 1px solid #ccc;
+}
+
+.btn-add-contacts {
+    padding: 0 3px;
+    margin: 5px;
+    
+    color: #000000de;
+    
+    line-height: 25px;
+    
+    font-weight: 400;
+}
+
+.btn-add-contacts span {
+    height: 20px;
+    
+    font-size: 10.5px;
+}
+
+.btn-add-contacts mat-icon {
+    width: 14px;
+    height: 15px;
+    
+    color: #aaa;
+    
+    font-size: 14px;
+}
