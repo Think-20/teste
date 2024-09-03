@@ -209,4 +209,7 @@ export class CheckInApprovalComponent implements AfterViewInit {
     });
   }
 
+  trackByEvent(index: number, event: Event): number {
+    return event.id;
+  }
 }
