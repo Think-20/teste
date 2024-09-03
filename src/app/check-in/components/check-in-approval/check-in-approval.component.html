@@ -322,11 +322,11 @@
                         <span class="position-relative text-ellipsis cursor-pointer"
                             [style.minWidth.px]="100"
                             [title]="event.place_name || 'Evento'"
-                            (click)="eventMatSelect.open()">
+                            (click)="eventMatSelect.open(); loadEvents()">
                             {{ event.place_name || '-' }}
 
                             <mat-select class="select-hidden col-md-3" #eventMatSelect>
-                                <mat-option *ngFor="let event of events"
+                                <mat-option *ngFor="let event of events; trackBy: trackByEvent"
                                     [value]="event"
                                     (click)="selectEvent(event)">
                                     {{ event.place.name }}
