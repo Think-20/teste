@@ -8,38 +8,53 @@
                 <h6 class="check-in-header-title">Aprovação:</h6>
             
                 <div class="check-in-header-right">
-                    <select>
-                        <option value="" disabled>Versão de Projeto</option>
+                    <span class="position-relative text-ellipsis cursor-pointer"
+                        [title]="project ? 'Versão do Projeto: ' + taskService.jobDisplay(project) : 'Versão do Projeto'"
+                        (click)="projectSelect.open()">
+                        {{ project ? taskService.jobDisplay(project) : 'Versão do Projeto' }}
 
-                        <option *ngFor="let project of projects" [value]="project">
-                            {{taskService.jobDisplay(project)}}
-                        </option>
-                    </select>
-                    <!-- <mat-form-field>
-                        <mat-label>Versão de Projeto</mat-label>
-
-                        <mat-select placeholder="Versão de Projeto" [compareWith]="compareProject">
-                            <mat-option *ngFor="let project of projects" [value]="project">
-                                {{ taskService.jobDisplay(project) }}
+                        <mat-select class="select-hidden col-md-3" #projectSelect
+                            [(ngModel)]="project"
+                            (ngModelChange)="updateCheckInModel()">
+                            <mat-option *ngFor="let project of projects"
+                                [value]="project"
+                                (click)="updateProject(project)">
+                                {{taskService.jobDisplay(project)}}
                             </mat-option>
                         </mat-select>
-                    </mat-form-field> -->
-                    
-                    <select>
-                        <option value="" disabled>Memorial</option>
+                    </span>
+                    |
+                    <span class="position-relative text-ellipsis cursor-pointer"
+                        [title]="memorial ? 'Memorial: ' + taskService.jobDisplay(memorial) : 'Memorial'"
+                        (click)="memorialSelect.open()">
+                        {{ memorial ? taskService.jobDisplay(memorial) : 'Memorial' }}
 
-                        <option *ngFor="let memorial of memorials" [value]="memorial">
-                            {{taskService.especificationDisplay(memorial.task)}}
-                        </option>
-                    </select>
-                    
-                    <select>
-                        <option value="" disabled>Orçamento</option>
+                        <mat-select class="select-hidden col-md-3" #memorialSelect
+                            [(ngModel)]="memorial"
+                            (ngModelChange)="updateCheckInModel()">
+                            <mat-option *ngFor="let memorial of memorials"
+                                [value]="memorial"
+                                (click)="updateMemorial(memorial)">
+                                {{taskService.jobDisplay(memorial)}}
+                            </mat-option>
+                        </mat-select>
+                    </span>
+                    |
+                    <span class="position-relative text-ellipsis cursor-pointer"
+                        [title]="budget ? 'Orçamento: ' + taskService.jobDisplay(budget) : 'Orçamento'"
+                        (click)="budgetSelect.open()">
+                        {{ budget ? taskService.jobDisplay(budget) : 'Orçamento' }}
 
-                        <option *ngFor="let budget of budgets" [value]="budget">
-                            {{taskService.budgetDisplay(budget)}}
-                        </option>
-                    </select>
+                        <mat-select class="select-hidden col-md-3" #budgetSelect
+                            [(ngModel)]="budget"
+                            (ngModelChange)="updateCheckInModel()">
+                            <mat-option *ngFor="let budget of budgets"
+                                [value]="budget"
+                                (click)="updateBudget(budget)">
+                                {{taskService.jobDisplay(budget)}}
+                            </mat-option>
+                        </mat-select>
+                    </span>
                 </div>
             </div>
 
@@ -50,57 +65,73 @@
 
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <mat-checkbox>APROVAÇÃO</mat-checkbox>
+                        <mat-checkbox
+                            [(ngModel)]="approval.marked"
+                            (ngModelChange)="updateAlertDate(approval)">
+                            APROVAÇÃO
+                        </mat-checkbox>
                     </div>
 
                     <div class="check-in-cell">
-                        Ana Julia
+                        {{ approval.name || '-' }}
                     </div>
 
                     <div class="check-in-cell">
-                        24 maio de 2024 - 10:05hs
-                    </div>
-                </div>
-
-                <div class="check-in-row">
-                    <div class="check-in-cell">
-                        <mat-checkbox>ACEITE PROPOSTA</mat-checkbox>
-                    </div>
-
-                    <div class="check-in-cell">
-                        Pamela
-                    </div>
-
-                    <div class="check-in-cell">
-                        24 maio de 2024 - 10:05hs
+                        {{ (approval.date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
                     </div>
                 </div>
 
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <mat-checkbox>ACEITE PRODUÇÃO</mat-checkbox>
+                        <mat-checkbox
+                            [(ngModel)]="acceptProposal.marked"
+                            (ngModelChange)="updateAlertDate(acceptProposal)">
+                            ACEITE PROPOSTA
+                        </mat-checkbox>
                     </div>
 
                     <div class="check-in-cell">
-                        Ivanildo
+                        {{ acceptProposal.name || '-' }}
                     </div>
 
                     <div class="check-in-cell">
-                        24 maio de 2024 - 10:05hs
+                        {{ (acceptProposal.date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
                     </div>
                 </div>
 
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <mat-checkbox>ACEITE DIRETORIA</mat-checkbox>
+                        <mat-checkbox
+                            [(ngModel)]="acceptProduction.marked"
+                            (ngModelChange)="updateAlertDate(acceptProduction)">
+                            ACEITE PRODUÇÃO
+                        </mat-checkbox>
                     </div>
 
                     <div class="check-in-cell">
-                        Ivanildo
+                        {{ acceptProduction.name || '-' }}
                     </div>
 
                     <div class="check-in-cell">
-                        24 maio de 2024 - 10:05hs
+                        {{ (acceptProduction.date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        <mat-checkbox
+                            [(ngModel)]="boardApproval.marked"
+                            (ngModelChange)="updateAlertDate(boardApproval)">
+                            ACEITE DIRETORIA
+                        </mat-checkbox>
+                    </div>
+
+                    <div class="check-in-cell">
+                        {{ boardApproval.name || '-' }}
+                    </div>
+
+                    <div class="check-in-cell">
+                        {{ (boardApproval.date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
                     </div>
                 </div>
 
@@ -111,11 +142,11 @@
                 <div class="organizadora">
                     <div class="check-in-row header">
                         <div class="check-in-cell">
-                            Ana Julia
+                            {{ organization.changed_by }}
                         </div>
 
                         <div class="check-in-cell">
-                            24 maio de 2024 - 10:05hs
+                            {{ organization.changed_in | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'' }}
                         </div>
 
                         <div class="check-in-cell">
@@ -136,16 +167,30 @@
                             <a class="icon-button" mat-button (click)="openModalOrganizationForm()">
                                 <mat-icon>add</mat-icon>
                             </a>
-                            
-                            APAS - Associação Paulista de Supermercados
+
+                            <span class="position-relative text-ellipsis cursor-pointer"
+                                [style.minWidth.px]="100"
+                                [title]="organization.name || 'Organizadora'"
+                                (click)="organizationMatSelect.open()">
+                                {{ organization.name || '-' }}
+
+                                <mat-select class="select-hidden col-md-3" #organizationMatSelect>
+                                    <mat-option *ngFor="let organization of organizations"
+                                        [value]="organization"
+                                        [title]="organization.name"
+                                        (click)="selectOrganization(organization)">
+                                        {{ organization.name }}
+                                    </mat-option>
+                                </mat-select>
+                            </span>
                         </div>
 
                         <div class="check-in-cell">
-                            <input type="text" />
+                            <input type="text" [(ngModel)]="organization.login" />
                         </div>
 
                         <div class="check-in-cell">
-                            <input type="text" />
+                            <input type="text" [(ngModel)]="organization.password" />
                         </div>
                     </div>
                 </div>
@@ -153,11 +198,11 @@
                 <div class="promotora">
                     <div class="check-in-row header">
                         <div class="check-in-cell">
-                            Ana Julia
+                            {{ checkInModel.promoter_changed_by }}
                         </div>
 
                         <div class="check-in-cell">
-                            24 maio de 2024 - 10:05hs
+                            {{ checkInModel.promoter_changed_in | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'' }}
                         </div>
 
                         <div class="check-in-cell">
@@ -175,15 +220,24 @@
 
                     <div class="check-in-row data">
                         <div class="check-in-cell">
-                            <input type="text" />
+                            <input type="text"
+                                [(ngModel)]="checkInModel.promoter_name"
+                                (change)="updatePromoter()"
+                            />
                         </div>
 
                         <div class="check-in-cell">
-                            <input type="text" />
+                            <input type="text"
+                                [(ngModel)]="checkInModel.promoter_login"
+                                (change)="updatePromoter()"
+                            />
                         </div>
 
                         <div class="check-in-cell">
-                            <input type="text" />
+                            <input type="text"
+                                [(ngModel)]="checkInModel.promoter_password"
+                                (change)="updatePromoter()"
+                            />
                         </div>
                     </div>
                 </div>
@@ -212,19 +266,19 @@
 
                 <div class="check-in-row data">
                     <div class="check-in-cell">
-                        <input type="text" />
+                        <input type="text" [(ngModel)]="checkInModel.area" />
                     </div>
 
                     <div class="check-in-cell">
-                        <input type="text" />
+                        <input type="text" [(ngModel)]="checkInModel.config" />
                     </div>
 
                     <div class="check-in-cell">
-                        <input type="text" />
+                        <input type="text" [(ngModel)]="checkInModel.location" />
                     </div>
                     
                     <div class="check-in-cell">
-                        <input type="text" />
+                        <input type="text" [(ngModel)]="checkInModel.pavilion" />
                     </div>
                 </div>
 
@@ -234,11 +288,11 @@
 
                 <div class="check-in-row header">
                     <div class="check-in-cell">
-                        Ana Julia
+                        {{ event.changed_by }}
                     </div>
 
                     <div class="check-in-cell">
-                        24 maio de 2024 - 10:05hs
+                        {{ event.changed_in | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'' }}
                     </div>
 
                     <div class="check-in-cell">
@@ -260,23 +314,37 @@
 
                 <div class="check-in-row data">
                     <div class="check-in-cell">
-                        <a class="icon-button" mat-button>
+                        <a class="icon-button" mat-button target="_blank"
+                            [routerLink]="['/events/new']">
                             <mat-icon>add</mat-icon>
                         </a>
 
-                        Expo Center Norte
+                        <span class="position-relative text-ellipsis cursor-pointer"
+                            [style.minWidth.px]="100"
+                            [title]="event.place_name || 'Evento'"
+                            (click)="eventMatSelect.open()">
+                            {{ event.place_name || '-' }}
+
+                            <mat-select class="select-hidden col-md-3" #eventMatSelect>
+                                <mat-option *ngFor="let event of events"
+                                    [value]="event"
+                                    (click)="selectEvent(event)">
+                                    {{ event.place.name }}
+                                </mat-option>
+                            </mat-select>
+                        </span>
                     </div>
 
                     <div class="check-in-cell">
-                        <input type="text">
+                        {{ (event.installation_date | date: 'dd MMM yy') || '-' }}
                     </div>
 
                     <div class="check-in-cell">
-                        <input type="text">
+                        {{ (event.event_date | date: 'dd MMM yy') || '-' }}
                     </div>
 
                     <div class="check-in-cell">
-                        <input type="text"> 
+                        {{ (event.dismantling_date | date: 'dd MMM yy') || '-' }}
                     </div>
                 </div>
 
@@ -284,7 +352,7 @@
 
         </div>
         
-        <cb-check-in-obs></cb-check-in-obs>
+        <cb-check-in-obs [(ngModel)]="checkInModel.approval_note" name="approval_note" id="approval_note"></cb-check-in-obs>
 
     </mat-expansion-panel>
 

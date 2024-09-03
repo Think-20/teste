@@ -18,4 +18,10 @@ export class CityService {
             .get(`${API}/cities/${stateId}/${cityName}`)
             .map(response => response.json())
     }
+
+    citiesById(cityId: number): Observable<City> {
+        return this.http
+            .get(`${API}/city/${cityId}`)
+            .map(response => response.json())
+    }
 }

@@ -4,15 +4,26 @@
 
         <div class="w-100">
 
-            <cb-check-in-approval [job]="job"></cb-check-in-approval>
+            <cb-check-in-approval
+                [job]="job"
+                [checkInModel]="checkInModel">
+            </cb-check-in-approval>
 
-            <cb-check-in-contact-info></cb-check-in-contact-info>
+            <cb-check-in-contact-info
+                [job]="job"
+                [checkInModel]="checkInModel">
+            </cb-check-in-contact-info>
 
-            <cb-check-in-billing></cb-check-in-billing>
+            <cb-check-in-billing
+                [job]="job"
+                [checkInModel]="checkInModel">
+            </cb-check-in-billing>
 
-            <cb-check-in-billing-amount></cb-check-in-billing-amount>
+            <cb-check-in-billing-amount>
+            </cb-check-in-billing-amount>
 
-            <cb-check-in-extras></cb-check-in-extras>
+            <cb-check-in-extras>
+            </cb-check-in-extras>
 
         </div>
 

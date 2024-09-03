@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, LOCALE_ID, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { registerLocaleData, DatePipe, CommonModule } from '@angular/common';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
@@ -234,6 +234,9 @@ import { CheckInBillingAmountComponent } from './check-in/components/check-in-bi
 import { CheckInExtrasComponent } from './check-in/components/check-in-extras/check-in-extras.component';
 import { CheckInObsComponent } from './check-in/components/check-in-obs/check-in-obs.component';
 import { CheckInOrganizationFormComponent } from './check-in/components/check-in-organization-form/check-in-organization-form.component';
+import { OrganizationService } from './shared/services/organization.service';
+import { CheckInService } from './check-in/check-in.service';
+import { CheckInComissionComponent } from './check-in/components/check-in-comission/check-in-comission.component';
 
 registerLocaleData(localePt);
 
@@ -370,9 +373,7 @@ registerLocaleData(localePt);
     CheckInExtrasComponent,
     CheckInObsComponent,
     CheckInOrganizationFormComponent,
-  ],
-  schemas: [
-    CUSTOM_ELEMENTS_SCHEMA,
+    CheckInComissionComponent
   ],
   imports: [
     CurrencyMaskModule,
@@ -419,6 +420,8 @@ registerLocaleData(localePt);
     NgApexchartsModule
   ],
   providers: [
+    CheckInService,
+    OrganizationService,
     ClientService,
     ProviderService,
     BankAccountTypeService,

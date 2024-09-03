@@ -1,0 +1,41 @@
+<form [formGroup]="form" class="check-in-row">
+    <div class="check-in-cell">
+        {{ title || '-' }}
+    </div>
+
+    <div class="check-in-cell">
+        Ana Julia
+    </div>
+
+    <div class="check-in-cell">
+        <input type="text" #comission class="input-comission"
+            formControlName="comission"
+            [readonly]="!employee2"
+            (input)="validateComission()"
+        />
+        %
+    </div>
+
+    <div class="check-in-cell">
+        <a class="icon-button" mat-button>
+            <mat-icon>{{ employee2 ? 'close' : 'add' }}</mat-icon>
+        </a>
+    </div>
+
+    <div class="check-in-cell">
+        {{ title || '-' }} 02
+    </div>
+
+    <div class="check-in-cell">
+        Julio Cirello
+    </div>
+
+    <div class="check-in-cell">
+        <input type="text" #comission2 class="input-comission"
+            formControlName="comission2"
+            [readonly]="!employee2"
+            (input)="validateComission2()"
+        />
+        %
+    </div>
+</form>
