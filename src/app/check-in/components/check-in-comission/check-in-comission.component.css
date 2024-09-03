@@ -1,0 +1,22 @@
+@import url('../../check-in.component.css');
+
+.check-in-row {
+    display: grid;
+
+    grid-template-columns: 100px 1fr 68px 50px 120px 1fr 68px;
+}
+
+.check-in-row .check-in-cell:nth-child(1),
+.check-in-row .check-in-cell:nth-child(2),
+.check-in-row .check-in-cell:nth-child(5),
+.check-in-row .check-in-cell:nth-child(6) {
+    border-right: 1px solid #ccc;
+}
+
+.input-comission {
+    max-width: 27px;
+
+    padding-right: 2px !important;
+    
+    text-align: right;
+}

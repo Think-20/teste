@@ -21,6 +21,14 @@
     stroke: #008000 !important;
 }
 
+.check-in-header-right {
+    display: grid;
+
+    grid-template-columns: auto auto auto auto auto;
+
+    gap: 1rem;
+}
+
 .icon-button {
     margin-right: 5px;
 }

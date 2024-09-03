@@ -10,6 +10,7 @@ export class Client {
     name: string
     fantasy_name: string
     cnpj: number
+    ie: string;
     mainphone: number
     secundaryphone: number
     site: string
@@ -20,6 +21,7 @@ export class Client {
     neighborhood: string
     complement?: string
     city?: City
+    city_id?: number;
     external: number
     cep: number
     employee?: Employee

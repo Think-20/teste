@@ -24,7 +24,9 @@
                     </div>
 
                     <div class="check-in-cell">
-                        Razão social Ltda
+                        <input type="text" 
+                            [(ngModel)]="client.name"
+                        />
                     </div>
                 </div>
 
@@ -35,7 +37,9 @@
                         </div>
                         
                         <div class="check-in-cell">
-                            João da Silva Moreira
+                            <input type="text" 
+                                [(ngModel)]="client.fantasy_name"
+                            />
                         </div>
                         
                         <div class="check-in-cell"></div>
@@ -47,7 +51,9 @@
                         </div>
 
                         <div class="check-in-cell">
-                            Diretor de Produção
+                            <input type="text" 
+                                [(ngModel)]="clientContact.department"
+                            />
                         </div>
                     </div>
 
@@ -57,7 +63,9 @@
                         </div>
 
                         <div class="check-in-cell">
-                            joaosilva@gmail.com.br
+                            <input type="email" 
+                                [(ngModel)]="clientContact.email"
+                            />
                         </div>
                     </div>
 
@@ -67,7 +75,9 @@
                         </div>
 
                         <div class="check-in-cell">
-                            11 99635-5673
+                            <input type="text" mask="(99) 9999-9999?9"
+                                [(ngModel)]="clientContact.cellphone"
+                            />
                         </div>
                     </div>
 
@@ -77,14 +87,69 @@
                         </div>
 
                         <div class="check-in-cell">
-                            11 99635-5673
+                            <input type="text" mask="(99) 9999-9999?9"
+                                [(ngModel)]="client.mainphone"
+                            />
                         </div>
                     </div>
                 </div>
 
-                <button class="btn-add-contacts" mat-button>
+                <div class="client" *ngFor="let client of clientContacts">
+                    <div class="check-in-row">
+                        <div class="check-in-cell">
+                            CONTATO
+                        </div>
+
+                        <!-- [class.invalid]="!client.name" -->
+                        <input type="text" 
+                            [(ngModel)]="client.name"
+                        />
+                        
+                        <div class="check-in-cell"></div>
+                    </div>
+
+                    <div class="check-in-row">
+                        <div class="check-in-cell">
+                            FUNÇÃO
+                        </div>
+
+                        <div class="check-in-cell">
+                            <!-- [class.invalid]="!client.department" -->
+                            <input type="text" 
+                                [(ngModel)]="client.department"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="check-in-row">
+                        <div class="check-in-cell">
+                            E-MAIL
+                        </div>
+
+                        <div class="check-in-cell">
+                            <!-- [class.invalid]="!client.email" -->
+                            <input type="email" 
+                                [(ngModel)]="client.email"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="check-in-row">
+                        <div class="check-in-cell">
+                            CELULAR
+                        </div>
+
+                        <div class="check-in-cell">
+                            <input type="text" mask="(99) 9999-9999?9"
+                                [(ngModel)]="client.cellphone"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-add-contacts" mat-button (click)="addClient()">
                     <span>
-                        CONTATO 2
+                        CONTATO {{ clientContacts.length + 2 }}
                     </span>
 
                     <mat-icon>add</mat-icon>
@@ -100,7 +165,9 @@
                     </div>
 
                     <div class="check-in-cell">
-                        Razão social Ltda
+                        <input type="text" 
+                            [(ngModel)]="agency.name"
+                        />
                     </div>
                 </div>
 
@@ -111,7 +178,9 @@
                         </div>
                         
                         <div class="check-in-cell">
-                            João da Silva Moreira
+                            <input type="text"
+                                [(ngModel)]="agency.fantasy_name"
+                            />
                         </div>
                         
                         <div class="check-in-cell"></div>
@@ -123,7 +192,9 @@
                         </div>
 
                         <div class="check-in-cell">
-                            Diretor de Produção
+                            <input type="text"
+                                [(ngModel)]="agencyContact.department"
+                            />
                         </div>
                     </div>
 
@@ -133,7 +204,9 @@
                         </div>
 
                         <div class="check-in-cell">
-                            joaosilva@gmail.com.br
+                            <input type="email" 
+                                [(ngModel)]="agencyContact.email"
+                            />
                         </div>
                     </div>
 
@@ -143,7 +216,9 @@
                         </div>
 
                         <div class="check-in-cell">
-                            11 99635-5673
+                            <input type="text" mask="(99) 9999-9999?9"
+                                [(ngModel)]="agencyContact.cellphone"
+                            />
                         </div>
                     </div>
 
@@ -153,14 +228,69 @@
                         </div>
 
                         <div class="check-in-cell">
-                            11 99635-5673
+                            <input type="text" mask="(99) 9999-9999?9"
+                                [(ngModel)]="agency.mainphone"
+                            />
                         </div>
                     </div>
                 </div>
 
-                <button class="btn-add-contacts" mat-button>
+                <div class="client" *ngFor="let agency of agencyContacts">
+                    <div class="check-in-row">
+                        <div class="check-in-cell">
+                            CONTATO
+                        </div>
+
+                        <!-- [class.invalid]="!agency.name"  -->
+                        <input type="text" 
+                            [(ngModel)]="agency.name"
+                        />
+                        
+                        <div class="check-in-cell"></div>
+                    </div>
+
+                    <div class="check-in-row">
+                        <div class="check-in-cell">
+                            FUNÇÃO
+                        </div>
+
+                        <div class="check-in-cell">
+                            <!-- [class.invalid]="!agency.department" -->
+                            <input type="text" 
+                                [(ngModel)]="agency.department"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="check-in-row">
+                        <div class="check-in-cell">
+                            E-MAIL
+                        </div>
+
+                        <div class="check-in-cell">
+                            <!-- [class.invalid]="!agency.email" -->
+                            <input type="email" 
+                                [(ngModel)]="agency.email"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="check-in-row">
+                        <div class="check-in-cell">
+                            CELULAR
+                        </div>
+
+                        <div class="check-in-cell">
+                            <input type="text" mask="(99) 9999-9999?9"
+                                [(ngModel)]="agency.cellphone"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn-add-contacts" mat-button (click)="addAgency()">
                     <span>
-                        CONTATO 2
+                        CONTATO {{ agencyContacts.length + 2 }}
                     </span>
 
                     <mat-icon>add</mat-icon>
@@ -170,7 +300,7 @@
 
         </div>
         
-        <cb-check-in-obs></cb-check-in-obs>
+        <cb-check-in-obs [(ngModel)]="checkInModel.contacts_obs" name="contacts_obs" id="contacts_obs"></cb-check-in-obs>
 
     </mat-expansion-panel>
 
