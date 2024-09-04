@@ -10,9 +10,11 @@ import { JobActivity } from '../job-activities/job-activity.model';
 import { Briefing } from '../briefings/briefing.model';
 import { Budget } from '../budgets/budget.model';
 import { Task } from '../schedule/task.model';
+import { CheckInModel } from 'app/check-in/check-in.model';
 
 export class Job {
-    id: number
+    id: number;
+    checkin?: CheckInModel;
     code?: number
     job_activity_id: number
     job_activity: JobActivity

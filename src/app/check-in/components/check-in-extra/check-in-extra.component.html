@@ -1,0 +1,58 @@
+<h1 mat-dialog-title class="p-0">
+    Extra
+</h1>
+
+<div mat-dialog-content>
+    <form [formGroup]="form" autocomplete="off">
+
+        <div class="row">
+            <mat-form-field class="col-sm-7">
+                <input ucWords matInput placeholder="Descrição*" formControlName="description">
+                <mat-error>
+                    Campo obrigatório.
+                </mat-error>
+            </mat-form-field>
+            
+            <mat-form-field class="col-sm-5">
+                <input matInput currencyMask placeholder="Valor*" formControlName="value">
+                <mat-error>
+                    O valor deve ser maior que R$ 0,00
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-12">
+                <mat-select  placeholder="Solicitante*" formControlName="requester">
+                    <mat-option *ngFor="let requester of requesters" [value]="requester.id">
+                        {{ requester.name }}
+                    </mat-option>
+                </mat-select>
+                <mat-error>
+                    Obrigatório
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-12">
+                <mat-select  placeholder="Orçamento*" formControlName="budget">
+                    <mat-option *ngFor="let budget of budgets" [value]="budgets.id">
+                        {{ budget.name }}
+                    </mat-option>
+                </mat-select>
+                <mat-error>
+                    Obrigatório
+                </mat-error>
+            </mat-form-field>
+        </div>
+
+        <div class="d-flex flex-row justify-content-end mt-2">
+            <button type="button" class="cb-button mr-3" color="primary" mat-raised-button
+                (click)="close()">
+                CANCELAR
+            </button>
+            
+            <button class="cb-button" color="primary" mat-raised-button
+                (click)="submit()">
+                SALVAR
+            </button>
+        </div>
+    </form>
+</div>

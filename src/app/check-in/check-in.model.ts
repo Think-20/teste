@@ -1,14 +1,12 @@
-import { Task } from 'app/schedule/task.model';
 import { AlertModel } from 'app/shared/models/alert.model';
 import { EventModel } from 'app/shared/models/event.model';
-import { OrganizationModel } from 'app/shared/models/organization.model';
 
 export class CheckInModel {
     id?: number;
     job_id: number;
-    project?: Task;
-    memorial?: Task;
-    budget?: Task;
+    project?: number;
+    memorial?: number;
+    budget?: number;
     alerts?: {
         approval?: AlertModel;
         accept_proposal?: AlertModel;
@@ -19,13 +17,19 @@ export class CheckInModel {
     config?: string;
     location?: string;
     pavilion?: string;
-    organization?: OrganizationModel;
+    organization_id?: number;
+    organization_login?: string;
+    organization_password?: string;
+    organization_changed_by?: string;
+    organization_changed_in?: string;
     promoter_name?: string;
     promoter_login?: string;
     promoter_password?: string;
     promoter_changed_by?: string;
     promoter_changed_in?: string;
-    event?: EventModel;
+    event_id?: EventModel;
+    event_changed_by?: string;
+    event_changed_in?: string;
     approval_note?: string = null;
     contacts?: {
         clients?: {
@@ -47,7 +51,7 @@ export class CheckInModel {
             percentage: number;
         } [];
     };
-    contacts_obs?: string = null;
+    contact_obs?: string = null;
     billing_client_id?: number;
     costumer_service_employee: null;
     costumer_service_comission: null;
