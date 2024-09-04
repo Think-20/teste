@@ -8,6 +8,10 @@ export class Event {
   edition: string
   note: string
   place: Place
+  place_name: string;
+  dismantling_date: string
+  event_date: string
+  installation_date: string
   ini_date: string
   fin_date: string
   ini_hour: string

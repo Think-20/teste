@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { AfterViewInit, Component, Input, OnChanges, SimpleChanges } from "@angular/core";
 import { FormControl } from '@angular/forms';
 import { City } from "app/address/city.model";
 import { CityService } from "app/address/city.service";
@@ -6,15 +6,19 @@ import { State } from "app/address/state.model";
 import { CheckInModel } from "app/check-in/check-in.model";
 import { Client } from "app/clients/client.model";
 import { Job } from "app/jobs/job.model";
+import { PersonModel } from 'app/shared/models/person.model';
+import { PersonService } from 'app/shared/services/person.service';
 
 @Component({
   selector: "cb-check-in-billing",
   templateUrl: "./check-in-billing.component.html",
   styleUrls: ["./check-in-billing.component.css"],
 })
-export class CheckInBillingComponent {
+export class CheckInBillingComponent implements AfterViewInit, OnChanges {
   @Input() job = new Job();
   @Input() checkInModel = new CheckInModel();
+
+  persons: PersonModel[] = [];
 
   costumer_service_employee = new FormControl(0);
   costumer_service_comission = new FormControl(0);
@@ -61,23 +65,53 @@ export class CheckInBillingComponent {
   }
 
   get agency(): Client {
-    return this.selectedAgency ? this.selectedAgency : new Client();
+    const index = this.agencies.findIndex(x => x.id === this.checkInModel.billing_client_id);
+
+    if (index >= 0) {
+      return this.agencies[index];
+    }
+
+    return null;
   }
 
   get state(): State {
     return this.city && this.city.state ? this.city.state : new State();
   }
 
-  city: City = new City();
+  city: City = new City();;
 
-  selectedAgency: Client;
+  constructor(
+    private cityService: CityService,
+    private personService: PersonService,
+  ) {}
 
-  constructor(private cityService: CityService) {}
+  ngAfterViewInit(): void {
+    this.loadPersons();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (Object.keys(changes).includes('checkInModel')) {
+      const currentValue: CheckInModel = changes.checkInModel.currentValue;
+      const previousValue: CheckInModel = changes.checkInModel.previousValue;
+
+      if (currentValue.billing_client_id != previousValue.billing_client_id) {
+        this.updateAgency(this.agency);
+      }
+    }
+  }
+
+  private loadPersons(): void {
+    this.personService.persons().subscribe({
+      next: response => {
+        this.persons = response;
+      }
+    });
+  }
 
   updateAgency(agency: Client): void {
-    this.selectedAgency = agency;
-
-    this.loadCity(this.selectedAgency.city_id);
+    if (agency && agency.city_id) {
+      this.loadCity(agency.city_id);
+    }
   }
 
   private loadCity(cityId: number): void {

@@ -14,21 +14,6 @@
 
         </mat-expansion-panel-header>
 
-        <!-- <table aria-describedby="Tabela aprovação" class="check-in-table table-1">
-            <tr class="columns-tr">
-                <th scope="col">ITEM</th>
-                <th scope="col">VALOR</th>
-                <th scope="col">SOLICITANTE</th>
-                <th scope="col">ORÇAMENTO</th>
-                <th scope="col">APROVAÇÃO</th>
-                <th scope="col">COMISSÃO EXTRA</th>
-                <th scope="col">FATURAMENTO</th>
-                <th scope="col">DATA</th>
-                <th scope="col">VENCIMENTO</th>
-                <th scope="col">QUITAÇÃO</th>
-            </tr>
-        </table> -->
-
         <div class="check-in-grid">
 
             <div class="check-in-grid-left">
@@ -99,7 +84,7 @@
                     </div>
                 </div>
 
-                <a class="icon-button" style="margin: 3px 8px; margin-right: auto;" mat-button>
+                <a class="icon-button" style="margin: 3px 8px; margin-right: auto;" mat-button (click)="addExtra()">
                     <mat-icon>add</mat-icon>
                 </a>
         

@@ -9,14 +9,14 @@
             
                 <div class="check-in-header-right">
                     <span class="position-relative text-ellipsis cursor-pointer"
-                        [title]="selectedAgency ? 'Agência: ' + selectedAgency.fantasy_name : 'Agência'"
+                        [title]="agency ? 'Agência: ' + agency.fantasy_name : 'Agência'"
                         (click)="$event.stopPropagation(); agencySelect.open()">
-                        {{ selectedAgency ? selectedAgency.fantasy_name : 'Agência' }}
+                        {{ agency ? agency.fantasy_name : 'Agência' }}
 
                         <mat-select class="select-hidden col-md-3" #agencySelect
-                            [(ngModel)]="selectedAgency">
+                            [(ngModel)]="checkInModel.billing_client_id">
                             <mat-option *ngFor="let agency of agencies"
-                                [value]="agency"
+                                [value]="agency.id"
                                 (click)="updateAgency(agency)">
                                 {{ agency.fantasy_name }}
                             </mat-option>
@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ agency.name || '-' }}
+                        {{ agency ? agency.name : '-' }}
                     </div>
                 </div>
 
@@ -48,7 +48,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ agency.cnpj || '-' }}
+                        {{ agency ? agency.cnpj : '-' }}
                     </div>
                 </div>
 
@@ -58,7 +58,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ agency.ie || '-' }}
+                        {{ agency ? agency.ie : '-' }}
                     </div>
                 </div>
 
@@ -68,11 +68,11 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ agency.cep || '-' }}
+                        {{ agency ? agency.cep : '-' }}
                     </div>
 
-                    <div class="check-in-cell" [title]="'Bairro: ' + (agency.neighborhood || '-')">
-                        {{ agency.neighborhood || '-' }}
+                    <div class="check-in-cell" [title]="'Bairro: ' + (agency ? agency.neighborhood : '-')">
+                        {{ agency ? agency.neighborhood : '-' }}
                     </div>
 
                     <div class="check-in-cell" [title]="'Cidade: ' + (city.name || '-')">
@@ -89,18 +89,18 @@
                         ENDEREÇO
                     </div>
 
-                    <div class="check-in-cell" [title]="agency.street || '-'">
+                    <div class="check-in-cell" [title]="(agency ? agency.street : '-')">
                         <span class="text-ellipsis">
-                            {{ agency.street || '-' }}
+                            {{ (agency ? agency.street : '-') }}
                         </span>
                     </div>
 
-                    <div class="check-in-cell" [title]="'Número: ' + (agency.number || '-')">
-                        {{ agency.number || '-' }}
+                    <div class="check-in-cell" [title]="'Número: ' + (agency ? agency.number : '-')">
+                        {{ (agency ? agency.number : '-') }}
                     </div>
 
-                    <div class="check-in-cell" [title]="'Complemento: ' + (agency.complement || '-')">
-                        {{ agency.complement || '-' }}
+                    <div class="check-in-cell" [title]="'Complemento: ' + (agency ? agency.complement : '-')">
+                        {{ (agency ? agency.complement : '-') }}
                     </div>
                 </div>
             </div>
@@ -132,36 +132,42 @@
 
                 <cb-check-in-comission
                     [checkInModel]="checkInModel"
+                    [persons]="persons"
                     [title]="'ATENDIMENTO'"
                     [context]="'costumer_service'">
                 </cb-check-in-comission>
 
                 <cb-check-in-comission
                     [checkInModel]="checkInModel"
+                    [persons]="persons"
                     [title]="'CRIAÇÃO'"
                     [context]="'creation'">
                 </cb-check-in-comission>
 
                 <cb-check-in-comission
                     [checkInModel]="checkInModel"
+                    [persons]="persons"
                     [title]="'GERENTE PROD.'"
                     [context]="'production_manager'">
                 </cb-check-in-comission>
 
                 <cb-check-in-comission
                     [checkInModel]="checkInModel"
+                    [persons]="persons"
                     [title]="'ORÇAMENTO'"
                     [context]="'budget'">
                 </cb-check-in-comission>
 
                 <cb-check-in-comission
                     [checkInModel]="checkInModel"
+                    [persons]="persons"
                     [title]="'DETALHAMENTO'"
                     [context]="'detailing'">
                 </cb-check-in-comission>
 
                 <cb-check-in-comission
                     [checkInModel]="checkInModel"
+                    [persons]="persons"
                     [title]="'PRODUÇÃO'"
                     [context]="'production'">
                 </cb-check-in-comission>

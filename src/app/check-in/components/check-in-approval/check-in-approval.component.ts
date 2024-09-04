@@ -8,10 +8,10 @@ import { CheckInOrganizationFormComponent } from '../check-in-organization-form/
 import { CheckInModel } from 'app/check-in/check-in.model';
 import { OrganizationModel } from 'app/shared/models/organization.model';
 import { AlertModel } from 'app/shared/models/alert.model';
-import { EventModel } from 'app/shared/models/event.model';
 import { EventService } from 'app/events/event.service';
 import { Event } from 'app/events/event.model';
 import { AuthService } from 'app/login/auth.service';
+import { Place } from 'app/places/place.model';
 
 @Component({
   selector: 'cb-check-in-approval',
@@ -24,16 +24,67 @@ export class CheckInApprovalComponent implements AfterViewInit {
   @Input() checkInModel: CheckInModel = new CheckInModel();
 
   projects: Task[] = [];
-  project: Task;
+  get project(): Task {
+    const index = this.projects.findIndex(x => x.id === this.checkInModel.project);
+
+    if (index >= 0) {
+      return this.projects[index];
+    }
+
+    return null;
+  }
 
   memorials: Task[] = [];
-  memorial: Task;
+  get memorial(): Task {
+    const index = this.memorials.findIndex(x => x.id === this.checkInModel.memorial);
+
+    if (index >= 0) {
+      return this.memorials[index];
+    }
+
+    return null;
+  }
 
   budgets: Task[] = [];
-  budget: Task;
+  get budget(): Task {
+    const index = this.budgets.findIndex(x => x.id === this.checkInModel.budget);
+
+    if (index >= 0) {
+      return this.budgets[index];
+    }
+
+    return null;
+  }
 
   events: Event[] = [];
+  get selectedEvent(): Event {
+    const index = this.events.findIndex(x => x.id === this.checkInModel.event_id);
+
+    if (index >= 0) {
+      return this.events[index];
+    }
+
+    return new Event();
+  }
+
+  get place(): Place {
+    if (this.checkInModel.event_id) {
+      return this.selectedEvent.place;
+    }
+
+    return new Place();
+  }
+
   organizations: OrganizationModel[] = [];
+  get organization(): OrganizationModel {
+    const index = this.organizations.findIndex(x => x.id === this.checkInModel.organization_id);
+
+    if (index >= 0) {
+      return this.organizations[index];
+    }
+
+    return new OrganizationModel();
+  }
 
   private get hasAlerts(): boolean {
     return this.checkInModel && !!this.checkInModel.alerts;
@@ -53,14 +104,6 @@ export class CheckInApprovalComponent implements AfterViewInit {
 
   get boardApproval(): AlertModel {
     return this.hasAlerts && this.checkInModel.alerts.board_approval ? this.checkInModel.alerts.board_approval : new AlertModel();
-  }
-
-  get organization(): OrganizationModel {
-    return this.checkInModel && this.checkInModel.organization ? this.checkInModel.organization : new OrganizationModel();
-  }
-
-  get event(): EventModel {
-    return this.checkInModel && this.checkInModel.event ? this.checkInModel.event : new EventModel();
   }
 
   constructor(
@@ -140,30 +183,13 @@ export class CheckInApprovalComponent implements AfterViewInit {
     this.budgets = this.budgets.concat(adds).reverse();
   }
 
-  updateProject(project: Task): void {
-    this.project = project;
-  }
-
-  updateMemorial(memorial: Task): void {
-    this.memorial = memorial;
-  }
-
-  updateBudget(budget: Task): void {
-    this.budget = budget;
-  }
-
-  updateCheckInModel(): void {
-    if (!this.checkInModel) {
-      return;
-    }
-
-    this.checkInModel.project = this.project;
-    this.checkInModel.memorial = this.memorial;
-    this.checkInModel.budget = this.budget;
-  }
-
   updateAlertDate(alert: AlertModel): void {
     alert.date = new Date().toISOString();    
+  }
+
+  updateOrganization(): void {
+    this.checkInModel.organization_changed_by = this.authService.currentUser().employee.name;
+    this.checkInModel.organization_changed_in = new Date().toISOString();
   }
 
   updatePromoter(): void {
@@ -171,28 +197,9 @@ export class CheckInApprovalComponent implements AfterViewInit {
     this.checkInModel.promoter_changed_in = new Date().toISOString();
   }
 
-  selectEvent(event: Event): void {
-    this.checkInModel.event = {
-      event_id: event.id,
-      event_name: event.name,
-      place_name: event.place.name,
-      installation_date: event.ini_date_mounting,
-      event_date: event.ini_date,
-      dismantling_date: event.ini_date_unmounting,
-      changed_by: this.authService.currentUser().employee.name,
-      changed_in: new Date().toISOString(),
-    };
-  }
-
-  selectOrganization(organization: OrganizationModel): void {
-    this.checkInModel.organization = {
-      id: organization.id,
-      name: organization.name,
-      login: this.organization.login,
-      password: this.organization.password,
-      changed_by: this.authService.currentUser().employee.name,
-      changed_in: new Date().toISOString(),
-    };
+  updateEvent(): void {
+    this.checkInModel.event_changed_by = this.authService.currentUser().employee.name;
+    this.checkInModel.event_changed_in = new Date().toISOString();
   }
 
   openModalOrganizationForm(): void {
@@ -200,10 +207,12 @@ export class CheckInApprovalComponent implements AfterViewInit {
       width: '500px',
     });
 
-    modal.afterClosed().subscribe(result => {
+    modal.afterClosed().subscribe((result?: OrganizationModel) => {
       if (result) {
-        this.selectOrganization(result);
-
+        this.checkInModel.organization_id = result.id;
+        
+        this.updateOrganization();
+        
         this.loadOrganizations();
       }
     });

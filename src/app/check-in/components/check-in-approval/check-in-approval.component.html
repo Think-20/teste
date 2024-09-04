@@ -14,11 +14,9 @@
                         {{ project ? taskService.jobDisplay(project) : 'Versão do Projeto' }}
 
                         <mat-select class="select-hidden col-md-3" #projectSelect
-                            [(ngModel)]="project"
-                            (ngModelChange)="updateCheckInModel()">
+                            [(ngModel)]="checkInModel.project">
                             <mat-option *ngFor="let project of projects"
-                                [value]="project"
-                                (click)="updateProject(project)">
+                                [value]="project.id">
                                 {{taskService.jobDisplay(project)}}
                             </mat-option>
                         </mat-select>
@@ -30,11 +28,9 @@
                         {{ memorial ? taskService.jobDisplay(memorial) : 'Memorial' }}
 
                         <mat-select class="select-hidden col-md-3" #memorialSelect
-                            [(ngModel)]="memorial"
-                            (ngModelChange)="updateCheckInModel()">
+                            [(ngModel)]="checkInModel.memorial">
                             <mat-option *ngFor="let memorial of memorials"
-                                [value]="memorial"
-                                (click)="updateMemorial(memorial)">
+                                [value]="memorial.id">
                                 {{taskService.jobDisplay(memorial)}}
                             </mat-option>
                         </mat-select>
@@ -46,11 +42,9 @@
                         {{ budget ? taskService.jobDisplay(budget) : 'Orçamento' }}
 
                         <mat-select class="select-hidden col-md-3" #budgetSelect
-                            [(ngModel)]="budget"
-                            (ngModelChange)="updateCheckInModel()">
+                            [(ngModel)]="checkInModel.budget">
                             <mat-option *ngFor="let budget of budgets"
-                                [value]="budget"
-                                (click)="updateBudget(budget)">
+                                [value]="budget.id">
                                 {{taskService.jobDisplay(budget)}}
                             </mat-option>
                         </mat-select>
@@ -142,11 +136,11 @@
                 <div class="organizadora">
                     <div class="check-in-row header">
                         <div class="check-in-cell">
-                            {{ organization.changed_by }}
+                            {{ checkInModel.organization_changed_by }}
                         </div>
 
                         <div class="check-in-cell">
-                            {{ organization.changed_in | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'' }}
+                            {{ checkInModel.organization_changed_in | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'' }}
                         </div>
 
                         <div class="check-in-cell">
@@ -174,11 +168,12 @@
                                 (click)="organizationMatSelect.open()">
                                 {{ organization.name || '-' }}
 
-                                <mat-select class="select-hidden col-md-3" #organizationMatSelect>
+                                <mat-select class="select-hidden col-md-3" #organizationMatSelect
+                                    [(ngModel)]="checkInModel.organization_id"
+                                    (ngModelChange)="updateOrganization()">
                                     <mat-option *ngFor="let organization of organizations"
-                                        [value]="organization"
-                                        [title]="organization.name"
-                                        (click)="selectOrganization(organization)">
+                                        [value]="organization.id"
+                                        [title]="organization.name">
                                         {{ organization.name }}
                                     </mat-option>
                                 </mat-select>
@@ -186,11 +181,17 @@
                         </div>
 
                         <div class="check-in-cell">
-                            <input type="text" [(ngModel)]="organization.login" />
+                            <input type="text"
+                                [(ngModel)]="checkInModel.organization_login"
+                                (ngModelChange)="updateOrganization()"
+                            />
                         </div>
 
                         <div class="check-in-cell">
-                            <input type="text" [(ngModel)]="organization.password" />
+                            <input type="text"
+                                [(ngModel)]="checkInModel.organization_password"
+                                (ngModelChange)="updateOrganization()"
+                            />
                         </div>
                     </div>
                 </div>
@@ -288,11 +289,11 @@
 
                 <div class="check-in-row header">
                     <div class="check-in-cell">
-                        {{ event.changed_by }}
+                        {{ checkInModel.event_changed_by }}
                     </div>
 
                     <div class="check-in-cell">
-                        {{ event.changed_in | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'' }}
+                        {{ checkInModel.event_changed_in | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'' }}
                     </div>
 
                     <div class="check-in-cell">
@@ -321,14 +322,15 @@
 
                         <span class="position-relative text-ellipsis cursor-pointer"
                             [style.minWidth.px]="100"
-                            [title]="event.place_name || 'Evento'"
+                            [title]="place.name || 'Evento'"
                             (click)="eventMatSelect.open(); loadEvents()">
-                            {{ event.place_name || '-' }}
+                            {{ place.name || '-' }}
 
-                            <mat-select class="select-hidden col-md-3" #eventMatSelect>
+                            <mat-select class="select-hidden col-md-3" #eventMatSelect
+                                [(ngModel)]="checkInModel.event_id"
+                                (ngModelChange)="updateEvent()">
                                 <mat-option *ngFor="let event of events; trackBy: trackByEvent"
-                                    [value]="event"
-                                    (click)="selectEvent(event)">
+                                    [value]="event.id">
                                     {{ event.place.name }}
                                 </mat-option>
                             </mat-select>
@@ -336,15 +338,15 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (event.installation_date | date: 'dd MMM yy') || '-' }}
+                        {{ (selectedEvent.ini_date_mounting | date: 'dd MMM yy') || '-' }}
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (event.event_date | date: 'dd MMM yy') || '-' }}
+                        {{ (selectedEvent.ini_date | date: 'dd MMM yy') || '-' }}
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (event.dismantling_date | date: 'dd MMM yy') || '-' }}
+                        {{ (selectedEvent.ini_date_unmounting | date: 'dd MMM yy') || '-' }}
                     </div>
                 </div>
 
