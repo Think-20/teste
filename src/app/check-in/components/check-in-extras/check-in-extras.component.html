@@ -1,3 +1,15 @@
+<mat-menu #menu="matMenu">
+    <ng-template matMenuContent let-extra="extra">
+        <button (click)="edit(extra)" mat-menu-item>
+          <mat-icon>mode_edit</mat-icon> Editar
+        </button>
+
+        <button (click)="delete(extra)" mat-menu-item>
+          <mat-icon>delete</mat-icon> Remover
+        </button>
+    </ng-template>
+</mat-menu>
+
 <mat-accordion class="check-in-accordion">
 
     <mat-expansion-panel hideToggle [expanded]="true" [disabled]="true">
@@ -8,7 +20,7 @@
                 <h6 class="check-in-header-title">Extras:</h6>
             
                 <div class="check-in-header-right">
-                    R$ 10.000,00
+                    {{ valorTotalExtrasRecebido | currency: 'BRL' }}
                 </div>
             </div>
 
@@ -16,7 +28,7 @@
 
         <div class="check-in-grid">
 
-            <div class="check-in-grid-left">
+            <div class="check-in-grid-left" style="min-height: 90px;">
 
                 <div class="check-in-row">
                     <div class="check-in-cell">
@@ -36,55 +48,27 @@
                     </div>
                 </div>
 
-                <div class="check-in-row">
+                <div *ngFor="let extra of extras" class="check-in-row cursor-pointer"
+                    [matMenuTriggerFor]="menu"
+                    [matMenuTriggerData]="{ extra: extra }">
                     <div class="check-in-cell">
-                        LOGOTIPO EM ADESIVO
+                        {{ extra.description }}
                     </div>
 
                     <div class="check-in-cell">
-                        R$ 7.200,00
+                        {{ extra.value | currency: 'BRL' }}
                     </div>
 
                     <div class="check-in-cell">
-                        Ana Luzia da Silva
+                        {{ extra && extra.requester_object ? extra.requester_object.name : '' }}
                     </div>
 
                     <div class="check-in-cell">
-                        Pamela Cristina
-                    </div>
-                </div>
-
-                <div class="check-in-row">
-                    <div class="check-in-cell">
-                        MESA BISTRÔ
-                    </div>
-
-                    <div class="check-in-cell">
-                        R$ 0,00
+                        {{ extra && extra.budget_object ? extra.budget_object.name : '' }}
                     </div>
                 </div>
 
-                <div class="check-in-row">
-                    <div class="check-in-cell">
-                        BALCÃO BAR
-                    </div>
-
-                    <div class="check-in-cell">
-                        R$ 0,00
-                    </div>
-                </div>
-
-                <div class="check-in-row">
-                    <div class="check-in-cell">
-                        DESCONTO
-                    </div>
-
-                    <div class="check-in-cell">
-                        R$ 0,00
-                    </div>
-                </div>
-
-                <a class="icon-button" style="margin: 3px 8px; margin-right: auto;" mat-button (click)="addExtra()">
+                <a class="icon-button" style="margin: 3px 8px; margin-right: auto;" mat-button (click)="openModalExtra()">
                     <mat-icon>add</mat-icon>
                 </a>
         
@@ -120,36 +104,38 @@
 
                 <div class="content-list">
                     <div class="list">
-                        <div class="check-in-row">
+                        <div *ngFor="let extra of extras" class="check-in-row cursor-pointer"
+                            [matMenuTriggerFor]="menu"
+                            [matMenuTriggerData]="{ extra: extra }">
                             <div class="check-in-cell">
-                                05 Janeiro 2024
+                                {{ extra.approval_date | date: 'dd MMMM yyyy' }}
                             </div>
 
                             <div class="check-in-cell">
-                                ORÇ/ATEN/PROD
+                                {{ extra.extra_commission }}
                             </div>
 
                             <div class="check-in-cell">
-                                Caroline Tansella
+                                {{ extra && extra.billing_employee_object ? extra.billing_employee_object.name : '' }}
                             </div>
 
                             <div class="check-in-cell">
-                                01 Janeiro 2024
+                                {{ extra.date | date: 'dd MMMM yyyy' }}
                             </div>
 
                             <div class="check-in-cell">
-                                05 Janeiro 2024
+                                {{ extra.due_date | date: 'dd MMMM yyyy' }}
                             </div>
 
                             <div class="check-in-cell">
-                                05 Janeiro 2024
+                                {{ extra.settlement_date | date: 'dd MMMM yyyy' }}
                             </div>
                         </div>
                     </div>
 
-                    <div class="content-bottom">
+                    <!-- <div class="content-bottom">
                         Aprovado Rodolfo Morales 15 jun 2024 | Desconto/Juros R$ 1.000,00
-                    </div>
+                    </div> -->
                 </div>
 
             </div>
@@ -158,7 +144,7 @@
                 <div class="check-in-row">
                     <div class="check-in-cell">VALOR TOTAL EXTRAS</div>
                     
-                    <div class="check-in-cell">R$ 100.000,00</div>
+                    <div class="check-in-cell">{{ valorTotalExtras | currency: 'BRL' }}</div>
                 </div>
             </div>
         
@@ -166,13 +152,16 @@
                 <div class="check-in-row">
                     <div class="check-in-cell">VALOR TOTAL EXTRAS RECEBIDO</div>
                     
-                    <div class="check-in-cell">R$ 100.000,00</div>
+                    <div class="check-in-cell">{{ valorTotalExtrasRecebido | currency: 'BRL' }}</div>
                 </div>
             </div>
 
         </div>
 
-        <cb-check-in-obs [borderBottom]="true"></cb-check-in-obs>
+        <cb-check-in-obs name="extras_obs" id="extras_obs"
+            [(ngModel)]="checkInModel.extras_obs"
+            [borderBottom]="true">
+        </cb-check-in-obs>
         
     </mat-expansion-panel>
 

@@ -4,4 +4,9 @@ export class Contact {
     department: string
     cellphone: number
     email: string
+
+    constructor() {
+        this.cellphone = null;
+        this.email = null;
+    }
 }

@@ -27,7 +27,7 @@
 }
 
 .check-in-grid-left .check-in-row:nth-child(1) .check-in-cell:nth-child(2) {
-    justify-content: end;
+    justify-content: flex-end;
 
     border-left: 1px solid #ccc;
 }
@@ -56,26 +56,6 @@
     flex-direction: column;
 
     justify-content: space-between;
-}
-
-.payments .check-in-row {
-    display: grid;
-
-    grid-template-columns: 100px 65px 100px auto 150px;
-}
-
-.payments .check-in-row:nth-child(1) {
-    border-bottom: 0;
-}
-
-.payments .check-in-row .check-in-cell:nth-child(2),
-.payments .check-in-row .check-in-cell:nth-child(3),
-.payments .check-in-row .check-in-cell:nth-child(4) {
-    border-left: 1px solid #ccc;
-}
-
-.payments .check-in-cell:nth-child(5) {
-    justify-content: flex-end;
 }
 
 .payment-bottom {

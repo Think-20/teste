@@ -230,6 +230,20 @@ export class BudgetFormComponent implements OnInit {
         total_geral_estande: this.formBuilder.control({ value: 0, disabled: true }, []),
         liquido_think: this.formBuilder.control({ value: 0, disabled: true }, []),
         margem_lucro: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        credenciais_taxas: this.formBuilder.control({ value: 0, disabled: false }, []),
+        credenciais_taxas_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
+        credenciais_taxas_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        seguro: this.formBuilder.control({ value: 0, disabled: false }, []),
+        seguro_reaproveitamento: this.formBuilder.control({ value: 0, disabled: false }, []),
+        seguro_porcentagem: this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        desconto:  this.formBuilder.control({ value: 0, disabled: false }, []),
+        desconto_reaproveitamento:  this.formBuilder.control({ value: 0, disabled: false }, []),
+        desconto_porcentagem:  this.formBuilder.control({ value: 0, disabled: true }, []),
+
+        diversos_operacional_total: this.formBuilder.control({ value: 0, disabled: true }, []),
       })
     );
 
@@ -265,6 +279,8 @@ export class BudgetFormComponent implements OnInit {
         this.setTotalLiquidoThink(index);
 
         this.setMargemLucro(index);
+
+        this.setDiversosOperacionalTotal(index);
       });
 
       console.log(formData)
@@ -325,6 +341,16 @@ export class BudgetFormComponent implements OnInit {
         operacional_logistica: formData.operacional_logistica || 0,
         servico_diversos_operacional: formData.servico_diversos_operacional || 0,
         coeficiente_margem: formData.coeficiente_margem || 0,
+
+        credenciais_taxas: formData.credenciais_taxas || 0,
+        credenciais_taxas_reaproveitamento: formData.credenciais_taxas_reaproveitamento || 0,
+        credenciais_taxas_porcentagem: formData.credenciais_taxas_porcentagem || 0,
+        seguro: formData.seguro || 0,
+        seguro_reaproveitamento: formData.seguro_reaproveitamento || 0,
+        seguro_porcentagem: formData.seguro_porcentagem || 0,
+        desconto: formData.desconto || 0,
+        desconto_reaproveitamento: formData.desconto_reaproveitamento || 0,
+        desconto_porcentagem: formData.desconto_porcentagem || 0,
 
         // valores orçamento reaproveitamento
         marcenaria_reaproveitamento: formData.marcenaria_reaproveitamento || 0,
@@ -468,17 +494,40 @@ export class BudgetFormComponent implements OnInit {
   setTotalDiversosOperacional(index: number) {
     const controlTotalDiversosOperacional: AbstractControl = this.budgetForms[index].get("diversos_operacional");
 
-    const controlTotalDiversosOperacionalPer: AbstractControl = this.budgetForms[index].get("servico_diversos_operacional_porcentagem");
-
     const totalEstande = this.getTotalServicoDiversosOperacional(index);
+    const totalCredenciaisTaxas = this.getTotalCredenciaisTaxas(index);
+    const totalSeguro = this.getTotalSeguro(index);
+    const totalDesconto = this.getTotalDesconto(index);
 
     const coeficiente = this.getCoeficiente(index, "diversos_operacional_coeficiente");
     
-    const total = totalEstande * coeficiente;
+    const total = 
+      totalEstande +
+      totalCredenciaisTaxas +
+      totalSeguro +
+      totalDesconto;
 
-    controlTotalDiversosOperacionalPer.setValue(total > 0 ? 100: 0, { emitEvent: false });
+    this.setPercentageInControl("servico_diversos_operacional_porcentagem", index, total, totalEstande);
+    this.setPercentageInControl("credenciais_taxas_porcentagem", index, total, totalCredenciaisTaxas);
+    this.setPercentageInControl("seguro_porcentagem", index, total, totalSeguro);
+    this.setPercentageInControl("desconto_porcentagem", index, total, totalDesconto);
 
-    controlTotalDiversosOperacional.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
+    const totalCoeficiente = (
+      totalEstande +
+      totalCredenciaisTaxas +
+      totalSeguro +
+      totalDesconto
+    ) * coeficiente;
+    
+    controlTotalDiversosOperacional.setValue(parseFloat(totalCoeficiente.toFixed(2)), { emitEvent: false });
+  }
+
+  setPercentageInControl(controlName: string, index: number, total: number, value: number): void {
+    const percentage = total > 0 ? (value * 100) / total : 0;
+
+    const control: AbstractControl = this.budgetForms[index].get(controlName);
+
+    control.setValue(parseFloat(percentage.toFixed(2)), { emitEvent: false });
   }
 
   setTotalFreteLogística(index: number) {
@@ -620,6 +669,22 @@ export class BudgetFormComponent implements OnInit {
     controlMargemLiquido.setValue(parseFloat(porcentagem.toFixed(2)), { emitEvent: false });
   }
 
+  setDiversosOperacionalTotal(index: number): void {
+    const controlDiversosOperacionalTotal: AbstractControl = this.budgetForms[index].get("diversos_operacional_total");
+
+    const totalServicoDiversosOperacional = this.getTotalServicoDiversosOperacional(index);
+
+    const totalCredenciaisTaxas = this.getTotalCredenciaisTaxas(index);
+
+    const totalSeguro = this.getTotalSeguro(index);
+
+    const totalDesconto = this.getTotalDesconto(index);
+
+    const total = totalServicoDiversosOperacional + totalCredenciaisTaxas + totalSeguro + totalDesconto;
+
+    controlDiversosOperacionalTotal.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
+  }
+
   getControlTotalEstande(index: number): AbstractControl {
     return this.budgetForms[index].get("total_estande");
   }
@@ -663,6 +728,19 @@ export class BudgetFormComponent implements OnInit {
   getTotalServicoDiversosOperacional(index: number): number {
     return this.budgetForms[index].get("servico_diversos_operacional").value;
   }
+
+  getTotalCredenciaisTaxas(index: number): number {
+    return this.budgetForms[index].get("credenciais_taxas").value;
+  }
+
+  getTotalSeguro(index: number): number {
+    return this.budgetForms[index].get("seguro").value;
+  }
+
+  getTotalDesconto(index: number): number {
+    return this.budgetForms[index].get("desconto").value;
+  }
+
 
   getTotalOperacionalLogistica(index: number): number {
     return this.budgetForms[index].get("operacional_logistica").value;

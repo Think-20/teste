@@ -59,6 +59,7 @@ export class Task {
   itens_especiais?: number
   execucao?: number
   operacional_logistica?: number
+  operacional_logistica_porcentagem?: number;
   servico_diversos_operacional?: number
   coeficiente_margem?: number
 
@@ -115,4 +116,14 @@ export class Task {
   diversos_operacional_reaproveitamento?: number
   operacional_logistica_reaproveitamento?: number
   servico_diversos_operacional_reaproveitamento?: number
+
+  credenciais_taxas?: number;
+  credenciais_taxas_reaproveitamento?: number;
+  credenciais_taxas_porcentagem?: number;
+  seguro?: number;
+  seguro_reaproveitamento?: number;
+  seguro_porcentagem?: number;
+  desconto?: number;
+  desconto_reaproveitamento?: number;
+  desconto_porcentagem?: number;
 }

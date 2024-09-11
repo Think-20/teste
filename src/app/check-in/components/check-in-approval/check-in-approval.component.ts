@@ -7,11 +7,12 @@ import { TaskService } from 'app/schedule/task.service';
 import { CheckInOrganizationFormComponent } from '../check-in-organization-form/check-in-organization-form.component';
 import { CheckInModel } from 'app/check-in/check-in.model';
 import { OrganizationModel } from 'app/shared/models/organization.model';
-import { AlertModel } from 'app/shared/models/alert.model';
 import { EventService } from 'app/events/event.service';
 import { Event } from 'app/events/event.model';
 import { AuthService } from 'app/login/auth.service';
 import { Place } from 'app/places/place.model';
+import { DatePipe } from '@angular/common';
+import { Employee } from 'app/employees/employee.model';
 
 @Component({
   selector: 'cb-check-in-approval',
@@ -19,9 +20,11 @@ import { Place } from 'app/places/place.model';
   styleUrls: ['./check-in-approval.component.css']
 })
 export class CheckInApprovalComponent implements AfterViewInit {
-
   @Input() job: Job;
   @Input() checkInModel: CheckInModel = new CheckInModel();
+  @Input() employees: Employee[] = [];
+
+  employeeId: number;
 
   projects: Task[] = [];
   get project(): Task {
@@ -86,33 +89,16 @@ export class CheckInApprovalComponent implements AfterViewInit {
     return new OrganizationModel();
   }
 
-  private get hasAlerts(): boolean {
-    return this.checkInModel && !!this.checkInModel.alerts;
-  }
-
-  get approval(): AlertModel {
-    return this.hasAlerts && this.checkInModel.alerts.approval ? this.checkInModel.alerts.approval : new AlertModel();
-  }
-
-  get acceptProposal(): AlertModel {
-    return this.hasAlerts && this.checkInModel.alerts.accept_proposal ? this.checkInModel.alerts.accept_proposal : new AlertModel();
-  }
-
-  get acceptProduction(): AlertModel {
-    return this.hasAlerts && this.checkInModel.alerts.accept_production ? this.checkInModel.alerts.accept_production : new AlertModel();
-  }
-
-  get boardApproval(): AlertModel {
-    return this.hasAlerts && this.checkInModel.alerts.board_approval ? this.checkInModel.alerts.board_approval : new AlertModel();
-  }
-
   constructor(
     private dialog: MatDialog,
+    private datePipe: DatePipe, 
     public taskService: TaskService,
     private authService: AuthService,
     private eventService: EventService,
     private organizationService: OrganizationService,
-  ) {}
+  ) {
+    this.employeeId = authService.currentUser().employee.id;
+  }
 
   ngAfterViewInit(): void {
     this.loadEvents();
@@ -183,23 +169,81 @@ export class CheckInApprovalComponent implements AfterViewInit {
     this.budgets = this.budgets.concat(adds).reverse();
   }
 
-  updateAlertDate(alert: AlertModel): void {
-    alert.date = new Date().toISOString();    
+  validateAlertDateApproval(event: PointerEvent): void {
+    if (this.employeeId != this.job.attendance.id) {
+      event.preventDefault();
+    }
+  }
+
+  updateAlertDateApproval(): void {
+    this.checkInModel.approval_employee_id = this.employeeId;
+    this.checkInModel.approval_date = this.getCurrentDate();
+  }
+
+  validateAlertDateAcceptProposal(event: PointerEvent): void {
+    if (this.employeeId != 11) {
+      event.preventDefault();
+    }
+  }
+
+  updateAlertDateAcceptProposal(): void {
+    this.checkInModel.accept_proposal_employee_id = this.employeeId;
+    this.checkInModel.accept_proposal_date = this.getCurrentDate();
+  }
+
+  validateAlertDateAcceptProduction(event: PointerEvent): void {
+    if (this.employeeId != 20) {
+      event.preventDefault();
+    }
+  }
+
+  updateAlertDateAcceptProduction(): void {
+    this.checkInModel.accept_production_employee_id = this.employeeId;
+    this.checkInModel.accept_production_date = this.getCurrentDate();
+  }
+
+  validateAlertDateBoardApproval(event: PointerEvent): void {
+    if (this.authService.currentUser().employee.department_id != 1) {
+      event.preventDefault();
+    }
+  }
+
+  updateAlertDateBoardApproval(): void {
+    this.checkInModel.board_approval_employee_id = this.employeeId;
+    this.checkInModel.board_approval_date = this.getCurrentDate();
   }
 
   updateOrganization(): void {
-    this.checkInModel.organization_changed_by = this.authService.currentUser().employee.name;
-    this.checkInModel.organization_changed_in = new Date().toISOString();
+    this.checkInModel.organization_changed_by = this.employeeId;
+    this.checkInModel.organization_changed_in = this.getCurrentDate();
   }
 
   updatePromoter(): void {
-    this.checkInModel.promoter_changed_by = this.authService.currentUser().employee.name;
-    this.checkInModel.promoter_changed_in = new Date().toISOString();
+    this.checkInModel.promoter_changed_by = this.employeeId;
+    this.checkInModel.promoter_changed_in = this.getCurrentDate();
   }
 
   updateEvent(): void {
-    this.checkInModel.event_changed_by = this.authService.currentUser().employee.name;
-    this.checkInModel.event_changed_in = new Date().toISOString();
+    this.checkInModel.event_changed_by = this.employeeId;
+    this.checkInModel.event_changed_in = this.getCurrentDate();
+  }
+
+  private getCurrentDate(): string {
+    return this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
+  }
+
+  getEmployeeName(id: number): string {
+    if (!id) {
+      return '';
+    }
+
+    const index = this.employees.findIndex(x => x.id == id);
+
+    if (index >= 0) {
+      return this.employees[index].name;
+    }
+    
+    return '';
   }
 
   openModalOrganizationForm(): void {
@@ -212,7 +256,7 @@ export class CheckInApprovalComponent implements AfterViewInit {
         this.checkInModel.organization_id = result.id;
         
         this.updateOrganization();
-        
+
         this.loadOrganizations();
       }
     });

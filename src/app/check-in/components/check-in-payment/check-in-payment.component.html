@@ -1,1 +1,21 @@
-<p>check-in-payment works!</p>
+<div class="check-in-row">
+    <div class="check-in-cell description">
+        {{ paymentModel.description }}
+    </div>
+
+    <div class="check-in-cell percentage">
+        {{ paymentModel.percentage }} %
+    </div>
+
+    <div class="check-in-cell value">
+        {{ paymentModel.value | currency: 'BRL' }}
+    </div>
+
+    <div class="check-in-cell">
+        {{ paymentModel.order_date | date: 'dd MMMM yyyy' }}
+    </div>
+
+    <div class="check-in-cell">
+        {{ (paymentModel.payment_date | date: 'dd MMMM yyyy') || 'Pendente (Valor c/ Juros)' }}
+    </div>
+</div>
