@@ -274,7 +274,7 @@ export class CheckInBillingAmountComponent implements OnInit, OnChanges {
 
     modal.afterClosed().subscribe(result => {
       if (result) {
-        this.payments.push(result);
+        this.loadPayments(this.checkInModel.id);
       }
     });
   }
