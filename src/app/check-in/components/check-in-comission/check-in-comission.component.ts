@@ -1,23 +1,21 @@
-import { Component, ElementRef, Input, OnInit, ViewChildren, OnDestroy } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChildren, OnDestroy, SimpleChanges, OnChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material';
 import { CheckInModel } from 'app/check-in/check-in.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { CheckInPeopleComponent } from '../check-in-people/check-in-people.component';
-import { PersonModel } from 'app/shared/models/person.model';
+import { Employee } from 'app/employees/employee.model';
 
 @Component({
   selector: 'cb-check-in-comission',
   templateUrl: './check-in-comission.component.html',
   styleUrls: ['./check-in-comission.component.css']
 })
-export class CheckInComissionComponent implements OnInit, OnDestroy {
-
+export class CheckInComissionComponent implements OnInit, OnChanges, OnDestroy {
   @Input() title: string;
   @Input() context: string;
   @Input() checkInModel = new CheckInModel();
-  @Input() persons: PersonModel[] = [];
+  @Input() employees: Employee[] = [];
 
   @ViewChildren('comission') comissionElement: ElementRef<HTMLInputElement>;
   @ViewChildren('comission2') comission2Element: ElementRef<HTMLInputElement>;
@@ -31,25 +29,7 @@ export class CheckInComissionComponent implements OnInit, OnDestroy {
 
   onDestroy$ = new Subject<void>();
 
-  get selectedPeople(): string {
-    const index = this.persons.findIndex(x => x.id === this.form.controls.employee.value);
-
-    if (index >= 0) {
-      return this.persons[index].name;
-    }
-
-    return null;
-  }
-
-  get selectedPeople2(): string {
-    const index = this.persons.findIndex(x => x.id === this.form.controls.employee2.value);
-
-    if (index >= 0) {
-      return this.persons[index].name;
-    }
-
-    return null;
-  }
+  add = false;
 
   get employee(): number {
     return this.context && this.checkInModel[this.context + '_employee'] ? this.checkInModel[this.context + '_employee'] : null;
@@ -74,6 +54,19 @@ export class CheckInComissionComponent implements OnInit, OnDestroy {
         this.checkInModel[this.context + '_comission2'] = value.comission2;
       }
     });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (Object.keys(changes).includes('checkInModel')) {
+      this.form.patchValue({
+        employee: this.checkInModel[this.context + '_employee'],
+        comission: this.checkInModel[this.context + '_comission'] || 100,
+        employee2: this.checkInModel[this.context + '_employee2'],
+        comission2: this.checkInModel[this.context + '_comission2'] || 0,
+      });
+
+      this.add = !!this.employee2;
+    }
   }
 
   validateComission(): void {
@@ -117,24 +110,21 @@ export class CheckInComissionComponent implements OnInit, OnDestroy {
   }
 
   employee2Action(): void {
-    if (this.employee2) {
-      this.form.controls.comission.patchValue(100);
-      this.form.controls.employee2.patchValue(null);
-      this.form.controls.comission2.patchValue(0);
+    this.add = !this.add;
 
+    this.form.controls.comission.patchValue(100);
+    this.form.controls.employee2.patchValue(null);
+    this.form.controls.comission2.patchValue(0);
+  }
 
-      return;
+  getSelectedEmployeName(id: number): string {
+    const index = this.employees.findIndex(x => x.id === id);
+
+    if (index >= 0) {
+      return this.employees[index].name;
     }
 
-    const modal = this.dialog.open(CheckInPeopleComponent, {
-      width: '500px',
-    });
-
-    modal.afterClosed().subscribe(result => {
-      if (result) {
-        this.persons.push(result);
-      }
-    });
+    return null;
   }
 
   ngOnDestroy(): void {

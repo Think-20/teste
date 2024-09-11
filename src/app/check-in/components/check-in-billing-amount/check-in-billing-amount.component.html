@@ -1,3 +1,15 @@
+<mat-menu #menu="matMenu">
+    <ng-template matMenuContent let-payment="payment">
+        <button (click)="edit(payment)" mat-menu-item>
+          <mat-icon>mode_edit</mat-icon> Editar
+        </button>
+
+        <button (click)="delete(payment)" mat-menu-item>
+          <mat-icon>delete</mat-icon> Remover
+        </button>
+    </ng-template>
+</mat-menu>
+
 <mat-accordion class="check-in-accordion">
 
     <mat-expansion-panel hideToggle [expanded]="true" [disabled]="true">
@@ -8,7 +20,7 @@
                 <h6 class="check-in-header-title">Valor faturado:</h6>
             
                 <div class="check-in-header-right">
-                    R$ 100.000,00
+                    {{ valorTotalRecebido | currency: 'BRL' }}
                 </div>
             </div>
 
@@ -24,7 +36,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        R$ 72.975,00
+                        {{ finalValue | currency: 'BRL' }}
                     </div>
                 </div>
 
@@ -34,13 +46,22 @@
                     </div>
 
                     <div class="check-in-cell">
-                        R$ 7.200,00
+                        {{ bv | currency: 'BRL' }}
                     </div>
 
-                    <div class="check-in-cell">
-                        Ana Luzia da Silva
+                    <div class="check-in-cell position-relative">
+                        <mat-select class="select-hidden" #personSelect [(ngModel)]="checkInModel.bv_customer_service">
+                            <mat-option *ngFor="let person of persons"
+                                [value]="person.id">
+                                {{ person.name }}
+                            </mat-option>
+                        </mat-select>
+                        
+                        <span class="text-ellipsis cursor-pointer" (click)="personSelect.open()">
+                            {{ personName || 'Selecionar pessoa' }}
+                        </span>
 
-                        <a class="icon-button" style="margin-left: 10px;" mat-button>
+                        <a class="icon-button" style="margin-left: 10px;" mat-button (click)="openModalPerson()">
                             <mat-icon>add</mat-icon>
                         </a>
                     </div>
@@ -52,7 +73,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        R$ 0,00
+                        {{ impostos | currency: 'BRL' }}
                     </div>
                 </div>
 
@@ -62,7 +83,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        R$ 0,00
+                        {{ equipamentos | currency: 'BRL' }}
                     </div>
                 </div>
 
@@ -72,7 +93,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        R$ 0,00
+                        {{ logistica | currency: 'BRL' }}
                     </div>
                 </div>
 
@@ -82,7 +103,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        R$ 0,00
+                        {{ credenciaisTaxas | currency: 'BRL' }}
                     </div>
                 </div>
 
@@ -92,7 +113,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        R$ 0,00
+                        {{ seguro | currency: 'BRL' }}
                     </div>
                 </div>
 
@@ -102,7 +123,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        R$ 0,00
+                        {{ outros | currency: 'BRL' }}
                     </div>
                 </div>
 
@@ -112,7 +133,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        R$ 0,00
+                        {{ desconto | currency: 'BRL' }}
                     </div>
                 </div>
 
@@ -144,80 +165,21 @@
 
                 <div class="content-payments">
                     <div class="payments">
-                        <div class="check-in-row">
-                            <div class="check-in-cell">
-                                SINAL
-                            </div>
-        
-                            <div class="check-in-cell">
-                                50%
-                            </div>
-        
-                            <div class="check-in-cell">
-                                R$ 50.000,00
-                            </div>
-        
-                            <div class="check-in-cell">
-                                05 Janeiro 2024
-                            </div>
-        
-                            <div class="check-in-cell">
-                                05 Janeiro 2024
-                            </div>
-                        </div>
+                        <cb-check-in-payment *ngFor="let payment of payments"
+                            [matMenuTriggerFor]="menu"
+                            [matMenuTriggerData]="{ payment: payment }"
+                            [paymentModel]="payment">
+                        </cb-check-in-payment>
 
-                        <div class="check-in-row">
-                            <div class="check-in-cell">
-                                PARCELA 01
-                            </div>
-        
-                            <div class="check-in-cell">
-                                25%
-                            </div>
-        
-                            <div class="check-in-cell">
-                                R$ 25.000,00
-                            </div>
-        
-                            <div class="check-in-cell">
-                                05 Janeiro 2024
-                            </div>
-        
-                            <div class="check-in-cell">
-                                Pendente (Valor c/ Juros)
-                            </div>
-                        </div>
-
-                        <div class="check-in-row">
-                            <div class="check-in-cell">
-                                PARCELA 02
-                            </div>
-        
-                            <div class="check-in-cell">
-                                25%
-                            </div>
-        
-                            <div class="check-in-cell">
-                                R$ 25.000,00
-                            </div>
-        
-                            <div class="check-in-cell">
-                                05 Janeiro 2024
-                            </div>
-        
-                            <div class="check-in-cell">
-                                Pendente (Valor c/ Juros)
-                            </div>
-                        </div>
-
-                        <a class="icon-button" style="margin: 3px 8px;" mat-button>
+                        <a class="icon-button" style="margin: 3px 8px;" mat-button
+                            (click)="openModalPayment()">
                             <mat-icon>add</mat-icon>
                         </a>
                     </div>
     
-                    <div class="payment-bottom">
+                    <!-- <div class="payment-bottom">
                         Aprovado Rodolfo Morales 15 jun 2024 | Desconto/Juros R$ 1.000,00
-                    </div>
+                    </div> -->
                 </div>
 
             </div>
@@ -229,7 +191,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        R$ 100.000,00
+                        {{ job.budget_value | currency: 'BRL' }}
                     </div>
                 </div>
             </div>
@@ -241,13 +203,13 @@
                     </div>
 
                     <div class="check-in-cell">
-                        R$ 100.000,00
+                        {{ valorTotalRecebido | currency: 'BRL' }}
                     </div>
                 </div>
             </div>
         </div>
 
-        <cb-check-in-obs></cb-check-in-obs>
+        <cb-check-in-obs [(ngModel)]="checkInModel.billing_amount_obs" name="billing_amount_obs" id="billing_amount_obs"></cb-check-in-obs>
         
     </mat-expansion-panel>
 

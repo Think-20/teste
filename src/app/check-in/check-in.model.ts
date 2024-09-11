@@ -1,4 +1,3 @@
-import { AlertModel } from 'app/shared/models/alert.model';
 import { EventModel } from 'app/shared/models/event.model';
 
 export class CheckInModel {
@@ -7,12 +6,18 @@ export class CheckInModel {
     project?: number;
     memorial?: number;
     budget?: number;
-    alerts?: {
-        approval?: AlertModel;
-        accept_proposal?: AlertModel;
-        accept_production?: AlertModel;
-        board_approval?: AlertModel;
-    };
+    approval: boolean;
+    approval_employee_id: number;
+    approval_date: string;
+    accept_proposal: boolean;
+    accept_proposal_employee_id: number;
+    accept_proposal_date: string;
+    accept_production: boolean;
+    accept_production_employee_id: number;
+    accept_production_date: string;
+    board_approval: boolean;
+    board_approval_employee_id: number;
+    board_approval_date: string;
     area?: number;
     config?: string;
     location?: string;
@@ -20,16 +25,16 @@ export class CheckInModel {
     organization_id?: number;
     organization_login?: string;
     organization_password?: string;
-    organization_changed_by?: string;
-    organization_changed_in?: string;
+    organization_changed_by?: number;
+    organization_changed_in?: string | Date;
     promoter_name?: string;
     promoter_login?: string;
     promoter_password?: string;
-    promoter_changed_by?: string;
-    promoter_changed_in?: string;
+    promoter_changed_by?: number;
+    promoter_changed_in?: string | Date;
     event_id?: EventModel;
-    event_changed_by?: string;
-    event_changed_in?: string;
+    event_changed_by?: number;
+    event_changed_in?: string | Date;
     approval_note?: string = null;
     contacts?: {
         clients?: {
@@ -78,6 +83,7 @@ export class CheckInModel {
     production_employee2: null;
     production_comission2: null;
     billing_obs: string;
+    bv_customer_service: number;
     billing_amount?: {
         billing_amount: number;
         value_base_for_calculation: number;
@@ -112,14 +118,14 @@ export class CheckInModel {
             id: number;
             description: string;
             value: number;
-            requester: string;
-            budget: string;
+            requester: number;
+            budget: number;
         } [];
         extra_commissions: {
             id: number;
             approval_date: string;
             extra_commission: string;
-            billing: string;
+            billing_employee_id: number;
             date: string;
             due_date: string;
             settlement_date: string;
@@ -130,4 +136,14 @@ export class CheckInModel {
         total_amount_extras_received: number;
         obs: string;
     };
+    billing_amount_obs?: string;
+    extras_obs?: string;
+
+    constructor() {
+        this.approval_note = null;
+        this.contact_obs = null;
+        this.billing_obs = null;
+        this.billing_amount_obs = null;
+        this.extras_obs = null;
+    }
 }

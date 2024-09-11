@@ -1,0 +1,60 @@
+<h1 mat-dialog-title class="p-0">
+    Pagamento
+</h1>
+
+<div mat-dialog-content>
+    <form [formGroup]="form" autocomplete="off">
+
+        <div class="row">
+
+            <mat-form-field class="col-sm-12">
+                <input ucWords matInput placeholder="Descrição*" formControlName="description">
+                <mat-error>
+                    Campo obrigatório.
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-12">
+                <input matInput currencyMask placeholder="Valor*" formControlName="value">
+                <mat-error>
+                    Campo obrigatório.
+                </mat-error>
+            </mat-form-field>
+    
+            <mat-form-field class="col-sm-6">
+                <input matInput readonly [matDatepicker]="availableDatepicker" formControlName="order_date" placeholder="Data previsão de pagamento*">
+
+                <mat-datepicker-toggle matSuffix [for]="availableDatepicker"></mat-datepicker-toggle>
+                <mat-datepicker #availableDatepicker></mat-datepicker>
+                
+                <mat-error>
+                    Campo obrigatório.
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-6">
+                <input matInput readonly [matDatepicker]="availableDatepicker2" formControlName="payment_date" placeholder="Data de pagamento">
+
+                <mat-datepicker-toggle matSuffix [for]="availableDatepicker2"></mat-datepicker-toggle>
+                <mat-datepicker #availableDatepicker2></mat-datepicker>
+
+                <mat-error>
+                    Campo obrigatório.
+                </mat-error>
+            </mat-form-field>
+
+        </div>
+
+        <div class="d-flex flex-row justify-content-end mt-4">
+            <button type="button" class="cb-button mr-3" color="primary" mat-raised-button
+                (click)="close()">
+                CANCELAR
+            </button>
+            
+            <button class="cb-button" color="primary" mat-raised-button
+                (click)="save()">
+                SALVAR
+            </button>
+        </div>
+    </form>
+</div>

@@ -6,23 +6,28 @@
 
             <cb-check-in-approval
                 [job]="job"
+                [employees]="employees"
                 [checkInModel]="checkInModel">
             </cb-check-in-approval>
 
-            <cb-check-in-contact-info
+            <cb-check-in-contact-info #contactInfo
                 [job]="job"
                 [checkInModel]="checkInModel">
             </cb-check-in-contact-info>
 
             <cb-check-in-billing
                 [job]="job"
+                [employees]="employees"
                 [checkInModel]="checkInModel">
             </cb-check-in-billing>
 
-            <cb-check-in-billing-amount>
+            <cb-check-in-billing-amount
+                [job]="job"
+                [checkInModel]="checkInModel">
             </cb-check-in-billing-amount>
 
-            <cb-check-in-extras>
+            <cb-check-in-extras
+                [checkInModel]="checkInModel">
             </cb-check-in-extras>
 
             <div class="d-flex flex-row justify-content-end mt-4"

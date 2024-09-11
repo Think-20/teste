@@ -1,0 +1,42 @@
+@import url('../../check-in.component.css');
+
+.check-in-row {
+    display: grid;
+
+    grid-template-columns: 100px 65px 100px auto 150px;
+}
+
+.check-in-row:nth-child(1) {
+    border-bottom: 0;
+}
+
+.check-in-row .check-in-cell:nth-child(2),
+.check-in-row .check-in-cell:nth-child(3),
+.check-in-row .check-in-cell:nth-child(4) {
+    border-left: 1px solid #ccc;
+}
+
+.check-in-cell:nth-child(5) {
+    justify-content: flex-end;
+}
+
+.percentage {
+    display: flex;
+
+    flex-direction: row;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.percentage input {
+    max-width: 23px;
+
+    padding: 3px 2px 3px 0 !important;
+
+    text-align: right;
+}
+
+.value input {
+    text-align: center !important;
+}

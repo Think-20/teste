@@ -6,14 +6,14 @@
     <form [formGroup]="form" autocomplete="off">
 
         <div class="row">
-            <mat-form-field class="col-sm-7">
+            <mat-form-field class="col-sm-6">
                 <input ucWords matInput placeholder="Descrição*" formControlName="description">
                 <mat-error>
                     Campo obrigatório.
                 </mat-error>
             </mat-form-field>
             
-            <mat-form-field class="col-sm-5">
+            <mat-form-field class="col-sm-6">
                 <input matInput currencyMask placeholder="Valor*" formControlName="value">
                 <mat-error>
                     O valor deve ser maior que R$ 0,00
@@ -21,9 +21,9 @@
             </mat-form-field>
 
             <mat-form-field class="col-sm-12">
-                <mat-select  placeholder="Solicitante*" formControlName="requester">
-                    <mat-option *ngFor="let requester of requesters" [value]="requester.id">
-                        {{ requester.name }}
+                <mat-select placeholder="Solicitante*" formControlName="requester">
+                    <mat-option *ngFor="let person of persons" [value]="person.id">
+                        {{ person.name }}
                     </mat-option>
                 </mat-select>
                 <mat-error>
@@ -32,18 +32,58 @@
             </mat-form-field>
 
             <mat-form-field class="col-sm-12">
-                <mat-select  placeholder="Orçamento*" formControlName="budget">
-                    <mat-option *ngFor="let budget of budgets" [value]="budgets.id">
-                        {{ budget.name }}
+                <mat-select placeholder="Orçamento*" formControlName="budget">
+                    <mat-option *ngFor="let employee of employees" [value]="employee.id">
+                        {{ employee.name }}
                     </mat-option>
                 </mat-select>
                 <mat-error>
                     Obrigatório
                 </mat-error>
             </mat-form-field>
+
+            <mat-form-field class="col-sm-12">
+                <input ucWords matInput placeholder="Comissão extra" formControlName="extra_commission">
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-12">
+                <mat-select placeholder="Faturamento" formControlName="billing_employee_id">
+                    <mat-option *ngFor="let employee of employees" [value]="employee.id">
+                        {{ employee.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-6">
+                <input matInput readonly [matDatepicker]="dateDatepicker" placeholder="Data" formControlName="date">
+
+                <mat-datepicker-toggle matSuffix [for]="dateDatepicker"></mat-datepicker-toggle>
+                <mat-datepicker #dateDatepicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-6">
+                <input matInput readonly [matDatepicker]="approvalDateDatepicker" placeholder="Data aprovação" formControlName="approval_date">
+
+                <mat-datepicker-toggle matSuffix [for]="approvalDateDatepicker"></mat-datepicker-toggle>
+                <mat-datepicker #approvalDateDatepicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-6">
+                <input matInput readonly [matDatepicker]="dueDateDatepicker" placeholder="Vencimento" formControlName="due_date">
+
+                <mat-datepicker-toggle matSuffix [for]="dueDateDatepicker"></mat-datepicker-toggle>
+                <mat-datepicker #dueDateDatepicker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field class="col-sm-6">
+                <input matInput readonly [matDatepicker]="settlementDateDatepicker" placeholder="Quitação" formControlName="settlement_date">
+
+                <mat-datepicker-toggle matSuffix [for]="settlementDateDatepicker"></mat-datepicker-toggle>
+                <mat-datepicker #settlementDateDatepicker></mat-datepicker>
+            </mat-form-field>
         </div>
 
-        <div class="d-flex flex-row justify-content-end mt-2">
+        <div class="d-flex flex-row justify-content-end mt-4">
             <button type="button" class="cb-button mr-3" color="primary" mat-raised-button
                 (click)="close()">
                 CANCELAR

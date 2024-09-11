@@ -5,14 +5,14 @@
 
     <div class="check-in-cell position-relative">
         <mat-select class="select-hidden" #employeeSelect formControlName="employee">
-            <mat-option *ngFor="let people of persons"
-                [value]="people.id">
-                {{ people.name }}
+            <mat-option *ngFor="let employee of employees"
+                [value]="employee.id">
+                {{ employee.name }}
             </mat-option>
         </mat-select>
         
         <span class="w-100 text-ellipsis cursor-pointer" (click)="employeeSelect.open()">
-            {{ selectedPeople || '-' }}
+            {{ getSelectedEmployeName(employee) || '-' }}
         </span>
     </div>
 
@@ -27,28 +27,28 @@
 
     <div class="check-in-cell">
         <a class="icon-button" mat-button (click)="employee2Action()">
-            <mat-icon>{{ employee2 ? 'close' : 'add' }}</mat-icon>
+            <mat-icon>{{ employee2 || add ? 'close' : 'add' }}</mat-icon>
         </a>
     </div>
 
-    <div class="check-in-cell">
+    <div *ngIf="add" class="check-in-cell">
         {{ title || '-' }} 02
     </div>
 
-    <div class="check-in-cell position-relative">
+    <div *ngIf="add" class="check-in-cell position-relative">
         <mat-select class="select-hidden" #employee2Select formControlName="employee2" [disabled]="!employee">
-            <mat-option *ngFor="let people of persons"
-                [value]="people.id">
-                {{ people.name }}
+            <mat-option *ngFor="let employee of employees"
+                [value]="employee.id">
+                {{ employee.name }}
             </mat-option>
         </mat-select>
         
         <span class="w-100 text-ellipsis cursor-pointer" (click)="employee2Select.open()">
-            {{ selectedPeople2 || '-' }}
+            {{ getSelectedEmployeName(employee2) || '-' }}
         </span>
     </div>
 
-    <div class="check-in-cell">
+    <div *ngIf="add" class="check-in-cell">
         <input type="text" #comission2 class="input-comission"
             formControlName="comission2"
             [readonly]="!employee2"

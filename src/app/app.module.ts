@@ -242,6 +242,8 @@ import { PersonService } from './shared/services/person.service';
 import { CheckInPaymentComponent } from './check-in/components/check-in-payment/check-in-payment.component';
 import { ExtrasService } from './shared/services/extras.service';
 import { CheckInExtraComponent } from './check-in/components/check-in-extra/check-in-extra.component';
+import { PaymentService } from './shared/services/payment.service';
+import { CheckInPaymentFormComponent } from './check-in/components/check-in-payment-form/check-in-payment-form.component';
 
 registerLocaleData(localePt);
 
@@ -381,7 +383,8 @@ registerLocaleData(localePt);
     CheckInComissionComponent,
     CheckInPeopleComponent,
     CheckInPaymentComponent,
-    CheckInExtraComponent
+    CheckInExtraComponent,
+    CheckInPaymentFormComponent
   ],
   imports: [
     CurrencyMaskModule,
@@ -431,6 +434,7 @@ registerLocaleData(localePt);
     CheckInService,
     OrganizationService,
     PersonService,
+    PaymentService,
     ExtrasService,
     ClientService,
     ProviderService,
@@ -516,7 +520,8 @@ registerLocaleData(localePt);
     ConfirmDialogComponent,
     CheckInOrganizationFormComponent,
     CheckInPeopleComponent,
-    CheckInExtraComponent
+    CheckInExtraComponent,
+    CheckInPaymentFormComponent
   ]
 })
 export class AppModule { }

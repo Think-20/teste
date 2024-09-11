@@ -60,72 +60,76 @@
                 <div class="check-in-row">
                     <div class="check-in-cell">
                         <mat-checkbox
-                            [(ngModel)]="approval.marked"
-                            (ngModelChange)="updateAlertDate(approval)">
+                            [(ngModel)]="checkInModel.approval"
+                            (click)="validateAlertDateApproval($event)"
+                            (ngModelChange)="updateAlertDateApproval()">
                             APROVAÇÃO
                         </mat-checkbox>
                     </div>
 
                     <div class="check-in-cell">
-                        {{ approval.name || '-' }}
+                        {{ job && job.attendance && job.attendance.id ? getEmployeeName(job.attendance.id) : '' }}
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (approval.date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                        {{ (checkInModel.approval_date| date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
                     </div>
                 </div>
 
                 <div class="check-in-row">
                     <div class="check-in-cell">
                         <mat-checkbox
-                            [(ngModel)]="acceptProposal.marked"
-                            (ngModelChange)="updateAlertDate(acceptProposal)">
+                            [(ngModel)]="checkInModel.accept_proposal"
+                            (click)="validateAlertDateAcceptProposal($event)"
+                            (ngModelChange)="updateAlertDateAcceptProposal('accept_proposal')">
                             ACEITE PROPOSTA
                         </mat-checkbox>
                     </div>
 
                     <div class="check-in-cell">
-                        {{ acceptProposal.name || '-' }}
+                        {{ getEmployeeName(checkInModel.accept_proposal_employee_id || 11) }}
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (acceptProposal.date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                        {{ (checkInModel.accept_proposal_date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
                     </div>
                 </div>
 
                 <div class="check-in-row">
                     <div class="check-in-cell">
                         <mat-checkbox
-                            [(ngModel)]="acceptProduction.marked"
-                            (ngModelChange)="updateAlertDate(acceptProduction)">
+                            [(ngModel)]="checkInModel.accept_production"
+                            (click)="validateAlertDateAcceptProduction($event)"
+                            (ngModelChange)="updateAlertDateAcceptProduction()">
                             ACEITE PRODUÇÃO
                         </mat-checkbox>
                     </div>
 
                     <div class="check-in-cell">
-                        {{ acceptProduction.name || '-' }}
+                        {{ getEmployeeName(checkInModel.accept_production_employee_id || 20) }}
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (acceptProduction.date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                        {{ (checkInModel.accept_production_date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
                     </div>
                 </div>
 
                 <div class="check-in-row">
                     <div class="check-in-cell">
                         <mat-checkbox
-                            [(ngModel)]="boardApproval.marked"
-                            (ngModelChange)="updateAlertDate(boardApproval)">
+                            [(ngModel)]="checkInModel.board_approval"
+                            (click)="validateAlertDateBoardApproval($event)"
+                            (ngModelChange)="updateAlertDateBoardApproval()">
                             ACEITE DIRETORIA
                         </mat-checkbox>
                     </div>
 
                     <div class="check-in-cell">
-                        {{ boardApproval.name || '-' }}
+                        {{ getEmployeeName(checkInModel.board_approval_employee_id || 1) }}
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (boardApproval.date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                        {{ (checkInModel.board_approval_date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
                     </div>
                 </div>
 
@@ -136,7 +140,7 @@
                 <div class="organizadora">
                     <div class="check-in-row header">
                         <div class="check-in-cell">
-                            {{ checkInModel.organization_changed_by }}
+                            {{ getEmployeeName(checkInModel.organization_changed_by) }}
                         </div>
 
                         <div class="check-in-cell">
@@ -163,10 +167,9 @@
                             </a>
 
                             <span class="position-relative text-ellipsis cursor-pointer"
-                                [style.minWidth.px]="100"
                                 [title]="organization.name || 'Organizadora'"
                                 (click)="organizationMatSelect.open()">
-                                {{ organization.name || '-' }}
+                                {{ organization.name || 'Selecionar organizadora' }}
 
                                 <mat-select class="select-hidden col-md-3" #organizationMatSelect
                                     [(ngModel)]="checkInModel.organization_id"
@@ -199,7 +202,7 @@
                 <div class="promotora">
                     <div class="check-in-row header">
                         <div class="check-in-cell">
-                            {{ checkInModel.promoter_changed_by }}
+                            {{ getEmployeeName(checkInModel.promoter_changed_by) }}
                         </div>
 
                         <div class="check-in-cell">
@@ -289,7 +292,7 @@
 
                 <div class="check-in-row header">
                     <div class="check-in-cell">
-                        {{ checkInModel.event_changed_by }}
+                        {{ getEmployeeName(checkInModel.event_changed_by) }}
                     </div>
 
                     <div class="check-in-cell">
@@ -321,10 +324,9 @@
                         </a>
 
                         <span class="position-relative text-ellipsis cursor-pointer"
-                            [style.minWidth.px]="100"
-                            [title]="place.name || 'Evento'"
+                            [title]="place ? place.name : 'Evento'"
                             (click)="eventMatSelect.open(); loadEvents()">
-                            {{ place.name || '-' }}
+                            {{ place && place.name ? place.name : 'Selecionar local do evento' }}
 
                             <mat-select class="select-hidden col-md-3" #eventMatSelect
                                 [(ngModel)]="checkInModel.event_id"

@@ -6,15 +6,15 @@ import { Observable } from "rxjs/Observable";
 
 import { API } from "../../app.api";
 import { ErrorHandler } from "../error-handler.service";
-import { ExtraModel } from '../models/extra.model';
+import { PaymentModel } from '../models/payment.model';
 
 @Injectable()
-export class ExtrasService {
+export class PaymentService {
   constructor(private http: Http, private snackBar: MatSnackBar) {}
 
-  extras(): Observable<ExtraModel[]> {
+  paymentsByCheckInId(checkInId: number): Observable<PaymentModel[]> {
     return this.http
-      .get(`${API}/extra`)
+      .get(`${API}/payment/checkin/${checkInId}`)
       .map((response) => response.json())
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
@@ -25,14 +25,14 @@ export class ExtrasService {
       });
   }
 
-  post(extra: ExtraModel): Observable<{
+  post(payment: PaymentModel): Observable<{
     message?: string,
-    object?: ExtraModel
+    object?: PaymentModel
   }> {
     return this.http
       .post(
-        `${API}/extra`,
-        JSON.stringify(extra),
+        `${API}/payment`,
+        JSON.stringify(payment),
         new RequestOptions()
       )
       .map((response) => response.json())
@@ -45,14 +45,14 @@ export class ExtrasService {
       });
   }
 
-  put(extra: ExtraModel): Observable<{
+  put(payment: PaymentModel): Observable<{
     message?: string,
-    object?: ExtraModel
+    object?: PaymentModel
   }> {
     return this.http
       .put(
-        `${API}/extra`,
-        JSON.stringify(extra),
+        `${API}/payment`,
+        JSON.stringify(payment),
         new RequestOptions()
       )
       .map((response) => response.json())
@@ -65,9 +65,9 @@ export class ExtrasService {
       });
   }
 
-  delete(extraId: number): Observable<any> {
+  delete(paymentId: number): Observable<any> {
     return this.http
-      .delete(`${API}/extra/${extraId}`)
+      .delete(`${API}/payment/${paymentId}`)
       .map((response) => response.json())
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {

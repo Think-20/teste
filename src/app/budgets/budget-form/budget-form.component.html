@@ -632,37 +632,130 @@
             <div class="orcamento-footer d-flex justify-content-end saldo-total">
               Saldo total: <span class="lucro" style="font-weight: 500; display: contents;">{{ budgetForm.controls.custo_total.value | currency: 'BRL' }}</span>
             </div>
-              <div class="orcamento-header d-flex justify-content-between">
-                <h3>Diversos | Operacional</h3>
-              </div>
-              <div class="col-md-12 p-0">
-                <mat-form-field class="col-md-7">
-                  <input
-                    matInput
-                    type="text"
-                    class="text-right"
-                    placeholder="Serviços - Diversos | Operacional"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    formControlName="servico_diversos_operacional">
-                </mat-form-field>
-                <mat-form-field class="col-md-3">
-                  <input
-                    matInput
-                    formControlName="servico_diversos_operacional_reaproveitamento"
-                    currencyMask
-                    (keypress)="allowOnlyNumbers($event)"
-                    type="text"
-                    class="text-right reaproveitamento">
-                </mat-form-field>
-                <mat-form-field class="col-md-2">
-                  <input
-                    matInput
-                    formControlName="servico_diversos_operacional_porcentagem"
-                    type="text"
-                    class="text-right porcentagem">
-                  <span class="mat-suffix" matSuffix>%</span>
-                </mat-form-field>
+            <div class="orcamento-header d-flex justify-content-between">
+              <h3>Diversos | Operacional</h3>
+            </div>
+            <div class="col-md-12 p-0">
+              <mat-form-field class="col-md-7">
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Serviços - Diversos | Operacional"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  formControlName="servico_diversos_operacional">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="servico_diversos_operacional_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right reaproveitamento">
+              </mat-form-field>
+              <mat-form-field class="col-md-2">
+                <input
+                  matInput
+                  formControlName="servico_diversos_operacional_porcentagem"
+                  type="text"
+                  class="text-right porcentagem">
+                <span class="mat-suffix" matSuffix>%</span>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-12 p-0">
+              <mat-form-field class="col-md-7">
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Credenciais/Taxas"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  formControlName="credenciais_taxas">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="credenciais_taxas_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right reaproveitamento">
+              </mat-form-field>
+              <mat-form-field class="col-md-2">
+                <input
+                  matInput
+                  formControlName="credenciais_taxas_porcentagem"
+                  type="text"
+                  class="text-right porcentagem">
+                <span class="mat-suffix" matSuffix>%</span>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-12 p-0">
+              <mat-form-field class="col-md-7">
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Seguro"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  formControlName="seguro">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="seguro_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right reaproveitamento">
+              </mat-form-field>
+              <mat-form-field class="col-md-2">
+                <input
+                  matInput
+                  formControlName="seguro_porcentagem"
+                  type="text"
+                  class="text-right porcentagem">
+                <span class="mat-suffix" matSuffix>%</span>
+              </mat-form-field>
+            </div>
+
+            <div class="col-md-12 p-0">
+              <mat-form-field class="col-md-7">
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Desconto"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  formControlName="desconto">
+              </mat-form-field>
+              <mat-form-field class="col-md-3">
+                <input
+                  matInput
+                  formControlName="desconto_reaproveitamento"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right reaproveitamento">
+              </mat-form-field>
+              <mat-form-field class="col-md-2">
+                <input
+                  matInput
+                  formControlName="desconto_porcentagem"
+                  type="text"
+                  class="text-right porcentagem">
+                <span class="mat-suffix" matSuffix>%</span>
+              </mat-form-field>
+            </div>
+            <div class="orcamento-footer d-flex justify-content-end saldo-total">
+              Total: <span class="lucro" style="font-weight: 500; display: contents;">{{ budgetForm.controls.diversos_operacional_total.value | currency: 'BRL' }}</span>
             </div>
             <div class="orcamento-header d-flex justify-content-between">
               <h3 class="p-0">Logística</h3>
