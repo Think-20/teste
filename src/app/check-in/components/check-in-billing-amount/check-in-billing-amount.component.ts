@@ -90,7 +90,7 @@ export class CheckInBillingAmountComponent implements OnInit, OnChanges {
 
     const total = this.custoTotal * budget.coeficiente_margem;
 
-    return total * 0.7 * budget.comissao_vendas_coeficiente;
+    return total * 0.7 * (budget.bonificacao_venda_coeficiente || 0);
   }
 
   get impostos(): number {

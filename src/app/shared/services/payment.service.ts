@@ -68,7 +68,6 @@ export class PaymentService {
   delete(paymentId: number): Observable<any> {
     return this.http
       .delete(`${API}/payment/${paymentId}`)
-      .map((response) => response.json())
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,

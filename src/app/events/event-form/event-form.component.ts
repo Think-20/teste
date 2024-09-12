@@ -82,73 +82,53 @@ constructor(
         Validators.maxLength(1000)
       ]),
       place: this.formBuilder.control('', [
-        Validators.required,
         ObjectValidator
       ]),
       ini_date: this.formBuilder.control('', [
-        Validators.required
       ]),
       fin_date: this.formBuilder.control('', [
-        Validators.required
       ]),
       ini_hour: this.formBuilder.control('', [
-        Validators.required
       ]),
       fin_hour: this.formBuilder.control('', [
-        Validators.required
       ]),
       ini_date_mounting: this.formBuilder.control('', [
-        Validators.required
       ]),
       fin_date_mounting: this.formBuilder.control('', [
-        Validators.required
       ]),
       ini_hour_mounting: this.formBuilder.control('', [
-        Validators.required
       ]),
       fin_hour_mounting: this.formBuilder.control('', [
-        Validators.required
       ]),
       ini_date_unmounting: this.formBuilder.control('', [
-        Validators.required
       ]),
       fin_date_unmounting: this.formBuilder.control('', [
-        Validators.required
       ]),
       ini_hour_unmounting: this.formBuilder.control('', [
-        Validators.required
       ]),
       fin_hour_unmounting: this.formBuilder.control('', [
-        Validators.required
       ]),
       organizer: this.formBuilder.control('', [
-        Validators.required,
         Validators.minLength(3),
         Validators.maxLength(100)
       ]),
       email: this.formBuilder.control('', [
-        Validators.required,
         Validators.pattern(Patterns.email),
         Validators.maxLength(80)
       ]),
       phone: this.formBuilder.control('', [
-        Validators.required,
         Validators.minLength(10),
         Validators.pattern(Patterns.phone)
       ]),
       site: this.formBuilder.control('', [
-        Validators.required,
         Validators.minLength(7),
         Validators.maxLength(100)
       ]),
       plan: this.formBuilder.control('', [
-        Validators.required
       ]),
       regulation: this.formBuilder.control('', [
-        Validators.required
       ]),
       manual: this.formBuilder.control('', [
-        Validators.required
       ]),
       created_at: this.formBuilder.control(''),
       updated_at: this.formBuilder.control(''),

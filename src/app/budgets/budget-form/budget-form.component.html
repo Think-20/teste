@@ -900,6 +900,37 @@
                     class="text-right">
                 </mat-form-field>
             </div>
+
+            <div class="col-md-12  p-0">
+              <mat-form-field class="col-md-8">
+                <input
+                  matInput
+                  type="text"
+                  class="text-right"
+                  placeholder="Bonificação de Vendas"
+                  currencyMask
+                  (keypress)="allowOnlyNumbers($event)"
+                  formControlName="bonificacao_venda">
+              </mat-form-field>
+              <mat-form-field class="col-md-2">
+                <input
+                  matInput
+                  formControlName="bonificacao_venda_meta_porcentagem"
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right">
+                <span matSuffix>%</span>
+              </mat-form-field>
+               <mat-form-field class="col-md-2">
+                <input
+                  matInput
+                  formControlName="bonificacao_venda_coeficiente"
+                  (keypress)="allowOnlyNumbers($event)"
+                  type="text"
+                  class="text-right">
+              </mat-form-field>
+            </div>
+
             <div class="col-md-12 p-0">
                 <mat-form-field class="col-md-8">
                   <input
