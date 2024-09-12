@@ -18,7 +18,7 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input matInput formControlName="place" [matAutocomplete]="autocompletePlace" placeholder="Local*" autocomplete="off">
+          <input matInput formControlName="place" [matAutocomplete]="autocompletePlace" placeholder="Local" autocomplete="off">
           <mat-error>
             Obrigatório
           </mat-error>
@@ -38,105 +38,105 @@
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input ucWords formControlName="organizer" matInput placeholder="Organizador*">
+          <input ucWords formControlName="organizer" matInput placeholder="Organizador">
           <mat-error>
             Obrigatório, entre 3 e 100 caract.
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input formControlName="phone" mask="(99) 9999-9999?9" matInput placeholder="Telefone*">
+          <input formControlName="phone" mask="(99) 9999-9999?9" matInput placeholder="Telefone">
           <mat-error>
             Tipo telefone
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input formControlName="email" matInput placeholder="E-mail*">
+          <input formControlName="email" matInput placeholder="E-mail">
           <mat-error>
             Obrigatório, tipo e-mail. Máx 80
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input formControlName="site" matInput placeholder="Site*">
+          <input formControlName="site" matInput placeholder="Site">
           <mat-error>
             Obrigatório, entre 7 e 100 caract.
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input [matDatepicker]="iniDatepicker" formControlName="ini_date" matInput placeholder="Data de início*">
+          <input [matDatepicker]="iniDatepicker" formControlName="ini_date" matInput placeholder="Data de início">
           <mat-datepicker-toggle matSuffix [for]="iniDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #iniDatepicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input [matDatepicker]="finDatepicker" formControlName="fin_date" matInput placeholder="Data final*">
+          <input [matDatepicker]="finDatepicker" formControlName="fin_date" matInput placeholder="Data final">
           <mat-datepicker-toggle matSuffix [for]="finDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #finDatepicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input type="time" formControlName="ini_hour" matInput placeholder="Horário de início*">
+          <input type="time" formControlName="ini_hour" matInput placeholder="Horário de início">
           <mat-error>
             Obrigatório
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input type="time" formControlName="fin_hour" matInput placeholder="Horário final*">
+          <input type="time" formControlName="fin_hour" matInput placeholder="Horário final">
           <mat-error>
             Obrigatório
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input [matDatepicker]="iniMountingDatepicker" formControlName="ini_date_mounting" matInput placeholder="Início da montagem*">
+          <input [matDatepicker]="iniMountingDatepicker" formControlName="ini_date_mounting" matInput placeholder="Início da montagem">
           <mat-datepicker-toggle matSuffix [for]="iniMountingDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #iniMountingDatepicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input [matDatepicker]="finMountingDatepicker" formControlName="fin_date_mounting" matInput placeholder="Final da montagem*">
+          <input [matDatepicker]="finMountingDatepicker" formControlName="fin_date_mounting" matInput placeholder="Final da montagem">
           <mat-datepicker-toggle matSuffix [for]="finMountingDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #finMountingDatepicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input type="time" formControlName="ini_hour_mounting" matInput placeholder="Horário de início*">
+          <input type="time" formControlName="ini_hour_mounting" matInput placeholder="Horário de início">
           <mat-error>
             Obrigatório
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input type="time" formControlName="fin_hour_mounting" matInput placeholder="Horário final*">
+          <input type="time" formControlName="fin_hour_mounting" matInput placeholder="Horário final">
           <mat-error>
             Obrigatório
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input [matDatepicker]="iniUnmountingDatepicker" formControlName="ini_date_unmounting" matInput placeholder="Início da desmontagem*">
+          <input [matDatepicker]="iniUnmountingDatepicker" formControlName="ini_date_unmounting" matInput placeholder="Início da desmontagem">
           <mat-datepicker-toggle matSuffix [for]="iniUnmountingDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #iniUnmountingDatepicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input [matDatepicker]="finUnmountingDatepicker" formControlName="fin_date_unmounting" matInput placeholder="Final da desmontagem*">
+          <input [matDatepicker]="finUnmountingDatepicker" formControlName="fin_date_unmounting" matInput placeholder="Final da desmontagem">
           <mat-datepicker-toggle matSuffix [for]="finUnmountingDatepicker"></mat-datepicker-toggle>
           <mat-datepicker #finUnmountingDatepicker></mat-datepicker>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input type="time" formControlName="ini_hour_unmounting" matInput placeholder="Horário de início*">
+          <input type="time" formControlName="ini_hour_unmounting" matInput placeholder="Horário de início">
           <mat-error>
             Obrigatório
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-3">
-          <input type="time" formControlName="fin_hour_unmounting" matInput placeholder="Horário final*">
+          <input type="time" formControlName="fin_hour_unmounting" matInput placeholder="Horário final">
           <mat-error>
             Obrigatório
           </mat-error>
         </mat-form-field>
         <mat-form-field class="col-md-4" (click)="previewFile(event?.plan, 'plan')">
-          <input formControlName="plan" matInput placeholder="Planta*" (click)="planInput.click()">
+          <input formControlName="plan" matInput placeholder="Planta" (click)="planInput.click()">
           <input type="file" class="cb-hidden" #planInput (change)="uploadFile('plan', planInput)">
         </mat-form-field>
         <mat-form-field class="col-md-4" (click)="previewFile(event?.manual, 'manual')">
-          <input formControlName="manual" matInput placeholder="Manual*" (click)="manualInput.click()">
+          <input formControlName="manual" matInput placeholder="Manual" (click)="manualInput.click()">
           <input type="file" class="cb-hidden" #manualInput (change)="uploadFile('manual', manualInput)">
         </mat-form-field>
         <mat-form-field class="col-md-4" (click)="previewFile(event?.regulation, 'regulation')">
-          <input formControlName="regulation" matInput placeholder="Regulamento*" (click)="regulationInput.click()">
+          <input formControlName="regulation" matInput placeholder="Regulamento" (click)="regulationInput.click()">
           <input type="file" class="cb-hidden" #regulationInput (change)="uploadFile('regulation', regulationInput)">
         </mat-form-field>
         <mat-form-field class="col-md-4">

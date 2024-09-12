@@ -184,6 +184,7 @@ export class BudgetFormComponent implements OnInit {
         // Racional Custos
         imposto: this.formBuilder.control({ value: 0, disabled: true }, []),
         comissao_vendas: this.formBuilder.control({ value: 0, disabled: true }, []),
+        bonificacao_venda: this.formBuilder.control({ value: 0, disabled: true }, []),
         bonificacao_projeto_interno: this.formBuilder.control({ value: 0, disabled: true }, []),
         bonificacao_orcamento: this.formBuilder.control({ value: 0, disabled: true }, []),
         bonificacao_gerente_producao: this.formBuilder.control({ value: 0, disabled: true }, []),
@@ -200,6 +201,7 @@ export class BudgetFormComponent implements OnInit {
         custo_total_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         imposto_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         comissao_vendas_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_venda_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         bonificacao_projeto_interno_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         bonificacao_orcamento_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
         bonificacao_gerente_producao_meta_porcentagem: this.formBuilder.control({ value: 0, disabled: false }, []),
@@ -215,6 +217,7 @@ export class BudgetFormComponent implements OnInit {
         custo_total_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
         imposto_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
         comissao_vendas_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
+        bonificacao_venda_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
         bonificacao_projeto_interno_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
         bonificacao_orcamento_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
         bonificacao_gerente_producao_coeficiente: this.formBuilder.control({ value: 0, disabled: false }, []),
@@ -375,6 +378,7 @@ export class BudgetFormComponent implements OnInit {
         custo_total_meta_porcentagem: formData.custo_total_meta_porcentagem,
         imposto_meta_porcentagem: formData.imposto_meta_porcentagem,
         comissao_vendas_meta_porcentagem: formData.comissao_vendas_meta_porcentagem,
+        bonificacao_venda_meta_porcentagem: formData.bonificacao_venda_meta_porcentagem || 0,
         bonificacao_projeto_interno_meta_porcentagem: formData.bonificacao_projeto_interno_meta_porcentagem,
         bonificacao_orcamento_meta_porcentagem: formData.bonificacao_orcamento_meta_porcentagem,
         bonificacao_gerente_producao_meta_porcentagem: formData.bonificacao_gerente_producao_meta_porcentagem,
@@ -389,6 +393,7 @@ export class BudgetFormComponent implements OnInit {
         custo_total_coeficiente: formData.custo_total_coeficiente || 0,
         imposto_coeficiente: formData.imposto_coeficiente || 0.15,
         comissao_vendas_coeficiente: formData.comissao_vendas_coeficiente || 0.05,
+        bonificacao_venda_coeficiente: formData.bonificacao_venda_coeficiente || 0.05,
         bonificacao_projeto_interno_coeficiente: formData.bonificacao_projeto_interno_coeficiente || 0.03,
         bonificacao_orcamento_coeficiente: formData.bonificacao_orcamento_coeficiente || 0.01,
         bonificacao_gerente_producao_coeficiente: formData.bonificacao_gerente_producao_coeficiente || 0.01,
@@ -442,6 +447,7 @@ export class BudgetFormComponent implements OnInit {
 
   setTodasComissoesBonificacoes(index: number) {
     this.setComissoesBonificacoes("comissao_vendas", index, this.getCoeficiente(index, "comissao_vendas_coeficiente"));
+    this.setComissoesBonificacoes("bonificacao_venda", index, this.getCoeficiente(index, "bonificacao_venda_coeficiente"));
     this.setComissoesBonificacoes("bonificacao_projeto_interno", index, this.getCoeficiente(index, "bonificacao_projeto_interno_coeficiente"));
     this.setComissoesBonificacoes("bonificacao_orcamento", index, this.getCoeficiente(index, "bonificacao_orcamento_coeficiente"));
     this.setComissoesBonificacoes("bonificacao_gerente_producao", index, this.getCoeficiente(index, "bonificacao_gerente_producao_coeficiente"));
@@ -644,9 +650,11 @@ export class BudgetFormComponent implements OnInit {
 
     const comissaoVendas = this.getTotalComissaoVendas(index);
 
+    const bonificacaoVendas = this.getTotalBonificacaoVendas(index);
+
     const bonificacaoProjetistaInterno = this.getTotalBonificacaoProjetistaInterno(index);
 
-    const total = totalEstande - (custoTotal + imposto + comissaoVendas + bonificacaoProjetistaInterno);
+    const total = totalEstande - (custoTotal + imposto + comissaoVendas + bonificacaoVendas + bonificacaoProjetistaInterno);
 
     controlLiquidoThink.setValue(parseFloat(total.toFixed(2)), { emitEvent: false });
   }
@@ -715,6 +723,10 @@ export class BudgetFormComponent implements OnInit {
 
   getTotalComissaoVendas(index: number): number {
     return this.budgetForms[index].get("comissao_vendas").value;
+  }
+
+  getTotalBonificacaoVendas(index: number): number {
+    return this.budgetForms[index].get("bonificacao_venda").value;
   }
 
   getTotalBonificacaoProjetistaInterno(index: number): number {

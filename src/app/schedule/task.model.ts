@@ -73,6 +73,7 @@ export class Task {
   custo_total_meta_porcentagem?: number
   imposto_meta_porcentagem?: number
   comissao_vendas_meta_porcentagem?: number
+  bonificacao_venda_meta_porcentagem?: number;
   bonificacao_projeto_interno_meta_porcentagem?: number
   bonificacao_orcamento_meta_porcentagem?: number
   bonificacao_gerente_producao_meta_porcentagem?: number
@@ -87,6 +88,7 @@ export class Task {
   custo_total_coeficiente?: number
   imposto_coeficiente?: number
   comissao_vendas_coeficiente?: number
+  bonificacao_venda_coeficiente?: number;
   bonificacao_projeto_interno_coeficiente?: number
   bonificacao_orcamento_coeficiente?: number
   bonificacao_gerente_producao_coeficiente?: number
