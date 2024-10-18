@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable } from '@angular/core';
+import { Component, OnInit, Injectable, ViewChild, OnDestroy } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -14,6 +14,9 @@ import { Pagination } from '../../shared/pagination.model';
 import { TimecardPlace } from '../timecard-place/timecard-place.model';
 import { TimecardPlaceService } from '../timecard-place/timecard-place.service';
 import { AuthService } from '../../login/auth.service';
+import { TimecardPlannerComponent } from '../components/timecard-planner/timecard-planner.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'cb-timecard-list',
@@ -36,7 +39,8 @@ import { AuthService } from '../../login/auth.service';
   ]
 })
 @Injectable()
-export class TimecardListComponent implements OnInit {
+export class TimecardListComponent implements OnInit, OnDestroy {
+  @ViewChild('timecardPlanner', { static: false }) timecardPlanner: TimecardPlannerComponent;
 
   rowAppearedState: string = 'ready'
   filterForm: FormGroup
@@ -57,7 +61,9 @@ export class TimecardListComponent implements OnInit {
   months: Month[] = MONTHS
   places: TimecardPlace[]
   totalBalance: string
-  filtering: boolean = false
+  filtering: boolean = false;
+
+  onDestroy$ = new Subject<null>();
 
   constructor(
     private fb: FormBuilder,
@@ -98,7 +104,9 @@ export class TimecardListComponent implements OnInit {
       ])
     })
 
-    this.filterForm.valueChanges.subscribe(() => {
+    this.filterForm.valueChanges.pipe(
+      takeUntil(this.onDestroy$)
+    ).subscribe(() => {
       this.filter()
     })
 
@@ -106,7 +114,9 @@ export class TimecardListComponent implements OnInit {
     this.justifyForm.controls.place.disable()
     this.justifyPlace = false
 
-    this.justifyForm.controls.place_id.valueChanges.subscribe((timecardPlace) => {
+    this.justifyForm.controls.place_id.valueChanges.pipe(
+      takeUntil(this.onDestroy$)
+    ).subscribe((timecardPlace) => {
       if(timecardPlace.description != 'Externo') {
         this.justifyForm.controls.place.disable()
         this.justifyPlace = false
@@ -123,9 +133,10 @@ export class TimecardListComponent implements OnInit {
       this.justifyForm.disable()
     }
 
-   this.filterForm.controls.employee.valueChanges
-   .debounceTime(500)
-   .subscribe(value => {
+    this.filterForm.controls.employee.valueChanges.pipe(
+      takeUntil(this.onDestroy$)
+    ).debounceTime(500)
+    .subscribe(value => {
       let snackBar = this.snackBar.open('Carregando registros...')
       this.employeeService.employees({ name: value }).subscribe(dataInfo => {
         this.searching = false
@@ -143,6 +154,17 @@ export class TimecardListComponent implements OnInit {
     if(!this.accessList) {
       this.filter()
     }
+
+    this.filterForm.valueChanges
+      .pipe(
+        takeUntil(this.onDestroy$)
+      ).subscribe((value) => {
+        this.timecardPlanner.loadDays(
+          value && value.year ? value.year : null,
+          value && value.month && value.month.id ? value.month.id - 1 : null,
+          value && value.employee && value.employee.id ? value.employee.id : null,
+        );
+      });
   }
 
   renewStatus() {
@@ -345,6 +367,11 @@ export class TimecardListComponent implements OnInit {
 
   comparePlace(var1: TimecardPlace, var2: TimecardPlace) {
     return var1.id == var2.id
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy$.next();
+    this.onDestroy$.complete();
   }
 
 }
