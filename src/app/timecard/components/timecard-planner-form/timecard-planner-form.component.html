@@ -9,7 +9,7 @@
             [title]="form.controls.category.value || (isDiretoria ? '' : 'Selecione a categoria')"
             (keyup.enter)="isDiretoria ? null : categorySelect.open()"
             (click)="isDiretoria ? null : categorySelect.open()">
-            <span [class.placeholder]="form.controls.category.invalid">
+            <span [class.placeholder]="!form.controls.category.value">
                 {{ form.controls.category.value || (isDiretoria ? '' : 'Selecione a categoria') }}
             </span>
 

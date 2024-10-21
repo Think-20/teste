@@ -177,8 +177,8 @@ export class TimecardService {
             })
     }
 
-    getLogs(): Observable<IPlannerLog[]> {
-        return this.http.get(`${API}/planner`)
+    getLogs(year: number, month: number, employeeId: number): Observable<IPlannerLog[]> {
+        return this.http.get(`${API}/planner/${year}/${month}/${employeeId}`)
             .map(response => response.json());
     }
 
