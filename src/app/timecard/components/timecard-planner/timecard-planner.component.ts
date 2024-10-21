@@ -93,7 +93,9 @@ export class TimecardPlannerComponent implements AfterViewInit {
   private loadEmployees = (): void => {
     this.employeeService.employees({ paginate: false }).subscribe({
       next: response => {
-        this.employees = response.pagination.data;
+        const employees: Employee[] = response.pagination.data;
+
+        this.employees = (employees ? employees : []).filter(employee => employee.department.id !== 1);
       }
     });
   }
