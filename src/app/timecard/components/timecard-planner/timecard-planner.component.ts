@@ -137,6 +137,10 @@ export class TimecardPlannerComponent implements AfterViewInit {
         snackBarStateCharging.dismiss();
       },
       error: () => {
+        this.logs = [];
+
+        this.loadDays();
+
         snackBarStateCharging.dismiss();
       }
     });
