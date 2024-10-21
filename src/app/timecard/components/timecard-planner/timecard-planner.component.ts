@@ -1,7 +1,9 @@
 import { TimecardService } from './../../timecard.service';
 import { DatePipe } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatCalendar } from '@angular/material';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
+import { MatCalendar, MatSnackBar } from '@angular/material';
+import { Employee } from 'app/employees/employee.model';
+import { EmployeeService } from 'app/employees/employee.service';
 import { AuthService } from 'app/login/auth.service';
 import { IPlannerDay } from 'app/timecard/models/planner-day.model';
 import { IPlannerHour } from 'app/timecard/models/planner-hour.model';
@@ -10,9 +12,10 @@ import { IPlannerLog } from 'app/timecard/models/planner-log.model';
 @Component({
   selector: 'cb-timecard-planner',
   templateUrl: './timecard-planner.component.html',
-  styleUrls: ['./timecard-planner.component.css']
+  styleUrls: ['./timecard-planner.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class TimecardPlannerComponent implements OnInit {
+export class TimecardPlannerComponent implements AfterViewInit {
   @ViewChild('calendar', { static: false }) calendar: MatCalendar<any>;
 
   private year: number = null;
@@ -23,9 +26,13 @@ export class TimecardPlannerComponent implements OnInit {
 
   logs: IPlannerLog[] = [];
 
+  logsMap: Map<string, IPlannerLog> = new Map<string, IPlannerLog>();
+
   days: IPlannerDay[] = [];
 
   daysFilter: number[] = [];
+
+  hours = Array.from({ length: 23 - 6 + 1 }, (_, i) => i + 6);
 
   currentMonth = false;
 
@@ -51,6 +58,10 @@ export class TimecardPlannerComponent implements OnInit {
 
   categorySelected = this.allCategories;
 
+  employees: Employee[] = [];
+
+  employeeSelected: Employee = null;
+
   isDiretoria = false;
 
   hasDayWithSelectedCategories = false;
@@ -61,44 +72,96 @@ export class TimecardPlannerComponent implements OnInit {
 
   constructor(
     private datePipe: DatePipe,
+    private snackBar: MatSnackBar,
     private authService: AuthService,
     private timecardService: TimecardService,
+    private employeeService: EmployeeService,
   ) { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
     const currentUser = this.authService.currentUser();
 
     this.isDiretoria = currentUser.employee.department_id === 1;
 
-    if (!this.isDiretoria) {
-      this.employeeId = currentUser.employee.id;
+    if (this.isDiretoria) {
+      this.loadEmployees();
     }
 
-    this.loadLogs();
+    this.loadLogs(new Date().getFullYear(), new Date().getMonth(), true);
   }
 
-  private loadLogs = () => {
-    this.timecardService.getLogs().subscribe({
+  private loadEmployees = (): void => {
+    this.employeeService.employees({ paginate: false }).subscribe({
       next: response => {
-        this.logs = response;
-
-        const year = this.year;
-
-        const month = this.month;
-
-        this.loadDays(year, month, this.employeeId);
+        this.employees = response.pagination.data;
       }
     });
   }
 
-  loadDays = (year: number, month: number, emplyeeId: number) => {
-    if (this.selectedDay && month !== this.month) {
-      this.selectedDay = 1;
+  loadLogs = (year: number, month: number, init = false) => {
+    let snackBarStateCharging = this.snackBar.open('Carregando...');
+
+    this.year = year || new Date().getFullYear();
+
+    this.month = month || new Date().getMonth();
+
+    const currentUser = this.authService.currentUser();
+
+    if (!this.isDiretoria) {
+      this.employeeId = currentUser.employee.id;
+
+    } else if (this.isDiretoria && !this.employeeId) {
+      this.loadDays();
+
+      if (init) {
+        this.scrollToCurrentDate();
+      }
+
+      snackBarStateCharging.dismiss();
+
+      return;
     }
 
-    this.year = year ? year : new Date().getFullYear();
+    this.timecardService.getLogs(year, month + 1, this.employeeId).subscribe({
+      next: response => {
+        this.logs = response;
 
-    this.month = month ? month : new Date().getMonth();
+        this.loadDays();
+
+        if (this.currentMonth && init) {
+          this.scrollToCurrentDate();
+        }
+
+        snackBarStateCharging.dismiss();
+      },
+      error: () => {
+        snackBarStateCharging.dismiss();
+      }
+    });
+  }
+
+  private scrollToCurrentDate(): void {
+    setTimeout(() => {
+      const container = document.querySelector('.tc-planner-days');
+
+      const element = document.getElementById(this.datePipe.transform(new Date(), 'yyyy-MM-dd'));
+
+      const containerRect = container.getBoundingClientRect();
+
+      const elementRect = element.getBoundingClientRect();
+
+      const offsetTop = elementRect.top - containerRect.top + container.scrollTop;
+
+      const scrollPosition = offsetTop - (container.clientHeight / 2) + (element.clientHeight / 2);
+
+      container.scrollTo({ top: scrollPosition, behavior: 'auto' });
+    });
+  }
+
+  private loadDays = () => {
+    this.year = this.year || new Date().getFullYear();
+
+    this.month = this.month || new Date().getMonth();
 
     const day = this.selectedDay || new Date().getDate();
     
@@ -106,30 +169,26 @@ export class TimecardPlannerComponent implements OnInit {
     
     this.calendar.activeDate = this.date;
 
-    if (this.isDiretoria) {
-      this.employeeId = emplyeeId;
-    }
-
     const daysInMonth = new Date(this.year, this.month + 1, 0).getDate();
 
     this.daysFilter = Array.from({ length: daysInMonth }, (_, i) => i + 1);
 
-    const logs = this.getLogs();
+    this.loadLogsMap();
 
     const days: IPlannerDay[] = [];
 
-    for (const day of this.daysFilter) {
+    this.daysFilter.forEach(day => {
       const date = new Date(this.year, this.month, day);
-
+  
       const dayObject: IPlannerDay = {
         date: this.datePipe.transform(date, 'yyyy-MM-dd'),
-        time_logs: this.loadHours(day, logs),
+        time_logs: this.loadHours(day),
       };
-
+  
       dayObject.visible = this.dayIsVisible(dayObject);
-
+  
       days.push(dayObject);
-    }
+    });
 
     this.days = days;
 
@@ -138,10 +197,10 @@ export class TimecardPlannerComponent implements OnInit {
     this.currentMonth = this.year === new Date().getFullYear() && this.month === new Date().getMonth();
   }
 
-  private getLogs = () => {
+  private loadLogsMap = () => {
     const formattedDate = this.datePipe.transform(new Date(this.year, this.month, 1), 'yyyy-MM');
 
-    return this.logs.filter(log => {
+    const logs = this.logs.filter(log => {
       const formattedLogDate = this.datePipe.transform(log.date, 'yyyy-MM');
 
       if (this.employeeId !== log.employee_id) {
@@ -150,29 +209,27 @@ export class TimecardPlannerComponent implements OnInit {
 
       return formattedDate === formattedLogDate;
     });
+
+    this.logsMap = new Map<string, IPlannerLog>();
+  
+    logs.forEach(log => {
+      const logDate = this.datePipe.transform(log.date, 'yyyy-MM-dd HH:mm');
+
+      this.logsMap.set(logDate, log);
+    });
   }
 
-  private loadHours = (day: number, logs: IPlannerLog[]): IPlannerHour[] => {
-    const hours = Array.from({ length: 23 - 6 + 1 }, (_, i) => i + 6);
-
-    return hours.map(hour => {
+  private loadHours = (day: number): IPlannerHour[] => {
+    return this.hours.map(hour => {
       const date = new Date(this.year, this.month, day, hour, 0, 0, 0);
 
       const formattedDate = this.datePipe.transform(date, 'yyyy-MM-dd HH:mm');
 
-      const log = logs.find(log => {
-        const formattedLogDate = this.datePipe.transform(log.date, 'yyyy-MM-dd HH:mm');
-
-        if (this.employeeId !== log.employee_id) {
-          return false;
-        }
-
-        return formattedDate === formattedLogDate;
-      });
+      const log = this.logsMap.get(formattedDate);
 
       return {
-        date: this.datePipe.transform(new Date(this.year, this.month, day, hour, 0, 0, 0), 'yyyy-MM-dd HH:mm'),
-        log: { ...log }
+        date: formattedDate,
+        log: log || {}
       } as IPlannerHour;
     });
   }
@@ -200,11 +257,11 @@ export class TimecardPlannerComponent implements OnInit {
 
     if (index >= 0) {
       this.logs[index] = log;
-      
-      return;
+    } else {
+      this.logs.push(log);
     }
 
-    this.logs.push(log);
+    this.loadLogsMap();
   }
 
   selectCategory = (category: string): void => {
@@ -213,6 +270,14 @@ export class TimecardPlannerComponent implements OnInit {
     this.daysVisible();
 
     this.loadHasDayWithSelectedCategories();
+  }
+
+  selectEmployee = (employee: Employee): void => {
+    this.employeeId = employee.id;
+
+    this.employeeSelected = employee;
+
+    this.loadLogs(this.year, this.month);
   }
 
   private daysVisible = (): void => {
