@@ -4,7 +4,6 @@ import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'app/login/auth.service';
 import { IPlannerLog } from 'app/timecard/models/planner-log.model';
-import { debounceTime } from 'rxjs-compat/operator/debounceTime';
 import { distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
@@ -38,7 +37,7 @@ export class TimecardPlannerFormComponent implements OnInit, AfterViewInit {
   ];
 
   form = new FormGroup({
-    category: new FormControl(null, [Validators.required]),
+    category: new FormControl(null, []),
     description: new FormControl(null, []),
   });
 
