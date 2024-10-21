@@ -156,13 +156,13 @@ export class TimecardListComponent implements OnInit, OnDestroy {
     }
 
     this.filterForm.valueChanges
+      .debounceTime(500)
       .pipe(
         takeUntil(this.onDestroy$)
       ).subscribe((value) => {
-        this.timecardPlanner.loadDays(
+        this.timecardPlanner.loadLogs(
           value && value.year ? value.year : null,
-          value && value.month && value.month.id ? value.month.id - 1 : null,
-          value && value.employee && value.employee.id ? value.employee.id : null,
+          value && value.month && value.month.id ? value.month.id - 1 : null
         );
       });
   }
