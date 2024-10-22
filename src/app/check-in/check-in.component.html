@@ -23,10 +23,11 @@
 
             <cb-check-in-billing-amount
                 [job]="job"
-                [checkInModel]="checkInModel">
+                [checkInModel]="checkInModel"
+                [valorTotalExtrasRecebido]="valorTotalExtrasRecebido">
             </cb-check-in-billing-amount>
 
-            <cb-check-in-extras
+            <cb-check-in-extras #extras
                 [checkInModel]="checkInModel">
             </cb-check-in-extras>
 

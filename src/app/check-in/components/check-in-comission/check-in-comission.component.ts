@@ -14,6 +14,7 @@ import { Employee } from 'app/employees/employee.model';
 export class CheckInComissionComponent implements OnInit, OnChanges, OnDestroy {
   @Input() title: string;
   @Input() context: string;
+  @Input() department: number;
   @Input() checkInModel = new CheckInModel();
   @Input() employees: Employee[] = [];
 
@@ -30,6 +31,10 @@ export class CheckInComissionComponent implements OnInit, OnChanges, OnDestroy {
   onDestroy$ = new Subject<void>();
 
   add = false;
+
+  get employeesList(): Employee[] {
+    return this.employees ? this.employees.filter(x => x.department_id === this.department) : [];
+  }
 
   get employee(): number {
     return this.context && this.checkInModel[this.context + '_employee'] ? this.checkInModel[this.context + '_employee'] : null;

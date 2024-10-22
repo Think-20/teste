@@ -9,6 +9,8 @@ export class CheckInModel {
     approval: boolean;
     approval_employee_id: number;
     approval_date: string;
+    accept_client: boolean;
+    accept_client_date: string;
     accept_proposal: boolean;
     accept_proposal_employee_id: number;
     accept_proposal_date: string;
@@ -36,26 +38,6 @@ export class CheckInModel {
     event_changed_by?: number;
     event_changed_in?: string | Date;
     approval_note?: string = null;
-    contacts?: {
-        clients?: {
-            id: number;
-            name: string;
-            department: string;
-            email: string;
-            cellphone: string;
-            landline: string;
-            percentage: number;
-        } [];
-        agencies?: {
-            id: number;
-            name: string;
-            department: string;
-            email: string;
-            cellphone: string;
-            landline: string;
-            percentage: number;
-        } [];
-    };
     contact_obs?: string = null;
     billing_client_id?: number;
     costumer_service_employee: null;
@@ -84,58 +66,6 @@ export class CheckInModel {
     production_comission2: null;
     billing_obs: string;
     bv_customer_service: number;
-    billing_amount?: {
-        billing_amount: number;
-        value_base_for_calculation: number;
-        bv: number;
-        bv_customer_service: string;
-        taxes: number;
-        equipment: number;
-        logistics: number;
-        credentials_fees: number;
-        insurance: number;
-        others: number;
-        discount: number;
-        final_contract_value: number;
-        payments?: {
-            id: number;
-            description: string;
-            percentage: number;
-            value: number;
-            date: string;
-            settlement_date: string;
-            state: string;
-        } [];
-        approved_by: string;
-        approved_at: string;
-        discount_interest: number;
-        total_amount_received: number;
-        obs: string;
-    };
-    extras?: {
-        total_amount_extras: number;
-        items: {
-            id: number;
-            description: string;
-            value: number;
-            requester: number;
-            budget: number;
-        } [];
-        extra_commissions: {
-            id: number;
-            approval_date: string;
-            extra_commission: string;
-            billing_employee_id: number;
-            date: string;
-            due_date: string;
-            settlement_date: string;
-        } [];
-        approved_by: string;
-        approved_at: string;
-        discount_interest: number;
-        total_amount_extras_received: number;
-        obs: string;
-    };
     billing_amount_obs?: string;
     extras_obs?: string;
 

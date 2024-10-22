@@ -35,6 +35,10 @@
                         ITEM
                     </div>
 
+                    <div class="check-in-cell" title="Quantidade">
+                        QTD
+                    </div>
+
                     <div class="check-in-cell">
                         VALOR
                     </div>
@@ -53,6 +57,10 @@
                     [matMenuTriggerData]="{ extra: extra }">
                     <div class="check-in-cell">
                         {{ extra.description }}
+                    </div>
+
+                    <div class="check-in-cell">
+                        {{ extra.quantity || 1 }}
                     </div>
 
                     <div class="check-in-cell">

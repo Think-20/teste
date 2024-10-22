@@ -7,7 +7,7 @@
 .check-in-grid-left:nth-child(1) .check-in-row {
     display: grid;
     
-    grid-template-columns: 150px 100px 1fr 1fr;
+    grid-template-columns: 120px 40px 100px 1fr 1fr;
 }
 
 .check-in-grid-left:nth-child(1) .check-in-row:nth-child(1) {
@@ -16,13 +16,15 @@
 
 .check-in-grid-left:nth-child(1) .check-in-cell:nth-child(1),
 .check-in-grid-left:nth-child(1) .check-in-cell:nth-child(2),
-.check-in-grid-left:nth-child(1) .check-in-cell:nth-child(3) {
+.check-in-grid-left:nth-child(1) .check-in-cell:nth-child(3),
+.check-in-grid-left:nth-child(1) .check-in-cell:nth-child(4) {
     border-right: 1px solid #ccc;
 }
 
 .check-in-grid-left:nth-child(1) .check-in-row:nth-child(1) .check-in-cell:nth-child(1),
 .check-in-grid-left:nth-child(1) .check-in-row:nth-child(1) .check-in-cell:nth-child(2),
-.check-in-grid-left:nth-child(1) .check-in-row:nth-child(1) .check-in-cell:nth-child(3) {
+.check-in-grid-left:nth-child(1) .check-in-row:nth-child(1) .check-in-cell:nth-child(3),
+.check-in-grid-left:nth-child(1) .check-in-row:nth-child(1) .check-in-cell:nth-child(4) {
     border-right: 0;
 }
 
