@@ -21,7 +21,7 @@ export class CheckInExtrasComponent implements OnInit {
     }
 
     if (this.extras.length == 1) {
-      return this.extras[0].value;
+      return this.extras[0].value * (this.extras[0].quantity || 1);
     }
 
     return this.extras
@@ -35,7 +35,7 @@ export class CheckInExtrasComponent implements OnInit {
     }
 
     if (this.extras.length == 1) {
-      return this.extras[0].value;
+      return this.extras[0].value * (this.extras[0].quantity || 1);
     }
 
     return this.extras
