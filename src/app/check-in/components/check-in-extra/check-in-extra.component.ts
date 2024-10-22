@@ -25,6 +25,7 @@ export class CheckInExtraComponent implements OnInit {
   form = new FormGroup({
     description: new FormControl(null, [Validators.required]),
     value: new FormControl(0, [Validators.required, Validators.min(0.01)]),
+    quantity: new FormControl(1, [Validators.required, Validators.min(1)]),
     requester: new FormControl(null, [Validators.required]),
     budget: new FormControl(null, [Validators.required]),
     approval_date: new FormControl(null, []),

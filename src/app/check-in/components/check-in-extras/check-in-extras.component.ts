@@ -25,7 +25,7 @@ export class CheckInExtrasComponent implements OnInit {
     }
 
     return this.extras
-      .map(x => x.value)
+      .map(x => x.value * (x.quantity || 1))
       .reduce((prv, current) => prv + current);
   }
 
@@ -40,7 +40,7 @@ export class CheckInExtrasComponent implements OnInit {
 
     return this.extras
       .filter(x => !!x.settlement_date)
-      .map(x => x.value)
+      .map(x => x.value * (x.quantity || 1))
       .reduce((prv, current) => prv + current);
   }
 

@@ -92,6 +92,18 @@
                             />
                         </div>
                     </div>
+
+                    <div class="check-in-row">
+                        <div class="check-in-cell">
+                            OBSERVAÇÃO
+                        </div>
+
+                        <div class="check-in-cell">
+                            <input type="text"
+                                [(ngModel)]="clientContact.obs"
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 <div class="client" *ngFor="let client of clientContacts">
@@ -142,6 +154,18 @@
                         <div class="check-in-cell">
                             <input type="text" mask="(99) 9999-9999?9"
                                 [(ngModel)]="client.cellphone"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="check-in-row">
+                        <div class="check-in-cell">
+                            OBSERVAÇÃO
+                        </div>
+
+                        <div class="check-in-cell">
+                            <input type="text"
+                                [(ngModel)]="client.obs"
                             />
                         </div>
                     </div>
@@ -233,6 +257,18 @@
                             />
                         </div>
                     </div>
+
+                    <div class="check-in-row">
+                        <div class="check-in-cell">
+                            OBSERVAÇÃO
+                        </div>
+
+                        <div class="check-in-cell">
+                            <input type="text"
+                                [(ngModel)]="agencyContact.obs"
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 <div class="client" *ngFor="let agency of agencyContacts">
@@ -280,6 +316,18 @@
                         <div class="check-in-cell">
                             <input type="text" mask="(99) 9999-9999?9"
                                 [(ngModel)]="agency.cellphone"
+                            />
+                        </div>
+                    </div>
+
+                    <div class="check-in-row">
+                        <div class="check-in-cell">
+                            OBSERVAÇÃO
+                        </div>
+
+                        <div class="check-in-cell">
+                            <input type="text"
+                                [(ngModel)]="agency.obs"
                             />
                         </div>
                     </div>

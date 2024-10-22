@@ -6,6 +6,7 @@ import { EmployeeService } from 'app/employees/employee.service';
 import { Employee } from 'app/employees/employee.model';
 import { CheckInContactInfoComponent } from './components/check-in-contact-info/check-in-contact-info.component';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
+import { CheckInExtrasComponent } from './components/check-in-extras/check-in-extras.component';
 
 @Component({
   selector: "cb-check-in",
@@ -15,10 +16,20 @@ import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
 export class CheckInComponent implements AfterViewInit {
   @ViewChild('contactInfo', { static: false }) contactInfo: CheckInContactInfoComponent;
 
+  @ViewChild('extras', { static: false }) extras: CheckInExtrasComponent;
+
   @Input() job: Job = new Job();
 
   checkInModel: CheckInModel = new CheckInModel();
   employees: Employee[] = [];
+
+  get valorTotalExtrasRecebido(): number {
+    if (!this.extras) {
+      return 0;
+    }
+
+    return this.extras.valorTotalExtrasRecebido;
+  }
 
   constructor(
     private snackBar: MatSnackBar,

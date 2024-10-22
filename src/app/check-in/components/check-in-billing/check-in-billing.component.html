@@ -38,7 +38,8 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ agency ? agency.name : '-' }}
+                        <input *ngIf="agency" type="text" name="agency-name" id="agency-name"
+                            [(ngModel)]="agency.name">
                     </div>
                 </div>
 
@@ -48,7 +49,8 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ agency ? agency.cnpj : '-' }}
+                        <input *ngIf="agency" type="text" name="agency-cnpj" id="agency-cnpj" mask="99.999.999/9999-99"
+                            [(ngModel)]="agency.cnpj">
                     </div>
                 </div>
 
@@ -58,7 +60,8 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ agency ? agency.ie : '-' }}
+                        <input *ngIf="agency" type="text" name="agency-ie" id="agency-ie" mask="99.999.999/9999-99"
+                            [(ngModel)]="agency.ie">
                     </div>
                 </div>
 
@@ -68,19 +71,35 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ agency ? agency.cep : '-' }}
+                        <input *ngIf="agency" type="text" name="agency-cep" id="agency-cep" mask="99999-999"
+                            [(ngModel)]="agency.cep">
                     </div>
 
                     <div class="check-in-cell" [title]="'Bairro: ' + (agency ? agency.neighborhood : '-')">
-                        {{ agency ? agency.neighborhood : '-' }}
+                        <input *ngIf="agency" type="text" name="agency-neighborhood" id="agency-neighborhood" placeholder="Bairro"
+                            [(ngModel)]="agency.neighborhood">
                     </div>
 
-                    <div class="check-in-cell" [title]="'Cidade: ' + (city.name || '-')">
-                        {{ city.name || '-' }}
+                    <div class="check-in-cell">
+                        <input *ngIf="agency" type="text" matInput [matAutocomplete]="autocompleteState" placeholder="Estado" autocomplete="off"
+                            [formControl]="stateControl">
+
+                        <mat-autocomplete #autocompleteState="matAutocomplete" [displayWith]="displayState">
+                            <mat-option *ngFor="let state of states | async" [value]="state">
+                              {{ state.name }}
+                            </mat-option>
+                        </mat-autocomplete>
                     </div>
 
-                    <div class="check-in-cell" [title]="'Estado: ' + (state.name || '-')">
-                        {{ state.name || '-' }}
+                    <div class="check-in-cell">
+                        <input *ngIf="agency" type="text" matInput [matAutocomplete]="autocompleteCity" placeholder="Cidade" autocomplete="off"
+                            [formControl]="cityControl">
+
+                        <mat-autocomplete #autocompleteCity="matAutocomplete" [displayWith]="displayCity">
+                            <mat-option *ngFor="let city of cities | async" [value]="city">
+                              {{ city.name }}
+                            </mat-option>
+                        </mat-autocomplete>
                     </div>
                 </div>
 
@@ -90,17 +109,18 @@
                     </div>
 
                     <div class="check-in-cell" [title]="(agency ? agency.street : '-')">
-                        <span class="text-ellipsis">
-                            {{ (agency ? agency.street : '-') }}
-                        </span>
+                        <input *ngIf="agency" type="text" name="agency-street" id="agency-street"
+                            [(ngModel)]="agency.street">
                     </div>
 
                     <div class="check-in-cell" [title]="'Número: ' + (agency ? agency.number : '-')">
-                        {{ (agency ? agency.number : '-') }}
+                        <input *ngIf="agency" type="text" name="agency-number" id="agency-number" placeholder="Número"
+                            [(ngModel)]="agency.number">
                     </div>
 
                     <div class="check-in-cell" [title]="'Complemento: ' + (agency ? agency.complement : '-')">
-                        {{ (agency ? agency.complement : '-') }}
+                        <input *ngIf="agency" type="text" name="agency-complement" id="agency-complement" placeholder="Complemento"
+                            [(ngModel)]="agency.complement">
                     </div>
                 </div>
             </div>
@@ -136,6 +156,7 @@
                     [checkInModel]="checkInModel"
                     [employees]="employees"
                     [title]="'ATENDIMENTO'"
+                    [department]="4"
                     [context]="'costumer_service'">
                 </cb-check-in-comission>
 
@@ -145,6 +166,7 @@
                     [checkInModel]="checkInModel"
                     [employees]="employees"
                     [title]="'CRIAÇÃO'"
+                    [department]="5"
                     [context]="'creation'">
                 </cb-check-in-comission>
 
@@ -154,6 +176,7 @@
                     [checkInModel]="checkInModel"
                     [employees]="employees"
                     [title]="'GERENTE PROD.'"
+                    [department]="3"
                     [context]="'production_manager'">
                 </cb-check-in-comission>
 
@@ -163,6 +186,7 @@
                     [checkInModel]="checkInModel"
                     [employees]="employees"
                     [title]="'ORÇAMENTO'"
+                    [department]="6"
                     [context]="'budget'">
                 </cb-check-in-comission>
 
@@ -172,6 +196,7 @@
                     [checkInModel]="checkInModel"
                     [employees]="employees"
                     [title]="'DETALHAMENTO'"
+                    [department]="6"
                     [context]="'detailing'">
                 </cb-check-in-comission>
 
@@ -181,6 +206,7 @@
                     [checkInModel]="checkInModel"
                     [employees]="employees"
                     [title]="'PRODUÇÃO'"
+                    [department]="3"
                     [context]="'production'">
                 </cb-check-in-comission>
             </div>
