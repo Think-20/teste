@@ -14,6 +14,7 @@ import { ErrorHandler } from '../shared/error-handler.service';
 import { AuthService } from '../login/auth.service';
 import { Pagination } from '../shared/pagination.model';
 import { Employee } from '../employees/employee.model';
+import { IPlannerLog } from './models/planner-log.model';
 
 
 @Injectable()
@@ -174,5 +175,20 @@ export class TimecardService {
                 })
                 return ErrorHandler.capture(err)
             })
+    }
+
+    getLogs(year: number, month: number, employeeId: number): Observable<IPlannerLog[]> {
+        return this.http.get(`${API}/planner/${year}/${month}/${employeeId}`)
+            .map(response => response.json());
+    }
+
+    postLog(log: IPlannerLog): Observable<{ object: IPlannerLog }> {
+        return this.http.post(`${API}/planner`, log)
+            .map(response => response.json());
+    }
+
+    putLog(log: IPlannerLog): Observable<{ object: IPlannerLog }> {
+        return this.http.put(`${API}/planner`, log)
+            .map(response => response.json());
     }
 }

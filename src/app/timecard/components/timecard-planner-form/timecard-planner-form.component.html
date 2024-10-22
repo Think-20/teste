@@ -1,0 +1,35 @@
+<form [formGroup]="form" class="tc-planner-form"
+    [class.diretoria]="isDiretoria">
+    <!-- <div *ngIf="isDiretoria" class="tc-planner-form-employee">
+        {{ log.employee_name || '' }}
+    </div> -->
+
+    <div class="tc-planner-form-category">
+        <span class="position-relative cursor-pointer" tabindex="0"
+            [title]="form.controls.category.value || (isDiretoria ? '' : 'Selecione a categoria')"
+            (keyup.enter)="isDiretoria ? null : categorySelect.open()"
+            (click)="isDiretoria ? null : categorySelect.open()">
+            <span [class.placeholder]="!form.controls.category.value">
+                {{ form.controls.category.value || (isDiretoria ? '' : 'Selecione a categoria') }}
+            </span>
+
+            <mat-select class="select-hidden" #categorySelect
+                [formControl]="form.controls.category"
+                [(ngModel)]="log.category">
+                <mat-option *ngFor="let category of categories"
+                    [value]="category"
+                    [title]="category">
+                    {{ category }}
+                </mat-option>
+            </mat-select>
+        </span>
+    </div>
+
+    <div class="tc-planner-form-description">
+        <textarea [placeholder]="isDiretoria ? '' : 'Informe as atividades realizadas...'" rows="1"
+            [readOnly]="isDiretoria"
+            [formControl]="form.controls.description"
+            [(ngModel)]="log.description"
+        ></textarea>
+    </div>
+</form>

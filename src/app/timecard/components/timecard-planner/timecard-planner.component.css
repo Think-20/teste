@@ -1,0 +1,142 @@
+.tc-planner-header {
+    display: grid;
+
+    grid-template-columns: 80px 44px 200px 95px 1fr;
+
+    color: #0000008a;
+
+    font-weight: 500;
+    font-size: 13px;
+
+    border-top: 1px solid #eee;
+
+    border-bottom: 1px solid #eee;
+}
+
+.tc-planner-calendar ::ng-deep .mat-calendar-header {
+    display: none;
+}
+
+.tc-planner-calendar ::ng-deep .mat-calendar-content {
+    min-width: 220px;
+}
+
+::ng-deep .cdk-overlay-pane {
+    max-height: 350px !important;
+}
+
+::ng-deep .cdk-overlay-pane .mat-menu-panel::-webkit-scrollbar {
+    width: 8px;
+
+    border-radius: 9px;
+}
+
+::ng-deep .cdk-overlay-pane .mat-menu-panel::-webkit-scrollbar-thumb {
+    background-color: #e5e6e8;
+
+    border-radius: 9px;
+}
+
+.tc-planner-header div {
+    display: flex;
+
+    align-items: center;
+}
+
+.tc-planner-header div {
+    padding: 10px;
+}
+
+.tc-planner-header-category,
+.tc-planner-header-description {
+    padding-left: 10px;
+}
+
+.tc-planner-header-filters {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+}
+
+.tc-planner-days {
+    max-height: 60vh;
+
+    overflow: auto;
+}
+
+.tc-planner-grid {
+    display: grid;
+
+    grid-template-columns: 80px 1fr;
+
+    grid-template-rows: auto;
+
+    grid-template-areas: "date forms";
+
+    padding-bottom: 20px;
+}
+
+.tc-planner-grid.hidden {
+    display: none !important;
+}
+
+.tc-planner-date {
+    grid-area: date;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.tc-planner-forms {
+    grid-area: forms;
+    
+    display: grid;
+    
+    grid-template-columns: 1fr;
+    
+    grid-template-areas: "form";
+}
+
+.tc-planner-logs {
+    display: grid;
+
+    grid-template-columns: 40px 1fr;
+}
+
+.tc-planner-logs-hour {
+    display: flex;
+
+    align-items: center;
+
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.select-hidden {
+    position: absolute;
+    
+    inset: 0;
+
+    visibility: hidden;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.no-itens {
+    display: flex;
+    
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 40px;
+}

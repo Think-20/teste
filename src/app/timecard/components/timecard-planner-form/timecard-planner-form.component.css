@@ -1,0 +1,86 @@
+.tc-planner-form {
+    display: grid;
+
+    grid-template-columns: 200px 1fr;
+
+    grid-template-rows: 50px;
+
+    grid-template-areas: "tc-planner-form-category tc-planner-form-description";
+
+    border-left: 4px solid #00aff2;
+}
+
+/* .diretoria {
+    grid-template-rows: 28px 35px;
+
+    grid-template-areas: 
+        "tc-planner-form-employee tc-planner-form-employee"
+        "tc-planner-form-category tc-planner-form-description";
+} */
+
+.tc-planner-form-employee {
+    grid-area: tc-planner-form-employee;
+
+    padding: 10px 10px 0px 10px;
+
+    font-size: 13px;
+
+    color: #898686;
+}
+
+.tc-planner-form-category {
+    grid-area: tc-planner-form-category;
+}
+
+.tc-planner-form-category span {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+
+    align-items: center;
+}
+
+/* .diretoria .tc-planner-form-category {
+    padding: 0px 10px 10px 10px;
+} */
+
+.tc-planner-form-description {
+    grid-area: tc-planner-form-description;
+}
+
+.tc-planner-form-description textarea {
+    width: 100%;
+
+    border: none;
+
+    resize: none;
+}
+
+.tc-planner-form-category .placeholder,
+.tc-planner-form-description textarea::placeholder {
+    color: #9b9b9b;
+}
+
+.tc-planner-form-category,
+.tc-planner-form-description {
+    display: flex;
+
+    align-items: center;
+
+    padding: 10px;
+
+    border-bottom: 1px solid #eee;
+}
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+.select-hidden {
+    position: absolute;
+    
+    inset: 0;
+
+    visibility: hidden;
+}

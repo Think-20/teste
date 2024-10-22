@@ -103,6 +103,7 @@
         </div>
       </form>
     </mat-card>
+
     <mat-card>
       <div *ngIf="timecards?.length > 0">
         <table class="table mat-table" [class.user-mode]="!accessList">
@@ -197,6 +198,11 @@
         </p>
       </div>
     </mat-card>
+
+    <mat-card>
+      <cb-timecard-planner #timecardPlanner></cb-timecard-planner>
+    </mat-card>
+
     <mat-card-title>
       <div class="row search-bar-group">
         <div class="title">
@@ -204,7 +210,7 @@
         </div>
       </div>
     </mat-card-title>
-    <mat-card>
+    <mat-card style="margin-bottom: 2rem;">
       <table class="table mat-table report">
         <div class="mat-header-row">
           <div class="mat-header-cell col-md-3 text-center">Dias</div>

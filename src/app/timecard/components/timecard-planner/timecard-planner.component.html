@@ -1,0 +1,77 @@
+<mat-menu #filterMenu="matMenu" xPosition="before">
+    <button mat-menu-item *ngIf="currentMonth" (click)="gotToCurrentDate()">Hoje</button>
+
+    <button mat-menu-item [matMenuTriggerFor]="daysMenu">
+        Dia
+    </button>
+
+    <button mat-menu-item [matMenuTriggerFor]="categoryMenu">
+        {{ categorySelected && categorySelected !== allCategories ? categorySelected : 'Categorias' }}
+    </button>
+
+    <button *ngIf="isDiretoria" mat-menu-item [matMenuTriggerFor]="employeesMenu">
+        {{ employeeSelected ? employeeSelected.name : 'Colaborador' }}
+    </button>
+</mat-menu>
+
+<mat-menu #categoryMenu="matMenu">
+    <button mat-menu-item *ngFor="let category of categoriesFilter" (click)="selectCategory(category)">
+        {{ category }}
+    </button>
+</mat-menu>
+
+<mat-menu #daysMenu="matMenu">
+    <mat-calendar class="tc-planner-calendar" #calendar
+        [selected]="date"
+        (selectedChange)="selectDay($event)"
+    ></mat-calendar>
+</mat-menu>
+
+<mat-menu #employeesMenu="matMenu">
+    <button mat-menu-item *ngFor="let employee of employees" (click)="selectEmployee(employee)">
+        {{ employee.name }}
+    </button>
+</mat-menu>
+
+<div>
+    <div class="tc-planner-header">
+        <div style="justify-content: center;">DATA</div>
+        <div></div>
+        <div class="tc-planner-header-category">CATEGORIA</div>
+        <div class="tc-planner-header-description">DESCRIÇÃO</div>
+        <div class="tc-planner-header-filters">
+            {{ employeeSelected ? employeeSelected.name : '' }}
+
+            <mat-icon class="cursor-pointer" [matMenuTriggerFor]="filterMenu">
+                more_vert
+            </mat-icon>
+        </div>
+    </div>
+
+    <div class="tc-planner-days cb-scroll">
+        <div *ngFor="let day of days; trackBy: trackByDays" class="tc-planner-grid"
+            [class.hidden]="!day.visible">
+            <div class="tc-planner-date" [id]="day.date | date: 'yyyy-MM-dd'">
+                <span>{{ day.date | date: 'd-EEE' }}</span>
+            </div>
+            
+            <div class="tc-planner-forms">
+                <div *ngFor="let timeLogs of day.time_logs; trackBy: trackByTimeLogs" class="tc-planner-logs">
+                    <div class="tc-planner-logs-hour">
+                        {{ timeLogs.date | date: 'HH:mm'}}
+                    </div>
+
+                    <cb-timecard-planner-form
+                        [log]="timeLogs.log"
+                        [date]="timeLogs.date"
+                        (changeLog)="setLog($event)">
+                    </cb-timecard-planner-form>
+                </div>
+            </div>
+        </div>
+
+        <div class="no-itens" *ngIf="!hasDayWithSelectedCategories">
+            Nenhum item encontrado
+        </div>
+    </div>
+</div>

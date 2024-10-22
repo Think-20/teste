@@ -244,6 +244,8 @@ import { ExtrasService } from './shared/services/extras.service';
 import { CheckInExtraComponent } from './check-in/components/check-in-extra/check-in-extra.component';
 import { PaymentService } from './shared/services/payment.service';
 import { CheckInPaymentFormComponent } from './check-in/components/check-in-payment-form/check-in-payment-form.component';
+import { TimecardPlannerComponent } from './timecard/components/timecard-planner/timecard-planner.component';
+import { TimecardPlannerFormComponent } from './timecard/components/timecard-planner-form/timecard-planner-form.component';
 
 registerLocaleData(localePt);
 
@@ -306,6 +308,7 @@ registerLocaleData(localePt);
     TimecardComponent,
     TimecardFormComponent,
     TimecardListComponent,
+    TimecardPlannerComponent,
     TimecardApprovalsComponent,
     ScheduleComponent,
     ScheduleBottomSheet,
@@ -384,7 +387,8 @@ registerLocaleData(localePt);
     CheckInPeopleComponent,
     CheckInPaymentComponent,
     CheckInExtraComponent,
-    CheckInPaymentFormComponent
+    CheckInPaymentFormComponent,
+    TimecardPlannerFormComponent
   ],
   imports: [
     CurrencyMaskModule,

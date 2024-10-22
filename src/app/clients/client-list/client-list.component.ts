@@ -42,16 +42,34 @@ export class ClientListComponent implements OnInit {
 
     switch(module) {
       case 'show': {
-        access = client.employee.id == employee.id ? this.authService.hasAccess('clients/get/{id}') : false
-        break
+        access = false;
+        
+        if (client.employee.id == employee.id) {
+          access = this.authService.hasAccess('clients/get/{id}')
+            || this.authService.hasAccess('my-clients/get/{id}');
+        }
+
+        break;
       }
       case 'edit': {
-        access = client.employee.id == employee.id ? this.authService.hasAccess('client/edit') : false
-        break
+        access = false;
+        
+        if (client.employee.id == employee.id) {
+          access = this.authService.hasAccess('client/edit')
+            || this.authService.hasAccess('my-client/edit');
+        }
+
+        break;
       }
       case 'delete': {
-        access = client.employee.id == employee.id ? this.authService.hasAccess('client/remove/{id}') : false
-        break
+        access = false;
+        
+        if (client.employee.id == employee.id) {
+          access = this.authService.hasAccess('client/remove/{id}')
+            || this.authService.hasAccess('my-client/remove/{id}');
+        }
+
+        break;
       }
       default: {
         access = false
