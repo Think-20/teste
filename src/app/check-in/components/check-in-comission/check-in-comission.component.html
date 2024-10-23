@@ -5,7 +5,7 @@
 
     <div class="check-in-cell position-relative">
         <mat-select class="select-hidden" #employeeSelect formControlName="employee">
-            <mat-option *ngFor="let employee of employees"
+            <mat-option *ngFor="let employee of employeesList"
                 [value]="employee.id">
                 {{ employee.name }}
             </mat-option>
@@ -37,7 +37,7 @@
 
     <div *ngIf="add" class="check-in-cell position-relative">
         <mat-select class="select-hidden" #employee2Select formControlName="employee2" [disabled]="!employee">
-            <mat-option *ngFor="let employee of employees"
+            <mat-option *ngFor="let employee of employeesList"
                 [value]="employee.id">
                 {{ employee.name }}
             </mat-option>

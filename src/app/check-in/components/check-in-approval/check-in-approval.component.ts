@@ -180,6 +180,10 @@ export class CheckInApprovalComponent implements AfterViewInit {
     this.checkInModel.approval_date = this.getCurrentDate();
   }
 
+  validateAlertDateAcceptClient(event: PointerEvent): void {
+    event.preventDefault();
+  }
+
   validateAlertDateAcceptProposal(event: PointerEvent): void {
     if (this.employeeId != 11) {
       event.preventDefault();
@@ -244,6 +248,18 @@ export class CheckInApprovalComponent implements AfterViewInit {
     }
     
     return '';
+  }
+
+  getClientName() {
+    if (this.job && this.job.agency) {
+      return this.job.agency.fantasy_name;
+    }
+
+    if (this.job && this.job.client) {
+      return this.job.client.fantasy_name;
+    }
+    
+    return '-';
   }
 
   openModalOrganizationForm(): void {

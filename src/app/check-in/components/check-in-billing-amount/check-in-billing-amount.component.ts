@@ -18,6 +18,7 @@ import { PaymentModel } from 'app/shared/models/payment.model';
 export class CheckInBillingAmountComponent implements OnInit, OnChanges {
   @Input() job = new Job();
   @Input() checkInModel = new CheckInModel();
+  @Input() valorTotalExtrasRecebido = 0;
 
   budgets: Task[] = [];
 

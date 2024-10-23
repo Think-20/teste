@@ -79,6 +79,25 @@
                 <div class="check-in-row">
                     <div class="check-in-cell">
                         <mat-checkbox
+                            [(ngModel)]="checkInModel.accept_client"
+                            (click)="validateAlertDateAcceptClient($event)"
+                            readonly>
+                            ACEITE CLIENTE
+                        </mat-checkbox>
+                    </div>
+
+                    <div class="check-in-cell">
+                        {{ getClientName() }}
+                    </div>
+
+                    <div class="check-in-cell">
+                        {{ (checkInModel.accept_client_date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        <mat-checkbox
                             [(ngModel)]="checkInModel.accept_proposal"
                             (click)="validateAlertDateAcceptProposal($event)"
                             (ngModelChange)="updateAlertDateAcceptProposal()">
@@ -243,6 +262,12 @@
                                 (change)="updatePromoter()"
                             />
                         </div>
+                    </div>
+
+                    <div class="check-in-row data">
+                        <div class="check-in-cell"></div>
+                        <div class="check-in-cell"></div>
+                        <div class="check-in-cell"></div>
                     </div>
                 </div>
 

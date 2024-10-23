@@ -3,10 +3,12 @@ export class Contact {
     name: string
     department: string
     cellphone: number
-    email: string
+    email: string;
+    obs?: string;
 
     constructor() {
         this.cellphone = null;
         this.email = null;
+        this.obs = null;
     }
 }

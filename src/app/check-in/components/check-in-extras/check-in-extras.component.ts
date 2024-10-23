@@ -21,11 +21,11 @@ export class CheckInExtrasComponent implements OnInit {
     }
 
     if (this.extras.length == 1) {
-      return this.extras[0].value;
+      return this.extras[0].value * (this.extras[0].quantity || 1);
     }
 
     return this.extras
-      .map(x => x.value)
+      .map(x => x.value * (x.quantity || 1))
       .reduce((prv, current) => prv + current);
   }
 
@@ -35,12 +35,12 @@ export class CheckInExtrasComponent implements OnInit {
     }
 
     if (this.extras.length == 1) {
-      return this.extras[0].value;
+      return this.extras[0].value * (this.extras[0].quantity || 1);
     }
 
     return this.extras
       .filter(x => !!x.settlement_date)
-      .map(x => x.value)
+      .map(x => x.value * (x.quantity || 1))
       .reduce((prv, current) => prv + current);
   }
 
