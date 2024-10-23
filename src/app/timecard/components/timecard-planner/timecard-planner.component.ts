@@ -2,8 +2,6 @@ import { TimecardService } from './../../timecard.service';
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
 import { MatCalendar, MatSnackBar } from '@angular/material';
-import { Employee } from 'app/employees/employee.model';
-import { EmployeeService } from 'app/employees/employee.service';
 import { AuthService } from 'app/login/auth.service';
 import { IPlannerDay } from 'app/timecard/models/planner-day.model';
 import { IPlannerHour } from 'app/timecard/models/planner-hour.model';
@@ -34,7 +32,7 @@ export class TimecardPlannerComponent implements AfterViewInit {
 
   hours = Array.from({ length: 23 - 6 + 1 }, (_, i) => i + 6);
 
-  currentMonth = false;
+  currentMonth = true;
 
   categories = [
     "Prospecção",
@@ -58,24 +56,19 @@ export class TimecardPlannerComponent implements AfterViewInit {
 
   categorySelected = this.allCategories;
 
-  employees: Employee[] = [];
-
-  employeeSelected: Employee = null;
-
   isDiretoria = false;
 
   hasDayWithSelectedCategories = false;
 
   selectedDay: number = null;
 
-  date: Date;
+  date = new Date();
 
   constructor(
     private datePipe: DatePipe,
     private snackBar: MatSnackBar,
     private authService: AuthService,
     private timecardService: TimecardService,
-    private employeeService: EmployeeService,
   ) { }
 
   ngAfterViewInit() {
@@ -83,36 +76,25 @@ export class TimecardPlannerComponent implements AfterViewInit {
 
     this.isDiretoria = currentUser.employee.department_id === 1;
 
-    if (this.isDiretoria) {
-      this.loadEmployees();
+    if (!this.isDiretoria) {
+      this.employeeId = currentUser.employee.id;
     }
 
-    this.loadLogs(new Date().getFullYear(), new Date().getMonth(), true);
+    this.loadLogs(new Date().getFullYear(), new Date().getMonth(), this.employeeId, true);
   }
 
-  private loadEmployees = (): void => {
-    this.employeeService.employees({ paginate: false }).subscribe({
-      next: response => {
-        const employees: Employee[] = response.pagination.data;
-
-        this.employees = (employees ? employees : []).filter(employee => employee.department.id !== 1);
-      }
-    });
-  }
-
-  loadLogs = (year: number, month: number, init = false) => {
+  loadLogs = (year: number, month: number, employeeId: number, init = false) => {
     let snackBarStateCharging = this.snackBar.open('Carregando...');
+
+    if (this.isDiretoria) {
+      this.employeeId = employeeId;
+    }
 
     this.year = year || new Date().getFullYear();
 
     this.month = month || new Date().getMonth();
 
-    const currentUser = this.authService.currentUser();
-
-    if (!this.isDiretoria) {
-      this.employeeId = currentUser.employee.id;
-
-    } else if (this.isDiretoria && !this.employeeId) {
+    if (!this.employeeId) {
       this.loadDays();
 
       if (init) {
@@ -276,14 +258,6 @@ export class TimecardPlannerComponent implements AfterViewInit {
     this.daysVisible();
 
     this.loadHasDayWithSelectedCategories();
-  }
-
-  selectEmployee = (employee: Employee): void => {
-    this.employeeId = employee.id;
-
-    this.employeeSelected = employee;
-
-    this.loadLogs(this.year, this.month);
   }
 
   private daysVisible = (): void => {

@@ -82,14 +82,15 @@
               </mat-option>
             </mat-select>
           </mat-form-field>
+
           <mat-form-field [class.cb-hidden]="!filtering" *ngIf="accessList" class="col-md-4">
-            <input matInput [matAutocomplete]="autocompleteEmployee" formControlName="employee" placeholder="Funcionário">
-            <mat-autocomplete #autocompleteEmployee="matAutocomplete" [displayWith]="displayEmployee">
+            <mat-select formControlName="employee" placeholder="Funcionário">
               <mat-option *ngFor="let employee of employees" [value]="employee">
                 {{ employee.name }}
               </mat-option>
-            </mat-autocomplete>
+            </mat-select>
           </mat-form-field>
+
           <mat-form-field [class.cb-hidden]="!filtering" class="col-md-3">
             <mat-select placeholder="Local" formControlName="place" [compareWith]="comparePlace">
               <mat-option *ngFor="let place of places" [value]="place">
