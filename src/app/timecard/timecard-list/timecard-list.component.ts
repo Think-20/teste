@@ -134,7 +134,9 @@ export class TimecardListComponent implements OnInit, OnDestroy {
     }
 
     this.employeeService.employees({ paginate: false }).subscribe(response => {
-      this.employees = response.pagination.data;
+      const employees: Employee[] = response.pagination.data;
+      
+      this.employees = (employees || []).filter(employee => employee.department_id !== 1);
     });
 
     let date = new Date()
