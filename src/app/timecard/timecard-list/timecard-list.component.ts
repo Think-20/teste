@@ -133,17 +133,11 @@ export class TimecardListComponent implements OnInit, OnDestroy {
       this.justifyForm.disable()
     }
 
-    this.filterForm.controls.employee.valueChanges.pipe(
-      takeUntil(this.onDestroy$)
-    ).debounceTime(500)
-    .subscribe(value => {
-      let snackBar = this.snackBar.open('Carregando registros...')
-      this.employeeService.employees({ name: value }).subscribe(dataInfo => {
-        this.searching = false
-        this.employees = dataInfo.pagination.data
-        snackBar.dismiss()
-      })
-    })
+    this.employeeService.employees({ paginate: false }).subscribe(response => {
+      const employees: Employee[] = response.pagination.data;
+      
+      this.employees = (employees || []).filter(employee => employee.department_id !== 1);
+    });
 
     let date = new Date()
     this.filterForm.controls.month.setValue(this.months.filter((month, index) => {
@@ -162,7 +156,8 @@ export class TimecardListComponent implements OnInit, OnDestroy {
       ).subscribe((value) => {
         this.timecardPlanner.loadLogs(
           value && value.year ? value.year : null,
-          value && value.month && value.month.id ? value.month.id - 1 : null
+          value && value.month && value.month.id ? value.month.id - 1 : null,
+          value && value.employee ? value.employee.id : null
         );
       });
   }
