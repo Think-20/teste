@@ -7,7 +7,8 @@
             <div class="check-in-header">
                 <h6 class="check-in-header-title">Aprovação:</h6>
             
-                <div class="check-in-header-right">
+                <div class="check-in-header-right"
+                    [class.lock]="checkInModel && checkInModel.accept_client">
                     <span class="position-relative text-ellipsis cursor-pointer"
                         [title]="project ? 'Versão do Projeto: ' + taskService.jobDisplay(project) : 'Versão do Projeto'"
                         (click)="projectSelect.open()">
@@ -17,14 +18,16 @@
                             [(ngModel)]="checkInModel.project">
                             <mat-option *ngFor="let project of projects"
                                 [value]="project.id">
-                                {{taskService.jobDisplay(project)}}
+                                {{ taskService.jobDisplay(project) }}
                             </mat-option>
                         </mat-select>
                     </span>
                     |
+                    <mat-icon *ngIf="checkInModel && checkInModel.accept_client" class="icon-lock">lock</mat-icon>
+
                     <span class="position-relative text-ellipsis cursor-pointer"
                         [title]="memorial ? 'Memorial: ' + taskService.jobDisplay(memorial) : 'Memorial'"
-                        (click)="memorialSelect.open()">
+                        (click)="checkInModel && checkInModel.accept_client ? null : memorialSelect.open()">
                         {{ memorial ? taskService.jobDisplay(memorial) : 'Memorial' }}
 
                         <mat-select class="select-hidden col-md-3" #memorialSelect
@@ -36,9 +39,11 @@
                         </mat-select>
                     </span>
                     |
+                    <mat-icon *ngIf="checkInModel && checkInModel.accept_client" class="icon-lock">lock</mat-icon>
+
                     <span class="position-relative text-ellipsis cursor-pointer"
                         [title]="budget ? 'Orçamento: ' + taskService.jobDisplay(budget) : 'Orçamento'"
-                        (click)="budgetSelect.open()">
+                        (click)="checkInModel && checkInModel.accept_client ? null : budgetSelect.open()">
                         {{ budget ? taskService.jobDisplay(budget) : 'Orçamento' }}
 
                         <mat-select class="select-hidden col-md-3" #budgetSelect
