@@ -28,6 +28,8 @@
         <div style="justify-content: center;">DATA</div>
         <div></div>
         <div class="tc-planner-header-category">CATEGORIA</div>
+        <div class="tc-planner-header-subcategory">SUBCATEGORIA</div>
+        <div class="tc-planner-header-modality">LOCAL</div>
         <div class="tc-planner-header-description">DESCRIÇÃO</div>
         <div class="tc-planner-header-filters">
             <mat-icon class="cursor-pointer" [matMenuTriggerFor]="filterMenu">
@@ -52,6 +54,7 @@
                     <cb-timecard-planner-form
                         [log]="timeLogs.log"
                         [date]="timeLogs.date"
+                        [places]="places"
                         (changeLog)="setLog($event)">
                     </cb-timecard-planner-form>
                 </div>

@@ -6,11 +6,11 @@
 
     <div class="tc-planner-form-category">
         <span class="position-relative cursor-pointer" tabindex="0"
-            [title]="form.controls.category.value || (isDiretoria ? '' : 'Selecione a categoria')"
+            [title]="form.controls.category.value || (isDiretoria ? '' : 'Categoria')"
             (keyup.enter)="isDiretoria ? null : categorySelect.open()"
             (click)="isDiretoria ? null : categorySelect.open()">
             <span [class.placeholder]="!form.controls.category.value">
-                {{ form.controls.category.value || (isDiretoria ? '' : 'Selecione a categoria') }}
+                {{ form.controls.category.value || (isDiretoria ? '' : 'Categoria') }}
             </span>
 
             <mat-select class="select-hidden" #categorySelect
@@ -20,6 +20,48 @@
                     [value]="category"
                     [title]="category">
                     {{ category }}
+                </mat-option>
+            </mat-select>
+        </span>
+    </div>
+
+    <div class="tc-planner-form-subcategory">
+        <span class="position-relative cursor-pointer" tabindex="0"
+            [title]="form.controls.subcategory.value || (isDiretoria ? '' : 'Subcategoria')"
+            (keyup.enter)="isDiretoria ? null : subcategorySelect.open()"
+            (click)="isDiretoria ? null : subcategorySelect.open()">
+            <span [class.placeholder]="!form.controls.subcategory.value">
+                {{ form.controls.subcategory.value || (isDiretoria ? '' : 'Subcategoria') }}
+            </span>
+
+            <mat-select class="select-hidden" #subcategorySelect
+                [formControl]="form.controls.subcategory"
+                [(ngModel)]="log.subcategory">
+                <mat-option *ngFor="let subcategory of categories"
+                    [value]="subcategory"
+                    [title]="subcategory">
+                    {{ subcategory }}
+                </mat-option>
+            </mat-select>
+        </span>
+    </div>
+
+    <div class="tc-planner-form-modality">
+        <span class="position-relative cursor-pointer" tabindex="0"
+            [title]="modality || (isDiretoria ? '' : 'Local')"
+            (keyup.enter)="isDiretoria ? null : modalitySelect.open()"
+            (click)="isDiretoria ? null : modalitySelect.open()">
+            <span [class.placeholder]="!modality">
+                {{ modality || (isDiretoria ? '' : 'Local') }}
+            </span>
+
+            <mat-select class="select-hidden" #modalitySelect
+                [formControl]="form.controls.modality_id"
+                [(ngModel)]="log.modality_id">
+                <mat-option *ngFor="let modality of places"
+                    [value]="modality.id"
+                    [title]="modality.description">
+                    {{ modality.description }}
                 </mat-option>
             </mat-select>
         </span>

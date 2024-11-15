@@ -5,7 +5,9 @@
         <div class="buttons col-md-3">
           <div>
             <button [disabled]="!activeCheckin" class="cb-button button-check" color="primary" (click)="register(justifyForm.value)" mat-raised-button>
-              CHECK IN
+              {{ activeCheckin ? 'CHECK IN' : '' }}
+
+              <cb-contador #contador *ngIf="!activeCheckin"></cb-contador>
             </button>
           </div>
           <div>
@@ -201,7 +203,9 @@
     </mat-card>
 
     <mat-card>
-      <cb-timecard-planner #timecardPlanner></cb-timecard-planner>
+      <cb-timecard-planner #timecardPlanner
+        [places]="places"
+      ></cb-timecard-planner>
     </mat-card>
 
     <mat-card-title>
