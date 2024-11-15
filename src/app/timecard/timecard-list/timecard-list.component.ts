@@ -1,5 +1,5 @@
 import { Component, OnInit, Injectable, ViewChild, OnDestroy } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -10,13 +10,13 @@ import { EmployeeService } from '../../employees/employee.service';
 import { Observable } from 'rxjs/Observable';
 import { ErrorHandler } from '../../shared/error-handler.service';
 import { Month, MONTHS } from '../../shared/date/months';
-import { Pagination } from '../../shared/pagination.model';
 import { TimecardPlace } from '../timecard-place/timecard-place.model';
 import { TimecardPlaceService } from '../timecard-place/timecard-place.service';
 import { AuthService } from '../../login/auth.service';
 import { TimecardPlannerComponent } from '../components/timecard-planner/timecard-planner.component';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ContadorComponent } from 'app/shared/contador/contador.component';
 
 @Component({
   selector: 'cb-timecard-list',
@@ -41,6 +41,7 @@ import { takeUntil } from 'rxjs/operators';
 @Injectable()
 export class TimecardListComponent implements OnInit, OnDestroy {
   @ViewChild('timecardPlanner', { static: false }) timecardPlanner: TimecardPlannerComponent;
+  @ViewChild('contador', { static: false }) contador: ContadorComponent;
 
   rowAppearedState: string = 'ready'
   filterForm: FormGroup
@@ -344,12 +345,28 @@ export class TimecardListComponent implements OnInit, OnDestroy {
   }
 
   filter() {
-      this.searching = true
-      this.timecardService.timecards(this.filterForm.value).subscribe((data) => {
+    this.searching = true
+    this.timecardService.timecards(this.filterForm.value).subscribe((data) => {
       this.searching = false
       this.timecards = <Timecard[]> data.timecards ? data.timecards : []
-      this.totalBalance = data.balance
+      this.totalBalance = data.balance;
+
+      this.hasTimecardsStarted();
     })
+  }
+
+  private hasTimecardsStarted() {
+    const timecard = this.timecards.find(x => !x.exit);
+
+    if (!timecard || timecard.exit) {
+      return;
+    }
+
+    const date = new Date(timecard.entry);
+
+    setTimeout(() => {
+      this.contador.startCounter(date);
+    });
   }
 
   displayEmployee(employee: Employee) {

@@ -1,11 +1,12 @@
 import { TimecardService } from './../../timecard.service';
 import { DatePipe } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, Input, ViewChild } from '@angular/core';
 import { MatCalendar, MatSnackBar } from '@angular/material';
 import { AuthService } from 'app/login/auth.service';
 import { IPlannerDay } from 'app/timecard/models/planner-day.model';
 import { IPlannerHour } from 'app/timecard/models/planner-hour.model';
 import { IPlannerLog } from 'app/timecard/models/planner-log.model';
+import { TimecardPlace } from 'app/timecard/timecard-place/timecard-place.model';
 
 @Component({
   selector: 'cb-timecard-planner',
@@ -15,6 +16,8 @@ import { IPlannerLog } from 'app/timecard/models/planner-log.model';
 })
 export class TimecardPlannerComponent implements AfterViewInit {
   @ViewChild('calendar', { static: false }) calendar: MatCalendar<any>;
+
+  @Input() places: TimecardPlace[] = [];
 
   private year: number = null;
 
@@ -170,7 +173,7 @@ export class TimecardPlannerComponent implements AfterViewInit {
   
       const dayObject: IPlannerDay = {
         date: this.datePipe.transform(date, 'yyyy-MM-dd'),
-        time_logs: this.loadHours(day),
+        time_logs: Array.from(this.loadHours(day)),
       };
   
       dayObject.visible = this.dayIsVisible(dayObject);
@@ -207,9 +210,16 @@ export class TimecardPlannerComponent implements AfterViewInit {
     });
   }
 
-  private loadHours = (day: number): IPlannerHour[] => {
-    return this.hours.map(hour => {
-      const date = new Date(this.year, this.month, day, hour, 0, 0, 0);
+  private *loadHours(day: number) {
+    for (let index = 0; index < this.hours.length; index++) {
+      yield this.getLogHour(day, this.hours[index], 0);
+      
+      yield this.getLogHour(day, this.hours[index], 30);
+    }
+  }
+
+  private getLogHour(day: number, hour: number, minutes: number): IPlannerHour {
+    const date = new Date(this.year, this.month, day, hour, minutes, 0, 0);
 
       const formattedDate = this.datePipe.transform(date, 'yyyy-MM-dd HH:mm');
 
@@ -219,7 +229,6 @@ export class TimecardPlannerComponent implements AfterViewInit {
         date: formattedDate,
         log: log || {}
       } as IPlannerHour;
-    });
   }
 
   selectDay(date: Date): void {
