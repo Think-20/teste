@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../login/auth.service';
 import { User } from '../../user/user.model';
 import { API, FRONTEND_VERSION, BACKEND_VERSION } from 'app/app.api';
+import { CheckInOrganizationFormComponent } from 'app/check-in/components/check-in-organization-form/check-in-organization-form.component';
+import { MatDialog } from '@angular/material';
 
 @Component({
   selector: 'cb-sidenav',
@@ -49,6 +51,7 @@ export class SidenavComponent implements OnInit {
   BACKEND_VERSION = BACKEND_VERSION
 
   constructor(
+    public dialog: MatDialog,
     private auth: AuthService,
     private route: Router
   ) { }
@@ -80,5 +83,11 @@ export class SidenavComponent implements OnInit {
 
   toggleMenu() {
     this.opened = this.opened === true ? false : true
+  }
+
+  addOrganizadora(): void {
+    this.dialog.open(CheckInOrganizationFormComponent, {
+      width: '500px',
+    });
   }
 }
