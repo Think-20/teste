@@ -20,6 +20,9 @@ export class CheckInModel {
     board_approval: boolean;
     board_approval_employee_id: number;
     board_approval_date: string;
+    financial_acceptance: boolean;
+    financial_acceptance_employee_id: number;
+    financial_acceptance_date: string;
     area?: number;
     config?: string;
     location?: string;

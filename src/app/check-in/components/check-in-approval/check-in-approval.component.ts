@@ -212,9 +212,20 @@ export class CheckInApprovalComponent implements AfterViewInit {
     }
   }
 
+  validateAlertDateFinancialAcceptance(event: PointerEvent): void {
+    if (this.authService.currentUser().employee.department_id != 1) {
+      event.preventDefault();
+    }
+  }
+
   updateAlertDateBoardApproval(): void {
     this.checkInModel.board_approval_employee_id = this.employeeId;
     this.checkInModel.board_approval_date = this.getCurrentDate();
+  }
+
+  updateAlertDateFinancialAcceptance(): void {
+    this.checkInModel.financial_acceptance_employee_id = this.employeeId;
+    this.checkInModel.financial_acceptance_date = this.getCurrentDate();
   }
 
   updateOrganization(): void {

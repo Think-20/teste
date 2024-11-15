@@ -60,25 +60,6 @@
                 <div class="check-in-row">
                     <div class="check-in-cell">
                         <mat-checkbox
-                            [(ngModel)]="checkInModel.approval"
-                            (click)="validateAlertDateApproval($event)"
-                            (ngModelChange)="updateAlertDateApproval()">
-                            APROVAÇÃO
-                        </mat-checkbox>
-                    </div>
-
-                    <div class="check-in-cell">
-                        {{ job && job.attendance && job.attendance.id ? getEmployeeName(job.attendance.id) : '' }}
-                    </div>
-
-                    <div class="check-in-cell">
-                        {{ (checkInModel.approval_date| date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
-                    </div>
-                </div>
-
-                <div class="check-in-row">
-                    <div class="check-in-cell">
-                        <mat-checkbox
                             [(ngModel)]="checkInModel.accept_client"
                             (click)="validateAlertDateAcceptClient($event)"
                             readonly>
@@ -87,11 +68,34 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ getClientName() }}
+                        <ng-container *ngIf="getClientName() as employeeName">
+                            <span class="text-ellipsis" [title]="employeeName || '-'">{{ employeeName }}</span>
+                        </ng-container>
                     </div>
 
                     <div class="check-in-cell">
                         {{ (checkInModel.accept_client_date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        <mat-checkbox
+                            [(ngModel)]="checkInModel.approval"
+                            (click)="validateAlertDateApproval($event)"
+                            (ngModelChange)="updateAlertDateApproval()">
+                            APROVAÇÃO
+                        </mat-checkbox>
+                    </div>
+
+                    <div class="check-in-cell">
+                        <ng-container *ngIf="(job && job.attendance && job.attendance.id ? getEmployeeName(job.attendance.id) : '') as employeeName">
+                            <span class="text-ellipsis" [title]="employeeName || '-'">{{ employeeName }}</span>
+                        </ng-container>
+                    </div>
+
+                    <div class="check-in-cell">
+                        {{ (checkInModel.approval_date| date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
                     </div>
                 </div>
 
@@ -106,7 +110,9 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ getEmployeeName(checkInModel.accept_proposal_employee_id || 11) }}
+                        <ng-container *ngIf="getEmployeeName(checkInModel.accept_proposal_employee_id || 11) as employeeName">
+                            <span class="text-ellipsis" [title]="employeeName || '-'">{{ employeeName }}</span>
+                        </ng-container>
                     </div>
 
                     <div class="check-in-cell">
@@ -125,7 +131,9 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ getEmployeeName(checkInModel.accept_production_employee_id || 20) }}
+                        <ng-container *ngIf="getEmployeeName(checkInModel.accept_production_employee_id || 20) as employeeName">
+                            <span class="text-ellipsis" [title]="employeeName || '-'">{{ employeeName }}</span>
+                        </ng-container>
                     </div>
 
                     <div class="check-in-cell">
@@ -144,11 +152,34 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ getEmployeeName(checkInModel.board_approval_employee_id || 1) }}
+                        <ng-container *ngIf="getEmployeeName(checkInModel.board_approval_employee_id || 1) as employeeName">
+                            <span class="text-ellipsis" [title]="employeeName || '-'">{{ employeeName }}</span>
+                        </ng-container>
                     </div>
 
                     <div class="check-in-cell">
                         {{ (checkInModel.board_approval_date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                    </div>
+                </div>
+
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        <mat-checkbox
+                            [(ngModel)]="checkInModel.financial_acceptance"
+                            (click)="validateAlertDateFinancialAcceptance($event)"
+                            (ngModelChange)="updateAlertDateFinancialAcceptance()">
+                            ACEITE FINANCEIRO
+                        </mat-checkbox>
+                    </div>
+
+                    <div class="check-in-cell">
+                        <ng-container *ngIf="getEmployeeName(checkInModel.financial_acceptance_employee_id || 1) as employeeName">
+                            <span class="text-ellipsis" [title]="employeeName || '-'">{{ employeeName }}</span>
+                        </ng-container>
+                    </div>
+
+                    <div class="check-in-cell">
+                        {{ (checkInModel.financial_acceptance_date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
                     </div>
                 </div>
 
@@ -269,6 +300,12 @@
                         <div class="check-in-cell"></div>
                         <div class="check-in-cell"></div>
                     </div>
+
+                    <div class="check-in-row data">
+                        <div class="check-in-cell"></div>
+                        <div class="check-in-cell"></div>
+                        <div class="check-in-cell"></div>
+                    </div>
                 </div>
 
             </div>
@@ -277,7 +314,7 @@
 
                 <div class="check-in-row header">
                     <div class="check-in-cell">
-                        ÁREA (M2)
+                        {{ job && job.job_type_id !== 1 ? 'ÁREA (M2)' : 'MOMENTOS' }}
                     </div>
 
                     <div class="check-in-cell">
