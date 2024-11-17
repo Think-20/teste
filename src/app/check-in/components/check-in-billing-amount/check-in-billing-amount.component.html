@@ -219,7 +219,10 @@
             </div>
         </div>
 
-        <cb-check-in-obs [(ngModel)]="checkInModel.billing_amount_obs" name="billing_amount_obs" id="billing_amount_obs"></cb-check-in-obs>
+        <cb-check-in-obs name="billing_amount_obs" id="billing_amount_obs"
+            [(ngModel)]="checkInModel.billing_amount_obs"
+            [borderBottom]="true">
+        </cb-check-in-obs>
         
     </mat-expansion-panel>
 

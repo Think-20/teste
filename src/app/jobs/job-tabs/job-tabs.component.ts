@@ -5,6 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { JobService } from '../job.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { JobFormComponent } from '../job-form/job-form.component';
+import { ExtrasComponent } from 'app/extras/extras.component';
 
 @Component({
   selector: 'cb-job-tabs',
@@ -14,7 +15,10 @@ import { JobFormComponent } from '../job-form/job-form.component';
 @Injectable()
 export class JobTabsComponent implements OnInit {
   @ViewChild('container', { static: false }) container: ElementRef
-  @ViewChild(JobFormComponent, { static: false }) jobForm: JobFormComponent
+  @ViewChild(JobFormComponent, { static: false }) jobForm: JobFormComponent;
+
+  @ViewChild('extras', { static: false }) extras: ExtrasComponent;
+
   containerWidth: number
   typeForm: string
   job: Job
@@ -27,7 +31,16 @@ export class JobTabsComponent implements OnInit {
     {index: 3, description: 'specification'},
     {index: 5, description: 'budget-form'},
     {index: 6, description: 'check-in'},
+    {index: 7, description: 'extras'},
   ]
+
+  get valorTotalExtrasRecebido(): number {
+    if (!this.extras) {
+      return 0;
+    }
+
+    return this.extras.valorTotalExtrasRecebido;
+  }
 
   constructor(
     private route: ActivatedRoute,

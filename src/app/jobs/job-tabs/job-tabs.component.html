@@ -27,10 +27,15 @@
       </cb-budget-form>
     </mat-tab>
     <mat-tab label="Check-in">
-      <cb-check-in *ngIf="job?.id != undefined" [job]="job"></cb-check-in>
+      <cb-check-in *ngIf="job?.id != undefined"
+        [job]="job"
+        [valorTotalExtrasRecebido]="valorTotalExtrasRecebido"
+      ></cb-check-in>
     </mat-tab>
     <mat-tab label="Extras">
-      <!-- <cb-check-in-extras></cb-check-in-extras> -->
+      <cb-extras #extras *ngIf="job?.id != undefined"
+        [job]="job"
+      ></cb-extras>
     </mat-tab>
     <mat-tab label="Detalhamento">
       Detalhamento

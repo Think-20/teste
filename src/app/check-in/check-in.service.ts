@@ -27,6 +27,8 @@ constructor(private http: Http, private snackBar: MatSnackBar) {}
     message?: string;
     object?: CheckInModel;
   }> {
+    this.deleteReadOnlyProperties(checkInModel);
+
     return this.http
       .post(`${API}/checking`, JSON.stringify(checkInModel), new RequestOptions())
       .map((response) => response.json())
@@ -43,6 +45,8 @@ constructor(private http: Http, private snackBar: MatSnackBar) {}
     message?: string;
     object?: CheckInModel;
   }> {
+    this.deleteReadOnlyProperties(checkInModel);
+
     return this.http
       .put(`${API}/checking`, JSON.stringify(checkInModel), new RequestOptions())
       .map((response) => response.json())
@@ -53,5 +57,17 @@ constructor(private http: Http, private snackBar: MatSnackBar) {}
 
         return ErrorHandler.capture(err);
       });
+  }
+
+  private deleteReadOnlyProperties(checkInModel: CheckInModel) {
+    delete checkInModel.hash;
+
+    delete checkInModel.extras_accept_client;
+    delete checkInModel.extras_accept_client_date;
+
+    delete checkInModel.accept_client;
+    delete checkInModel.accept_client_date;
+
+    delete checkInModel.extras_obs;
   }
 }

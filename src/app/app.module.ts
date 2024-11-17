@@ -231,7 +231,7 @@ import { CheckInApprovalComponent } from './check-in/components/check-in-approva
 import { CheckInContactInfoComponent } from './check-in/components/check-in-contact-info/check-in-contact-info.component';
 import { CheckInBillingComponent } from './check-in/components/check-in-billing/check-in-billing.component';
 import { CheckInBillingAmountComponent } from './check-in/components/check-in-billing-amount/check-in-billing-amount.component';
-import { CheckInExtrasComponent } from './check-in/components/check-in-extras/check-in-extras.component';
+import { ExtrasGridComponent } from './extras/components/extras-grid/extras-grid.component';
 import { CheckInObsComponent } from './check-in/components/check-in-obs/check-in-obs.component';
 import { CheckInOrganizationFormComponent } from './check-in/components/check-in-organization-form/check-in-organization-form.component';
 import { OrganizationService } from './shared/services/organization.service';
@@ -240,13 +240,14 @@ import { CheckInComissionComponent } from './check-in/components/check-in-comiss
 import { CheckInPeopleComponent } from './check-in/components/check-in-people/check-in-people.component';
 import { PersonService } from './shared/services/person.service';
 import { CheckInPaymentComponent } from './check-in/components/check-in-payment/check-in-payment.component';
-import { ExtrasService } from './shared/services/extras.service';
-import { CheckInExtraComponent } from './check-in/components/check-in-extra/check-in-extra.component';
+import { ExtrasService } from './extras/extras.service';
+import { ExtraRowComponent } from './extras/components/extra-row/extra-row.component';
 import { PaymentService } from './shared/services/payment.service';
 import { CheckInPaymentFormComponent } from './check-in/components/check-in-payment-form/check-in-payment-form.component';
 import { TimecardPlannerComponent } from './timecard/components/timecard-planner/timecard-planner.component';
 import { TimecardPlannerFormComponent } from './timecard/components/timecard-planner-form/timecard-planner-form.component';
 import { ContadorComponent } from './shared/contador/contador.component';
+import { ExtrasComponent } from './extras/extras.component';
 
 registerLocaleData(localePt);
 
@@ -382,16 +383,17 @@ registerLocaleData(localePt);
     CheckInContactInfoComponent,
     CheckInBillingComponent,
     CheckInBillingAmountComponent,
-    CheckInExtrasComponent,
     CheckInObsComponent,
     CheckInOrganizationFormComponent,
     CheckInComissionComponent,
     CheckInPeopleComponent,
     CheckInPaymentComponent,
-    CheckInExtraComponent,
     CheckInPaymentFormComponent,
     TimecardPlannerFormComponent,
-    ContadorComponent
+    ContadorComponent,
+    ExtrasComponent,
+    ExtrasGridComponent,
+    ExtraRowComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -527,7 +529,7 @@ registerLocaleData(localePt);
     ConfirmDialogComponent,
     CheckInOrganizationFormComponent,
     CheckInPeopleComponent,
-    CheckInExtraComponent,
+    ExtraRowComponent,
     CheckInPaymentFormComponent
   ]
 })

@@ -2,10 +2,13 @@ import { EventModel } from 'app/shared/models/event.model';
 
 export class CheckInModel {
     id?: number;
+    hash?: string;
     job_id: number;
     project?: number;
     memorial?: number;
     budget?: number;
+    extras_accept_client: boolean;
+    extras_accept_client_date: string;
     approval: boolean;
     approval_employee_id: number;
     approval_date: string;

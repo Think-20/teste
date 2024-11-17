@@ -6,7 +6,7 @@ import { EmployeeService } from 'app/employees/employee.service';
 import { Employee } from 'app/employees/employee.model';
 import { CheckInContactInfoComponent } from './components/check-in-contact-info/check-in-contact-info.component';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
-import { CheckInExtrasComponent } from './components/check-in-extras/check-in-extras.component';
+import { ExtrasGridComponent } from '../extras/components/extras-grid/extras-grid.component';
 
 @Component({
   selector: "cb-check-in",
@@ -16,20 +16,13 @@ import { CheckInExtrasComponent } from './components/check-in-extras/check-in-ex
 export class CheckInComponent implements AfterViewInit {
   @ViewChild('contactInfo', { static: false }) contactInfo: CheckInContactInfoComponent;
 
-  @ViewChild('extras', { static: false }) extras: CheckInExtrasComponent;
+  @ViewChild('extras', { static: false }) extras: ExtrasGridComponent;
 
   @Input() job: Job = new Job();
+  @Input() valorTotalExtrasRecebido = 0;
 
   checkInModel: CheckInModel = new CheckInModel();
   employees: Employee[] = [];
-
-  get valorTotalExtrasRecebido(): number {
-    if (!this.extras) {
-      return 0;
-    }
-
-    return this.extras.valorTotalExtrasRecebido;
-  }
 
   constructor(
     private snackBar: MatSnackBar,

@@ -4,9 +4,9 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { Observable } from "rxjs/Observable";
 
-import { API } from "../../app.api";
-import { ErrorHandler } from "../error-handler.service";
-import { ExtraModel } from '../models/extra.model';
+import { API } from "../app.api";
+import { ErrorHandler } from "../shared/error-handler.service";
+import { ExtraModel } from '../shared/models/extra.model';
 
 @Injectable()
 export class ExtrasService {
@@ -15,6 +15,45 @@ export class ExtrasService {
   extras(): Observable<ExtraModel[]> {
     return this.http
       .get(`${API}/extra`)
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
+
+        return ErrorHandler.capture(err);
+      });
+  }
+
+  saveObs(id: number, obs: string) {
+    const body = {
+      id,
+      extras_obs: obs,
+    };
+
+    return this.http
+      .put(`${API}/checking`, JSON.stringify(body), new RequestOptions())
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
+
+        return ErrorHandler.capture(err);
+      });
+  }
+
+  sendEmail(checkInId: number) {
+    const body = {
+      checkin_id: checkInId,
+    };
+
+    return this.http
+      .post(
+        `${API}/extra/email`,
+        JSON.stringify(body),
+        new RequestOptions()
+      )
       .map((response) => response.json())
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {

@@ -1,0 +1,187 @@
+@import url('../../../check-in/check-in.component.css');
+
+.extras-grid ::ng-deep .mat-checkbox-layout {
+    margin: 0 !important;
+}
+
+.extras-grid ::ng-deep .mat-checkbox-inner-container {
+    width: 14px;
+    height: 14px;
+}
+
+.extras-grid ::ng-deep .mat-checkbox-frame {
+    border-width: 1px;
+}
+
+.extras-grid ::ng-deep .mat-checkbox-checked .mat-checkbox-background {
+    background-color: transparent !important;
+}
+
+.extras-grid ::ng-deep .mat-checkbox-checked .mat-checkbox-checkmark-path {
+    stroke: #008000 !important;
+}
+
+.check-in-accordion {
+    padding-bottom: 1px;
+}
+
+.accept-client,
+.send-email {
+    border-bottom: none;
+}
+
+.accept-client .check-in-row {
+    display: grid;
+
+    grid-template-columns: 0.65fr .35fr 1fr;
+}
+
+.accept-client .check-in-row .check-in-cell:nth-child(2) {
+    justify-content: flex-end;
+
+    border-right: 1px solid #ccc;
+}
+
+.send-email .check-in-row {
+    border-bottom: none !important;
+}
+
+.send-email .check-in-row {
+    display: grid;
+
+    grid-template-columns: 1fr !important;
+}
+
+.send-email .check-in-row .check-in-cell {
+    justify-content: flex-end;
+
+    cursor: pointer;
+}
+
+.send-email .check-in-row .check-in-cell a {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+}
+
+.send-email .check-in-row .check-in-cell mat-icon {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 14px;
+    height: 14px;
+
+    margin-left: 0.35rem;
+
+    transform: rotateZ(315deg);
+
+    font-size: 14px;
+}
+
+.send-email .check-in-row .check-in-cell:hover {
+    opacity: 0.75;
+}
+
+.extras-left .check-in-row {
+    display: grid;
+    
+    grid-template-columns: 120px 40px 100px 1fr 1fr;
+}
+
+.extras-left .check-in-row:nth-child(1) {
+    border-bottom: 1px solid #ccc;
+}
+
+.extras-left .check-in-cell:nth-child(1),
+.extras-left .check-in-cell:nth-child(2),
+.extras-left .check-in-cell:nth-child(3),
+.extras-left .check-in-cell:nth-child(4) {
+    border-right: 1px solid #ccc;
+}
+
+.extras-left .check-in-row:nth-child(1) .check-in-cell:nth-child(1),
+.extras-left .check-in-row:nth-child(1) .check-in-cell:nth-child(2),
+.extras-left .check-in-row:nth-child(1) .check-in-cell:nth-child(3),
+.extras-left .check-in-row:nth-child(1) .check-in-cell:nth-child(4) {
+    border-right: 0;
+}
+
+.check-in-grid-left,
+.check-in-grid-right {
+    display: grid;
+
+    grid-template-rows: 30px auto;
+}
+
+.check-in-grid-right .check-in-row {
+    display: grid;
+
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.check-in-grid-right .check-in-row:nth-child(1) {
+    border-bottom: 1px solid #ccc;
+}
+
+.list .check-in-row:nth-child(1) {
+    border-bottom: 0;
+}
+
+.list .check-in-row .check-in-cell:nth-child(1),
+.list .check-in-row .check-in-cell:nth-child(2),
+.list .check-in-row .check-in-cell:nth-child(3),
+.list .check-in-row .check-in-cell:nth-child(4),
+.list .check-in-row .check-in-cell:nth-child(5) {
+    border-right: 1px solid #ccc;
+}
+
+.content-list {
+    display: flex;
+
+    flex-direction: column;
+
+    justify-content: space-between;
+}
+
+.content-bottom {
+    padding: 3px 8px;
+
+    font-size: 10.5px;
+    
+    text-align: end;
+}
+
+.total-value {
+    border-top: 0;
+}
+
+.total-value .check-in-row {
+    display: grid;
+
+    grid-template-columns: 150px auto;
+
+    border-bottom: 0;
+}
+
+.total-value .check-in-row .check-in-cell:nth-child(1) {
+    border-right: 1px solid #ccc;
+}
+
+.extra-value {
+    border-top: 0;
+}
+
+.extra-value .check-in-row {
+    display: grid;
+
+    grid-template-columns: auto 1fr;
+
+    border-bottom: 0 !important;
+}
+
+.extra-value .check-in-row .check-in-cell:nth-child(2) {
+    justify-content: flex-end;
+}

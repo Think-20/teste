@@ -1,6 +1,6 @@
 import { EmployeeService } from 'app/employees/employee.service';
 import { PersonService } from 'app/shared/services/person.service';
-import { ExtrasService } from 'app/shared/services/extras.service';
+import { ExtrasService } from 'app/extras/extras.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
@@ -10,11 +10,11 @@ import { Employee } from 'app/employees/employee.model';
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'cb-check-in-extra',
-  templateUrl: './check-in-extra.component.html',
-  styleUrls: ['./check-in-extra.component.css']
+  selector: 'cb-extra-row',
+  templateUrl: './extra-row.component.html',
+  styleUrls: ['./extra-row.component.css']
 })
-export class CheckInExtraComponent implements OnInit {
+export class ExtraRowComponent implements OnInit {
 
   @Input() checkInId: number;
   @Input() extra: ExtraModel = null;
@@ -37,7 +37,7 @@ export class CheckInExtraComponent implements OnInit {
   });
 
   constructor(
-    public dialog: MatDialogRef<CheckInExtraComponent>,
+    public dialog: MatDialogRef<ExtraRowComponent>,
     private datePipe: DatePipe,
     private snackBar: MatSnackBar,
     private extrasService: ExtrasService,
