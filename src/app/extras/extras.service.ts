@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Http, RequestOptions } from "@angular/http";
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { Observable } from "rxjs/Observable";
@@ -10,12 +10,12 @@ import { ExtraModel } from '../shared/models/extra.model';
 
 @Injectable()
 export class ExtrasService {
-  constructor(private http: Http, private snackBar: MatSnackBar) {}
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
   extras(): Observable<ExtraModel[]> {
     return this.http
-      .get(`${API}/extra`)
-      .map((response) => response.json())
+      .get<ExtraModel[]>(`${API}/extra`)
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,
@@ -32,8 +32,8 @@ export class ExtrasService {
     };
 
     return this.http
-      .put(`${API}/checking`, JSON.stringify(body), new RequestOptions())
-      .map((response) => response.json())
+      .put(`${API}/checking`, JSON.stringify(body), )
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,
@@ -52,9 +52,9 @@ export class ExtrasService {
       .post(
         `${API}/extra/email`,
         JSON.stringify(body),
-        new RequestOptions()
+        
       )
-      .map((response) => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,
@@ -72,9 +72,9 @@ export class ExtrasService {
       .post(
         `${API}/extra`,
         JSON.stringify(extra),
-        new RequestOptions()
+        
       )
-      .map((response) => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,
@@ -92,9 +92,9 @@ export class ExtrasService {
       .put(
         `${API}/extra`,
         JSON.stringify(extra),
-        new RequestOptions()
+        
       )
-      .map((response) => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,
@@ -107,7 +107,7 @@ export class ExtrasService {
   delete(extraId: number): Observable<any> {
     return this.http
       .delete(`${API}/extra/${extraId}`)
-      .map((response) => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,

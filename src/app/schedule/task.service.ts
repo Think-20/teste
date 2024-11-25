@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions } from '@angular/http';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
@@ -30,7 +29,7 @@ export class TaskService {
   pageIndex = 0
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private httpClient: HttpClient,
     private datePipe: DatePipe,
     private snackBar: MatSnackBar,
@@ -86,7 +85,7 @@ export class TaskService {
     let url = `tasks/load-form`
 
     return this.http.get(`${API}/${url}`)
-        .map(response => response.json())
+        
         .catch((err) => {
             this.snackBar.open(ErrorHandler.message(err), '', {
                 duration: 3000
@@ -100,7 +99,7 @@ export class TaskService {
     let url = `tasks/recalculate-next-date/${nextEstimatedTime}`
 
     return this.http.get(`${API}/${url}`)
-        .map(response => response.json())
+        
         .catch((err) => {
             this.snackBar.open(ErrorHandler.message(err), '', {
                 duration: 3000
@@ -113,8 +112,8 @@ export class TaskService {
   responsiblesByActivity(jobActivityId: number): Observable<Employee[]> {
     let url = `tasks/${jobActivityId}/responsibles`
 
-    return this.http.get(`${API}/${url}`)
-        .map(response => response.json())
+    return this.http.get<Employee[]>(`${API}/${url}`)
+        
         .catch((err) => {
             this.snackBar.open(ErrorHandler.message(err), '', {
                 duration: 3000
@@ -161,7 +160,7 @@ export class TaskService {
       let url = `tasks/updated-info`
 
       return this.http.get(`${API}/${url}`)
-          .map(response => response.json())
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -176,8 +175,8 @@ export class TaskService {
 
       url = prefix + url
 
-      return this.http.get(`${API}/${url}`)
-          .map(response => response.json())
+      return this.http.get<Task>(`${API}/${url}`)
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -190,7 +189,7 @@ export class TaskService {
       let url = `tasks/get-next-available-date/${availableDate}/${estimatedTime}/${jobActivity.description}/${budgetValue}`
 
       return this.http.get(`${API}/${url}`)
-          .map(response => response.json())
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -204,8 +203,8 @@ export class TaskService {
 
       return this.http.post(`${API}/${url}`,
           JSON.stringify(params),
-          new RequestOptions())
-          .map(response => response.json())
+          )
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -223,9 +222,9 @@ export class TaskService {
       return this.http.post(
               `${API}/${url}`,
               JSON.stringify(task),
-              new RequestOptions()
+              
           )
-          .map(response => response.json())
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -240,9 +239,9 @@ export class TaskService {
       return this.http.post(
               `${API}/${url}`,
               JSON.stringify(params),
-              new RequestOptions()
+              
           )
-          .map(response => response.json())
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -260,9 +259,9 @@ export class TaskService {
       return this.http.put(
               `${API}/${url}`,
               JSON.stringify(task),
-              new RequestOptions()
+              
           )
-          .map(response => response.json())
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -280,9 +279,9 @@ export class TaskService {
       return this.http.put(
               `${API}/${url}`,
               JSON.stringify(params),
-              new RequestOptions()
+              
           )
-          .map(response => response.json())
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -298,7 +297,7 @@ export class TaskService {
       url = prefix + url
 
       return this.http.delete(`${API}/${url}`)
-          .map(response => response.json())
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -316,9 +315,9 @@ export class TaskService {
     return this.http.post(
             `${API}/${url}`,
             JSON.stringify(task),
-            new RequestOptions()
+            
         )
-        .map(response => response.json())
+        
         .catch((err) => {
             this.snackBar.open(ErrorHandler.message(err), '', {
                 duration: 3000
@@ -334,8 +333,8 @@ export class TaskService {
         var dtEnd = this.datePipe.transform(dateEnd, 'yyyy-MM-dd');
     
     
-        return this.http.get(`${API}/${url}/${dtInit}/${dtEnd}`)
-        .map(response => response.json())
+        return this.http.get<ScheduleGoal[]>(`${API}/${url}/${dtInit}/${dtEnd}`)
+        
         .catch((err) => {
             this.snackBar.open(ErrorHandler.message(err), '', {
                 duration: 3000

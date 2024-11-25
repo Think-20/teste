@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpModule, RequestOptions } from '@angular/http';
 import { RouterModule } from '@angular/router';
 
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -26,6 +25,7 @@ import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 
 import { RequestOptionsApiService } from './request-options-api.service';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -34,10 +34,10 @@ import { RequestOptionsApiService } from './request-options-api.service';
   imports: [
     BrowserAnimationsModule,
     BrowserModule,
-    HttpModule,
+    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    RouterModule.forRoot(ROUTES),
+    RouterModule.forRoot(ROUTES, { relativeLinkResolution: 'legacy' }),
 
     MatTableModule,
     MatProgressBarModule,
@@ -53,7 +53,7 @@ import { RequestOptionsApiService } from './request-options-api.service';
   providers: [
     AuthGuard,
     AuthService,
-    {provide: RequestOptions, useClass: RequestOptionsApiService}
+    RequestOptionsApiService
   ],
   bootstrap: [LoginComponent]
 })

@@ -1,7 +1,9 @@
 import { HttpInterceptor, HttpRequest, HttpHandler, HttpEvent } from "@angular/common/http";
 import { Observable } from "rxjs";
 import { User } from "app/user/user.model";
+import { Injectable } from "@angular/core";
 
+@Injectable()
 export class AddHeaderInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     let user = JSON.parse(localStorage.getItem('currentUser')) || new User

@@ -1,7 +1,7 @@
 import { OrganizationService } from 'app/shared/services/organization.service';
 import { Job } from './../../../reports/service-report/report-list.model';
 import { AfterViewInit, Component, Input } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Task } from 'app/schedule/task.model';
 import { TaskService } from 'app/schedule/task.service';
 import { CheckInOrganizationFormComponent } from '../check-in-organization-form/check-in-organization-form.component';

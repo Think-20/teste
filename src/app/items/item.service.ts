@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -19,7 +19,7 @@ import { DataInfo } from 'app/shared/data-info.model';
 @Injectable()
 export class ItemService {
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) { }
@@ -27,14 +27,14 @@ export class ItemService {
   searchValue = {}
   pageIndex = 0
 
-  items(params?: {}, page: number = 0): Observable<DataInfo> {
+  items(params?: {}, page: number = 0): Observable<any> {
     let url = params === {} ? `items/all?page=${page}` : `items/filter?page=${page}`
 
     return this.http.post(`${API}/${url}`,
       JSON.stringify(params),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -44,8 +44,11 @@ export class ItemService {
   }
 
   uploadImage(file: any): Observable<any> {
-    let requestOptions = new RequestOptions()
-    let headers = new Headers()
+    let requestOptions = {
+      headers: new HttpHeaders()
+    };
+
+    let headers = new HttpHeaders()
 
     let user = this.auth.currentUser()
     let token = this.auth.token()
@@ -59,14 +62,14 @@ export class ItemService {
     data.append('image', file, file.name)
 
     return this.http.post(`${API}/${url}`, data, requestOptions)
-      .map(response => response.json())
+      
   }
 
-  item(itemId: number): Observable<Item> {
+  item(itemId: number): Observable<any> {
     let url = `items/get/${itemId}`
 
     return this.http.get(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -81,9 +84,9 @@ export class ItemService {
     return this.http.post(
       `${API}/${url}`,
       JSON.stringify(pricing),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -97,9 +100,9 @@ export class ItemService {
 
     return this.http.delete(
       `${API}/${url}`,
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -114,9 +117,9 @@ export class ItemService {
     return this.http.post(
       `${API}/${url}`,
       JSON.stringify(childItem),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -130,9 +133,9 @@ export class ItemService {
 
     return this.http.delete(
       `${API}/${url}`,
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -147,9 +150,9 @@ export class ItemService {
     return this.http.post(
       `${API}/${url}`,
       JSON.stringify(item),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -164,9 +167,9 @@ export class ItemService {
     return this.http.put(
       `${API}/${url}`,
       JSON.stringify(item),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -179,7 +182,7 @@ export class ItemService {
     let url = `item/remove/${id}`
 
     return this.http.delete(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000

@@ -25,7 +25,8 @@ import { Event } from 'app/events/event.model';
 import { JobEventsService } from 'app/job-events/job-events.service';
 import { JobEvents } from 'app/job-events/job-events-model';
 import { Observable, Subject } from 'rxjs';
-import { MatOption, MatSelect, MatSelectChange } from '@angular/material';
+import { MatOption } from '@angular/material/core';
+import { MatSelect, MatSelectChange } from '@angular/material/select';
 import { JobActivity } from 'app/job-activities/job-activity.model';
 import { JobActivityService } from 'app/job-activities/job-activity.service';
 import { ConfirmDialogService } from 'app/confirm-dialog/confirm-dialog.service';
@@ -52,11 +53,11 @@ import { ConfirmDialogService } from 'app/confirm-dialog/confirm-dialog.service'
 })
 @Injectable()
 export class ServiceReportComponent implements OnInit, OnDestroy {
-  @ViewChild('selectAttendance', { static: false}) selectAttendance: MatSelect;
-  @ViewChild('selectCreation', { static: false}) selectCreation: MatSelect;
-  @ViewChild('selectJobType', { static: false}) selectJobType: MatSelect;
-  @ViewChild('selectStatus', { static: false}) selectStatus: MatSelect;
-  @ViewChild('selectJobActivity', { static: false}) selectJobActivity: MatSelect;
+  @ViewChild('selectAttendance') selectAttendance: MatSelect;
+  @ViewChild('selectCreation') selectCreation: MatSelect;
+  @ViewChild('selectJobType') selectJobType: MatSelect;
+  @ViewChild('selectStatus') selectStatus: MatSelect;
+  @ViewChild('selectJobActivity') selectJobActivity: MatSelect;
 
   rowAppearedState: string = 'ready'
   searchForm: FormGroup

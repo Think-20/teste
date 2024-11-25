@@ -1,6 +1,6 @@
 import { Component, ElementRef, Input, OnInit, ViewChildren, OnDestroy, SimpleChanges, OnChanges } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { CheckInModel } from 'app/check-in/check-in.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';

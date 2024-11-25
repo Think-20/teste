@@ -1,7 +1,8 @@
 import { TimecardService } from './../../timecard.service';
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, ChangeDetectionStrategy, Component, Input, ViewChild } from '@angular/core';
-import { MatCalendar, MatSnackBar } from '@angular/material';
+import { MatCalendar } from '@angular/material/datepicker';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from 'app/login/auth.service';
 import { IPlannerDay } from 'app/timecard/models/planner-day.model';
 import { IPlannerHour } from 'app/timecard/models/planner-hour.model';
@@ -15,7 +16,7 @@ import { TimecardPlace } from 'app/timecard/timecard-place/timecard-place.model'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class TimecardPlannerComponent implements AfterViewInit {
-  @ViewChild('calendar', { static: false }) calendar: MatCalendar<any>;
+  @ViewChild('calendar') calendar: MatCalendar<any>;
 
   @Input() places: TimecardPlace[] = [];
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -16,7 +16,7 @@ import { AuthService } from '../../login/auth.service';
 @Injectable()
 export class ClientStatusService {
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private snackBar: MatSnackBar,
         private auth: AuthService
     ) {}
@@ -24,8 +24,8 @@ export class ClientStatusService {
     status(): Observable<ClientStatus[]> {
         let url = `client-status/all`
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+        return this.http.get<ClientStatus[]>(`${API}/${url}`)
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000

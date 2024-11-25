@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, ResponseContentType } from '@angular/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -15,6 +14,7 @@ import { Pagination } from 'app/shared/pagination.model';
 import { Client } from '../../clients/client.model';
 import { ReportsInfo } from '../../shared/reports-info.model';
 import { PerformanceReportLite } from '../../reports/performance-report-lite/performance-report-lite.model';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable()
@@ -24,7 +24,7 @@ export class ReportService {
   pageIndex = 0
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) { }
@@ -52,7 +52,7 @@ export class ReportService {
     let url = `/reports`
 
     return this.http.get(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -64,11 +64,11 @@ export class ReportService {
   performanceLite(params?: {}): Observable<PerformanceReportLite> {
     let url = `jobs/performance-lite`
 
-    return this.http.post(`${API}/${url}`,
+    return this.http.post<PerformanceReportLite>(`${API}/${url}`,
       JSON.stringify(params),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -83,11 +83,11 @@ export class ReportService {
     
    // let prefix = this.auth.hasAccess('jobs/all') ? '' : 'my-'
 
-    return this.http.post(`${API}/${url}`,
+    return this.http.post<ReportsInfo>(`${API}/${url}`,
       JSON.stringify(params),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -102,8 +102,8 @@ export class ReportService {
 
     url = prefix + url
 
-    return this.http.get(`${API}/${url}`)
-      .map(response => response.json())
+    return this.http.get<Job>(`${API}/${url}`)
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -119,7 +119,7 @@ export class ReportService {
     url = prefix + url
 
     return this.http.delete(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000

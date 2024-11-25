@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -15,15 +15,15 @@ import { Bank } from './bank.model';
 @Injectable()
 export class BankService {
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private snackBar: MatSnackBar
     ) {}
 
     banks(query: string = ''): Observable<Bank[]> {
         let url = `banks/all`
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+        return this.http.get<Bank[]>(`${API}/${url}`)
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -35,7 +35,7 @@ export class BankService {
     /*
     costCategory(costCategoryId: number): Observable<CostCategory> {
         return this.http.get(`${API}/cost-categories/get/${costCategoryId}`)
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -48,9 +48,9 @@ export class BankService {
         return this.http.post(
                 `${API}/cost-category/save`,
                 JSON.stringify(costCategory),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -63,9 +63,9 @@ export class BankService {
         return this.http.put(
                 `${API}/cost-category/edit`,
                 JSON.stringify(costCategory),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -76,7 +76,7 @@ export class BankService {
 
     delete(id: number): Observable<CostCategory> {
         return this.http.delete(`${API}/cost-category/remove/${id}`)
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000

@@ -30,7 +30,7 @@ import { NotificationModule } from '../notification-bar/notification.module';
     MatMenuModule,
     NotificationModule,
 
-    RouterModule.forRoot(ROUTES)
+    RouterModule.forRoot(ROUTES, { relativeLinkResolution: 'legacy' })
   ],
   exports: [
     BrowserAnimationsModule,

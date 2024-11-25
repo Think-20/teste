@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions } from '@angular/http';
-import { MatSnackBar } from '@angular/material';
+import { HttpClient } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { API } from 'app/app.api';
 import { AuthService } from 'app/login/auth.service';
 import { ErrorHandler } from 'app/shared/error-handler.service';
@@ -15,18 +15,18 @@ export class HomeService {
   layoutGrid2: string;
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) { }
 
-  home(params?: {}, page: number = 0): Observable<HomeData> {
+  home(params?: {}, page: number = 0): Observable<any> {
     let url = `dashboard`
     return this.http.post(`${API}/${url}`,
       JSON.stringify(params),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000

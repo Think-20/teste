@@ -8,7 +8,7 @@ import { Client } from "app/clients/client.model";
 import { Job } from "app/jobs/job.model";
 import { Observable, of, Subject } from 'rxjs';
 import { FormControl } from '@angular/forms';
-import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { takeUntil } from 'rxjs/operators';
 import { StateService } from 'app/address/state.service';
 

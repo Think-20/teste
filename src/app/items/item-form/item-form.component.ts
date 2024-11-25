@@ -53,7 +53,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 @Injectable()
 export class ItemFormComponent implements OnInit {
 
-  @ViewChild('fileInput', { static: false }) fileInput
+  @ViewChild('fileInput') fileInput
   typeForm: string
   rowAppearedState = 'ready'
   item: Item

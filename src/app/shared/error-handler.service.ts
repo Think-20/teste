@@ -1,27 +1,26 @@
 import { FormGroup, FormControl, FormArray, AbstractControl } from '@angular/forms';
-import { Response } from '@angular/http'
-
+import { HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable'
 import 'rxjs/add/observable/throw';
 
 export class ErrorHandler {
-    static capture(error: Response | any) {
+    static capture(error: any) {
         let errorMessage: string = ErrorHandler.message(error)
         //console.log(errorMessage)
         return Observable.throw(errorMessage)
     }
 
-    static message(error: Response | any): string {
+    static message(error: any): string {
         let errorMessage: string
 
-        if(error instanceof Response) {
+        if(error instanceof HttpResponse) {
             errorMessage = `Erro ${error.status} ao acessar a URL ${error.url} - ${error.statusText}`
 
             if(error.url === null) {
                 errorMessage = 'Erro: servidor não encontrado.'
-            } else if(error.text() != '') {
+            } else if((error as any).text() != '') {
                 try {
-                    let data = JSON.parse(error.text())
+                    let data = JSON.parse((error as any).text())
                     if(error.status == 404) {
                       errorMessage = 'Arquivo não encontrado'
                     } else {

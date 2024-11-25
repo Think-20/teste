@@ -1,16 +1,15 @@
 import { Injectable } from '@angular/core'; 
-import { BaseRequestOptions, RequestOptionsArgs, RequestOptions } from '@angular/http';
-
+import { HttpHeaders, HttpParamsOptions } from '@angular/common/http';
 @Injectable()
-export class RequestOptionsApiService extends BaseRequestOptions {
+export class RequestOptionsApiService {
+    headers = new HttpHeaders
 
     constructor() {
-        super()
         this.headers.set('Content-Type', 'application/json')
     }
 
-    merge(options?: RequestOptionsArgs): RequestOptions {
-        const newOptions = super.merge(options)
+    merge(options?) {
+        const newOptions = { ...options };
 
         let user = JSON.parse(localStorage.getItem('currentUser')) || ''
         let token = localStorage.getItem('token') || ''

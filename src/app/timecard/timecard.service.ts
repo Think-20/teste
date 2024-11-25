@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -20,7 +20,7 @@ import { IPlannerLog } from './models/planner-log.model';
 @Injectable()
 export class TimecardService {
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private authService: AuthService,
         private snackBar: MatSnackBar
     ) {}
@@ -62,7 +62,7 @@ export class TimecardService {
         return this.http.post(`${API}/${url}`,
               JSON.stringify(params)
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -72,8 +72,8 @@ export class TimecardService {
     }
 
     status(): Observable<Timecard[]> {
-        return this.http.get(`${API}/employees/office-hours/status/yourself`)
-            .map(response => response.json())
+        return this.http.get<Timecard[]>(`${API}/employees/office-hours/status/yourself`)
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -85,8 +85,8 @@ export class TimecardService {
     approvalsPending(): Observable<Timecard[]> {
         let url = `employees/office-hours/approvals-pending/show`
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+        return this.http.get<Timecard[]>(`${API}/${url}`)
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -99,7 +99,7 @@ export class TimecardService {
         let url = `employees/office-hours/approvals-pending/approve/${id}`
 
         return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -109,8 +109,8 @@ export class TimecardService {
     }
 
     timecard(timecardId: number): Observable<Timecard> {
-        return this.http.get(`${API}/employees/office-hours/get/${timecardId}`)
-            .map(response => response.json())
+        return this.http.get<Timecard>(`${API}/employees/office-hours/get/${timecardId}`)
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -125,9 +125,9 @@ export class TimecardService {
         return this.http.post(
                 `${API}/${url}`,
                 JSON.stringify(data),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -146,9 +146,9 @@ export class TimecardService {
         return this.http.post(
                 `${API}/${url}`,
                 JSON.stringify(timecard),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -161,14 +161,14 @@ export class TimecardService {
         return this.http.put(
                 `${API}/employees/office-hours/edit`,
                 JSON.stringify(timecard),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
     }
 
     delete(id: number): Observable<any> {
         return this.http.delete(`${API}/employees/office-hours/remove/${id}`)
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -178,17 +178,17 @@ export class TimecardService {
     }
 
     getLogs(year: number, month: number, employeeId: number): Observable<IPlannerLog[]> {
-        return this.http.get(`${API}/planner/${year}/${month}/${employeeId}`)
-            .map(response => response.json());
+        return this.http.get<IPlannerLog[]>(`${API}/planner/${year}/${month}/${employeeId}`)
+            ;
     }
 
     postLog(log: IPlannerLog): Observable<{ object: IPlannerLog }> {
-        return this.http.post(`${API}/planner`, log)
-            .map(response => response.json());
+        return this.http.post<{ object: IPlannerLog }>(`${API}/planner`, log)
+            ;
     }
 
     putLog(log: IPlannerLog): Observable<{ object: IPlannerLog }> {
-        return this.http.put(`${API}/planner`, log)
-            .map(response => response.json());
+        return this.http.put<{ object: IPlannerLog }>(`${API}/planner`, log)
+            ;
     }
 }

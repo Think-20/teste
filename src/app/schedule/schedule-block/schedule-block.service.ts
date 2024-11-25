@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, ResponseContentType } from '@angular/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -13,11 +12,12 @@ import { AuthService } from '../../login/auth.service';
 import { DataInfo } from '../../shared/data-info.model';
 import { DatePipe } from '@angular/common';
 import { ScheduleBlock } from './schedule-block.model';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class ScheduleBlockService {
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private datePipe: DatePipe,
     private authService: AuthService,
     private snackBar: MatSnackBar,
@@ -28,10 +28,10 @@ export class ScheduleBlockService {
     let url = this.authService.hasAccess('schedule-blocks/valid')
     ? `schedule-blocks/valid` : 'my-schedule-blocks/valid'
 
-    return this.http.get(`${API}/${url}`,
-      new RequestOptions()
+    return this.http.get<ScheduleBlock[]>(`${API}/${url}`,
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -43,11 +43,11 @@ export class ScheduleBlockService {
   all(params?: {}, page: number = 0): Observable<DataInfo> {
     let url = `schedule-blocks/all?page=${page}`
 
-    return this.http.post(`${API}/${url}`,
+    return this.http.post<DataInfo>(`${API}/${url}`,
       JSON.stringify(params),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -62,9 +62,9 @@ export class ScheduleBlockService {
     return this.http.post(
       `${API}/${url}`,
       JSON.stringify(scheduleBlock),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -77,7 +77,7 @@ export class ScheduleBlockService {
     let url = `schedule-block/remove/${id}`
 
     return this.http.delete(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000

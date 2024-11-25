@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Http, RequestOptions } from "@angular/http";
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { Observable } from "rxjs/Observable";
@@ -10,12 +10,12 @@ import { PaymentModel } from '../models/payment.model';
 
 @Injectable()
 export class PaymentService {
-  constructor(private http: Http, private snackBar: MatSnackBar) {}
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
   paymentsByCheckInId(checkInId: number): Observable<PaymentModel[]> {
     return this.http
-      .get(`${API}/payment/checkin/${checkInId}`)
-      .map((response) => response.json())
+      .get<PaymentModel[]>(`${API}/payment/checkin/${checkInId}`)
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,
@@ -33,9 +33,9 @@ export class PaymentService {
       .post(
         `${API}/payment`,
         JSON.stringify(payment),
-        new RequestOptions()
+        
       )
-      .map((response) => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,
@@ -53,9 +53,9 @@ export class PaymentService {
       .put(
         `${API}/payment`,
         JSON.stringify(payment),
-        new RequestOptions()
+        
       )
-      .map((response) => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,

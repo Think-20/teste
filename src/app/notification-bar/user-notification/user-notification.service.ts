@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -18,19 +18,19 @@ import { DataInfo } from '../../shared/data-info.model';
 @Injectable()
 export class UserNotificationService {
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) { }
 
-  userNotifications(page: number = 0): Observable<DataInfo> {
+  userNotifications(page: number = 0): Observable<any> {
     let url = `notifications/all?page=${page}`
 
     return this.http.get(
       `${API}/${url}`,
-      new RequestOptions()
+      
     )
-    .map(response => response.json())
+    
     .catch((err) => {
       this.snackBar.open(ErrorHandler.message(err), '', {
         duration: 3000
@@ -39,14 +39,14 @@ export class UserNotificationService {
     })
   }
 
-  recents(): Observable<DataInfo> {
+  recents(): Observable<any> {
     let url = `notifications/recents`
 
     return this.http.get(
       `${API}/${url}`,
-      new RequestOptions()
+      
     )
-    .map(response => response.json())
+    
     .catch((err) => {
       this.snackBar.open(ErrorHandler.message(err), '', {
         duration: 3000
@@ -55,14 +55,14 @@ export class UserNotificationService {
     })
   }
 
-  listen(): Observable<UserNotification[]> {
+  listen(): Observable<any> {
     let url = `notifications/listen`
 
     return this.http.get(
       `${API}/${url}`,
-      new RequestOptions()
+      
     )
-    .map(response => response.json())
+    
     .catch((err) => {
       this.snackBar.open(ErrorHandler.message(err), '', {
         duration: 3000
@@ -82,9 +82,9 @@ export class UserNotificationService {
     return this.http.put(
       `${API}/${url}`,
       JSON.stringify({ids: ids}),
-      new RequestOptions()
+      
     )
-    .map(response => response.json())
+    
     .catch((err) => {
       this.snackBar.open(ErrorHandler.message(err), '', {
         duration: 3000

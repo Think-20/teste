@@ -14,10 +14,10 @@ import { ExtrasComponent } from 'app/extras/extras.component';
 })
 @Injectable()
 export class JobTabsComponent implements OnInit {
-  @ViewChild('container', { static: false }) container: ElementRef
-  @ViewChild(JobFormComponent, { static: false }) jobForm: JobFormComponent;
+  @ViewChild('container') container: ElementRef
+  @ViewChild(JobFormComponent) jobForm: JobFormComponent;
 
-  @ViewChild('extras', { static: false }) extras: ExtrasComponent;
+  @ViewChild('extras') extras: ExtrasComponent;
 
   containerWidth: number
   typeForm: string

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -21,7 +21,7 @@ export class EventService {
   pageIndex = 0
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) { }
@@ -38,12 +38,12 @@ export class EventService {
   events(params?: {}, page: number = 0): Observable<DataInfo> {
     let url = params === {} ? `events/all?page=${page}` : `events/filter?page=${page}`
 
-    return this.http.post(
+    return this.http.post<DataInfo>(
       `${API}/${url}`,
       JSON.stringify(params),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -55,8 +55,8 @@ export class EventService {
   event(eventId: number): Observable<Event> {
     let url = `events/get/${eventId}`
 
-    return this.http.get(`${API}/${url}`)
-      .map(response => response.json())
+    return this.http.get<Event>(`${API}/${url}`)
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -71,9 +71,9 @@ export class EventService {
     return this.http.post(
       `${API}/${url}`,
       JSON.stringify(event),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -88,9 +88,9 @@ export class EventService {
     return this.http.put(
       `${API}/${url}`,
       JSON.stringify(event),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -103,7 +103,7 @@ export class EventService {
     let url = `event/remove/${id}`
 
     return this.http.delete(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -115,12 +115,12 @@ export class EventService {
   jobEvents(params?: {}): Observable<DataInfo> {
     let url = params === '' ? `events/filter` : `events/filter`
 
-    return this.http.post(
+    return this.http.post<DataInfo>(
       `${API}/${url}`,
       JSON.stringify(params),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000

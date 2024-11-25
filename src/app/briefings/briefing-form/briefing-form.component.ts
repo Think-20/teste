@@ -31,7 +31,7 @@ export class BriefingFormComponent implements OnInit {
   @Input('briefing') briefing: Briefing
   @Input('isAdmin') isAdmin: boolean = false
   @Input('typeForm') typeForm: string
-  @ViewChild('responsible', { static: false }) responsibleSelect
+  @ViewChild('responsible') responsibleSelect
 
   constructor(
     private briefingService: BriefingService,

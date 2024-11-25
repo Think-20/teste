@@ -5,7 +5,7 @@ import { CheckInService } from "./check-in.service";
 import { EmployeeService } from 'app/employees/employee.service';
 import { Employee } from 'app/employees/employee.model';
 import { CheckInContactInfoComponent } from './components/check-in-contact-info/check-in-contact-info.component';
-import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
+import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material/snack-bar';
 import { ExtrasGridComponent } from '../extras/components/extras-grid/extras-grid.component';
 
 @Component({
@@ -14,9 +14,9 @@ import { ExtrasGridComponent } from '../extras/components/extras-grid/extras-gri
   styleUrls: ["./check-in.component.css"],
 })
 export class CheckInComponent implements AfterViewInit {
-  @ViewChild('contactInfo', { static: false }) contactInfo: CheckInContactInfoComponent;
+  @ViewChild('contactInfo') contactInfo: CheckInContactInfoComponent;
 
-  @ViewChild('extras', { static: false }) extras: ExtrasGridComponent;
+  @ViewChild('extras') extras: ExtrasGridComponent;
 
   @Input() job: Job = new Job();
   @Input() valorTotalExtrasRecebido = 0;

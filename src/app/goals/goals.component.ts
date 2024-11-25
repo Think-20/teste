@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Goal, YearsMonth } from './goals.model';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { GoalsService } from './goals.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs';
 
 @Component({

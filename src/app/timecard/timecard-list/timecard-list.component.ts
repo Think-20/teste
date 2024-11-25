@@ -40,8 +40,8 @@ import { ContadorComponent } from 'app/shared/contador/contador.component';
 })
 @Injectable()
 export class TimecardListComponent implements OnInit, OnDestroy {
-  @ViewChild('timecardPlanner', { static: false }) timecardPlanner: TimecardPlannerComponent;
-  @ViewChild('contador', { static: false }) contador: ContadorComponent;
+  @ViewChild('timecardPlanner') timecardPlanner: TimecardPlannerComponent;
+  @ViewChild('contador') contador: ContadorComponent;
 
   rowAppearedState: string = 'ready'
   filterForm: FormGroup

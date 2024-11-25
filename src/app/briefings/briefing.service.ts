@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, ResponseContentType } from '@angular/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -12,12 +11,13 @@ import { ErrorHandler } from '../shared/error-handler.service';
 import { Briefing } from './briefing.model';
 import { AuthService } from '../login/auth.service';
 import { Pagination } from 'app/shared/pagination.model';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable()
 export class BriefingService {
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) {}
@@ -26,7 +26,7 @@ export class BriefingService {
     let url = `briefings/load-form`
 
     return this.http.get(`${API}/${url}`)
-        .map(response => response.json())
+        
         .catch((err) => {
             this.snackBar.open(ErrorHandler.message(err), '', {
                 duration: 3000
@@ -39,7 +39,7 @@ export class BriefingService {
     let url = `briefings/recalculate-next-date/${nextEstimatedTime}`
 
     return this.http.get(`${API}/${url}`)
-        .map(response => response.json())
+        
         .catch((err) => {
             this.snackBar.open(ErrorHandler.message(err), '', {
                 duration: 3000
@@ -54,11 +54,11 @@ export class BriefingService {
 
       url = prefix + url
 
-      return this.http.post(`${API}/${url}`,
+      return this.http.post<Pagination>(`${API}/${url}`,
             JSON.stringify(params),
-            new RequestOptions()
+            
           )
-          .map(response => response.json())
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -73,8 +73,8 @@ export class BriefingService {
 
       url = prefix + url
 
-      return this.http.get(`${API}/${url}`)
-          .map(response => response.json())
+      return this.http.get<Briefing>(`${API}/${url}`)
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -88,7 +88,7 @@ export class BriefingService {
       let url = `briefings/get-next-available-date/${availableDate}/${estimatedTime}/${swap}`
 
       return this.http.get(`${API}/${url}`)
-          .map(response => response.json())
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -106,9 +106,9 @@ export class BriefingService {
       return this.http.post(
               `${API}/${url}`,
               JSON.stringify(briefing),
-              new RequestOptions()
+              
           )
-          .map(response => response.json())
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -126,9 +126,9 @@ export class BriefingService {
       return this.http.put(
               `${API}/${url}`,
               JSON.stringify(briefing),
-              new RequestOptions()
+              
           )
-          .map(response => response.json())
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -146,9 +146,9 @@ export class BriefingService {
       return this.http.put(
               `${API}/${url}`,
               JSON.stringify(briefing),
-              new RequestOptions()
+              
           )
-          .map(response => response.json())
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000
@@ -164,7 +164,7 @@ export class BriefingService {
       url = prefix + url
 
       return this.http.delete(`${API}/${url}`)
-          .map(response => response.json())
+          
           .catch((err) => {
               this.snackBar.open(ErrorHandler.message(err), '', {
                   duration: 3000

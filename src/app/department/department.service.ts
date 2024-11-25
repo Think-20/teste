@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -17,7 +17,7 @@ import { DataInfo } from '../shared/data-info.model';
 @Injectable()
 export class DepartmentService {
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private snackBar: MatSnackBar,
         private auth: AuthService
     ) {}
@@ -30,12 +30,12 @@ export class DepartmentService {
 
         url = prefix + url
 
-        return this.http.post(
+        return this.http.post<DataInfo>(
               `${API}/${url}`,
               JSON.stringify(params),
-              new RequestOptions()
+              
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -50,8 +50,8 @@ export class DepartmentService {
 
         url = prefix + url
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+        return this.http.get<Department>(`${API}/${url}`)
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -63,8 +63,8 @@ export class DepartmentService {
     canInsertClients(): Observable<Department[]> {
         let url = `departments/can-insert-clients`
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+        return this.http.get<Department[]>(`${API}/${url}`)
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -82,9 +82,9 @@ export class DepartmentService {
         return this.http.post(
                 `${API}/${url}`,
                 JSON.stringify(department),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -102,9 +102,9 @@ export class DepartmentService {
         return this.http.put(
                 `${API}/${url}`,
                 JSON.stringify(department),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -120,7 +120,7 @@ export class DepartmentService {
         url = prefix + url
 
         return this.http.delete(`${API}/${url}`)
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000

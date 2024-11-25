@@ -1,19 +1,19 @@
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs/Observable";
-import { MatSnackBar } from "@angular/material";
+import { MatSnackBar } from "@angular/material/snack-bar";
 import { ErrorHandler } from "../shared/error-handler.service";
 import { CheckInModel } from './check-in.model';
-import { Http, RequestOptions } from "@angular/http";
+import { HttpClient } from '@angular/common/http';
 import { API } from "../app.api";
 
 @Injectable()
 export class CheckInService {
-constructor(private http: Http, private snackBar: MatSnackBar) {}
+constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
   checkIn(checkInId: number): Observable<CheckInModel> {
     return this.http
-      .get(`${API}/checking/${checkInId}`)
-      .map((response) => response.json())
+      .get<CheckInModel>(`${API}/checking/${checkInId}`)
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,
@@ -30,8 +30,8 @@ constructor(private http: Http, private snackBar: MatSnackBar) {}
     this.deleteReadOnlyProperties(checkInModel);
 
     return this.http
-      .post(`${API}/checking`, JSON.stringify(checkInModel), new RequestOptions())
-      .map((response) => response.json())
+      .post(`${API}/checking`, JSON.stringify(checkInModel), )
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,
@@ -48,8 +48,8 @@ constructor(private http: Http, private snackBar: MatSnackBar) {}
     this.deleteReadOnlyProperties(checkInModel);
 
     return this.http
-      .put(`${API}/checking`, JSON.stringify(checkInModel), new RequestOptions())
-      .map((response) => response.json())
+      .put(`${API}/checking`, JSON.stringify(checkInModel), )
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,

@@ -18,7 +18,7 @@ import { MessageLoadingService } from './message-loading/message-loading.service
   styleUrls: ['./file-upload.component.css']
 })
 export class FileUploadComponent implements OnInit {
-  @ViewChild(ImageViewerComponent, { static: false }) imageViewer: ImageViewerComponent;
+  @ViewChild(ImageViewerComponent) imageViewer: ImageViewerComponent;
   images: GALLERY_IMAGE[] = []
   fileForm: FormGroup
   progress: number

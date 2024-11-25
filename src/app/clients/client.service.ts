@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -11,14 +11,13 @@ import { API } from '../app.api';
 import { ErrorHandler } from '../shared/error-handler.service';
 import { Client } from './client.model';
 import { AuthService } from '../login/auth.service';
-import { Pagination } from '../shared/pagination.model';
 import { DataInfo } from '../shared/data-info.model';
 
 
 @Injectable()
 export class ClientService {
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) { }
@@ -29,12 +28,12 @@ export class ClientService {
 
     url = prefix + url
 
-    return this.http.post(
+    return this.http.post<DataInfo>(
       `${API}/${url}`,
       JSON.stringify(params),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -49,8 +48,8 @@ export class ClientService {
 
     url = prefix + url
 
-    return this.http.get(`${API}/${url}`)
-      .map(response => response.json())
+    return this.http.get<Client>(`${API}/${url}`)
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -60,14 +59,18 @@ export class ClientService {
   }
 
   uploadSheet(file: any): Observable<any> {
-    let requestOptions = new RequestOptions()
-    let headers = new Headers()
+    let requestOptions = {
+      headers: new HttpHeaders(),
+    };
+
+    let headers = new HttpHeaders();
 
     let user = this.auth.currentUser()
     let token = this.auth.token()
 
     headers.set('Authorization', `${token}`)
     headers.set('User', `${user.id}`)
+
     requestOptions.headers = headers
 
     let url = 'client/import'
@@ -75,7 +78,7 @@ export class ClientService {
     data.append('file', file, file.name)
 
     return this.http.post(`${API}/${url}`, data, requestOptions)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -93,9 +96,9 @@ export class ClientService {
     return this.http.post(
       `${API}/${url}`,
       JSON.stringify(client),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -113,9 +116,9 @@ export class ClientService {
     return this.http.put(
       `${API}/${url}`,
       JSON.stringify(client),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -131,7 +134,7 @@ export class ClientService {
     url = prefix + url
 
     return this.http.delete(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000

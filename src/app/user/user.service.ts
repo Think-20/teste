@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -17,7 +17,7 @@ import { DataInfo } from '../shared/data-info.model';
 @Injectable()
 export class UserService {
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private snackBar: MatSnackBar,
         private auth: AuthService
     ) {}
@@ -29,12 +29,12 @@ export class UserService {
 
         url = prefix + url
 
-        return this.http.post(
+        return this.http.post<DataInfo>(
               `${API}/${url}`,
               JSON.stringify(params),
-              new RequestOptions()
+              
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -49,8 +49,8 @@ export class UserService {
 
         url = prefix + url
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+        return this.http.get<User>(`${API}/${url}`)
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -62,8 +62,8 @@ export class UserService {
     canInsertClients(): Observable<User[]> {
         let url = `users/can-insert-clients`
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+        return this.http.get<User[]>(`${API}/${url}`)
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -81,9 +81,9 @@ export class UserService {
         return this.http.post(
                 `${API}/${url}`,
                 JSON.stringify(user),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -101,9 +101,9 @@ export class UserService {
         return this.http.put(
                 `${API}/${url}`,
                 JSON.stringify(user),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -118,9 +118,9 @@ export class UserService {
         return this.http.put(
                 `${API}/${url}`,
                 JSON.stringify(data),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -136,7 +136,7 @@ export class UserService {
         url = prefix + url
 
         return this.http.delete(`${API}/${url}`)
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -20,7 +20,7 @@ export class ProviderService {
   pageIndex = 0
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) { }
@@ -28,11 +28,11 @@ export class ProviderService {
   providers(params = {}, page: number = 0): Observable<DataInfo> {
     let url = params == {} ? `providers/all?page=${page}` : `providers/filter?page=${page}`
 
-    return this.http.post(`${API}/${url}`,
+    return this.http.post<DataInfo>(`${API}/${url}`,
         JSON.stringify(params),
-        new RequestOptions()
+        
       )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -44,8 +44,8 @@ export class ProviderService {
   provider(providerId: number): Observable<Provider> {
     let url = `providers/get/${providerId}`
 
-    return this.http.get(`${API}/${url}`)
-      .map(response => response.json())
+    return this.http.get<Provider>(`${API}/${url}`)
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -60,9 +60,9 @@ export class ProviderService {
     return this.http.post(
       `${API}/${url}`,
       JSON.stringify(provider),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -77,9 +77,9 @@ export class ProviderService {
     return this.http.put(
       `${API}/${url}`,
       JSON.stringify(provider),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -92,7 +92,7 @@ export class ProviderService {
     let url = `provider/remove/${id}`
 
     return this.http.delete(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000

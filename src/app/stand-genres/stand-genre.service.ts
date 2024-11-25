@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -15,15 +15,15 @@ import { StandGenre } from './stand-genre.model';
 @Injectable()
 export class StandGenreService {
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private snackBar: MatSnackBar
     ) {}
 
     standGenres(query: string = ''): Observable<StandGenre[]> {
         let url = query === '' ? `stand-genres/all` : `stand-genres/filter/${query}`
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+        return this.http.get<StandGenre[]>(`${API}/${url}`)
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000

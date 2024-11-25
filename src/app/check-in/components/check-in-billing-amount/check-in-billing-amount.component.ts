@@ -4,7 +4,7 @@ import { CheckInModel } from 'app/check-in/check-in.model';
 import { Job } from 'app/jobs/job.model';
 import { Task } from 'app/schedule/task.model';
 import { CheckInPeopleComponent } from '../check-in-people/check-in-people.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { PersonModel } from 'app/shared/models/person.model';
 import { PersonService } from 'app/shared/services/person.service';
 import { CheckInPaymentFormComponent } from '../check-in-payment-form/check-in-payment-form.component';

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http'; 
+import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -10,18 +10,18 @@ import { City } from './city.model';
 @Injectable()
 export class CityService {
     constructor(
-        private http: Http
+        private http: HttpClient
     ) {}
 
     cities(stateId: number, cityName: string): Observable<City[]> {
         return this.http
-            .get(`${API}/cities/${stateId}/${cityName}`)
-            .map(response => response.json())
+            .get<City[]>(`${API}/cities/${stateId}/${cityName}`)
+            
     }
 
     citiesById(cityId: number): Observable<City> {
         return this.http
-            .get(`${API}/city/${cityId}`)
-            .map(response => response.json())
+            .get<City>(`${API}/city/${cityId}`)
+            
     }
 }

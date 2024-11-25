@@ -1,7 +1,8 @@
+import { CurrencyMaskModule, } from 'ng2-currency-mask/dist/ng2-currency-mask';
+import { CURRENCY_MASK_CONFIG } from 'ng2-currency-mask/dist/ng2-currency-mask';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { registerLocaleData, DatePipe, CommonModule } from '@angular/common';
-import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -116,8 +117,6 @@ import { JobLevelService } from './job-level/job-level.service';
 import { JobMainExpectationService } from './job-main-expectation/job-main-expectation.service';
 import { ScheduleComponent, ReloadComponent, ScheduleBottomSheet } from './schedule/schedule.component';
 
-import { CurrencyMaskModule } from 'ng2-currency-mask';
-import { CURRENCY_MASK_CONFIG } from "ng2-currency-mask/src/currency-mask.config";
 import { CustomCurrencyMaskConfig } from 'app/shared/custom-currency-mask-config';
 import { JobStatusService } from 'app/job-status/job-status.service';
 
@@ -203,7 +202,7 @@ import { ServiceListComponent } from './reports/service-report/service-list/job-
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 import { MatListModule } from '@angular/material/list';
-import { MatGridListModule } from '@angular/material';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { DecimalPipe } from './shared/decimal.pipe';
 import { AlertsContainerComponent } from './alerts/components/alerts-container/alerts-container.component';
 import { AlertService } from './alerts/alerts.service';
@@ -401,12 +400,11 @@ registerLocaleData(localePt);
     MatNativeDateModule,
     HeaderModule,
     LoginModule,
-    HttpModule,
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
     NgxImageGalleryModule,
-    RouterModule.forRoot(ROUTES),
+    RouterModule.forRoot(ROUTES, { relativeLinkResolution: 'legacy' }),
 
     MatListModule,
     MatBottomSheetModule,

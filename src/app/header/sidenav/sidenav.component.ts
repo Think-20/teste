@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable, Output, ElementRef, Renderer, ViewChild } from '@angular/core';
+import { Component, OnInit, Injectable, Output, ElementRef, ViewChild, Renderer2 } from '@angular/core';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { Router } from '@angular/router';
 
@@ -6,7 +6,7 @@ import { AuthService } from '../../login/auth.service';
 import { User } from '../../user/user.model';
 import { API, FRONTEND_VERSION, BACKEND_VERSION } from 'app/app.api';
 import { CheckInOrganizationFormComponent } from 'app/check-in/components/check-in-organization-form/check-in-organization-form.component';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'cb-sidenav',

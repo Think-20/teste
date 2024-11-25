@@ -23,7 +23,7 @@ import { Task } from '../task.model';
 export class ScheduleLineComponent implements OnInit {
 
   @Input() menu: MatMenu
-  @ViewChild('menuTrigger', { static: false }) menuTrigger: MatMenuTrigger
+  @ViewChild('menuTrigger') menuTrigger: MatMenuTrigger
   @Input() month: Month
   @Input() paramsHasFilter: boolean = false
   @Input() date: Date

@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, ResponseContentType } from '@angular/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -14,6 +13,7 @@ import { AuthService } from '../login/auth.service';
 import { Task } from '../schedule/task.model';
 import { FileUploadServiceInterface } from 'app/shared/file-upload/file-upload-service.interface';
 import { FileUploadInterface } from 'app/shared/file-upload/file-upload.interface';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable()
@@ -22,7 +22,7 @@ export class ProjectFileService implements FileUploadServiceInterface {
   task: Task = null
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) { }
@@ -35,7 +35,7 @@ export class ProjectFileService implements FileUploadServiceInterface {
     let url = `project-files/remove/${id}`
 
     return this.http.delete(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000

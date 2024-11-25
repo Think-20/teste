@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Http, RequestOptions } from "@angular/http";
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from "@angular/material/snack-bar";
 
 import { Observable } from "rxjs/Observable";
@@ -10,12 +10,12 @@ import { OrganizationModel } from '../models/organization.model';
 
 @Injectable()
 export class OrganizationService {
-  constructor(private http: Http, private snackBar: MatSnackBar) {}
+  constructor(private http: HttpClient, private snackBar: MatSnackBar) {}
 
   organizations(): Observable<OrganizationModel[]> {
     return this.http
-      .get(`${API}/organization`)
-      .map((response) => response.json())
+      .get<OrganizationModel[]>(`${API}/organization`)
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,
@@ -37,9 +37,9 @@ export class OrganizationService {
       .post(
         `${API}/organization`,
         JSON.stringify(organization),
-        new RequestOptions()
+        
       )
-      .map((response) => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,

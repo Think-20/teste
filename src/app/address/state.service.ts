@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http'; 
+import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -10,10 +10,10 @@ import { State } from './state.model';
 @Injectable()
 export class StateService {
     constructor(
-        private http: Http
+        private http: HttpClient
     ) {}
 
     states(stateName: string = 'all'): Observable<State[]> {
-        return this.http.get(`${API}/states/${stateName}`).map(response => response.json())
+        return this.http.get<State[]>(`${API}/states/${stateName}`)
     }
 }

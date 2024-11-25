@@ -11,7 +11,7 @@ import { EmployeeService } from '../employee.service';
 })
 @Injectable()
 export class EmployeeTabsComponent implements OnInit {
-  @ViewChild('container', { static: false }) container: ElementRef
+  @ViewChild('container') container: ElementRef
   containerWidth: number
   typeForm: string
   employee: Employee

@@ -24,7 +24,7 @@ export class ImageViewerComponent implements OnInit, AfterViewInit {
   }
 
   // get reference to gallery component
-  @ViewChild(NgxImageGalleryComponent, { static: false }) ngxImageGallery: NgxImageGalleryComponent;
+  @ViewChild(NgxImageGalleryComponent) ngxImageGallery: NgxImageGalleryComponent;
 
   // gallery configuration
   conf: GALLERY_CONF = {

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { API } from '../../app/app.api';
 import { Observable } from 'rxjs';
@@ -12,15 +12,15 @@ import { Memory } from './memories.model';
 export class MemoriesService {
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
   ) { }
 
-  getMemories(): Observable<Memory[]> {
+  getMemories(): Observable<any> {
     let url = `reminders`;
 
     return this.http.get(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -29,15 +29,15 @@ export class MemoriesService {
       });
   }
 
-  updateReadMemory(id: number): Observable<string> {
+  updateReadMemory(id: number): Observable<any> {
     const url = `reminders/read/${id}`
 
     return this.http.put(
       `${API}/${url}`,
       JSON.stringify(id),
-      new RequestOptions()
+      
     )
-    .map(response => response.json())
+    
     .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
             duration: 3000

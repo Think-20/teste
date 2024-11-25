@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { API } from '../app.api';
@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
 @Injectable()
 export class AuthService {
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private datePipe: DatePipe,
         private snackBar: MatSnackBar
     ) { }
@@ -36,7 +36,7 @@ export class AuthService {
 
         return this.http
             .post(url, JSON.stringify(data))
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -50,7 +50,7 @@ export class AuthService {
 
         return this.http
             .get(url)
-            .map(response => response.json())
+            
     }
 
     setValidToken(status: boolean) {

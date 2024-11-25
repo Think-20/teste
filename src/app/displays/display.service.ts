@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -20,7 +20,7 @@ export class DisplayService {
   pageIndex = 0
 
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private snackBar: MatSnackBar,
         private auth: AuthService
     ) {}
@@ -29,12 +29,12 @@ export class DisplayService {
     displays(params?: {}, page: number = 0): Observable<DataInfo> {
       let url = params === {} ? `displays/all?page=${page}` : `displays/filter?page=${page}`
 
-        return this.http.post(
+        return this.http.post<DataInfo>(
               `${API}/${url}`,
               JSON.stringify(params),
-              new RequestOptions()
+              
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -46,8 +46,8 @@ export class DisplayService {
     display(displayId): Observable<Display> {
         let url = `displays/get/${displayId}`
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+        return this.http.get<Display>(`${API}/${url}`)
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -62,9 +62,9 @@ export class DisplayService {
         return this.http.post(
                 `${API}/${url}`,
                 JSON.stringify(display),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -79,9 +79,9 @@ export class DisplayService {
         return this.http.put(
                 `${API}/${url}`,
                 JSON.stringify(display),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -94,7 +94,7 @@ export class DisplayService {
         let url = `display/remove/${id}`
 
         return this.http.delete(`${API}/${url}`)
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000

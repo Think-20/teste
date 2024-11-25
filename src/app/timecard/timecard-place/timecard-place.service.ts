@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -15,7 +15,7 @@ import { TimecardPlace } from './timecard-place.model';
 @Injectable()
 export class TimecardPlaceService {
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private authService: AuthService,
         private snackBar: MatSnackBar
     ) {}
@@ -23,8 +23,8 @@ export class TimecardPlaceService {
     places(params?: {}): Observable<TimecardPlace[]> {
         let url = `timecard/places/all`
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+        return this.http.get<TimecardPlace[]>(`${API}/${url}`)
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000

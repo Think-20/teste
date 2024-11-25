@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -19,7 +19,7 @@ import { FileUploadInterface } from 'app/shared/file-upload/file-upload.interfac
 @Injectable()
 export class SpecificationFileService implements FileUploadServiceInterface {
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) { }
@@ -32,7 +32,7 @@ export class SpecificationFileService implements FileUploadServiceInterface {
     let url = `specification-files/remove/${id}`
 
     return this.http.delete(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000

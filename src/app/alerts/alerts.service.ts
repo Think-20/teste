@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { API } from '../../app/app.api';
 import { BehaviorSubject, Observable, of } from 'rxjs';
@@ -42,7 +42,7 @@ export class AlertService {
 
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
   ) { }
 
@@ -50,8 +50,8 @@ export class AlertService {
 
     const url = `notifywindow`
 
-    return this.http.get(`${API}/${url}`)
-      .map(response => response.json())
+    return this.http.get<ProjectsPendency>(`${API}/${url}`)
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -63,12 +63,12 @@ export class AlertService {
   updateStatusProject(project: EditStatus): Observable<EditStatus> {
     const url = 'job/edit'
 
-    return this.http.put(
+    return this.http.put<EditStatus>(
       `${API}/${url}`,
       JSON.stringify(project),
-      new RequestOptions()
+      
   )
-  .map(response => response.json())
+  
   .catch((err) => {
       this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000

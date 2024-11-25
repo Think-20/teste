@@ -11,7 +11,7 @@ import { ClientService } from '../client.service';
 })
 export class ClientImportComponent implements OnInit {
 
-  @ViewChild('fileInput', { static: false }) fileInput
+  @ViewChild('fileInput') fileInput
   informations: Array<any> = []
   clientForm: FormGroup
 

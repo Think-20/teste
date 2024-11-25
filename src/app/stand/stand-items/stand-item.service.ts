@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -15,7 +15,7 @@ import { StandItem } from './stand-item.model';
 @Injectable()
 export class StandItemService {
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private snackBar: MatSnackBar
     ) {}
 

@@ -22,7 +22,7 @@ import { AuthService } from "app/login/auth.service";
   styleUrls: ["./budget-form.component.css"],
 })
 export class BudgetFormComponent implements OnInit {
-  @ViewChild("finalValue", { static: false }) finalValue: ElementRef;
+  @ViewChild("finalValue") finalValue: ElementRef;
   budgetForm = new FormGroup({});
 
   @Input("typeForm") typeForm: string;

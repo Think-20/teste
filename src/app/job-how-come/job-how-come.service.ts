@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -15,7 +15,7 @@ import { JobHowCome } from './job-how-come.model';
 @Injectable()
 export class JobHowComeService {
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private snackBar: MatSnackBar
     ) {}
 
@@ -23,7 +23,7 @@ export class JobHowComeService {
         let url = query === '' ? `job-how-comes/all` : `job-how-comes/filter/${query}`
 
         return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000

@@ -1,7 +1,8 @@
 import { DatePipe } from '@angular/common';
 import { AfterViewInit, Component, ElementRef, HostListener, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MONTHS, Month } from 'app/shared/date/months';
 import { HomeService } from './home.service';
@@ -71,10 +72,10 @@ export type LineChartOptions = {
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit, AfterViewInit {
-  @ViewChild('job', { static: false }) jobElement: ElementRef;
-  @ViewChild('metas', { static: false }) metasElement: ElementRef;
-  @ViewChild('emProducao', { static: false }) emProducaoElement: ElementRef;
-  @ViewChild('deadLine', { static: false }) deadLineElement: ElementRef;
+  @ViewChild('job') jobElement: ElementRef;
+  @ViewChild('metas') metasElement: ElementRef;
+  @ViewChild('emProducao') emProducaoElement: ElementRef;
+  @ViewChild('deadLine') deadLineElement: ElementRef;
 
   
   sizeGraphJobs: number;

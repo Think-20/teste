@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FormGroup, AbstractControl } from '@angular/forms';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -11,7 +11,6 @@ import { API } from '../app.api';
 import { ErrorHandler } from '../shared/error-handler.service';
 import { AuthService } from '../login/auth.service';
 import { HttpRequest } from '@angular/common/http';
-import { HttpClient } from '@angular/common/http';
 import { HttpEventType } from '@angular/common/http';
 import { HttpHeaders } from '@angular/common/http';
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Http, RequestOptions } from '@angular/http';
-import { MatSnackBar } from '@angular/material';
+import { HttpClient, HttpEventType, HttpRequest, HttpResponse } from '@angular/common/http';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { API } from 'app/app.api';
 import { AuthService } from 'app/login/auth.service';
 import { ErrorHandler } from 'app/shared/error-handler.service';
@@ -17,29 +17,35 @@ export class GoalsService {
   private url = 'goal';
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) { }
 
-  getGoals(): Observable<Goal[]> {
-    return this.http.get(`${API}/${this.url}`, { body: JSON.stringify({ id: 1 })})
-      .map(response => response.json())
+  getGoals(): Observable<any> {
+    const req = new HttpRequest('GET', `${API}/${this.url}`, { body: JSON.stringify({ id: 1 })}, {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+      responseType: 'json',
+    });
+
+    return this.http.request(req)
+      .filter(event => event.type === HttpEventType.Response)
+      .map((event: HttpResponse<any>) => event.body)
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
         })
         return ErrorHandler.capture(err)
-      })
+      });
   }
 
 
-  updateGoals(goal: Goal): Observable<Goal> {
+  updateGoals(goal: Goal): Observable<any> {
     return this.http.put(`${API}/${this.url}`,
       JSON.stringify(goal),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -48,12 +54,12 @@ export class GoalsService {
       })
   }
 
-  postGoals(goal: Goal): Observable<Goal> {
+  postGoals(goal: Goal): Observable<any> {
     return this.http.post(`${API}/${this.url}`,
       JSON.stringify(goal),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000

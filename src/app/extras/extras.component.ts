@@ -8,7 +8,7 @@ import { ExtrasGridComponent } from './components/extras-grid/extras-grid.compon
   styleUrls: ["./extras.component.css"],
 })
 export class ExtrasComponent {
-  @ViewChild('extrasGrid', { static: false }) extrasGrid!: ExtrasGridComponent;
+  @ViewChild('extrasGrid') extrasGrid!: ExtrasGridComponent;
 
   @Input() job = new Job();
 

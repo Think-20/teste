@@ -62,7 +62,7 @@ export class ScheduleFormComponent implements OnInit {
   durationErrorMessage: string
   budgetErrorMessage: string
   subscriptions: Subscription = new Subscription
-  @ViewChild('availableDatepicker', { static: false }) availableDatepicker: MatDatepicker<Date>
+  @ViewChild('availableDatepicker') availableDatepicker: MatDatepicker<Date>
   buttonEnable: boolean = true
 
   constructor(

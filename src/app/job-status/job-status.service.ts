@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -15,15 +15,15 @@ import { JobStatus } from './job-status.model';
 @Injectable()
 export class JobStatusService {
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private snackBar: MatSnackBar
     ) {}
 
-    jobStatus(query: string = ''): Observable<JobStatus[]> {
+    jobStatus(query: string = ''): Observable<any> {
         let url = query === '' ? `job-status/all` : `job-status/filter/${query}`
 
         return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000

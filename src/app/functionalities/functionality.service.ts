@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -20,21 +20,21 @@ export class FunctionalityService {
   pageIndex = 0
 
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private snackBar: MatSnackBar,
         private auth: AuthService
     ) {}
 
 
-    functionalities(params?: {}, page: number = 0): Observable<DataInfo> {
+    functionalities(params?: {}, page: number = 0): Observable<any> {
       let url = params === {} ? `functionalities/all?page=${page}` : `functionalities/filter?page=${page}`
 
         return this.http.post(
               `${API}/${url}`,
               JSON.stringify(params),
-              new RequestOptions()
+              
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -43,11 +43,11 @@ export class FunctionalityService {
             })
     }
 
-    functionality(functionalityId): Observable<Functionality> {
+    functionality(functionalityId): Observable<any> {
         let url = `functionalities/get/${functionalityId}`
 
         return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -62,9 +62,9 @@ export class FunctionalityService {
         return this.http.post(
                 `${API}/${url}`,
                 JSON.stringify(functionality),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -79,9 +79,9 @@ export class FunctionalityService {
         return this.http.put(
                 `${API}/${url}`,
                 JSON.stringify(functionality),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -94,7 +94,7 @@ export class FunctionalityService {
         let url = `functionality/remove/${id}`
 
         return this.http.delete(`${API}/${url}`)
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000

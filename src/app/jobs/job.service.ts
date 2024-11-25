@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions, ResponseContentType } from '@angular/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -15,6 +14,7 @@ import { Pagination } from 'app/shared/pagination.model';
 import { Client } from '../clients/client.model';
 import { DataInfo } from '../shared/data-info.model';
 import { PerformanceReportLite } from '../reports/performance-report-lite/performance-report-lite.model';
+import { HttpClient } from '@angular/common/http';
 
 
 @Injectable()
@@ -24,7 +24,7 @@ export class JobService {
   pageIndex = 0
 
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar,
     private auth: AuthService
   ) { }
@@ -63,7 +63,7 @@ export class JobService {
     let url = `jobs/load-form`
 
     return this.http.get(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -72,14 +72,14 @@ export class JobService {
       })
   }
 
-  performanceLite(params?: {}): Observable<PerformanceReportLite> {
+  performanceLite(params?: {}): Observable<any> {
     let url = `jobs/performance-lite`
 
     return this.http.post(`${API}/${url}`,
       JSON.stringify(params),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -88,7 +88,7 @@ export class JobService {
       })
   }
 
-  jobs(params?: {}, page: number = 0): Observable<DataInfo> {
+  jobs(params?: {}, page: number = 0): Observable<any> {
     let url = params === {} ? `jobs/all?page=${page}` : `jobs/filter?page=${page}`
     let prefix = this.auth.hasAccess('jobs/all') ? '' : 'my-'
 
@@ -96,9 +96,9 @@ export class JobService {
 
     return this.http.post(`${API}/${url}`,
       JSON.stringify(params),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -107,14 +107,14 @@ export class JobService {
       })
   }
 
-  job(jobId: number): Observable<Job> {
+  job(jobId: number): Observable<any> {
     let url = `jobs/get/${jobId}`
     let prefix = this.auth.hasAccess('jobs/get/{id}') ? '' : 'my-'
 
     url = prefix + url
 
     return this.http.get(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -132,9 +132,9 @@ export class JobService {
     return this.http.post(
       `${API}/${url}`,
       JSON.stringify(job),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -152,9 +152,9 @@ export class JobService {
     return this.http.put(
       `${API}/${url}`,
       JSON.stringify(job),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -170,7 +170,7 @@ export class JobService {
     url = prefix + url
 
     return this.http.delete(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -185,9 +185,9 @@ export class JobService {
 
     url = prefix + url
 
-    return this.http.get(`${API}/${url}`, { responseType: ResponseContentType.Blob }).map(
+    return this.http.get(`${API}/${url}`, { responseType: 'arraybuffer' }).map(
       (res) => {
-        return new Blob([res.blob()], { type: res.headers.get('content-type') })
+        return new Blob([res])
       })
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {

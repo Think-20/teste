@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -17,13 +17,13 @@ import { DataInfo } from '../shared/data-info.model';
 @Injectable()
 export class PositionService {
     constructor(
-        private http: Http,
+        private http: HttpClient,
         private snackBar: MatSnackBar,
         private auth: AuthService
     ) {}
 
 
-    positions(params?: {}, page: number = 0): Observable<DataInfo> {
+    positions(params?: {}, page: number = 0): Observable<any> {
       let url = params === {} ? `positions/all?page=${page}` : `positions/filter?page=${page}`
       //let prefix = this.auth.hasAccess('positions/all') ? '' : 'my-'
       let prefix = ''
@@ -33,9 +33,9 @@ export class PositionService {
         return this.http.post(
               `${API}/${url}`,
               JSON.stringify(params),
-              new RequestOptions()
+              
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -44,14 +44,14 @@ export class PositionService {
             })
     }
 
-    position(positionId): Observable<Position> {
+    position(positionId): Observable<any> {
         let url = `positions/get/${positionId}`
         let prefix = this.auth.hasAccess('positions/get/{id}') ? '' : 'my-'
 
         url = prefix + url
 
         return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -63,8 +63,8 @@ export class PositionService {
     canInsertClients(): Observable<Position[]> {
         let url = `positions/can-insert-clients`
 
-        return this.http.get(`${API}/${url}`)
-            .map(response => response.json())
+        return this.http.get<Position[]>(`${API}/${url}`)
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -82,9 +82,9 @@ export class PositionService {
         return this.http.post(
                 `${API}/${url}`,
                 JSON.stringify(position),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -102,9 +102,9 @@ export class PositionService {
         return this.http.put(
                 `${API}/${url}`,
                 JSON.stringify(position),
-                new RequestOptions()
+                
             )
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000
@@ -120,7 +120,7 @@ export class PositionService {
         url = prefix + url
 
         return this.http.delete(`${API}/${url}`)
-            .map(response => response.json())
+            
             .catch((err) => {
                 this.snackBar.open(ErrorHandler.message(err), '', {
                     duration: 3000

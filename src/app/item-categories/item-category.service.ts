@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, RequestOptions } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { Observable } from 'rxjs/Observable';
@@ -17,21 +17,21 @@ import { DataInfo } from 'app/shared/data-info.model';
 @Injectable()
 export class ItemCategoryService {
   constructor(
-    private http: Http,
+    private http: HttpClient,
     private snackBar: MatSnackBar
   ) { }
 
   searchValue = {}
   pageIndex = 0
 
-  itemCategories(params?: {}, page: number = 0): Observable<DataInfo> {
+  itemCategories(params?: {}, page: number = 0): Observable<any> {
     let url = params === {} ? `item-categories/all?page=${page}` : `item-categories/filter?page=${page}`
 
     return this.http.post(`${API}/${url}`,
       JSON.stringify(params),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -40,11 +40,11 @@ export class ItemCategoryService {
       })
   }
 
-  itemsGroupByCategory(query: string = ''): Observable<ItemCategory[]> {
+  itemsGroupByCategory(query: string = ''): Observable<any> {
     let url = query === '' ? `item-categories/items-group-by-category` : `item-categories/filter/${query}`
 
     return this.http.get(`${API}/${url}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -53,9 +53,9 @@ export class ItemCategoryService {
       })
   }
 
-  itemCategory(itemCategoryId: number): Observable<ItemCategory> {
+  itemCategory(itemCategoryId: number): Observable<any> {
     return this.http.get(`${API}/item-categories/get/${itemCategoryId}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -68,9 +68,9 @@ export class ItemCategoryService {
     return this.http.post(
       `${API}/item-category/save`,
       JSON.stringify(itemCategory),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
@@ -83,14 +83,14 @@ export class ItemCategoryService {
     return this.http.put(
       `${API}/item-category/edit`,
       JSON.stringify(itemCategory),
-      new RequestOptions()
+      
     )
-      .map(response => response.json())
+      
   }
 
   delete(id: number): Observable<any> {
     return this.http.delete(`${API}/item-category/remove/${id}`)
-      .map(response => response.json())
+      
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000
