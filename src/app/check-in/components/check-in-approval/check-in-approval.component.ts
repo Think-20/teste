@@ -213,7 +213,7 @@ export class CheckInApprovalComponent implements AfterViewInit {
   }
 
   validateAlertDateFinancialAcceptance(event: PointerEvent): void {
-    if (this.authService.currentUser().employee.department_id != 1) {
+    if (this.authService.currentUser().employee.department_id != 6) {
       event.preventDefault();
     }
   }

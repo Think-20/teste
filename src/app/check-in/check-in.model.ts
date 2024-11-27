@@ -46,7 +46,7 @@ export class CheckInModel {
     approval_note?: string = null;
     contact_obs?: string = null;
     billing_client_id?: number;
-    costumer_service_employee: null;
+    costumer_service_employee?: number;
     costumer_service_comission: null;
     costumer_service_employee2: null;
     costumer_service_comission2: null;
@@ -54,11 +54,11 @@ export class CheckInModel {
     creation_comission: null;
     creation_employee2: null;
     creation_comission2: null;
-    production_manager_employee: null;
+    production_manager_employee?: number;
     production_manager_comission: null;
     production_manager_employee2: null;
     production_manager_comission2: null;
-    budget_employee: null;
+    budget_employee?: number;
     budget_comission: null;
     budget_employee2: null;
     budget_comission2: null;

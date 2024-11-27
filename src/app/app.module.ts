@@ -248,6 +248,9 @@ import { TimecardPlannerComponent } from './timecard/components/timecard-planner
 import { TimecardPlannerFormComponent } from './timecard/components/timecard-planner-form/timecard-planner-form.component';
 import { ContadorComponent } from './shared/contador/contador.component';
 import { ExtrasComponent } from './extras/extras.component';
+import { ExternalComponent } from './external/external.component';
+import { ExternalExtrasComponent } from './external/external-extras/external-extras.component';
+import { CheckInOtherCnpjsComponent } from './check-in/components/check-in-other-cnpjs/check-in-other-cnpjs.component';
 
 registerLocaleData(localePt);
 
@@ -394,6 +397,10 @@ registerLocaleData(localePt);
     ExtrasComponent,
     ExtrasGridComponent,
     ExtraRowComponent,
+
+    ExternalComponent,
+    ExternalExtrasComponent,
+    CheckInOtherCnpjsComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -528,6 +535,7 @@ registerLocaleData(localePt);
     ChartPreviewComponent,
     ConfirmDialogComponent,
     CheckInOrganizationFormComponent,
+    CheckInOtherCnpjsComponent,
     CheckInPeopleComponent,
     ExtraRowComponent,
     CheckInPaymentFormComponent

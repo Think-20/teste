@@ -70,3 +70,32 @@
 
     padding-right: 0 !important;
 }
+
+.faturar-cnpjs {
+    grid-template-columns: 1fr !important;
+
+    border-top: 1px solid #ccc;
+}
+
+.faturar-cnpjs a {
+    display: flex;
+
+    align-items: center;
+
+    cursor: pointer;
+}
+
+.faturar-cnpjs a:hover {
+    opacity: 0.75;
+}
+
+.faturar-cnpjs mat-icon {
+    width: 16px;
+    height: 16px;
+
+    font-size: 1rem;
+}
+
+.faturar-cnpjs .check-in-cell {
+    border-right: none !important;
+}

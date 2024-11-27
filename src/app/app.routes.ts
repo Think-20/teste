@@ -69,10 +69,22 @@ import { MemoriesContainerComponent } from './memories/components/memories-conta
 import { HomeEmptyComponent } from './home-empty/home-empty.component';
 import { GoalsComponent } from './goals/goals.component';
 import { CustomeNotificationInactivationComponente } from './customer-notification-inactivation/customer-notification-inactivation.component';
+import { ExternalComponent } from './external/external.component';
+import { ExternalExtrasComponent } from './external/external-extras/external-extras.component';
 
 export const ROUTES: Routes = [
   {
     path: 'login', component: LoginComponent
+  },
+  {
+    path: 'external',
+    component: ExternalComponent,
+    children: [
+      {
+        path: 'extras/:id/:hash',
+        component: ExternalExtrasComponent,
+      }
+    ],
   },
   {
     path: '', component: LayoutComponent, children: [

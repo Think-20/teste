@@ -17,9 +17,9 @@
                 [formControl]="form.controls.category"
                 [(ngModel)]="log.category">
                 <mat-option *ngFor="let category of categories"
-                    [value]="category"
-                    [title]="category">
-                    {{ category }}
+                    [value]="category.name"
+                    [title]="category.name">
+                    {{ category.name }}
                 </mat-option>
             </mat-select>
         </span>
@@ -29,7 +29,7 @@
         <span class="position-relative cursor-pointer" tabindex="0"
             [title]="form.controls.subcategory.value || (isDiretoria ? '' : 'Subcategoria')"
             (keyup.enter)="isDiretoria ? null : subcategorySelect.open()"
-            (click)="isDiretoria ? null : subcategorySelect.open()">
+            (click)="loadSubcategoriesByCategoryAndOpen(form.controls.category.value, subcategorySelect)">
             <span [class.placeholder]="!form.controls.subcategory.value">
                 {{ form.controls.subcategory.value || (isDiretoria ? '' : 'Subcategoria') }}
             </span>
@@ -37,7 +37,7 @@
             <mat-select class="select-hidden" #subcategorySelect
                 [formControl]="form.controls.subcategory"
                 [(ngModel)]="log.subcategory">
-                <mat-option *ngFor="let subcategory of categories"
+                <mat-option *ngFor="let subcategory of subcategories"
                     [value]="subcategory"
                     [title]="subcategory">
                     {{ subcategory }}

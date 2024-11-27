@@ -1,0 +1,102 @@
+<div class="extras">
+    <ng-container *ngIf="!accepted">
+        <h4 class="extras-title animate__animated animate__fadeIn">
+            Olá! 😊
+            <br/>
+            <br/>
+            <span class="animate__animated animate__fadeIn animate__delay-1s">
+                Verifique os itens extras na tabela abaixo:
+            </span>
+        </h4>
+
+        <div class="extras-grid animate__animated animate__fadeIn animate__delay-2s">
+            <div class="extras-grid-content cb-scroll">
+                <div class="extras-grid-header">
+                    <div class="extras-grid-cell">
+                        Item
+                    </div>
+
+                    <div class="extras-grid-cell" title="Quantidade">
+                        Qtd
+                    </div>
+
+                    <div class="extras-grid-cell" title="Valor unidade">
+                        Valor
+                    </div>
+
+                    <div class="extras-grid-cell">
+                        Data
+                    </div>
+
+                    <div class="extras-grid-cell">
+                        Vencimento
+                    </div>
+
+                    <div class="extras-grid-cell">
+                        Quitação
+                    </div>
+                </div>
+                
+                <div class="extras-grid-body cb-scroll">
+                    <div *ngFor="let extra of extras" class="extras-grid-row">
+                        <div class="extras-grid-cell">
+                            <span [title]="extra.description">
+                                {{ extra.description }}
+                            </span>
+                        </div>
+
+                        <div class="extras-grid-cell">
+                            <span [title]="extra.quantity || 1">
+                                {{ extra.quantity || 1 }}
+                            </span>
+                        </div>
+
+                        <div class="extras-grid-cell">
+                            <span [title]="extra.value | currency: 'BRL'">
+                                {{ extra.value | currency: 'BRL' }}
+                            </span>
+                        </div>
+
+                        <div class="extras-grid-cell">
+                            <span [title]="extra.date | date: 'dd MMMM yyyy'">
+                                {{ extra.date | date: 'dd MMMM yyyy' }}
+                            </span>
+                        </div>
+
+                        <div class="extras-grid-cell">
+                            <span [title]="extra.due_date | date: 'dd MMMM yyyy'">
+                                {{ extra.due_date | date: 'dd MMMM yyyy' }}
+                            </span>
+                        </div>
+
+                        <div class="extras-grid-cell">
+                            <span [title]="extra.settlement_date | date: 'dd MMMM yyyy'">
+                                {{ extra.settlement_date | date: 'dd MMMM yyyy' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="extras-grid-footer">
+                Valor total extras: {{ total | currency: 'BRL' }} 
+            </div>
+        </div>
+
+        <button class="extras-btn-accepted animate__animated animate__fadeIn animate__delay-2s"
+            [disabled]="accepted || loading"
+            (click)="confirm()">
+            Clique aqui para aceitar
+        </button>
+    </ng-container>
+
+    <ng-container *ngIf="accepted">
+        <div class="extras-container animate__animated animate__fadeIn">
+            <div class="extras-message">
+                <h3>Sucesso!</h3>
+
+                <p>Obrigado pela parceria com a Think Ideias. Sua confirmação foi realizada com sucesso.</p>
+            </div>
+        </div>
+    </ng-container>
+</div>

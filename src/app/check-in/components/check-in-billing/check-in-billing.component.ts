@@ -8,9 +8,10 @@ import { Client } from "app/clients/client.model";
 import { Job } from "app/jobs/job.model";
 import { Observable, of, Subject } from 'rxjs';
 import { FormControl } from '@angular/forms';
-import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
 import { takeUntil } from 'rxjs/operators';
 import { StateService } from 'app/address/state.service';
+import { CheckInOtherCnpjsComponent } from '../check-in-other-cnpjs/check-in-other-cnpjs.component';
 
 @Component({
   selector: "cb-check-in-billing",
@@ -61,6 +62,7 @@ export class CheckInBillingComponent implements AfterViewInit, OnChanges, OnDest
   private onDestroy$ = new Subject<void>();
 
   constructor(
+    private dialog: MatDialog,
     private snackBar: MatSnackBar,
     private cityService: CityService,
     private stateService: StateService,
@@ -117,9 +119,25 @@ export class CheckInBillingComponent implements AfterViewInit, OnChanges, OnDest
       const currentValue: CheckInModel = changes.checkInModel.currentValue;
       const previousValue: CheckInModel = changes.checkInModel.previousValue;
 
+      this.setPropertyDefaultValue('costumer_service_employee', this.job.attendance.id);
+      this.setPropertyDefaultValue('budget_employee', 11);
+      this.setPropertyDefaultValue('production_manager_employee', 20);
+
       if (currentValue && previousValue && currentValue.billing_client_id != previousValue.billing_client_id) {
         this.updateAgency(this.agency);
       }
+    }
+  }
+
+  private setPropertyDefaultValue(
+    property:
+      | "costumer_service_employee"
+      | "budget_employee"
+      | "production_manager_employee",
+    value: number
+  ): void {
+    if (!this.checkInModel[property]) {
+      this.checkInModel[property] = value;
     }
   }
 
@@ -140,6 +158,12 @@ export class CheckInBillingComponent implements AfterViewInit, OnChanges, OnDest
 
         this.stateControl.setValue(city.state);
       },
+    });
+  }
+
+  faturarOutrosCNPJs(): void {
+    this.dialog.open(CheckInOtherCnpjsComponent, {
+      width: '500px',
     });
   }
 
