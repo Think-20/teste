@@ -1,0 +1,16 @@
+.dialog-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 1.5rem;
+}
+
+.dialog-header h1 {
+    margin: 0;
+}
+
+.gap-1 {
+    gap: 1rem;
+}

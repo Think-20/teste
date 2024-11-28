@@ -251,6 +251,8 @@ import { ExtrasComponent } from './extras/extras.component';
 import { ExternalComponent } from './external/external.component';
 import { ExternalExtrasComponent } from './external/external-extras/external-extras.component';
 import { CheckInOtherCnpjsComponent } from './check-in/components/check-in-other-cnpjs/check-in-other-cnpjs.component';
+import { CheckInOtherCnpjComponent } from './check-in/components/check-in-other-cnpj/check-in-other-cnpj.component';
+import { AlertsCheckInComponent } from './alerts/components/alerts-check-in/alerts-check-in.component';
 
 registerLocaleData(localePt);
 
@@ -374,6 +376,7 @@ registerLocaleData(localePt);
     DecimalPipe,
 
     AlertsContainerComponent,
+    AlertsCheckInComponent,
     MemoriesContainerComponent,
     FormatMaskDirective,
     ChartPreviewComponent,
@@ -401,6 +404,7 @@ registerLocaleData(localePt);
     ExternalComponent,
     ExternalExtrasComponent,
     CheckInOtherCnpjsComponent,
+    CheckInOtherCnpjComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -538,7 +542,8 @@ registerLocaleData(localePt);
     CheckInOtherCnpjsComponent,
     CheckInPeopleComponent,
     ExtraRowComponent,
-    CheckInPaymentFormComponent
+    CheckInPaymentFormComponent,
+    AlertsCheckInComponent,
   ]
 })
 export class AppModule { }

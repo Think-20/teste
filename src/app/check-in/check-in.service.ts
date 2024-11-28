@@ -5,6 +5,8 @@ import { ErrorHandler } from "../shared/error-handler.service";
 import { CheckInModel } from './check-in.model';
 import { Http, RequestOptions } from "@angular/http";
 import { API } from "../app.api";
+import { of } from 'rxjs';
+import { IOtherCnpj } from './models/other-cnpj.model';
 
 @Injectable()
 export class CheckInService {
@@ -69,5 +71,24 @@ constructor(private http: Http, private snackBar: MatSnackBar) {}
     delete checkInModel.accept_client_date;
 
     delete checkInModel.extras_obs;
+  }
+
+  getOtherCnpjs() {
+    const response: IOtherCnpj[] = [
+      {
+        id: 1,
+        cnpj: '12.345.678/9012-34',
+        name: 'CNPJ 1',
+        value: 10000,
+      },
+      {
+        id: 1,
+        cnpj: '12.345.678/9012-34',
+        name: 'CNPJ 2',
+        value: 5000,
+      },
+    ];
+
+    return of(response);
   }
 }

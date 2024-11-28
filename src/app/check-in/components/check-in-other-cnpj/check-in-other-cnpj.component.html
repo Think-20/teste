@@ -1,0 +1,26 @@
+<form [formGroup]="form">
+    <div class="col-sm-12" style="text-align: end;">
+        <mat-icon style="cursor: pointer;" (click)="delete()">remove_circle_outline</mat-icon>
+    </div>
+
+    <mat-form-field class="col-sm-12">
+        <input ucWords matInput #inputName placeholder="Nome*" formControlName="name">
+        <mat-error>
+            Campo obrigatório.
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="col-sm-6">
+        <input matInput mask="99.999.999/9999-99" placeholder="CNPJ*" formControlName="cnpj">
+        <mat-error>
+            Campo obrigatório.
+        </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="col-sm-6">
+        <input matInput currencyMask placeholder="Valor*" formControlName="value">
+        <mat-error>
+            Campo obrigatório.
+        </mat-error>
+    </mat-form-field>
+</form>

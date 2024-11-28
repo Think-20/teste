@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { state, style, trigger, animate, transition } from '@angular/animations';
 
@@ -54,8 +54,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute,
     private auth: AuthService,
+    private route: ActivatedRoute,
     private memoryService: MemoriesService,
     private alertService: AlertService,
   ) { }

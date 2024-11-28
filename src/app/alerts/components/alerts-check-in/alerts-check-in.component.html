@@ -1,0 +1,55 @@
+<div class="my-container">
+  <h3 mat-dialog-title class="title">Alertas</h3>
+</div>
+
+<div mat-dialog-content>
+  <mat-card style="min-height: 25rem;" class="container-fluid d-flex flex-column">
+    <div class="title">
+      Você possui {{ ('0' + projects?.count).slice(-3) }} projeto(s) aguardando {{ atendimento ? 'sua aprovação' : 'seu aceite' }}
+    </div>
+
+    <div *ngIf="projects?.data.length" class="table-responsive mt-4" style="padding-bottom: 1rem;">
+      <table class="table">
+        <thead>
+          <tr>
+            <th class="text-center mat-header-cell">CRIAÇÃO</th>
+            <th class="text-center mat-header-cell">JOB</th>
+            <th class="text-center mat-header-cell">TIPO</th>
+            <th class="text-center mat-header-cell">CLIENTE</th>
+            <th class="text-center mat-header-cell">EVENTO</th>
+            <th class="text-center mat-header-cell">VERBA/VALOR</th>
+            <th class="text-center mat-header-cell">ÁREA</th>
+            <th class="text-center mat-header-cell">DEADLINE</th>
+            <th class="text-center mat-header-cell">ATEND.</th>
+            <th class="text-center mat-header-cell"></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let project of projects?.data">
+            <td class="text-center">{{ project.creation_responsible ? project.creation_responsible : '-' }}</td>
+            <td class="text-center">{{ project.job_activity }}</td>
+            <td class="text-center">{{ project.job_type }}</td>
+            <td class="text-center">{{ project.client }}</td>
+            <td class="text-center">{{ project.event }}</td>
+            <td class="text-center">{{ project.budget_value | number: '1.2' }}</td>
+            <td class="text-center">{{ project.area }} m²</td>
+            <td class="text-center">{{ project.deadline | date : "dd/MM/yy" }}</td>
+            <td class="text-center">{{ project.attendance }}</td>
+            <td class="text-center">
+              <a style="text-decoration: none; color: #212529; cursor: pointer;"
+                (click)="navigateToCheckIn(project.id)">
+                Acessar
+              </a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div *ngIf="!projects?.data.length" class="col-md-12 d-flex justify-content-center mt-5 records-not-found">
+      <p>
+        <small>Todos seus projetos estão com o status atualizado!</small>
+      </p>
+    </div>
+  </mat-card>
+</div>

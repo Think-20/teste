@@ -1,1 +1,23 @@
-<p>check-in-other-cnpjs works!</p>
+<div class="dialog-header">
+    <h1 mat-dialog-title class="p-0">
+        Faturar para outros CNPJs
+    </h1>
+
+    <mat-icon mat-dialog-close>close</mat-icon>
+</div>
+
+<div mat-dialog-content class="cb-scroll">
+    <div class="row px-3 py-1 gap-1" formArray="formArray">
+        <cb-check-in-other-cnpj #otherCnpj *ngFor="let form of formArray.controls; let index = $index"
+            [form]="form"
+            (remove)="remove(index)"
+        ></cb-check-in-other-cnpj>
+    </div>
+</div>
+
+<div mat-dialog-footer class="d-flex flex-row justify-content-end pt-3">
+    <button class="cb-button" color="primary" mat-raised-button
+        (click)="add()">
+        ADICIONAR
+    </button>
+</div>
