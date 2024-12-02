@@ -28,7 +28,7 @@ export class ExternalExtrasService {
 
   confirm(id: number, hash: string): Observable<string> {
     return this.http
-      .post(`${API}/extra/${id}/${hash}`, { checkin_id: id, hash })
+      .post(`${API}/extra/confirm`, { checkin_id: id, hash })
       .map((response) => response.json())
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), "", {

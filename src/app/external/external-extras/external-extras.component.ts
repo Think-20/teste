@@ -1,6 +1,6 @@
 import { ExternalExtrasService } from './external-extras.service';
 import { ActivatedRoute } from '@angular/router';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
 import { ExtraModel } from 'app/shared/models/extra.model';
 
@@ -17,19 +17,18 @@ export class ExternalExtrasComponent implements OnInit {
   id: number;
   hash: string;
 
-  extras: ExtraModel[] = [];
-
+  extrasList: ExtraModel[] = [];
   
   get total(): number {
-    if (!this.extras || !this.extras.length) {
+    if (!this.extrasList || !this.extrasList.length) {
       return 0;
     }
 
-    if (this.extras.length == 1) {
-      return this.extras[0].value * (this.extras[0].quantity || 1);
+    if (this.extrasList.length == 1) {
+      return this.extrasList[0].value * (this.extrasList[0].quantity || 1);
     }
 
-    return this.extras
+    return this.extrasList
       .map(x => x.value * (x.quantity || 1))
       .reduce((prv, current) => prv + current);
   }
@@ -37,25 +36,24 @@ export class ExternalExtrasComponent implements OnInit {
 
   constructor(
     private snackBar: MatSnackBar,
-    readonly activatedRoute: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
+    private changeDetectorRef: ChangeDetectorRef,
     private externalExtrasService: ExternalExtrasService,
-  ) {
-    this.id = (activatedRoute.snapshot.paramMap.get('id') || 0) as number;
-
-    this.hash = activatedRoute.snapshot.paramMap.get('hash') || '';
-  }
+  ) { }
 
   ngOnInit() {
+    this.id = Number(this.activatedRoute.snapshot.paramMap.get('id') || 0);
+
+    this.hash = this.activatedRoute.snapshot.paramMap.get('hash') || '';
+
     this.loadExtras();
   }
   
   private loadExtras(): void {
-    this.externalExtrasService.get(this.id, this.hash).subscribe({
-      next: (extras) => {
-        if (extras && extras.length > 0) {
-          this.extras = extras.filter(x => x.checkin_id === this.id);
-        }
-      }
+    this.externalExtrasService.get(this.id, this.hash).subscribe((response) => {
+      this.extrasList = [...response];
+      
+      this.changeDetectorRef.detectChanges();
     });
   }
 
@@ -75,11 +73,15 @@ export class ExternalExtrasComponent implements OnInit {
           snackBarStateCharging.dismiss();
 
           this.accepted = true;
+
+          this.changeDetectorRef.detectChanges();
         },
         error: (error) => {
           snackBarStateCharging.dismiss();
 
           this.loading = false;
+
+          this.changeDetectorRef.detectChanges();
         }
       });
   }
