@@ -38,19 +38,9 @@ export class TimecardPlannerComponent implements AfterViewInit {
   currentMonth = true;
 
   categories = [
-    "Prospecção",
-    "Reunião clientes",
-    "Prospecção de clientes",
-    "Memorial descritivo",
-    "Briefing Criação",
-    "Processos Adm",
-    "Trânsito",
-    "Montagem",
-    "VT",
-    "Feira",
-    "Almoço",
-    "Intervalo",
-    "Saída",
+    "Operacional",
+    "Reuniões",
+    "Visitas",
   ];
 
   allCategories = 'Todas';

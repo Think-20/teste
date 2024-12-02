@@ -233,7 +233,7 @@ import { CheckInBillingComponent } from './check-in/components/check-in-billing/
 import { CheckInBillingAmountComponent } from './check-in/components/check-in-billing-amount/check-in-billing-amount.component';
 import { ExtrasGridComponent } from './extras/components/extras-grid/extras-grid.component';
 import { CheckInObsComponent } from './check-in/components/check-in-obs/check-in-obs.component';
-import { CheckInOrganizationFormComponent } from './check-in/components/check-in-organization-form/check-in-organization-form.component';
+import { OrganizationFormComponent } from './organization/components/check-in-organization-form/organization-form.component';
 import { OrganizationService } from './shared/services/organization.service';
 import { CheckInService } from './check-in/check-in.service';
 import { CheckInComissionComponent } from './check-in/components/check-in-comission/check-in-comission.component';
@@ -253,6 +253,7 @@ import { ExternalExtrasComponent } from './external/external-extras/external-ext
 import { CheckInOtherCnpjsComponent } from './check-in/components/check-in-other-cnpjs/check-in-other-cnpjs.component';
 import { CheckInOtherCnpjComponent } from './check-in/components/check-in-other-cnpj/check-in-other-cnpj.component';
 import { AlertsCheckInComponent } from './alerts/components/alerts-check-in/alerts-check-in.component';
+import { OrganizationComponent } from './organization/organization.component';
 
 registerLocaleData(localePt);
 
@@ -390,21 +391,26 @@ registerLocaleData(localePt);
     CheckInBillingComponent,
     CheckInBillingAmountComponent,
     CheckInObsComponent,
-    CheckInOrganizationFormComponent,
     CheckInComissionComponent,
     CheckInPeopleComponent,
     CheckInPaymentComponent,
     CheckInPaymentFormComponent,
+    CheckInOtherCnpjsComponent,
+    CheckInOtherCnpjComponent,
+
     TimecardPlannerFormComponent,
+    
     ContadorComponent,
+
     ExtrasComponent,
     ExtrasGridComponent,
     ExtraRowComponent,
 
     ExternalComponent,
     ExternalExtrasComponent,
-    CheckInOtherCnpjsComponent,
-    CheckInOtherCnpjComponent,
+
+    OrganizationComponent,
+    OrganizationFormComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -538,7 +544,7 @@ registerLocaleData(localePt);
     UpdatedInfoComponent,
     ChartPreviewComponent,
     ConfirmDialogComponent,
-    CheckInOrganizationFormComponent,
+    OrganizationFormComponent,
     CheckInOtherCnpjsComponent,
     CheckInPeopleComponent,
     ExtraRowComponent,

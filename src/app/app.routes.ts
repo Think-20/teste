@@ -71,6 +71,7 @@ import { GoalsComponent } from './goals/goals.component';
 import { CustomeNotificationInactivationComponente } from './customer-notification-inactivation/customer-notification-inactivation.component';
 import { ExternalComponent } from './external/external.component';
 import { ExternalExtrasComponent } from './external/external-extras/external-extras.component';
+import { OrganizationComponent } from './organization/organization.component';
 
 export const ROUTES: Routes = [
   {
@@ -282,6 +283,10 @@ export const ROUTES: Routes = [
             path: 'list', component: JobListComponent, canActivate: [AuthGuard]
           }
         ]
+      },
+      {
+        path: 'organizations',
+        component: OrganizationComponent,
       },
       {
         path: 'places', component: PlacesComponent, children: [

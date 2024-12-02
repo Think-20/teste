@@ -1,0 +1,111 @@
+<mat-menu #menu="matMenu">
+    <ng-template matMenuContent let-organization="organization">
+        <a mat-menu-item (click)="edit(organization)">
+            <mat-icon>mode_edit</mat-icon> Editar
+        </a>
+
+        <button mat-menu-item (click)="delete(organization)">
+            <mat-icon>delete</mat-icon> Remover
+        </button>
+    </ng-template>
+</mat-menu>
+
+<div class="my-container">
+    <h3 class="lead">Organizadoras</h3>
+</div>
+
+<div class="col-md-12 pr-0">
+    <div>
+        <mat-card-title>
+            <div class="row search-bar-group">
+                <div class="title">
+                    Lista
+                </div>
+
+                <mat-form-field class="bar">
+                    <input #searchInput matInput placeholder="Qual organizadora você procura?" autocomplete="off"
+                        [(ngModel)]="search"
+                        (ngModelChange)="filter()"
+                    />
+                </mat-form-field>
+
+                <div class="buttons">
+                    <a mat-button (click)="searchInput.focus()">
+                        <mat-icon>search</mat-icon>
+                    </a>
+
+                    <a mat-button (click)="add()">
+                        <mat-icon>add</mat-icon>
+                    </a>
+
+                    <a matTooltip="Limpar filtro" mat-button *ngIf="search" (click)="search = null">
+                        <mat-icon>clear</mat-icon>
+                    </a>
+                </div>
+            </div>
+        </mat-card-title>
+        
+        <mat-card>
+            <div *ngIf="organizationsFiltered.length > 0">
+                <table class="table mat-table">
+                    <div class="mat-header-row">
+                        <div class="mat-header-cell mat-column-name">Nome</div>
+                        <div class="mat-header-cell mat-column-city">Cidade</div>
+                        <div class="mat-header-cell mat-column-address">Endereço</div>
+                        <div class="mat-header-cell mat-column-address-number">Número</div>
+                        <div class="mat-header-cell mat-column-site">Site</div>
+                        <div class="mat-header-cell mat-column-action">Ação</div>
+                    </div>
+
+                    <div class="mat-row" *ngFor="let organization of organizationsFiltered; trackBy: trackByOrganizationId"
+                        [@rowAppeared]="rowAppearedState">
+                        <div class="mat-cell mat-column-name text-ellipsis">
+                            {{ organization.name }}
+                        </div>
+
+                        <div class="mat-cell mat-column-city text-ellipsis">
+                            {{ organization.city }}
+                        </div>
+
+                        <div class="mat-cell mat-column-address text-ellipsis">
+                            {{ organization.address }}
+                        </div>
+
+                        <div class="mat-cell mat-column-address-number text-ellipsis">
+                            {{ organization.address_number }}
+                        </div>
+
+                        <div class="mat-cell mat-column-site text-ellipsis">
+                            {{ organization.site }}
+                        </div>
+
+                        <div class="mat-cell mat-column-action">
+                            <button mat-icon-button [matMenuTriggerFor]="menu" [matMenuTriggerData]="{ organization: organization }">
+                                <mat-icon>menu</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </table>
+            </div>
+
+            <div *ngIf="loading" class="col-md-12 records-not-found">
+                <p>
+                    <small>Aguarde...</small>
+                </p>
+            </div>
+
+            <div *ngIf="organizationsFiltered.length == 0 && !!search && !loading" class="col-md-12 records-not-found">
+                <p><small>Não encontramos resultados para sua busca. :(</small></p>
+            </div>
+
+            <div *ngIf="organizations.length == 0 && !loading" class="col-md-12 records-not-found">
+                <p>
+                    <small>
+                        Ainda não existe nenhuma organizadora cadastrada. Que tal
+                        <a style="cursor: pointer; color: #6c6cff;" (click)="add()">cadastrar</a> agora?
+                    </small>
+                </p>
+            </div>
+        </mat-card>
+    </div>
+</div>

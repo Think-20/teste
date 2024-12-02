@@ -4,7 +4,7 @@ import { AfterViewInit, Component, Input } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Task } from 'app/schedule/task.model';
 import { TaskService } from 'app/schedule/task.service';
-import { CheckInOrganizationFormComponent } from '../check-in-organization-form/check-in-organization-form.component';
+import { OrganizationFormComponent } from '../../../organization/components/check-in-organization-form/organization-form.component';
 import { CheckInModel } from 'app/check-in/check-in.model';
 import { OrganizationModel } from 'app/shared/models/organization.model';
 import { EventService } from 'app/events/event.service';
@@ -274,7 +274,7 @@ export class CheckInApprovalComponent implements AfterViewInit {
   }
 
   openModalOrganizationForm(): void {
-    const modal = this.dialog.open(CheckInOrganizationFormComponent, {
+    const modal = this.dialog.open(OrganizationFormComponent, {
       width: '500px',
     });
 

@@ -1,6 +1,6 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialog, MatDialogRef, MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
+import { MatDialogRef, MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
 import { Client } from 'app/clients/client.model';
 import { ClientService } from 'app/clients/client.service';
 import { Employee } from 'app/employees/employee.model';
@@ -10,15 +10,17 @@ import { OrganizationService } from 'app/shared/services/organization.service';
 import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'cb-check-in-organization-form',
-  templateUrl: './check-in-organization-form.component.html',
-  styleUrls: ['./check-in-organization-form.component.css']
+  selector: 'cb-organization-form',
+  templateUrl: './organization-form.component.html',
+  styleUrls: ['./organization-form.component.css']
 })
-export class CheckInOrganizationFormComponent implements AfterViewInit {
+export class OrganizationFormComponent implements AfterViewInit {
 
   employee: Employee;
 
   clients: Client[];
+
+  organizationId?: number;
 
   form = new FormGroup({
     client: new FormControl(null, [Validators.required]),
@@ -30,7 +32,7 @@ export class CheckInOrganizationFormComponent implements AfterViewInit {
   });
 
   constructor(
-    public dialog: MatDialogRef<CheckInOrganizationFormComponent>,
+    public dialog: MatDialogRef<OrganizationFormComponent>,
     private snackBar: MatSnackBar,
     private authService: AuthService,
     private clientService: ClientService,
@@ -69,7 +71,20 @@ export class CheckInOrganizationFormComponent implements AfterViewInit {
       });
   }
 
-  displayClient = (client: Client): string => client.fantasy_name;
+  edit(organization: OrganizationModel): void {
+    this.form.patchValue({
+      client: organization.client_object,
+      name: organization.name,
+      address: organization.address,
+      city: organization.city,
+      address_number: organization.address_number,
+      site: organization.site,
+    });
+
+    this.organizationId = organization.id;
+  }
+
+  displayClient = (client: Client): string => client ? client.fantasy_name : null;
 
   close(organization?: OrganizationModel): void {
     if (organization) {
@@ -88,13 +103,11 @@ export class CheckInOrganizationFormComponent implements AfterViewInit {
 
     let snackBarStateCharging: MatSnackBarRef<SimpleSnackBar>;
 
-    const data = {
-      ...this.form.value,
-      client: null,
-      client_id: this.form.controls.client.value.id
-    };
+    const action = this.organizationId
+      ? this.update()
+      : this.create();
 
-    this.organizationService.save(data)
+    action
       .do(() => snackBarStateCharging = this.snackBar.open('Salvando...'))
       .subscribe(response => {
         snackBarStateCharging.dismiss();
@@ -111,4 +124,30 @@ export class CheckInOrganizationFormComponent implements AfterViewInit {
       });
   }
 
+  private create(): Observable<{
+    message?: string;
+    object?: OrganizationModel;
+  }> {
+    const data = {
+      ...this.form.value,
+      client: null,
+      client_id: this.form.controls.client.value.id
+    };
+
+    return this.organizationService.post(data);
+  }
+
+  private update(): Observable<{
+    message?: string;
+    object?: OrganizationModel;
+  }> {
+    const data = {
+      ...this.form.value,
+      id: this.organizationId,
+      client: null,
+      client_id: this.form.controls.client.value.id
+    };
+
+    return this.organizationService.put(data);
+  }
 }

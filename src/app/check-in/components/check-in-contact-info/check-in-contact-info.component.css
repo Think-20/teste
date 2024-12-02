@@ -48,3 +48,10 @@
     
     font-size: 14px;
 }
+
+.check-in-grid-full {
+    padding: 3px 8px;
+
+    border: 1px #ccc solid;
+    border-bottom: 0;
+}

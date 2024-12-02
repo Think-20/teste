@@ -7,6 +7,7 @@ export class CheckInModel {
     project?: number;
     memorial?: number;
     budget?: number;
+    client_email?: string;
     extras_accept_client: boolean;
     extras_accept_client_date: string;
     approval: boolean;

@@ -6,7 +6,7 @@ import { Observable } from "rxjs/Observable";
 
 import { API } from "../../app.api";
 import { ErrorHandler } from "../error-handler.service";
-import { OrganizationModel } from '../models/organization.model';
+import { OrganizationModel } from "../models/organization.model";
 
 @Injectable()
 export class OrganizationService {
@@ -29,9 +29,9 @@ export class OrganizationService {
     return null;
   }
 
-  save(organization: any): Observable<{
-    message?: string,
-    object?: OrganizationModel
+  post(organization: OrganizationModel): Observable<{
+    message?: string;
+    object?: OrganizationModel;
   }> {
     return this.http
       .post(
@@ -44,6 +44,43 @@ export class OrganizationService {
         this.snackBar.open(ErrorHandler.message(err), "", {
           duration: 3000,
         });
+
+        return ErrorHandler.capture(err);
+      });
+  }
+
+  put(organization: OrganizationModel): Observable<{
+    message?: string;
+    object?: OrganizationModel;
+  }> {
+    return this.http
+      .put(
+        `${API}/organization`,
+        JSON.stringify(organization),
+        new RequestOptions()
+      )
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
+
+        return ErrorHandler.capture(err);
+      });
+  }
+
+  delete(organizationId: number): Observable<{
+    message?: string;
+    status?: string;
+  }> {
+    return this.http
+      .delete(
+        `${API}/organization/${organizationId}`,
+        new RequestOptions()
+      )
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", { duration: 3000 });
 
         return ErrorHandler.capture(err);
       });
