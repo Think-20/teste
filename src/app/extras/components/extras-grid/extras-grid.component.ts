@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
 import { ExtraModel } from 'app/shared/models/extra.model';
 import { ExtrasService } from 'app/extras/extras.service';
-import { ExtraRowComponent } from '../extra-row/extra-row.component';
+import { ExtraFormComponent } from '../extra-form/extra-form.component';
 import { CheckInModel } from 'app/check-in/check-in.model';
 import { Job } from 'app/jobs/job.model';
 import { Subject } from 'rxjs';
@@ -102,7 +102,7 @@ export class ExtrasGridComponent implements OnInit {
       return;
     }
 
-    const modal = this.dialog.open(ExtraRowComponent, {
+    const modal = this.dialog.open(ExtraFormComponent, {
       width: '500px',
     });
 
@@ -111,6 +111,8 @@ export class ExtrasGridComponent implements OnInit {
 
     modal.afterClosed().subscribe(result => {
       if (result) {
+        this.checkInModel.extras_accept_client = false;
+
         this.loadExtras();
       }
     });
@@ -123,6 +125,8 @@ export class ExtrasGridComponent implements OnInit {
   delete(extra: ExtraModel): void {
     this.extrasService.delete(extra.id)
       .subscribe(() => {
+        this.checkInModel.extras_accept_client = false;
+
         this.loadExtras();
       });
   }
@@ -132,17 +136,15 @@ export class ExtrasGridComponent implements OnInit {
       return;
     }
 
-    let snackBarStateCharging: MatSnackBarRef<SimpleSnackBar> = null;
+    let snackBarStateCharging = this.snackBar.open('Enviando e-mail...');
 
-    this.extrasService.sendEmail(this.checkInModel.id)
-      .do(() => snackBarStateCharging = this.snackBar.open('Enviando e-mail...'))
-      .subscribe(() => {
-        snackBarStateCharging.dismiss();
+    this.extrasService.sendEmail(this.checkInModel.id).subscribe(() => {
+      snackBarStateCharging.dismiss();
 
-        snackBarStateCharging = this.snackBar.open('E-mail enviado!');
-            
-        setTimeout(() => snackBarStateCharging.dismiss(), 3000);
-      });
+      snackBarStateCharging = this.snackBar.open('E-mail enviado!');
+          
+      setTimeout(() => snackBarStateCharging.dismiss(), 3000);
+    });
   }
 
   changeObs(): void {

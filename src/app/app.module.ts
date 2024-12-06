@@ -241,7 +241,7 @@ import { CheckInPeopleComponent } from './check-in/components/check-in-people/ch
 import { PersonService } from './shared/services/person.service';
 import { CheckInPaymentComponent } from './check-in/components/check-in-payment/check-in-payment.component';
 import { ExtrasService } from './extras/extras.service';
-import { ExtraRowComponent } from './extras/components/extra-row/extra-row.component';
+import { ExtraFormComponent } from './extras/components/extra-form/extra-form.component';
 import { PaymentService } from './shared/services/payment.service';
 import { CheckInPaymentFormComponent } from './check-in/components/check-in-payment-form/check-in-payment-form.component';
 import { TimecardPlannerComponent } from './timecard/components/timecard-planner/timecard-planner.component';
@@ -404,7 +404,7 @@ registerLocaleData(localePt);
 
     ExtrasComponent,
     ExtrasGridComponent,
-    ExtraRowComponent,
+    ExtraFormComponent,
 
     ExternalComponent,
     ExternalExtrasComponent,
@@ -547,7 +547,7 @@ registerLocaleData(localePt);
     OrganizationFormComponent,
     CheckInOtherCnpjsComponent,
     CheckInPeopleComponent,
-    ExtraRowComponent,
+    ExtraFormComponent,
     CheckInPaymentFormComponent,
     AlertsCheckInComponent,
   ]

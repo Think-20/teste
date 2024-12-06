@@ -10,12 +10,11 @@ import { Employee } from 'app/employees/employee.model';
 import { DatePipe } from '@angular/common';
 
 @Component({
-  selector: 'cb-extra-row',
-  templateUrl: './extra-row.component.html',
-  styleUrls: ['./extra-row.component.css']
+  selector: 'cb-extra-form',
+  templateUrl: './extra-form.component.html',
+  styleUrls: ['./extra-form.component.css']
 })
-export class ExtraRowComponent implements OnInit {
-
+export class ExtraFormComponent implements OnInit {
   @Input() checkInId: number;
   @Input() extra: ExtraModel = null;
 
@@ -37,7 +36,7 @@ export class ExtraRowComponent implements OnInit {
   });
 
   constructor(
-    public dialog: MatDialogRef<ExtraRowComponent>,
+    public dialog: MatDialogRef<ExtraFormComponent>,
     private datePipe: DatePipe,
     private snackBar: MatSnackBar,
     private extrasService: ExtrasService,
@@ -104,5 +103,4 @@ export class ExtraRowComponent implements OnInit {
         }
       });
   }
-
 }
