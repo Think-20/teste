@@ -64,8 +64,8 @@ export class TimecardPlannerFormComponent implements OnInit, AfterViewInit, OnDe
         'Eventos do mercado',
         'Montagem',
         'Prospecções de clientes Novos',
-        'Relacionamento com cientes',
-        'Tecnica'
+        'Relacionamento com clientes',
+        'Técnica'
       ]
     }
   ];
