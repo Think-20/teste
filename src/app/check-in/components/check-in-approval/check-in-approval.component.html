@@ -8,52 +8,78 @@
                 <h6 class="check-in-header-title">Aprovação:</h6>
             
                 <div class="check-in-header-right"
-                    [class.lock]="checkInModel && checkInModel.accept_client">
-                    <span class="position-relative text-ellipsis cursor-pointer"
-                        [title]="project ? 'Versão do Projeto: ' + taskService.jobDisplay(project) : 'Versão do Projeto'"
-                        (click)="projectSelect.open()">
-                        {{ project ? taskService.jobDisplay(project) : 'Versão do Projeto' }}
+                    [class.lock]="checkInModel && checkInModel.accept_client"
+                    [style.fontSize.rem]="1.45">
+                    <div class="center-items">
+                        <span class="approval-items position-relative text-ellipsis cursor-pointer"
+                            [title]="project ? 'Versão do Projeto: ' + taskService.jobDisplay(project) : 'Versão do Projeto'"
+                            (click)="projectSelect.open()">
+                            {{ project ? taskService.jobDisplay(project) : 'Versão do Projeto' }}
 
-                        <mat-select class="select-hidden col-md-3" #projectSelect
-                            [(ngModel)]="checkInModel.project">
-                            <mat-option *ngFor="let project of projects"
-                                [value]="project.id">
-                                {{ taskService.jobDisplay(project) }}
-                            </mat-option>
-                        </mat-select>
-                    </span>
+                            <mat-select class="select-hidden col-md-3" #projectSelect
+                                [(ngModel)]="checkInModel.project"
+                                (ngModelChange)="projectChanged()">
+                                <mat-option *ngFor="let project of projects"
+                                    [value]="project.id">
+                                    {{ taskService.jobDisplay(project) }}
+                                </mat-option>
+                            </mat-select>
+                        </span>
+
+                        <div class="approval-logs">
+                            {{ (checkInModel.project_change_date ? projectChange : '-') }}
+                        </div>
+                    </div>
                     |
-                    <mat-icon *ngIf="checkInModel && checkInModel.accept_client" class="icon-lock">lock</mat-icon>
+                    <div class="center-items">
+                        <div class="d-flex flex-row">
+                            <mat-icon *ngIf="checkInModel && checkInModel.accept_client" class="icon-lock">lock</mat-icon>
 
-                    <span class="position-relative text-ellipsis cursor-pointer"
-                        [title]="memorial ? 'Memorial: ' + taskService.jobDisplay(memorial) : 'Memorial'"
-                        (click)="checkInModel && checkInModel.accept_client ? null : memorialSelect.open()">
-                        {{ memorial ? taskService.jobDisplay(memorial) : 'Memorial' }}
+                            <span class="approval-items position-relative text-ellipsis cursor-pointer"
+                                [title]="memorial ? 'Memorial: ' + taskService.jobDisplay(memorial) : 'Memorial'"
+                                (click)="checkInModel && checkInModel.accept_client ? null : memorialSelect.open()">
+                                {{ memorial ? taskService.jobDisplay(memorial) : 'Memorial' }}
 
-                        <mat-select class="select-hidden col-md-3" #memorialSelect
-                            [(ngModel)]="checkInModel.memorial">
-                            <mat-option *ngFor="let memorial of memorials"
-                                [value]="memorial.id">
-                                {{taskService.jobDisplay(memorial)}}
-                            </mat-option>
-                        </mat-select>
-                    </span>
+                                <mat-select class="select-hidden col-md-3" #memorialSelect
+                                    [(ngModel)]="checkInModel.memorial"
+                                    (ngModelChange)="memorialChanged()">
+                                    <mat-option *ngFor="let memorial of memorials"
+                                        [value]="memorial.id">
+                                        {{taskService.jobDisplay(memorial)}}
+                                    </mat-option>
+                                </mat-select>
+                            </span>
+                        </div>
+
+                        <div class="approval-logs">
+                            {{ (checkInModel.memorial_change_date ? memorialChange : '-') }}
+                        </div>
+                    </div>
                     |
-                    <mat-icon *ngIf="checkInModel && checkInModel.accept_client" class="icon-lock">lock</mat-icon>
+                    <div class="center-items">
+                        <div class="d-flex flex-row">
+                            <mat-icon *ngIf="checkInModel && checkInModel.accept_client" class="icon-lock">lock</mat-icon>
 
-                    <span class="position-relative text-ellipsis cursor-pointer"
-                        [title]="budget ? 'Orçamento: ' + taskService.jobDisplay(budget) : 'Orçamento'"
-                        (click)="checkInModel && checkInModel.accept_client ? null : budgetSelect.open()">
-                        {{ budget ? taskService.jobDisplay(budget) : 'Orçamento' }}
+                            <span class="approval-items position-relative text-ellipsis cursor-pointer"
+                                [title]="budget ? 'Orçamento: ' + taskService.jobDisplay(budget) : 'Orçamento'"
+                                (click)="checkInModel && checkInModel.accept_client ? null : budgetSelect.open()">
+                                {{ budget ? taskService.jobDisplay(budget) : 'Orçamento' }}
 
-                        <mat-select class="select-hidden col-md-3" #budgetSelect
-                            [(ngModel)]="checkInModel.budget">
-                            <mat-option *ngFor="let budget of budgets"
-                                [value]="budget.id">
-                                {{taskService.jobDisplay(budget)}}
-                            </mat-option>
-                        </mat-select>
-                    </span>
+                                <mat-select class="select-hidden col-md-3" #budgetSelect
+                                    [(ngModel)]="checkInModel.budget"
+                                    (ngModelChange)="budgetChanged()">
+                                    <mat-option *ngFor="let budget of budgets"
+                                        [value]="budget.id">
+                                        {{taskService.jobDisplay(budget)}}
+                                    </mat-option>
+                                </mat-select>
+                            </span>
+                        </div>
+
+                        <div class="approval-logs">
+                            {{ (checkInModel.budget_change_date ? budgetChange : '-') }}
+                        </div>
+                    </div>
                 </div>
             </div>
 

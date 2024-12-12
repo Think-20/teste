@@ -5,8 +5,14 @@ export class CheckInModel {
     hash?: string;
     job_id: number;
     project?: number;
+    project_change_employee?: number;
+    project_change_date?: string;
     memorial?: number;
+    memorial_change_employee?: number;
+    memorial_change_date?: string;
     budget?: number;
+    budget_change_employee?: number;
+    budget_change_date?: string;
     client_email?: string;
     extras_accept_client: boolean;
     extras_accept_client_date: string;

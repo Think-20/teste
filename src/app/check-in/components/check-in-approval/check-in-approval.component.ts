@@ -89,6 +89,27 @@ export class CheckInApprovalComponent implements AfterViewInit {
     return new OrganizationModel();
   }
 
+  get projectChange(): string {
+    return this.getApprovalLog(
+      this.checkInModel.project_change_employee,
+      this.checkInModel.project_change_date,
+    );
+  }
+
+  get memorialChange(): string {
+    return this.getApprovalLog(
+      this.checkInModel.memorial_change_employee,
+      this.checkInModel.memorial_change_date,
+    );
+  }
+
+  get budgetChange(): string {
+    return this.getApprovalLog(
+      this.checkInModel.budget_change_employee,
+      this.checkInModel.budget_change_date,
+    );
+  }
+  
   constructor(
     private dialog: MatDialog,
     private datePipe: DatePipe, 
@@ -98,6 +119,33 @@ export class CheckInApprovalComponent implements AfterViewInit {
     private organizationService: OrganizationService,
   ) {
     this.employeeId = authService.currentUser().employee.id;
+  }
+
+  private getApprovalLog(employeeId: number, date: string): string {
+    if (!date) {
+      return '';
+    }
+
+    const employee = this.getEmployeeName(employeeId);
+
+    const dateFormatted = this.datePipe.transform(date, 'dd/MM/yyyy HH:mm')
+
+    return `${employee} - ${dateFormatted}`;
+  }
+
+  projectChanged(): void {
+    this.checkInModel.project_change_employee = this.employeeId;
+    this.checkInModel.project_change_date = this.getCurrentDate();
+  }
+
+  memorialChanged(): void {
+    this.checkInModel.memorial_change_employee = this.employeeId;
+    this.checkInModel.memorial_change_date = this.getCurrentDate();
+  }
+
+  budgetChanged(): void {
+    this.checkInModel.budget_change_employee = this.employeeId;
+    this.checkInModel.budget_change_date = this.getCurrentDate();
   }
 
   ngAfterViewInit(): void {
