@@ -61,6 +61,32 @@ constructor(private http: Http, private snackBar: MatSnackBar) {}
       });
   }
 
+  resetAcceptClient(
+    checkInId: number,
+    date: string,
+    accept: number,
+  ): Observable<{
+    message?: string;
+    object?: CheckInModel;
+  }> {
+    const checkInModel = {
+      id: checkInId,
+      accept_client_date: date,
+      accept_client: accept,
+    };
+
+    return this.http
+      .put(`${API}/checking`, JSON.stringify(checkInModel), new RequestOptions())
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
+
+        return ErrorHandler.capture(err);
+      });
+  }
+
   private deleteReadOnlyProperties(checkInModel: CheckInModel) {
     delete checkInModel.hash;
 

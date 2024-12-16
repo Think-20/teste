@@ -70,7 +70,7 @@
 .aprovacao .check-in-row {
     display: grid;
 
-    grid-template-columns: 0.65fr .35fr 1fr;
+    grid-template-columns: 205px 100px 1fr;
 }
 
 .aprovacao .check-in-row:nth-child(1),
@@ -205,4 +205,42 @@
     font-weight: lighter;
 
     margin-top: 3px;
+}
+
+.accept {
+    &--0,
+    &--1,
+    &--2 {
+        display: flex;
+
+        align-items: center;
+        justify-content: flex-start;
+        
+        gap: 0.25rem;
+
+        overflow: hidden;
+
+        &::before {
+            content: '';
+        
+            display: block;
+
+            min-width: 8px;
+            min-height: 8px;
+
+            border-radius: 50%;
+        }
+    }
+
+    &--0::before {
+        background-color: #003cbf;
+    }
+
+    &--1::before {
+        background-color: #00ad00;
+    }
+
+    &--2::before {
+        background-color: #ff0000;
+    }
 }

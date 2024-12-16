@@ -61,16 +61,16 @@
                             <mat-icon *ngIf="checkInModel && checkInModel.accept_client" class="icon-lock">lock</mat-icon>
 
                             <span class="approval-items position-relative text-ellipsis cursor-pointer"
-                                [title]="budget ? 'Orçamento: ' + taskService.jobDisplay(budget) : 'Orçamento'"
+                                [title]="budget ? 'Orçamento: ' + taskService.budgetDisplay(budget) : 'Orçamento'"
                                 (click)="checkInModel && checkInModel.accept_client ? null : budgetSelect.open()">
-                                {{ budget ? taskService.jobDisplay(budget) : 'Orçamento' }}
+                                {{ budget ? taskService.budgetDisplay(budget) : 'Orçamento' }}
 
                                 <mat-select class="select-hidden col-md-3" #budgetSelect
                                     [(ngModel)]="checkInModel.budget"
                                     (ngModelChange)="budgetChanged()">
                                     <mat-option *ngFor="let budget of budgets"
                                         [value]="budget.id">
-                                        {{taskService.jobDisplay(budget)}}
+                                        {{taskService.budgetDisplay(budget)}}
                                     </mat-option>
                                 </mat-select>
                             </span>
@@ -90,12 +90,23 @@
 
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <mat-checkbox
-                            [(ngModel)]="checkInModel.accept_client"
-                            (click)="validateAlertDateAcceptClient($event)"
-                            readonly>
-                            ACEITE CLIENTE
-                        </mat-checkbox>
+                        <ng-container *ngIf="getAcceptLabel('client', checkInModel.accept_client || 0) as label">
+                            <div class="position-relative cursor-pointer accept--{{ checkInModel.accept_client || 0 }}"
+                                [title]="label"
+                                (click)="acceptClientSelect.open()">
+                                <span class="text-ellipsis">{{ label }}</span>
+
+                                <mat-select class="select-hidden col-md-3" #acceptClientSelect
+                                    [(ngModel)]="checkInModel.accept_client"
+                                    (ngModelChange)="updateAlertDateAcceptClient()">
+                                    <mat-option *ngFor="let accept of acceptList"
+                                        [value]="accept"
+                                        [disabled]="accept != 0">
+                                        {{ getAcceptLabel('client', accept || 0) }}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </ng-container>
                     </div>
 
                     <div class="check-in-cell">
@@ -105,18 +116,29 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (checkInModel.accept_client_date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                        {{ (checkInModel.accept_client_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
                     </div>
                 </div>
 
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <mat-checkbox
-                            [(ngModel)]="checkInModel.approval"
-                            (click)="validateAlertDateApproval($event)"
-                            (ngModelChange)="updateAlertDateApproval()">
-                            APROVAÇÃO
-                        </mat-checkbox>
+                        <ng-container *ngIf="getAcceptLabel('approval', checkInModel.approval || 0) as label">
+                            <div class="position-relative cursor-pointer accept--{{ checkInModel.approval || 0 }}"
+                                [title]="label"
+                                (click)="approvalSelect.open()">
+                                <span class="text-ellipsis">{{ label }}</span>
+
+                                <mat-select class="select-hidden col-md-3" #approvalSelect
+                                    [disabled]="employeeId != job.attendance.id"
+                                    [(ngModel)]="checkInModel.approval"
+                                    (ngModelChange)="updateAlertDateApproval()">
+                                    <mat-option *ngFor="let accept of acceptList"
+                                        [value]="accept">
+                                        {{ getAcceptLabel('approval', accept || 0) }}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </ng-container>
                     </div>
 
                     <div class="check-in-cell">
@@ -126,18 +148,29 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (checkInModel.approval_date| date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                        {{ (checkInModel.approval_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
                     </div>
                 </div>
 
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <mat-checkbox
-                            [(ngModel)]="checkInModel.accept_proposal"
-                            (click)="validateAlertDateAcceptProposal($event)"
-                            (ngModelChange)="updateAlertDateAcceptProposal()">
-                            ACEITE PROPOSTA
-                        </mat-checkbox>
+                        <ng-container *ngIf="getAcceptLabel('proposal', checkInModel.accept_proposal || 0) as label">
+                            <div class="position-relative cursor-pointer accept--{{ checkInModel.accept_proposal || 0 }}"
+                                [title]="label"
+                                (click)="acceptProposalSelect.open()">
+                                <span class="text-ellipsis">{{ label }}</span>
+
+                                <mat-select class="select-hidden col-md-3" #acceptProposalSelect
+                                    [disabled]="employeeId != 11"
+                                    [(ngModel)]="checkInModel.accept_proposal"
+                                    (ngModelChange)="updateAlertDateAcceptProposal()">
+                                    <mat-option *ngFor="let accept of acceptList"
+                                        [value]="accept">
+                                        {{ getAcceptLabel('proposal', accept || 0) }}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </ng-container>
                     </div>
 
                     <div class="check-in-cell">
@@ -147,18 +180,29 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (checkInModel.accept_proposal_date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                        {{ (checkInModel.accept_proposal_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
                     </div>
                 </div>
 
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <mat-checkbox
-                            [(ngModel)]="checkInModel.accept_production"
-                            (click)="validateAlertDateAcceptProduction($event)"
-                            (ngModelChange)="updateAlertDateAcceptProduction()">
-                            ACEITE PRODUÇÃO
-                        </mat-checkbox>
+                        <ng-container *ngIf="getAcceptLabel('production', checkInModel.accept_production || 0) as label">
+                            <div class="position-relative cursor-pointer accept--{{ checkInModel.accept_production || 0 }}"
+                                [title]="label"
+                                (click)="acceptProductionSelect.open()">
+                                <span class="text-ellipsis">{{ label }}</span>
+
+                                <mat-select class="select-hidden col-md-3" #acceptProductionSelect
+                                    [disabled]="employeeId != 20"
+                                    [(ngModel)]="checkInModel.accept_production"
+                                    (ngModelChange)="updateAlertDateAcceptProduction()">
+                                    <mat-option *ngFor="let accept of acceptList"
+                                        [value]="accept">
+                                        {{ getAcceptLabel('production', accept || 0) }}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </ng-container>
                     </div>
 
                     <div class="check-in-cell">
@@ -168,18 +212,29 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (checkInModel.accept_production_date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                        {{ (checkInModel.accept_production_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
                     </div>
                 </div>
 
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <mat-checkbox
-                            [(ngModel)]="checkInModel.board_approval"
-                            (click)="validateAlertDateBoardApproval($event)"
-                            (ngModelChange)="updateAlertDateBoardApproval()">
-                            ACEITE DIRETORIA
-                        </mat-checkbox>
+                        <ng-container *ngIf="getAcceptLabel('board', checkInModel.board_approval || 0) as label">
+                            <div class="position-relative cursor-pointer accept--{{ checkInModel.board_approval || 0 }}"
+                                [title]="label"
+                                (click)="boardApprovalSelect.open()">
+                                <span class="text-ellipsis">{{ label }}</span>
+
+                                <mat-select class="select-hidden col-md-3" #boardApprovalSelect
+                                    [disabled]="employeeDepartment != 1"
+                                    [(ngModel)]="checkInModel.board_approval"
+                                    (ngModelChange)="updateAlertDateBoardApproval()">
+                                    <mat-option *ngFor="let accept of acceptList"
+                                        [value]="accept">
+                                        {{ getAcceptLabel('board', accept || 0) }}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </ng-container>
                     </div>
 
                     <div class="check-in-cell">
@@ -189,18 +244,29 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (checkInModel.board_approval_date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                        {{ (checkInModel.board_approval_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
                     </div>
                 </div>
 
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <mat-checkbox
-                            [(ngModel)]="checkInModel.financial_acceptance"
-                            (click)="validateAlertDateFinancialAcceptance($event)"
-                            (ngModelChange)="updateAlertDateFinancialAcceptance()">
-                            ACEITE FINANCEIRO
-                        </mat-checkbox>
+                        <ng-container *ngIf="getAcceptLabel('financial', checkInModel.financial_acceptance || 0) as label">
+                            <div class="position-relative cursor-pointer accept--{{ checkInModel.financial_acceptance || 0 }}"
+                                [title]="label"
+                                (click)="financialAcceptanceSelect.open()">
+                                <span class="text-ellipsis">{{ label }}</span>
+
+                                <mat-select class="select-hidden col-md-3" #financialAcceptanceSelect
+                                    [disabled]="employeeDepartment != 6"
+                                    [(ngModel)]="checkInModel.financial_acceptance"
+                                    (ngModelChange)="updateAlertDateFinancialAcceptance()">
+                                    <mat-option *ngFor="let accept of acceptList"
+                                        [value]="accept">
+                                        {{ getAcceptLabel('financial', accept || 0) }}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </ng-container>
                     </div>
 
                     <div class="check-in-cell">
@@ -210,7 +276,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (checkInModel.financial_acceptance_date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                        {{ (checkInModel.financial_acceptance_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
                     </div>
                 </div>
 

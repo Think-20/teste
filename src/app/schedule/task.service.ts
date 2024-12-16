@@ -52,7 +52,11 @@ export class TaskService {
 
   budgetDisplay(task: Task, noAbbreviation: boolean = false) {
     const dsc = `Orçamento ${task.reopened === 0 ? 'do ' : 'da '}`;
-    return dsc + task.job_activity.description.replace('de', 'do').replace('Modificação', `Modificação ${StringHelper.padChar(task.reopened)}`).toLowerCase();
+
+    return dsc + task.job_activity.description
+        .replace('de', 'do')
+        .replace('Modificação', `mod. ${StringHelper.padChar(task.reopened)}`)
+        .toLowerCase();
   }
 
   proposalsDisplay(task: Task, noAbbreviation: boolean = false) {

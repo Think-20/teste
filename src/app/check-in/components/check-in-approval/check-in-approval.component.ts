@@ -1,7 +1,7 @@
 import { OrganizationService } from 'app/shared/services/organization.service';
-import { Job } from './../../../reports/service-report/report-list.model';
+import { Job } from 'app/jobs/job.model';
 import { AfterViewInit, Component, Input } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog, MatSnackBar } from '@angular/material';
 import { Task } from 'app/schedule/task.model';
 import { TaskService } from 'app/schedule/task.service';
 import { OrganizationFormComponent } from '../../../organization/components/check-in-organization-form/organization-form.component';
@@ -13,11 +13,12 @@ import { AuthService } from 'app/login/auth.service';
 import { Place } from 'app/places/place.model';
 import { DatePipe } from '@angular/common';
 import { Employee } from 'app/employees/employee.model';
+import { CheckInService } from 'app/check-in/check-in.service';
 
 @Component({
   selector: 'cb-check-in-approval',
   templateUrl: './check-in-approval.component.html',
-  styleUrls: ['./check-in-approval.component.css']
+  styleUrls: ['./check-in-approval.component.scss']
 })
 export class CheckInApprovalComponent implements AfterViewInit {
   @Input() job: Job;
@@ -25,6 +26,9 @@ export class CheckInApprovalComponent implements AfterViewInit {
   @Input() employees: Employee[] = [];
 
   employeeId: number;
+  employeeDepartment: number;
+
+  acceptList = [0, 1, 2];
 
   projects: Task[] = [];
   get project(): Task {
@@ -113,12 +117,51 @@ export class CheckInApprovalComponent implements AfterViewInit {
   constructor(
     private dialog: MatDialog,
     private datePipe: DatePipe, 
+    private snackBar: MatSnackBar,
     public taskService: TaskService,
     private authService: AuthService,
     private eventService: EventService,
+    private checkInService: CheckInService,
     private organizationService: OrganizationService,
   ) {
     this.employeeId = authService.currentUser().employee.id;
+  }
+
+  getAcceptLabel(type: 'client' | 'approval', accept: number): void {
+    const object = {
+      'client': {
+        0: 'Aguardando aceite do cliente',
+        1: 'Aceito pelo cliente',
+        2: 'Recusado pelo cliente',
+      },
+      'approval': {
+        0: 'Aguardando aprovação do atendente',
+        1: 'Aprovado pelo atendente',
+        2: 'Recusado pelo atendente',
+      },
+      'proposal': {
+        0: 'Aguardando aceite da proposta',
+        1: 'Proposta aceita',
+        2: 'Proposta recusada',
+      },
+      'production': {
+        0: 'Aguardando aceite de produção',
+        1: 'Produção aceita',
+        2: 'Produção recusada',
+      },
+      'board': {
+        0: 'Aguardando aceite da diretoria',
+        1: 'Aceito pela diretoria',
+        2: 'Recusado pela diretoria',
+      },
+      'financial': {
+        0: 'Aguardando aceite do financeiro',
+        1: 'Aceito pelo financeiro',
+        2: 'Recusado pelo financeiro',
+      }
+    }
+
+    return object[type][accept];
   }
 
   private getApprovalLog(employeeId: number, date: string): string {
@@ -149,6 +192,8 @@ export class CheckInApprovalComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    this.employeeDepartment = this.authService.currentUser().employee.department_id;
+
     this.loadEvents();
     this.loadOrganizations();
     this.loadProjects();
@@ -217,9 +262,20 @@ export class CheckInApprovalComponent implements AfterViewInit {
     this.budgets = this.budgets.concat(adds).reverse();
   }
 
-  validateAlertDateApproval(event: PointerEvent): void {
-    if (this.employeeId != this.job.attendance.id) {
-      event.preventDefault();
+  updateAlertDateAcceptClient(): void {
+    if (this.job && this.job.checkin) {
+      this.checkInModel.accept_client_date = this.getCurrentDate();
+      
+      let snackBarStateCharging = this.snackBar.open('Salvando...');
+
+      this.checkInService.resetAcceptClient(
+        this.checkInModel.id,
+        this.checkInModel.accept_client_date,
+        this.checkInModel.accept_client,
+      ).subscribe({
+        next: () => snackBarStateCharging.dismiss(),
+        error: () => snackBarStateCharging.dismiss(),
+      });
     }
   }
 
@@ -232,38 +288,14 @@ export class CheckInApprovalComponent implements AfterViewInit {
     event.preventDefault();
   }
 
-  validateAlertDateAcceptProposal(event: PointerEvent): void {
-    if (this.employeeId != 11) {
-      event.preventDefault();
-    }
-  }
-
   updateAlertDateAcceptProposal(): void {
     this.checkInModel.accept_proposal_employee_id = this.employeeId;
     this.checkInModel.accept_proposal_date = this.getCurrentDate();
   }
 
-  validateAlertDateAcceptProduction(event: PointerEvent): void {
-    if (this.employeeId != 20) {
-      event.preventDefault();
-    }
-  }
-
   updateAlertDateAcceptProduction(): void {
     this.checkInModel.accept_production_employee_id = this.employeeId;
     this.checkInModel.accept_production_date = this.getCurrentDate();
-  }
-
-  validateAlertDateBoardApproval(event: PointerEvent): void {
-    if (this.authService.currentUser().employee.department_id != 1) {
-      event.preventDefault();
-    }
-  }
-
-  validateAlertDateFinancialAcceptance(event: PointerEvent): void {
-    if (this.authService.currentUser().employee.department_id != 6) {
-      event.preventDefault();
-    }
   }
 
   updateAlertDateBoardApproval(): void {
