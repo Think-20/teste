@@ -127,7 +127,16 @@ export class CheckInApprovalComponent implements AfterViewInit {
     this.employeeId = authService.currentUser().employee.id;
   }
 
-  getAcceptLabel(type: 'client' | 'approval', accept: number): void {
+  getAcceptLabel(
+    type:
+      | "client"
+      | "approval"
+      | "proposal"
+      | "production"
+      | "board"
+      | "financial",
+    accept: number,
+  ): void {
     const object = {
       'client': {
         0: 'Aguardando aceite do cliente',
