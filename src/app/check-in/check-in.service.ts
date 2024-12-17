@@ -95,6 +95,27 @@ export class CheckInService {
       });
   }
 
+  sendEmail(checkInId: number) {
+    const body = {
+      checkin_id: checkInId,
+    };
+
+    return this.http
+      .post(
+        `${API}/checking/email`,
+        JSON.stringify(body),
+        new RequestOptions()
+      )
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
+
+        return ErrorHandler.capture(err);
+      });
+  }
+
   private deleteReadOnlyProperties(checkInModel: CheckInModel) {
     delete checkInModel.hash;
 

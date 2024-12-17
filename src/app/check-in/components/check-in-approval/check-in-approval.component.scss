@@ -244,3 +244,28 @@
         background-color: #ff0000;
     }
 }
+
+.send-email a {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+
+    & mat-icon {
+        display: flex;
+
+        align-items: center;
+        justify-content: center;
+    
+        width: 14px;
+        height: 14px;
+    
+        margin-left: 0.35rem;
+    
+        transform: rotateZ(315deg);
+    
+        font-size: 14px;
+    }
+}

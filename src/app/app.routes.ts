@@ -72,6 +72,7 @@ import { CustomeNotificationInactivationComponente } from './customer-notificati
 import { ExternalComponent } from './external/external.component';
 import { ExternalExtrasComponent } from './external/external-extras/external-extras.component';
 import { OrganizationComponent } from './organization/organization.component';
+import { ExternalCheckInComponent } from './external/external-check-in/external-check-in.component';
 
 export const ROUTES: Routes = [
   {
@@ -84,6 +85,10 @@ export const ROUTES: Routes = [
       {
         path: 'extras/:id/:hash',
         component: ExternalExtrasComponent,
+      },
+      {
+        path: 'check-in/:id/:hash/:accept',
+        component: ExternalCheckInComponent,
       }
     ],
   },

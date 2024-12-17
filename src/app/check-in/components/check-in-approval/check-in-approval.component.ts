@@ -378,6 +378,22 @@ export class CheckInApprovalComponent implements AfterViewInit {
     });
   }
 
+  sendEmail(): void {
+    if (!this.checkInModel.id) {
+      return;
+    }
+
+    let snackBarStateCharging = this.snackBar.open('Enviando e-mail...');
+
+    this.checkInService.sendEmail(this.checkInModel.id).subscribe(() => {
+      snackBarStateCharging.dismiss();
+
+      snackBarStateCharging = this.snackBar.open('E-mail enviado!');
+          
+      setTimeout(() => snackBarStateCharging.dismiss(), 3000);
+    });
+  }
+
   trackByEvent(index: number, event: Event): number {
     return event.id;
   }
