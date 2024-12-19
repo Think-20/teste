@@ -87,7 +87,7 @@ export const ROUTES: Routes = [
         component: ExternalExtrasComponent,
       },
       {
-        path: 'check-in/:id/:hash/:accept',
+        path: 'check-in/:id/:hash/:status',
         component: ExternalCheckInComponent,
       }
     ],

@@ -269,3 +269,20 @@
         font-size: 14px;
     }
 }
+
+.client-refuse {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+    
+    width: 1rem;
+    height: 1.5rem;
+    
+    font-size: 0.9rem;
+}
+
+::ng-deep .client-refuse-tooltip {
+    background-color: #7f7f7f;
+    font-size: 0.65rem;
+}

@@ -7,14 +7,12 @@ import { Http, RequestOptions } from "@angular/http";
 import { API } from "../app.api";
 import { of } from 'rxjs';
 import { IOtherCnpj } from './models/other-cnpj.model';
-import { DatePipe } from '@angular/common';
 
 @Injectable()
 export class CheckInService {
   constructor(
     private http: Http,
     private snackBar: MatSnackBar,
-    private datePipe: DatePipe,
   ) {}
 
   checkIn(checkInId: number): Observable<CheckInModel> {
@@ -53,9 +51,6 @@ export class CheckInService {
     object?: CheckInModel;
   }> {
     this.deleteReadOnlyProperties(checkInModel);
-
-    checkInModel.accept_client = 0;
-    checkInModel.accept_client_date = this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
 
     return this.http
       .put(`${API}/checking`, JSON.stringify(checkInModel), new RequestOptions())

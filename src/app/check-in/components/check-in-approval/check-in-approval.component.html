@@ -92,9 +92,19 @@
                     <div class="check-in-cell">
                         <ng-container *ngIf="getAcceptLabel('client', checkInModel.accept_client || 0) as label">
                             <div class="position-relative cursor-pointer accept--{{ checkInModel.accept_client || 0 }}"
-                                [title]="label"
                                 (click)="acceptClientSelect.open()">
-                                <span class="text-ellipsis">{{ label }}</span>
+                                <span class="text-ellipsis"
+                                    [title]="label">
+                                    {{ label }}
+                                </span>
+
+                                <mat-icon *ngIf="checkInModel.accept_client === 2 && checkInModel.reason_for_rejection"
+                                    class="client-refuse"
+                                    matTooltipClass="client-refuse-tooltip"
+                                    matTooltipPosition="above"
+                                    [matTooltip]="'Motivo de recusa: ' + checkInModel.reason_for_rejection">
+                                    info
+                                </mat-icon>
 
                                 <mat-select class="select-hidden col-md-3" #acceptClientSelect
                                     [(ngModel)]="checkInModel.accept_client"
