@@ -64,6 +64,20 @@ export class CheckInApprovalComponent implements AfterViewInit {
   }
 
   events: Event[] = [];
+  get eventsView(): Event[] {
+    if (!this.organization) {
+      return [];
+    }
+
+    const events = this.events.filter(x => !!x.organization_object);
+
+    if (!events || events.length === 0) {
+      return [];
+    }
+
+    return events.filter(x => x.organization_object.id === this.organization.id);
+  }
+
   get selectedEvent(): Event {
     const index = this.events.findIndex(x => x.id === this.checkInModel.event_id);
 
@@ -219,7 +233,7 @@ export class CheckInApprovalComponent implements AfterViewInit {
   }
 
   loadEvents(): void {
-    this.eventService.events().subscribe({
+    this.eventService.events({paginate: false}).subscribe({
       next: (response) => {
         this.events = response.pagination.data as Event[];
       }

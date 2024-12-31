@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable, Input } from '@angular/core';
+import { Component, Injectable, Input, ViewChild, ElementRef, AfterViewInit, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,6 +20,8 @@ import { isObject } from 'util';
 import { Patterns } from 'app/shared/patterns.model';
 import { UploadFileService } from 'app/shared/upload-file.service';
 import { JobService } from '../../jobs/job.service';
+import { OrganizationModel } from 'app/shared/models/organization.model';
+import { OrganizationService } from 'app/shared/services/organization.service';
 
 @Component({
   selector: 'cb-event-form',
@@ -42,17 +44,21 @@ import { JobService } from '../../jobs/job.service';
   ]
 })
 @Injectable()
-export class EventFormComponent implements OnInit {
+export class EventFormComponent implements OnInit, AfterViewInit {
+  @ViewChild('inputOrganizer', {static: false}) inputOrganizer: ElementRef<HTMLInputElement>;
 
   @Input('mode') typeForm: string
   @Input('withHeader') withHeader: boolean = true
   rowAppearedState = 'ready'
-  event: Event
+  event: Event;
   places: Place[]
   eventForm: FormGroup
-  contactsArray: FormArray
+  contactsArray: FormArray;
 
-constructor(
+  organizations: OrganizationModel[] = [];
+  organizationsView: OrganizationModel[] = [];
+
+  constructor(
     private placeService: PlaceService,
     private eventService: EventService,
     private jobService: JobService,
@@ -62,12 +68,11 @@ constructor(
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private organizationService: OrganizationService,
   ) { }
 
-  ngOnInit() {
-    this.typeForm = this.route.snapshot.url[0].path
-
+  ngOnInit(): void {
     this.eventForm = this.formBuilder.group({
       name: this.formBuilder.control('', [
         Validators.required,
@@ -108,10 +113,7 @@ constructor(
       ]),
       fin_hour_unmounting: this.formBuilder.control('', [
       ]),
-      organizer: this.formBuilder.control('', [
-        Validators.minLength(3),
-        Validators.maxLength(100)
-      ]),
+      organizer: this.formBuilder.control('', []),
       email: this.formBuilder.control('', [
         Validators.pattern(Patterns.email),
         Validators.maxLength(80)
@@ -133,13 +135,47 @@ constructor(
       created_at: this.formBuilder.control(''),
       updated_at: this.formBuilder.control(''),
       employee: this.formBuilder.control(''),
-    })
+    });
+  }
+
+  ngAfterViewInit() {
+    this.typeForm = this.route.snapshot.url[0].path
+
+    this.loadOrganizations();
 
     this.listenPlaces()
 
-    if(['edit', 'show'].indexOf(this.typeForm) > -1) {
+    if (['edit', 'show'].indexOf(this.typeForm) > -1) {
       this.loadEvent()
     }
+
+    this.observerOrganizer();
+  }
+
+  private observerOrganizer(): void {
+    this.eventForm.get('organizer').valueChanges
+      .debounceTime(250)
+      .subscribe(name => {
+        if (isObject(name)) {
+          return;
+        }
+
+        if (!name) {
+          this.organizationsView = [];
+
+          return;
+        }
+
+        this.organizationsView = [...this.organizations].filter(x => {
+          return x.name.toLowerCase().includes(name.toLowerCase());
+        });
+      });
+  }
+
+  private loadOrganizations(): void {
+    this.organizationService.organizations().subscribe((response) => {
+      this.organizations = response;
+    });
   }
 
   listenPlaces() {
@@ -209,7 +245,12 @@ constructor(
       this.eventForm.controls.updated_at.setValue(new Date(this.event.updated_at))
       this.eventForm.controls.employee.setValue(this.event.employee.name)
 
-      this.eventForm.controls.organizer.setValue(this.event.organizer)
+      if (this.event.organization_object) {
+        this.eventForm.controls.organizer.setValue(this.event.organization_object);
+      } else {
+        this.inputOrganizer.nativeElement.value = this.event.organizer;
+      }
+
       this.eventForm.controls.site.setValue(this.event.site)
       this.eventForm.controls.phone.setValue(this.event.phone)
       this.eventForm.controls.email.setValue(this.event.email)
@@ -268,6 +309,10 @@ constructor(
         })
       }
     })
+  }
+
+  displayOrganization(organization: OrganizationModel): string {
+    return organization.name;
   }
 }
 

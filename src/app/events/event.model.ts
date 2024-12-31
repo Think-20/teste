@@ -1,6 +1,7 @@
 import { Employee } from '../employees/employee.model';
 import { Place } from '../places/place.model';
 import { Job } from '../jobs/job.model';
+import { OrganizationModel } from 'app/shared/models/organization.model';
 
 export class Event {
   id: number
@@ -24,7 +25,8 @@ export class Event {
   fin_date_unmounting: string
   ini_hour_unmounting: string
   fin_hour_unmounting: string
-  organizer: string
+  organizer: string;
+  organization_object?: OrganizationModel;
   email: string
   phone: string
   site: string

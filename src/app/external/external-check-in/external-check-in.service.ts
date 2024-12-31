@@ -12,7 +12,10 @@ export class ExternalCheckInService {
 
   constructor(private http: Http, private snackBar: MatSnackBar) {}
 
-  accept(id: number, hash: string): Observable<string> {
+  accept(id: number, hash: string): Observable<{
+    error: string,
+    message: string,
+  }> {
     const body = {
       checkin_id: id,
       checkin_hash: hash,
@@ -31,7 +34,10 @@ export class ExternalCheckInService {
       });
   }
 
-  refuse(id: number, hash: string, reasonForRejection: string): Observable<string> {
+  refuse(id: number, hash: string, reasonForRejection: string): Observable<{
+    error: string,
+    message: string,
+  }> {
     const body = {
       checkin_id: id,
       checkin_hash: hash,

@@ -71,18 +71,27 @@ export class ExternalCheckInComponent implements OnInit, AfterViewInit {
     const snackBarLoading = this.snackBar.open('Carregando...');
 
     if (this.debbug) {
-      setTimeout(() => this.acceptNext(snackBarLoading), 1000);
+      setTimeout(() => this.acceptNext(null, snackBarLoading), 1000);
 
       return;
     }
 
     this.externalCheckInService.accept(this.id, this.hash).subscribe({
-      next: () => this.acceptNext(snackBarLoading),
+      next: (response) => this.acceptNext(response, snackBarLoading),
       error: () => this.acceptError(snackBarLoading),
     });
   }
 
-  private acceptNext(snackBarLoading: MatSnackBarRef<SimpleSnackBar>): void {
+  private acceptNext(response: {
+    error: string,
+    message: string,
+  }, snackBarLoading: MatSnackBarRef<SimpleSnackBar>): void {
+    if (response && response.error && JSON.parse(response.error)) {
+      this.acceptError(snackBarLoading);
+      
+      return;
+    }
+    
     snackBarLoading.dismiss();
         
     this.success = true;
@@ -105,7 +114,7 @@ export class ExternalCheckInComponent implements OnInit, AfterViewInit {
     const snackBarLoading = this.snackBar.open('Carregando...');
 
     if (this.debbug) {
-      setTimeout(() => this.refuseNext(snackBarLoading), 5000);
+      setTimeout(() => this.refuseNext(null, snackBarLoading), 5000);
 
       return;
     }
@@ -113,12 +122,21 @@ export class ExternalCheckInComponent implements OnInit, AfterViewInit {
     const reasonForRejection = this.reasonForRejection.value;
 
     this.externalCheckInService.refuse(this.id, this.hash, reasonForRejection).subscribe({
-      next: () => this.refuseNext(snackBarLoading),
+      next: (response) => this.refuseNext(response, snackBarLoading),
       error: () => this.refuseError(snackBarLoading),
     });
   }
 
-  private refuseNext(snackBarLoading: MatSnackBarRef<SimpleSnackBar>): void {
+  private refuseNext(response: {
+    error: string,
+    message: string,
+  }, snackBarLoading: MatSnackBarRef<SimpleSnackBar>): void {
+    if (response && response.error && JSON.parse(response.error)) {
+      this.refuseError(snackBarLoading);
+
+      return;
+    }
+    
     snackBarLoading.dismiss();
 
     this.success = true;

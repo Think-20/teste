@@ -37,12 +37,20 @@
             Entre 3 e 1000 caract.
           </mat-error>
         </mat-form-field>
+        
         <mat-form-field class="col-md-3">
-          <input ucWords formControlName="organizer" matInput placeholder="Organizador">
+          <input matInput #inputOrganizer formControlName="organizer" [matAutocomplete]="autocompleteOrganization" placeholder="Organizador" autocomplete="off">
           <mat-error>
-            Obrigatório, entre 3 e 100 caract.
+            Campo obrigatório
           </mat-error>
         </mat-form-field>
+
+        <mat-autocomplete #autocompleteOrganization="matAutocomplete" [displayWith]="displayOrganization">
+          <mat-option *ngFor="let organization of organizationsView" [value]="organization">
+            {{ organization.name }}
+          </mat-option>
+        </mat-autocomplete>
+
         <mat-form-field class="col-md-3">
           <input formControlName="phone" mask="(99) 9999-9999?9" matInput placeholder="Telefone">
           <mat-error>

@@ -11,7 +11,7 @@
                     [class.lock]="checkInModel && checkInModel.accept_client"
                     [style.fontSize.rem]="1.45">
                     <div class="center-items">
-                        <span class="approval-items position-relative text-ellipsis cursor-pointer"
+                        <span class="approval-items position-relative text-ellipsis text-center cursor-pointer" style="width: 100%;"
                             [title]="project ? 'Versão do Projeto: ' + taskService.jobDisplay(project) : 'Versão do Projeto'"
                             (click)="projectSelect.open()">
                             {{ project ? taskService.jobDisplay(project) : 'Versão do Projeto' }}
@@ -26,16 +26,16 @@
                             </mat-select>
                         </span>
 
-                        <div class="approval-logs">
+                        <div class="approval-logs text-ellipsis">
                             {{ (checkInModel.project_change_date ? projectChange : '-') }}
                         </div>
                     </div>
                     |
                     <div class="center-items">
-                        <div class="d-flex flex-row">
+                        <div class="d-flex flex-row" style="width: 100%;">
                             <mat-icon *ngIf="checkInModel && checkInModel.accept_client" class="icon-lock">lock</mat-icon>
 
-                            <span class="approval-items position-relative text-ellipsis cursor-pointer"
+                            <span class="approval-items position-relative text-ellipsis text-center cursor-pointer"
                                 [title]="memorial ? 'Memorial: ' + taskService.jobDisplay(memorial) : 'Memorial'"
                                 (click)="checkInModel && checkInModel.accept_client ? null : memorialSelect.open()">
                                 {{ memorial ? taskService.jobDisplay(memorial) : 'Memorial' }}
@@ -51,16 +51,16 @@
                             </span>
                         </div>
 
-                        <div class="approval-logs">
+                        <div class="approval-logs text-ellipsis">
                             {{ (checkInModel.memorial_change_date ? memorialChange : '-') }}
                         </div>
                     </div>
                     |
                     <div class="center-items">
-                        <div class="d-flex flex-row">
+                        <div class="d-flex flex-row" style="width: 100%;">
                             <mat-icon *ngIf="checkInModel && checkInModel.accept_client" class="icon-lock">lock</mat-icon>
 
-                            <span class="approval-items position-relative text-ellipsis cursor-pointer"
+                            <span class="approval-items position-relative text-ellipsis text-center cursor-pointer"
                                 [title]="budget ? 'Orçamento: ' + taskService.budgetDisplay(budget) : 'Orçamento'"
                                 (click)="checkInModel && checkInModel.accept_client ? null : budgetSelect.open()">
                                 {{ budget ? taskService.budgetDisplay(budget) : 'Orçamento' }}
@@ -76,7 +76,7 @@
                             </span>
                         </div>
 
-                        <div class="approval-logs">
+                        <div class="approval-logs text-ellipsis">
                             {{ (checkInModel.budget_change_date ? budgetChange : '-') }}
                         </div>
                     </div>
@@ -512,7 +512,7 @@
                                 (ngModelChange)="updateEvent()">
                                 <mat-option *ngFor="let event of events; trackBy: trackByEvent"
                                     [value]="event.id">
-                                    {{ event.place.name }}
+                                    {{ (event.ini_date | date: 'MM/yy') + ' - ' + event.place.name }}
                                 </mat-option>
                             </mat-select>
                         </span>
