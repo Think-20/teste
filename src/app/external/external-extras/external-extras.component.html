@@ -83,11 +83,19 @@
             </div>
         </div>
 
-        <button class="extras-btn-accepted animate__animated animate__fadeIn animate__delay-2s"
-            [disabled]="accepted || loading"
-            (click)="confirm()">
-            Clique aqui para aceitar
-        </button>
+        <div class="extras__buttons animate__animated animate__fadeIn animate__delay-2s">
+            <button type="button"
+                [disabled]="accepted || loading"
+                (click)="refuse()">
+                Recusar
+            </button>
+            
+            <button type="button"
+                [disabled]="accepted || loading"
+                (click)="confirm()">
+                Aceitar itens extras
+            </button>
+        </div>
     </ng-container>
 
     <ng-container *ngIf="accepted">

@@ -16,7 +16,7 @@ import { CheckInOtherCnpjsComponent } from '../check-in-other-cnpjs/check-in-oth
 @Component({
   selector: "cb-check-in-billing",
   templateUrl: "./check-in-billing.component.html",
-  styleUrls: ["./check-in-billing.component.css"],
+  styleUrls: ["./check-in-billing.component.scss"],
 })
 export class CheckInBillingComponent implements AfterViewInit, OnChanges, OnDestroy {
   @Input() job = new Job();

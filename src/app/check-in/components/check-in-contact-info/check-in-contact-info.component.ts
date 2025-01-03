@@ -10,7 +10,7 @@ import { forkJoin } from 'rxjs';
 @Component({
   selector: 'cb-check-in-contact-info',
   templateUrl: './check-in-contact-info.component.html',
-  styleUrls: ['./check-in-contact-info.component.css']
+  styleUrls: ['./check-in-contact-info.component.scss']
 })
 export class CheckInContactInfoComponent implements OnChanges {
   @Input() job: Job = new Job();

@@ -5,7 +5,7 @@ import { ExtrasGridComponent } from './components/extras-grid/extras-grid.compon
 @Component({
   selector: "cb-extras",
   templateUrl: "./extras.component.html",
-  styleUrls: ["./extras.component.css"],
+  styleUrls: ["./extras.component.scss"],
 })
 export class ExtrasComponent {
   @ViewChild('extrasGrid', { static: false }) extrasGrid!: ExtrasGridComponent;

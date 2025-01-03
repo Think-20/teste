@@ -9,7 +9,7 @@ import { Employee } from 'app/employees/employee.model';
 @Component({
   selector: 'cb-check-in-comission',
   templateUrl: './check-in-comission.component.html',
-  styleUrls: ['./check-in-comission.component.css']
+  styleUrls: ['./check-in-comission.component.scss']
 })
 export class CheckInComissionComponent implements OnInit, OnChanges, OnDestroy {
   @Input() title: string;

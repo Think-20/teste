@@ -4,7 +4,7 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 @Component({
   selector: 'cb-check-in-obs',
   templateUrl: './check-in-obs.component.html',
-  styleUrls: ['./check-in-obs.component.css'],
+  styleUrls: ['./check-in-obs.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

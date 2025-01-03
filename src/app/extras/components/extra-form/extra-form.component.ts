@@ -12,7 +12,7 @@ import { DatePipe } from '@angular/common';
 @Component({
   selector: 'cb-extra-form',
   templateUrl: './extra-form.component.html',
-  styleUrls: ['./extra-form.component.css']
+  styleUrls: ['./extra-form.component.scss']
 })
 export class ExtraFormComponent implements OnInit {
   @Input() checkInId: number;

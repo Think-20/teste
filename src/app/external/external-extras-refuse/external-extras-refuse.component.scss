@@ -1,0 +1,137 @@
+$box-width: 10rem;
+
+.external-check-in {
+    position: relative;
+
+    max-width: 400px;
+
+    padding: 2rem 1.5rem ($box-width + 0.5rem);
+    
+    background-color: #ffffff;
+    
+    box-shadow: 0 2px 5px 0px #e8e8e8;
+
+    border-radius: 5px;
+
+    overflow: hidden;
+
+    & h3 {
+        padding: 0;
+
+        margin-bottom: 2rem;
+
+        font-size: 1.5rem;
+        font-weight: 400;
+    }
+    
+    &__box {
+        position: absolute;
+    
+        right: 0;
+        bottom: 0;
+        left: 0;
+
+        display: flex;
+
+        align-items: flex-end;
+        justify-content: center;
+
+        width: 100%;
+        height: $box-width;
+
+        padding: 2rem 1.5rem 1rem;
+
+        background-color: #0000000d;
+
+        clip-path: polygon(0% 20%, 100% 0%, 100% 100%, 0% 100%);
+
+        animation: polygon-animation 1s normal;
+
+        overflow: hidden;
+
+        & span {
+            align-self: center;
+
+            font-size: 1.25rem;
+        }
+
+        &__reason-for-rejection {
+            width: 100%;
+
+            & textarea {
+                width: 100%;
+                
+                padding: 0.5rem;
+
+                resize: none;
+                
+                border: none;
+
+                border-radius: 4px;
+            }
+
+            &__buttons {
+                display: flex;
+
+                align-items: center;
+                justify-content: flex-end;
+
+                gap: 0.75rem;
+
+                & button {
+                    display: block;
+    
+                    justify-self: flex-end;
+                    
+                    padding: 0.5rem 0.85rem;
+    
+                    margin-top: 0.5rem;
+    
+                    color: #ffffff;
+                    
+                    text-decoration: none;
+                    
+                    font-size: 0.85rem;
+                    font-weight: 600;
+                    font-family: Arial, sans-serif;
+
+                    border-radius: 4px;
+                    border: none;
+
+                    &:nth-child(1) {
+                        background-color: #28598e;
+                    }
+
+                    &:nth-child(2) {
+                        background-color: #d00000;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.logo {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+
+    margin-top: 0.85rem;
+
+    & img {
+        width: 40px;
+    }
+}
+
+@keyframes polygon-animation {
+    from {
+        clip-path: polygon(0% 100%, 100% 100%, 100% 100%, 0% 100%);
+    }
+
+    to {
+        clip-path: polygon(0% 20%, 100% 0%, 100% 100%, 0% 100%);
+    }
+}

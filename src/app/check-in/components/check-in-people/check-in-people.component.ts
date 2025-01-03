@@ -9,7 +9,7 @@ import { PersonService } from 'app/shared/services/person.service';
 @Component({
   selector: 'cb-check-in-people',
   templateUrl: './check-in-people.component.html',
-  styleUrls: ['./check-in-people.component.css']
+  styleUrls: ['./check-in-people.component.scss']
 })
 export class CheckInPeopleComponent implements OnInit {
 

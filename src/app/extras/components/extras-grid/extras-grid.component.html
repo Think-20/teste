@@ -12,7 +12,7 @@
 
 <mat-accordion class="check-in-accordion extras-grid">
 
-    <mat-expansion-panel hideToggle [expanded]="true" [disabled]="true">
+    <mat-expansion-panel hideToggle [expanded]="true">
         
         <mat-expansion-panel-header>
 
@@ -21,22 +21,81 @@
             
                 <div class="check-in-header-right">
                     {{ valorTotalExtrasRecebido | currency: 'BRL' }}
+
+                    <mat-icon>keyboard_arrow_down</mat-icon>
                 </div>
             </div>
 
         </mat-expansion-panel-header>
 
         <div class="check-in-grid">
+            <div class="check-in-grid-left accept-approval">
+                <div class="check-in-row">
+                    <div class="check-in-cell">
+                        <ng-container *ngIf="getAcceptLabel('approval', checkInModel.approval || 0) as label">
+                            <div class="position-relative cursor-pointer accept--{{ checkInModel.approval || 0 }}"
+                                [title]="label"
+                                (click)="approvalSelect.open()">
+                                <span class="text-ellipsis">{{ label }}</span>
+
+                                <mat-select class="select-hidden col-md-3" #approvalSelect
+                                    [disabled]="employeeId != job.attendance.id"
+                                    [(ngModel)]="checkInModel.approval"
+                                    (ngModelChange)="updateAlertDateApproval()">
+                                    <mat-option *ngFor="let accept of acceptList"
+                                        [value]="accept">
+                                        {{ getAcceptLabel('approval', accept || 0) }}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </ng-container>
+                    </div>
+
+                    <div class="check-in-cell">
+                        <ng-container *ngIf="(job && job.attendance && job.attendance.id ? getEmployeeName(job.attendance.id) : '') as employeeName">
+                            <span class="text-ellipsis" [title]="employeeName || '-'">{{ employeeName }}</span>
+                        </ng-container>
+                    </div>
+
+                    <div class="check-in-cell">
+                        {{ (checkInModel.approval_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
+                    </div>
+                </div>
+            </div>
+
+            <div class="check-in-grid-right accept-approval">
+            </div>
 
             <div class="check-in-grid-left accept-client">
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <mat-checkbox
-                            [(ngModel)]="checkInModel.extras_accept_client"
-                            (click)="validateAcceptClient($event)"
-                            readonly>
-                            ACEITE CLIENTE
-                        </mat-checkbox>
+                        <ng-container *ngIf="getAcceptLabel('client', checkInModel.extras_accept_client || 0) as label">
+                            <div class="position-relative cursor-pointer accept--{{ checkInModel.extras_accept_client || 0 }}"
+                                (click)="acceptClientSelect.open()">
+                                <span class="text-ellipsis"
+                                    [title]="label">
+                                    {{ label }}
+                                </span>
+
+                                <mat-icon *ngIf="checkInModel.extras_accept_client === 2 && checkInModel.reason_for_rejection"
+                                    class="client-refuse"
+                                    matTooltipClass="client-refuse-tooltip"
+                                    matTooltipPosition="above"
+                                    [matTooltip]="'Motivo de recusa: ' + checkInModel.reason_for_rejection">
+                                    info
+                                </mat-icon>
+
+                                <mat-select class="select-hidden col-md-3" #acceptClientSelect
+                                    [(ngModel)]="checkInModel.extras_accept_client"
+                                    (ngModelChange)="updateAlertDateAcceptClient()">
+                                    <mat-option *ngFor="let accept of acceptList"
+                                        [value]="accept"
+                                        [disabled]="accept != 0">
+                                        {{ getAcceptLabel('client', accept || 0) }}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </ng-container>
                     </div>
 
                     <div class="check-in-cell">
@@ -46,7 +105,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (checkInModel.extras_accept_client_date | date: 'dd MMMM \'de\' yyyy - HH:mm\'hs\'') || '-' }}
+                        {{ (checkInModel.extras_accept_client_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
                     </div>
                 </div>
             </div>
@@ -54,7 +113,7 @@
             <div class="check-in-grid-right send-email">
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <a *ngIf="!checkInModel.extras_accept_client && extras && extras.length"
+                        <a *ngIf="checkInModel.extras_accept_client === 0 && extras && extras.length"
                             (click)="sendEmail()">
                             Enviar e-mail para aceite de cliente
                             

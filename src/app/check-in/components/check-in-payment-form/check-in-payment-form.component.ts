@@ -10,7 +10,7 @@ import { takeUntil } from 'rxjs/operators';
 @Component({
   selector: 'cb-check-in-payment-form',
   templateUrl: './check-in-payment-form.component.html',
-  styleUrls: ['./check-in-payment-form.component.css']
+  styleUrls: ['./check-in-payment-form.component.scss']
 })
 export class CheckInPaymentFormComponent implements OnInit, OnDestroy {
   @Input() checkInId: number;

@@ -8,7 +8,7 @@ import { CheckInOtherCnpjComponent } from '../check-in-other-cnpj/check-in-other
 @Component({
   selector: 'cb-check-in-other-cnpjs',
   templateUrl: './check-in-other-cnpjs.component.html',
-  styleUrls: ['./check-in-other-cnpjs.component.css']
+  styleUrls: ['./check-in-other-cnpjs.component.scss']
 })
 export class CheckInOtherCnpjsComponent implements OnInit {
   @ViewChildren('otherCnpj') otherCnpjElements: QueryList<CheckInOtherCnpjComponent>;

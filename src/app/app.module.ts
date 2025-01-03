@@ -255,6 +255,7 @@ import { CheckInOtherCnpjComponent } from './check-in/components/check-in-other-
 import { AlertsCheckInComponent } from './alerts/components/alerts-check-in/alerts-check-in.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { ExternalCheckInComponent } from './external/external-check-in/external-check-in.component';
+import { ExternalExtrasRefuseComponent } from './external/external-extras-refuse/external-extras-refuse.component';
 
 registerLocaleData(localePt);
 
@@ -413,6 +414,7 @@ registerLocaleData(localePt);
     OrganizationComponent,
     OrganizationFormComponent,
     ExternalCheckInComponent,
+    ExternalExtrasRefuseComponent,
   ],
   imports: [
     CurrencyMaskModule,

@@ -73,6 +73,7 @@ import { ExternalComponent } from './external/external.component';
 import { ExternalExtrasComponent } from './external/external-extras/external-extras.component';
 import { OrganizationComponent } from './organization/organization.component';
 import { ExternalCheckInComponent } from './external/external-check-in/external-check-in.component';
+import { ExternalExtrasRefuseComponent } from './external/external-extras-refuse/external-extras-refuse.component';
 
 export const ROUTES: Routes = [
   {
@@ -85,6 +86,10 @@ export const ROUTES: Routes = [
       {
         path: 'extras/:id/:hash',
         component: ExternalExtrasComponent,
+      },
+      {
+        path: 'extras/refuse/:id/:hash',
+        component: ExternalExtrasRefuseComponent,
       },
       {
         path: 'check-in/:id/:hash/:status',

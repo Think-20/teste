@@ -1,4 +1,19 @@
-@import url('../../../check-in/check-in.component.css');
+@import url('../../../check-in/check-in.component.scss');
+
+$border: 1px solid #ccc;
+
+.check-in-accordion ::ng-deep .mat-expanded .mat-expansion-panel-header,
+.check-in-accordion ::ng-deep .mat-expansion-panel-header {
+    border: $border;
+}
+
+.check-in-accordion ::ng-deep .mat-expansion-panel-body {
+    overflow: hidden !important;
+}
+
+.accept-approval {
+    border-top: none;
+}
 
 .extras-grid ::ng-deep .mat-checkbox-layout {
     margin: 0 !important;
@@ -30,16 +45,23 @@
     border-bottom: none;
 }
 
+.check-in-grid-left.accept-approval,
+.check-in-grid-right.accept-approval {
+    border-bottom: none;
+}
+
+.check-in-grid-left.accept-approval .check-in-row,
 .accept-client .check-in-row {
     display: grid;
 
-    grid-template-columns: 0.65fr .35fr 1fr;
+    grid-template-columns: 205px 100px 1fr;
 }
 
+.check-in-grid-left.accept-approval .check-in-row .check-in-cell:nth-child(2),
 .accept-client .check-in-row .check-in-cell:nth-child(2) {
     justify-content: flex-end;
 
-    border-right: 1px solid #ccc;
+    border-right: $border;
 }
 
 .send-email .check-in-row {
@@ -92,14 +114,14 @@
 }
 
 .extras-left .check-in-row:nth-child(1) {
-    border-bottom: 1px solid #ccc;
+    border-bottom: $border;
 }
 
 .extras-left .check-in-cell:nth-child(1),
 .extras-left .check-in-cell:nth-child(2),
 .extras-left .check-in-cell:nth-child(3),
 .extras-left .check-in-cell:nth-child(4) {
-    border-right: 1px solid #ccc;
+    border-right: $border;
 }
 
 .extras-left .check-in-row:nth-child(1) .check-in-cell:nth-child(1),
@@ -123,7 +145,7 @@
 }
 
 .check-in-grid-right .check-in-row:nth-child(1) {
-    border-bottom: 1px solid #ccc;
+    border-bottom: $border;
 }
 
 .list .check-in-row:nth-child(1) {
@@ -135,7 +157,7 @@
 .list .check-in-row .check-in-cell:nth-child(3),
 .list .check-in-row .check-in-cell:nth-child(4),
 .list .check-in-row .check-in-cell:nth-child(5) {
-    border-right: 1px solid #ccc;
+    border-right: $border;
 }
 
 .content-list {
@@ -167,7 +189,7 @@
 }
 
 .total-value .check-in-row .check-in-cell:nth-child(1) {
-    border-right: 1px solid #ccc;
+    border-right: $border;
 }
 
 .extra-value {
@@ -184,4 +206,42 @@
 
 .extra-value .check-in-row .check-in-cell:nth-child(2) {
     justify-content: flex-end;
+}
+
+.accept {
+    &--0,
+    &--1,
+    &--2 {
+        display: flex;
+
+        align-items: center;
+        justify-content: flex-start;
+        
+        gap: 0.25rem;
+
+        overflow: hidden;
+
+        &::before {
+            content: '';
+        
+            display: block;
+
+            min-width: 8px;
+            min-height: 8px;
+
+            border-radius: 50%;
+        }
+    }
+
+    &--0::before {
+        background-color: #003cbf;
+    }
+
+    &--1::before {
+        background-color: #00ad00;
+    }
+
+    &--2::before {
+        background-color: #ff0000;
+    }
 }

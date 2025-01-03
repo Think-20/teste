@@ -4,7 +4,7 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'cb-check-in-payment',
   templateUrl: './check-in-payment.component.html',
-  styleUrls: ['./check-in-payment.component.css']
+  styleUrls: ['./check-in-payment.component.scss']
 })
 export class CheckInPaymentComponent {
 

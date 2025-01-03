@@ -11,7 +11,7 @@ import { ExtrasGridComponent } from '../extras/components/extras-grid/extras-gri
 @Component({
   selector: "cb-check-in",
   templateUrl: "./check-in.component.html",
-  styleUrls: ["./check-in.component.css"],
+  styleUrls: ["./check-in.component.scss"],
 })
 export class CheckInComponent implements AfterViewInit {
   @ViewChild('contactInfo', { static: false }) contactInfo: CheckInContactInfoComponent;

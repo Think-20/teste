@@ -7,15 +7,24 @@ import { CheckInModel } from 'app/check-in/check-in.model';
 import { Job } from 'app/jobs/job.model';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { DatePipe } from '@angular/common';
+import { Employee } from 'app/employees/employee.model';
+import { EmployeeService } from 'app/employees/employee.service';
+import { AuthService } from 'app/login/auth.service';
 
 @Component({
   selector: 'cb-extras-grid',
   templateUrl: './extras-grid.component.html',
-  styleUrls: ['./extras-grid.component.css']
+  styleUrls: ['./extras-grid.component.scss']
 })
 export class ExtrasGridComponent implements OnInit {
   @Input() job = new Job();
   @Input() checkInModel = new CheckInModel();
+  @Input() employees: Employee[] = [];
+
+  employeeId: number;
+
+  acceptList = [0, 1, 2];
 
   extras: ExtraModel[] = [];
 
@@ -57,19 +66,33 @@ export class ExtrasGridComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
+    private datePipe: DatePipe,
     private snackBar: MatSnackBar,
+    readonly authService: AuthService,
     private extrasService: ExtrasService,
-  ) { }
+    private employeeService: EmployeeService,
+  ) {
+    this.employeeId = authService.currentUser().employee.id;
+  }
 
   ngOnInit() {
+    this.loadEmployees();
+
     this.obs$
       .debounceTime(1000)
       .pipe(distinctUntilChanged())
       .subscribe(() => {
+        this.checkInModel.extras_accept_client = 2;
         this.saveObs();
       });
     
     this.loadExtras();
+  }
+
+  private loadEmployees(): void {
+    this.employeeService.employees({paginate: false}).subscribe((response) => {
+      this.employees = response.pagination.data;
+    });
   }
 
   private loadExtras(): void {
@@ -93,8 +116,61 @@ export class ExtrasGridComponent implements OnInit {
     return '-';
   }
 
-  validateAcceptClient(event: PointerEvent): void {
-    event.preventDefault();
+  getAcceptLabel(type: "client" | "approval", accept: number): void {
+    const object = {
+      'client': {
+        0: 'Aguardando aceite do cliente',
+        1: 'Aceito pelo cliente',
+        2: 'Recusado pelo cliente',
+      },
+      'approval': {
+        0: 'Aguardando aprovação do atendente',
+        1: 'Aprovado pelo atendente',
+        2: 'Recusado pelo atendente',
+      },
+    }
+
+    return object[type][accept];
+  }
+
+  updateAlertDateApproval(): void {
+    this.checkInModel.approval_employee_id = this.employeeId;
+    this.checkInModel.approval_date = this.getCurrentDate();
+  }
+
+  updateAlertDateAcceptClient(): void {
+    if (this.job && this.job.checkin) {
+      this.checkInModel.extras_accept_client_date = this.getCurrentDate();
+
+      // let snackBarStateCharging = this.snackBar.open('Salvando...');
+
+      // this.checkInService.resetAcceptClient(
+      //   this.checkInModel.id,
+      //   this.checkInModel.accept_client_date,
+      //   this.checkInModel.accept_client,
+      // ).subscribe({
+      //   next: () => snackBarStateCharging.dismiss(),
+      //   error: () => snackBarStateCharging.dismiss(),
+      // });
+    }
+  }
+
+  private getCurrentDate(): string {
+    return this.datePipe.transform(new Date(), 'yyyy-MM-dd HH:mm:ss');
+  }
+
+  getEmployeeName(id: number): string {
+    if (!id) {
+      return '';
+    }
+
+    const index = this.employees.findIndex(x => x.id == id);
+
+    if (index >= 0) {
+      return this.employees[index].name;
+    }
+    
+    return '';
   }
 
   openModalExtra(extra?: ExtraModel): void {
@@ -111,7 +187,7 @@ export class ExtrasGridComponent implements OnInit {
 
     modal.afterClosed().subscribe(result => {
       if (result) {
-        this.checkInModel.extras_accept_client = false;
+        this.checkInModel.extras_accept_client = 0;
 
         this.loadExtras();
       }
@@ -125,7 +201,7 @@ export class ExtrasGridComponent implements OnInit {
   delete(extra: ExtraModel): void {
     this.extrasService.delete(extra.id)
       .subscribe(() => {
-        this.checkInModel.extras_accept_client = false;
+        this.checkInModel.extras_accept_client = 0;
 
         this.loadExtras();
       });

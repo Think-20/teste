@@ -14,7 +14,7 @@ export class CheckInModel {
     budget_change_employee?: number;
     budget_change_date?: string;
     client_email?: string;
-    extras_accept_client: boolean;
+    extras_accept_client: number;
     extras_accept_client_date: string;
     approval: number;
     approval_employee_id: number;

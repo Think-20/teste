@@ -1,5 +1,5 @@
 import { ExternalExtrasService } from './external-extras.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
 import { ExtraModel } from 'app/shared/models/extra.model';
@@ -7,7 +7,7 @@ import { ExtraModel } from 'app/shared/models/extra.model';
 @Component({
   selector: 'cb-external-extras',
   templateUrl: './external-extras.component.html',
-  styleUrls: ['./external-extras.component.css'],
+  styleUrls: ['./external-extras.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExternalExtrasComponent implements OnInit {
@@ -32,9 +32,9 @@ export class ExternalExtrasComponent implements OnInit {
       .map(x => x.value * (x.quantity || 1))
       .reduce((prv, current) => prv + current);
   }
-  
 
   constructor(
+    private router: Router,
     private snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute,
     private changeDetectorRef: ChangeDetectorRef,
@@ -84,5 +84,15 @@ export class ExternalExtrasComponent implements OnInit {
           this.changeDetectorRef.detectChanges();
         }
       });
+  }
+
+  refuse(): void {
+    if (this.accepted || this.loading) {
+      return;
+    }
+
+    this.router.navigate(['external/extras/refuse', this.id, this.hash], {
+      queryParams: { debbug: true }
+    });
   }
 }

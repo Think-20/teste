@@ -150,5 +150,4 @@ export class ExternalCheckInComponent implements OnInit, AfterViewInit {
 
     this.snackBar.open('Falha no processo \"Recusar Proposta\".');
   }
-
 }

@@ -13,7 +13,7 @@ import { PaymentModel } from 'app/shared/models/payment.model';
 @Component({
   selector: 'cb-check-in-billing-amount',
   templateUrl: './check-in-billing-amount.component.html',
-  styleUrls: ['./check-in-billing-amount.component.css']
+  styleUrls: ['./check-in-billing-amount.component.scss']
 })
 export class CheckInBillingAmountComponent implements OnInit, OnChanges {
   @Input() job = new Job();
