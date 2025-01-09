@@ -51,12 +51,12 @@ p {
 }
 
 .memorial-cabecalho {
-  background-image: url('/assets/images/timbrado_cabecalho.jpg');
+  background-image: url('/assets/images/timbrado_cabecalho.png');
   min-height: 173px;
 }
 
 .memorial-corpo {
-  background-image: url('/assets/images/timbrado_corpo.jpg');
+  background-image: url('/assets/images/timbrado_corpo.png');
   min-height: 730px;
   padding-top: 0;
   background-repeat: repeat-y;
@@ -67,7 +67,7 @@ p {
 }
 
 .memorial-rodape {
-  background-image: url('/assets/images/timbrado_rodape.jpg');
+  background-image: url('/assets/images/timbrado_rodape.png');
   min-height: 273px;
 }
 

@@ -60,7 +60,9 @@ export class JobTabsComponent implements OnInit {
   }
 
   tab($event: MatTabChangeEvent) {
-    let target = this.tabs.find(tab => tab.index == $event.index).description
+    const tab = this.tabs.find(tab => tab.index == $event.index);
+
+    let target = tab && tab.description ? tab.description : null;
 
     const queryParams: Params = { tab: target };
     this.router.navigate(

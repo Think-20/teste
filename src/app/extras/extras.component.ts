@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from "@angular/core";
 import { Job } from "app/jobs/job.model";
 import { ExtrasGridComponent } from './components/extras-grid/extras-grid.component';
+import { CheckInModel } from 'app/check-in/check-in.model';
 
 @Component({
   selector: "cb-extras",
@@ -12,6 +13,9 @@ export class ExtrasComponent {
 
   @Input() job = new Job();
 
+  get checkin() {
+    return this.job && this.job.checkin ? this.job.checkin : new CheckInModel();
+  }
   
   get valorTotalExtrasRecebido(): number {
     if (!this.extrasGrid) {

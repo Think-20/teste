@@ -119,25 +119,9 @@ export class CheckInBillingComponent implements AfterViewInit, OnChanges, OnDest
       const currentValue: CheckInModel = changes.checkInModel.currentValue;
       const previousValue: CheckInModel = changes.checkInModel.previousValue;
 
-      this.setPropertyDefaultValue('costumer_service_employee', this.job.attendance.id);
-      this.setPropertyDefaultValue('budget_employee', 11);
-      this.setPropertyDefaultValue('production_manager_employee', 20);
-
       if (currentValue && previousValue && currentValue.billing_client_id != previousValue.billing_client_id) {
         this.updateAgency(this.agency);
       }
-    }
-  }
-
-  private setPropertyDefaultValue(
-    property:
-      | "costumer_service_employee"
-      | "budget_employee"
-      | "production_manager_employee",
-    value: number
-  ): void {
-    if (!this.checkInModel[property]) {
-      this.checkInModel[property] = value;
     }
   }
 
