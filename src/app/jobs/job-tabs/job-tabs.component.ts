@@ -29,6 +29,7 @@ export class JobTabsComponent implements OnInit {
     {index: 1, description: 'briefing'},
     {index: 2, description: 'project'},
     {index: 3, description: 'specification'},
+    {index: 4, description: 'proposals'},
     {index: 5, description: 'budget-form'},
     {index: 6, description: 'check-in'},
     {index: 7, description: 'extras'},
@@ -65,6 +66,7 @@ export class JobTabsComponent implements OnInit {
     let target = tab && tab.description ? tab.description : null;
 
     const queryParams: Params = { tab: target };
+
     this.router.navigate(
       [],
       {
