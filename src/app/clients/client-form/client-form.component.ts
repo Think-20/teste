@@ -81,7 +81,7 @@ constructor(
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -167,7 +167,10 @@ constructor(
       paginate: false,
       deleted: true
     }).subscribe(dataInfo => {
-      let employees = dataInfo.pagination.data
+      let employees = this.authService.hasAccess('employees/all')
+        ? dataInfo.pagination.data
+        : dataInfo.data;
+
       this.employees = employees.filter(employee => {
         return (employee.department.description === 'Atendimento' || employee.department.description ==='Diretoria')
       })
