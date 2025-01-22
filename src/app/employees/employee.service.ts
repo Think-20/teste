@@ -27,10 +27,7 @@ export class EmployeeService {
 
 
   employees(params?: {}, page: number = 0): Observable<DataInfo> {
-    let url = params === {} ? `employees/all?page=${page}` : `employees/filter?page=${page}`
-    let prefix = this.auth.hasAccess('employees/all') ? '' : 'my-'
-
-    url = prefix + url
+    let url = params === {} ? `employees/all?page=${page}` : `employees/filter?page=${page}`;
 
     return this.http.post(
       `${API}/${url}`,

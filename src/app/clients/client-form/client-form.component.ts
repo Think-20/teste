@@ -167,9 +167,13 @@ constructor(
       paginate: false,
       deleted: true
     }).subscribe(dataInfo => {
-      let employees = this.authService.hasAccess('employees/all')
-        ? dataInfo.pagination.data
-        : dataInfo.data;
+      let employees = [];
+
+      if (dataInfo && dataInfo.pagination && dataInfo.pagination.data) {
+        employees = dataInfo.pagination.data;
+      } else if (dataInfo && dataInfo.data) {
+        employees = dataInfo.data;
+      }
 
       this.employees = employees.filter(employee => {
         return (employee.department.description === 'Atendimento' || employee.department.description ==='Diretoria')
