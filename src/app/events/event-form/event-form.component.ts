@@ -248,7 +248,7 @@ export class EventFormComponent implements OnInit, AfterViewInit {
       if (this.event.organization_object) {
         this.eventForm.controls.organizer.setValue(this.event.organization_object);
       } else {
-        this.inputOrganizer.nativeElement.value = this.event.organizer;
+        this.inputOrganizer.nativeElement.value = this.event.organizer as string;
       }
 
       this.eventForm.controls.site.setValue(this.event.site)
@@ -298,9 +298,17 @@ export class EventFormComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    event.id = eventId
+    const eventModel = JSON.parse(JSON.stringify(event)) as Event;
+    
+    eventModel.id = eventId;
 
-    this.eventService.edit(event).subscribe(data => {
+    if (typeof eventModel.organizer === 'object') {
+      eventModel.organization_id = (eventModel.organizer as OrganizationModel).id;
+
+      eventModel.organizer = null;
+    }
+
+    this.eventService.edit(eventModel).subscribe(data => {
       if(data.status) {
         this.router.navigateByUrl('/events')
       } else {

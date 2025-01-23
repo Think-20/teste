@@ -25,7 +25,8 @@ export class Event {
   fin_date_unmounting: string
   ini_hour_unmounting: string
   fin_hour_unmounting: string
-  organizer: string;
+  organizer: string | OrganizationModel;
+  organization_id?: number;
   organization_object?: OrganizationModel;
   email: string
   phone: string

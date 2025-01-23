@@ -510,7 +510,7 @@
                             <mat-select class="select-hidden col-md-3" #eventMatSelect
                                 [(ngModel)]="checkInModel.event_id"
                                 (ngModelChange)="updateEvent()">
-                                <mat-option *ngFor="let event of events; trackBy: trackByEvent"
+                                <mat-option *ngFor="let event of eventsView; trackBy: trackByEvent"
                                     [value]="event.id">
                                     {{ (event.ini_date | date: 'MM/yy') + ' - ' + event.place.name }}
                                 </mat-option>
