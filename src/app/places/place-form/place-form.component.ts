@@ -1,5 +1,5 @@
 import { Component, OnInit, Injectable, Input } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
+import { FormBuilder, FormGroup, FormControl, Validators } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -9,12 +9,10 @@ import { PlaceService } from '../place.service';
 
 import { CityService } from '../../address/city.service';
 import { StateService } from '../../address/state.service';
-import { Employee } from '../../employees/employee.model';
 import { City } from '../../address/city.model';
 import { State } from '../../address/state.model';
 
 import { ErrorHandler } from '../../shared/error-handler.service';
-import { Patterns } from '../../shared/patterns.model';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/debounceTime';
@@ -52,8 +50,8 @@ export class PlaceFormComponent implements OnInit {
   cities: Observable<City[]>
   states: Observable<State[]>
   placeForm: FormGroup
-
-constructor(
+  
+  constructor(
     private stateService: StateService,
     private cityService: CityService,
     private placeService: PlaceService,
@@ -61,7 +59,7 @@ constructor(
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -125,7 +123,6 @@ constructor(
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
       })
   }
-
 
   loadPlace() {
     let snackBarStateCharging = this.snackBar.open('Carregando local...')

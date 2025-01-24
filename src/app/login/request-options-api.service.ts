@@ -12,6 +12,10 @@ export class RequestOptionsApiService extends BaseRequestOptions {
     merge(options?: RequestOptionsArgs): RequestOptions {
         const newOptions = super.merge(options)
 
+        if (options && options.url && options.url.includes('viacep.com.br')) {
+            return newOptions;
+        }
+
         let user = JSON.parse(localStorage.getItem('currentUser')) || ''
         let token = localStorage.getItem('token') || ''
 

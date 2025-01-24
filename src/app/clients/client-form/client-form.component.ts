@@ -1,4 +1,4 @@
-import { Component, OnInit, Injectable, Input } from '@angular/core';
+import { Component, OnInit, Injectable, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -30,6 +30,9 @@ import { ClientComission } from '../client-comission/client-comission.model';
 import { ClientComissionService } from '../client-comission/client-comission.service';
 import { ObjectValidator, CnpjValidator } from '../../shared/custom-validators';
 import { Location } from '@angular/common';
+import { Subject } from 'rxjs';
+import { ViaCepService } from 'app/shared/services/viacep.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'cb-client-form',
@@ -52,7 +55,7 @@ import { Location } from '@angular/common';
   ]
 })
 @Injectable()
-export class ClientFormComponent implements OnInit {
+export class ClientFormComponent implements OnInit, OnDestroy {
 
   @Input('mode') typeForm: string
   @Input('withHeader') withHeader: boolean = true
@@ -68,7 +71,9 @@ export class ClientFormComponent implements OnInit {
   contactsArray: FormArray
   isDiretoria = false;
 
-constructor(
+  onDestroy$ = new Subject<null>();
+
+  constructor(
     private stateService: StateService,
     private cityService: CityService,
     private clientTypeService: ClientTypeService,
@@ -81,7 +86,8 @@ constructor(
     private formBuilder: FormBuilder,
     private snackBar: MatSnackBar,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private viacepService: ViaCepService,
   ) { }
 
   ngOnInit() {
@@ -184,7 +190,7 @@ constructor(
         this.clientStatus = clientStatus
 
         if(this.typeForm === 'edit') {
-          this.loadClient()
+          this.loadClient();
         } else {
           this.clientForm.controls.client_status.setValue(this.clientStatus.filter((status) => {
             return status.description == 'Ativo'
@@ -192,7 +198,12 @@ constructor(
           this.clientForm.controls.employee.setValue(this.employees.filter((employee) => {
             return employee.name == this.authService.currentUser().employee.name
           }).pop())
-          this.addContact()
+
+          this.addContact();
+
+          if (this.typeForm === 'new') {
+            this.cepObserver();
+          }
         }
       })
     })
@@ -217,6 +228,66 @@ constructor(
         this.cities = this.cityService.cities(stateId, cityName)
         Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
       })
+  }
+
+    private cepObserver(): void {
+      this.clientForm.controls.cep.valueChanges
+        .pipe(takeUntil(this.onDestroy$))
+        .subscribe(cep => {
+          this.getAddressByCep(cep);
+        });
+    }
+
+  private getAddressByCep(cep: string): void {
+    if (cep.length !== 9) {
+      return;
+    }
+
+    const snack = this.snackBar.open('Buscando CEP...');
+
+    this.viacepService.get(cep).subscribe({
+      next: data => {
+        snack.dismiss();
+        
+        if (data && data.erro && JSON.parse(data.erro)) {
+          return;
+        }
+
+        this.clientForm.controls.street.setValue(data.logradouro);
+        this.clientForm.controls.neighborhood.setValue(data.bairro);
+
+        this.getState(data.uf, data.localidade);
+      },
+      error: () => {
+        snack.dismiss();
+      }
+    });
+  }
+
+  private getState(uf: string, city: string): void {
+    this.stateService.states(uf).subscribe(states => {
+      if (!states || !states.length) {
+        return;
+      }
+
+      const state = states[0];
+
+      this.clientForm.controls.state.setValue(state);
+
+      this.getCity(city, state);
+    });
+  }
+
+  private getCity(city: string, state: State): void {
+    this.cityService.cities(state.id, city).subscribe(cities => {
+      if (!cities || !cities.length) {
+        return;
+      }
+
+      const city = cities[0];
+
+      this.clientForm.controls.city.setValue(city);
+    });
   }
 
   toggleExternal() {
@@ -268,7 +339,9 @@ constructor(
       for(let contact of client.contacts) {
         this.addContact(contact)
       }
-    })
+
+      this.cepObserver();
+    });
   }
 
   get contacts() { return this.clientForm.get('contacts'); }
@@ -375,6 +448,11 @@ constructor(
         })
       }
     })
+  }
+
+  ngOnDestroy(): void {
+    this.onDestroy$.next();
+    this.onDestroy$.complete();
   }
 }
 
