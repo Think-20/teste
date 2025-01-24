@@ -10,6 +10,8 @@ import { ExtrasGridComponent } from './components/extras-grid/extras-grid.compon
 export class ExtrasComponent {
   @ViewChild('extrasGrid', { static: false }) extrasGrid!: ExtrasGridComponent;
 
+  @Input() typeForm: string;
+
   @Input() job = new Job();
 
   
@@ -21,4 +23,11 @@ export class ExtrasComponent {
     return this.extrasGrid.valorTotalExtrasRecebido;
   }
   
+  get block(): boolean {
+    if (this.job && this.job.status && this.job.status.id) {
+      return this.job.status.id !== 3 || this.typeForm === "show";
+    }
+
+    return false;
+  }
 }

@@ -18,11 +18,21 @@ export class CheckInComponent implements AfterViewInit {
 
   @ViewChild('extras', { static: false }) extras: ExtrasGridComponent;
 
+  @Input() typeForm: string;
+
   @Input() job: Job = new Job();
   @Input() valorTotalExtrasRecebido = 0;
 
   checkInModel: CheckInModel = new CheckInModel();
   employees: Employee[] = [];
+
+  get block(): boolean {
+    if (this.job && this.job.status && this.job.status.id) {
+      return this.job.status.id !== 3 || this.typeForm === "show";
+    }
+
+    return false;
+  }
 
   constructor(
     private snackBar: MatSnackBar,

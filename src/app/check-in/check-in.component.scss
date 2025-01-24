@@ -1,3 +1,9 @@
+.check-in--block {
+    pointer-events: none;
+
+    opacity: 0.8;
+}
+
 .check-in-accordion ::ng-deep .mat-expansion-panel-body {
     overflow: auto !important;
 
