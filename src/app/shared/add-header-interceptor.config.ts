@@ -8,7 +8,9 @@ export class AddHeaderInterceptor implements HttpInterceptor {
     let token = localStorage.getItem('token') || ''
     let clonedRequest;
 
-    if(req.url.indexOf('upload-file') === -1) {
+    if (req.url.includes('viacep.com.br')) {
+      return next.handle(req);
+    } else if (req.url.indexOf('upload-file') === -1) {
       clonedRequest = req.clone({
         headers: req.headers.set('Authorization', `${token}`)
         .set('User', `${user.id}`)
