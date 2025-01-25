@@ -65,6 +65,8 @@ export class ScheduleFormComponent implements OnInit {
   @ViewChild('availableDatepicker', { static: false }) availableDatepicker: MatDatepicker<Date>
   buttonEnable: boolean = true
 
+  employeeId: number;
+
   constructor(
     private formBuilder: FormBuilder,
     private jobService: JobService,
@@ -83,6 +85,8 @@ export class ScheduleFormComponent implements OnInit {
   ngOnInit() {
     this.typeForm = this.route.snapshot.url[1].path
     this.isAdmin = this.authService.hasDisplay('schedule/new?adminmode')
+
+    this.employeeId = this.authService.currentUser().employee.id;
 
     this.paramAttendance = this.authService.currentUser().employee.department.description === 'Atendimento'
       ? this.authService.currentUser().employee : null
@@ -228,6 +232,22 @@ export class ScheduleFormComponent implements OnInit {
 
     this.scheduleForm.controls.budget_value.setValue(task.job.budget_value);
 
+    if (this.employeeId === 82
+      && task
+      && task.job
+      && task.job.status
+      && task.job.status.id === 9
+      && this.scheduleForm.controls.job_activity.value
+      && this.scheduleForm.controls.job_activity.value.id === 8) {
+      this.scheduleForm.controls.responsible.enable();
+    } else if (this.scheduleForm.controls.job_activity.value
+      && this.scheduleForm.controls.job_activity.value.keep_responsible === 1
+      && !this.adminMode) {
+      this.scheduleForm.controls.responsible.disable();
+    } else {
+      this.scheduleForm.controls.responsible.enable();
+    }
+
     if (this.scheduleForm.controls.job_activity.value.keep_responsible === 1) {
       this.scheduleForm.controls.responsible.setValue(task.responsible);
       this.filterItemsByResponsible()
@@ -271,10 +291,6 @@ export class ScheduleFormComponent implements OnInit {
     });
 
     this.jobTypeService.jobTypes().subscribe(job_types => this.job_types = job_types)
-
-    // this.employeeService.canInsertClients().subscribe((attendances) => {
-    //   this.attendances = attendances
-    // })
 
     this.employeeService.employees().subscribe(dataInfo => {
       let employees = dataInfo.pagination.data
