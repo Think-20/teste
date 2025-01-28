@@ -1,20 +1,26 @@
-import { Component, Input, ViewChild } from "@angular/core";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { Job } from "app/jobs/job.model";
 import { ExtrasGridComponent } from './components/extras-grid/extras-grid.component';
+import { ExtraModel } from 'app/shared/models/extra.model';
+import { ExtrasService } from './extras.service';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: "cb-extras",
   templateUrl: "./extras.component.html",
   styleUrls: ["./extras.component.scss"],
 })
-export class ExtrasComponent {
+export class ExtrasComponent implements OnInit {
   @ViewChild('extrasGrid', { static: false }) extrasGrid!: ExtrasGridComponent;
 
   @Input() typeForm: string;
 
   @Input() job = new Job();
 
-  
+  extras: ExtraModel[] = [];
+
+  loading = false;
+
   get valorTotalExtrasRecebido(): number {
     if (!this.extrasGrid) {
       return 0;
@@ -29,5 +35,41 @@ export class ExtrasComponent {
     }
 
     return false;
+  }
+
+  constructor(
+    private snackBar: MatSnackBar,
+    private extrasService: ExtrasService,
+  ) {}
+
+  ngOnInit(): void {
+    this.extrasService.extras().subscribe((response) => {
+      this.extras = response;
+    });
+  }
+
+  addExtra(): void {
+    let message = this.snackBar.open('Adicionando nova versão de extra...');
+
+    this.loading = true;
+
+    this.extrasService.post({
+      job_id: this.job.id,
+      approval: 0,
+      accept_client: 0,
+    }).subscribe({
+      next: (response) => {
+        this.extras.unshift(response.object);
+
+        message.dismiss();
+
+        this.loading = false;
+      },
+      error: () => {
+        message.dismiss();
+
+        this.loading = false;
+      }
+    });
   }
 }

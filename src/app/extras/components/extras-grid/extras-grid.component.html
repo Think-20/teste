@@ -1,23 +1,30 @@
 <mat-menu #menu="matMenu">
-    <ng-template matMenuContent let-extra="extra">
-        <button (click)="edit(extra)" mat-menu-item>
+    <ng-template matMenuContent let-item="item">
+        <button (click)="edit(item)" mat-menu-item>
           <mat-icon>mode_edit</mat-icon> Editar
         </button>
 
-        <button (click)="delete(extra)" mat-menu-item>
+        <button (click)="delete(item)" mat-menu-item>
           <mat-icon>delete</mat-icon> Remover
         </button>
     </ng-template>
 </mat-menu>
 
-<mat-accordion class="check-in-accordion extras-grid">
+<mat-accordion class="check-in-accordion extras-grid"
+    [class.check-in-accordion--last]="last">
 
-    <mat-expansion-panel hideToggle [expanded]="true">
+    <mat-expansion-panel hideToggle [expanded]="!last">
         
         <mat-expansion-panel-header>
 
             <div class="check-in-header">
-                <h6 class="check-in-header-title">Extras:</h6>
+                <h6 class="check-in-header-title">
+                    Versão {{ index < 10 ? ('0' + index) : index }} do(s) extra(s)
+
+                    <span *ngIf="extra.updated_by && extra.updated_at">
+                        {{ getEmployeeName(extra.updated_by) || '-' }} | {{ extra.updated_at | date: 'dd/MM/yyyy HH:mm' }}
+                    </span>
+                </h6>
             
                 <div class="check-in-header-right">
                     {{ valorTotalExtrasRecebido | currency: 'BRL' }}
@@ -32,15 +39,15 @@
             <div class="check-in-grid-left accept-approval">
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <ng-container *ngIf="getAcceptLabel('approval', checkInModel.approval || 0) as label">
-                            <div class="position-relative cursor-pointer accept--{{ checkInModel.approval || 0 }}"
+                        <ng-container *ngIf="getAcceptLabel('approval', extra.approval || 0) as label">
+                            <div class="position-relative cursor-pointer accept--{{ extra.approval || 0 }}"
                                 [title]="label"
                                 (click)="approvalSelect.open()">
                                 <span class="text-ellipsis">{{ label }}</span>
 
                                 <mat-select class="select-hidden col-md-3" #approvalSelect
                                     [disabled]="employeeId != job.attendance.id"
-                                    [(ngModel)]="checkInModel.approval"
+                                    [(ngModel)]="extra.approval"
                                     (ngModelChange)="updateAlertDateApproval()">
                                     <mat-option *ngFor="let accept of acceptList"
                                         [value]="accept">
@@ -58,7 +65,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (checkInModel.approval_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
+                        {{ (extra.approval_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
                     </div>
                 </div>
             </div>
@@ -69,24 +76,24 @@
             <div class="check-in-grid-left accept-client">
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <ng-container *ngIf="getAcceptLabel('client', checkInModel.extras_accept_client || 0) as label">
-                            <div class="position-relative cursor-pointer accept--{{ checkInModel.extras_accept_client || 0 }}"
+                        <ng-container *ngIf="getAcceptLabel('client', extra.accept_client || 0) as label">
+                            <div class="position-relative cursor-pointer accept--{{ extra.accept_client || 0 }}"
                                 (click)="acceptClientSelect.open()">
                                 <span class="text-ellipsis"
                                     [title]="label">
                                     {{ label }}
                                 </span>
 
-                                <mat-icon *ngIf="checkInModel.extras_accept_client === 2 && checkInModel.reason_for_rejection"
+                                <mat-icon *ngIf="extra.accept_client === 2 && extra.reason_for_rejection"
                                     class="client-refuse"
                                     matTooltipClass="client-refuse-tooltip"
                                     matTooltipPosition="above"
-                                    [matTooltip]="'Motivo de recusa: ' + checkInModel.reason_for_rejection">
+                                    [matTooltip]="'Motivo de recusa: ' + extra.reason_for_rejection">
                                     info
                                 </mat-icon>
 
                                 <mat-select class="select-hidden col-md-3" #acceptClientSelect
-                                    [(ngModel)]="checkInModel.extras_accept_client"
+                                    [(ngModel)]="extra.accept_client"
                                     (ngModelChange)="updateAlertDateAcceptClient()">
                                     <mat-option *ngFor="let accept of acceptList"
                                         [value]="accept"
@@ -105,7 +112,7 @@
                     </div>
 
                     <div class="check-in-cell">
-                        {{ (checkInModel.extras_accept_client_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
+                        {{ (extra.accept_client_date | date: 'dd/MM/yyyy HH:mm') || '-' }}
                     </div>
                 </div>
             </div>
@@ -113,7 +120,7 @@
             <div class="check-in-grid-right send-email">
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <a *ngIf="checkInModel.extras_accept_client === 0 && extras && extras.length"
+                        <a *ngIf="extra.accept_client === 0"
                             (click)="sendEmail()">
                             Enviar e-mail para aceite de cliente
                             
@@ -147,35 +154,35 @@
                     </div>
                 </div>
 
-                <div *ngFor="let extra of extras" class="check-in-row cursor-pointer">
+                <div *ngFor="let item of items" class="check-in-row cursor-pointer">
                     <div class="check-in-cell"
                         [matMenuTriggerFor]="menu"
-                        [matMenuTriggerData]="{ extra: extra }">
-                        {{ extra.description }}
+                        [matMenuTriggerData]="{ item: item }">
+                        {{ item.description }}
                     </div>
 
                     <div class="check-in-cell"
                         [matMenuTriggerFor]="menu"
-                        [matMenuTriggerData]="{ extra: extra }">
-                        {{ extra.quantity || 1 }}
+                        [matMenuTriggerData]="{ item: item }">
+                        {{ item.quantity || 1 }}
                     </div>
 
                     <div class="check-in-cell"
                         [matMenuTriggerFor]="menu"
-                        [matMenuTriggerData]="{ extra: extra }">
-                        {{ extra.value | currency: 'BRL' }}
+                        [matMenuTriggerData]="{ item: item }">
+                        {{ item.value | currency: 'BRL' }}
                     </div>
 
                     <div class="check-in-cell"
                         [matMenuTriggerFor]="menu"
-                        [matMenuTriggerData]="{ extra: extra }">
-                        {{ extra && extra.requester_object ? extra.requester_object.name : '' }}
+                        [matMenuTriggerData]="{ item: item }">
+                        {{ item && item.requester_object ? item.requester_object.name : '' }}
                     </div>
 
                     <div class="check-in-cell"
                         [matMenuTriggerFor]="menu"
-                        [matMenuTriggerData]="{ extra: extra }">
-                        {{ extra && extra.budget_object ? extra.budget_object.name : '' }}
+                        [matMenuTriggerData]="{ item: item }">
+                        {{ item && item.budget_object ? item.budget_object.name : '' }}
                     </div>
                 </div>
 
@@ -215,41 +222,41 @@
 
                 <div class="content-list">
                     <div class="list">
-                        <div *ngFor="let extra of extras" class="check-in-row cursor-pointer">
+                        <div *ngFor="let item of items" class="check-in-row cursor-pointer">
                             <div class="check-in-cell"
                                 [matMenuTriggerFor]="menu"
-                                [matMenuTriggerData]="{ extra: extra }">
-                                {{ extra.approval_date | date: 'dd MMMM yyyy' }}
+                                [matMenuTriggerData]="{ item: item }">
+                                {{ item.approval_date | date: 'dd MMMM yyyy' }}
                             </div>
 
                             <div class="check-in-cell"
                                 [matMenuTriggerFor]="menu"
-                                [matMenuTriggerData]="{ extra: extra }">
-                                {{ extra.extra_commission }}
+                                [matMenuTriggerData]="{ item: item }">
+                                {{ item.item_commission }}
                             </div>
 
                             <div class="check-in-cell"
                                 [matMenuTriggerFor]="menu"
-                                [matMenuTriggerData]="{ extra: extra }">
-                                {{ extra && extra.billing_employee_object ? extra.billing_employee_object.name : '' }}
+                                [matMenuTriggerData]="{ item: item }">
+                                {{ item && item.billing_employee_object ? item.billing_employee_object.name : '' }}
                             </div>
 
                             <div class="check-in-cell"
                                 [matMenuTriggerFor]="menu"
-                                [matMenuTriggerData]="{ extra: extra }">
-                                {{ extra.date | date: 'dd MMMM yyyy' }}
+                                [matMenuTriggerData]="{ item: item }">
+                                {{ item.date | date: 'dd MMMM yyyy' }}
                             </div>
 
                             <div class="check-in-cell"
                                 [matMenuTriggerFor]="menu"
-                                [matMenuTriggerData]="{ extra: extra }">
-                                {{ extra.due_date | date: 'dd MMMM yyyy' }}
+                                [matMenuTriggerData]="{ item: item }">
+                                {{ item.due_date | date: 'dd MMMM yyyy' }}
                             </div>
 
                             <div class="check-in-cell"
                                 [matMenuTriggerFor]="menu"
-                                [matMenuTriggerData]="{ extra: extra }">
-                                {{ extra.settlement_date | date: 'dd MMMM yyyy' }}
+                                [matMenuTriggerData]="{ item: item }">
+                                {{ item.settlement_date | date: 'dd MMMM yyyy' }}
                             </div>
                         </div>
                     </div>
@@ -280,9 +287,9 @@
         </div>
 
         <cb-check-in-obs name="extras_obs" id="extras_obs"
-            [(ngModel)]="checkInModel.extras_obs"
+            [(ngModel)]="extra.obs"
             (ngModelChange)="changeObs()"
-            [borderBottom]="true">
+            [borderBottom]="last">
         </cb-check-in-obs>
         
     </mat-expansion-panel>

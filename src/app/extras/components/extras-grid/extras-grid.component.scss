@@ -2,17 +2,44 @@
 
 $border: 1px solid #ccc;
 
-.check-in-accordion ::ng-deep .mat-expanded .mat-expansion-panel-header,
-.check-in-accordion ::ng-deep .mat-expansion-panel-header {
-    border: $border;
+.check-in-header-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 1rem;
+
+    & span {
+        font-weight: lighter;
+        font-size: 12px;
+        color: #AAA;
+    }
+}
+
+.check-in-accordion {
+    & ::ng-deep .mat-expanded .mat-expansion-panel-header,
+    & ::ng-deep .mat-expansion-panel-header {
+        border-top: $border;
+        border-bottom: none;
+    }
+
+    &--last ::ng-deep .mat-expanded .mat-expansion-panel-header,
+    &--last ::ng-deep .mat-expansion-panel-header {
+        border-top: $border;
+        border-bottom: $border;
+    }
 }
 
 .check-in-accordion ::ng-deep .mat-expansion-panel-body {
     overflow: hidden !important;
 }
 
+.check-in-accordion--last .accept-approval {
+    border-top: none !important;
+}
+
 .accept-approval {
-    border-top: none;
+    border-top: $border;
 }
 
 .extras-grid ::ng-deep .mat-checkbox-layout {
