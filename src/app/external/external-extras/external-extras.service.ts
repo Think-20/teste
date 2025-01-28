@@ -2,7 +2,7 @@ import { Http } from '@angular/http';
 import { Injectable } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { ErrorHandler } from "../../shared/error-handler.service";
-import { ExtraModel } from 'app/shared/models/extra.model';
+import { ExtraItemModel } from 'app/shared/models/extra-item.model';
 import { Observable } from 'rxjs';
 import { API } from 'app/app.api';
 
@@ -13,7 +13,7 @@ export class ExternalExtrasService {
 
   constructor(private http: Http, private snackBar: MatSnackBar) {}
 
-  get(id: number, hash: string): Observable<ExtraModel[]> {
+  get(id: number, hash: string): Observable<ExtraItemModel[]> {
     return this.http
       .get(`${API}/extra/${id}/${hash}`)
       .map((response) => response.json())

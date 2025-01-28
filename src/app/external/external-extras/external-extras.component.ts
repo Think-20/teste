@@ -2,7 +2,7 @@ import { ExternalExtrasService } from './external-extras.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
-import { ExtraModel } from 'app/shared/models/extra.model';
+import { ExtraItemModel } from 'app/shared/models/extra-item.model';
 
 @Component({
   selector: 'cb-external-extras',
@@ -17,7 +17,7 @@ export class ExternalExtrasComponent implements OnInit {
   id: number;
   hash: string;
 
-  extrasList: ExtraModel[] = [];
+  extrasList: ExtraItemModel[] = [];
   
   get total(): number {
     if (!this.extrasList || !this.extrasList.length) {

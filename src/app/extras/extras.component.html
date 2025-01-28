@@ -3,10 +3,23 @@
     <div class="row">
         <div class="w-100">
 
-            <cb-extras-grid #extrasGrid
+            <cb-extras-grid #extrasGrid *ngFor="let extra of extras; let last = last; let index = index"
                 [job]="job"
+                [last]="last"
+                [index]="extras.length - index"
+                [extra]="extra"
                 [checkInModel]="job.checkin"
             ></cb-extras-grid>
+
+            <div class="d-flex flex-row justify-content-end mt-4"
+                [style.paddingLeft.px]="24"
+                [style.paddingRight.px]="24">
+                <button class="cb-button" color="primary" mat-raised-button
+                    [disabled]="loading"
+                    (click)="addExtra()">
+                    ADICIONAR
+                </button>
+            </div>
 
         </div>
     </div>

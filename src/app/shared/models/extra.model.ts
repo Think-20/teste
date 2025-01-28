@@ -1,22 +1,18 @@
-import { Employee } from 'app/employees/employee.model';
-import { PersonModel } from './person.model';
+import { ExtraItemModel } from './extra-item.model';
 
 export class ExtraModel {
     id?: number;
-    checkin_id?: number;
     description?: string;
-    value?: number;
-    quantity?: number;
-    requester?: number;
-    budget?: number;
+    job_id?: number;
+    accept_client?: number;
+    accept_client_date?: string;
+    reason_for_rejection?: string;
+    approval?: number;
     approval_date?: string;
-    extra_commission?: string;
-    billing_employee_id?: number;
-    date?: string;
-    due_date?: string;
-    settlement_date?: string;
+    hash?: string;
+    obs?: string;
     created_at?: string;
+    updated_by?: number;
     updated_at?: string;
-    requester_object?: PersonModel;
-    budget_object?: Employee;
+    extra_items?: ExtraItemModel[];
 }

@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
-import { ExtraModel } from 'app/shared/models/extra.model';
+import { ExtraItemModel } from 'app/shared/models/extra-item.model';
 import { ExtrasService } from 'app/extras/extras.service';
 import { ExtraFormComponent } from '../extra-form/extra-form.component';
 import { CheckInModel } from 'app/check-in/check-in.model';
@@ -11,6 +11,7 @@ import { DatePipe } from '@angular/common';
 import { Employee } from 'app/employees/employee.model';
 import { EmployeeService } from 'app/employees/employee.service';
 import { AuthService } from 'app/login/auth.service';
+import { ExtraModel } from 'app/shared/models/extra.model';
 
 @Component({
   selector: 'cb-extras-grid',
@@ -19,6 +20,9 @@ import { AuthService } from 'app/login/auth.service';
 })
 export class ExtrasGridComponent implements OnInit {
   @Input() job = new Job();
+  @Input() last = false;
+  @Input() index = 0;
+  @Input() extra = new ExtraModel();
   @Input() checkInModel = new CheckInModel();
   @Input() employees: Employee[] = [];
 
@@ -26,40 +30,46 @@ export class ExtrasGridComponent implements OnInit {
 
   acceptList = [0, 1, 2];
 
-  extras: ExtraModel[] = [];
-
   obs$ = new Subject<boolean>();
   
+  get items(): ExtraItemModel[] {
+    return this.extra
+      && this.extra.extra_items
+      && this.extra.extra_items.length
+      ? this.extra.extra_items
+      : [];
+  }
+
   get valorTotalExtras(): number {
-    if (!this.extras || !this.extras.length) {
+    if (!this.items || !this.items.length) {
       return 0;
     }
 
-    if (this.extras.length == 1) {
-      return this.extras[0].value * (this.extras[0].quantity || 1);
+    if (this.items.length == 1) {
+      return this.items[0].value * (this.items[0].quantity || 1);
     }
 
-    return this.extras
+    return this.items
       .map(x => x.value * (x.quantity || 1))
       .reduce((prv, current) => prv + current);
   }
 
   get valorTotalExtrasRecebido(): number {
-    if (!this.extras || !this.extras.length) {
+    if (!this.items || !this.items.length) {
       return 0;
     }
 
-    if (this.extras.length == 1) {
-      return this.extras[0].value * (this.extras[0].quantity || 1);
+    if (this.items.length == 1) {
+      return this.items[0].value * (this.items[0].quantity || 1);
     }
 
-    const extras = this.extras.filter(x => !!x.settlement_date);
+    const items = this.items.filter(x => !!x.settlement_date);
 
-    if (!extras || extras.length <= 0) {
+    if (!items || items.length <= 0) {
       return 0;
     }
 
-    return extras
+    return items
       .map(x => x.value * (x.quantity || 1))
       .reduce((prv, current) => prv + current);
   }
@@ -82,26 +92,14 @@ export class ExtrasGridComponent implements OnInit {
       .debounceTime(1000)
       .pipe(distinctUntilChanged())
       .subscribe(() => {
-        this.checkInModel.extras_accept_client = 2;
         this.saveObs();
       });
-    
-    this.loadExtras();
   }
 
   private loadEmployees(): void {
     this.employeeService.employees({paginate: false}).subscribe((response) => {
       this.employees = response.pagination.data;
     });
-  }
-
-  private loadExtras(): void {
-    this.extrasService.extras()
-      .subscribe(extras => {
-        if (extras && extras.length > 0 && this.checkInModel.id) {
-          this.extras = extras.filter(x => x.checkin_id === this.checkInModel.id);
-        }
-      });
   }
 
   getClientName() {
@@ -134,25 +132,22 @@ export class ExtrasGridComponent implements OnInit {
   }
 
   updateAlertDateApproval(): void {
-    this.checkInModel.approval_employee_id = this.employeeId;
-    this.checkInModel.approval_date = this.getCurrentDate();
+    this.extra.approval_date = this.getCurrentDate();
   }
 
   updateAlertDateAcceptClient(): void {
-    if (this.job && this.job.checkin) {
-      this.checkInModel.extras_accept_client_date = this.getCurrentDate();
+    this.extra.accept_client_date = this.getCurrentDate();
 
-      // let snackBarStateCharging = this.snackBar.open('Salvando...');
+    let snackBarStateCharging = this.snackBar.open('Salvando...');
 
-      // this.checkInService.resetAcceptClient(
-      //   this.checkInModel.id,
-      //   this.checkInModel.accept_client_date,
-      //   this.checkInModel.accept_client,
-      // ).subscribe({
-      //   next: () => snackBarStateCharging.dismiss(),
-      //   error: () => snackBarStateCharging.dismiss(),
-      // });
-    }
+    this.extrasService.resetAcceptClient(
+      this.extra.id,
+      this.extra.accept_client,
+      this.extra.accept_client_date,
+    ).subscribe({
+      next: () => snackBarStateCharging.dismiss(),
+      error: () => snackBarStateCharging.dismiss(),
+    });
   }
 
   private getCurrentDate(): string {
@@ -173,48 +168,40 @@ export class ExtrasGridComponent implements OnInit {
     return '';
   }
 
-  openModalExtra(extra?: ExtraModel): void {
-    if (!this.checkInModel.id) {
-      return;
-    }
-
+  openModalExtra(item?: ExtraItemModel): void {
     const modal = this.dialog.open(ExtraFormComponent, {
       width: '500px',
     });
 
-    modal.componentInstance.checkInId = this.checkInModel.id;
-    modal.componentInstance.patchValue(extra);
+    modal.componentInstance.extra = this.extra;
+    modal.componentInstance.patchValue(item);
 
     modal.afterClosed().subscribe(result => {
       if (result) {
-        this.checkInModel.extras_accept_client = 0;
-
-        this.loadExtras();
+        this.extra.accept_client = 0;
       }
     });
   }
 
-  edit(extra: ExtraModel): void {
+  edit(extra: ExtraItemModel): void {
     this.openModalExtra(extra);
   }
 
-  delete(extra: ExtraModel): void {
+  delete(extra: ExtraItemModel): void {
     this.extrasService.delete(extra.id)
       .subscribe(() => {
-        this.checkInModel.extras_accept_client = 0;
-
-        this.loadExtras();
+        this.extra.accept_client = 0;
       });
   }
 
   sendEmail(): void {
-    if (!this.checkInModel.id) {
+    if (!this.checkInModel.client_email) {
       return;
     }
 
     let snackBarStateCharging = this.snackBar.open('Enviando e-mail...');
 
-    this.extrasService.sendEmail(this.checkInModel.id).subscribe(() => {
+    this.extrasService.sendEmail(this.extra.id).subscribe(() => {
       snackBarStateCharging.dismiss();
 
       snackBarStateCharging = this.snackBar.open('E-mail enviado!');
@@ -229,7 +216,7 @@ export class ExtrasGridComponent implements OnInit {
 
   private saveObs(): void {
     this.extrasService
-      .saveObs(this.checkInModel.id, this.checkInModel.extras_obs)
+      .saveObs(this.extra.id, this.extra.obs)
       .subscribe();
   }
 }

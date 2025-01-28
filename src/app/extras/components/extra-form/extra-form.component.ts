@@ -4,10 +4,11 @@ import { ExtrasService } from 'app/extras/extras.service';
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
-import { ExtraModel } from 'app/shared/models/extra.model';
+import { ExtraItemModel } from 'app/shared/models/extra-item.model';
 import { PersonModel } from 'app/shared/models/person.model';
 import { Employee } from 'app/employees/employee.model';
 import { DatePipe } from '@angular/common';
+import { ExtraModel } from 'app/shared/models/extra.model';
 
 @Component({
   selector: 'cb-extra-form',
@@ -15,8 +16,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./extra-form.component.scss']
 })
 export class ExtraFormComponent implements OnInit {
-  @Input() checkInId: number;
-  @Input() extra: ExtraModel = null;
+  extra: ExtraModel = null;
 
   persons: PersonModel[] = [];
   employees: Employee[] = [];
@@ -52,7 +52,7 @@ export class ExtraFormComponent implements OnInit {
     }).subscribe(response => this.employees = response.pagination.data);
   }
 
-  patchValue(extra: ExtraModel): void {
+  patchValue(extra: ExtraItemModel): void {
     this.extra = extra;
 
     if (this.extra) {
@@ -60,7 +60,7 @@ export class ExtraFormComponent implements OnInit {
     }
   }
 
-  close(extra?: ExtraModel): void {
+  close(extra?: ExtraItemModel): void {
     if (extra) {
       this.dialog.close(extra);
 
@@ -75,32 +75,42 @@ export class ExtraFormComponent implements OnInit {
       return;
     }
 
-    let snackBarStateCharging: MatSnackBarRef<SimpleSnackBar>;
+    const body = this.getBody();
 
-    const body: ExtraModel = {
+    const request = (this.extra && this.extra.id
+      ? this.extrasService.put(body)
+      : this.extrasService.post(body));
+      
+    let snackBarStateCharging = this.snackBar.open('Salvando...');
+
+    request.subscribe(response => {
+      snackBarStateCharging.dismiss();
+
+      if (response.message) {
+        snackBarStateCharging = this.snackBar.open(response.message);
+
+        setTimeout(() => snackBarStateCharging.dismiss(), 2000);
+      }
+
+      if (response.object) {
+        this.close(response.object);
+      }
+    });
+  }
+
+  private getBody(): ExtraItemModel {
+    return {
       ...this.form.value,
       id: this.extra ? this.extra.id : null,
-      checkin_id: this.checkInId,
-      approval_date: this.datePipe.transform(this.form.value.approval_date, 'yyyy-MM-dd HH:mm:ss'),
-      date: this.datePipe.transform(this.form.value.date, 'yyyy-MM-dd HH:mm:ss'),
-      due_date: this.datePipe.transform(this.form.value.due_date, 'yyyy-MM-dd HH:mm:ss'),
-      settlement_date: this.datePipe.transform(this.form.value.settlement_date, 'yyyy-MM-dd HH:mm:ss'),
+      extra_id: this.extra.id,
+      approval_date: this.getFormattedDate(this.form.value.approval_date),
+      date: this.getFormattedDate(this.form.value.date),
+      due_date: this.getFormattedDate(this.form.value.due_date),
+      settlement_date: this.getFormattedDate(this.form.value.settlement_date),
     };
+  }
 
-    (this.extra && this.extra.id ? this.extrasService.put(body) : this.extrasService.post(body))
-      .do(() => snackBarStateCharging = this.snackBar.open('Salvando...'))
-      .subscribe(response => {
-        snackBarStateCharging.dismiss();
-
-        if (response.message) {
-          snackBarStateCharging = this.snackBar.open(response.message);
-          
-          setTimeout(() => snackBarStateCharging.dismiss(), 2000);
-        }
-        
-        if (response.object) {
-          this.close(response.object);
-        }
-      });
+  private getFormattedDate(date: string | Date): string {
+    return this.datePipe.transform(date, 'yyyy-MM-dd HH:mm:ss');
   }
 }
