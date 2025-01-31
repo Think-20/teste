@@ -6,6 +6,19 @@
     <mat-card>
       <div class="row">
         <mat-form-field class="col-md-3">
+          <input formControlName="cnpj" mask="99.999.999/9999-99" matInput placeholder="CNPJ*" autofocus>
+          <div class="cb-checkbox-inside-control">
+            <mat-checkbox formControlName="external_toggle" [value]="1">Estrangeiro</mat-checkbox>
+            <input type="hidden" formControlName="external">
+          </div>
+          <mat-error>
+            Obrigatório, digite um CNPJ válido
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3">
+          <input formControlName="ie" matInput placeholder="Inscrição estadual">
+        </mat-form-field>
+        <mat-form-field class="col-md-3">
           <input ucWords formControlName="fantasy_name" matInput placeholder="Nome*">
           <mat-error>
             Obrigatório, entre 3 e 50 caract.
@@ -45,6 +58,15 @@
           </mat-select>
         </mat-form-field>
         <mat-form-field class="col-md-3">
+          <input formControlName="mainphone" mask="(99) 9999-9999?9" matInput placeholder="Telefone principal*">
+          <mat-error>
+            Obrigatório
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field class="col-md-3">
+          <input formControlName="secundaryphone" mask="(99) 9999-9999?9" matInput placeholder="Telefone secundário">
+        </mat-form-field>
+        <mat-form-field class="col-md-3">
           <mat-select [disabled]="!isDiretoria" placeholder="Atendimento*" formControlName="employee" [compareWith]="compareEmployee">
             <mat-option *ngFor="let employee of employees" [value]="employee">
               {{ employee.name }}
@@ -54,28 +76,6 @@
         <cb-stars class="col-md-3 star-input" label="Score" [rate]="client != undefined ? (client.rate + 1) : 0" [input]="clientForm.controls.rate">
           <input formControlName="rate" matInput>
         </cb-stars>
-        <mat-form-field class="col-md-3">
-          <input formControlName="cnpj" mask="99.999.999/9999-99" matInput placeholder="CNPJ*">
-          <div class="cb-checkbox-inside-control">
-            <mat-checkbox formControlName="external_toggle" [value]="1">Estrangeiro</mat-checkbox>
-            <input type="hidden" formControlName="external">
-          </div>
-          <mat-error>
-            Obrigatório, digite um CNPJ válido
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="col-md-3">
-          <input formControlName="ie" matInput placeholder="Inscrição estadual">
-        </mat-form-field>
-        <mat-form-field class="col-md-3">
-          <input formControlName="mainphone" mask="(99) 9999-9999?9" matInput placeholder="Telefone principal*">
-          <mat-error>
-            Obrigatório
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="col-md-3">
-          <input formControlName="secundaryphone" mask="(99) 9999-9999?9" matInput placeholder="Telefone secundário">
-        </mat-form-field>
         <div class="form-array" formArrayName="contacts">
           <div *ngFor="let control of getContactsControls(clientForm); let i = index">
             <form [formGroup]="getContactsControls(clientForm)[i]" novalidate autocomplete="off" class="flex contact-item">

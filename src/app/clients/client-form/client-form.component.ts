@@ -1,3 +1,4 @@
+import { ReceitaFederalService } from 'app/shared/services/external-apis/receita-federal.service';
 import { Component, OnInit, Injectable, Input, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
 import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
@@ -30,8 +31,8 @@ import { ClientComission } from '../client-comission/client-comission.model';
 import { ClientComissionService } from '../client-comission/client-comission.service';
 import { ObjectValidator, CnpjValidator } from '../../shared/custom-validators';
 import { Location } from '@angular/common';
-import { Subject } from 'rxjs';
-import { ViaCepService } from 'app/shared/services/viacep.service';
+import { race, Subject } from 'rxjs';
+import { ViaCepService } from 'app/shared/services/external-apis/viacep.service';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
@@ -71,6 +72,9 @@ export class ClientFormComponent implements OnInit, OnDestroy {
   contactsArray: FormArray
   isDiretoria = false;
 
+  oldCnpj: string;
+
+  raceCnpj$ = new Subject<null>();
   onDestroy$ = new Subject<null>();
 
   constructor(
@@ -88,6 +92,7 @@ export class ClientFormComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private viacepService: ViaCepService,
+    private receitaFederalService: ReceitaFederalService,
   ) { }
 
   ngOnInit() {
@@ -203,6 +208,7 @@ export class ClientFormComponent implements OnInit, OnDestroy {
 
           if (this.typeForm === 'new') {
             this.cepObserver();
+            this.cnpjObserver();
           }
         }
       })
@@ -230,13 +236,63 @@ export class ClientFormComponent implements OnInit, OnDestroy {
       })
   }
 
-    private cepObserver(): void {
-      this.clientForm.controls.cep.valueChanges
-        .pipe(takeUntil(this.onDestroy$))
-        .subscribe(cep => {
-          this.getAddressByCep(cep);
-        });
+  private cnpjObserver(): void {
+    this.clientForm.controls.cnpj.valueChanges
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe(cep => {
+        this.getCompanyDataByCnpj(cep);
+      });
+  }
+
+  private getCompanyDataByCnpj(cnpj: string): void {
+    if (this.clientForm.controls.cnpj.invalid
+      || this.clientForm.controls.external_toggle.value
+      || cnpj.length !== 18
+      || cnpj === this.oldCnpj) {
+      return;
     }
+    
+    this.oldCnpj = cnpj;
+
+    this.raceCnpj$.next();
+
+    this.snackBar.open("Carregando...");
+
+    race([
+      this.receitaFederalService.get(cnpj),
+      this.raceCnpj$,
+    ]).subscribe({
+      next: (data) => {
+        if (!data) {
+          return;
+        }
+
+        this.clientForm.patchValue({
+          name: data.nome,
+          fantasy_name: data.fantasia,
+          mainphone: data.telefone,
+          cep: data.cep.replace(/[.-]/g, ""),
+          street: data.logradouro,
+          number: data.numero,
+          neighborhood: data.bairro,
+          complement: data.complemento,
+        });
+
+        this.getState(data.uf, data.municipio);
+      },
+      error: (error) => {
+        this.oldCnpj = null;
+      }
+    });
+  }
+
+  private cepObserver(): void {
+    this.clientForm.controls.cep.valueChanges
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe(cep => {
+        this.getAddressByCep(cep);
+      });
+  }
 
   private getAddressByCep(cep: string): void {
     if (cep.length !== 9) {
@@ -265,12 +321,18 @@ export class ClientFormComponent implements OnInit, OnDestroy {
   }
 
   private getState(uf: string, city: string): void {
-    this.stateService.states(uf).subscribe(states => {
+    let ufBase = uf;
+    
+    if (uf.length !== 1) {
+      ufBase = uf[0];
+    }
+    
+    this.stateService.states(ufBase).subscribe(states => {
       if (!states || !states.length) {
         return;
       }
 
-      const state = states[0];
+      const state = states.find(state => state.code === uf);
 
       this.clientForm.controls.state.setValue(state);
 
@@ -313,34 +375,36 @@ export class ClientFormComponent implements OnInit, OnDestroy {
       snackBarStateCharging.dismiss()
       this.client = client
 
-      this.clientForm.controls.name.setValue(this.client.name)
-      this.clientForm.controls.fantasy_name.setValue(this.client.fantasy_name)
-      this.clientForm.controls.cnpj.setValue(this.client.cnpj)
-      this.clientForm.controls.external_toggle.setValue(this.client.external == 1 ? true : false)
-      this.clientForm.controls.mainphone.setValue(this.client.mainphone)
-      this.clientForm.controls.secundaryphone.setValue(this.client.secundaryphone)
-      this.clientForm.controls.client_type.setValue(this.client.type)
-      this.clientForm.controls.comission.setValue(this.client.comission)
-      this.clientForm.controls.client_status.setValue(this.client.status)
-      this.clientForm.controls.employee.setValue(this.client.employee)
-      this.clientForm.controls.site.setValue(this.client.site)
-      this.clientForm.controls.note.setValue(this.client.note)
-      this.clientForm.controls.rate.setValue(this.client.rate)
-      this.clientForm.controls.cep.setValue(this.client.cep)
-      this.clientForm.controls.street.setValue(this.client.street)
-      this.clientForm.controls.number.setValue(this.client.number)
-      this.clientForm.controls.neighborhood.setValue(this.client.neighborhood)
-      this.clientForm.controls.city.setValue(this.client.city)
-      this.clientForm.controls.state.setValue(this.client.city.state)
-      this.clientForm.controls.complement.setValue(this.client.complement)
-
-      this.clientForm.controls.contacts.setValue([])
+      this.clientForm.patchValue({
+        name: this.client.name,
+        fantasy_name: this.client.fantasy_name,
+        cnpj: this.client.cnpj,
+        external_toggle: this.client.external == 1 ? true : false,
+        mainphone: this.client.mainphone,
+        secundaryphone: this.client.secundaryphone,
+        client_type: this.client.type,
+        comission: this.client.comission,
+        client_status: this.client.status,
+        employee: this.client.employee,
+        site: this.client.site,
+        note: this.client.note,
+        rate: this.client.rate,
+        cep: this.client.cep,
+        street: this.client.street,
+        number: this.client.number,
+        neighborhood: this.client.neighborhood,
+        city: this.client.city,
+        state: this.client.city.state,
+        complement: this.client.complement,
+        contacts: [],
+      });
 
       for(let contact of client.contacts) {
         this.addContact(contact)
       }
 
       this.cepObserver();
+      this.cnpjObserver();
     });
   }
 
@@ -366,12 +430,12 @@ export class ClientFormComponent implements OnInit, OnDestroy {
     const contacts = <FormArray>this.clientForm.controls['contacts']
 
     contacts.push(this.formBuilder.group({
-      id: this.formBuilder.control(contact ? contact.id : '' || ''),
-      name: this.formBuilder.control(contact ? contact.name : '' || '', [
+      id: this.formBuilder.control((contact ? contact.id : '') || ''),
+      name: this.formBuilder.control((contact ? contact.name : '') || '', [
         Validators.required,
         Validators.minLength(3)
       ]),
-      department: this.formBuilder.control(contact ? contact.department : '' || '', [
+      department: this.formBuilder.control((contact ? contact.department : '') || '', [
         Validators.required,
         Validators.minLength(3)
       ]),
@@ -380,7 +444,7 @@ export class ClientFormComponent implements OnInit, OnDestroy {
         Validators.pattern(Patterns.email),
         Validators.maxLength(80)
       ]),
-      cellphone: this.formBuilder.control(contact ? contact.cellphone : '' || '', [
+      cellphone: this.formBuilder.control((contact ? contact.cellphone : '') || '', [
         Validators.minLength(10),
         Validators.pattern(Patterns.phone)
       ])
@@ -453,6 +517,9 @@ export class ClientFormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.onDestroy$.next();
     this.onDestroy$.complete();
+
+    this.raceCnpj$.next();
+    this.raceCnpj$.complete();
   }
 }
 
