@@ -1,11 +1,12 @@
 {
-  "name": "company-book",
+  "name": "my-job",
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --host 0.0.0.0 --proxy-config proxy.conf.json",
-    "build": "ng build --configuration production",
+    "start": "ng serve --proxy-config proxy.conf.json",
+    "build:prod": "ng build --configuration production",
+    "build:dev": "ng build --configuration development",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
