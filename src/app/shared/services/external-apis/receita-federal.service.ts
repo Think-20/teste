@@ -4,12 +4,13 @@ import { ExternalApiService } from "./external-api.service";
 import { Observable } from "rxjs";
 import { MatSnackBar } from "@angular/material";
 import { ErrorHandler } from "app/shared/error-handler.service";
+import { environment } from 'environments/environment';
 
 @Injectable({
   providedIn: "root",
 })
 export class ReceitaFederalService extends ExternalApiService {
-  static api = "https://receitaws.com.br";
+  static api = environment.apiReceitaWs;
 
   constructor(private http: Http, private snackBar: MatSnackBar) {
     super();
@@ -19,7 +20,7 @@ export class ReceitaFederalService extends ExternalApiService {
     cnpj = cnpj.replace(/[./-]/g, "");
 
     return this.http
-      .get(`/api-receitaws/v1/cnpj/${cnpj}`)
+      .get(`${ReceitaFederalService.api}/v1/cnpj/${cnpj}`)
       .map((response) => response.json())
       .catch((err) => {
         if (err.status === 429) {

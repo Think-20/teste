@@ -267,11 +267,15 @@ export class ClientFormComponent implements OnInit, OnDestroy {
           return;
         }
 
+        const cep = data.cep
+          ? data.cep.replace(/[.]/g, "")
+          : null;
+
         this.clientForm.patchValue({
           name: data.nome,
           fantasy_name: data.fantasia,
           mainphone: data.telefone,
-          cep: data.cep.replace(/[.-]/g, ""),
+          cep,
           street: data.logradouro,
           number: data.numero,
           neighborhood: data.bairro,
