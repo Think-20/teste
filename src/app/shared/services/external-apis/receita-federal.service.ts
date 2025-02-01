@@ -1,4 +1,4 @@
-import { Headers, Http } from "@angular/http";
+import { Http } from "@angular/http";
 import { Injectable } from "@angular/core";
 import { ExternalApiService } from "./external-api.service";
 import { Observable } from "rxjs";
