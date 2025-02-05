@@ -12,6 +12,8 @@
         [isAdmin]="isAdmin">
       </cb-briefing-form>
       -->
+
+      <cb-developing></cb-developing>
     </mat-tab>
     <mat-tab label="Projeto">
       <cb-projects (requestJobReloadEmitter)="reload()" *ngIf="job?.id != undefined" [job]="job"></cb-projects>
@@ -40,22 +42,28 @@
       ></cb-extras>
     </mat-tab>
     <mat-tab label="Detalhamento">
-      Detalhamento
+      <cb-developing
+        [text]="''"
+      ></cb-developing>
     </mat-tab>
     <mat-tab label="Ficha de custo">
-      Ficha de custo
+      <cb-developing
+        [text]="''"
+      ></cb-developing>
     </mat-tab>
     <mat-tab label="Lista de compras">
-      Lista de compras
+      <cb-developing
+        [text]="''"
+      ></cb-developing>
     </mat-tab>
     <mat-tab label="Contrato e NF">
-      Contrato e NF
+      <cb-developing></cb-developing>
     </mat-tab>
     <mat-tab label="Feedback">
-      Feedback
+      <cb-developing></cb-developing>
     </mat-tab>
     <mat-tab label="Fotos do projeto">
-      Fotos do projeto
+      <cb-developing></cb-developing>
     </mat-tab>
   </mat-tab-group>
 </div>

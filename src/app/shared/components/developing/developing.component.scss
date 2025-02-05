@@ -1,0 +1,24 @@
+.developing {
+  display: flex;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  padding: 4rem 0;
+
+  &__image {
+    width: 50%;
+
+    max-height: 300px;
+
+    margin-bottom: 1rem;
+  }
+
+  &__text {
+    color: #3f3d56;
+
+    font-size: 0.95rem;
+  }
+}

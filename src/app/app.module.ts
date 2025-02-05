@@ -256,6 +256,7 @@ import { AlertsCheckInComponent } from './alerts/components/alerts-check-in/aler
 import { OrganizationComponent } from './organization/organization.component';
 import { ExternalCheckInComponent } from './external/external-check-in/external-check-in.component';
 import { ExternalExtrasRefuseComponent } from './external/external-extras-refuse/external-extras-refuse.component';
+import { DevelopingModule } from './shared/components/developing/developing.module';
 
 registerLocaleData(localePt);
 
@@ -458,7 +459,8 @@ registerLocaleData(localePt);
     MatProgressBarModule,
     MatCheckboxModule,
     CommonModule,
-    NgApexchartsModule
+    NgApexchartsModule,
+    DevelopingModule,
   ],
   providers: [
     CheckInService,
