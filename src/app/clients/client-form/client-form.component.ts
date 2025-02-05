@@ -1,75 +1,104 @@
-import { ReceitaFederalService } from 'app/shared/services/external-apis/receita-federal.service';
-import { Component, OnInit, Injectable, Input, OnDestroy } from '@angular/core';
-import { FormBuilder, FormGroup, FormControl, FormArray, Validators, AbstractControl } from '@angular/forms';
-import { trigger, style, state, transition, animate, keyframes } from '@angular/animations';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ReceitaFederalService } from "app/shared/services/external-apis/receita-federal.service";
+import { Component, OnInit, Injectable, Input, OnDestroy } from "@angular/core";
+import {
+  FormBuilder,
+  FormGroup,
+  FormControl,
+  FormArray,
+  Validators,
+  AbstractControl,
+} from "@angular/forms";
+import {
+  trigger,
+  style,
+  state,
+  transition,
+  animate,
+  keyframes,
+} from "@angular/animations";
+import { ActivatedRoute, Router } from "@angular/router";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
-import { Client } from '../client.model';
-import { ClientService } from '../client.service';
+import { Client } from "../client.model";
+import { ClientService } from "../client.service";
 
-import { CityService } from '../../address/city.service';
-import { StateService } from '../../address/state.service';
-import { ClientTypeService } from '../client-types/client-type.service';
-import { ClientStatusService } from '../client-status/client-status.service';
-import { EmployeeService } from '../../employees/employee.service';
-import { AuthService } from '../../login/auth.service';
-import { Employee } from '../../employees/employee.model';
-import { City } from '../../address/city.model';
-import { State } from '../../address/state.model';
-import { ClientType } from '../client-types/client-type.model';
-import { ClientStatus } from '../client-status/client-status.model';
-import { Contact } from '../../contacts/contact.model';
+import { CityService } from "../../address/city.service";
+import { StateService } from "../../address/state.service";
+import { ClientTypeService } from "../client-types/client-type.service";
+import { ClientStatusService } from "../client-status/client-status.service";
+import { EmployeeService } from "../../employees/employee.service";
+import { AuthService } from "../../login/auth.service";
+import { Employee } from "../../employees/employee.model";
+import { City } from "../../address/city.model";
+import { State } from "../../address/state.model";
+import { ClientType } from "../client-types/client-type.model";
+import { ClientStatus } from "../client-status/client-status.model";
+import { Contact } from "../../contacts/contact.model";
 
-import { ErrorHandler } from '../../shared/error-handler.service';
-import { Patterns } from '../../shared/patterns.model';
+import { ErrorHandler } from "../../shared/error-handler.service";
+import { Patterns } from "../../shared/patterns.model";
 
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/do';
-import { ClientComission } from '../client-comission/client-comission.model';
-import { ClientComissionService } from '../client-comission/client-comission.service';
-import { ObjectValidator, CnpjValidator } from '../../shared/custom-validators';
-import { Location } from '@angular/common';
-import { race, Subject } from 'rxjs';
-import { ViaCepService } from 'app/shared/services/external-apis/viacep.service';
-import { takeUntil } from 'rxjs/operators';
+import { Observable } from "rxjs/Observable";
+import "rxjs/add/operator/debounceTime";
+import "rxjs/add/operator/do";
+import { ClientComission } from "../client-comission/client-comission.model";
+import { ClientComissionService } from "../client-comission/client-comission.service";
+import { ObjectValidator, CnpjValidator } from "../../shared/custom-validators";
+import { Location } from "@angular/common";
+import { race, Subject } from "rxjs";
+import { ViaCepService } from "app/shared/services/external-apis/viacep.service";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
-  selector: 'cb-client-form',
-  templateUrl: './client-form.component.html',
-  styleUrls: ['./client-form.component.css'],
+  selector: "cb-client-form",
+  templateUrl: "./client-form.component.html",
+  styleUrls: ["./client-form.component.css"],
   animations: [
-    trigger('rowAppeared', [
-      state('ready', style({opacity: 1})),
-      transition('void => ready', animate('300ms 0s ease-in', keyframes([
-        style({opacity: 0, transform: 'translateX(-30px)', offset: 0}),
-        style({opacity: 0.8, transform: 'translateX(10px)', offset: 0.8}),
-        style({opacity: 1, transform: 'translateX(0px)', offset: 1})
-      ]))),
-      transition('ready => void', animate('300ms 0s ease-out', keyframes([
-        style({opacity: 1, transform: 'translateX(0px)', offset: 0}),
-        style({opacity: 0.8, transform: 'translateX(-10px)', offset: 0.2}),
-        style({opacity: 0, transform: 'translateX(30px)', offset: 1})
-      ]))),
-    ])
-  ]
+    trigger("rowAppeared", [
+      state("ready", style({ opacity: 1 })),
+      transition(
+        "void => ready",
+        animate(
+          "300ms 0s ease-in",
+          keyframes([
+            style({ opacity: 0, transform: "translateX(-30px)", offset: 0 }),
+            style({ opacity: 0.8, transform: "translateX(10px)", offset: 0.8 }),
+            style({ opacity: 1, transform: "translateX(0px)", offset: 1 }),
+          ])
+        )
+      ),
+      transition(
+        "ready => void",
+        animate(
+          "300ms 0s ease-out",
+          keyframes([
+            style({ opacity: 1, transform: "translateX(0px)", offset: 0 }),
+            style({
+              opacity: 0.8,
+              transform: "translateX(-10px)",
+              offset: 0.2,
+            }),
+            style({ opacity: 0, transform: "translateX(30px)", offset: 1 }),
+          ])
+        )
+      ),
+    ]),
+  ],
 })
 @Injectable()
 export class ClientFormComponent implements OnInit, OnDestroy {
-
-  @Input('mode') typeForm: string
-  @Input('withHeader') withHeader: boolean = true
-  rowAppearedState = 'ready'
-  client: Client
-  clientTypes: ClientType[]
-  comissions: ClientComission[]
-  clientStatus: ClientStatus[]
-  cities: Observable<City[]>
-  states: Observable<State[]>
-  employees: Employee[]
-  clientForm: FormGroup
-  contactsArray: FormArray
+  @Input("mode") typeForm: string;
+  @Input("withHeader") withHeader: boolean = true;
+  rowAppearedState = "ready";
+  client: Client;
+  clientTypes: ClientType[];
+  comissions: ClientComission[];
+  clientStatus: ClientStatus[];
+  cities: Observable<City[]>;
+  states: Observable<State[]>;
+  employees: Employee[];
+  clientForm: FormGroup;
+  contactsArray: FormArray;
   isDiretoria = false;
 
   oldCnpj: string;
@@ -92,184 +121,210 @@ export class ClientFormComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private router: Router,
     private viacepService: ViaCepService,
-    private receitaFederalService: ReceitaFederalService,
-  ) { }
+    private receitaFederalService: ReceitaFederalService
+  ) {}
 
   ngOnInit() {
-    let snackBarStateCharging
-    this.typeForm = this.route.snapshot.url[0].path
+    let snackBarStateCharging;
+    this.typeForm = this.route.snapshot.url[0].path;
 
-    this.isDiretoria = this.authService.currentUser().employee.department_id === 1;
+    this.isDiretoria =
+      this.authService.currentUser().employee.department_id === 1;
 
-    let stateControl: FormControl = this.formBuilder.control('', [Validators.required, ObjectValidator])
-    let cityControl: FormControl = this.formBuilder.control('', [Validators.required, ObjectValidator])
-    let clientTypeControl: FormControl = this.formBuilder.control('', [Validators.required])
-    let comissionControl: FormControl = this.formBuilder.control('', [Validators.required])
-    let clientStatusControl: FormControl = this.formBuilder.control('', [Validators.required])
-    let employeeControl: FormControl = this.formBuilder.control('', [Validators.required])
+    let stateControl: FormControl = this.formBuilder.control("", [
+      Validators.required,
+      ObjectValidator,
+    ]);
+    let cityControl: FormControl = this.formBuilder.control("", [
+      Validators.required,
+      ObjectValidator,
+    ]);
+    let clientTypeControl: FormControl = this.formBuilder.control("", [
+      Validators.required,
+    ]);
+    let comissionControl: FormControl = this.formBuilder.control("", [
+      Validators.required,
+    ]);
+    let clientStatusControl: FormControl = this.formBuilder.control("", [
+      Validators.required,
+    ]);
+    let employeeControl: FormControl = this.formBuilder.control("", [
+      Validators.required,
+    ]);
 
     this.clientForm = this.formBuilder.group({
-      name: this.formBuilder.control('', [
+      name: this.formBuilder.control("", [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(100)
+        Validators.maxLength(100),
       ]),
-      fantasy_name: this.formBuilder.control('', [
+      fantasy_name: this.formBuilder.control("", [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(50)
+        Validators.maxLength(50),
       ]),
-      site: this.formBuilder.control('', [
-        Validators.minLength(7),
-      ]),
+      site: this.formBuilder.control("", [Validators.minLength(7)]),
       client_type: clientTypeControl,
       comission: comissionControl,
       client_status: clientStatusControl,
       employee: employeeControl,
-      rate: this.formBuilder.control(''),
-      cnpj: this.formBuilder.control('', [
+      rate: this.formBuilder.control(""),
+      cnpj: this.formBuilder.control("", [Validators.required, CnpjValidator]),
+      ie: this.formBuilder.control(""),
+      mainphone: this.formBuilder.control("", [
         Validators.required,
-        CnpjValidator
+        Validators.minLength(10),
       ]),
-      ie: this.formBuilder.control(''),
-      mainphone: this.formBuilder.control('', [
-        Validators.required,
-        Validators.minLength(10)
-      ]),
-      secundaryphone: this.formBuilder.control('', [
-        Validators.minLength(10)
-      ]),
-      note: this.formBuilder.control(''),
-      external: this.formBuilder.control(''),
-      external_toggle: this.formBuilder.control(''),
-      street: this.formBuilder.control('', [
+      secundaryphone: this.formBuilder.control("", [Validators.minLength(10)]),
+      note: this.formBuilder.control(""),
+      external: this.formBuilder.control(""),
+      external_toggle: this.formBuilder.control(""),
+      street: this.formBuilder.control("", [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(50)
+        Validators.maxLength(50),
       ]),
-      number: this.formBuilder.control('', [
-        Validators.maxLength(11)
-      ]),
-      neighborhood: this.formBuilder.control('', [
+      number: this.formBuilder.control("", [Validators.maxLength(11)]),
+      neighborhood: this.formBuilder.control("", [
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(30)
+        Validators.maxLength(30),
       ]),
-      complement: this.formBuilder.control('', [
-        Validators.maxLength(255)
-      ]),
-      cep: this.formBuilder.control('', [
-        Validators.required
-      ]),
+      complement: this.formBuilder.control("", [Validators.maxLength(255)]),
+      cep: this.formBuilder.control("", [Validators.required]),
       city: cityControl,
       state: stateControl,
-      contacts: this.formBuilder.array([])
-    })
+      contacts: this.formBuilder.array([]),
+    });
 
     this.clientForm.controls.external_toggle.valueChanges.subscribe(() => {
-      this.toggleExternal()
-    })
+      this.toggleExternal();
+    });
 
     // this.employeeService.canInsertClients().subscribe(employees => {
     //   this.employees = employees
     // })
 
-    this.employeeService.employees({
-      paginate: false,
-      deleted: true
-    }).subscribe(dataInfo => {
-      let employees = dataInfo.pagination.data
-      this.employees = employees.filter(employee => {
-        return (employee.department.description === 'Atendimento' || employee.department.description ==='Diretoria')
+    this.employeeService
+      .employees({
+        paginate: false,
+        deleted: true,
       })
-    })
+      .subscribe((dataInfo) => {
+        let employees = dataInfo.pagination.data;
+        this.employees = employees.filter((employee) => {
+          return (
+            employee.department.description === "Atendimento" ||
+            employee.department.description === "Diretoria"
+          );
+        });
+      });
 
     this.clientTypeService.types().subscribe((clientTypes) => {
-      this.clientTypes = clientTypes
+      this.clientTypes = clientTypes;
 
       this.clientComissionService.comission().subscribe((comissions) => {
-        this.comissions = comissions
-      })
+        this.comissions = comissions;
+      });
 
       this.clientStatusService.status().subscribe((clientStatus) => {
-        this.clientStatus = clientStatus
+        this.clientStatus = clientStatus;
 
-        if(this.typeForm === 'edit') {
+        if (this.typeForm === "edit") {
           this.loadClient();
         } else {
-          this.clientForm.controls.client_status.setValue(this.clientStatus.filter((status) => {
-            return status.description == 'Ativo'
-          }).pop())
-          this.clientForm.controls.employee.setValue(this.employees.filter((employee) => {
-            return employee.name == this.authService.currentUser().employee.name
-          }).pop())
+          this.clientForm.controls.client_status.setValue(
+            this.clientStatus
+              .filter((status) => {
+                return status.description == "Ativo";
+              })
+              .pop()
+          );
+          this.clientForm.controls.employee.setValue(
+            this.employees
+              .filter((employee) => {
+                return (
+                  employee.name == this.authService.currentUser().employee.name
+                );
+              })
+              .pop()
+          );
 
           this.addContact();
 
-          if (this.typeForm === 'new') {
+          if (this.typeForm === "new") {
             this.cepObserver();
             this.cnpjObserver();
           }
         }
-      })
-    })
+      });
+    });
 
     stateControl.valueChanges
-      .do(stateName => {
-         snackBarStateCharging = this.snackBar.open('Aguarde...')
+      .do((stateName) => {
+        snackBarStateCharging = this.snackBar.open("Aguarde...");
       })
       .debounceTime(500)
-      .subscribe(stateName => {
-        this.states = this.stateService.states(stateName)
-        Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
-      })
+      .subscribe((stateName) => {
+        this.states = this.stateService.states(stateName);
+        Observable.timer(500).subscribe((timer) =>
+          snackBarStateCharging.dismiss()
+        );
+      });
 
     cityControl.valueChanges
-      .do(stateName => {
-         snackBarStateCharging = this.snackBar.open('Aguarde...')
+      .do((stateName) => {
+        snackBarStateCharging = this.snackBar.open("Aguarde...");
       })
       .debounceTime(500)
-      .subscribe(cityName => {
-        let stateId = stateControl.value.id || stateControl.value
-        this.cities = this.cityService.cities(stateId, cityName)
-        Observable.timer(500).subscribe(timer => snackBarStateCharging.dismiss())
-      })
+      .subscribe((cityName) => {
+        let stateId = stateControl.value.id || stateControl.value;
+        this.cities = this.cityService.cities(stateId, cityName);
+        Observable.timer(500).subscribe((timer) =>
+          snackBarStateCharging.dismiss()
+        );
+      });
   }
 
   private cnpjObserver(): void {
     this.clientForm.controls.cnpj.valueChanges
       .pipe(takeUntil(this.onDestroy$))
-      .subscribe(cep => {
+      .subscribe((cep) => {
         this.getCompanyDataByCnpj(cep);
       });
   }
 
   private getCompanyDataByCnpj(cnpj: string): void {
-    if (this.clientForm.controls.cnpj.invalid
-      || this.clientForm.controls.external_toggle.value
-      || cnpj.length !== 18
-      || cnpj === this.oldCnpj) {
+    if (
+      this.clientForm.controls.cnpj.invalid ||
+      this.clientForm.controls.external_toggle.value ||
+      cnpj.length !== 18 ||
+      cnpj === this.oldCnpj
+    ) {
       return;
     }
-    
+
     this.oldCnpj = cnpj;
 
     this.raceCnpj$.next();
 
-    this.snackBar.open("Carregando...");
+    let message = this.snackBar.open("Carregando...");
 
-    race([
-      this.receitaFederalService.get(cnpj),
-      this.raceCnpj$,
-    ]).subscribe({
+    race([this.receitaFederalService.get(cnpj), this.raceCnpj$]).subscribe({
       next: (data) => {
-        if (!data) {
+        if (
+          !data ||
+          (data.error && JSON.parse(data.error)) ||
+          (data.status && data.status === "ERROR")
+        ) {
+          this.oldCnpj = null;
+
+          message.dismiss();
+
           return;
         }
 
-        const cep = data.cep
-          ? data.cep.replace(/[.]/g, "")
-          : null;
+        const cep = data.cep ? data.cep.replace(/[.]/g, "") : null;
 
         this.clientForm.patchValue({
           name: data.nome,
@@ -286,14 +341,16 @@ export class ClientFormComponent implements OnInit, OnDestroy {
       },
       error: (error) => {
         this.oldCnpj = null;
-      }
+
+        message.dismiss();
+      },
     });
   }
 
   private cepObserver(): void {
     this.clientForm.controls.cep.valueChanges
       .pipe(takeUntil(this.onDestroy$))
-      .subscribe(cep => {
+      .subscribe((cep) => {
         this.getAddressByCep(cep);
       });
   }
@@ -303,12 +360,12 @@ export class ClientFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    const snack = this.snackBar.open('Buscando CEP...');
+    const snack = this.snackBar.open("Buscando CEP...");
 
     this.viacepService.get(cep).subscribe({
-      next: data => {
+      next: (data) => {
         snack.dismiss();
-        
+
         if (data && data.erro && JSON.parse(data.erro)) {
           return;
         }
@@ -320,23 +377,23 @@ export class ClientFormComponent implements OnInit, OnDestroy {
       },
       error: () => {
         snack.dismiss();
-      }
+      },
     });
   }
 
   private getState(uf: string, city: string): void {
     let ufBase = uf;
-    
+
     if (uf.length !== 1) {
       ufBase = uf[0];
     }
-    
-    this.stateService.states(ufBase).subscribe(states => {
+
+    this.stateService.states(ufBase).subscribe((states) => {
       if (!states || !states.length) {
         return;
       }
 
-      const state = states.find(state => state.code === uf);
+      const state = states.find((state) => state.code === uf);
 
       this.clientForm.controls.state.setValue(state);
 
@@ -345,7 +402,7 @@ export class ClientFormComponent implements OnInit, OnDestroy {
   }
 
   private getCity(city: string, state: State): void {
-    this.cityService.cities(state.id, city).subscribe(cities => {
+    this.cityService.cities(state.id, city).subscribe((cities) => {
       if (!cities || !cities.length) {
         return;
       }
@@ -357,27 +414,27 @@ export class ClientFormComponent implements OnInit, OnDestroy {
   }
 
   toggleExternal() {
-    if(this.clientForm.controls.external_toggle.value) {
-      this.clientForm.controls.external.setValue(1)
-      this.clientForm.controls.cnpj.clearValidators()
-      this.clientForm.controls.cnpj.disable()
+    if (this.clientForm.controls.external_toggle.value) {
+      this.clientForm.controls.external.setValue(1);
+      this.clientForm.controls.cnpj.clearValidators();
+      this.clientForm.controls.cnpj.disable();
     } else {
-      this.clientForm.controls.external.setValue(0)
-      this.clientForm.controls.cnpj.enable()
+      this.clientForm.controls.external.setValue(0);
+      this.clientForm.controls.cnpj.enable();
       this.clientForm.controls.cnpj.setValidators([
         Validators.required,
-        CnpjValidator
-      ])
-      this.clientForm.controls.cnpj.updateValueAndValidity()
+        CnpjValidator,
+      ]);
+      this.clientForm.controls.cnpj.updateValueAndValidity();
     }
   }
 
   loadClient() {
-    let snackBarStateCharging = this.snackBar.open('Carregando cliente...')
-    let clientId = parseInt(this.route.snapshot.url[1].path)
-    this.clientService.client(clientId).subscribe(client => {
-      snackBarStateCharging.dismiss()
-      this.client = client
+    let snackBarStateCharging = this.snackBar.open("Carregando cliente...");
+    let clientId = parseInt(this.route.snapshot.url[1].path);
+    this.clientService.client(clientId).subscribe((client) => {
+      snackBarStateCharging.dismiss();
+      this.client = client;
 
       this.clientForm.patchValue({
         name: this.client.name,
@@ -403,8 +460,8 @@ export class ClientFormComponent implements OnInit, OnDestroy {
         contacts: [],
       });
 
-      for(let contact of client.contacts) {
-        this.addContact(contact)
+      for (let contact of client.contacts) {
+        this.addContact(contact);
       }
 
       this.cepObserver();
@@ -412,110 +469,117 @@ export class ClientFormComponent implements OnInit, OnDestroy {
     });
   }
 
-  get contacts() { return this.clientForm.get('contacts'); }
+  get contacts() {
+    return this.clientForm.get("contacts");
+  }
 
   compareClientType(clientType1: ClientType, clientType2: ClientType) {
-    return clientType1.id === clientType2.id
+    return clientType1.id === clientType2.id;
   }
 
   compareComission(var1: ClientComission, var2: ClientComission) {
-    return var1.id === var2.id
+    return var1.id === var2.id;
   }
 
-  compareClientStatus(clientStatus1: ClientStatus, clientStatus2: ClientStatus) {
-    return clientStatus1.id === clientStatus2.id
+  compareClientStatus(
+    clientStatus1: ClientStatus,
+    clientStatus2: ClientStatus
+  ) {
+    return clientStatus1.id === clientStatus2.id;
   }
 
   compareEmployee(employee1: Employee, employee2: Employee) {
-    return employee1.id === employee2.id
+    return employee1.id === employee2.id;
   }
 
   addContact(contact?: Contact) {
-    const contacts = <FormArray>this.clientForm.controls['contacts']
+    const contacts = <FormArray>this.clientForm.controls["contacts"];
 
-    contacts.push(this.formBuilder.group({
-      id: this.formBuilder.control((contact ? contact.id : '') || ''),
-      name: this.formBuilder.control((contact ? contact.name : '') || '', [
-        Validators.required,
-        Validators.minLength(3)
-      ]),
-      department: this.formBuilder.control((contact ? contact.department : '') || '', [
-        Validators.required,
-        Validators.minLength(3)
-      ]),
-      email: this.formBuilder.control(contact ? contact.email : '', [
-        Validators.required,
-        Validators.pattern(Patterns.email),
-        Validators.maxLength(80)
-      ]),
-      cellphone: this.formBuilder.control((contact ? contact.cellphone : '') || '', [
-        Validators.minLength(10),
-        Validators.pattern(Patterns.phone)
-      ])
-    }))
+    contacts.push(
+      this.formBuilder.group({
+        id: this.formBuilder.control((contact ? contact.id : "") || ""),
+        name: this.formBuilder.control((contact ? contact.name : "") || "", [
+          Validators.required,
+          Validators.minLength(3),
+        ]),
+        department: this.formBuilder.control(
+          (contact ? contact.department : "") || "",
+          [Validators.required, Validators.minLength(3)]
+        ),
+        email: this.formBuilder.control(contact ? contact.email : "", [
+          Validators.required,
+          Validators.pattern(Patterns.email),
+          Validators.maxLength(80),
+        ]),
+        cellphone: this.formBuilder.control(
+          (contact ? contact.cellphone : "") || "",
+          [Validators.minLength(10), Validators.pattern(Patterns.phone)]
+        ),
+      })
+    );
   }
 
   deleteContact(i) {
-    const contacts = <FormArray>this.clientForm.controls['contacts']
-    if(contacts.length > 1) contacts.removeAt(i)
+    const contacts = <FormArray>this.clientForm.controls["contacts"];
+    if (contacts.length > 1) contacts.removeAt(i);
   }
 
   displayState(state: State) {
-    return state.code
+    return state.code;
   }
 
   displayEmployee(employee: Employee) {
-    return employee.name
+    return employee.name;
   }
 
   displayCity(city: City) {
-    return city.name
+    return city.name;
   }
 
   getContactsControls(clientForm: FormGroup) {
-    return (<FormArray>this.clientForm.get('contacts')).controls
+    return (<FormArray>this.clientForm.get("contacts")).controls;
   }
 
   save(client: Client) {
-    if(ErrorHandler.formIsInvalid(this.clientForm)) {
-      this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
-        duration: 5000
-      })
+    if (ErrorHandler.formIsInvalid(this.clientForm)) {
+      this.snackBar.open("Por favor, preencha corretamente os campos.", "", {
+        duration: 5000,
+      });
       return;
     }
 
-    this.clientService.save(client).subscribe(data => {
-      let snackbar = this.snackBar.open(data.message, '', {
-        duration: 5000
-      })
+    this.clientService.save(client).subscribe((data) => {
+      let snackbar = this.snackBar.open(data.message, "", {
+        duration: 5000,
+      });
 
-      if(data.status) {
+      if (data.status) {
         snackbar.afterDismissed().subscribe(() => {
-          this.location.back()
-        })
+          this.location.back();
+        });
       }
-    })
+    });
   }
 
   edit(client: Client, clientId: number) {
-    if(ErrorHandler.formIsInvalid(this.clientForm)) {
-      this.snackBar.open('Por favor, preencha corretamente os campos.', '', {
-        duration: 5000
-      })
+    if (ErrorHandler.formIsInvalid(this.clientForm)) {
+      this.snackBar.open("Por favor, preencha corretamente os campos.", "", {
+        duration: 5000,
+      });
       return;
     }
 
-    client.id = clientId
+    client.id = clientId;
 
-    this.clientService.edit(client).subscribe(data => {
-      if(data.status) {
-        this.router.navigateByUrl('/clients')
+    this.clientService.edit(client).subscribe((data) => {
+      if (data.status) {
+        this.router.navigateByUrl("/clients");
       } else {
-        this.snackBar.open(data.message, '', {
-          duration: data.status ? 1000 : 5000
-        })
+        this.snackBar.open(data.message, "", {
+          duration: data.status ? 1000 : 5000,
+        });
       }
-    })
+    });
   }
 
   ngOnDestroy(): void {
@@ -526,4 +590,3 @@ export class ClientFormComponent implements OnInit, OnDestroy {
     this.raceCnpj$.complete();
   }
 }
-

@@ -31,7 +31,7 @@ export class RequestOptionsApiService extends BaseRequestOptions {
   }
 
   private isExternalApi(url: string): boolean {
-    const externalApis = [ViaCepService.api, ReceitaFederalService.api];
+    const externalApis = [ViaCepService.api];
 
     return externalApis.some((api) => url.includes(api));
   }

@@ -6,5 +6,4 @@
 export const environment = {
   production: false,
   api: 'http://54.163.167.198:8000',
-  apiReceitaWs: '/api-receitaws'
 };
