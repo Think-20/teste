@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog, MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
 import { ExtraItemModel } from 'app/shared/models/extra-item.model';
-import { ExtrasService } from 'app/extras/extras.service';
+import { ExtraService } from 'app/extras/extra.service';
 import { ExtraFormComponent } from '../extra-form/extra-form.component';
 import { CheckInModel } from 'app/check-in/check-in.model';
 import { Job } from 'app/jobs/job.model';
@@ -12,6 +12,7 @@ import { Employee } from 'app/employees/employee.model';
 import { EmployeeService } from 'app/employees/employee.service';
 import { AuthService } from 'app/login/auth.service';
 import { ExtraModel } from 'app/shared/models/extra.model';
+import { ExtraItemService } from 'app/extras/extra-item.service';
 
 @Component({
   selector: 'cb-extras-grid',
@@ -20,6 +21,7 @@ import { ExtraModel } from 'app/shared/models/extra.model';
 })
 export class ExtrasGridComponent implements OnInit {
   @Input() job = new Job();
+  @Input() first = false;
   @Input() last = false;
   @Input() index = 0;
   @Input() extra = new ExtraModel();
@@ -34,9 +36,9 @@ export class ExtrasGridComponent implements OnInit {
   
   get items(): ExtraItemModel[] {
     return this.extra
-      && this.extra.extra_items
-      && this.extra.extra_items.length
-      ? this.extra.extra_items
+      && this.extra.items
+      && this.extra.items.length
+      ? this.extra.items
       : [];
   }
 
@@ -79,8 +81,9 @@ export class ExtrasGridComponent implements OnInit {
     private datePipe: DatePipe,
     private snackBar: MatSnackBar,
     readonly authService: AuthService,
-    private extrasService: ExtrasService,
+    private extraService: ExtraService,
     private employeeService: EmployeeService,
+    private extraItemService: ExtraItemService,
   ) {
     this.employeeId = authService.currentUser().employee.id;
   }
@@ -133,6 +136,12 @@ export class ExtrasGridComponent implements OnInit {
 
   updateAlertDateApproval(): void {
     this.extra.approval_date = this.getCurrentDate();
+
+    this.extraService.saveApproval(
+      this.extra.id,
+      this.extra.approval,
+      this.extra.approval_date,
+    ).subscribe();
   }
 
   updateAlertDateAcceptClient(): void {
@@ -140,7 +149,7 @@ export class ExtrasGridComponent implements OnInit {
 
     let snackBarStateCharging = this.snackBar.open('Salvando...');
 
-    this.extrasService.resetAcceptClient(
+    this.extraService.resetAcceptClient(
       this.extra.id,
       this.extra.accept_client,
       this.extra.accept_client_date,
@@ -173,12 +182,22 @@ export class ExtrasGridComponent implements OnInit {
       width: '500px',
     });
 
-    modal.componentInstance.extra = this.extra;
+    modal.componentInstance.extraId = this.extra.id;
     modal.componentInstance.patchValue(item);
 
     modal.afterClosed().subscribe(result => {
       if (result) {
-        this.extra.accept_client = 0;
+        this.resetAcceptClient();
+
+        if (this.extra.items && this.extra.items.length) {
+          const index = this.extra.items.findIndex(x => x.id === result.id);
+
+          if (index >= 0) {
+            this.extra.items[index] = result;
+          } else {
+            this.extra.items.push(result);
+          }
+        }
       }
     });
   }
@@ -187,11 +206,21 @@ export class ExtrasGridComponent implements OnInit {
     this.openModalExtra(extra);
   }
 
-  delete(extra: ExtraItemModel): void {
-    this.extrasService.delete(extra.id)
+  delete(extraItem: ExtraItemModel): void {
+    this.extraItemService.delete(extraItem.id)
       .subscribe(() => {
-        this.extra.accept_client = 0;
+        this.resetAcceptClient();
+
+        if (this.extra.items && this.extra.items.length) {
+          this.extra.items = this.extra.items.filter(x => x.id !== extraItem.id);
+        }
       });
+  }
+
+  private resetAcceptClient(): void {
+    this.extra.accept_client = 0;
+
+    this.updateAlertDateAcceptClient();
   }
 
   sendEmail(): void {
@@ -201,7 +230,7 @@ export class ExtrasGridComponent implements OnInit {
 
     let snackBarStateCharging = this.snackBar.open('Enviando e-mail...');
 
-    this.extrasService.sendEmail(this.extra.id).subscribe(() => {
+    this.extraService.sendEmail(this.extra.id).subscribe(() => {
       snackBarStateCharging.dismiss();
 
       snackBarStateCharging = this.snackBar.open('E-mail enviado!');
@@ -215,7 +244,7 @@ export class ExtrasGridComponent implements OnInit {
   }
 
   private saveObs(): void {
-    this.extrasService
+    this.extraService
       .saveObs(this.extra.id, this.extra.obs)
       .subscribe();
   }

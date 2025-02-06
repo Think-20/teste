@@ -13,7 +13,7 @@
 <mat-accordion class="check-in-accordion extras-grid"
     [class.check-in-accordion--last]="last">
 
-    <mat-expansion-panel hideToggle [expanded]="!last">
+    <mat-expansion-panel hideToggle [expanded]="first">
         
         <mat-expansion-panel-header>
 
@@ -120,7 +120,7 @@
             <div class="check-in-grid-right send-email">
                 <div class="check-in-row">
                     <div class="check-in-cell">
-                        <a *ngIf="extra.accept_client === 0"
+                        <a *ngIf="extra.accept_client == 0"
                             (click)="sendEmail()">
                             Enviar e-mail para aceite de cliente
                             

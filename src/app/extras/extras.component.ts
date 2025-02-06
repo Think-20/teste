@@ -2,7 +2,7 @@ import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { Job } from "app/jobs/job.model";
 import { ExtrasGridComponent } from './components/extras-grid/extras-grid.component';
 import { ExtraModel } from 'app/shared/models/extra.model';
-import { ExtrasService } from './extras.service';
+import { ExtraService } from './extra.service';
 import { MatSnackBar } from '@angular/material';
 
 @Component({
@@ -39,12 +39,14 @@ export class ExtrasComponent implements OnInit {
 
   constructor(
     private snackBar: MatSnackBar,
-    private extrasService: ExtrasService,
+    private extrasService: ExtraService,
   ) {}
 
   ngOnInit(): void {
-    this.extrasService.extras().subscribe((response) => {
-      this.extras = response;
+    this.extrasService.get().subscribe((response) => {
+      this.extras = response && response.length
+        ? response.filter((extra) => extra.job_id === this.job.id)
+        : [];
     });
   }
 
@@ -59,6 +61,8 @@ export class ExtrasComponent implements OnInit {
       accept_client: 0,
     }).subscribe({
       next: (response) => {
+        response.object.obs = null;
+
         this.extras.unshift(response.object);
 
         message.dismiss();

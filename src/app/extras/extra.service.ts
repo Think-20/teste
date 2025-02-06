@@ -1,67 +1,26 @@
 import { Injectable } from "@angular/core";
 import { Http, RequestOptions } from "@angular/http";
 import { MatSnackBar } from "@angular/material/snack-bar";
-
 import { Observable } from "rxjs/Observable";
-
 import { API } from "../app.api";
 import { ErrorHandler } from "../shared/error-handler.service";
-import { ExtraItemModel } from '../shared/models/extra-item.model';
 import { ExtraModel } from 'app/shared/models/extra.model';
-import { of } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Injectable()
-export class ExtrasService {
+export class ExtraService {
   constructor(private http: Http, private snackBar: MatSnackBar) {}
 
-  extras(): Observable<ExtraModel[]> {
-    // return this.http
-    //   .get(`${API}/extra`)
-    //   .map((response) => response.json())
-    //   .catch((err) => {
-    //     this.snackBar.open(ErrorHandler.message(err), "", {
-    //       duration: 3000,
-    //     });
+  get(): Observable<ExtraModel[]> {
+    return this.http
+      .get(`${API}/extra`)
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
 
-    //     return ErrorHandler.capture(err);
-    //   });
-
-    return of([
-      {
-        id: 1,
-        description: 'Versão extras 1',
-        job_id: 1,
-        accept_client: 2,
-        accept_client_date: '2024-01-21 23:35',
-        approval: 1,
-        approval_date: '2024-01-21 22:00',
-        updated_by: 1,
-        updated_at: '2024-01-21 22:00',
-        extra_items: [
-          {
-            id: 1,
-            extra_id: 1,
-            description: 'Mesa',
-            value: 150,
-            quantity: 5,
-            requester: 1,
-            budget: 1,
-          }
-        ],
-      },
-      {
-        id: 2,
-        description: 'Versão extras 2',
-        job_id: 1,
-        accept_client: 0,
-        approval: 0,
-        extra_items: [],
-      } as ExtraModel
-    ]).debounceTime(200).pipe(
-      map((extras) => extras.sort((a, b) => b.id - a.id)),
-      map((extras) => extras.map((extra) => ({...extra, obs: extra.obs || ''}))),
-    );
+        return ErrorHandler.capture(err);
+      });
   }
 
   resetAcceptClient(
@@ -73,6 +32,25 @@ export class ExtrasService {
       id: extraId,
       accept_client: acceptClient,
       accept_client_date: acceptClientDate,
+    };
+
+    return this.http
+      .put(`${API}/extra`, JSON.stringify(body), new RequestOptions())
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
+
+        return ErrorHandler.capture(err);
+      });
+  }
+
+  saveApproval(id: number, approval: number, approvalDate: string) {
+    const body = {
+      id,
+      approval,
+      approval_date: approvalDate,
     };
 
     return this.http
@@ -144,40 +122,26 @@ export class ExtrasService {
 
         return ErrorHandler.capture(err);
       });
-
-    const response = {
-      message: 'Sucesso',
-      object: {...extra}
-    };
-
-    return of(response).debounceTime(200);
   }
 
   put(extra: ExtraModel): Observable<{
     message?: string,
     object?: ExtraModel
   }> {
-    // return this.http
-    //   .put(
-    //     `${API}/extra`,
-    //     JSON.stringify(extra),
-    //     new RequestOptions()
-    //   )
-    //   .map((response) => response.json())
-    //   .catch((err) => {
-    //     this.snackBar.open(ErrorHandler.message(err), "", {
-    //       duration: 3000,
-    //     });
+    return this.http
+      .put(
+        `${API}/extra`,
+        JSON.stringify(extra),
+        new RequestOptions()
+      )
+      .map((response) => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), "", {
+          duration: 3000,
+        });
 
-    //     return ErrorHandler.capture(err);
-    //   });
-
-    const response = {
-      message: 'Sucesso',
-      object: {...extra}
-    };
-
-    return of(response).debounceTime(200);
+        return ErrorHandler.capture(err);
+      });
   }
 
   delete(extraId: number): Observable<any> {

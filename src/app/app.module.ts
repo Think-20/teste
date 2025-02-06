@@ -240,7 +240,7 @@ import { CheckInComissionComponent } from './check-in/components/check-in-comiss
 import { CheckInPeopleComponent } from './check-in/components/check-in-people/check-in-people.component';
 import { PersonService } from './shared/services/person.service';
 import { CheckInPaymentComponent } from './check-in/components/check-in-payment/check-in-payment.component';
-import { ExtrasService } from './extras/extras.service';
+import { ExtraService } from './extras/extra.service';
 import { ExtraFormComponent } from './extras/components/extra-form/extra-form.component';
 import { PaymentService } from './shared/services/payment.service';
 import { CheckInPaymentFormComponent } from './check-in/components/check-in-payment-form/check-in-payment-form.component';
@@ -257,6 +257,7 @@ import { OrganizationComponent } from './organization/organization.component';
 import { ExternalCheckInComponent } from './external/external-check-in/external-check-in.component';
 import { ExternalExtrasRefuseComponent } from './external/external-extras-refuse/external-extras-refuse.component';
 import { DevelopingModule } from './shared/components/developing/developing.module';
+import { ExtraItemService } from './extras/extra-item.service';
 
 registerLocaleData(localePt);
 
@@ -467,7 +468,8 @@ registerLocaleData(localePt);
     OrganizationService,
     PersonService,
     PaymentService,
-    ExtrasService,
+    ExtraService,
+    ExtraItemService,
     ClientService,
     ProviderService,
     BankAccountTypeService,

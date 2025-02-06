@@ -3,8 +3,9 @@
     <div class="row">
         <div class="w-100">
 
-            <cb-extras-grid #extrasGrid *ngFor="let extra of extras; let last = last; let index = index"
+            <cb-extras-grid #extrasGrid *ngFor="let extra of extras; let last = last; let first = first; let index = index"
                 [job]="job"
+                [first]="first"
                 [last]="last"
                 [index]="extras.length - index"
                 [extra]="extra"

@@ -14,5 +14,5 @@ export class ExtraModel {
     created_at?: string;
     updated_by?: number;
     updated_at?: string;
-    extra_items?: ExtraItemModel[];
+    items?: ExtraItemModel[];
 }

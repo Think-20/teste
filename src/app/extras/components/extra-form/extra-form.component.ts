@@ -1,14 +1,13 @@
 import { EmployeeService } from 'app/employees/employee.service';
 import { PersonService } from 'app/shared/services/person.service';
-import { ExtrasService } from 'app/extras/extras.service';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef, MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
+import { MatDialogRef, MatSnackBar } from '@angular/material';
 import { ExtraItemModel } from 'app/shared/models/extra-item.model';
 import { PersonModel } from 'app/shared/models/person.model';
 import { Employee } from 'app/employees/employee.model';
 import { DatePipe } from '@angular/common';
-import { ExtraModel } from 'app/shared/models/extra.model';
+import { ExtraItemService } from 'app/extras/extra-item.service';
 
 @Component({
   selector: 'cb-extra-form',
@@ -16,7 +15,8 @@ import { ExtraModel } from 'app/shared/models/extra.model';
   styleUrls: ['./extra-form.component.scss']
 })
 export class ExtraFormComponent implements OnInit {
-  extra: ExtraModel = null;
+  extraId: number;
+  extraItem: ExtraItemModel = null;
 
   persons: PersonModel[] = [];
   employees: Employee[] = [];
@@ -39,7 +39,7 @@ export class ExtraFormComponent implements OnInit {
     public dialog: MatDialogRef<ExtraFormComponent>,
     private datePipe: DatePipe,
     private snackBar: MatSnackBar,
-    private extrasService: ExtrasService,
+    private extraItemService: ExtraItemService,
     private personService: PersonService,
     private employeeService: EmployeeService,
   ) { }
@@ -53,10 +53,10 @@ export class ExtraFormComponent implements OnInit {
   }
 
   patchValue(extra: ExtraItemModel): void {
-    this.extra = extra;
+    this.extraItem = extra;
 
-    if (this.extra) {
-      this.form.patchValue(this.extra);
+    if (this.extraItem) {
+      this.form.patchValue(this.extraItem);
     }
   }
 
@@ -77,9 +77,9 @@ export class ExtraFormComponent implements OnInit {
 
     const body = this.getBody();
 
-    const request = (this.extra && this.extra.id
-      ? this.extrasService.put(body)
-      : this.extrasService.post(body));
+    const request = (this.extraItem && this.extraItem.id
+      ? this.extraItemService.put(body)
+      : this.extraItemService.post(body));
       
     let snackBarStateCharging = this.snackBar.open('Salvando...');
 
@@ -99,15 +99,21 @@ export class ExtraFormComponent implements OnInit {
   }
 
   private getBody(): ExtraItemModel {
-    return {
+    const extraItem: ExtraItemModel = {
       ...this.form.value,
-      id: this.extra ? this.extra.id : null,
-      extra_id: this.extra.id,
+      id: this.extraItem ? this.extraItem.id : null,
+      extra_id: this.extraId,
       approval_date: this.getFormattedDate(this.form.value.approval_date),
       date: this.getFormattedDate(this.form.value.date),
       due_date: this.getFormattedDate(this.form.value.due_date),
       settlement_date: this.getFormattedDate(this.form.value.settlement_date),
     };
+
+    if (!this.extraItem || !this.extraItem.id) {
+      delete extraItem.id;
+    }
+
+    return extraItem;
   }
 
   private getFormattedDate(date: string | Date): string {
