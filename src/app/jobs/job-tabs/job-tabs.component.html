@@ -21,13 +21,6 @@
     <mat-tab label="Memorial descritivo">
       <cb-specification *ngIf="job?.id != undefined" [job]="job"></cb-specification>
     </mat-tab>
-    <mat-tab label="Proposta">
-      <cb-proposals *ngIf="job?.id != undefined" [job]="job" [containerWidth]="containerWidth"></cb-proposals>
-    </mat-tab>
-    <mat-tab label="Orçamento">
-      <cb-budget-form *ngIf="job?.id != undefined" [typeForm]="typeForm" [job]="job">
-      </cb-budget-form>
-    </mat-tab>
     <mat-tab label="Check-in">
       <cb-check-in *ngIf="job?.id != undefined"
         [job]="job"
@@ -40,6 +33,18 @@
         [job]="job"
         [typeForm]="typeForm"
       ></cb-extras>
+    </mat-tab>
+    <mat-tab label="Orçamento">
+      <cb-budget-form *ngIf="job?.id != undefined"
+        [typeForm]="typeForm"
+        [job]="job"
+      ></cb-budget-form>
+    </mat-tab>
+    <mat-tab label="Contrato">
+      <cb-proposals *ngIf="job?.id != undefined"
+        [job]="job"
+        [containerWidth]="containerWidth"
+      ></cb-proposals>
     </mat-tab>
     <mat-tab label="Detalhamento">
       <cb-developing
