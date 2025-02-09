@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import { Briefing } from '../briefing.model';
 import { FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
-import { BriefingService } from '../briefing.service';
+import { BriefingsService } from '../briefings.service';
 import { UploadFileService } from '../../shared/upload-file.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Employee } from '../../employees/employee.model';
@@ -34,7 +34,7 @@ export class BriefingFormComponent implements OnInit {
   @ViewChild('responsible', { static: false }) responsibleSelect
 
   constructor(
-    private briefingService: BriefingService,
+    private briefingService: BriefingsService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,

@@ -50,9 +50,11 @@ export class FileUploadComponent implements OnInit {
       files: this.formBuilder.array([]),
     })
 
-    this.files.forEach((fileInterface) => {
-      this.addFile(fileInterface)
-    })
+    if (this.files && this.files.length) {
+      this.files.forEach((fileInterface) => {
+        this.addFile(fileInterface)
+      });
+    }
   }
 
   openModal(i: number) {

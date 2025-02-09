@@ -24,7 +24,7 @@ import { StandGenre } from 'app/stand-genres/stand-genre.model';
 import { StandGenreService } from 'app/stand-genres/stand-genre.service';
 import { StandItem } from 'app/stand/stand-items/stand-item.model';
 import { Briefing } from 'app/briefings/briefing.model';
-import { BriefingService } from 'app/briefings/briefing.service';
+import { BriefingsService } from 'app/briefings/briefings.service';
 import { StandItemFormComponent } from 'app/stand/stand-items/stand-item-form/stand-item-form.component';
 import { isUndefined } from 'util';
 import { StandItemService } from 'app/stand/stand-items/stand-item.service';
@@ -72,7 +72,7 @@ export class StandFormComponent implements OnInit {
 
   constructor(
     private uploadFileService: UploadFileService,
-    private briefingService: BriefingService,
+    private briefingService: BriefingsService,
     private jobService: JobService,
     private configurationService: StandConfigurationService,
     private standItemService: StandItemService,

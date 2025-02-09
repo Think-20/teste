@@ -7,13 +7,15 @@
       <cb-job-form [typeForm]="typeForm" (jobEmitter)="setJob($event)" (isAdminEmitter)="setIsAdmin($event)"></cb-job-form>
     </mat-tab>
     <mat-tab label="Briefing">
-      <!--
-      <cb-briefing-form *ngIf="job?.id != undefined && job?.job_activity?.description != 'Orçamento'" [typeForm]="typeForm" [job]="job"
-        [isAdmin]="isAdmin">
-      </cb-briefing-form>
-      -->
-
-      <cb-developing></cb-developing>
+      <!-- <cb-briefing-form *ngIf="job?.id != undefined && job?.job_activity?.description != 'Orçamento'"
+        [job]="job"
+        [isAdmin]="isAdmin"
+        [typeForm]="typeForm"
+      ></cb-briefing-form> -->
+      
+      <cb-briefing
+        [job]="job"
+      ></cb-briefing>
     </mat-tab>
     <mat-tab label="Projeto">
       <cb-projects (requestJobReloadEmitter)="reload()" *ngIf="job?.id != undefined" [job]="job"></cb-projects>

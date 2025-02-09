@@ -129,7 +129,7 @@ import { ReportService} from './reports/service-report/report-list.service';
 import { JobFormComponent } from './jobs/job-form/job-form.component';
 
 import { BriefingFormComponent } from './briefings/briefing-form/briefing-form.component';
-import { BriefingService } from './briefings/briefing.service';
+import { BriefingsService } from './briefings/briefings.service';
 
 import { BudgetFormComponent } from './budgets/budget-form/budget-form.component';
 import { BudgetService } from './budgets/budget.service';
@@ -258,6 +258,8 @@ import { ExternalCheckInComponent } from './external/external-check-in/external-
 import { ExternalExtrasRefuseComponent } from './external/external-extras-refuse/external-extras-refuse.component';
 import { DevelopingModule } from './shared/components/developing/developing.module';
 import { ExtraItemService } from './extras/extra-item.service';
+import { BriefingComponent } from './briefing/briefing.component';
+import { BriefingService } from './briefing/briefing.service';
 
 registerLocaleData(localePt);
 
@@ -417,6 +419,7 @@ registerLocaleData(localePt);
     OrganizationFormComponent,
     ExternalCheckInComponent,
     ExternalExtrasRefuseComponent,
+    BriefingComponent,
   ],
   imports: [
     CurrencyMaskModule,
@@ -500,6 +503,7 @@ registerLocaleData(localePt);
     TimecardService,
     TimecardPlaceService,
     JobStatusService,
+    BriefingsService,
     BriefingService,
     BudgetService,
     TaskService,
