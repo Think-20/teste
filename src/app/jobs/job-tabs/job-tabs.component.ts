@@ -6,6 +6,7 @@ import { JobService } from '../job.service';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { JobFormComponent } from '../job-form/job-form.component';
 import { ExtrasComponent } from 'app/extras/extras.component';
+import { JobTabStatus } from '../job-tab-status.model';
 
 @Component({
   selector: 'cb-job-tabs',
@@ -23,7 +24,10 @@ export class JobTabsComponent implements OnInit {
   typeForm: string
   job: Job
   isAdmin: boolean
-  selectedIndex: number = 0
+  selectedIndex: number = 0;
+
+  tabStatus: JobTabStatus;
+
   tabs = [
     {index: 0, description: 'info'},
     {index: 1, description: 'briefing'},
@@ -58,6 +62,19 @@ export class JobTabsComponent implements OnInit {
     })
 
     this.initContainerWidthObservable()
+  }
+
+  loadTabsStatus(): void {
+    if (!this.job || !this.job.id) {
+      return;
+    }
+
+    this.jobService.getTabsStatus(this.job.id)
+      .subscribe({
+        next: (response) => {
+          this.tabStatus = response;
+        },
+      })
   }
 
   tab($event: MatTabChangeEvent) {
@@ -98,7 +115,9 @@ export class JobTabsComponent implements OnInit {
   }
 
   setJob(job: Job) {
-    this.job = job
+    this.job = job;
+
+    this.loadTabsStatus();
   }
 
   setIsAdmin(isAdmin) {

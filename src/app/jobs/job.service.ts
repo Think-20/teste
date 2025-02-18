@@ -15,6 +15,7 @@ import { Pagination } from 'app/shared/pagination.model';
 import { Client } from '../clients/client.model';
 import { DataInfo } from '../shared/data-info.model';
 import { PerformanceReportLite } from '../reports/performance-report-lite/performance-report-lite.model';
+import { JobTabStatus } from './job-tab-status.model';
 
 
 @Injectable()
@@ -115,6 +116,29 @@ export class JobService {
 
     return this.http.get(`${API}/${url}`)
       .map(response => response.json())
+      .catch((err) => {
+        this.snackBar.open(ErrorHandler.message(err), '', {
+          duration: 3000
+        })
+        return ErrorHandler.capture(err)
+      })
+  }
+
+  getTabsStatus(jobId: number): Observable<JobTabStatus> {
+    let url = `jobs/get/${jobId}`
+    let prefix = this.auth.hasAccess('jobs/get/{id}') ? '' : 'my-'
+
+    url = prefix + url
+
+    return this.http.get(`${API}/${url}`)
+      .map(response => response.json())
+      .map(response => ({
+        info_check: response["info_check"],
+        project_check: response["project_check"],
+        descriptive_memorial_check: response["descriptive_memorial_check"],
+        checkin_check: response["checkin_check"],
+        budget_check: response["budget_check"],
+      }) as JobTabStatus)
       .catch((err) => {
         this.snackBar.open(ErrorHandler.message(err), '', {
           duration: 3000

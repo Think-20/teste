@@ -1,0 +1,21 @@
+<div class="job-tab"
+    [class.job-tab--dev]="status === eJobTabStatus.dev">
+    {{tab}}
+    
+    <div class="job-tab__status">
+        <mat-icon *ngIf="status === eJobTabStatus.green" class="job-tab__status--done animate__animated animate__fadeIn"
+            [title]="'Finalizado'">
+            check_circle
+        </mat-icon>
+        
+        <mat-icon *ngIf="status === eJobTabStatus.yellow" class="job-tab__status--incomplete animate__animated animate__fadeIn"
+            [title]="'Pendente'">
+            warning
+        </mat-icon>
+        
+        <mat-icon *ngIf="status === eJobTabStatus.red" class="job-tab__status--late animate__animated animate__fadeIn"
+            [title]="'Em atraso'">
+            error
+        </mat-icon>
+    </div>
+</div>

@@ -1,0 +1,36 @@
+.job-tab {
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.3rem;
+
+    &--dev {
+        color: #999999;
+    }
+
+    &__status {
+        &--done,
+        &--incomplete,
+        &--late,
+        &--dev {
+            width: 20px;
+            height: 20px;
+
+            font-size: 20px;
+        }
+
+        &--done {
+            color: #009900;
+        }
+
+        &--incomplete {
+            color: #deb100;
+        }
+
+        &--late {
+            color: #ff0000;
+        }
+    }
+}

@@ -1,75 +1,184 @@
 <div class="my-container">
   <h3 class="lead">{{ job?.id != undefined ? 'Job ' + showId(job) + ' | ' + displayNameEvent(job) : 'Jobs'}}</h3>
 </div>
+
 <div id="containerJobTabs" class="col-md-12">
   <mat-tab-group [selectedIndex]="selectedIndex" (selectedTabChange)="tab($event)">
-    <mat-tab label="Informações">
-      <cb-job-form [typeForm]="typeForm" (jobEmitter)="setJob($event)" (isAdminEmitter)="setIsAdmin($event)"></cb-job-form>
-    </mat-tab>
-    <mat-tab label="Briefing">
-      <!-- <cb-briefing-form *ngIf="job?.id != undefined && job?.job_activity?.description != 'Orçamento'"
-        [job]="job"
-        [isAdmin]="isAdmin"
-        [typeForm]="typeForm"
-      ></cb-briefing-form> -->
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Informações'"
+          [status]="tabStatus.info_check"
+        ></cb-job-tab>
+      </ng-template>
       
+      <cb-job-form
+        [typeForm]="typeForm"
+        (jobEmitter)="setJob($event)"
+        (isAdminEmitter)="setIsAdmin($event)"
+      ></cb-job-form>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Briefing'"
+        ></cb-job-tab>
+      </ng-template>
+
       <cb-briefing
         [job]="job"
       ></cb-briefing>
     </mat-tab>
-    <mat-tab label="Projeto">
-      <cb-projects (requestJobReloadEmitter)="reload()" *ngIf="job?.id != undefined" [job]="job"></cb-projects>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Projeto'"
+          [status]="tabStatus.project_check"
+        ></cb-job-tab>
+      </ng-template>
+
+      <cb-projects *ngIf="job?.id != undefined"
+        [job]="job"
+        (requestJobReloadEmitter)="reload()"
+      ></cb-projects>
     </mat-tab>
-    <mat-tab label="Memorial descritivo">
-      <cb-specification *ngIf="job?.id != undefined" [job]="job"></cb-specification>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Memorial descritivo'"
+          [status]="tabStatus.descriptive_memorial_check"
+        ></cb-job-tab>
+      </ng-template>
+
+      <cb-specification *ngIf="job?.id != undefined"
+        [job]="job"
+      ></cb-specification>
     </mat-tab>
-    <mat-tab label="Check-in">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Check-in'"
+          [status]="tabStatus.checkin_check"
+        ></cb-job-tab>
+      </ng-template>
+      
       <cb-check-in *ngIf="job?.id != undefined"
         [job]="job"
         [typeForm]="typeForm"
         [valorTotalExtrasRecebido]="valorTotalExtrasRecebido"
       ></cb-check-in>
     </mat-tab>
-    <mat-tab label="Extras">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Extras'"
+        ></cb-job-tab>
+      </ng-template>
+
       <cb-extras #extras *ngIf="job?.id != undefined"
         [job]="job"
         [typeForm]="typeForm"
       ></cb-extras>
     </mat-tab>
-    <mat-tab label="Orçamento">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Orçamento'"
+          [status]="tabStatus.budget_check"
+        ></cb-job-tab>
+      </ng-template>
+
       <cb-budget-form *ngIf="job?.id != undefined"
         [typeForm]="typeForm"
         [job]="job"
       ></cb-budget-form>
     </mat-tab>
-    <mat-tab label="Contrato">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Contrato'"
+        ></cb-job-tab>
+      </ng-template>
+
       <cb-proposals *ngIf="job?.id != undefined"
         [job]="job"
         [containerWidth]="containerWidth"
       ></cb-proposals>
     </mat-tab>
-    <mat-tab label="Detalhamento">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Detalhamento'"
+        ></cb-job-tab>
+      </ng-template>
+
       <cb-developing
         [text]="''"
       ></cb-developing>
     </mat-tab>
-    <mat-tab label="Ficha de custo">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Ficha de custo'"
+        ></cb-job-tab>
+      </ng-template>
+
       <cb-developing
         [text]="''"
       ></cb-developing>
     </mat-tab>
-    <mat-tab label="Lista de compras">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Lista de compras'"
+        ></cb-job-tab>
+      </ng-template>
+
       <cb-developing
         [text]="''"
       ></cb-developing>
     </mat-tab>
-    <mat-tab label="Contrato e NF">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Contrato e NF'"
+          [status]="'DEV'"
+        ></cb-job-tab>
+      </ng-template>
+
       <cb-developing></cb-developing>
     </mat-tab>
-    <mat-tab label="Feedback">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Feedback'"
+          [status]="'DEV'"
+        ></cb-job-tab>
+      </ng-template>
+
       <cb-developing></cb-developing>
     </mat-tab>
-    <mat-tab label="Fotos do projeto">
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <cb-job-tab
+          [tab]="'Fotos do projeto'"
+          [status]="'DEV'"
+        ></cb-job-tab>
+      </ng-template>
+
       <cb-developing></cb-developing>
     </mat-tab>
   </mat-tab-group>

@@ -260,6 +260,7 @@ import { DevelopingModule } from './shared/components/developing/developing.modu
 import { ExtraItemService } from './extras/extra-item.service';
 import { BriefingComponent } from './briefing/briefing.component';
 import { BriefingService } from './briefing/briefing.service';
+import { JobTabComponent } from './jobs/job-tab/job-tab.component';
 
 registerLocaleData(localePt);
 
@@ -420,6 +421,7 @@ registerLocaleData(localePt);
     ExternalCheckInComponent,
     ExternalExtrasRefuseComponent,
     BriefingComponent,
+    JobTabComponent,
   ],
   imports: [
     CurrencyMaskModule,
