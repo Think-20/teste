@@ -1,5 +1,5 @@
 import { CheckInModel } from "app/check-in/check-in.model";
-import { AfterViewInit, Component, Input, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
 import { Job } from "app/jobs/job.model";
 import { CheckInService } from "./check-in.service";
 import { EmployeeService } from 'app/employees/employee.service';
@@ -22,6 +22,8 @@ export class CheckInComponent implements AfterViewInit {
 
   @Input() job: Job = new Job();
   @Input() valorTotalExtrasRecebido = 0;
+
+  @Output("changed") changed = new EventEmitter<void>();
 
   checkInModel: CheckInModel = new CheckInModel();
   employees: Employee[] = [];
@@ -74,6 +76,8 @@ export class CheckInComponent implements AfterViewInit {
     ).do(() => snackBarStateCharging = this.snackBar.open('Salvando...')).subscribe({
       next: (response) => {
         snackBarStateCharging.dismiss();
+
+        this.changed.emit();
 
         if (response.object) {
           snackBarStateCharging = this.snackBar.open(response.message);

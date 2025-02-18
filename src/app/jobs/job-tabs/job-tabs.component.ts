@@ -26,7 +26,7 @@ export class JobTabsComponent implements OnInit {
   isAdmin: boolean
   selectedIndex: number = 0;
 
-  tabStatus: JobTabStatus;
+  tabStatus = new JobTabStatus();
 
   tabs = [
     {index: 0, description: 'info'},

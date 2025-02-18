@@ -14,6 +14,7 @@
       
       <cb-job-form
         [typeForm]="typeForm"
+        (changed)="loadTabsStatus()"
         (jobEmitter)="setJob($event)"
         (isAdminEmitter)="setIsAdmin($event)"
       ></cb-job-form>
@@ -41,6 +42,7 @@
 
       <cb-projects *ngIf="job?.id != undefined"
         [job]="job"
+        (changed)="loadTabsStatus()"
         (requestJobReloadEmitter)="reload()"
       ></cb-projects>
     </mat-tab>
@@ -55,6 +57,7 @@
 
       <cb-specification *ngIf="job?.id != undefined"
         [job]="job"
+        (changed)="loadTabsStatus()"
       ></cb-specification>
     </mat-tab>
 
@@ -70,6 +73,7 @@
         [job]="job"
         [typeForm]="typeForm"
         [valorTotalExtrasRecebido]="valorTotalExtrasRecebido"
+        (changed)="loadTabsStatus()"
       ></cb-check-in>
     </mat-tab>
 
@@ -97,6 +101,7 @@
       <cb-budget-form *ngIf="job?.id != undefined"
         [typeForm]="typeForm"
         [job]="job"
+        (changed)="loadTabsStatus()"
       ></cb-budget-form>
     </mat-tab>
 
@@ -117,6 +122,7 @@
       <ng-template mat-tab-label>
         <cb-job-tab
           [tab]="'Detalhamento'"
+          [status]="'DEV'"
         ></cb-job-tab>
       </ng-template>
 
@@ -129,6 +135,7 @@
       <ng-template mat-tab-label>
         <cb-job-tab
           [tab]="'Ficha de custo'"
+          [status]="'DEV'"
         ></cb-job-tab>
       </ng-template>
 
@@ -141,6 +148,7 @@
       <ng-template mat-tab-label>
         <cb-job-tab
           [tab]="'Lista de compras'"
+          [status]="'DEV'"
         ></cb-job-tab>
       </ng-template>
 

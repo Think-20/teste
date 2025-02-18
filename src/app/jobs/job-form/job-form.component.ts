@@ -48,7 +48,8 @@ import { EventService } from 'app/events/event.service';
 export class JobFormComponent implements OnInit {
   @Input('typeForm') typeForm: string
   @Output('jobEmitter') jobEmitter: EventEmitter<Job> = new EventEmitter()
-  @Output('isAdminEmitter') isAdminEmitter: EventEmitter<boolean> = new EventEmitter()
+  @Output('isAdminEmitter') isAdminEmitter: EventEmitter<boolean> = new EventEmitter();
+  @Output("changed") changed = new EventEmitter<void>();
   standItemState = 'hidden'
   job_activities: JobActivity[]
   job_types: JobType[]
@@ -809,6 +810,8 @@ export class JobFormComponent implements OnInit {
     this.buttonEnable = false
 
     this.jobService.edit(job).subscribe(data => {
+      this.changed.emit();
+
       this.snackBar.open(data.message, '', {
         duration: data.status ? 1000 : 5000
       }).afterDismissed().subscribe(observer => {

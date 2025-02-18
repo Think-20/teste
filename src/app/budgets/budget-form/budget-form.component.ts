@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef } from "@angular/core";
+import { Component, OnInit, Input, ViewChild, ElementRef, EventEmitter, Output } from "@angular/core";
 import {
   FormGroup,
   FormBuilder,
@@ -28,6 +28,8 @@ export class BudgetFormComponent implements OnInit {
   @Input("typeForm") typeForm: string;
   @Input("task") task: Task;
   @Input() job: Job;
+  @Output("changed") changed = new EventEmitter<void>();
+
   sortedTasks: Task[];
   expandedIndex: number = null;
   budgetForms: FormGroup[] = [];
@@ -884,12 +886,14 @@ export class BudgetFormComponent implements OnInit {
         duration: data.status ? 1000 : 5000
       })
 
+      this.changed.emit();
+
       if (this.backscreen === 'agenda') {
         this.router.navigate(['schedule'])
         return;
       }
 
-      this.router.navigateByUrl(`/jobs/edit/${this.job.id}?tab=check-in`)
+      this.router.navigateByUrl(`/jobs/edit/${this.job.id}?tab=contract`)
     })
   }
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Job } from '../jobs/job.model';
 import { TaskService } from '../schedule/task.service';
 import { Task } from '../schedule/task.model';
@@ -19,7 +19,9 @@ export class SpecificationComponent implements OnInit {
   @Input('typeForm') typeForm: string
   @Input() job: Job
   sortedTasks: Task[]
-  expandedIndex: number = 0
+  expandedIndex: number = 0;
+
+  @Output() changed = new EventEmitter<void>();
 
   constructor(
     private route: ActivatedRoute,
@@ -47,6 +49,10 @@ export class SpecificationComponent implements OnInit {
     let newTask = this.sortedTasks.find(t => t.id == task.id)
     newTask.specification_files[newTask.specification_files.length - 1].responsible = this.authService.currentUser().employee
     this.sortedTasks[this.sortedTasks.findIndex(t => t.id == newTask.id)] = newTask
+  }
+
+  onChanged(): void {
+    this.changed.emit();
   }
 
   navigateToBudget(task: Task) {
